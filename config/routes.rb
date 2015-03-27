@@ -56,4 +56,8 @@ Rails.application.routes.draw do
   #   end
   
   root 'leagues#index'
+  
+  resources :leagues
+  resources :user_accounts
+  
 end

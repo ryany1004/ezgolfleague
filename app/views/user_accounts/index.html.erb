@@ -1,0 +1,36 @@
+<h4>User Accounts</h4>
+
+<table class="table table-striped">
+	<thead>
+		<tr>
+      <th>&nbsp;</th>
+			<th>Email Address</th>
+      <th>Last Updated</th>
+      <th><%= link_to 'Create New', new_user_account_path, :class => 'btn btn-primary' %></th>
+		</tr>
+	</thead>
+	<tbody>
+	<% @users.each do |user_account| %>
+		<tr>
+      <% unless user_account.avatar.url.blank? -%>
+      <td><%= link_to (image_tag user_account.avatar.url(:thumb)), user_account_path(user_account) %></td>
+      <% else -%>
+      <td>&nbsp;</td>
+      <% end -%>
+			<td><%= link_to user_account.email, user_account_path(user_account) %></td>
+			<td><%= user_account.updated_at.to_s(:date_and_time) %></td>
+      <td><%= link_to "Edit", edit_user_account_path(user_account) %> | <%= link_to 'Delete', user_account_path(user_account), :data => { :confirm => 'Are you sure you want to delete this user?' }, :method => :delete %></td>
+		</tr>
+	<% end %>
+	</tbody>
+  <tfoot>
+		<tr>
+      <th>&nbsp;</th>
+			<th>&nbsp;</th>
+			<th>&nbsp;</th>
+      <th><%= link_to 'Create New', new_user_account_path, :class => 'btn btn-primary' %></th>
+		</tr>
+  </tfoot>
+</table>
+
+<%= paginate @users %>
