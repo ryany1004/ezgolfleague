@@ -1,10 +1,49 @@
 class UserAccountsController < ApplicationController
   before_action :authenticate_user!
+  before_action :fetch_user, :only => [:edit, :update, :destroy]
+  before_action :initialize_form, :only => [:new, :edit]
   
   def index    
-    @users = User.page params[:page]
+    @user_accounts = User.page params[:page]
     
     @page_title = "User Accounts"
+  end
+  
+  def new
+    @user_account = User.new
+  end
+  
+  def create
+  end
+  
+  def edit
+  end
+  
+  def update
+    if @user_account.update!(user_params)
+      redirect_to user_accounts_path, :flash => { :success => "The user was successfully updated." }
+    else
+      fetch_user
+      
+      render :edit
+    end
+  end
+  
+  def destroy
+  end
+  
+  private
+  
+  def user_params
+    params.require(:user).permit(:first_name, :last_name, :email, :avatar, :street_address_1, :street_address_2, :city, :us_state, :postal_code, :phone_number)
+  end
+  
+  def fetch_user
+    @user_account = User.find(params[:id])
+  end
+  
+  def initialize_form    
+    @us_states = US_STATES
   end
   
 end

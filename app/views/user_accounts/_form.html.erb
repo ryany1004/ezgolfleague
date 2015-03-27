@@ -1,0 +1,49 @@
+<%= simple_form_for @user_account, url: user_account_path(@user_account) do |f| %>
+  <% if notification = f.error_notification %>
+    <div class="alert alert-error fade in">
+      <a class="close" data-dismiss="alert" href="#">&times;</a>
+      <%= notification %>
+    </div>
+  <% end %>
+  
+  <legend>User Account Details</legend>
+  
+  <h3>Basic Details</h3>
+  <div class="well">
+    <%= f.input :email, :label => 'Email Address', placeholder: 'user@domain.com', required: true %>
+  
+	  <%= f.input :first_name, :label => 'First Name' %>
+
+	  <%= f.input :last_name, :label => 'Last Name' %>
+  </div>
+  
+  <h3>Avatar</h3>
+  <div class="well">
+    <% unless @user_account.avatar.blank? -%>
+    <p><%= image_tag @user_account.avatar.url(:medium) %></p>
+    <% end -%>
+    <%= f.input :avatar, :label => 'Avatar Photo' %>
+  </div>
+
+  <h3>Address</h3>
+  <div class="well">
+    <%= f.input :street_address_1, :label => 'Street Address 1', placeholder: '123 Main Street' %>
+  
+    <%= f.input :street_address_2, :label => 'Street Address 2', placeholder: 'Suite 200' %>
+  
+    <%= f.input :city, :label => 'City' %>
+    
+	  <%= f.input :us_state, :label => 'State', collection: @us_states %>
+
+	  <%= f.input :postal_code, :label => 'Zip Code' %>
+  </div>
+  
+  <h3>Phone</h3>
+  <div class="well">
+	  <%= f.input :phone_number, :label => 'Phone Number' %>
+  </div>
+
+  <div class="form-actions">
+    <%= f.button :submit, :class => 'btn btn-default' %>
+  </div>
+<% end %>
