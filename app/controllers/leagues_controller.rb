@@ -1,6 +1,6 @@
 class LeaguesController < ApplicationController
   before_action :authenticate_user!
-  before_action :fetch_user, :only => [:edit, :update, :destroy]
+  before_action :fetch_league, :only => [:edit, :update, :destroy]
   
   def index    
     @leagues = League.page params[:page]
@@ -45,7 +45,7 @@ class LeaguesController < ApplicationController
     params.require(:league).permit(:name)
   end
   
-  def fetch_user
+  def fetch_league
     @league = League.find(params[:id])
   end
   

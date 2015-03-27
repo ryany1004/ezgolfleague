@@ -57,7 +57,10 @@ Rails.application.routes.draw do
   
   root 'leagues#index'
   
-  resources :leagues
+  resources :leagues do
+    resources :league_memberships
+  end
+
   resources :user_accounts
   
 end
