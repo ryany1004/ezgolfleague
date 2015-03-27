@@ -1,0 +1,29 @@
+<h4>Leagues</h4>
+
+<table class="table table-striped">
+	<thead>
+		<tr>
+			<th>Name</th>
+      <th>Date Added</th>
+      <th><%= link_to 'Create New', new_league_path, :class => 'btn btn-primary' %></th>
+		</tr>
+	</thead>
+	<tbody>
+	<% @leagues.each do |league| %>
+		<tr>
+			<td><%= link_to league.name, edit_league_path(league) %></td>
+			<td><%= league.created_at.to_s(:date_and_time) %></td>
+      <td><%= link_to "Edit", edit_league_path(league) %> | <%= link_to 'Delete', league_path(league), :data => { :confirm => 'Are you sure you want to delete this league?' }, :method => :delete %></td>
+		</tr>
+	<% end %>
+	</tbody>
+  <tfoot>
+		<tr>
+			<th>&nbsp;</th>
+			<th>&nbsp;</th>
+      <th><%= link_to 'Create New', new_user_account_path, :class => 'btn btn-primary' %></th>
+		</tr>
+  </tfoot>
+</table>
+
+<%= paginate @leagues %>

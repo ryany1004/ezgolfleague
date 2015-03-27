@@ -14,22 +14,34 @@ class UserAccountsController < ApplicationController
   end
   
   def create
+    @user_account = User.new(user_params)
+      
+    if @user_account.save      
+      redirect_to user_accounts_path, :flash => { :success => "The user was successfully created." }
+    else      
+      initialize_form
+      
+      render :new
+    end
   end
   
   def edit
   end
   
   def update
-    if @user_account.update!(user_params)
+    if @user_account.update(user_params)
       redirect_to user_accounts_path, :flash => { :success => "The user was successfully updated." }
     else
-      fetch_user
+      initialize_form
       
       render :edit
     end
   end
   
   def destroy
+    @user_account.destroy
+    
+    redirect_to user_accounts_path, :flash => { :success => "The user was successfully deleted." }
   end
   
   private

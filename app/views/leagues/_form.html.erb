@@ -1,0 +1,19 @@
+<%= simple_form_for @league do |f| %>
+  <% if notification = f.error_notification %>
+    <div class="alert alert-error fade in">
+      <a class="close" data-dismiss="alert" href="#">&times;</a>
+      <%= notification %>
+    </div>
+  <% end %>
+  
+  <legend>League Details</legend>
+  
+  <h3>Basic Details</h3>
+  <div class="well">  
+	  <%= f.input :name, :label => 'Name', required: true %>
+  </div>
+  
+  <div class="form-actions">
+    <%= f.button :submit, :class => 'btn btn-default' %>
+  </div>
+<% end %>
