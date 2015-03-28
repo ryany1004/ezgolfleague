@@ -1,10 +1,15 @@
+<ol class="breadcrumb">
+  <li><%= link_to "Leagues", leagues_path %></li>
+  <li class="active">League Memberships</li>
+</ol>
+
 <h4>League Membership</h4>
 
 <table class="table table-striped">
 	<thead>
 		<tr>
 			<th>User Name</th>
-      <th>Is An Admin?</th>
+      <th>Admin</th>
       <th>Date Added</th>
       <th><%= link_to 'Create New', new_league_league_membership_path(@league), :class => 'btn btn-primary' %></th>
 		</tr>
@@ -15,7 +20,7 @@
 			<td><%= link_to membership.user.complete_name, edit_league_league_membership_path(@league, membership) %></td>
       <td><%= human_boolean(membership.is_admin?) %></td>
 			<td><%= membership.created_at.to_s(:date_and_time) %></td>
-      <td><%= link_to "Edit", edit_league_league_membership_path(@league, membership) %> | <%= link_to 'Delete', edit_league_league_membership_path(@league, membership), :data => { :confirm => 'Are you sure you want to delete this membership?' }, :method => :delete %></td>
+      <td><%= link_to "Edit", edit_league_league_membership_path(@league, membership) %> | <%= link_to 'Delete', league_league_membership_path(@league, membership), :data => { :confirm => 'Are you sure you want to delete this membership?' }, :method => :delete %></td>
 		</tr>
 	<% end %>
 	</tbody>

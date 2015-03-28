@@ -7,10 +7,10 @@
   <% end %>
   
   <legend>Membership Details</legend>
-  
+    
   <h3>Basic Details</h3>
   <div class="well">     
-    <%= f.association :user, :label => 'User', :label_method => :complete_name %>
+    <%= f.association :user, collection: @users, :label => 'User', :label_method => :complete_name %>
     
 	  <%= f.input :is_admin, :label => 'Is this user an admin for this league?' %>
   </div>

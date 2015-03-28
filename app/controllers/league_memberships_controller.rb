@@ -2,7 +2,7 @@ class LeagueMembershipsController < ApplicationController
   before_action :authenticate_user!
   before_action :fetch_membership, :only => [:edit, :update, :destroy]
   before_action :fetch_league
-  before_action :fetch_users, :only => [:edit, :new]
+  before_action :fetch_users
   
   def index 
     @league_memberships = LeagueMembership.order("created_at DESC").page params[:page]
@@ -57,7 +57,13 @@ class LeagueMembershipsController < ApplicationController
   end
   
   def fetch_users
-    @users = User.all.order("last_name").order("first_name").order("created_at DESC")
+    if @league.users.count > 0
+      existing_user_ids = @league.users.map { |n| n.id }
+    
+      @users = User.where("id NOT IN (?)", existing_user_ids).order("last_name").order("first_name").order("created_at DESC")
+    else
+      @users = User.all.order("last_name").order("first_name").order("created_at DESC")
+    end
   end
   
 end
