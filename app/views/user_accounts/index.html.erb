@@ -6,13 +6,13 @@
       <th>&nbsp;</th>
 			<th>Name</th>
       <th>Date Joined</th>
-      <th><%= link_to 'Create New', new_user_account_path, :class => 'btn btn-primary' %></th>
+      <th><%= link_to 'Create User', new_user_account_path, :class => 'btn btn-primary' %></th>
 		</tr>
 	</thead>
 	<tbody>
 	<% @user_accounts.each do |user_account| %>
 		<tr>
-      <% unless user_account.avatar.url.blank? -%>
+      <% unless user_account.avatar.blank? -%>
       <td><%= link_to (image_tag user_account.avatar.url(:micro)), user_account_path(user_account) %></td>
       <% else -%>
       <td>&nbsp;</td>
@@ -28,7 +28,7 @@
       <th>&nbsp;</th>
 			<th>&nbsp;</th>
 			<th>&nbsp;</th>
-      <th><%= link_to 'Create New', new_user_account_path, :class => 'btn btn-primary' %></th>
+      <th><%= link_to 'Create User', new_user_account_path, :class => 'btn btn-primary' %></th>
 		</tr>
   </tfoot>
 </table>

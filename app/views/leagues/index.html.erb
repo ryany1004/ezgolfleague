@@ -1,4 +1,4 @@
-<h4>Leagues</h4>
+<h4>My Leagues</h4>
 
 <table class="table table-striped">
 	<thead>
@@ -6,7 +6,11 @@
 			<th>Name</th>
       <th>Date Added</th>
       <th>&nbsp;</th>
-      <th><%= link_to 'Create New', new_league_path, :class => 'btn btn-primary' %></th>
+      <% if current_user.is_super_user? -%>
+      <th><%= link_to 'Create League', new_league_path, :class => 'btn btn-primary' %></th>
+      <% else -%>
+      <th>&nbsp;</th>
+      <% end -%>
 		</tr>
 	</thead>
 	<tbody>
@@ -24,7 +28,11 @@
 			<th>&nbsp;</th>
       <th>&nbsp;</th>
 			<th>&nbsp;</th>
-      <th><%= link_to 'Create New', new_user_account_path, :class => 'btn btn-primary' %></th>
+      <% if current_user.is_super_user? -%>
+      <th><%= link_to 'Create League', new_user_account_path, :class => 'btn btn-primary' %></th>
+      <% else -%>
+      <th>&nbsp;</th>
+      <% end -%>
 		</tr>
   </tfoot>
 </table>

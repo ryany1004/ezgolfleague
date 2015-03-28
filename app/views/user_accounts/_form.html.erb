@@ -17,12 +17,14 @@
 	  <%= f.input :last_name, :label => 'Last Name', required: true %>
   </div>
   
+  <% if @user_account.new_record? -%>
   <h3>Password</h3>
   <div class="well">  
 	  <%= f.input :password, :label => 'Password' %>
 
 	  <%= f.input :password_confirmation, :label => 'Password Confirmation' %>
   </div>
+  <% end -%>
   
   <h3>Avatar</h3>
   <div class="well">
@@ -48,7 +50,6 @@
   </div>
   
   <% if @user_account.new_record? -%>
-  <h3>Invite</h3>
   <div class="well">
     <%= f.input :should_invite, :label => 'Send Email Invitation', as: :boolean %>
   </div>

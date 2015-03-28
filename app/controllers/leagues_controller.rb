@@ -2,10 +2,16 @@ class LeaguesController < ApplicationController
   before_action :authenticate_user!
   before_action :fetch_league, :only => [:edit, :update, :destroy]
   
-  def index    
-    @leagues = League.page params[:page]
+  def index
+    if current_user.is_super_user?
+      @leagues = League.order("name").page params[:page]
     
-    @page_title = "Leagues"
+      @page_title = "Leagues"
+    else
+      @leagues = current_user.leagues.order("name").page params[:page]
+    
+      @page_title = "My Leagues"
+    end
   end
   
   def new
