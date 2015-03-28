@@ -4,5 +4,4 @@ class LeagueMembership < ActiveRecord::Base
   
   validates :league, presence: true
   validates :user, presence: true
-  
 end

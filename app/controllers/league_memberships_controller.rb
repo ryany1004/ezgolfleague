@@ -64,6 +64,8 @@ class LeagueMembershipsController < ApplicationController
     else
       @users = User.all.order("last_name").order("first_name").order("created_at DESC")
     end
+
+    @users = User.where(id: @league_membership.user.id) if @users.count == 0 && @league_membership.blank? == false
   end
   
 end

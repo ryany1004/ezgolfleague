@@ -15,16 +15,22 @@ class UserAccountsController < ApplicationController
   
   def create
     @user_account = User.new(user_params)
-      
-    if @user_account.save      
-      redirect_to user_accounts_path, :flash => { :success => "The user was successfully created." }
-    else      
-      initialize_form
-      
-      render :new
+
+    if @user_account.should_invite == "1"
+      User.invite!(user_params, current_user)
+
+      redirect_to user_accounts_path, :flash => { :success => "The user was successfully invited." }
+    else
+      if @user_account.save
+        redirect_to user_accounts_path, :flash => { :success => "The user was successfully created." }
+      else
+        initialize_form
+
+        render :new
+      end
     end
   end
-  
+
   def edit
   end
   
@@ -47,7 +53,7 @@ class UserAccountsController < ApplicationController
   private
   
   def user_params
-    params.require(:user).permit(:first_name, :last_name, :email, :avatar, :street_address_1, :street_address_2, :city, :us_state, :postal_code, :phone_number)
+    params.require(:user).permit(:first_name, :last_name, :email, :avatar, :street_address_1, :street_address_2, :city, :us_state, :postal_code, :phone_number, :password, :password_confirmation, :should_invite)
   end
   
   def fetch_user
