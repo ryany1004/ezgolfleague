@@ -4,4 +4,6 @@ class LeagueMembership < ActiveRecord::Base
   
   validates :league, presence: true
   validates :user, presence: true
+  
+  paginates_per 50
 end

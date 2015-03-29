@@ -61,6 +61,8 @@ Rails.application.routes.draw do
     resources :league_memberships
   end
 
+  resources :courses
+
   resources :user_accounts
   
 end
