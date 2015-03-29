@@ -15,6 +15,10 @@
 	  <%= f.input :first_name, :label => 'First Name', required: true %>
 
 	  <%= f.input :last_name, :label => 'Last Name', required: true %>
+    
+    <% if @user_account.new_record? -%>
+      <%= f.input :should_invite, :label => 'Send Invitation via Email', as: :boolean %>
+    <% end -%>
   </div>
   
   <% if @user_account.new_record? -%>
@@ -49,10 +53,31 @@
     <%= f.input :phone_number, :label => 'Phone Number' %>
   </div>
   
-  <% if @user_account.new_record? -%>
-  <div class="well">
-    <%= f.input :should_invite, :label => 'Send Email Invitation', as: :boolean %>
-  </div>
+  <% if @user_account.new_record? == false && @editing_current_user != true -%>
+  <h3>Leagues</h3>
+
+  <table class="table table-striped">
+  	<thead>
+  		<tr>
+  			<th>Name</th>
+        <th>Status</th>
+  		</tr>
+  	</thead>
+  	<tbody>
+  	<% @user_account.leagues.each do |league| %>
+  		<tr>
+  			<td><%= link_to league.name, edit_league_path(league) %></td>
+        <td><%= league.state_for_user(@user_account) %></td>
+  		</tr>
+  	<% end %>
+  	</tbody>
+    <tfoot>
+  		<tr>
+  			<th>&nbsp;</th>
+        <th>&nbsp;</th>
+  		</tr>
+    </tfoot>
+  </table>
   <% end -%>
   
   <div class="form-actions">

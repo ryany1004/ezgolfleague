@@ -6,4 +6,11 @@ class LeagueMembership < ActiveRecord::Base
   validates :user, presence: true
   
   paginates_per 50
+
+  before_create :setup_initial_state
+
+  def setup_initial_state
+    self.state = MembershipStates::ADDED
+  end
+
 end

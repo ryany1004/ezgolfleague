@@ -1,0 +1,20 @@
+<div id="container" style="padding-top: 20px;">
+  <%= simple_form_for resource, :as => resource_name, :url => invitation_path(resource_name), :html => {:method => :post} do |f| %>
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h3 class="panel-title">Login to EZ Golf Tournament</h3>
+    </div>
+    <div class="panel-body">
+      <% resource.class.invite_key_fields.each do |field| -%>
+        <div class="field">
+        <%= f.input field %>
+        </div>
+      <% end -%>
+
+      <div class="actions">
+        <%= f.submit "Create Account" %>
+      </div>
+    </div>
+  </div>
+  <% end %>
+</div>

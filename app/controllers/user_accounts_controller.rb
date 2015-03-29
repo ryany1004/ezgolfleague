@@ -36,7 +36,11 @@ class UserAccountsController < ApplicationController
   
   def update
     if @user_account.update(user_params)
-      redirect_to user_accounts_path, :flash => { :success => "The user was successfully updated." }
+      if @user_account == current_user
+        redirect_to root_path
+      else
+        redirect_to user_accounts_path, :flash => { :success => "The user was successfully updated." }
+      end
     else
       initialize_form
       
@@ -50,10 +54,50 @@ class UserAccountsController < ApplicationController
     redirect_to user_accounts_path, :flash => { :success => "The user was successfully deleted." }
   end
   
+  # User
+  
+  def edit_current
+    @user_account = current_user
+    @editing_current_user = true
+  end
+  
+  # League Admin Invite
+  
+  def setup_league_admin_invite
+    @user_account = User.new
+    @leagues = League.all.order("name")
+  end
+  
+  def send_league_admin_invite
+    @user_account = User.new(user_params)
+    @user_account.password = "temporary_password1234"
+    @user_account.password_confirmation = "temporary_password1234"
+
+    if @user_account.save
+      @user_account.league_memberships.each do |m|
+        m.state = MembershipStates::INVITED
+        m.is_admin = true
+        m.save
+      end
+      
+      user = User.invite!({:email => @user_account.email}, current_user) do |u|
+        u.skip_invitation = true
+      end
+    
+      user.deliver_invitation
+    else
+      @user_account.errors.each do |e|
+        Rails.logger.debug { "#{e}" }
+      end
+    end
+
+    redirect_to user_accounts_path, :flash => { :success => "The user was successfully invited." }
+  end
+  
   private
   
   def user_params
-    params.require(:user).permit(:first_name, :last_name, :email, :avatar, :street_address_1, :street_address_2, :city, :us_state, :postal_code, :phone_number, :password, :password_confirmation, :should_invite)
+    params.require(:user).permit!
   end
   
   def fetch_user

@@ -63,6 +63,11 @@ Rails.application.routes.draw do
 
   resources :courses
 
-  resources :user_accounts
+  resources :user_accounts do
+    get 'edit_current', on: :collection
+    
+    get 'setup_league_admin_invite', on: :collection
+    post 'send_league_admin_invite', on: :collection
+  end
   
 end
