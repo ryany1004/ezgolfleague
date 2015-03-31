@@ -32,6 +32,7 @@
   </div>
 <% end %>
 
+<% unless @course.new_record? -%>
 <h3>Holes</h3>
 <div class="well">
   <table class="table table-striped" id="course-holes-table">
@@ -60,3 +61,4 @@
   
   <div id="course-hole-form" style="display:none;"></div>
 </div>
+<% end -%>
