@@ -11,7 +11,24 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150329210449) do
+ActiveRecord::Schema.define(version: 20150330235631) do
+
+  create_table "course_hole_tee_boxes", force: :cascade do |t|
+    t.integer  "course_hole_id"
+    t.string   "name"
+    t.string   "description"
+    t.integer  "yardage"
+    t.datetime "created_at",     null: false
+    t.datetime "updated_at",     null: false
+  end
+
+  create_table "course_holes", force: :cascade do |t|
+    t.integer  "course_id"
+    t.integer  "hole_number"
+    t.integer  "par"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
 
   create_table "courses", force: :cascade do |t|
     t.string   "name"

@@ -61,7 +61,11 @@ Rails.application.routes.draw do
     resources :league_memberships
   end
 
-  resources :courses
+  resources :courses do
+    resources :course_holes do
+      resources :course_hole_tee_boxes
+    end
+  end
 
   resources :user_accounts do
     get 'edit_current', on: :collection

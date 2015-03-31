@@ -27,8 +27,36 @@
     
     <%= f.input :phone_number, :label => 'Phone Number' %>
   </div>
-
   <div class="form-actions">
     <%= f.button :submit, :class => 'btn btn-default' %>
   </div>
 <% end %>
+
+<h3>Holes</h3>
+<div class="well">
+  <table class="table table-striped" id="course-holes-table">
+    <thead>
+      <tr>
+        <th>Hole Number</th>
+        <th>Par</th>
+        <th>Yardage</th>
+        <th><%= link_to 'New Hole', new_course_course_hole_path(@course), remote: true, :class => 'btn btn-primary' %></th>
+      </tr>
+    </thead>
+    <tbody>
+    <% @course.course_holes.each do |hole| %>
+      <%= render partial: 'course_holes/table_row', locals: {course_hole: hole, course: @course} %>
+    <% end %>
+    </tbody>
+    <tfoot>
+      <tr>
+        <th>&nbsp;</th>
+        <th>&nbsp;</th>
+        <th>&nbsp;</th>
+        <th><%= link_to 'New Hole', new_course_course_hole_path(@course), remote: true, :class => 'btn btn-primary' %></th>
+      </tr>
+    </tfoot>
+  </table>
+  
+  <div id="course-hole-form" style="display:none;"></div>
+</div>
