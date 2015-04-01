@@ -1,4 +1,4 @@
-<%= simple_form_for [@course, @course_hole], remote: true do |f| %>
+<%= simple_form_for [@course, @course_hole], remote: @remote_form do |f| %>
   <% if notification = f.error_notification %>
     <div class="alert alert-error fade in">
       <a class="close" data-dismiss="alert" href="#">&times;</a>
@@ -24,7 +24,6 @@
     </div>
   <% end %>
   
-
   <div class="form-actions">
     <% if !@course_hole.new_record? -%>
         <%= link_to 'Add Additional Tee Box', new_course_course_hole_course_hole_tee_box_path(@course, @course_hole), remote: true, :class => 'btn btn-primary' %>
