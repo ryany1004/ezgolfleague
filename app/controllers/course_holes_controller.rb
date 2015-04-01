@@ -8,10 +8,12 @@ class CourseHolesController < ApplicationController
   def new
     @course_hole = CourseHole.new
     @course_hole.hole_number = @course.course_holes.last.hole_number + 1 if @course.course_holes.count > 0
+    @course_hole.course_hole_tee_boxes.build
   end
 
   def create
     @course_hole = CourseHole.new(course_hole_params)
+    @course_hole.course_hole_tee_boxes.build
     @course_hole.course = @course
     @course_hole.save
   end
@@ -39,7 +41,6 @@ class CourseHolesController < ApplicationController
   end
   
   def course_hole_params
-    params.require(:course_hole).permit(:hole_number, :par)
+    params.require(:course_hole).permit(:hole_number, :par, course_hole_tee_boxes_attributes: [:name, :description, :yardage])
   end
-  
 end

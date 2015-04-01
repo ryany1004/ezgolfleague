@@ -12,8 +12,24 @@
   
     <%= f.input :par, :label => 'Par', required: true %>
   </div>
+  
+  <h3>Tee Box Info</h3>  
+  <%= f.simple_fields_for :course_hole_tee_boxes do |b| %>
+    <div class="well">
+      <%= b.input :name, :label => 'Name (i.e. Black)', required: true %>
+
+      <%= b.input :yardage, :label => 'Yards', required: true %>
+      
+      <%= b.input :description, :label => "Optional Description (i.e. Men's)" %>
+    </div>
+  <% end %>
+  
 
   <div class="form-actions">
+    <% if !@course_hole.new_record? -%>
+        <%= link_to 'Add Additional Tee Box', new_course_course_hole_course_hole_tee_box_path(@course, @course_hole), remote: true, :class => 'btn btn-primary' %>
+    <% end -%>
+    
     <%= f.button :submit, :class => 'btn btn-default' %>
   </div>
 <% end %>

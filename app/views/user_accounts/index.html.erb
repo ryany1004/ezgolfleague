@@ -13,7 +13,7 @@
 	<% @user_accounts.each do |user_account| %>
 		<tr>
       <% unless user_account.avatar.blank? -%>
-      <td><%= link_to (image_tag user_account.avatar.url(:micro)), user_account_path(user_account) %></td>
+      <td><%= link_to (image_tag user_account.avatar.url(:micro)), edit_user_account_path(user_account) %></td>
       <% else -%>
       <td>&nbsp;</td>
       <% end -%>

@@ -1,4 +1,3 @@
 class CourseHoleTeeBox < ActiveRecord::Base
-  belongs_to :course_hole, inverse_of: :course_hole_tee_box
-  
+  belongs_to :course_hole, inverse_of: :course_hole_tee_boxes
 end
