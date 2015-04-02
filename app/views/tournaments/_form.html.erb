@@ -1,0 +1,33 @@
+<%= simple_form_for [current_user.selected_league, @tournament] do |f| %>
+  <% if notification = f.error_notification %>
+    <div class="alert alert-error fade in">
+      <a class="close" data-dismiss="alert" href="#">&times;</a>
+      <%= notification %>
+    </div>
+  <% end %>
+  
+  <legend>Tournament Details</legend>
+
+  <h3>Basic Details</h3>
+  <div class="well">  
+    <%= f.input :league_id, collection: @leagues, :label => 'League', :label_method => :name %>
+    
+    <%= f.input :course_id, collection: @courses, :label => 'Course', :label_method => :name %>
+    
+	  <%= f.input :name, :label => 'Name', required: true %>
+    
+    <%= f.input :tournament_at, :label => 'Tournament Date', required: true %>
+  </div>
+
+  <h3>Sign Up</h3>
+  <div class="well">
+    <%= f.input :signup_opens_at, :label => 'Signup Opening Date' %>
+  
+    <%= f.input :signup_closes_at, :label => 'Signup Closing Date' %>
+  
+    <%= f.input :max_players, :label => 'Maximum Number of Players' %>
+  </div>
+  <div class="form-actions">
+    <%= f.button :submit, :class => 'btn btn-default' %>
+  </div>
+<% end %>

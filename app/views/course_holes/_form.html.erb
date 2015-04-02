@@ -21,6 +21,10 @@
       <%= b.input :yardage, :label => 'Yards', required: true %>
       
       <%= b.input :description, :label => "Optional Description (i.e. Men's)" %>
+      
+      <% if !@course_hole.new_record? -%>
+        <%= link_to 'Delete Tee Box', course_course_hole_course_hole_tee_box_path(@course, @course_hole, b.object), :data => { :confirm => 'Are you sure you want to delete this tee box?' }, :method => :delete %>
+      <% end -%>
     </div>
   <% end %>
   

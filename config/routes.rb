@@ -59,6 +59,7 @@ Rails.application.routes.draw do
   
   resources :leagues do
     resources :league_memberships
+    resources :tournaments
   end
 
   resources :courses do

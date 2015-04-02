@@ -21,4 +21,8 @@ class User < ActiveRecord::Base
     return "#{self.last_name}, #{self.first_name}"
   end
   
+  def selected_league
+    return self.leagues.first #TODO: UPDATE
+  end
+  
 end
