@@ -41,6 +41,9 @@ gem 'aws-sdk'
 gem 'kaminari', '~> 0.16.1'
 gem 'simple_form'
 
+gem 'momentjs-rails', '~> 2.9',  :github => 'derekprior/momentjs-rails'
+gem 'datetimepicker-rails', github: 'zpaulovics/datetimepicker-rails', branch: 'master', submodules: true
+
 group :development, :test do
   gem 'sqlite3', :require => "sqlite3"
   

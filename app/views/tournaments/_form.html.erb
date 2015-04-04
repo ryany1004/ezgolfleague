@@ -16,14 +16,14 @@
     
 	  <%= f.input :name, :label => 'Name', required: true %>
     
-    <%= f.input :tournament_at, :label => 'Tournament Date', required: true %>
+    <%= f.input :tournament_at, :label => 'Tournament Date', required: true, :as => :date_picker %>
   </div>
 
   <h3>Sign Up</h3>
   <div class="well">
-    <%= f.input :signup_opens_at, :label => 'Signup Opening Date' %>
+    <%= f.input :signup_opens_at, :label => 'Signup Opening Date', :as => :date_picker %>
   
-    <%= f.input :signup_closes_at, :label => 'Signup Closing Date' %>
+    <%= f.input :signup_closes_at, :label => 'Signup Closing Date', :as => :date_picker %>
   
     <%= f.input :max_players, :label => 'Maximum Number of Players' %>
   </div>
