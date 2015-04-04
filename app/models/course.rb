@@ -11,7 +11,7 @@ class Course < ActiveRecord::Base
     
     self.course_holes.each do |h|
       h.course_hole_tee_boxes.each do |b|
-        box_types << b unless box_types.include? b
+        box_types << b.name unless box_types.include? b.name
       end
     end
     

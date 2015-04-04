@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150404190529) do
+ActiveRecord::Schema.define(version: 20150404194141) do
 
   create_table "course_hole_tee_boxes", force: :cascade do |t|
     t.integer  "course_hole_id"
@@ -32,6 +32,14 @@ ActiveRecord::Schema.define(version: 20150404190529) do
     t.integer  "womens_handicap", default: 0
   end
 
+  create_table "course_holes_tournaments", id: false, force: :cascade do |t|
+    t.integer "course_hole_id"
+    t.integer "tournament_id"
+  end
+
+  add_index "course_holes_tournaments", ["course_hole_id"], name: "index_course_holes_tournaments_on_course_hole_id"
+  add_index "course_holes_tournaments", ["tournament_id"], name: "index_course_holes_tournaments_on_tournament_id"
+
   create_table "courses", force: :cascade do |t|
     t.string   "name"
     t.string   "phone_number"
@@ -40,8 +48,10 @@ ActiveRecord::Schema.define(version: 20150404190529) do
     t.string   "city"
     t.string   "us_state"
     t.string   "postal_code"
-    t.datetime "created_at",       null: false
-    t.datetime "updated_at",       null: false
+    t.datetime "created_at",                     null: false
+    t.datetime "updated_at",                     null: false
+    t.float    "rating",           default: 0.0
+    t.integer  "slope",            default: 0
   end
 
   create_table "league_memberships", force: :cascade do |t|
@@ -69,6 +79,8 @@ ActiveRecord::Schema.define(version: 20150404190529) do
     t.integer  "max_players"
     t.datetime "created_at",       null: false
     t.datetime "updated_at",       null: false
+    t.string   "mens_tee_box"
+    t.string   "womens_tee_box"
   end
 
   create_table "users", force: :cascade do |t|

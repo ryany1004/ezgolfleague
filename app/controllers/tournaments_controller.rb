@@ -16,9 +16,8 @@ class TournamentsController < ApplicationController
   def create
     @tournament = Tournament.new(tournament_params)
     
-
     if @tournament.save
-      redirect_to league_tournaments_path(current_user.selected_league), :flash => { :success => "The tournament was successfully created." }
+      redirect_to edit_tournament_path(@tournament), :flash => { :success => "The tournament was successfully created." }
     else
       initialize_form
 
@@ -48,7 +47,7 @@ class TournamentsController < ApplicationController
   private
   
   def tournament_params
-    params.require(:tournament).permit(:name, :league_id, :course_id, :tournament_at, :signup_opens_at, :signup_closes_at, :max_players)
+    params.require(:tournament).permit(:name, :league_id, :course_id, :tournament_at, :signup_opens_at, :signup_closes_at, :max_players, :mens_tee_box, :womens_tee_box, :course_hole_ids => [])
   end
   
   def fetch_tournament

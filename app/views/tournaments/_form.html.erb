@@ -28,6 +28,17 @@
     <%= f.input :max_players, :label => 'Maximum Number of Players' %>
   </div>
   
+  <% if !@tournament.new_record? -%>
+  <h3>Holes and Game Info</h3>
+  <div class="well">
+    <%= f.association :course_holes, :label => 'Which holes are included?', :label_method => :name, as: :check_boxes %>
+    
+    <%= f.input :mens_tee_box, collection: @tournament.course.tee_box_types, :label => "Men's Tee Box" %>
+    
+    <%= f.input :womens_tee_box, collection: @tournament.course.tee_box_types, :label => "Women's Tee Box" %>
+  </div>
+  <% end -%>
+  
   <h3>Game Types</h3>
   <div class="well">
     Game type info here.
