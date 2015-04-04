@@ -60,6 +60,9 @@ Rails.application.routes.draw do
   resources :leagues do
     resources :league_memberships
     resources :tournaments
+    
+    get 'write_member_email'
+    post 'send_member_email'
   end
 
   resources :courses do

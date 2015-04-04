@@ -18,6 +18,13 @@
     Include info required to charge credit cards here.
   </div>
   
+  <% if !@league.new_record? -%>
+  <h3>Message League Members</h3>
+  <div class="well">  
+    <%= link_to 'Email All Members', league_write_member_email_path(@league), :class => 'btn btn-primary' %>
+  </div>
+  <% end -%>
+  
   <div class="form-actions">
     <%= f.button :submit, :class => 'btn btn-default' %>
   </div>
