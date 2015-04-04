@@ -3,9 +3,16 @@ class TournamentsController < ApplicationController
   before_action :fetch_tournament, :only => [:edit, :update, :destroy]
   before_action :initialize_form, :only => [:new, :edit]
   
-  def index    
-    @tournaments = Tournament.page params[:page]
-    
+  def index   
+    if current_user.is_super_user?
+      @upcoming_tournaments = Tournament.where("tournament_at >= ?", Time.now).page params[:page]
+      @past_tournaments = Tournament.where("tournament_at < ?", Time.now).page params[:page]
+    else      
+      membership_ids = current_user.leagues.map { |n| n.id }
+      @upcoming_tournaments = Tournament.joins(:league).where("leagues.id IN (?)", membership_ids).where("tournament_at >= ?", Time.now).page params[:page]
+      @past_tournaments = Tournament.joins(:league).where("leagues.id IN (?)", membership_ids).where("tournament_at < ?", Time.now).page params[:page]
+    end
+
     @page_title = "Tournaments"
   end
   
@@ -17,7 +24,7 @@ class TournamentsController < ApplicationController
     @tournament = Tournament.new(tournament_params)
     
     if @tournament.save
-      redirect_to edit_tournament_path(@tournament), :flash => { :success => "The tournament was successfully created." }
+      redirect_to edit_league_tournament_path(@tournament.league, @tournament), :flash => { :success => "The tournament was successfully created." }
     else
       initialize_form
 

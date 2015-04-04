@@ -3,8 +3,13 @@ class UserAccountsController < ApplicationController
   before_action :fetch_user, :only => [:edit, :update, :destroy]
   before_action :initialize_form, :only => [:new, :edit]
   
-  def index    
-    @user_accounts = User.page params[:page]
+  def index
+    if current_user.is_super_user?
+      @user_accounts = User.page params[:page]
+    else
+      membership_ids = current_user.leagues.map { |n| n.id }
+      @user_accounts = User.joins(:league_memberships).where("league_memberships.league_id IN (?)", membership_ids).page params[:page]
+    end
     
     @page_title = "User Accounts"
   end

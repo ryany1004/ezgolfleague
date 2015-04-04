@@ -75,4 +75,9 @@ Rails.application.routes.draw do
     post 'send_league_admin_invite', on: :collection
   end
   
+  resources :crontab do
+    get 'send_tournament_registration_emails', on: :collection
+    get 'send_tournament_registration_reminder_emails', on: :collection
+  end
+  
 end

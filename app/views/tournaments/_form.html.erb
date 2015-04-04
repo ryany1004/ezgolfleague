@@ -21,9 +21,9 @@
 
   <h3>Sign Up Info</h3>
   <div class="well">
-    <%= f.input :signup_opens_at, :label => 'Signup Opening Date', :as => :date_picker %>
+    <%= f.input :signup_opens_at, :label => 'Signup Opening Date', :as => :datetime_picker %>
   
-    <%= f.input :signup_closes_at, :label => 'Signup Closing Date', :as => :date_picker %>
+    <%= f.input :signup_closes_at, :label => 'Signup Closing Date', :as => :datetime_picker %>
   
     <%= f.input :max_players, :label => 'Maximum Number of Players' %>
   </div>
@@ -39,12 +39,12 @@
   </div>
   <% end -%>
   
-  <h3>Game Types</h3>
+  <h3>Game Type</h3>
   <div class="well">
     Game type info here.
   </div>
   
-  <h3>Contents</h3>
+  <h3>Contests</h3>
   <div class="well">
     Contest info here.
   </div>
