@@ -6,7 +6,7 @@ class LeaguesController < ApplicationController
     if current_user.is_super_user?
       @leagues = League.order("name").page params[:page]
     
-      @page_title = "Leagues"
+      @page_title = "All Leagues"
     else
       @leagues = current_user.leagues.order("name").page params[:page]
     

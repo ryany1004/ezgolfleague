@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150402013004) do
+ActiveRecord::Schema.define(version: 20150404190529) do
 
   create_table "course_hole_tee_boxes", force: :cascade do |t|
     t.integer  "course_hole_id"
@@ -26,8 +26,10 @@ ActiveRecord::Schema.define(version: 20150402013004) do
     t.integer  "course_id"
     t.integer  "hole_number"
     t.integer  "par"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
+    t.datetime "created_at",                  null: false
+    t.datetime "updated_at",                  null: false
+    t.integer  "mens_handicap",   default: 0
+    t.integer  "womens_handicap", default: 0
   end
 
   create_table "courses", force: :cascade do |t|

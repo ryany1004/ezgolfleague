@@ -48,6 +48,6 @@ class CourseHolesController < ApplicationController
   end
   
   def course_hole_params
-    params.require(:course_hole).permit(:hole_number, :par, course_hole_tee_boxes_attributes: [:name, :description, :yardage])
+    params.require(:course_hole).permit(:hole_number, :par, :mens_handicap, :womens_handicap, course_hole_tee_boxes_attributes: [:name, :description, :yardage])
   end
 end

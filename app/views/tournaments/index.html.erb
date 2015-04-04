@@ -3,9 +3,9 @@
 <table class="table table-striped">
 	<thead>
 		<tr>
+      <th>Name</th>
 			<th>League</th>
       <th>Course</th>
-      <th>Name</th>
       <th>Date</th>
       <th>Signup Opens</th>
       <th>Max Players</th>
@@ -15,9 +15,9 @@
 	<tbody>
 	<% @tournaments.each do |tournament| %>
 		<tr>
+      <td><%= link_to tournament.name, edit_league_tournament_path(tournament.league, tournament) %></td>
       <td><%= tournament.league.name %></td>
       <td><%= tournament.course.name %></td>
-			<td><%= link_to tournament.name, edit_league_tournament_path(tournament.league, tournament) %></td>
       <td><%= tournament.tournament_at.to_s(:short) %></td>
       <td><%= tournament.signup_opens_at.to_s(:short) %></td>
       <td><%= tournament.max_players %></td>

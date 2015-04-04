@@ -5,7 +5,7 @@ class LeagueMembershipsController < ApplicationController
   before_action :fetch_users
   
   def index 
-    @league_memberships = LeagueMembership.order("created_at DESC").page params[:page]
+    @league_memberships = @league.league_memberships.order("created_at DESC").page params[:page]
     
     @page_title = "League Memberships"
   end

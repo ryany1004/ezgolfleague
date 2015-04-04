@@ -20,7 +20,7 @@
 //= require moment
 //= require bootstrap-datetimepicker
 //= require pickers
-  
+
 /*menu handler*/
 $(function(){
   function stripTrailingSlash(str) {

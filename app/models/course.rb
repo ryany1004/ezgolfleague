@@ -5,4 +5,17 @@ class Course < ActiveRecord::Base
   validates :name, presence: true
   
   paginates_per 50
+  
+  def tee_box_types
+    box_types = []
+    
+    self.course_holes.each do |h|
+      h.course_hole_tee_boxes.each do |b|
+        box_types << b unless box_types.include? b
+      end
+    end
+    
+    return box_types
+  end
+  
 end

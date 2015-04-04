@@ -1,0 +1,21 @@
+<%= simple_form_for [@course, @course_hole, @course_hole_tee_box] do |f| %>
+  <% if notification = f.error_notification %>
+    <div class="alert alert-error fade in">
+      <a class="close" data-dismiss="alert" href="#">&times;</a>
+      <%= notification %>
+    </div>
+  <% end %>
+  
+  <h3>Tee Box Info</h3>  
+  <div class="well">
+    <%= f.input :name, :label => 'Name (i.e. Black)', required: true %>
+
+    <%= f.input :yardage, :label => 'Yards', required: true %>
+    
+    <%= f.input :description, :label => "Optional Description (i.e. Men's)" %>
+  </div>
+  
+  <div class="form-actions">
+    <%= f.button :submit, :class => 'btn btn-default' %>
+  </div>
+<% end %>

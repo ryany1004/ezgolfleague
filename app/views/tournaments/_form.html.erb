@@ -16,10 +16,10 @@
     
 	  <%= f.input :name, :label => 'Name', required: true %>
     
-    <%= f.input :tournament_at, :label => 'Tournament Date', required: true, :as => :date_picker %>
+    <%= f.input :tournament_at, :label => 'Tournament Date', required: true, :as => :datetime_picker %>
   </div>
 
-  <h3>Sign Up</h3>
+  <h3>Sign Up Info</h3>
   <div class="well">
     <%= f.input :signup_opens_at, :label => 'Signup Opening Date', :as => :date_picker %>
   
@@ -27,6 +27,22 @@
   
     <%= f.input :max_players, :label => 'Maximum Number of Players' %>
   </div>
+  
+  <h3>Game Types</h3>
+  <div class="well">
+    Game type info here.
+  </div>
+  
+  <h3>Contents</h3>
+  <div class="well">
+    Contest info here.
+  </div>
+  
+  <h3>Payout Details</h3>
+  <div class="well">
+    Payout info here.
+  </div>
+  
   <div class="form-actions">
     <%= f.button :submit, :class => 'btn btn-default' %>
   </div>
