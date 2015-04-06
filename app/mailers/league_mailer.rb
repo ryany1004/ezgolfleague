@@ -4,7 +4,7 @@ class LeagueMailer < ApplicationMailer
     @user = user
     @contents = contents
 
-    mail(to: @user.email, subject: "League Message: #{{subject}}")
+    mail(to: @user.email, subject: "League Message: #{subject}")
   end
   
 end
