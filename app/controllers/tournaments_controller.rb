@@ -59,6 +59,16 @@ class TournamentsController < ApplicationController
     @page_title = "Signups for #{@tournament.name}"
   end
   
+  def delete_signup
+    tournament = Tournament.find(params[:tournament_id])
+    tournament_group = TournamentGroup.find(params[:group_id])
+    user = User.find(params[:user_id])
+    
+    tournament.remove_player_from_group(tournament_group, user)
+    
+    redirect_to league_tournament_signups_path(tournament.league, tournament), :flash => { :success => "The registration was successfully deleted." }
+  end
+  
   private
   
   def tournament_params

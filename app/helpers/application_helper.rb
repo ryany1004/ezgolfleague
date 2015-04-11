@@ -37,16 +37,16 @@ module ApplicationHelper
     members = []
     
     team.golf_outings.each do |outing|
-      members << outing.user unless members.include? outing.user || outing_user == user
+      members << outing.user unless members.include? outing.user or outing.user == user
     end
     
     names = ""
     
     members.each do |m|
-      names = "#{names}#{m}<br/>"
+      names = "#{names}#{m.complete_name}<br/>"
     end
     
-    return names
+    return names.html_safe
   end
   
 end

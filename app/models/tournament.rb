@@ -10,6 +10,44 @@ class Tournament < ActiveRecord::Base
   
   paginates_per 50
   
+  def includes_player?(user)
+    player_included = false
+    
+    self.tournament_groups.each do |group|
+      group.players_signed_up.each do |player|
+        player_included = true if player == user
+      end
+    end
+    
+    return player_included
+  end
+  
+  def add_player_to_group(tournament_group, user)
+    Tournament.transaction do
+      team = Team.create(tournament_group: tournament_group)
+      outing = GolfOuting.create(team: team, user: user)
+      scorecard = Scorecard.create(golf_outing: outing)
+      
+      self.course_holes.each do |hole|
+        score = Score.create(scorecard: scorecard, course_hole: hole)
+      end
+    end
+  end
+  
+  def remove_player_from_group(tournament_group, user)
+    tournament_group.teams.each do |team|
+      team.golf_outings.each do |outing|
+        if outing.user = user
+          outing.destroy
+          
+          team.destroy if team.golf_outings.count == 0
+          
+          break
+        end
+      end
+    end
+  end
+  
   #date parsing
   def tournament_at=(date)
     begin

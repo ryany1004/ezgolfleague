@@ -1,0 +1,44 @@
+<h4>Tee Times for <%= @tournament.name %></h4>
+
+<% @tournament.tournament_groups.each do |group| %>
+
+<span class="label label-default"><%= group.tee_time_at.to_s(:time_only) %></span>
+
+<table class="table table-striped">
+	<thead>
+		<tr>
+			<th>Players</th>
+      <th>&nbsp;</th>
+		</tr>
+	</thead>
+  <tbody>
+    <% group.players_signed_up.each do |player| -%>
+    <tr>
+      <td><%= player.complete_name %></td>
+      <% if player == current_user -%>
+      <td><%= link_to "Cancel Registration", play_tournament_remove_signup_path(@tournament, group_id: group.id), :method => :delete %></td>
+      <% else -%>
+      <td>&nbsp;</td>
+      <% end -%>
+    </tr>
+    <% end %>
+    <% (group.max_number_of_players - group.players_signed_up.count).abs.times do -%>
+    <tr>
+      <td>Time Available</td>
+      <% if @tournament.includes_player?(current_user) == false -%>
+      <td><%= link_to "Sign Up", play_tournament_complete_signup_path(@tournament, group_id: group.id), :method => :put %></td>
+      <% else -%>
+      <td>&nbsp;</td>
+      <% end -%>
+    </tr>
+    <% end -%>
+  </tbody>
+  <tfoot>
+		<tr>
+			<th>&nbsp;</th>
+      <th>&nbsp;</th>
+		</tr>
+  </tfoot>
+</table>
+
+<% end %>

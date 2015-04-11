@@ -61,6 +61,7 @@ Rails.application.routes.draw do
     resources :league_memberships
     resources :tournaments do #this is for setting them up
       get 'signups'
+      delete 'delete_signup'
       
       resources :tournament_groups
     end
@@ -71,8 +72,10 @@ Rails.application.routes.draw do
   
   #this is for playing tournaments
   namespace :play do
-    resources :tournaments, only: [:show] do
+    resources :tournaments, only: [] do
       get 'signup'
+      put 'complete_signup'
+      delete 'remove_signup'
     end
   end
 

@@ -7,5 +7,6 @@ Time::DATE_FORMATS.merge!(
   :month_and_day => "%m/%d",
   :month_and_day_and_year => "%m/%d/%y",
   :short_day => "%a",
-  :year_only => "%Y"
+  :year_only => "%Y",
+  :time_only => "%I:%M %p"
 )

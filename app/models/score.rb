@@ -1,4 +1,4 @@
 class Score < ActiveRecord::Base
-  belongs_to :scorecard, inverse_of: :scorecards
-  has_one :course_hole
+  belongs_to :scorecard, inverse_of: :scores
+  belongs_to :course_hole
 end
