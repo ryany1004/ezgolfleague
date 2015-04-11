@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150411184401) do
+ActiveRecord::Schema.define(version: 20150411194753) do
 
   create_table "course_hole_tee_boxes", force: :cascade do |t|
     t.integer  "course_hole_id"
@@ -108,8 +108,9 @@ ActiveRecord::Schema.define(version: 20150411184401) do
   create_table "tournament_groups", force: :cascade do |t|
     t.integer  "tournament_id"
     t.datetime "tee_time_at"
-    t.datetime "created_at",    null: false
-    t.datetime "updated_at",    null: false
+    t.datetime "created_at",                        null: false
+    t.datetime "updated_at",                        null: false
+    t.integer  "max_number_of_players", default: 4
   end
 
   add_index "tournament_groups", ["tournament_id"], name: "index_tournament_groups_on_tournament_id"

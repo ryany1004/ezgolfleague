@@ -1,0 +1,1 @@
+JAVASCRIPT_DATETIME_PICKER_FORMAT = "%m/%d/%Y %I:%M %p %:z"

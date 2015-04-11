@@ -51,6 +51,14 @@ class TournamentsController < ApplicationController
     redirect_to league_tournaments_path(current_user.selected_league), :flash => { :success => "The tournament was successfully deleted." }
   end
   
+  def signups
+    @tournament = Tournament.find(params[:tournament_id])
+    
+    @tournament_groups = @tournament.tournament_groups.page params[:page]
+    
+    @page_title = "Signups for #{@tournament.name}"
+  end
+  
   private
   
   def tournament_params

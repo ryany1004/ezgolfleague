@@ -33,4 +33,20 @@ module ApplicationHelper
     end
   end
   
+  def team_member_names_without_user(team, user)
+    members = []
+    
+    team.golf_outings.each do |outing|
+      members << outing.user unless members.include? outing.user || outing_user == user
+    end
+    
+    names = ""
+    
+    members.each do |m|
+      names = "#{names}#{m}<br/>"
+    end
+    
+    return names
+  end
+  
 end

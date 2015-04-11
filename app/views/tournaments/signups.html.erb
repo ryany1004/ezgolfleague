@@ -1,0 +1,40 @@
+<h4><%= @page_title %></h4>
+
+<table class="table table-striped">
+	<thead>
+		<tr>
+			<th>Name</th>
+      <th>Group / Tee Time</th>
+      <th>Teamed With</th>
+      <th><%= link_to 'Signup for Tournament', play_tournament_signup_path(@tournament), :class => 'btn btn-primary' %></th>
+		</tr>
+	</thead>
+	<tbody>
+	<% @tournament_groups.each_with_index do |tournament_group, i| %>
+    <% tournament_group.teams.each do |team| %>
+      <% team.golf_outings.each do |golf_outing| %>
+      <tr>
+        <td><%= golf_outing.user.complete_name %></td>
+        <td><%= i + 1 %> - <%= tournament_group.tee_time_at.to_s(:date_and_time) %></td>
+        <td><%= team_member_names_without_user(team, golf_outing.user) %></td>
+        <% if user_is_league_admin(current_user, @tournament.league) -%>
+        <td>Remove</td>
+        <% else -%>
+        <td>&nbsp;</td>
+        <% end -%>
+      </tr>
+      <% end %>
+    <% end %>
+	<% end %>
+	</tbody>
+  <tfoot>
+		<tr>
+			<th>&nbsp;</th>
+      <th>&nbsp;</th>
+			<th>&nbsp;</th>
+      <th>&nbsp;</th>
+		</tr>
+  </tfoot>
+</table>
+
+<%= paginate @tournament_groups %>

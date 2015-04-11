@@ -54,6 +54,13 @@
     Payout info here.
   </div>
   
+  <% if !@tournament.new_record? -%>
+  <h3>Groups / Tee Times</h3>
+  <div class="well">  
+    <%= link_to 'Setup Tee Times', league_tournament_tournament_groups_path(@tournament.league, @tournament), :class => 'btn btn-primary' %>
+  </div>
+  <% end -%>
+  
   <div class="form-actions">
     <%= f.button :submit, :class => 'btn btn-default' %>
   </div>

@@ -21,7 +21,7 @@
       <td><%= tournament.tournament_at.to_s(:short) %></td>
       <td><%= tournament.signup_opens_at.to_s(:short) %></td>
       <td><%= tournament.max_players %></td>
-      <td><%= link_to "Edit", edit_league_tournament_path(tournament.league, tournament) %> | <%= link_to 'Delete', league_tournament_path(tournament.league, tournament), :data => { :confirm => 'Are you sure you want to delete this tournament?' }, :method => :delete %></td>
+      <td><%= link_to "Signups", league_tournament_signups_path(tournament.league, tournament) %> | <%= link_to "Edit", edit_league_tournament_path(tournament.league, tournament) %> | <%= link_to 'Delete', league_tournament_path(tournament.league, tournament), :data => { :confirm => 'Are you sure you want to delete this tournament?' }, :method => :delete %></td>
 		</tr>
 	<% end %>
 	</tbody>

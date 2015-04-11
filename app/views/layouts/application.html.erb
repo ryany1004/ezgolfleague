@@ -41,6 +41,7 @@
             <li><%= link_to "All User Accounts", user_accounts_path %></li>
             <% if current_user.is_super_user %>
             <li><%= link_to "Invite League Admin", setup_league_admin_invite_user_accounts_path %></li>
+            <li><%= link_to "Invite Golfer", setup_league_admin_invite_user_accounts_path %></li>
             <% end -%>
           </ul>
         </li>

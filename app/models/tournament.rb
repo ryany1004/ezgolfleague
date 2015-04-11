@@ -13,28 +13,28 @@ class Tournament < ActiveRecord::Base
   #date parsing
   def tournament_at=(date)
     begin
-      parsed = Date.strptime(date,'%m/%d/%Y %I:%M %p')
+      parsed = DateTime.strptime("#{date} #{Time.zone.now.formatted_offset}", JAVASCRIPT_DATETIME_PICKER_FORMAT)
       super parsed
     rescue
-      date         
+      write_attribute(:tournament_at, date)
     end
   end
   
   def signup_opens_at=(date)
     begin
-      parsed = Date.strptime(date,'%m/%d/%Y %I:%M %p')
+      parsed = DateTime.strptime("#{date} #{Time.zone.now.formatted_offset}", JAVASCRIPT_DATETIME_PICKER_FORMAT)
       super parsed
     rescue
-      date         
+      write_attribute(:signup_opens_at, date)
     end
   end
   
   def signup_closes_at=(date)
     begin
-      parsed = Date.strptime(date,'%m/%d/%Y %I:%M %p')
+      parsed = DateTime.strptime("#{date} #{Time.zone.now.formatted_offset}", JAVASCRIPT_DATETIME_PICKER_FORMAT)
       super parsed
     rescue
-      date         
+      write_attribute(:signup_closes_at, date)
     end
   end
   

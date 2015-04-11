@@ -59,10 +59,21 @@ Rails.application.routes.draw do
   
   resources :leagues do
     resources :league_memberships
-    resources :tournaments
+    resources :tournaments do #this is for setting them up
+      get 'signups'
+      
+      resources :tournament_groups
+    end
     
     get 'write_member_email'
     post 'send_member_email'
+  end
+  
+  #this is for playing tournaments
+  namespace :play do
+    resources :tournaments, only: [:show] do
+      get 'signup'
+    end
   end
 
   resources :courses do
