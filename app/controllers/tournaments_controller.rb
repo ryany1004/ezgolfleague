@@ -81,7 +81,12 @@ class TournamentsController < ApplicationController
   
   def initialize_form    
     @courses = Course.all.order("name")
-    @leagues = current_user.leagues
+    
+    if current_user.is_super_user?
+      @leagues = League.all.order("name")
+    else
+      @leagues = current_user.leagues
+    end
   end
   
 end

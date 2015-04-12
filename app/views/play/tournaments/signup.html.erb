@@ -4,7 +4,7 @@
 
 <span class="label label-default"><%= group.tee_time_at.to_s(:time_only) %></span>
 
-<table class="table table-striped">
+<table class="table table-striped table-bordered">
 	<thead>
 		<tr>
 			<th>Players</th>
@@ -33,12 +33,6 @@
     </tr>
     <% end -%>
   </tbody>
-  <tfoot>
-		<tr>
-			<th>&nbsp;</th>
-      <th>&nbsp;</th>
-		</tr>
-  </tfoot>
 </table>
 
 <% end %>

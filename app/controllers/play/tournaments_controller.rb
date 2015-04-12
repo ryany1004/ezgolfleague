@@ -1,4 +1,6 @@
 class Play::TournamentsController < ApplicationController
+  layout "golfer"
+  
   before_action :authenticate_user!
   before_action :fetch_tournament
   

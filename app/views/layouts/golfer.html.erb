@@ -30,9 +30,13 @@
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav">
-        <li><%= link_to "Dashboard", play_dashboard_index_path %></li>
+        <li><%= link_to "My Dashboard", play_dashboard_index_path %></li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
+        <% if user_is_any_league_admin(current_user) %>
+        <li><%= link_to "Switch to Admin Mode", root_path %></li>
+        <% end -%>
+        
         <% if current_user.leagues.count > 1 -%>
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Switch Leagues <span class="caret"></span></a>

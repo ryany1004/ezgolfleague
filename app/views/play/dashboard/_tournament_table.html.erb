@@ -2,8 +2,8 @@
 	<thead>
 		<tr>
 			<th>Name</th>
-      <th>At</th>
-      <% if is_previous.blank? -%>
+      <th>When</th>
+      <% if is_previous == false -%>
       <th>Registered</th>
       <% else -%>
       <th>Played</th>
@@ -16,8 +16,14 @@
     <tr>
       <td><%= t.name %></td>
       <td><%= t.tournament_at.to_s(:date_and_time) %></td>
-      <td><%= human_boolean(t.includes_player?(current_user)) %></td>
-      <% unless is_previous.blank? -%>
+      <td><%= human_boolean(t.includes_player?(current_user)) %>
+        <% if !t.includes_player?(current_user) -%>
+         | <%= link_to "Register", play_tournament_signup_path(t) %>
+        <% else %>
+         | <%= link_to "Edit", play_tournament_signup_path(t) %>
+        <% end -%>
+      </td>
+      <% unless is_previous == false -%>
       <td><%= t.player_score(current_user) %></td>
       <% end -%>
     </tr>
@@ -28,7 +34,7 @@
 			<th>&nbsp;</th>
       <th>&nbsp;</th>
       <th>&nbsp;</th>
-      <% unless is_previous.blank? -%>
+      <% unless is_previous == false -%>
       <th>&nbsp;</th>
       <% end -%>
 		</tr>
