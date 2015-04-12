@@ -73,8 +73,10 @@ namespace :create_sample_data do
     end
 
     u = User.create(email: "sample@sample.com", password: "This is not a real password", first_name: "Test", last_name: "User", current_league: l)
-    u.leagues << l
-    u.save
+
+    User.all.each do |u|
+      m = LeagueMembership.create(league: l, user: u, is_admin: true)
+    end
     
     t.add_player_to_group(g1, u)
   end
