@@ -1,11 +1,15 @@
 class Play::DashboardController < ApplicationController
   layout "golfer"
   
+  before_action :authenticate_user!
+  
   def index
     @page_title = "My Dashboard"
+      
+    @todays_tournament = current_user.selected_league.tournaments.where("tournament_at >= ? AND tournament_at < ?", Date.today, Date.tomorrow).first
     
-    @upcoming_tournaments = current_user.selected_league.tournaments.where("tournament_at >= ?", Time.now)
-    @past_tournaments = current_user.selected_league.tournaments.where("tournament_at < ?", Time.now)
+    @upcoming_tournaments = current_user.selected_league.tournaments.where("tournament_at >= ?", Date.tomorrow)
+    @past_tournaments = current_user.selected_league.tournaments.where("tournament_at < ?", Date.today)
     
     #ranking information
   end

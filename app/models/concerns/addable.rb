@@ -7,8 +7,8 @@ module Addable
       outing = GolfOuting.create!(team: team, user: user)
       scorecard = Scorecard.create!(golf_outing: outing)
       
-      self.course_holes.each do |hole|
-        score = Score.create!(scorecard: scorecard, course_hole: hole)
+      self.course_holes.each_with_index do |hole, i|
+        score = Score.create!(scorecard: scorecard, course_hole: hole, sort_order: i)
       end
     end
   end

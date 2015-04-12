@@ -5,12 +5,12 @@ class TournamentsController < ApplicationController
   
   def index   
     if current_user.is_super_user?
-      @upcoming_tournaments = Tournament.where("tournament_at >= ?", Time.now).page params[:page]
-      @past_tournaments = Tournament.where("tournament_at < ?", Time.now).page params[:page]
+      @upcoming_tournaments = Tournament.where("tournament_at >= ?", Date.today).page params[:page]
+      @past_tournaments = Tournament.where("tournament_at < ?", Date.today).page params[:page]
     else      
       membership_ids = current_user.leagues.map { |n| n.id }
-      @upcoming_tournaments = Tournament.joins(:league).where("leagues.id IN (?)", membership_ids).where("tournament_at >= ?", Time.now).page params[:page]
-      @past_tournaments = Tournament.joins(:league).where("leagues.id IN (?)", membership_ids).where("tournament_at < ?", Time.now).page params[:page]
+      @upcoming_tournaments = Tournament.joins(:league).where("leagues.id IN (?)", membership_ids).where("tournament_at >= ?", Date.today).page params[:page]
+      @past_tournaments = Tournament.joins(:league).where("leagues.id IN (?)", membership_ids).where("tournament_at < ?", Date.today).page params[:page]
     end
 
     @page_title = "Tournaments"

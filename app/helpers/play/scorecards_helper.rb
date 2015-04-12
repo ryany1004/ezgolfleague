@@ -1,0 +1,2 @@
+module Play::ScorecardsHelper
+end

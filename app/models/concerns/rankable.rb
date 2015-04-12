@@ -5,10 +5,12 @@ module Rankable
     ranked_players = []
     
     self.players.each do |player|
-      ranked_players << { id: player.id, name: player.complete_name, score: self.player_score(player) }
+      score = self.player_score(player)
+      
+      ranked_players << { id: player.id, name: player.complete_name, score: score } if score > 0
     end
     
-    ranked_players.sort! { |x,y| y.score <=> x.score }
+    ranked_players.sort! { |x,y| x[:score] <=> y[:score] }
     
     return ranked_players
   end

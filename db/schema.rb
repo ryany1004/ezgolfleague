@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150412002643) do
+ActiveRecord::Schema.define(version: 20150412194005) do
 
   create_table "course_hole_tee_boxes", force: :cascade do |t|
     t.integer  "course_hole_id"
@@ -93,6 +93,7 @@ ActiveRecord::Schema.define(version: 20150412002643) do
     t.integer  "strokes",        default: 0
     t.datetime "created_at",                 null: false
     t.datetime "updated_at",                 null: false
+    t.integer  "sort_order",     default: 0
   end
 
   add_index "scores", ["scorecard_id"], name: "index_scores_on_scorecard_id"

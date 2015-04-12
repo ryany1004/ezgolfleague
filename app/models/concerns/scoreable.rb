@@ -20,11 +20,15 @@ module Scoreable
       group.teams.each do |team|
         team.golf_outings.each do |golf_outing|
           if golf_outing.user == user
-            return golf_outing.scorecards.first
+            scorecard = golf_outing.scorecards.first
+
+            return scorecard
           end
         end
       end
     end
+    
+    return nil
   end
   
   def has_scores?

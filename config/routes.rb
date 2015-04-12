@@ -78,6 +78,8 @@ Rails.application.routes.draw do
       delete 'remove_signup'
     end
     
+    resources :scorecards, only: [:show, :edit, :update]
+    
     resources :dashboard, only: [:index] do
       put 'switch_leagues'
     end
