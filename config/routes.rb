@@ -72,7 +72,7 @@ Rails.application.routes.draw do
   
   #this is for playing tournaments
   namespace :play do
-    resources :tournaments, only: [] do
+    resources :tournaments, only: [:show] do
       get 'signup'
       put 'complete_signup'
       delete 'remove_signup'

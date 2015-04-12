@@ -34,7 +34,7 @@
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <% if user_is_any_league_admin(current_user) %>
-        <li><%= link_to "Switch to Admin Mode", root_path %></li>
+        <li><%= link_to "Admin Console", root_path %></li>
         <% end -%>
         
         <% if current_user.leagues.count > 1 -%>

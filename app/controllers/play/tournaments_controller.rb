@@ -2,7 +2,13 @@ class Play::TournamentsController < ApplicationController
   layout "golfer"
   
   before_action :authenticate_user!
-  before_action :fetch_tournament
+  before_action :fetch_tournament, :except => [:show]
+  
+  def show
+    @tournament = Tournament.find(params[:id])
+  
+    @page_title = "#{@tournament.name}"
+  end
   
   def signup
   end

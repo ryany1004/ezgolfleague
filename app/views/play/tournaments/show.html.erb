@@ -1,0 +1,109 @@
+<ol class="breadcrumb">
+  <li><%= link_to "My Dashboard", play_dashboard_index_path %></li>
+  <li class="active"><%= @tournament.name %></li>
+</ol>
+
+<div class="row">
+  <div class="col-md-6">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">Tournament Info</h3>
+      </div>
+      <div class="panel-body">
+        <span class="label label-default">When</span>
+        <h4><%= @tournament.tournament_at.to_s(:date_and_time) %></h4>
+        <span class="label label-default">Where</span>
+        <h4><%= @tournament.course.name %></h4>
+        <p>
+          <%= @tournament.course.street_address_1 %><br/>
+          <%= @tournament.course.city %>, <%= @tournament.course.us_state %> <%= @tournament.course.postal_code %><br/>
+          <%= link_to "View on Map", "https://www.google.com/maps/place/#{@tournament.course.street_address_1}+#{@tournament.course.city}+#{@tournament.course.us_state}+#{@tournament.course.postal_code}" %>
+        </p>
+      </div>
+      
+      <ul class="list-group">
+        <li class="list-group-item"><strong>Sign Up Opened:</strong> <%= @tournament.signup_opens_at.to_s(:date_and_time) %></li>
+        <li class="list-group-item"><strong>Sign Up Closed:</strong> <%= @tournament.signup_closes_at.to_s(:date_and_time) %></li>
+      </ul>
+      
+    </div>
+  </div>
+  
+  
+  <div class="col-md-6">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">Rankings</h3>
+      </div>
+      <% if @tournament.has_scores? -%>
+      <div class="panel-body">
+        Here's the breakdown for this tournament.
+      </div>
+      <table class="table table-striped">
+      	<thead>
+      		<tr>
+      			<th>Rank</th>
+            <th>Player</th>
+            <th>Score</th>
+      		</tr>
+      	</thead>
+        <tbody>
+          <% @tournament.ranked_player_list.each_with_index do |player, i| %>
+          <tr>
+            <td><strong><%= i + 1 %></strong></td>
+            <td><%= player[:name] %></td>
+            <td><%= player[:score] %></td>
+          </tr>
+          <% end -%>
+        </tbody>
+      </table>
+      <% else -%>
+      <div class="panel-body">
+        Rankings will be available once the tournament is underway.
+      </div>
+      <% end -%>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-6">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">Players <span class="badge"><%= @tournament.number_of_players %></span></h3>
+      </div>
+      <div class="panel-body">
+        All tournament players are listed below.
+      </div>
+      <table class="table table-striped">
+      	<thead>
+      		<tr>
+            <th>&nbsp;</th>
+      			<th>Name</th>
+            <th>Group / Tee Time</th>
+            <th>Teamed With</th>
+      		</tr>
+      	</thead>
+      	<tbody>
+      	<% @tournament.tournament_groups.each_with_index do |tournament_group, i| %>
+          <% tournament_group.teams.each do |team| %>
+            <% team.golf_outings.each do |golf_outing| %>
+            <tr>
+              <% unless golf_outing.user.avatar.blank? -%>
+              <td><%= image_tag golf_outing.user.avatar.url(:micro) %></td>
+              <% else -%>
+              <td>&nbsp;</td>
+              <% end -%>
+              <td><%= golf_outing.user.complete_name %></td>
+              <td>#<%= i + 1 %> - <%= tournament_group.tee_time_at.to_s(:date_and_time) %></td>
+              <td><%= team_member_names_without_user(team, golf_outing.user) %></td>
+            </tr>
+            <% end %>
+          <% end %>
+      	<% end %>
+      	</tbody>
+      </table>
+
+    </div>
+  </div>
+</div>

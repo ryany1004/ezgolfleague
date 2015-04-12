@@ -79,6 +79,13 @@ namespace :create_sample_data do
     end
     
     t.add_player_to_group(g1, u)
+    
+    scorecard = t.primary_scorecard_for_user(u)
+    scorecard.scores.each do |score|
+      score.strokes = Random.rand(4) + 1
+      score.save
+    end
+    
   end
   
 end
