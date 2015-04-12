@@ -29,7 +29,6 @@
     </div>
   </div>
   
-  
   <div class="col-md-6">
     <div class="panel panel-default">
       <div class="panel-heading">
@@ -52,7 +51,7 @@
           <tr>
             <td><strong><%= i + 1 %></strong></td>
             <td><%= player[:name] %></td>
-            <td><%= player[:score] %></td>
+            <td><%= player[:score] %> | <%= link_to "View Scorecard", player[:scorecard_url] %></td>
           </tr>
           <% end -%>
         </tbody>

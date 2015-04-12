@@ -18,9 +18,7 @@ module Addable
       team.golf_outings.each do |outing|
         if outing.user == user
           outing.destroy
-          
           team.destroy if team.golf_outings.count == 0
-          
           break
         end
       end
