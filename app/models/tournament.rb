@@ -22,14 +22,34 @@ class Tournament < ActiveRecord::Base
     return player_included
   end
   
+  def player_score(user)
+    return nil if !self.includes_player?(user)
+
+    total_score = 0
+
+    self.tournament_groups.each do |group|
+      group.teams.each do |team|
+        team.golf_outings.each do |golf_outing|
+          if golf_outing.user == user
+            golf_outing.scorecards.first.scores.each do |score|
+              total_score = total_score + score.strokes
+            end
+          end
+        end
+      end
+    end
+    
+    return total_score
+  end
+  
   def add_player_to_group(tournament_group, user)
     Tournament.transaction do
-      team = Team.create(tournament_group: tournament_group)
-      outing = GolfOuting.create(team: team, user: user)
-      scorecard = Scorecard.create(golf_outing: outing)
+      team = Team.create!(tournament_group: tournament_group)
+      outing = GolfOuting.create!(team: team, user: user)
+      scorecard = Scorecard.create!(golf_outing: outing)
       
       self.course_holes.each do |hole|
-        score = Score.create(scorecard: scorecard, course_hole: hole)
+        score = Score.create!(scorecard: scorecard, course_hole: hole)
       end
     end
   end

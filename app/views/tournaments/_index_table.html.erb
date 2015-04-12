@@ -15,7 +15,7 @@
 	<tbody>
 	<% tournaments.each do |tournament| %>
 		<tr>
-      <td><%= link_to tournament.name, edit_league_tournament_path(tournament.league, tournament) %></td>
+      <td><%= link_to_if is_editable?(tournament), tournament.name, edit_league_tournament_path(tournament.league, tournament) %></td>
       <td><%= tournament.league.name %></td>
       <td><%= tournament.course.name %></td>
       <td><%= tournament.tournament_at.to_s(:short) %></td>

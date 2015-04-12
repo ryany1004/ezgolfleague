@@ -77,6 +77,10 @@ Rails.application.routes.draw do
       put 'complete_signup'
       delete 'remove_signup'
     end
+    
+    resources :dashboard, only: [:index] do
+      put 'switch_leagues'
+    end
   end
 
   resources :courses do

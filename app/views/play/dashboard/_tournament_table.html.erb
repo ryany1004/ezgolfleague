@@ -1,0 +1,36 @@
+<table class="table table-striped">
+	<thead>
+		<tr>
+			<th>Name</th>
+      <th>At</th>
+      <% if is_previous.blank? -%>
+      <th>Registered</th>
+      <% else -%>
+      <th>Played</th>
+      <th>Score</th>
+      <% end -%>
+		</tr>
+	</thead>
+  <tbody>
+    <% tournaments.each do |t| %>
+    <tr>
+      <td><%= t.name %></td>
+      <td><%= t.tournament_at.to_s(:date_and_time) %></td>
+      <td><%= human_boolean(t.includes_player?(current_user)) %></td>
+      <% unless is_previous.blank? -%>
+      <td><%= t.player_score(current_user) %></td>
+      <% end -%>
+    </tr>
+    <% end %>
+  </tbody>
+  <tfoot>
+		<tr>
+			<th>&nbsp;</th>
+      <th>&nbsp;</th>
+      <th>&nbsp;</th>
+      <% unless is_previous.blank? -%>
+      <th>&nbsp;</th>
+      <% end -%>
+		</tr>
+  </tfoot>
+</table>

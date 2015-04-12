@@ -1,0 +1,54 @@
+<div class="row">
+  <div class="col-md-6">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">Upcoming Tournaments</h3>
+      </div>
+      <div class="panel-body">
+        <% if @upcoming_tournaments.count > 0 -%>
+        <%= render partial: 'tournament_table', locals: {tournaments: @upcoming_tournaments} %>
+        <% else -%>
+        <p>No upcoming tournaments in this league.</p>
+        <% end -%>
+      </div>
+    </div>
+  </div>
+  
+  <div class="col-md-6">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">Rankings</h3>
+      </div>
+      <div class="panel-body">
+        ...
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <% if @past_tournaments.count > 0 -%>
+  <div class="col-md-6">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">Previous Tournaments</h3>
+      </div>
+      <div class="panel-body">
+        <h4>Previous Tournaments</h4>
+        <%= render partial: 'tournament_table', locals: {tournaments: @past_tournaments, is_previous: true} %>
+      </div>
+    </div>
+  </div>
+  <% end -%>
+  
+  <div class="col-md-6">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">League Info</h3>
+      </div>
+      <div class="panel-body">
+        ...
+      </div>
+    </div>
+  </div>
+</div>

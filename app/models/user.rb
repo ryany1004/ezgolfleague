@@ -8,6 +8,7 @@ class User < ActiveRecord::Base
   
   has_many :league_memberships, :dependent => :destroy
   has_many :leagues, through: :league_memberships
+  belongs_to :current_league, :class_name => "League"
   
   validates :email, presence: true
   validates :first_name, presence: true
@@ -22,7 +23,11 @@ class User < ActiveRecord::Base
   end
   
   def selected_league
-    return self.leagues.first #TODO: UPDATE
+    unless self.current_league.blank?
+      return self.current_league
+    else
+      return self.leagues.first
+    end
   end
   
 end

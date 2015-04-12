@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150411194753) do
+ActiveRecord::Schema.define(version: 20150412002643) do
 
   create_table "course_hole_tee_boxes", force: :cascade do |t|
     t.integer  "course_hole_id"
@@ -163,6 +163,7 @@ ActiveRecord::Schema.define(version: 20150411194753) do
     t.integer  "invited_by_id"
     t.string   "invited_by_type"
     t.integer  "invitations_count",      default: 0
+    t.integer  "current_league_id"
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true
