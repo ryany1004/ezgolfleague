@@ -23,7 +23,7 @@
       <td><%= link_to "Edit", edit_play_scorecard_path(@todays_tournament.primary_scorecard_for_user(current_user)) %></td>
       <td><%= t.player_score(current_user) %></td>
       <% elsif is_previous == true -%>
-      <td><%= link_to "View", play_scorecard_path(@todays_tournament.primary_scorecard_for_user(current_user)) %></td>
+      <td><%= link_to "View", play_scorecard_path(t.primary_scorecard_for_user(current_user)) %></td>
       <td><%= t.player_score(current_user) %></td>
       <% else -%>
       <td><%= human_boolean(t.includes_player?(current_user)) %>
