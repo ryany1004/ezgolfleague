@@ -17,4 +17,35 @@ class League < ActiveRecord::Base
     return membership.state
   end
   
+  def ranked_users_for_year(year)
+    ranked_players = []
+    
+    year_date = Date.parse("#{year}-01-01")
+    tournaments = Tournament.where("tournament_at >= ? AND tournament_at <= ?", year_date.at_beginning_of_year, year_date.at_end_of_year).includes(tournament_groups: [teams: :golf_outings])
+    
+    tournaments.each do |t|
+      t.players.each do |p|
+        score = t.player_score(p)
+      
+        found_existing_player = false
+        
+        ranked_players.each do |r|
+          if r[:id] == p.id
+            r[:score] = r[:score] + score
+            
+            found_existing_player = true
+          end
+        end
+      
+        if found_existing_player == false
+          ranked_players << { id: p.id, name: p.complete_name, score: score } if score > 0
+        end
+      end
+    end
+    
+    ranked_players.sort! { |x,y| x[:score] <=> y[:score] }
+    
+    return ranked_players
+  end
+  
 end

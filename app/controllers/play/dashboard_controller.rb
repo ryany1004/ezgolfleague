@@ -10,8 +10,8 @@ class Play::DashboardController < ApplicationController
     
     @upcoming_tournaments = current_user.selected_league.tournaments.where("tournament_at >= ?", Date.tomorrow)
     @past_tournaments = current_user.selected_league.tournaments.where("tournament_at < ?", Date.today)
-    
-    #ranking information
+
+    @rankings = current_user.selected_league.ranked_users_for_year(Date.today.year.to_s)
   end
   
   def switch_leagues

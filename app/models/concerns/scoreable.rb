@@ -16,7 +16,9 @@ module Scoreable
   end
   
   def primary_scorecard_for_user(user)
-    self.tournament_groups.each do |group|
+    eager_groups = TournamentGroup.includes(teams: [{ golf_outings: :scorecards }]).where(tournament: self)
+    
+    eager_groups.each do |group|
       group.teams.each do |team|
         team.golf_outings.each do |golf_outing|
           if golf_outing.user == user
