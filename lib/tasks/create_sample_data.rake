@@ -1,16 +1,22 @@
 namespace :create_sample_data do
 
+  desc 'Delete All Data'
+  task remove: :environment do
+    League.all.destroy_all
+    Course.all.destroy_all
+    User.all.destroy_all
+    Tournament.all.destroy_all
+  end
+
   desc 'Create Sample Data'
   task all: :environment do
-    League.where(name: "Sample League").destroy_all
-    Course.where(name: "Sample Course").destroy_all
-    User.where(email: "sample@sample.com").destroy_all
-    User.where(email: "sample2@sample.com").destroy_all
-    Tournament.where(name: "Sample Tournament").destroy_all
+    League.where(name: "Danny's League").destroy_all
+    Course.where(name: "Bushwood").destroy_all
+    User.where("email LIKE ?", "%sample.com").destroy_all
     
-    l = League.create(name: "Sample League")
+    l = League.create(name: "Danny's League")
     
-    c = Course.create(name: "Sample Course", phone_number: "888-888-8888", street_address_1: "123 Main Street", city: "My Zone", us_state: "CA", postal_code: "11111", rating: 72.1, slope: 3)
+    c = Course.create(name: "Bushwood", phone_number: "888-888-8888", street_address_1: "123 Main Street", city: "My Zone", us_state: "CA", postal_code: "11111", rating: 72.1, slope: 3)
     h1 = CourseHole.create(course: c, hole_number: 1, par: 1, mens_handicap: 1, womens_handicap: 3)
     CourseHoleTeeBox.create(course_hole: h1, name: "Black", yardage: 200)
     
@@ -65,37 +71,68 @@ namespace :create_sample_data do
     h18 = CourseHole.create(course: c, hole_number: 18, par: 1, mens_handicap: 1, womens_handicap: 3)
     CourseHoleTeeBox.create(course_hole: h18, name: "Black", yardage: 200)
     
-    t = Tournament.create(league: l, course: c, name: "Sample Tournament", tournament_at: DateTime.now + 1.month, signup_opens_at: DateTime.now, signup_closes_at: DateTime.now + 29.days, max_players: 100, mens_tee_box: "Black")
-    g1 = TournamentGroup.create(tournament: t, tee_time_at: DateTime.now + 31.days, max_number_of_players: 4)
-    g2 = TournamentGroup.create(tournament: t, tee_time_at: DateTime.now + 31.days + 15.minutes, max_number_of_players: 4)
-    groups = [g1, g2]
-
-    c.course_holes.each do |c|
-      t.course_holes << c
-      t.save
+    #Sample Users
+    user_info = [
+      {:email => 'sample1@sample.com', :first_name => "Bob", :last_name => "Higgenbottom"},
+      {:email => 'sample2@sample.com', :first_name => "Larry", :last_name => "Crabapple"},
+      {:email => 'sample3@sample.com', :first_name => "Stirling", :last_name => "Olson"},
+      {:email => 'sample4@sample.com', :first_name => "Jake", :last_name => "Sutton"},
+      {:email => 'sample5@sample.com', :first_name => "Jon", :last_name => "Evans"},
+      {:email => 'sample6@sample.com', :first_name => "Sheehan", :last_name => "Commette"},
+      {:email => 'sample7@sample.com', :first_name => "Sarah", :last_name => "Silvers"},
+      {:email => 'sample8@sample.com', :first_name => "Bob", :last_name => "Lewis"},
+      {:email => 'sample9@sample.com', :first_name => "Barry", :last_name => "Anners"},
+      {:email => 'sample10@sample.com', :first_name => "Jon", :last_name => "Snow"},
+      {:email => 'sample11@sample.com', :first_name => "Ben", :last_name => "McKenzie"},
+      {:email => 'sample12@sample.com', :first_name => "Stan", :last_name => "Blach"},
+      {:email => 'sample13@sample.com', :first_name => "Simone", :last_name => "Perez"},
+      {:email => 'sample14@sample.com', :first_name => "Jack", :last_name => "Crack"},
+      {:email => 'sample15@sample.com', :first_name => "Steve", :last_name => "Cook"},
+      {:email => 'sample16@sample.com', :first_name => "Phil", :last_name => "Schiller"},
+      {:email => 'sample17@sample.com', :first_name => "Myke", :last_name => "Hurley"},
+      {:email => 'sample18@sample.com', :first_name => "Katie", :last_name => "Cotton"},
+      {:email => 'sample19@sample.com', :first_name => "Jonas", :last_name => "Gruber"},
+    ]
+    
+    sample_users = []
+    user_info.each do |u|
+      u1 = User.create(email: u[:email], password: "This is not a real password", first_name: u[:first_name], last_name: u[:last_name], current_league: l)
+      sample_users << u1
     end
-
-    u1 = User.create(email: "sample@sample.com", password: "This is not a real password", first_name: "Test", last_name: "User", current_league: l)
-    u2 = User.create(email: "sample2@sample.com", password: "This is not a real password", first_name: "Test 2", last_name: "User 2", current_league: l)
-    sample_users = [u1, u2]
 
     User.all.each do |u|
       m = LeagueMembership.create(league: l, user: u, is_admin: true)
     end
     
-    sample_users.each_with_index do |u, i|
-      t.add_player_to_group(groups[i], u)
-    
-      scorecard = t.primary_scorecard_for_user(u)
-      unless scorecard.blank?
-        puts "#{u.id} #{scorecard.class}"
+    tournament_info = [{:name => "Peachwood Open", :tournament_at => DateTime.now}, {:name => "Scalleywag Cup", :tournament_at => DateTime.now + 1.month}, {:name => "Caddy Day", :tournament_at => DateTime.now - 1.month}]
+    tournament_info.each do |ti|
+      t = Tournament.create(league: l, course: c, name: ti[:name], tournament_at: ti[:tournament_at], signup_opens_at: ti[:tournament_at] - 1.month, signup_closes_at: ti[:tournament_at] - 1.day, max_players: 100, mens_tee_box: "Black")
       
-        scorecard.scores.each do |score|
-          score.strokes = Random.rand(4) + 1
-          score.save
+      c.course_holes.each do |c|
+        t.course_holes << c
+        t.save
+      end
+
+      group = TournamentGroup.create(tournament: t, tee_time_at: ti[:tournament_at], max_number_of_players: 4)
+
+      sample_users.each_with_index do |u, i|
+        # t.add_player_to_group(groups[i], u)
+        
+        if group.players_signed_up.count >= group.max_number_of_players
+          group = TournamentGroup.create(tournament: t, tee_time_at: group.tournament_at + 15.minutes, max_number_of_players: 4)
         end
-      else
-        puts "No Scorecard for #{u.id}"
+        
+        t.add_player_to_group(group, u)
+    
+        scorecard = t.primary_scorecard_for_user(u)
+        unless scorecard.blank?      
+          scorecard.scores.each do |score|
+            score.strokes = Random.rand(4) + 1
+            score.save
+          end
+        else
+          puts "No Scorecard for #{u.id}"
+        end
       end
     end
   end

@@ -7,7 +7,6 @@ class Play::DashboardController < ApplicationController
     @page_title = "My Dashboard"
       
     @todays_tournament = current_user.selected_league.tournaments.where("tournament_at >= ? AND tournament_at < ?", Date.today, Date.tomorrow).first
-    
     @upcoming_tournaments = current_user.selected_league.tournaments.where("tournament_at >= ?", Date.tomorrow)
     @past_tournaments = current_user.selected_league.tournaments.where("tournament_at < ?", Date.today)
 

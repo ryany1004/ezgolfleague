@@ -2,6 +2,7 @@
 	<thead>
 		<tr>
 			<th>Name</th>
+      <th>Course</th>
       <th>When</th>
       <% if is_current == true -%>
       <th>Scorecard</th>
@@ -18,13 +19,24 @@
     <% tournaments.each do |t| %>
     <tr>
       <td><%= link_to t.name, play_tournament_path(t) %></td>
+      <td><%= t.course.name %></td>
       <td><%= t.tournament_at.to_s(:date_and_time) %></td>
       <% if is_current == true -%>
-      <td><%= link_to "Edit", edit_play_scorecard_path(t.primary_scorecard_for_user(current_user)) %></td>
-      <td><%= t.player_score(current_user) %></td>
+        <% if t.includes_player?(current_user) -%>
+        <td><%= link_to "Edit", edit_play_scorecard_path(t.primary_scorecard_for_user(current_user)) %></td>
+        <td><%= t.player_score(current_user) %></td>
+        <% else %>
+        <td>N/A</td>
+        <td>N/A</td>
+        <% end -%>
       <% elsif is_previous == true -%>
-      <td><%= link_to "View", play_scorecard_path(t.primary_scorecard_for_user(current_user)) %></td>
-      <td><%= t.player_score(current_user) %></td>
+        <% if t.includes_player?(current_user) -%>
+        <td><%= link_to "View", play_scorecard_path(t.primary_scorecard_for_user(current_user)) %></td>
+        <td><%= t.player_score(current_user) %></td>
+        <% else %>
+        <td>N/A</td>
+        <td>N/A</td>
+        <% end -%>
       <% else -%>
       <td><%= human_boolean(t.includes_player?(current_user)) %>
         <% if !t.includes_player?(current_user) -%>

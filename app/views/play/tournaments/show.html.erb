@@ -5,7 +5,7 @@
 
 <div class="row">
   <div class="col-md-6">
-    <div class="panel panel-default">
+    <div class="panel panel-default panel-success">
       <div class="panel-heading">
         <h3 class="panel-title">Tournament Info</h3>
       </div>
@@ -29,14 +29,11 @@
   </div>
   
   <div class="col-md-6">
-    <div class="panel panel-default">
+    <div class="panel panel-default panel-success">
       <div class="panel-heading">
         <h3 class="panel-title">Rankings</h3>
       </div>
       <% if @tournament.has_scores? -%>
-      <div class="panel-body">
-        Here's the breakdown for this tournament.
-      </div>
       <table class="table table-striped">
       	<thead>
       		<tr>
@@ -66,12 +63,9 @@
 
 <div class="row">
   <div class="col-md-6">
-    <div class="panel panel-default">
+    <div class="panel panel-default panel-success">
       <div class="panel-heading">
         <h3 class="panel-title">Players <span class="badge"><%= @tournament.number_of_players %></span></h3>
-      </div>
-      <div class="panel-body">
-        All tournament players are listed below.
       </div>
       <table class="table table-striped">
       	<thead>
@@ -103,7 +97,24 @@
       	<% end %>
       	</tbody>
       </table>
-
     </div>
+    
+    <div class="panel panel-default panel-success">
+      <div class="panel-heading">
+        <h3 class="panel-title">Payouts</h3>
+      </div>
+      <table class="table table-striped">
+      	<thead>
+      		<tr>
+      			<th>Name</th>
+            <th>Amount</th>
+      		</tr>
+      	</thead>
+      	<tbody>
+          <tr></tr>
+      	</tbody>
+      </table>
+    </div>
+    
   </div>
 </div>

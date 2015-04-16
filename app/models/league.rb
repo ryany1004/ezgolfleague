@@ -21,7 +21,7 @@ class League < ActiveRecord::Base
     ranked_players = []
     
     year_date = Date.parse("#{year}-01-01")
-    tournaments = Tournament.where("tournament_at >= ? AND tournament_at <= ?", year_date.at_beginning_of_year, year_date.at_end_of_year).includes(tournament_groups: [teams: :golf_outings])
+    tournaments = Tournament.where(league: self).where("tournament_at >= ? AND tournament_at <= ?", year_date.at_beginning_of_year, year_date.at_end_of_year).includes(tournament_groups: [teams: :golf_outings])
     
     tournaments.each do |t|
       t.players.each do |p|
