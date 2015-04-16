@@ -1,3 +1,5 @@
+<div class="row">
+
 <% if @upcoming_tournaments.count > 0 -%>
   <%= render partial: 'index_table', locals: {tournaments: @upcoming_tournaments, title: "Upcoming Tournaments"} %>
 <% end -%>
@@ -10,3 +12,5 @@
 <h4>You don't have any tournaments yet.</h4>
 <%= link_to 'Create Tournament', new_league_tournament_path(current_user.selected_league), :class => 'btn btn-primary' %>
 <% end -%>
+
+</div>

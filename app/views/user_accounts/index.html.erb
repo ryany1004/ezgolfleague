@@ -1,36 +1,41 @@
-<h4>User Accounts</h4>
-
-<table class="table table-striped">
-	<thead>
-		<tr>
-      <th>&nbsp;</th>
-			<th>Name</th>
-      <th>Date Joined</th>
-      <th><%= link_to 'Create User', new_user_account_path, :class => 'btn btn-primary' %></th>
-		</tr>
-	</thead>
-	<tbody>
-	<% @user_accounts.each do |user_account| %>
-		<tr>
-      <% unless user_account.avatar.blank? -%>
-      <td><%= link_to (image_tag user_account.avatar.url(:micro)), edit_user_account_path(user_account) %></td>
-      <% else -%>
-      <td>&nbsp;</td>
-      <% end -%>
-			<td><%= link_to user_account.complete_name, edit_user_account_path(user_account) %></td>
-			<td><%= user_account.created_at.to_s(:date_and_time) %></td>
-      <td><%= link_to "Edit", edit_user_account_path(user_account) %> | <%= link_to 'Delete', user_account_path(user_account), :data => { :confirm => 'Are you sure you want to delete this user?' }, :method => :delete %></td>
-		</tr>
-	<% end %>
-	</tbody>
-  <tfoot>
-		<tr>
-      <th>&nbsp;</th>
-			<th>&nbsp;</th>
-			<th>&nbsp;</th>
-      <th><%= link_to 'Create User', new_user_account_path, :class => 'btn btn-primary' %></th>
-		</tr>
-  </tfoot>
-</table>
+<div class="col-md-12">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h3 class="panel-title">User Accounts</h3>
+    </div>
+    <table class="table table-striped">
+    	<thead>
+    		<tr>
+          <th>&nbsp;</th>
+    			<th>Name</th>
+          <th>Date Joined</th>
+          <th><%= link_to 'Create User', new_user_account_path, :class => 'btn btn-primary' %></th>
+    		</tr>
+    	</thead>
+    	<tbody>
+    	<% @user_accounts.each do |user_account| %>
+    		<tr>
+          <% unless user_account.avatar.blank? -%>
+          <td><%= link_to (image_tag user_account.avatar.url(:micro)), edit_user_account_path(user_account) %></td>
+          <% else -%>
+          <td>&nbsp;</td>
+          <% end -%>
+    			<td><%= link_to user_account.complete_name, edit_user_account_path(user_account) %></td>
+    			<td><%= user_account.created_at.to_s(:date_and_time) %></td>
+          <td><%= link_to "Edit", edit_user_account_path(user_account) %> | <%= link_to 'Delete', user_account_path(user_account), :data => { :confirm => 'Are you sure you want to delete this user?' }, :method => :delete %></td>
+    		</tr>
+    	<% end %>
+    	</tbody>
+      <tfoot>
+    		<tr>
+          <th>&nbsp;</th>
+    			<th>&nbsp;</th>
+    			<th>&nbsp;</th>
+          <th><%= link_to 'Create User', new_user_account_path, :class => 'btn btn-primary' %></th>
+    		</tr>
+      </tfoot>
+    </table>
+  </div>
+</div>
 
 <%= paginate @user_accounts %>
