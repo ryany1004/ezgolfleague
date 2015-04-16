@@ -20,45 +20,34 @@
           <%= link_to "View on Map", "https://www.google.com/maps/place/#{@tournament.course.street_address_1}+#{@tournament.course.city}+#{@tournament.course.us_state}+#{@tournament.course.postal_code}" %>
         </p>
       </div>
-      
       <ul class="list-group">
         <li class="list-group-item"><strong>Sign Ups:</strong> <%= @tournament.signup_opens_at.to_s(:date_and_time) %> - <%= @tournament.signup_closes_at.to_s(:date_and_time) %></li>
       </ul>
-      
     </div>
   </div>
   
   <div class="col-md-6">
     <div class="panel panel-default panel-success">
       <div class="panel-heading">
-        <h3 class="panel-title">Rankings</h3>
+        <h3 class="panel-title">Payouts</h3>
       </div>
-      <% if @tournament.has_scores? -%>
       <table class="table table-striped">
-      	<thead>
-      		<tr>
-      			<th>Rank</th>
-            <th>Player</th>
-            <th>Score</th>
-      		</tr>
-      	</thead>
-        <tbody>
-          <% @tournament.ranked_player_list.each_with_index do |player, i| %>
+        <thead>
           <tr>
-            <td><strong><%= i + 1 %></strong></td>
-            <td><%= player[:name] %></td>
-            <td><%= player[:score] %> | <%= link_to "View Scorecard", player[:scorecard_url] %></td>
+            <th>Name</th>
+            <th>Amount</th>
           </tr>
-          <% end -%>
+        </thead>
+        <tbody>
+          <tr>
+            <td>X</td>
+            <td>$1,000</td>
+          </tr>
         </tbody>
       </table>
-      <% else -%>
-      <div class="panel-body">
-        Rankings will be available once the tournament is underway.
-      </div>
-      <% end -%>
     </div>
   </div>
+  
 </div>
 
 <div class="row">
@@ -98,23 +87,37 @@
       	</tbody>
       </table>
     </div>
-    
+  </div>
+  
+  <div class="col-md-6">
     <div class="panel panel-default panel-success">
       <div class="panel-heading">
-        <h3 class="panel-title">Payouts</h3>
+        <h3 class="panel-title">Rankings</h3>
       </div>
+      <% if @tournament.has_scores? -%>
       <table class="table table-striped">
       	<thead>
       		<tr>
-      			<th>Name</th>
-            <th>Amount</th>
+      			<th>Rank</th>
+            <th>Player</th>
+            <th>Score</th>
       		</tr>
       	</thead>
-      	<tbody>
-          <tr></tr>
-      	</tbody>
+        <tbody>
+          <% @tournament.ranked_player_list.each_with_index do |player, i| %>
+          <tr>
+            <td><strong><%= i + 1 %></strong></td>
+            <td><%= player[:name] %></td>
+            <td><%= player[:score] %> | <%= link_to "View Scorecard", player[:scorecard_url] %></td>
+          </tr>
+          <% end -%>
+        </tbody>
       </table>
+      <% else -%>
+      <div class="panel-body">
+        Rankings will be available once the tournament is underway.
+      </div>
+      <% end -%>
     </div>
-    
   </div>
 </div>
