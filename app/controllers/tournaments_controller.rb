@@ -69,6 +69,14 @@ class TournamentsController < ApplicationController
     redirect_to league_tournament_signups_path(tournament.league, tournament), :flash => { :success => "The registration was successfully deleted." }
   end
   
+  def scorecards
+    @tournament = Tournament.find(params[:tournament_id])
+    @players = @tournament.players
+  end
+  
+  def update_scorecard
+  end
+  
   private
   
   def tournament_params

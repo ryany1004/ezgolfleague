@@ -57,19 +57,6 @@ Rails.application.routes.draw do
   
   root 'leagues#index'
   
-  resources :leagues do
-    resources :league_memberships
-    resources :tournaments do #this is for setting them up
-      get 'signups'
-      delete 'delete_signup'
-      
-      resources :tournament_groups
-    end
-    
-    get 'write_member_email'
-    post 'send_member_email'
-  end
-  
   #this is for playing tournaments
   namespace :play do
     resources :tournaments, only: [:show] do
@@ -78,11 +65,33 @@ Rails.application.routes.draw do
       delete 'remove_signup'
     end
     
+    resource :user_account, only: [:edit, :update], controller: "user_account" do
+      get 'password'
+      patch 'change_password'
+    end
+    
     resources :scorecards, only: [:show, :edit, :update]
     
     resources :dashboard, only: [:index] do
       put 'switch_leagues'
     end
+  end
+  
+  #this is for admin
+  resources :leagues do
+    resources :league_memberships
+    resources :tournaments do #this is for setting them up
+      get 'signups'
+      delete 'delete_signup'
+      
+      get 'scorecards'
+      put 'update_scorecard'
+      
+      resources :tournament_groups
+    end
+    
+    get 'write_member_email'
+    post 'send_member_email'
   end
 
   resources :courses do
