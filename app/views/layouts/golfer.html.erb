@@ -33,7 +33,7 @@
         <li><%= link_to "My Dashboard", play_dashboard_index_path %></li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        <% if user_is_any_league_admin(current_user) %>
+        <% if current_user.is_any_league_admin? %>
         <li><%= link_to "Admin Console", root_path %></li>
         <% end -%>
         
