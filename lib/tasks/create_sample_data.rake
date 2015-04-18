@@ -104,7 +104,7 @@ namespace :create_sample_data do
       m = LeagueMembership.create(league: l, user: u, is_admin: true)
     end
     
-    tournament_info = [{:name => "Peachwood Open", :tournament_at => DateTime.now}, {:name => "Scalleywag Cup", :tournament_at => DateTime.now + 1.month}, {:name => "Caddy Day", :tournament_at => DateTime.now - 1.month}]
+    tournament_info = [{:name => "Peachwood Open", :tournament_at => DateTime.now, :create_scores => true}, {:name => "Scalleywag Cup", :tournament_at => DateTime.now + 1.month, :create_scores => false}, {:name => "Caddy Day", :tournament_at => DateTime.now - 1.month, :create_scores => true}]
     tournament_info.each do |ti|
       t = Tournament.create(league: l, course: c, name: ti[:name], tournament_at: ti[:tournament_at], signup_opens_at: ti[:tournament_at] - 1.month, signup_closes_at: ti[:tournament_at] - 1.day, max_players: 100, mens_tee_box: "Black")
       
@@ -115,23 +115,23 @@ namespace :create_sample_data do
 
       group = TournamentGroup.create(tournament: t, tee_time_at: ti[:tournament_at], max_number_of_players: 4)
 
-      sample_users.each_with_index do |u, i|
-        # t.add_player_to_group(groups[i], u)
-        
+      sample_users.each_with_index do |u, i|        
         if group.players_signed_up.count >= group.max_number_of_players
           group = TournamentGroup.create(tournament: t, tee_time_at: group.tournament_at + 15.minutes, max_number_of_players: 4)
         end
         
         t.add_player_to_group(group, u)
     
-        scorecard = t.primary_scorecard_for_user(u)
-        unless scorecard.blank?      
-          scorecard.scores.each do |score|
-            score.strokes = Random.rand(4) + 1
-            score.save
+        if ti[:create_scores] == true
+          scorecard = t.primary_scorecard_for_user(u)
+          unless scorecard.blank?      
+            scorecard.scores.each do |score|
+              score.strokes = Random.rand(4) + 1
+              score.save
+            end
+          else
+            puts "No Scorecard for #{u.id}"
           end
-        else
-          puts "No Scorecard for #{u.id}"
         end
       end
     end
