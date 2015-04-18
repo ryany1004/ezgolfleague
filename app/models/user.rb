@@ -30,4 +30,21 @@ class User < ActiveRecord::Base
     end
   end
   
+  def is_any_league_admin?
+    return true if self.is_super_user
+    return false if self.blank?
+    
+    self.leagues.each do |league|
+      membership = league.membership_for_user(self)
+    
+      unless membership.blank?
+        return membership.is_admin
+      else
+        return false
+      end
+    end
+    
+    return false
+  end
+  
 end

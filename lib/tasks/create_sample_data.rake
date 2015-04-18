@@ -101,7 +101,7 @@ namespace :create_sample_data do
     end
 
     User.all.each do |u|
-      m = LeagueMembership.create(league: l, user: u, is_admin: true)
+      m = LeagueMembership.create(league: l, user: u, is_admin: false)
     end
     
     tournament_info = [{:name => "Peachwood Open", :tournament_at => DateTime.now, :create_scores => true}, {:name => "Scalleywag Cup", :tournament_at => DateTime.now + 1.month, :create_scores => false}, {:name => "Caddy Day", :tournament_at => DateTime.now - 1.month, :create_scores => true}]

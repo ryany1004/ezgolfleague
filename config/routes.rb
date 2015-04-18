@@ -54,8 +54,9 @@ Rails.application.routes.draw do
   #     # (app/controllers/admin/products_controller.rb)
   #     resources :products
   #   end
-  
-  root 'leagues#index'
+    
+  root to: 'tournaments#index', constraints: -> (r) { r.env["warden"].authenticate? && r.env['warden'].user.is_any_league_admin? }, as: :league_admin_root
+  root to: 'play/dashboard#index'
   
   #this is for playing tournaments
   namespace :play do
