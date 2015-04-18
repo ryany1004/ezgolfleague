@@ -5,6 +5,8 @@ class ScorecardsController < ApplicationController
   def index
     @tournament = Tournament.find(params[:tournament_id])
     @players = @tournament.players
+    
+    @page_title = "Scorecards"
   end
   
   def edit
