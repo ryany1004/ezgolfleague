@@ -1,6 +1,6 @@
 class TournamentsController < ApplicationController
   before_action :authenticate_user!
-  before_action :fetch_tournament, :only => [:edit, :update, :destroy]
+  before_action :fetch_tournament, :only => [:edit, :update, :destroy, :signups, :manage_holes, :update_holes, :delete_signup]
   before_action :initialize_form, :only => [:new, :edit]
   
   def index   
@@ -22,13 +22,27 @@ class TournamentsController < ApplicationController
   
   def create
     @tournament = Tournament.new(tournament_params)
+    @tournament.course.course_holes.each do |ch|
+      @tournament.course_holes << ch
+    end
     
     if @tournament.save
-      redirect_to edit_league_tournament_path(@tournament.league, @tournament), :flash => { :success => "The tournament was successfully created." }
+      redirect_to league_tournament_manage_holes_path(@tournament.league, @tournament), :flash => { :success => "The tournament was successfully created. Please update course information." }
     else
       initialize_form
 
       render :new
+    end
+  end
+  
+  def manage_holes
+  end
+
+  def update_holes
+    if @tournament.update(tournament_params)
+      redirect_to league_tournament_tournament_groups_path(current_user.selected_league, @tournament), :flash => { :success => "The tournament holes were successfully updated." }
+    else
+      render :manage_holes
     end
   end
 
@@ -51,22 +65,19 @@ class TournamentsController < ApplicationController
     redirect_to league_tournaments_path(current_user.selected_league), :flash => { :success => "The tournament was successfully deleted." }
   end
   
-  def signups
-    @tournament = Tournament.find(params[:tournament_id])
-    
+  def signups    
     @tournament_groups = @tournament.tournament_groups.page params[:page]
     
     @page_title = "Signups for #{@tournament.name}"
   end
   
   def delete_signup
-    tournament = Tournament.find(params[:tournament_id])
     tournament_group = TournamentGroup.find(params[:group_id])
     user = User.find(params[:user_id])
     
-    tournament.remove_player_from_group(tournament_group, user)
+    @tournament.remove_player_from_group(tournament_group, user)
     
-    redirect_to league_tournament_signups_path(tournament.league, tournament), :flash => { :success => "The registration was successfully deleted." }
+    redirect_to league_tournament_signups_path(tournament.league, @tournament), :flash => { :success => "The registration was successfully deleted." }
   end
   
   private
@@ -76,7 +87,11 @@ class TournamentsController < ApplicationController
   end
   
   def fetch_tournament
-    @tournament = Tournament.find(params[:id])
+    unless params[:tournament_id].blank?
+      @tournament = Tournament.find(params[:tournament_id])
+    else
+      @tournament = Tournament.find(params[:id])
+    end
   end
   
   def initialize_form    

@@ -21,16 +21,20 @@ class Play::TournamentsController < ApplicationController
     else
       @tournament.add_player_to_group(tournament_group, current_user)
       
-      redirect_to play_tournament_signup_path(@tournament), :flash => { :success => "You are registered for the tournament." }
+      redirect_to play_dashboard_index_path, :flash => { :success => "You are registered for the tournament." }
     end
   end
   
   def remove_signup
-    tournament_group = TournamentGroup.find(params[:group_id])
-
-    @tournament.remove_player_from_group(tournament_group, current_user)
-
-    redirect_to play_tournament_signup_path(@tournament), :flash => { :success => "Your registration has been canceled." }
+    @tournament.tournament_groups.each do |tg|
+      tg.teams.each do |team|
+        team.golf_outings.each do |outing|
+          @tournament.remove_player_from_group(tg, current_user) if outing.user == current_user
+        end
+      end
+    end
+    
+    redirect_to play_dashboard_index_path, :flash => { :success => "Your registration has been canceled." }
   end
   
   private

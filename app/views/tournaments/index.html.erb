@@ -1,11 +1,11 @@
 <div class="row">
 
 <% if @upcoming_tournaments.count > 0 -%>
-  <%= render partial: 'index_table', locals: {tournaments: @upcoming_tournaments, title: "Upcoming Tournaments"} %>
+  <%= render partial: 'index_table', locals: {tournaments: @upcoming_tournaments, title: "Upcoming Tournaments", show_create: true} %>
 <% end -%>
 
 <% if @past_tournaments.count > 0 -%>
-  <%= render partial: 'index_table', locals: {tournaments: @past_tournaments, title: "Past Tournaments"} %>
+  <%= render partial: 'index_table', locals: {tournaments: @past_tournaments, title: "Past Tournaments", show_create: false} %>
 <% end -%>
 
 <% if @upcoming_tournaments.count == 0 && @past_tournaments.count == 0 -%>

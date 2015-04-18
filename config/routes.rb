@@ -85,7 +85,12 @@ Rails.application.routes.draw do
       get 'signups'
       delete 'delete_signup'
       
-      resources :tournament_groups
+      get 'manage_holes'
+      patch 'update_holes'
+      
+      resources :tournament_groups do
+        post 'batch_create', on: :collection
+      end
     end
     
     get 'write_member_email'

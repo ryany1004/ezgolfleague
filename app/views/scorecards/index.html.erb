@@ -1,6 +1,6 @@
 <ol class="breadcrumb">
   <li><%= link_to "Tournaments", league_tournaments_path(current_user.selected_league) %></li>
-  <li><%= link_to @tournament.name, league_tournament_path(current_user.selected_league, @tournament) %></li>
+  <li><%= link_to @tournament.name, edit_league_tournament_path(current_user.selected_league, @tournament) %></li>
   <li class="active">Scorecards</li>
 </ol>
 
@@ -18,11 +18,9 @@
         <div id="collapse<%= i %>" class="panel-collapse collapse <% if i == 0 -%>in<% end -%>" role="tabpanel" aria-labelledby="heading<%= i %>">
           <div class="panel-body">
             <%= render partial: '/shared/scorecards/show', locals: {scorecard: @tournament.primary_scorecard_for_user(player), split_holes: split_holes_for_course_tournament(@tournament), split_scores: split_scores_for_scorecard(@tournament.primary_scorecard_for_user(player), @tournament.course_holes.count), tournament: @tournament} %>
-            <% if is_today?(@tournament) -%>
             <p>
               <%= link_to "Edit This Scorecard", edit_scorecard_path(@tournament.primary_scorecard_for_user(player)), class: "btn btn-warning", role: "button" %>
             </p>
-            <% end -%>
           </div>
         </div>
       </div>

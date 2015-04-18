@@ -10,8 +10,9 @@
       <% elsif is_previous == true -%>
       <th>Scorecard</th>
       <th>Score</th>
+      <th>Points</th>
       <% else -%>
-      <th>Registered</th>
+      <th>Register</th>
       <% end -%>
 		</tr>
 	</thead>
@@ -33,16 +34,26 @@
         <% if t.includes_player?(current_user) -%>
         <td><%= link_to "View", play_scorecard_path(t.primary_scorecard_for_user(current_user)) %></td>
         <td><%= t.player_score(current_user) %></td>
+        <td>&nbsp;</td>
         <% else %>
         <td>N/A</td>
         <td>N/A</td>
+        <td>&nbsp;</td>
         <% end -%>
       <% else -%>
-      <td><%= human_boolean(t.includes_player?(current_user)) %>
-        <% if !t.includes_player?(current_user) -%>
-         | <%= link_to "Register", play_tournament_signup_path(t) %>
-        <% else %>
-         | <%= link_to "Edit", play_tournament_signup_path(t) %>
+      <td>
+        <% if t.is_open_for_registration? -%>
+          <% if !t.includes_player?(current_user) -%>
+           <%= link_to "Register", play_tournament_signup_path(t) %>
+          <% else %>
+           <%= link_to "View", play_tournament_signup_path(t) %> | <%= link_to "Cancel", play_tournament_remove_signup_path(t), :data => { :confirm => 'Are you sure you want to cancel this registration?' }, :method => :delete %>
+          <% end -%>
+        <% else -%>
+          <% if t.number_of_players >= t.max_players -%>
+            Full
+          <% else -%>
+            <%= t.signup_opens_at.to_s(:date_and_time) %>
+          <% end -%>
         <% end -%>
       </td>
       <% end -%>

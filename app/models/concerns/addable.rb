@@ -1,6 +1,13 @@
 module Addable
   extend ActiveSupport::Concern
 
+  def is_open_for_registration?
+    return false if self.number_of_players >= self.max_players
+    return false if self.signup_opens_at > Time.zone.now
+    
+    return true
+  end
+
   def add_player_to_group(tournament_group, user)
     Tournament.transaction do
       team = Team.create!(tournament_group: tournament_group)

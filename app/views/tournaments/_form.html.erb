@@ -29,14 +29,7 @@
   </div>
   
   <% if !@tournament.new_record? -%>
-  <h3>Holes and Game Info</h3>
-  <div class="well">
-    <%= f.association :course_holes, collection: @tournament.course.course_holes, :label => 'Which holes are included?', :label_method => :name, as: :check_boxes %>
-    
-    <%= f.input :mens_tee_box, collection: @tournament.course.tee_box_types, :label => "Men's Tee Box" %>
-    
-    <%= f.input :womens_tee_box, collection: @tournament.course.tee_box_types, :label => "Women's Tee Box" %>
-  </div>
+    <%= render partial: 'holes_form', locals: {tournament: @tournament, f: f} %>
   <% end -%>
   
   <h3>Game Type</h3>
@@ -57,7 +50,7 @@
   <% if !@tournament.new_record? -%>
   <h3>Groups / Tee Times</h3>
   <div class="well">  
-    <%= link_to 'Setup Tee Times', league_tournament_tournament_groups_path(@tournament.league, @tournament), :class => 'btn btn-primary' %>
+    <%= link_to 'Manage Tee Times', league_tournament_tournament_groups_path(@tournament.league, @tournament), :class => 'btn btn-primary' %>
   </div>
   <% end -%>
   
