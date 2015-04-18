@@ -84,15 +84,14 @@ Rails.application.routes.draw do
       get 'signups'
       delete 'delete_signup'
       
-      get 'scorecards'
-      put 'update_scorecard'
-      
       resources :tournament_groups
     end
     
     get 'write_member_email'
     post 'send_member_email'
   end
+  
+  resources :scorecards, :except => [:delete]
 
   resources :courses do
     resources :course_holes do

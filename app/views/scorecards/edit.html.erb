@@ -1,0 +1,24 @@
+<ol class="breadcrumb">
+  <li><%= link_to "Tournaments", league_tournaments_path(current_user.selected_league) %></li>
+  <li><%= link_to @tournament.name, league_tournament_path(current_user.selected_league, @tournament) %></li>
+  <li class="active">Scorecard: <%= @player.complete_name %></li>
+</ol>
+
+<div class="col-md-12">
+    <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+      <div class="panel panel-default">
+        <div class="panel-heading" role="tab" id="heading1">
+          <h4 class="panel-title">
+            <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapse1" aria-expanded="false" aria-controls="collapse1">
+              <%= @player.complete_name %>
+            </a>
+          </h4>
+        </div>
+        <div id="collapse1" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="heading1">
+          <div class="panel-body">
+            <%= render partial: '/shared/scorecards/edit', locals: {edit_url: scorecard_path, scorecard: @tournament.primary_scorecard_for_user(@player), split_holes: split_holes_for_course_tournament(@tournament), split_scores: split_scores_for_scorecard(@tournament.primary_scorecard_for_user(@player), @tournament.course_holes.count), tournament: @tournament} %>
+          </div>
+        </div>
+      </div>
+    </div>
+</div>
