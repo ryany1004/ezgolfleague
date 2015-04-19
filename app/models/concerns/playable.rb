@@ -35,4 +35,15 @@ module Playable
     return player_included
   end
   
+  def assign_players_to_flights
+    self.flights.each do |f|
+      self.players.each do |p|
+        player_course_handicap = p.course_handicap(self.course)
+        if player_course_handicap >= f.lower_bound && player_course_handicap <= f.upper_bound
+          f.users << p
+        end
+      end
+    end
+  end 
+  
 end

@@ -1,4 +1,6 @@
 class User < ActiveRecord::Base
+  include Handicapable
+  
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable, :registerable
   devise :invitable, :database_authenticatable, :recoverable, :rememberable, :trackable, :validatable
@@ -8,7 +10,9 @@ class User < ActiveRecord::Base
   
   has_many :league_memberships, :dependent => :destroy
   has_many :leagues, through: :league_memberships
+  has_many :payouts, inverse_of: :user
   belongs_to :current_league, :class_name => "League"
+  has_and_belongs_to_many :flights, inverse_of: :users
   
   validates :email, presence: true
   validates :first_name, presence: true

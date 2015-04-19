@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150419182206) do
+ActiveRecord::Schema.define(version: 20150419195936) do
 
   create_table "course_hole_tee_boxes", force: :cascade do |t|
     t.integer  "course_hole_id"
@@ -23,6 +23,8 @@ ActiveRecord::Schema.define(version: 20150419182206) do
     t.integer  "course_tee_box_id"
   end
 
+  add_index "course_hole_tee_boxes", ["course_hole_id"], name: "index_course_hole_tee_boxes_on_course_hole_id"
+
   create_table "course_holes", force: :cascade do |t|
     t.integer  "course_id"
     t.integer  "hole_number"
@@ -32,6 +34,8 @@ ActiveRecord::Schema.define(version: 20150419182206) do
     t.integer  "mens_handicap",   default: 0
     t.integer  "womens_handicap", default: 0
   end
+
+  add_index "course_holes", ["course_id"], name: "index_course_holes_on_course_id"
 
   create_table "course_holes_tournaments", id: false, force: :cascade do |t|
     t.integer "course_hole_id"
@@ -50,6 +54,8 @@ ActiveRecord::Schema.define(version: 20150419182206) do
     t.datetime "updated_at",               null: false
   end
 
+  add_index "course_tee_boxes", ["course_id"], name: "index_course_tee_boxes_on_course_id"
+
   create_table "courses", force: :cascade do |t|
     t.string   "name"
     t.string   "phone_number"
@@ -61,6 +67,25 @@ ActiveRecord::Schema.define(version: 20150419182206) do
     t.datetime "created_at",       null: false
     t.datetime "updated_at",       null: false
   end
+
+  create_table "flights", force: :cascade do |t|
+    t.integer  "tournament_id"
+    t.integer  "flight_number"
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
+    t.integer  "lower_bound"
+    t.integer  "upper_bound"
+  end
+
+  add_index "flights", ["tournament_id"], name: "index_flights_on_tournament_id"
+
+  create_table "flights_users", id: false, force: :cascade do |t|
+    t.integer "flight_id"
+    t.integer "user_id"
+  end
+
+  add_index "flights_users", ["flight_id"], name: "index_flights_users_on_flight_id"
+  add_index "flights_users", ["user_id"], name: "index_flights_users_on_user_id"
 
   create_table "golf_outings", force: :cascade do |t|
     t.integer  "team_id"
@@ -82,12 +107,27 @@ ActiveRecord::Schema.define(version: 20150419182206) do
     t.string   "state"
   end
 
+  add_index "league_memberships", ["league_id"], name: "index_league_memberships_on_league_id"
+  add_index "league_memberships", ["user_id"], name: "index_league_memberships_on_user_id"
+
   create_table "leagues", force: :cascade do |t|
     t.string   "name"
     t.datetime "created_at",                null: false
     t.datetime "updated_at",                null: false
     t.float    "dues_amount", default: 0.0
   end
+
+  create_table "payouts", force: :cascade do |t|
+    t.integer  "flight_id"
+    t.integer  "user_id"
+    t.decimal  "amount"
+    t.float    "points"
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
+    t.integer  "sort_order", default: 0
+  end
+
+  add_index "payouts", ["flight_id"], name: "index_payouts_on_flight_id"
 
   create_table "scorecards", force: :cascade do |t|
     t.integer  "golf_outing_id"
@@ -106,6 +146,7 @@ ActiveRecord::Schema.define(version: 20150419182206) do
     t.integer  "sort_order",     default: 0
   end
 
+  add_index "scores", ["course_hole_id"], name: "index_scores_on_course_hole_id"
   add_index "scores", ["scorecard_id"], name: "index_scores_on_scorecard_id"
 
   create_table "teams", force: :cascade do |t|
@@ -140,6 +181,9 @@ ActiveRecord::Schema.define(version: 20150419182206) do
     t.integer  "mens_tee_box_id"
     t.integer  "womens_tee_box_id"
   end
+
+  add_index "tournaments", ["course_id"], name: "index_tournaments_on_course_id"
+  add_index "tournaments", ["league_id"], name: "index_tournaments_on_league_id"
 
   create_table "users", force: :cascade do |t|
     t.datetime "created_at",                             null: false

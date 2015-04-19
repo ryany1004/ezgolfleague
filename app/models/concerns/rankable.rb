@@ -2,21 +2,30 @@ module Rankable
   extend ActiveSupport::Concern
   include Rails.application.routes.url_helpers
 
-  def ranked_player_list
-    ranked_players = []
+  def flights_with_rankings
+    ranked_flights = []
     
-    self.players.each do |player|
-      score = self.player_score(player)
+    self.flights.each do |f|
+      ranked_flight = { flight_id: f.id, flight_number: f.flight_number, players: [] }
       
-      scorecard = self.primary_scorecard_for_user(player)
-      scorecard_url = play_scorecard_path(scorecard)
+      f.users.each do |player|
+        score = self.player_score(player)
       
-      ranked_players << { id: player.id, name: player.complete_name, score: score, scorecard_url: scorecard_url } if score > 0
+        scorecard = self.primary_scorecard_for_user(player)
+        scorecard_url = play_scorecard_path(scorecard)
+        
+        points = nil
+        f.payouts.each do |payout|
+          points = payout.points if payout.user == player
+        end
+      
+        ranked_flight[:players] << { id: player.id, name: player.complete_name, score: score, scorecard_url: scorecard_url, points: points } if score > 0
+      end
+      
+      ranked_flights << ranked_flight
     end
     
-    ranked_players.sort! { |x,y| x[:score] <=> y[:score] }
-    
-    return ranked_players
+    return ranked_flights
   end
   
 end

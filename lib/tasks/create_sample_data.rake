@@ -17,7 +17,7 @@ namespace :create_sample_data do
     l = League.create(name: "Danny's League")
     
     c = Course.create(name: "Bushwood", phone_number: "888-888-8888", street_address_1: "123 Main Street", city: "My Zone", us_state: "CA", postal_code: "11111")
-    tee_box = CourseTeeBox.create(course: c, name: "Black", rating: 72.1, slope: 3)
+    tee_box = CourseTeeBox.create(course: c, name: "Black", rating: 120.0, slope: 3)
     
     h1 = CourseHole.create(course: c, hole_number: 1, par: 1, mens_handicap: 1, womens_handicap: 3)
     CourseHoleTeeBox.create(course_tee_box: tee_box, course_hole: h1, yardage: 200)
@@ -75,30 +75,30 @@ namespace :create_sample_data do
     
     #Sample Users
     user_info = [
-      {:email => 'sample1@sample.com', :first_name => "Bob", :last_name => "Higgenbottom"},
-      {:email => 'sample2@sample.com', :first_name => "Larry", :last_name => "Crabapple"},
-      {:email => 'sample3@sample.com', :first_name => "Stirling", :last_name => "Olson"},
-      {:email => 'sample4@sample.com', :first_name => "Jake", :last_name => "Sutton"},
-      {:email => 'sample5@sample.com', :first_name => "Jon", :last_name => "Evans"},
-      {:email => 'sample6@sample.com', :first_name => "Sheehan", :last_name => "Commette"},
-      {:email => 'sample7@sample.com', :first_name => "Sarah", :last_name => "Silvers"},
-      {:email => 'sample8@sample.com', :first_name => "Bob", :last_name => "Lewis"},
-      {:email => 'sample9@sample.com', :first_name => "Barry", :last_name => "Anners"},
-      {:email => 'sample10@sample.com', :first_name => "Jon", :last_name => "Snow"},
-      {:email => 'sample11@sample.com', :first_name => "Ben", :last_name => "McKenzie"},
-      {:email => 'sample12@sample.com', :first_name => "Stan", :last_name => "Blach"},
-      {:email => 'sample13@sample.com', :first_name => "Simone", :last_name => "Perez"},
-      {:email => 'sample14@sample.com', :first_name => "Jack", :last_name => "Crack"},
-      {:email => 'sample15@sample.com', :first_name => "Steve", :last_name => "Cook"},
-      {:email => 'sample16@sample.com', :first_name => "Phil", :last_name => "Schiller"},
-      {:email => 'sample17@sample.com', :first_name => "Myke", :last_name => "Hurley"},
-      {:email => 'sample18@sample.com', :first_name => "Katie", :last_name => "Cotton"},
-      {:email => 'sample19@sample.com', :first_name => "Jonas", :last_name => "Gruber"},
+      {:email => 'sample1@sample.com', :first_name => "Bob", :last_name => "Higgenbottom", :handicap_index => 10.4},
+      {:email => 'sample2@sample.com', :first_name => "Larry", :last_name => "Crabapple", :handicap_index => 11.2},
+      {:email => 'sample3@sample.com', :first_name => "Stirling", :last_name => "Olson", :handicap_index => 9.4},
+      {:email => 'sample4@sample.com', :first_name => "Jake", :last_name => "Sutton", :handicap_index => 18.4},
+      {:email => 'sample5@sample.com', :first_name => "Jon", :last_name => "Evans", :handicap_index => 5.4},
+      {:email => 'sample6@sample.com', :first_name => "Sheehan", :last_name => "Commette", :handicap_index => 3.4},
+      {:email => 'sample7@sample.com', :first_name => "Sarah", :last_name => "Silvers", :handicap_index => 6.4},
+      {:email => 'sample8@sample.com', :first_name => "Bob", :last_name => "Lewis", :handicap_index => 11.4},
+      {:email => 'sample9@sample.com', :first_name => "Barry", :last_name => "Anners", :handicap_index => 14.4},
+      {:email => 'sample10@sample.com', :first_name => "Jon", :last_name => "Snow", :handicap_index => 15.4},
+      {:email => 'sample11@sample.com', :first_name => "Ben", :last_name => "McKenzie", :handicap_index => 16.8},
+      {:email => 'sample12@sample.com', :first_name => "Stan", :last_name => "Blach", :handicap_index => 23.9},
+      {:email => 'sample13@sample.com', :first_name => "Simone", :last_name => "Perez", :handicap_index => 22.1},
+      {:email => 'sample14@sample.com', :first_name => "Jack", :last_name => "Crack", :handicap_index => 12.2},
+      {:email => 'sample15@sample.com', :first_name => "Steve", :last_name => "Cook", :handicap_index => 13.4},
+      {:email => 'sample16@sample.com', :first_name => "Phil", :last_name => "Schiller", :handicap_index => 16.4},
+      {:email => 'sample17@sample.com', :first_name => "Myke", :last_name => "Hurley", :handicap_index => 36.4},
+      {:email => 'sample18@sample.com', :first_name => "Katie", :last_name => "Cotton", :handicap_index => 22.9},
+      {:email => 'sample19@sample.com', :first_name => "Jonas", :last_name => "Gruber", :handicap_index => 30.1},
     ]
     
     sample_users = []
     user_info.each do |u|
-      u1 = User.create(email: u[:email], password: "This is not a real password", first_name: u[:first_name], last_name: u[:last_name], current_league: l)
+      u1 = User.create(email: u[:email], password: "This is not a real password", first_name: u[:first_name], last_name: u[:last_name], current_league: l, handicap_index: u[:handicap_index])
       sample_users << u1
     end
 
@@ -107,6 +107,7 @@ namespace :create_sample_data do
     end
     
     tournament_info = [{:name => "Peachwood Open", :tournament_at => DateTime.now, :create_scores => true}, {:name => "Scalleywag Cup", :tournament_at => DateTime.now + 1.month, :create_scores => false}, {:name => "Caddy Day", :tournament_at => DateTime.now - 1.month, :create_scores => true}]
+    
     tournament_info.each do |ti|
       t = Tournament.create(league: l, course: c, name: ti[:name], tournament_at: ti[:tournament_at], signup_opens_at: ti[:tournament_at] - 1.month, signup_closes_at: ti[:tournament_at] - 1.day, max_players: 100, mens_tee_box: c.course_tee_boxes.first, womens_tee_box: c.course_tee_boxes.first)
       
@@ -117,6 +118,7 @@ namespace :create_sample_data do
 
       group = TournamentGroup.create(tournament: t, tee_time_at: ti[:tournament_at], max_number_of_players: 4)
 
+      #create scores
       sample_users.each_with_index do |u, i|
         group.reload
         
@@ -137,6 +139,80 @@ namespace :create_sample_data do
             puts "No Scorecard for #{u.id}"
           end
         end
+      end
+      
+      #create flights
+      f1 = Flight.create(flight_number: 0, tournament: t, lower_bound: 0, upper_bound: 12)
+      f2 = Flight.create(flight_number: 1, tournament: t, lower_bound: 13, upper_bound: 20)
+      f3 = Flight.create(flight_number: 2, tournament: t, lower_bound: 21, upper_bound: 30)
+      t.assign_players_to_flights
+      
+      #payouts      
+      f1.reload
+      f2.reload
+      f3.reload
+      
+      p1 = Payout.create(flight: f1, sort_order: 0, amount: 45.00, points: 45.0)
+      
+      if t.tournament_at < DateTime.now
+        p1.user = f1.users[0]
+        p1.save
+      end
+      
+      p2 = Payout.create(flight: f1, sort_order: 1, amount: 25.00, points: 25.0)
+      
+      if t.tournament_at < DateTime.now
+        p2.user = f1.users[1]
+        p2.save
+      end
+      
+      p3 = Payout.create(flight: f1, sort_order: 2, amount: 15.00, points: 15.0)
+      
+      if t.tournament_at < DateTime.now
+        p3.user = f1.users[2]
+        p3.save
+      end
+      
+      p4 = Payout.create(flight: f2, sort_order: 0, amount: 45.00, points: 45.0)
+      
+      if t.tournament_at < DateTime.now
+        p4.user = f2.users[0]
+        p4.save
+      end
+      
+      p5 = Payout.create(flight: f2, sort_order: 1, amount: 25.00, points: 25.0)
+      
+      if t.tournament_at < DateTime.now
+        p5.user = f2.users[1]
+        p5.save
+      end
+      
+      p6 = Payout.create(flight: f2, sort_order: 2, amount: 15.00, points: 15.0)
+      
+      if t.tournament_at < DateTime.now
+        p6.user = f2.users[2]
+        p6.save
+      end
+      
+      p7 = Payout.create(flight: f3, sort_order: 0, amount: 45.00, points: 45.0)
+      
+      if t.tournament_at < DateTime.now
+        p7.user = f3.users[0]
+        p7.save
+      end
+      
+      p8 = Payout.create(flight: f3, sort_order: 1, amount: 25.00, points: 25.0)
+      
+      if t.tournament_at < DateTime.now
+        p8.user = f3.users[1]
+        p8.save
+      end
+      
+      p9 = Payout.create(flight: f3, sort_order: 2, amount: 15.00, points: 15.0)
+      
+      if t.tournament_at < DateTime.now
+        p9.user = f3.users[2]
+        p9.save
       end
     end
   end

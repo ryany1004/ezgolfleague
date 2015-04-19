@@ -34,15 +34,26 @@
       <table class="table table-striped">
         <thead>
           <tr>
+            <th>Flight</th>
             <th>Name</th>
             <th>Amount</th>
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>X</td>
-            <td>$1,000</td>
-          </tr>
+          <% @tournament.flights.each do |f| %>
+            <% f.payouts.each do |p| %>
+            <tr>
+              <td><strong><%= f.flight_number + 1 %></strong></td>
+              <td><%= p.user.complete_name unless p.user.blank? %></td>
+              <td><%= number_to_currency(p.amount) %></td>
+            </tr>
+            <% end %>
+            <tr>
+              <td>&nbsp;</td>
+              <td>&nbsp;</td>
+              <td>&nbsp;</td>
+            </tr>
+          <% end %>
         </tbody>
       </table>
     </div>
@@ -98,6 +109,7 @@
       <table class="table table-striped">
       	<thead>
       		<tr>
+            <th>Flight</th>
       			<th>Rank</th>
             <th>Player</th>
             <th>Score</th>
@@ -105,13 +117,23 @@
       		</tr>
       	</thead>
         <tbody>
-          <% @tournament.ranked_player_list.each_with_index do |player, i| %>
-          <tr>
-            <td><strong><%= i + 1 %></strong></td>
-            <td><%= player[:name] %></td>
-            <td><%= player[:score] %> | <%= link_to "Scorecard", player[:scorecard_url] %></td>
-            <td>&nbsp;</td>
-          </tr>
+          <% @tournament.flights_with_rankings.each do |flight| %>
+            <% flight[:players].each_with_index do |player, i| -%>
+            <tr>
+              <td><strong><%= flight[:flight_number] + 1 %></strong></td>
+              <td><strong><%= i + 1 %></strong></td>
+              <td><%= player[:name] %></td>
+              <td><%= player[:score] %> | <%= link_to "Scorecard", player[:scorecard_url] %></td>
+              <td><%= player[:points].to_i %></td>
+            </tr>
+            <% end -%>
+            <tr>
+              <td>&nbsp;</td>
+              <td>&nbsp;</td>
+              <td>&nbsp;</td>
+              <td>&nbsp;</td>
+              <td>&nbsp;</td>
+            </tr>
           <% end -%>
         </tbody>
       </table>

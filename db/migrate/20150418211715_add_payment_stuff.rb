@@ -9,11 +9,11 @@ class AddPaymentStuff < ActiveRecord::Migration
     end
     
     change_table :tournaments do |t|
-      t.float :dues_amount, :default => 0.0
+      t.decimal :dues_amount, :default => 0.0
     end
     
     change_table :leagues do |t|
-      t.float :dues_amount, :default => 0.0
+      t.decimal :dues_amount, :default => 0.0
     end
   end
 end
