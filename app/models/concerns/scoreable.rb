@@ -61,6 +61,8 @@ module Scoreable
         end
       end
     end
+    
+    return false
   end
   
 end

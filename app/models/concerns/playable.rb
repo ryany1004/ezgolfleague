@@ -35,15 +35,12 @@ module Playable
     return player_included
   end
   
-  def assign_players_to_flights
+  def flight_for_player(user)
     self.flights.each do |f|
-      self.players.each do |p|
-        player_course_handicap = p.course_handicap(self.course)
-        if player_course_handicap >= f.lower_bound && player_course_handicap <= f.upper_bound
-          f.users << p
-        end
-      end
+      return f if f.users.include? user
     end
-  end 
+    
+    return nil
+  end
   
 end
