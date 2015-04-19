@@ -6,6 +6,8 @@ class Tournament < ActiveRecord::Base
   
   belongs_to :league, inverse_of: :tournaments
   belongs_to :course, inverse_of: :tournaments
+  belongs_to :mens_tee_box, :class_name => "CourseTeeBox", :foreign_key => "mens_tee_box_id"
+  belongs_to :womens_tee_box, :class_name => "CourseTeeBox", :foreign_key => "womens_tee_box_id"
   has_many :tournament_groups, -> { order(:tee_time_at) }, inverse_of: :tournament, :dependent => :destroy
   has_and_belongs_to_many :course_holes, -> { order(:hole_number) }
   

@@ -78,7 +78,7 @@
               <% end -%>
               <td><%= golf_outing.user.complete_name %></td>
               <td><strong><%= i + 1 %></strong></td>
-              <td><%= tournament_group.tee_time_at.to_s(:date_and_time) %></td>
+              <td><%= tournament_group.tee_time_at.to_s(:time_only) %></td>
               <td><%= team_member_names_without_user(team, golf_outing.user) %></td>
             </tr>
             <% end %>

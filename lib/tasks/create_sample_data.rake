@@ -16,60 +16,62 @@ namespace :create_sample_data do
     
     l = League.create(name: "Danny's League")
     
-    c = Course.create(name: "Bushwood", phone_number: "888-888-8888", street_address_1: "123 Main Street", city: "My Zone", us_state: "CA", postal_code: "11111", rating: 72.1, slope: 3)
+    c = Course.create(name: "Bushwood", phone_number: "888-888-8888", street_address_1: "123 Main Street", city: "My Zone", us_state: "CA", postal_code: "11111")
+    tee_box = CourseTeeBox.create(course: c, name: "Black", rating: 72.1, slope: 3)
+    
     h1 = CourseHole.create(course: c, hole_number: 1, par: 1, mens_handicap: 1, womens_handicap: 3)
-    CourseHoleTeeBox.create(course_hole: h1, name: "Black", yardage: 200)
+    CourseHoleTeeBox.create(course_tee_box: tee_box, course_hole: h1, yardage: 200)
     
     h2 = CourseHole.create(course: c, hole_number: 2, par: 1, mens_handicap: 1, womens_handicap: 3)
-    CourseHoleTeeBox.create(course_hole: h2, name: "Black", yardage: 200)
+    CourseHoleTeeBox.create(course_tee_box: tee_box, course_hole: h2, yardage: 200)
     
     h3 = CourseHole.create(course: c, hole_number: 3, par: 1, mens_handicap: 1, womens_handicap: 3)
-    CourseHoleTeeBox.create(course_hole: h3, name: "Black", yardage: 200)
+    CourseHoleTeeBox.create(course_tee_box: tee_box, course_hole: h3, yardage: 200)
     
     h4 = CourseHole.create(course: c, hole_number: 4, par: 1, mens_handicap: 1, womens_handicap: 3)
-    CourseHoleTeeBox.create(course_hole: h4, name: "Black", yardage: 200)
+    CourseHoleTeeBox.create(course_tee_box: tee_box, course_hole: h4, yardage: 200)
     
     h5 = CourseHole.create(course: c, hole_number: 5, par: 1, mens_handicap: 1, womens_handicap: 3)
-    CourseHoleTeeBox.create(course_hole: h5, name: "Black", yardage: 200)
+    CourseHoleTeeBox.create(course_tee_box: tee_box, course_hole: h5, yardage: 200)
     
     h6 = CourseHole.create(course: c, hole_number: 6, par: 1, mens_handicap: 1, womens_handicap: 3)
-    CourseHoleTeeBox.create(course_hole: h6, name: "Black", yardage: 200)
+    CourseHoleTeeBox.create(course_tee_box: tee_box, course_hole: h6, yardage: 200)
     
     h7 = CourseHole.create(course: c, hole_number: 7, par: 1, mens_handicap: 1, womens_handicap: 3)
-    CourseHoleTeeBox.create(course_hole: h7, name: "Black", yardage: 200)
+    CourseHoleTeeBox.create(course_tee_box: tee_box, course_hole: h7, yardage: 200)
     
     h8 = CourseHole.create(course: c, hole_number: 8, par: 1, mens_handicap: 1, womens_handicap: 3)
-    CourseHoleTeeBox.create(course_hole: h8, name: "Black", yardage: 200)
+    CourseHoleTeeBox.create(course_tee_box: tee_box, course_hole: h8, yardage: 200)
     
     h9 = CourseHole.create(course: c, hole_number: 9, par: 1, mens_handicap: 1, womens_handicap: 3)
-    CourseHoleTeeBox.create(course_hole: h9, name: "Black", yardage: 200)
+    CourseHoleTeeBox.create(course_tee_box: tee_box, course_hole: h9, yardage: 200)
     
     h10 = CourseHole.create(course: c, hole_number: 10, par: 1, mens_handicap: 1, womens_handicap: 3)
-    CourseHoleTeeBox.create(course_hole: h10, name: "Black", yardage: 200)
+    CourseHoleTeeBox.create(course_tee_box: tee_box, course_hole: h10, yardage: 200)
     
     h11 = CourseHole.create(course: c, hole_number: 11, par: 1, mens_handicap: 1, womens_handicap: 3)
-    CourseHoleTeeBox.create(course_hole: h11, name: "Black", yardage: 200)
+    CourseHoleTeeBox.create(course_tee_box: tee_box, course_hole: h11, yardage: 200)
     
     h12 = CourseHole.create(course: c, hole_number: 12, par: 1, mens_handicap: 1, womens_handicap: 3)
-    CourseHoleTeeBox.create(course_hole: h12, name: "Black", yardage: 200)
+    CourseHoleTeeBox.create(course_tee_box: tee_box, course_hole: h12, yardage: 200)
     
     h13 = CourseHole.create(course: c, hole_number: 13, par: 1, mens_handicap: 1, womens_handicap: 3)
-    CourseHoleTeeBox.create(course_hole: h13, name: "Black", yardage: 200)
+    CourseHoleTeeBox.create(course_tee_box: tee_box, course_hole: h13, yardage: 200)
     
     h14 = CourseHole.create(course: c, hole_number: 14, par: 1, mens_handicap: 1, womens_handicap: 3)
-    CourseHoleTeeBox.create(course_hole: h14, name: "Black", yardage: 200)
+    CourseHoleTeeBox.create(course_tee_box: tee_box, course_hole: h14, yardage: 200)
     
     h15 = CourseHole.create(course: c, hole_number: 15, par: 1, mens_handicap: 1, womens_handicap: 3)
-    CourseHoleTeeBox.create(course_hole: h15, name: "Black", yardage: 200)
+    CourseHoleTeeBox.create(course_tee_box: tee_box, course_hole: h15, yardage: 200)
     
     h16 = CourseHole.create(course: c, hole_number: 16, par: 1, mens_handicap: 1, womens_handicap: 3)
-    CourseHoleTeeBox.create(course_hole: h16, name: "Black", yardage: 200)
+    CourseHoleTeeBox.create(course_tee_box: tee_box, course_hole: h16, yardage: 200)
     
     h17 = CourseHole.create(course: c, hole_number: 17, par: 1, mens_handicap: 1, womens_handicap: 3)
-    CourseHoleTeeBox.create(course_hole: h17, name: "Black", yardage: 200)
+    CourseHoleTeeBox.create(course_tee_box: tee_box, course_hole: h17, yardage: 200)
     
     h18 = CourseHole.create(course: c, hole_number: 18, par: 1, mens_handicap: 1, womens_handicap: 3)
-    CourseHoleTeeBox.create(course_hole: h18, name: "Black", yardage: 200)
+    CourseHoleTeeBox.create(course_tee_box: tee_box, course_hole: h18, yardage: 200)
     
     #Sample Users
     user_info = [
@@ -106,7 +108,7 @@ namespace :create_sample_data do
     
     tournament_info = [{:name => "Peachwood Open", :tournament_at => DateTime.now, :create_scores => true}, {:name => "Scalleywag Cup", :tournament_at => DateTime.now + 1.month, :create_scores => false}, {:name => "Caddy Day", :tournament_at => DateTime.now - 1.month, :create_scores => true}]
     tournament_info.each do |ti|
-      t = Tournament.create(league: l, course: c, name: ti[:name], tournament_at: ti[:tournament_at], signup_opens_at: ti[:tournament_at] - 1.month, signup_closes_at: ti[:tournament_at] - 1.day, max_players: 100, mens_tee_box: "Black")
+      t = Tournament.create(league: l, course: c, name: ti[:name], tournament_at: ti[:tournament_at], signup_opens_at: ti[:tournament_at] - 1.month, signup_closes_at: ti[:tournament_at] - 1.day, max_players: 100, mens_tee_box: c.course_tee_boxes.first, womens_tee_box: c.course_tee_boxes.first)
       
       c.course_holes.each do |c|
         t.course_holes << c
@@ -115,9 +117,11 @@ namespace :create_sample_data do
 
       group = TournamentGroup.create(tournament: t, tee_time_at: ti[:tournament_at], max_number_of_players: 4)
 
-      sample_users.each_with_index do |u, i|        
+      sample_users.each_with_index do |u, i|
+        group.reload
+        
         if group.players_signed_up.count >= group.max_number_of_players
-          group = TournamentGroup.create(tournament: t, tee_time_at: group.tournament_at + 15.minutes, max_number_of_players: 4)
+          group = TournamentGroup.create(tournament: t, tee_time_at: group.tee_time_at + 8.minutes, max_number_of_players: 4)
         end
         
         t.add_player_to_group(group, u)

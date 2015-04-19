@@ -26,6 +26,7 @@
       <td><%= link_to "Cancel Registration", play_tournament_remove_signup_path(@tournament), :data => { :confirm => 'Are you sure you want to cancel this registration?' }, :method => :delete %></td>
       <% else -%>
       <td>&nbsp;</td>
+      <td>&nbsp;</td>
       <% end -%>
     </tr>
     <% end %>
@@ -37,6 +38,7 @@
       <td><%= link_to "Register", play_tournament_complete_signup_path(@tournament, group_id: group.id, pay_now: false), :method => :put, :role => "button", :class => "btn btn-default" %>
       </td>
       <% else -%>
+      <td>&nbsp;</td>
       <td>&nbsp;</td>
       <% end -%>
     </tr>
