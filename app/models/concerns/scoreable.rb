@@ -15,6 +15,20 @@ module Scoreable
     return total_score
   end
   
+  def player_points(user)
+    return nil if !self.includes_player?(user)
+    
+    points = 0
+    
+    self.flights.each do |f|
+      f.payouts.each do |p|
+        points = points + p.points if p.user == user
+      end
+    end
+    
+    return points
+  end
+  
   def primary_scorecard_for_user(user)
     eager_groups = TournamentGroup.includes(teams: [{ golf_outings: :scorecards }]).where(tournament: self)
     

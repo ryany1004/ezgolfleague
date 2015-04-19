@@ -25,25 +25,25 @@ class League < ActiveRecord::Base
     
     tournaments.each do |t|
       t.players.each do |p|
-        score = t.player_score(p)
+        points = t.player_points(p)
       
         found_existing_player = false
         
         ranked_players.each do |r|
           if r[:id] == p.id
-            r[:score] = r[:score] + score
+            r[:points] = r[:points] + points
             
             found_existing_player = true
           end
         end
       
         if found_existing_player == false
-          ranked_players << { id: p.id, name: p.complete_name, score: score } if score > 0
+          ranked_players << { id: p.id, name: p.complete_name, points: points }
         end
       end
     end
     
-    ranked_players.sort! { |x,y| x[:score] <=> y[:score] }
+    ranked_players.sort! { |x,y| y[:points] <=> x[:points] }
     
     return ranked_players
   end
