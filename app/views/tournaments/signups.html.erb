@@ -7,7 +7,11 @@
 			<th>Name</th>
       <th>Group / Tee Time</th>
       <th>Teamed With</th>
+      <% if is_editable?(@tournament) -%>
       <th><%= link_to 'Signup for Tournament', play_tournament_signup_path(@tournament), :class => 'btn btn-primary' %></th>
+      <% else -%>
+      <th>&nbsp;</th>
+      <% end -%>
 		</tr>
 	</thead>
 	<tbody>
