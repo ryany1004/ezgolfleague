@@ -72,7 +72,6 @@
       <table class="table table-striped">
       	<thead>
       		<tr>
-            <th>&nbsp;</th>
       			<th>Name</th>
             <th>Flight</th>
             <th>Group</th>
@@ -85,11 +84,6 @@
           <% tournament_group.teams.each do |team| %>
             <% team.golf_outings.each do |golf_outing| %>
             <tr>
-              <% unless golf_outing.user.avatar.blank? -%>
-              <td><%= image_tag(golf_outing.user.avatar.url(:micro)) %></td>
-              <% else -%>
-              <td>&nbsp;</td>
-              <% end -%>
               <td><%= golf_outing.user.complete_name %></td>
               <% if @tournament.flight_for_player(golf_outing.user).blank? -%>
               <td>&nbsp;</td>

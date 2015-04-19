@@ -34,11 +34,11 @@
         <% if t.includes_player?(current_user) -%>
         <td><%= link_to "View", play_scorecard_path(t.primary_scorecard_for_user(current_user)) %></td>
         <td><%= t.player_score(current_user) %></td>
-        <td>&nbsp;</td>
+        <td><%= t.player_points(current_user) %></td>
         <% else %>
         <td>N/A</td>
         <td>N/A</td>
-        <td>&nbsp;</td>
+        <td>N/A</td>
         <% end -%>
       <% else -%>
       <td>
