@@ -100,6 +100,8 @@ Rails.application.routes.draw do
   resources :scorecards, :except => [:delete]
 
   resources :courses do
+    resources :course_tee_boxes
+    
     resources :course_holes do
       resources :course_hole_tee_boxes
     end

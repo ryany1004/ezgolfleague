@@ -4,6 +4,16 @@
       <div class="panel-heading">
         <h3 class="panel-title"><%= current_user.selected_league.name %></h3>
       </div>
+      <% if current_user.has_paid == false -%>
+      <table class="table">
+        <tbody>
+          <tr>
+            <td><em>Your annual league dues are unpaid. Please pay them now to remain in good standing.</em></td>
+            <td><a href="#">Pay Now</a></td>
+          </tr>
+        </tbody>
+      </table>
+      <% end -%>
     </div>
   </div>
 </div>

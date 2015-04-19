@@ -11,15 +11,16 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150412194005) do
+ActiveRecord::Schema.define(version: 20150419172801) do
 
   create_table "course_hole_tee_boxes", force: :cascade do |t|
     t.integer  "course_hole_id"
     t.string   "name"
     t.string   "description"
     t.integer  "yardage"
-    t.datetime "created_at",     null: false
-    t.datetime "updated_at",     null: false
+    t.datetime "created_at",        null: false
+    t.datetime "updated_at",        null: false
+    t.integer  "course_tee_box_id"
   end
 
   create_table "course_holes", force: :cascade do |t|
@@ -40,6 +41,15 @@ ActiveRecord::Schema.define(version: 20150412194005) do
   add_index "course_holes_tournaments", ["course_hole_id"], name: "index_course_holes_tournaments_on_course_hole_id"
   add_index "course_holes_tournaments", ["tournament_id"], name: "index_course_holes_tournaments_on_tournament_id"
 
+  create_table "course_tee_boxes", force: :cascade do |t|
+    t.integer  "course_id"
+    t.string   "name"
+    t.float    "rating",     default: 0.0
+    t.integer  "slope",      default: 0
+    t.datetime "created_at",               null: false
+    t.datetime "updated_at",               null: false
+  end
+
   create_table "courses", force: :cascade do |t|
     t.string   "name"
     t.string   "phone_number"
@@ -48,17 +58,16 @@ ActiveRecord::Schema.define(version: 20150412194005) do
     t.string   "city"
     t.string   "us_state"
     t.string   "postal_code"
-    t.datetime "created_at",                     null: false
-    t.datetime "updated_at",                     null: false
-    t.float    "rating",           default: 0.0
-    t.integer  "slope",            default: 0
+    t.datetime "created_at",       null: false
+    t.datetime "updated_at",       null: false
   end
 
   create_table "golf_outings", force: :cascade do |t|
     t.integer  "team_id"
     t.integer  "user_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
+    t.boolean  "has_paid",   default: false
   end
 
   add_index "golf_outings", ["team_id"], name: "index_golf_outings_on_team_id"
@@ -75,8 +84,9 @@ ActiveRecord::Schema.define(version: 20150412194005) do
 
   create_table "leagues", force: :cascade do |t|
     t.string   "name"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
+    t.float    "dues_amount", default: 0.0
   end
 
   create_table "scorecards", force: :cascade do |t|
@@ -124,10 +134,11 @@ ActiveRecord::Schema.define(version: 20150412194005) do
     t.datetime "signup_opens_at"
     t.datetime "signup_closes_at"
     t.integer  "max_players"
-    t.datetime "created_at",       null: false
-    t.datetime "updated_at",       null: false
+    t.datetime "created_at",                     null: false
+    t.datetime "updated_at",                     null: false
     t.string   "mens_tee_box"
     t.string   "womens_tee_box"
+    t.float    "dues_amount",      default: 0.0
   end
 
   create_table "users", force: :cascade do |t|
@@ -165,6 +176,8 @@ ActiveRecord::Schema.define(version: 20150412194005) do
     t.string   "invited_by_type"
     t.integer  "invitations_count",      default: 0
     t.integer  "current_league_id"
+    t.float    "handicap_index",         default: 0.0
+    t.boolean  "has_paid",               default: false
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true

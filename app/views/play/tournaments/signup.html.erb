@@ -13,8 +13,9 @@
 <table class="table table-striped table-bordered">
 	<thead>
 		<tr>
-			<th width="80%">Players</th>
-      <th width="20%">&nbsp;</th>
+			<th width="60%">Players</th>
+      <th width="20%">Pay Now (<%= number_to_currency(@tournament.dues_amount) %>)</th>
+      <th width="20%">Pay On Site</th>
 		</tr>
 	</thead>
   <tbody>
@@ -32,7 +33,9 @@
     <tr>
       <td>Time Available</td>
       <% if @tournament.includes_player?(current_user) == false -%>
-      <td><%= link_to "Sign Up", play_tournament_complete_signup_path(@tournament, group_id: group.id), :method => :put %></td>
+      <td><%= link_to "Register & Pay", play_tournament_complete_signup_path(@tournament, group_id: group.id, pay_now: true), :method => :put, :role => "button", :class => "btn btn-default" %></td>
+      <td><%= link_to "Register", play_tournament_complete_signup_path(@tournament, group_id: group.id, pay_now: false), :method => :put, :role => "button", :class => "btn btn-default" %>
+      </td>
       <% else -%>
       <td>&nbsp;</td>
       <% end -%>

@@ -1,8 +1,7 @@
 <ol class="breadcrumb">
   <li><%= link_to "Courses", courses_path %></li>
   <li><%= link_to @course.name, edit_course_path(@course) %></li>
-  <li><%= link_to "Hole #{@course_hole.hole_number}", edit_course_course_hole_path(@course, @course_hole) %></li>
-  <li class="active">New Tee Box</li>
+  <li class="active">Create Course Tee Box</li>
 </ol>
 
 <%= render 'form' %>

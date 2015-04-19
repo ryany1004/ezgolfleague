@@ -7,7 +7,8 @@
     	<thead>
     		<tr>
     			<th>Name</th>
-          <th>Holes</th>
+          <th width="10%">Tee Boxes</th>
+          <th width="10%">Holes</th>
           <th>Date Added</th>
           <th><%= link_to 'Create Course', new_course_path, :class => 'btn btn-primary' %></th>
     		</tr>
@@ -16,7 +17,8 @@
     	<% @courses.each do |course| %>
     		<tr>
     			<td><%= link_to course.name, edit_course_path(course) %></td>
-          <td><%= course.course_holes.count %></td>
+          <td><div style="float: right;"><%= course.course_tee_boxes.count %> <%= link_to "Edit", course_course_tee_boxes_path(course) %></div></td>
+          <td><div style="float: right;"><%= course.course_holes.count %> <%= link_to "Edit", course_course_holes_path(course) %></div></td>
     			<td><%= course.created_at.to_s(:date_and_time) %></td>
           <td><%= link_to "Edit", edit_course_path(course) %> | <%= link_to 'Delete', course_path(course), :data => { :confirm => 'Are you sure you want to delete this course?' }, :method => :delete %></td>
     		</tr>
@@ -25,6 +27,7 @@
       <tfoot>
     		<tr>
     			<th>&nbsp;</th>
+          <th>&nbsp;</th>
           <th>&nbsp;</th>
     			<th>&nbsp;</th>
           <th><%= link_to 'Create Course', new_course_path, :class => 'btn btn-primary' %></th>

@@ -16,7 +16,7 @@ class CourseHole < ActiveRecord::Base
       yardage_strings = []
       
       self.course_hole_tee_boxes.each do |b|
-        yardage_strings << "#{b.name} - #{b.yardage}"
+        yardage_strings << "#{b.course_tee_box.name} - #{b.yardage}"
       end
       
       return yardage_strings

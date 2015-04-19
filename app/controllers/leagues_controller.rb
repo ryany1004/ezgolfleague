@@ -62,7 +62,7 @@ class LeaguesController < ApplicationController
   private
   
   def league_params
-    params.require(:league).permit(:name)
+    params.require(:league).permit(:name, :dues_amount)
   end
   
   def fetch_league

@@ -1,0 +1,41 @@
+<ol class="breadcrumb">
+  <li><%= link_to "Courses", courses_path %></li>
+  <li><%= link_to @course.name, edit_course_path(@course) %></li>
+  <li class="active">Tee Boxes</li>
+</ol>
+
+<div class="col-md-12">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h3 class="panel-title">Course Tee Boxes</h3>
+    </div>
+    <table class="table table-striped">
+    	<thead>
+    		<tr>
+    			<th>Name</th>
+          <th>Slope</th>
+          <th>Rating</th>
+          <th><%= link_to 'Create Course Tee Box', new_course_course_tee_box_path(@course), :class => 'btn btn-primary' %></th>
+    		</tr>
+    	</thead>
+    	<tbody>
+    	<% @course_tee_boxes.each do |tee_box| %>
+    		<tr>
+    			<td><%= link_to tee_box.name, edit_course_course_tee_box_path(@course, tee_box) %></td>
+          <td><%= tee_box.slope %></td>
+    			<td><%= tee_box.rating %></td>
+          <td><%= link_to "Edit", edit_course_course_tee_box_path(@course, tee_box) %> | <%= link_to 'Delete', course_course_tee_box_path(@course, tee_box), :data => { :confirm => 'Are you sure you want to delete this course tee box?' }, :method => :delete %></td>
+    		</tr>
+    	<% end %>
+    	</tbody>
+      <tfoot>
+    		<tr>
+    			<th>&nbsp;</th>
+          <th>&nbsp;</th>
+    			<th>&nbsp;</th>
+          <th><%= link_to 'Create Course Tee Box', new_course_course_tee_box_path(@course), :class => 'btn btn-primary' %></th>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
+</div>

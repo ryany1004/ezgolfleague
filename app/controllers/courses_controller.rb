@@ -17,7 +17,7 @@ class CoursesController < ApplicationController
     @course = Course.new(course_params)
 
     if @course.save
-      redirect_to edit_course_path(@course), :flash => { :success => "The course was successfully created." }
+      redirect_to course_course_tee_boxes_path(@course), :flash => { :success => "The course was successfully created. Please add tee box information next." }
     else
       initialize_form
 
@@ -47,7 +47,7 @@ class CoursesController < ApplicationController
   private
   
   def course_params
-    params.require(:course).permit(:name, :street_address_1, :street_address_2, :city, :us_state, :postal_code, :phone_number, :rating, :slope)
+    params.require(:course).permit(:name, :street_address_1, :street_address_2, :city, :us_state, :postal_code, :phone_number)
   end
   
   def fetch_course
