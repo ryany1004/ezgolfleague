@@ -15,6 +15,32 @@ class Tournament < ActiveRecord::Base
   validates :name, presence: true
   validates :tournament_at, presence: true
   validates :signup_opens_at, presence: true
+  validates :signup_closes_at, presence: true
+
+  validate :dates_are_valid, on: :create
+  def dates_are_valid
+    now = Time.zone.now.at_beginning_of_day
+    
+    if tournament_at.present? && tournament_at < now
+      errors.add(:tournament_at, "can't be in the past")
+    end
+    
+    if signup_opens_at.present? && signup_opens_at < now
+      errors.add(:signup_opens_at, "can't be in the past")
+    end
+    
+    if signup_closes_at.present? && signup_closes_at < now
+      errors.add(:signup_closes_at, "can't be in the past")
+    end
+    
+    if signup_opens_at.present? && tournament_at.present? && tournament_at < signup_opens_at
+      errors.add(:signup_opens_at, "can't be after the tournament")
+    end
+    
+    if signup_opens_at.present? && signup_closes_at.present? && signup_opens_at > signup_closes_at
+      errors.add(:signup_closes_at, "can't be before the sign up opening")
+    end
+  end
   
   paginates_per 50
   
