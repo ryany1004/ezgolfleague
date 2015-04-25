@@ -2,7 +2,7 @@
 <div class="well">
   <%= f.association :course_holes, collection: tournament.course.course_holes, :label => 'Which holes are included?', :label_method => :name, as: :check_boxes %>
   
-  <%= f.input :mens_tee_box_id, collection: tournament.course.course_tee_boxes, :label => "Men's Tee Box", :label_method => :name %>
+  <%= f.input :mens_tee_box_id, collection: tournament.course.course_tee_boxes, :label => "Men's Tee Box", :label_method => :name, required: true %>
   
-  <%= f.input :womens_tee_box_id, collection: tournament.course.course_tee_boxes, :label => "Women's Tee Box", :label_method => :name %>
+  <%= f.input :womens_tee_box_id, collection: tournament.course.course_tee_boxes, :label => "Women's Tee Box", :label_method => :name, required: true %>
 </div>

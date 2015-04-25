@@ -1,0 +1,23 @@
+<%= simple_form_for [@tournament.league, @tournament, @flight] do |f| %>
+  <% if notification = f.error_notification %>
+    <div class="alert alert-error fade in">
+      <a class="close" data-dismiss="alert" href="#">&times;</a>
+      <%= notification %>
+    </div>
+  <% end %>
+  
+  <legend>Flight Details</legend>
+  
+  <h3>Basic Details</h3>
+  <div class="well">  
+	  <%= f.input :flight_number, :label => 'Flight Number', required: true %>
+    
+    <%= f.input :lower_bound, :label => 'Handicap Lower Bound', required: true %>
+    
+    <%= f.input :upper_bound, :label => 'Handicap Upper Bound', required: true %>
+  </div>
+  
+  <div class="form-actions">
+    <%= f.button :submit, :class => 'btn btn-default' %>
+  </div>
+<% end %>

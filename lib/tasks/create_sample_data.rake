@@ -109,7 +109,7 @@ namespace :create_sample_data do
     tournament_info = [{:name => "Peachwood Open", :tournament_at => DateTime.now, :create_scores => true}, {:name => "Scalleywag Cup", :tournament_at => DateTime.now + 1.month, :create_scores => false}, {:name => "Caddy Day", :tournament_at => DateTime.now - 1.month, :create_scores => true}]
     
     tournament_info.each do |ti|
-      t = Tournament.create(league: l, course: c, name: ti[:name], tournament_at: ti[:tournament_at], signup_opens_at: ti[:tournament_at] - 1.month, signup_closes_at: ti[:tournament_at] - 1.day, max_players: 100, mens_tee_box: c.course_tee_boxes.first, womens_tee_box: c.course_tee_boxes.first)
+      t = Tournament.create(league: l, course: c, name: ti[:name], tournament_at: ti[:tournament_at], signup_opens_at: ti[:tournament_at] - 1.month, signup_closes_at: ti[:tournament_at] - 1.day, max_players: 100, mens_tee_box: c.course_tee_boxes.first, womens_tee_box: c.course_tee_boxes.first, dues_amount: 20.0)
       
       c.course_holes.each do |c|
         t.course_holes << c

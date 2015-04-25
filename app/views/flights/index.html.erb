@@ -1,0 +1,44 @@
+<ol class="breadcrumb">
+  <li><%= link_to "Tournaments", league_tournaments_path(current_user.selected_league) %></li>
+  <li><%= link_to @tournament.name, edit_league_tournament_path(current_user.selected_league, @tournament) %></li>
+  <li class="active">Flights</li>
+</ol>
+
+<div class="col-md-12">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h3 class="panel-title">Flights</h3>
+    </div>
+    <div class="panel-body">
+      By specifying handicap ranges when creating flights, players can automatically be placed based on their current course handicap.
+    </div>
+    <table class="table table-striped">
+    	<thead>
+    		<tr>
+    			<th>Number</th>
+          <th>Handicap Lower Bound</th>
+          <th>Handicap Upper Bound</th>
+          <th><%= link_to 'Create Flight', new_league_tournament_flight_path, :class => 'btn btn-primary' %></th>
+    		</tr>
+    	</thead>
+    	<tbody>
+    	<% @flights.each do |flight| %>
+    		<tr>
+    			<td><%= link_to flight.flight_number, edit_league_tournament_flight_path(@tournament.league, @tournament, flight) %></td>
+    			<td><%= flight.lower_bound %></td>
+          <td><%= flight.upper_bound %></td>
+          <td><%= link_to "Edit", edit_league_tournament_flight_path(@tournament.league, @tournament, flight) %> | <%= link_to 'Delete', league_tournament_flight_path(@tournament.league, @tournament, flight), :data => { :confirm => 'Are you sure you want to delete this flight? It will remove all associated payout information.' }, :method => :delete %></td>
+    		</tr>
+    	<% end %>
+    	</tbody>
+      <tfoot>
+    		<tr>
+    			<th>&nbsp;</th>
+          <th>&nbsp;</th>
+          <th>&nbsp;</th>
+          <th><%= link_to 'Create Flight', new_league_tournament_flight_path, :class => 'btn btn-primary' %></th>
+    		</tr>
+      </tfoot>
+    </table>
+  </div>
+</div>

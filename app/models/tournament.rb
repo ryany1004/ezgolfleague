@@ -16,6 +16,9 @@ class Tournament < ActiveRecord::Base
   validates :tournament_at, presence: true
   validates :signup_opens_at, presence: true
   validates :signup_closes_at, presence: true
+  validates :max_players, presence: true
+  validates :mens_tee_box, presence: true
+  validates :womens_tee_box, presence: true
 
   validate :dates_are_valid, on: :create
   def dates_are_valid

@@ -88,6 +88,8 @@ Rails.application.routes.draw do
       get 'manage_holes'
       patch 'update_holes'
       
+      resources :flights
+      
       resources :tournament_groups do
         post 'batch_create', on: :collection
       end

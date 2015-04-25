@@ -1,3 +1,13 @@
+  <% if !@tournament.new_record? -%>
+  <h3>Manage</h3>
+  <div class="well">  
+    <%= link_to 'Tee Times', league_tournament_tournament_groups_path(@tournament.league, @tournament), :class => 'btn btn-primary' %>
+    <%= link_to 'Flights & Payouts', league_tournament_flights_path(@tournament.league, @tournament), :class => 'btn btn-primary' %>
+    <%= link_to 'Contests', league_tournament_tournament_groups_path(@tournament.league, @tournament), :class => 'btn btn-primary' %>
+    <%= link_to 'Game Types', league_tournament_tournament_groups_path(@tournament.league, @tournament), :class => 'btn btn-primary' %>
+  </div>
+  <% end -%>
+
 <%= simple_form_for [current_user.selected_league, @tournament] do |f| %>
   <% if notification = f.error_notification %>
     <div class="alert alert-error fade in">
@@ -23,40 +33,19 @@
 
   <h3>Sign Up Info</h3>
   <div class="well">
-    <%= f.input :signup_opens_at, :label => 'Signup Opening Date', :as => :datetime_picker %>
+    <%= f.input :signup_opens_at, :label => 'Signup Opening Date', :as => :datetime_picker, required: true %>
   
-    <%= f.input :signup_closes_at, :label => 'Signup Closing Date', :as => :datetime_picker %>
+    <%= f.input :signup_closes_at, :label => 'Signup Closing Date', :as => :datetime_picker, required: true %>
   
-    <%= f.input :max_players, :label => 'Maximum Number of Players' %>
+    <%= f.input :max_players, :label => 'Maximum Number of Players', required: true %>
   </div>
   
   <% if !@tournament.new_record? -%>
     <%= render partial: 'holes_form', locals: {tournament: @tournament, f: f} %>
   <% end -%>
   
-  <h3>Game Type</h3>
-  <div class="well">
-    Game type info here.
-  </div>
-  
-  <h3>Contests</h3>
-  <div class="well">
-    Contest info here.
-  </div>
-  
-  <h3>Payout Details</h3>
-  <div class="well">
-    Payout info here.
-  </div>
-  
-  <% if !@tournament.new_record? -%>
-  <h3>Groups / Tee Times</h3>
-  <div class="well">  
-    <%= link_to 'Manage Tee Times', league_tournament_tournament_groups_path(@tournament.league, @tournament), :class => 'btn btn-primary' %>
-  </div>
-  <% end -%>
-  
   <div class="form-actions">
     <%= f.button :submit, :class => 'btn btn-default' %>
   </div>
+  
 <% end %>
