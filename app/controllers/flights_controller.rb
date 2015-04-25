@@ -12,6 +12,9 @@ class FlightsController < BaseController
     if @tournament.flights.count > 0
       @flight.flight_number = @tournament.flights.last.flight_number + 1
       @flight.lower_bound = @tournament.flights.last.upper_bound + 1
+    else
+      @flight.flight_number = 1
+      @flight.lower_bound = 0
     end
   end
   

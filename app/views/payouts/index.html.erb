@@ -1,0 +1,39 @@
+<ol class="breadcrumb">
+  <li><%= link_to "Tournaments", league_tournaments_path(current_user.selected_league) %></li>
+  <li><%= link_to @tournament.name, edit_league_tournament_path(current_user.selected_league, @tournament) %></li>
+  <li><%= link_to "Flight #{@flight.flight_number}", league_tournament_flights_path(current_user.selected_league, @tournament, @flight) %></li>
+  <li class="active">Payouts</li>
+</ol>
+
+<div class="col-md-12">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h3 class="panel-title">Payouts</h3>
+    </div>
+    <table class="table table-striped">
+    	<thead>
+    		<tr>
+    			<th>Amount</th>
+          <th>Points</th>
+          <th><%= link_to 'Create Payout', new_league_tournament_flight_payout_path(current_user.selected_league, @tournament, @flight), :class => 'btn btn-primary' %></th>
+    		</tr>
+    	</thead>
+    	<tbody>
+    	<% @payouts.each do |payout| %>
+    		<tr>
+    			<td><%= link_to number_to_currency(payout.amount), edit_league_tournament_flight_payout_path(@tournament.league, @tournament, payout.flight, payout) %></td>
+    			<td><%= payout.points.to_i %></td>
+          <td><%= link_to "Edit", edit_league_tournament_flight_payout_path(@tournament.league, @tournament, payout.flight, payout) %> | <%= link_to 'Delete', league_tournament_flight_payout_path(@tournament.league, @tournament, payout.flight, payout), :data => { :confirm => 'Are you sure you want to delete this payout?' }, :method => :delete %></td>
+    		</tr>
+    	<% end %>
+    	</tbody>
+      <tfoot>
+    		<tr>
+    			<th>&nbsp;</th>
+          <th>&nbsp;</th>
+          <th><%= link_to 'Create Payout', new_league_tournament_flight_payout_path(current_user.selected_league, @tournament, @flight), :class => 'btn btn-primary' %></th>
+    		</tr>
+      </tfoot>
+    </table>
+  </div>
+</div>

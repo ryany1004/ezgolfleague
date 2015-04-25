@@ -1,0 +1,21 @@
+<%= simple_form_for [@tournament.league, @tournament, @flight, @payout] do |f| %>
+  <% if notification = f.error_notification %>
+    <div class="alert alert-error fade in">
+      <a class="close" data-dismiss="alert" href="#">&times;</a>
+      <%= notification %>
+    </div>
+  <% end %>
+  
+  <legend>Payout Details</legend>
+  
+  <h3>Basic Details</h3>
+  <div class="well">  
+	  <%= f.input :amount, :label => 'Amount ($)', required: true %>
+    
+    <%= f.input :points, :label => 'Points', required: true %>
+  </div>
+  
+  <div class="form-actions">
+    <%= f.button :submit, :class => 'btn btn-default' %>
+  </div>
+<% end %>

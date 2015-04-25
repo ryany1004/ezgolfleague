@@ -18,6 +18,7 @@
     			<th>Number</th>
           <th>Handicap Lower Bound</th>
           <th>Handicap Upper Bound</th>
+          <th>Payouts</th>
           <th><%= link_to 'Create Flight', new_league_tournament_flight_path, :class => 'btn btn-primary' %></th>
     		</tr>
     	</thead>
@@ -27,6 +28,7 @@
     			<td><%= link_to flight.flight_number, edit_league_tournament_flight_path(@tournament.league, @tournament, flight) %></td>
     			<td><%= flight.lower_bound %></td>
           <td><%= flight.upper_bound %></td>
+          <td><%= link_to flight.payouts.count, league_tournament_flight_payouts_path(@tournament.league, @tournament, flight) %></td>
           <td><%= link_to "Edit", edit_league_tournament_flight_path(@tournament.league, @tournament, flight) %> | <%= link_to 'Delete', league_tournament_flight_path(@tournament.league, @tournament, flight), :data => { :confirm => 'Are you sure you want to delete this flight? It will remove all associated payout information.' }, :method => :delete %></td>
     		</tr>
     	<% end %>
@@ -34,6 +36,7 @@
       <tfoot>
     		<tr>
     			<th>&nbsp;</th>
+          <th>&nbsp;</th>
           <th>&nbsp;</th>
           <th>&nbsp;</th>
           <th><%= link_to 'Create Flight', new_league_tournament_flight_path, :class => 'btn btn-primary' %></th>
