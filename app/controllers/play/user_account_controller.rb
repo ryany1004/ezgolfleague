@@ -1,7 +1,6 @@
-class Play::UserAccountController < ApplicationController
+class Play::UserAccountController < BaseController
     layout "golfer"
   
-    before_action :authenticate_user!
     before_action :fetch_user, :only => [:edit, :update, :password, :change_password]
     before_action :initialize_form, :only => [:edit]
     

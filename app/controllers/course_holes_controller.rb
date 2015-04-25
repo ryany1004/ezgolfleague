@@ -1,5 +1,4 @@
-class CourseHolesController < ApplicationController
-  before_action :authenticate_user!
+class CourseHolesController < BaseController
   before_action :fetch_course, :only => [:index, :new, :edit, :create, :update, :destroy]
   before_action :fetch_course_hole, :only => [:edit, :update, :destroy]
   

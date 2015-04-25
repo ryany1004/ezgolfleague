@@ -1,5 +1,4 @@
-class LeaguesController < ApplicationController
-  before_action :authenticate_user!
+class LeaguesController < BaseController
   before_action :fetch_league, :only => [:edit, :update, :destroy]
   
   def index

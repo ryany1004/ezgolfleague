@@ -1,5 +1,4 @@
-class ScorecardsController < ApplicationController
-  before_action :authenticate_user!
+class ScorecardsController < BaseController
   before_action :fetch_all_params, :only => [:update, :edit]
   
   def index

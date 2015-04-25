@@ -1,5 +1,4 @@
-class CourseHoleTeeBoxesController < ApplicationController
-  before_action :authenticate_user!
+class CourseHoleTeeBoxesController < BaseController
   before_action :fetch_course
   before_action :fetch_course_hole
   before_action :fetch_tee_box, :except => [:new, :create]

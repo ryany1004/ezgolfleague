@@ -1,5 +1,4 @@
-class TournamentGroupsController < ApplicationController
-  before_action :authenticate_user!
+class TournamentGroupsController < BaseController
   before_action :fetch_tournament
   before_action :fetch_tournament_group, :except => [:index, :new, :create, :batch_create]
   

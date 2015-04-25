@@ -1,5 +1,4 @@
-class CoursesController < ApplicationController
-  before_action :authenticate_user!
+class CoursesController < BaseController
   before_action :fetch_course, :only => [:edit, :update, :destroy]
   before_action :initialize_form, :only => [:new, :edit]
   

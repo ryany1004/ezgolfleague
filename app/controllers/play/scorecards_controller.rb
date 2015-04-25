@@ -1,7 +1,6 @@
-class Play::ScorecardsController < ApplicationController
+class Play::ScorecardsController < BaseController
   layout "golfer"
   
-  before_action :authenticate_user!
   before_action :fetch_scorecard
   
   def show

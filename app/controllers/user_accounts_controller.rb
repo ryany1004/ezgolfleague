@@ -1,5 +1,4 @@
-class UserAccountsController < ApplicationController
-  before_action :authenticate_user!
+class UserAccountsController < BaseController
   before_action :fetch_user, :only => [:edit, :update, :destroy]
   before_action :initialize_form, :only => [:new, :edit]
   

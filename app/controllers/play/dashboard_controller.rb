@@ -1,8 +1,6 @@
-class Play::DashboardController < ApplicationController
+class Play::DashboardController < BaseController
   layout "golfer"
-  
-  before_action :authenticate_user!
-  
+    
   def index
     @page_title = "My Dashboard"
       

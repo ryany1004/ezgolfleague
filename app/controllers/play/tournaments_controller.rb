@@ -1,7 +1,6 @@
-class Play::TournamentsController < ApplicationController
+class Play::TournamentsController < BaseController
   layout "golfer"
   
-  before_action :authenticate_user!
   before_action :fetch_tournament, :except => [:show]
   
   def show

@@ -1,5 +1,4 @@
-class LeagueMembershipsController < ApplicationController
-  before_action :authenticate_user!
+class LeagueMembershipsController < BaseController
   before_action :fetch_membership, :only => [:edit, :update, :destroy]
   before_action :fetch_league
   before_action :fetch_users

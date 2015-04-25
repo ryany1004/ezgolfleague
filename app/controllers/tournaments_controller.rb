@@ -1,5 +1,4 @@
-class TournamentsController < ApplicationController
-  before_action :authenticate_user!
+class TournamentsController < BaseController
   before_action :fetch_tournament, :only => [:edit, :update, :destroy, :signups, :manage_holes, :update_holes, :delete_signup]
   before_action :initialize_form, :only => [:new, :edit]
   
