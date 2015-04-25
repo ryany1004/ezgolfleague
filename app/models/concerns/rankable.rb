@@ -14,13 +14,14 @@ module Rankable
         scorecard = self.primary_scorecard_for_user(player)
         scorecard_url = play_scorecard_path(scorecard)
         
-        points = nil
+        points = 0
         f.payouts.each do |payout|
           points = payout.points if payout.user == player
         end
       
-        ranked_flight[:players] << { id: player.id, name: player.complete_name, score: score, scorecard_url: scorecard_url, points: points } if score > 0
+        ranked_flight[:players] << { id: player.id, name: player.complete_name, score: score, scorecard_url: scorecard_url, points: points } if !score.blank? && score > 0
       end
+      ranked_flight[:players].sort! { |x,y| y[:points] <=> x[:points] }
       
       ranked_flights << ranked_flight
     end

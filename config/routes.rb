@@ -88,6 +88,9 @@ Rails.application.routes.draw do
       get 'manage_holes'
       patch 'update_holes'
       
+      get 'finalize'
+      patch 'confirm_finalization'
+      
       resources :flights do
         resources :payouts
       end

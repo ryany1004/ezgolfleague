@@ -1,0 +1,71 @@
+<ol class="breadcrumb">
+  <li><%= link_to "Tournaments", league_tournaments_path(current_user.selected_league) %></li>
+  <li class="active">Finalize Tournament</li>
+</ol>
+
+<div class="row">
+  <div class="col-md-12">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">Calculated Payouts</h3>
+      </div>
+      <table class="table table-striped">
+      	<thead>
+      		<tr>
+            <th>Flight</th>
+            <th>Player</th>
+            <th>Strokes</th>
+            <th>Course Handicap</th>
+      			<th>Amount</th>
+            <th>Points</th>
+      		</tr>
+      	</thead>
+      	<tbody>
+      	<% @payouts.each do |payout| %>
+      		<tr>
+            <td><%= payout.flight.flight_number %></td>
+            <td><%= payout.user.complete_name %></td>
+            <td><%= @tournament.player_score(payout.user) %></td>
+            <td><%= payout.user.course_handicap(@tournament.course) %></td>
+      			<td><%= number_to_currency(payout.amount) %></td>
+      			<td><%= payout.points.to_i %></td>
+      		</tr>
+      	<% end %>
+      	</tbody>
+        <tfoot>
+      		<tr>
+      			<th>&nbsp;</th>
+            <th>&nbsp;</th>
+      			<th>&nbsp;</th>
+            <th>&nbsp;</th>
+      			<th>&nbsp;</th>
+            <th><%= link_to 'Confirm Correct', league_tournament_confirm_finalization_path(@tournament.league, @tournament), :method => :patch, :class => 'btn btn-danger' %></th>
+      		</tr>
+        </tfoot>
+      </table>
+    </div>
+  </div>
+  
+  <div class="col-md-12">
+      <h2>Scorecards</h2>
+    
+      <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+        <% @players.each_with_index do |player, i| %>
+        <div class="panel panel-default">
+          <div class="panel-heading" role="tab" id="heading<%= i %>">
+            <h4 class="panel-title">
+              <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapse<%= i %>" aria-expanded="false" aria-controls="collapse<%= i %>">
+                <%= player.complete_name %>
+              </a>
+            </h4>
+          </div>
+          <div id="collapse<%= i %>" class="panel-collapse collapse <% if i == 0 -%>in<% end -%>" role="tabpanel" aria-labelledby="heading<%= i %>">
+            <div class="panel-body">
+              <%= render partial: '/shared/scorecards/show', locals: {scorecard: @tournament.primary_scorecard_for_user(player), split_holes: split_holes_for_course_tournament(@tournament), split_scores: split_scores_for_scorecard(@tournament.primary_scorecard_for_user(player), @tournament.course_holes.count), tournament: @tournament} %>
+            </div>
+          </div>
+        </div>
+        <% end -%>
+      </div>
+  </div>
+</div>

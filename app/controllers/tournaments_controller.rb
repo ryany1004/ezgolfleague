@@ -1,5 +1,5 @@
 class TournamentsController < BaseController
-  before_action :fetch_tournament, :only => [:edit, :update, :destroy, :signups, :manage_holes, :update_holes, :delete_signup]
+  before_action :fetch_tournament, :only => [:edit, :update, :destroy, :signups, :manage_holes, :update_holes, :delete_signup, :finalize, :confirm_finalization]
   before_action :initialize_form, :only => [:new, :edit]
   
   def index   
@@ -64,6 +64,8 @@ class TournamentsController < BaseController
     redirect_to league_tournaments_path(current_user.selected_league), :flash => { :success => "The tournament was successfully deleted." }
   end
   
+  # Signups
+  
   def signups    
     @tournament_groups = @tournament.tournament_groups.page params[:page]
     
@@ -77,6 +79,27 @@ class TournamentsController < BaseController
     @tournament.remove_player_from_group(tournament_group, user)
     
     redirect_to league_tournament_signups_path(tournament.league, @tournament), :flash => { :success => "The registration was successfully deleted." }
+  end
+  
+  # Finalize
+  
+  def finalize
+    @players = @tournament.players
+    
+    @tournament.assign_payouts_from_scores
+    @payouts = []
+    @tournament.flights.each do |f|
+      f.payouts.each do |p|
+        @payouts << p
+      end
+    end
+  end
+  
+  def confirm_finalization
+    @tournament.is_finalized = true
+    @tournament.save
+    
+    redirect_to league_tournaments_path(current_user.selected_league), :flash => { :success => "The tournament was successfully finalized." }
   end
   
   private

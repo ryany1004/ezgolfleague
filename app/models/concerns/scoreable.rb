@@ -47,7 +47,7 @@ module Scoreable
     return nil
   end
   
-  def has_scores?
+  def has_scores?    
     eager_groups = TournamentGroup.includes(teams: [{ golf_outings: :scorecards }]).where(tournament: self)
     
     eager_groups.each do |group|
@@ -64,5 +64,27 @@ module Scoreable
     
     return false
   end
-  
+
+  def assign_payouts_from_scores
+    self.flights.each do |f|
+      player_scores = []
+      
+      f.users.each do |player|
+        score = self.player_score(player)
+      
+        player_scores << {player: player, score: score}
+      end
+      
+      player_scores.sort! { |x,y| x[:score] <=> y[:score] }
+      
+      f.payouts.each_with_index do |p, i|
+        player = player_scores[i][:player]
+        
+        p.user = player
+        p.save
+      end
+      
+    end
+  end
+
 end
