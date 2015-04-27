@@ -29,6 +29,7 @@ class ScorecardsController < BaseController
     @scorecard = Scorecard.find(params[:id])
     @player = @scorecard.golf_outing.user
     @tournament = @scorecard.golf_outing.team.tournament_group.tournament
+    @handicap_allowance = @tournament.handicap_allowance(@scorecard.golf_outing.user)
   end
   
 end

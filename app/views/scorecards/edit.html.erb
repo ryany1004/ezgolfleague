@@ -16,7 +16,7 @@
         </div>
         <div id="collapse1" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="heading1">
           <div class="panel-body">
-            <%= render partial: '/shared/scorecards/edit', locals: {edit_url: scorecard_path, scorecard: @tournament.primary_scorecard_for_user(@player), split_holes: split_holes_for_course_tournament(@tournament), split_scores: split_scores_for_scorecard(@tournament.primary_scorecard_for_user(@player), @tournament.course_holes.count), tournament: @tournament} %>
+            <%= render partial: '/shared/scorecards/edit', locals: {edit_url: scorecard_path, scorecard: @tournament.primary_scorecard_for_user(@player), split_holes: split_holes_for_course_tournament(@tournament), split_scores: split_scores_for_scorecard(@tournament.primary_scorecard_for_user(@player), @tournament.course_holes.count), tournament: @tournament, handicap_allowance: @handicap_allowance} %>
           </div>
         </div>
       </div>

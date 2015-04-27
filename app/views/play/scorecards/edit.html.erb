@@ -4,4 +4,4 @@
   <li class="active">Scorecard</li>
 </ol>
 
-<%= render partial: '/shared/scorecards/edit', locals: {edit_url: play_scorecard_path(@scorecard), scorecard: @scorecard, split_holes: @split_holes, split_scores: @split_scores, tournament: @tournament} %>
+<%= render partial: '/shared/scorecards/edit', locals: {edit_url: play_scorecard_path(@scorecard), scorecard: @scorecard, split_holes: @split_holes, split_scores: @split_scores, tournament: @tournament, handicap_allowance: @handicap_allowance} %>

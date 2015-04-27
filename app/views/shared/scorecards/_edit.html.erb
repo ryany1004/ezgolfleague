@@ -1,11 +1,10 @@
 <table class="table table-striped table-bordered">
 	<thead>
 		<tr>
-      <th width="20%">Flight</th>
-      <th width="20%">Score</th>
-      <th width="20%">Par</th>
-      <th width="20%">Men's Handicap</th>
-      <th width="20%">Women's Handicap</th>
+      <th width="25%">Flight</th>
+      <th width="25%">Score</th>
+      <th width="25%">Par</th>
+      <th width="25%">Course Handicap</th>
 		</tr>
 	</thead>
 	<tbody>
@@ -13,8 +12,7 @@
       <td><%= (tournament.flight_for_player(scorecard.golf_outing.user).flight_number) %></td>
       <td><%= scorecard.scores.map {|score| score.strokes }.sum %></td>
       <td><%= tournament.course_holes.map {|hole| hole.par }.sum %></td>
-      <td><%= tournament.course_holes.map {|hole| hole.mens_handicap }.sum %></td>
-      <td><%= tournament.course_holes.map {|hole| hole.womens_handicap }.sum %></td>
+      <td><%= scorecard.golf_outing.user.course_handicap(tournament.course, scorecard.golf_outing.course_tee_box) %></td>
 		</tr>
 	</tbody>
 </table>
@@ -53,17 +51,25 @@
 		</tr>
 		<tr>
 			<th>Men's Handicap</th>
-      <% split.each do |hole| -%>
-      <th><%= hole.mens_handicap %></th>
+      <% split.each do |hole| -%>      
+        <% if handicap_allowance_strokes_for_hole(handicap_allowance, hole) > 0 -%>
+        <th><%= hole.mens_handicap %> (-<%=  handicap_allowance_strokes_for_hole(handicap_allowance, hole) %>)</th>
+        <% else -%>
+        <th><%= hole.mens_handicap %></th>
+        <% end -%>
       <% end -%>
-      <th><%= split.map {|hole| hole.mens_handicap }.sum %></th>
+      <th>&nbsp;</th>
 		</tr>
 		<tr>
 			<th>Women's Handicap</th>
       <% split.each do |hole| -%>
-      <th><%= hole.womens_handicap %></th>
+        <% if handicap_allowance_strokes_for_hole(handicap_allowance, hole) > 0 -%>
+        <th><%= hole.womens_handicap %> (-<%=  handicap_allowance_strokes_for_hole(handicap_allowance, hole) %>)</th>
+        <% else -%>
+        <th><%= hole.womens_handicap %></th>
+        <% end -%>
       <% end -%>
-      <th><%= split.map {|hole| hole.womens_handicap }.sum %></th>
+      <th>&nbsp;</th>
 		</tr>
   </tfoot>
 </table>

@@ -49,4 +49,14 @@ module ApplicationHelper
     return names.html_safe
   end
   
+  def handicap_allowance_strokes_for_hole(handicap_allowance, course_hole)  
+    handicap_allowance.each do |h|      
+      if h[:course_hole] == course_hole        
+        return h[:strokes]
+      end
+    end
+    
+    return 0
+  end
+
 end

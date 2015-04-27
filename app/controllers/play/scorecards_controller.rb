@@ -34,7 +34,8 @@ class Play::ScorecardsController < BaseController
   def fetch_scorecard
     @scorecard = Scorecard.find(params[:id])
     @tournament = @scorecard.golf_outing.team.tournament_group.tournament
-        
+    @handicap_allowance = @tournament.handicap_allowance(@scorecard.golf_outing.user)
+    
     @split_scores = @scorecard.scores.each_slice(@tournament.course_holes.count / 2).to_a
     @split_holes = @tournament.course_holes.each_slice(@tournament.course_holes.count / 2).to_a
   end

@@ -5,11 +5,23 @@ module Scoreable
     return nil if !self.includes_player?(user)
 
     total_score = 0
+    
+    handicap_allowance = self.handicap_allowance(user)
 
     scorecard = self.primary_scorecard_for_user(user)
     
     scorecard.scores.each do |score|
-      total_score = total_score + score.strokes
+      hole_score = score.strokes
+      
+      handicap_allowance.each do |h|
+        if h[:course_hole] == score.course_hole
+          if h[:strokes] != 0
+            hole_score = hole_score - h[:strokes]
+          end
+        end
+      end
+      
+      total_score = total_score + hole_score
     end
     
     return total_score
@@ -27,6 +39,46 @@ module Scoreable
     end
     
     return points
+  end
+  
+  def handicap_allowance(user)
+    golf_outing = self.golf_outing_for_player(user)
+    course_handicap = user.course_handicap(self.course, golf_outing.course_tee_box)
+        
+    if golf_outing.course_tee_box == self.mens_tee_box
+      sorted_course_holes_by_handicap = self.course.course_holes.order("mens_handicap")
+    else
+      sorted_course_holes_by_handicap = self.course.course_holes.order("womens_handicap")
+    end
+        
+    if course_handicap > 0    
+      allowance = []
+      while course_handicap > 0 do
+        sorted_course_holes_by_handicap.each do |hole|
+          existing_hole = nil
+          
+          allowance.each do |a|
+            if hole == a[:course_hole]
+              existing_hole = a
+            end
+          end
+                    
+          if existing_hole.blank?            
+            existing_hole = {course_hole: hole, strokes: 0}
+            allowance << existing_hole
+          end
+                    
+          if course_handicap > 0
+            existing_hole[:strokes] = existing_hole[:strokes] + 1
+            course_handicap = course_handicap - 1
+          end
+        end
+      end
+      
+      return allowance
+    else
+      return nil
+    end
   end
   
   def primary_scorecard_for_user(user)
