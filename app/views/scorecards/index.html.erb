@@ -11,7 +11,7 @@
         <div class="panel-heading" role="tab" id="heading<%= i %>">
           <h4 class="panel-title">
             <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapse<%= i %>" aria-expanded="false" aria-controls="collapse<%= i %>">
-              <%= player.complete_name %>
+              <%= player.complete_name %> <% if @tournament.primary_scorecard_for_user(player).is_confirmed == true -%>(Confirmed)<% else -%>(Unconfirmed)<% end -%>
             </a>
           </h4>
         </div>

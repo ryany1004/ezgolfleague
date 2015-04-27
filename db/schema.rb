@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150425195622) do
+ActiveRecord::Schema.define(version: 20150427213024) do
 
   create_table "course_hole_tee_boxes", force: :cascade do |t|
     t.integer  "course_hole_id"
@@ -90,9 +90,10 @@ ActiveRecord::Schema.define(version: 20150425195622) do
   create_table "golf_outings", force: :cascade do |t|
     t.integer  "team_id"
     t.integer  "user_id"
-    t.datetime "created_at",                 null: false
-    t.datetime "updated_at",                 null: false
-    t.boolean  "has_paid",   default: false
+    t.datetime "created_at",                        null: false
+    t.datetime "updated_at",                        null: false
+    t.boolean  "has_paid",          default: false
+    t.integer  "course_tee_box_id"
   end
 
   add_index "golf_outings", ["team_id"], name: "index_golf_outings_on_team_id"
@@ -131,8 +132,9 @@ ActiveRecord::Schema.define(version: 20150425195622) do
 
   create_table "scorecards", force: :cascade do |t|
     t.integer  "golf_outing_id"
-    t.datetime "created_at",     null: false
-    t.datetime "updated_at",     null: false
+    t.datetime "created_at",                     null: false
+    t.datetime "updated_at",                     null: false
+    t.boolean  "is_confirmed",   default: false
   end
 
   add_index "scorecards", ["golf_outing_id"], name: "index_scorecards_on_golf_outing_id"

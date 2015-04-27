@@ -106,7 +106,7 @@ namespace :create_sample_data do
       m = LeagueMembership.create(league: l, user: u, is_admin: false)
     end
     
-    tournament_info = [{:name => "Peachwood Open", :tournament_at => DateTime.now, :create_scores => true}, {:name => "Scalleywag Cup", :tournament_at => DateTime.now + 1.month, :create_scores => false}, {:name => "Caddy Day", :tournament_at => DateTime.now - 1.month, :create_scores => true}]
+    tournament_info = [{:name => "Peachwood Open", :tournament_at => DateTime.now, :create_scores => true, :finalize_tournament => false}, {:name => "Scalleywag Cup", :tournament_at => DateTime.now + 1.month, :create_scores => false, :finalize_tournament => false}, {:name => "Caddy Day", :tournament_at => DateTime.now - 1.month, :create_scores => true, :finalize_tournament => true}]
     
     tournament_info.each do |ti|
       t = Tournament.create(league: l, course: c, name: ti[:name], max_players: 100, mens_tee_box: c.course_tee_boxes.first, womens_tee_box: c.course_tee_boxes.first, dues_amount: 20.0) {|h|
@@ -130,13 +130,21 @@ namespace :create_sample_data do
           group = TournamentGroup.create(tournament: t, tee_time_at: group.tee_time_at + 8.minutes, max_number_of_players: 4)
         end
         
-        t.add_player_to_group(group, u)
+        t.add_player_to_group(group, u, c.course_tee_boxes.first)
+        t.is_finalized = ti[:finalize_tournament] == true
+        t.save
     
-        if ti[:create_scores] == true
-          t.is_finalized = true
-          t.save
-          
+        if ti[:create_scores] == true          
           scorecard = t.primary_scorecard_for_user(u)
+      
+          if Random.rand(2) == 0
+            scorecard.is_confirmed = false
+          else
+            scorecard.is_confirmed = true
+          end
+ 
+          scorecard.save
+          
           unless scorecard.blank?      
             scorecard.scores.each do |score|
               score.strokes = Random.rand(4) + 1
@@ -151,7 +159,7 @@ namespace :create_sample_data do
       #create flights
       f1 = Flight.create(flight_number: 1, tournament: t, lower_bound: 0, upper_bound: 12)
       f2 = Flight.create(flight_number: 2, tournament: t, lower_bound: 13, upper_bound: 20)
-      f3 = Flight.create(flight_number: 3, tournament: t, lower_bound: 21, upper_bound: 35)
+      f3 = Flight.create(flight_number: 3, tournament: t, lower_bound: 21, upper_bound: 100)
       t.assign_players_to_flights
       
       #payouts      

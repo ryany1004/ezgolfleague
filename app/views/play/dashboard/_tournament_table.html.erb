@@ -24,7 +24,11 @@
       <td><%= t.tournament_at.to_s(:date_and_time) %></td>
       <% if is_current == true -%>
         <% if t.includes_player?(current_user) -%>
+        <% if t.is_finalized -%>
+        <td><%= link_to "View", play_scorecard_path(t.primary_scorecard_for_user(current_user)) %></td>
+        <% else -%>
         <td><%= link_to "Edit", edit_play_scorecard_path(t.primary_scorecard_for_user(current_user)) %></td>
+        <% end -%>
         <td><%= t.player_score(current_user) %></td>
         <% else %>
         <td>N/A</td>

@@ -43,4 +43,16 @@ module Playable
     return nil
   end
   
+  def golf_outing_for_player(user)
+    self.tournament_groups.each do |group|
+      group.teams.each do |team|
+        team.golf_outings.each do |outing|
+          return outing if outing.user == user
+        end
+      end
+    end
+    
+    return nil
+  end
+  
 end

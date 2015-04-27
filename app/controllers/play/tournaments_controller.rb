@@ -18,7 +18,8 @@ class Play::TournamentsController < BaseController
     if @tournament.includes_player?(current_user)
       redirect_to play_tournament_signup_path(@tournament), :flash => { :error => "You are already registered for this tournament. Remove your existing registration and try again." }
     else
-      @tournament.add_player_to_group(tournament_group, current_user)
+      course_tee_box = @tournament.course.course_tee_boxes.find(params[:course_tee_box_id])
+      @tournament.add_player_to_group(tournament_group, current_user, course_tee_box)
       
       redirect_to play_dashboard_index_path, :flash => { :success => "You are registered for the tournament." }
     end

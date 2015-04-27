@@ -17,6 +17,14 @@ class Play::ScorecardsController < BaseController
     end
   end
   
+  def finalize_scorecard
+    scorecard = Scorecard.find(params[:scorecard_id])
+    scorecard.is_confirmed = true
+    scorecard.save
+    
+    redirect_to play_scorecard_path(scorecard), :flash => { :success => "The scorecard was successfully updated." }
+  end
+  
   private
   
   def scorecard_params

@@ -26,7 +26,7 @@
             <td><%= payout.flight.flight_number %></td>
             <td><%= payout.user.complete_name %></td>
             <td><%= @tournament.player_score(payout.user) %></td>
-            <td><%= payout.user.course_handicap(@tournament.course) %></td>
+            <td><%= payout.user.course_handicap(@tournament.course, @tournament.golf_outing_for_player(payout.user).course_tee_box) %></td>
       			<td><%= number_to_currency(payout.amount) %></td>
       			<td><%= payout.points.to_i %></td>
       		</tr>
@@ -39,7 +39,7 @@
       			<th>&nbsp;</th>
             <th>&nbsp;</th>
       			<th>&nbsp;</th>
-            <th><%= link_to 'Confirm Correct', league_tournament_confirm_finalization_path(@tournament.league, @tournament), :method => :patch, :class => 'btn btn-danger' %></th>
+            <th><%= link_to 'Confirm & Finalize', league_tournament_confirm_finalization_path(@tournament.league, @tournament), :method => :patch, :class => 'btn btn-danger' %></th>
       		</tr>
         </tfoot>
       </table>
@@ -55,7 +55,7 @@
           <div class="panel-heading" role="tab" id="heading<%= i %>">
             <h4 class="panel-title">
               <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapse<%= i %>" aria-expanded="false" aria-controls="collapse<%= i %>">
-                <%= player.complete_name %>
+                <%= player.complete_name %><% if !@tournament.primary_scorecard_for_user(player).is_confirmed? -%> (Unconfirmed)<% end -%>
               </a>
             </h4>
           </div>

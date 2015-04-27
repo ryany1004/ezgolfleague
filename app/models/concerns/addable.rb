@@ -8,10 +8,10 @@ module Addable
     return true
   end
 
-  def add_player_to_group(tournament_group, user)
+  def add_player_to_group(tournament_group, user, course_tee_box)
     Tournament.transaction do
       team = Team.create!(tournament_group: tournament_group)
-      outing = GolfOuting.create!(team: team, user: user)
+      outing = GolfOuting.create!(team: team, user: user, course_tee_box: course_tee_box)
       scorecard = Scorecard.create!(golf_outing: outing)
       
       self.course_holes.each_with_index do |hole, i|
@@ -33,9 +33,10 @@ module Addable
   end
 
   def assign_players_to_flights
-    self.flights.each do |f|
-      self.players.each do |p|
-        player_course_handicap = p.course_handicap(self.course)
+    self.flights.each do |f|      
+      self.players.each do |p|    
+        golf_outing = self.golf_outing_for_player(p)
+        player_course_handicap = p.course_handicap(self.course, golf_outing.course_tee_box)
         if player_course_handicap >= f.lower_bound && player_course_handicap <= f.upper_bound
           f.users << p
         end
