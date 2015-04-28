@@ -21,10 +21,12 @@
     <% end -%>
   </div>
   
+  <% if current_user_is_admin_for_user(@user_account) -%>
   <h3>Handicap</h3>
   <div class="well">
     <%= f.input :handicap_index, :label => 'Handicap Index' %>
   </div>
+  <% end -%>
   
   <% if @user_account.new_record? -%>
   <h3>Password</h3>

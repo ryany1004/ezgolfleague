@@ -17,6 +17,19 @@ module ApplicationHelper
       return false
     end
   end
+  
+  def current_user_is_admin_for_user(user)
+    return true if current_user.is_super_user
+    return false if user.blank?
+
+    current_user.leagues.each do |league|
+      membership = league.membership_for_user(user)
+      
+      return true if membership.blank? == false && membership.is_admin == true
+    end
+    
+    return false
+  end
 
   def bootstrap_class_for(flash_type)
     case flash_type
