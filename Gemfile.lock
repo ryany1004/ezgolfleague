@@ -52,6 +52,9 @@ GEM
       minitest (~> 5.1)
       thread_safe (~> 0.3, >= 0.3.4)
       tzinfo (~> 1.1)
+    airbrake (4.1.0)
+      builder
+      multi_json
     arel (6.0.0)
     autoprefixer-rails (5.1.8)
       execjs
@@ -210,6 +213,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  airbrake
   aws-sdk
   bootstrap-sass (~> 3.3.4)
   byebug
