@@ -1,0 +1,30 @@
+<ol class="breadcrumb">
+  <li><%= link_to "User Accounts", user_accounts_path %></li>
+  <li class="active">Send Golfer Invite</li>
+</ol>
+
+<%= simple_form_for @user_account, url: send_golfer_invite_user_accounts_path do |f| %>
+  <% if notification = f.error_notification %>
+    <div class="alert alert-error fade in">
+      <a class="close" data-dismiss="alert" href="#">&times;</a>
+      <%= notification %>
+    </div>
+  <% end %>
+  
+  <legend>Invitation Details</legend>
+  
+  <h3>Basic Details</h3>
+  <div class="well">
+    <%= f.input :email, :label => 'Email Address', placeholder: 'user@domain.com', required: true %>
+  
+	  <%= f.input :first_name, :label => 'First Name', required: true %>
+
+	  <%= f.input :last_name, :label => 'Last Name', required: true %>
+    
+    <%= f.association :leagues, collection: @leagues, :label => 'Leagues', :label_method => :name, as: :check_boxes %>
+  </div>
+
+  <div class="form-actions">
+    <%= f.submit 'Send Invite', :class => 'btn btn-default' %>
+  </div>
+<% end %>

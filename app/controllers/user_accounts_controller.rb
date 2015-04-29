@@ -73,29 +73,70 @@ class UserAccountsController < BaseController
   end
   
   def send_league_admin_invite
-    @user_account = User.new(user_params)
-    @user_account.password = "temporary_password1234"
-    @user_account.password_confirmation = "temporary_password1234"
+    if self.invite_user(user_params, true)
+      redirect_to user_accounts_path, :flash => { :success => "The league admin was successfully invited." }
+    else
+      redirect_to user_accounts_path, :flash => { :error => "There was an error inviting the league admin. Please check your information and try again." }
+    end
+  end
+  
+  # Golfer Invite
+  
+  def setup_golfer_invite
+    @user_account = User.new
+    @leagues = current_user.leagues.order("name")
+  end
+  
+  def send_golfer_invite
+    if self.invite_user(user_params, false)
+      redirect_to user_accounts_path, :flash => { :success => "The golfer was successfully invited." }
+    else
+      redirect_to user_accounts_path, :flash => { :error => "There was an error inviting the golfer. Please check your information and try again." }
+    end
+  end
+  
+  def invite_user(user_params, is_admin = false)
+    existing_user = User.where("email = ?", user_params[:email]).first
+    
+    if existing_user.blank?
+      @user_account = User.new(user_params)
+      @user_account.password = "temporary_password1234"
+      @user_account.password_confirmation = "temporary_password1234"
 
-    if @user_account.save
-      @user_account.league_memberships.each do |m|
-        m.state = MembershipStates::INVITED
-        m.is_admin = true
-        m.save
+      if @user_account.save
+        @user_account.league_memberships.each do |m|
+          m.state = MembershipStates::INVITED
+          m.is_admin = true
+          m.save
+        end
+      
+        user = User.invite!({:email => @user_account.email}, current_user) do |u|
+          u.skip_invitation = true
+        end
+    
+        user.deliver_invitation
+        
+        return true
+      else
+        @user_account.errors.each do |e|
+          Rails.logger.debug { "#{e}" }
+        end
+        
+        return false
+      end
+    else
+      user_params[:league_ids].each do |league_id|
+        unless league_id.blank?        
+          league = League.find(league_id)
+        
+          if existing_user.league_memberships.where("league_id = ?", league.id).blank?
+            m = LeagueMembership.create(league: league, user: existing_user, is_admin: is_admin, state: MembershipStates::ADDED)
+          end
+        end
       end
       
-      user = User.invite!({:email => @user_account.email}, current_user) do |u|
-        u.skip_invitation = true
-      end
-    
-      user.deliver_invitation
-    else
-      @user_account.errors.each do |e|
-        Rails.logger.debug { "#{e}" }
-      end
+      return true
     end
-
-    redirect_to user_accounts_path, :flash => { :success => "The user was successfully invited." }
   end
   
   private
