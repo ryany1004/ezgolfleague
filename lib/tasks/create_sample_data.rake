@@ -14,7 +14,7 @@ namespace :create_sample_data do
     Course.where(name: "Bushwood").destroy_all
     User.where("email LIKE ?", "%sample.com").destroy_all
     
-    l = League.create(name: "Danny's League")
+    l = League.create(name: "Danny's League", dues_amount: 20.00)
     
     c = Course.create(name: "Bushwood", phone_number: "888-888-8888", street_address_1: "123 Main Street", city: "My Zone", us_state: "CA", postal_code: "11111")
     tee_box = CourseTeeBox.create(course: c, name: "Black", rating: 120.0, slope: 3)
