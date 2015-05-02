@@ -1,0 +1,38 @@
+<%= simple_form_for [@tournament.league, @tournament, @contest] do |f| %>
+  <% if notification = f.error_notification %>
+    <div class="alert alert-error fade in">
+      <a class="close" data-dismiss="alert" href="#">&times;</a>
+      <%= notification %>
+    </div>
+  <% end %>
+  
+  <legend>Contest Details</legend>
+  
+  <h3>Basic Details</h3>
+  <div class="well">  
+	  <%= f.input :name, :label => 'Name', required: true %>
+    
+    <% if @contest.new_record? -%>
+      <%= f.input :contest_type, :label => 'Contest Type', collection: @contest_types, as: :radio_buttons, label_method: :name, value_method: :value %>
+    <% end -%>
+  </div>
+  
+  <% if @contest.new_record? == false && @contest.contest_type == 0 -%>
+  <h3>Overall Winner</h3>
+  <div class="well">  
+    <%= f.simple_fields_for :overall_winner do |b| %>
+      <div class="well">
+        <%= b.association :winner, collection: @tournament.league.users, label_method: :complete_name %>
+      
+        <%= b.input :result_value, :label => 'Result (i.e. 300 yards)', required: true %>
+      
+        <%= b.input :payout_amount, :label => "Payout Amount ($)" %>
+      </div>
+    <% end %>
+  </div>
+  <% end -%>
+  
+  <div class="form-actions">
+    <%= f.button :submit, "Save Contest", :class => 'btn btn-default' %>
+  </div>
+<% end %>

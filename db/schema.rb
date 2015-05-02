@@ -11,7 +11,34 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150502214536) do
+ActiveRecord::Schema.define(version: 20150502220841) do
+
+  create_table "contest_holes", force: :cascade do |t|
+    t.integer  "tournament_id"
+    t.integer  "course_hole_id"
+    t.datetime "created_at",     null: false
+    t.datetime "updated_at",     null: false
+  end
+
+  create_table "contest_results", force: :cascade do |t|
+    t.integer  "contest_id"
+    t.integer  "contest_hole_id"
+    t.integer  "winner_id"
+    t.string   "result_value"
+    t.decimal  "payout_amount"
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
+  end
+
+  create_table "contests", force: :cascade do |t|
+    t.integer  "tournament_id"
+    t.string   "name"
+    t.integer  "contest_type"
+    t.integer  "overall_winner_contest_result_id"
+    t.decimal  "overall_winner_payout_amount"
+    t.datetime "created_at",                       null: false
+    t.datetime "updated_at",                       null: false
+  end
 
   create_table "course_hole_tee_boxes", force: :cascade do |t|
     t.integer  "course_hole_id"

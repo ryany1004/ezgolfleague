@@ -1,0 +1,7 @@
+<ol class="breadcrumb">
+  <li><%= link_to "Tournaments", league_tournaments_path(current_user.selected_league) %></li>
+  <li><%= link_to @tournament.name, edit_league_tournament_path(current_user.selected_league, @tournament) %></li>
+  <li class="active">New Contest</li>
+</ol>
+
+<%= render 'form' %>

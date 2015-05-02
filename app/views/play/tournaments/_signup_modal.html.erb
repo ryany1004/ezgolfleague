@@ -37,7 +37,7 @@
                             
               <% if (group.players_signed_up.count + 2) < group.max_number_of_players  %>
               <div class="well">
-                <p><em>Would you like to register another member for this tee-time? They will have to confirm their registration within 3 days or it will be canceled.</em></p>
+                <p><em>Would you like to register another member for this tee-time? Their registration will be added but not confirmed.</em></p>
                 <%= f.input :another_member_id, collection: tournament.league.users_not_signed_up_for_tournament(tournament, [current_user.id]), label_method: :complete_name, value_method: :id %>
               </div>
               <% end -%>
