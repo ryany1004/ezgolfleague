@@ -1,0 +1,53 @@
+<%= simple_form_for :tournament, url: play_tournament_complete_signup_path(tournament, group_id: group.id), method: :put do |f| %>
+<div class="modal fade" id="Group<%= group.id %>" role="dialog" aria-labelledby="gridSystemModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="gridSystemModalLabel">Register for Tournament</h4>
+        </div>
+        <div class="modal-body">
+          <div class="container-fluid">
+            <div class="row">
+              <p>You can choose to register and also if you'd like to pay your registration dues (<%= number_to_currency(tournament.dues_amount) %>) now. Please note that dues are non-refundable.</p>
+              <p><em>Please register by selecting the appropriate tee-box.</em></p>
+              <table class="table table-striped">
+                <thead>
+                  <tr>
+                    <th>Tee Box</th>
+                    <th>&nbsp;</th>
+                    <th>&nbsp;</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><strong><%= tournament.mens_tee_box.name %></strong></td>
+                    <td><%= f.button :button, "Register & Pay Now", :class => "btn btn-primary", :name => "pay_now", value: tournament.mens_tee_box.id %></td>
+                    <td><%= f.button :button, "Register & Pay Later", :class => "btn btn-primary", :name => "pay_later", value: tournament.mens_tee_box.id %></td>
+                  </tr>
+                  <% if !tournament.womens_tee_box.blank? && tournament.womens_tee_box != tournament.mens_tee_box -%>
+                  <tr>
+                    <td><strong><%= tournament.womens_tee_box.name %></strong></td>
+                    <td><%= f.button :button, "Register & Pay Now", :class => "btn btn-primary", :name => "pay_now", value: tournament.womens_tee_box.id %></td>
+                    <td><%= f.button :button, "Register & Pay Later", :class => "btn btn-primary", :name => "pay_later", value: tournament.womens_tee_box.id %></td>
+                  </tr>
+                  <% end -%>
+                </tbody>
+              </table>
+                            
+              <% if (group.players_signed_up.count + 2) < group.max_number_of_players  %>
+              <div class="well">
+                <p><em>Would you like to register another member for this tee-time? They will have to confirm their registration within 3 days or it will be canceled.</em></p>
+                <%= f.input :another_member_id, collection: tournament.league.users_not_signed_up_for_tournament(tournament, [current_user.id]), label_method: :complete_name, value_method: :id %>
+              </div>
+              <% end -%>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+        </div>
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<% end %>

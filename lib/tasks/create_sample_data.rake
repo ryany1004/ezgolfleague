@@ -156,6 +156,8 @@ namespace :create_sample_data do
         end
       end
       
+      group = TournamentGroup.create(tournament: t, tee_time_at: t.tournament_groups.last.tee_time_at + 8.minutes, max_number_of_players: 4)
+      
       #create flights
       f1 = Flight.create(flight_number: 1, tournament: t, lower_bound: 0, upper_bound: 12)
       f2 = Flight.create(flight_number: 2, tournament: t, lower_bound: 13, upper_bound: 20)

@@ -8,10 +8,10 @@ module Addable
     return true
   end
 
-  def add_player_to_group(tournament_group, user, course_tee_box)
+  def add_player_to_group(tournament_group, user, course_tee_box, confirmed = true)
     Tournament.transaction do
       team = Team.create!(tournament_group: tournament_group)
-      outing = GolfOuting.create!(team: team, user: user, course_tee_box: course_tee_box)
+      outing = GolfOuting.create!(team: team, user: user, course_tee_box: course_tee_box, confirmed: confirmed)
       scorecard = Scorecard.create!(golf_outing: outing)
       
       self.course_holes.each_with_index do |hole, i|

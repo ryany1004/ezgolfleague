@@ -11,7 +11,9 @@ class Tournament < ActiveRecord::Base
   has_many :tournament_groups, -> { order(:tee_time_at) }, inverse_of: :tournament, :dependent => :destroy
   has_many :flights, -> { order(:flight_number) }, inverse_of: :tournament, :dependent => :destroy
   has_and_belongs_to_many :course_holes, -> { order(:hole_number) }
-  
+    
+  attr_accessor :another_member_id
+    
   validates :name, presence: true
   validates :tournament_at, presence: true
   validates :signup_opens_at, presence: true

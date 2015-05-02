@@ -6,88 +6,42 @@
 
 <h4>Tee Times for <%= @tournament.name %></h4>
 
-<% @tournament.tournament_groups.each do |group| %>
+<% @tournament.tournament_groups.each_with_index do |group, j| %>
+  <span class="label label-default"><%= group.tee_time_at.to_s(:time_only) %></span>
 
-<span class="label label-default"><%= group.tee_time_at.to_s(:time_only) %></span>
-
-<table class="table table-striped table-bordered">
-	<thead>
-		<tr>
-			<th width="70%">Players</th>
-      <th width="30%">Register</th>
-		</tr>
-	</thead>
-  <tbody>
-    <% group.players_signed_up.each do |player| -%>
-    <tr>
-      <td><%= player.complete_name %></td>
-      <% if player == current_user -%>
-      <td><%= link_to "Cancel Registration", play_tournament_remove_signup_path(@tournament), :data => { :confirm => 'Are you sure you want to cancel this registration?' }, :method => :delete %></td>
-      <% else -%>
-      <td>&nbsp;</td>
+  <table class="table table-striped table-bordered">
+  	<thead>
+  		<tr>
+  			<th width="70%">Players</th>
+        <th width="30%">Register</th>
+  		</tr>
+  	</thead>
+    <tbody>
+      <% group.players_signed_up.each do |player| -%>
+      <tr>
+        <td><%= player.complete_name %></td>
+        <% if player == current_user -%>
+        <td><%= link_to "Cancel Registration", play_tournament_remove_signup_path(@tournament), :data => { :confirm => 'Are you sure you want to cancel this registration?' }, :method => :delete %></td>
+        <% else -%>
+        <td>Booked</td>
+        <% end -%>
+      </tr>
+      <% end %>
+      <% (group.max_number_of_players - group.players_signed_up.count).abs.times.each_with_index do |item, i| -%>
+      <tr>
+        <td>Time Available</td>
+        <% if @tournament.includes_player?(current_user) == false -%>
+        <td><button type="button" class="btn btn-primary btn" data-toggle="modal" data-target="#Group<%= group.id %>">Register Tee Time</button></td>
+        </td>
+        <% else -%>
+        <td>&nbsp;</td>
+        <% end -%>
+      </tr>
       <% end -%>
-    </tr>
-    <% end %>
-    <% (group.max_number_of_players - group.players_signed_up.count).abs.times.each_with_index do |item, i| -%>
-    <tr>
-      <td>Time Available</td>
-      <% if @tournament.includes_player?(current_user) == false -%>
-      <td><button type="button" class="btn btn-primary btn" data-toggle="modal" data-target="#<%= i %>Modal">Register Tee Time</button></td>
-      </td>
-      <% else -%>
-      <td>&nbsp;</td>
-      <% end -%>
-    </tr>
-    <% end -%>
-  </tbody>
-</table>
-
+    </tbody>
+  </table>  
 <% end %>
 
-<% @tournament.tournament_groups.each do |group| %>
-  <% (group.max_number_of_players - group.players_signed_up.count).abs.times.each_with_index do |item, i| -%>
-  <div class="modal fade" id="<%= i %>Modal" role="dialog" aria-labelledby="gridSystemModalLabel" aria-hidden="true">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title" id="gridSystemModalLabel">Register for Tournament</h4>
-          </div>
-          <div class="modal-body">
-            <div class="container-fluid">
-              <div class="row">
-                <p>You can choose to register and also if you'd like to pay your registration dues (<%= number_to_currency(@tournament.dues_amount) %>) now. Please note that dues are non-refundable.</p>
-                <p><em>Please register by selecting the appropriate tee-box.</em></p>
-                <table class="table table-striped">
-                  <thead>
-                    <tr>
-                      <th>Tee Box</th>
-                      <th>&nbsp;</th>
-                      <th>&nbsp;</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td><strong><%= @tournament.mens_tee_box.name %></strong></td>
-                      <td><%= link_to "Register & Pay Now", play_tournament_complete_signup_path(@tournament, group_id: group.id, course_tee_box_id: @tournament.mens_tee_box.id, pay_now: true), :method => :put, :role => "button", :class => "btn btn-default" %></td>
-                      <td><%= link_to "Register & Pay Later", play_tournament_complete_signup_path(@tournament, group_id: group.id, course_tee_box_id: @tournament.mens_tee_box.id, pay_now: false), :method => :put, :role => "button", :class => "btn btn-default" %></td>
-                    </tr>
-                    <% if !@tournament.womens_tee_box.blank? && @tournament.womens_tee_box != @tournament.mens_tee_box -%>
-                    <tr>
-                      <td><strong><%= @tournament.womens_tee_box.name %></strong></td>
-                      <td><%= link_to "Register & Pay Now", play_tournament_complete_signup_path(@tournament, group_id: group.id, course_tee_box_id: @tournament.womens_tee_box.id, pay_now: true), :method => :put, :role => "button", :class => "btn btn-default" %></td>
-                      <td><%= link_to "Register & Pay Later", play_tournament_complete_signup_path(@tournament, group_id: group.id, course_tee_box_id: @tournament.womens_tee_box.id, pay_now: false), :method => :put, :role => "button", :class => "btn btn-default" %></td>
-                    </tr>
-                    <% end -%>
-                  </tbody>
-                </table>
-            </div>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-          </div>
-        </div><!-- /.modal-content -->
-      </div><!-- /.modal-dialog -->
-    </div><!-- /.modal -->
-    <% end -%>
+<% @tournament.tournament_groups.each do |group| %>  
+  <%= render partial: 'signup_modal', locals: {tournament: @tournament, group: group} %>
 <% end -%>

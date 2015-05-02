@@ -28,6 +28,13 @@
   </div>
   <% end -%>
   
+  <% if current_user_is_admin_for_user(@user_account) -%>
+  <h3>Has Paid Annual Dues?</h3>
+  <div class="well">
+    <%= f.input :has_paid, :label => 'Has Paid Dues' %>
+  </div>
+  <% end -%>
+  
   <% if @user_account.new_record? -%>
   <h3>Password</h3>
   <div class="well">  

@@ -48,4 +48,15 @@ class League < ActiveRecord::Base
     return ranked_players
   end
   
+  def users_not_signed_up_for_tournament(tournament, extra_ids_to_omit)
+    tournament_users = tournament.players
+    ids_to_omit = tournament_users.map { |n| n.id }
+    
+    extra_ids_to_omit.each do |eid|
+      ids_to_omit << eid
+    end
+    
+    return self.users.where("users.id NOT IN (?)", ids_to_omit).order("last_name, first_name")
+  end
+  
 end
