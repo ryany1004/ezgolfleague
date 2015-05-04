@@ -97,7 +97,9 @@ Rails.application.routes.draw do
         resources :payouts
       end
       
-      resources :contests
+      resources :contests do
+        resources :contest_results
+      end
       
       resources :tournament_groups do
         post 'batch_create', on: :collection

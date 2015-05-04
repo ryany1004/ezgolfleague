@@ -10,26 +10,20 @@
   
   <h3>Basic Details</h3>
   <div class="well">  
-	  <%= f.input :name, :label => 'Name', required: true %>
+	  <%= f.input :name, :label => 'Name', hint: 'i.e. Closest to the Pin', required: true %>
     
     <% if @contest.new_record? -%>
       <%= f.input :contest_type, :label => 'Contest Type', collection: @contest_types, as: :radio_buttons, label_method: :name, value_method: :value %>
     <% end -%>
   </div>
   
-  <% if @contest.new_record? == false && @contest.contest_type == 0 -%>
-  <h3>Overall Winner</h3>
-  <div class="well">  
-    <%= f.simple_fields_for :overall_winner do |b| %>
-      <div class="well">
-        <%= b.association :winner, collection: @tournament.league.users, label_method: :complete_name %>
-      
-        <%= b.input :result_value, :label => 'Result (i.e. 300 yards)', required: true %>
-      
-        <%= b.input :payout_amount, :label => "Payout Amount ($)" %>
-      </div>
-    <% end %>
-  </div>
+  <% if @contest.new_record? == false && @contest.contest_type == 1 -%>
+    <% if @contest.course_holes.count == 0 -%>
+    <h3>Please Select Course Holes</h3>
+    <div class="well">  
+        <%= f.association :course_holes, collection: @tournament.course.course_holes, :label => 'Which holes are included?', :label_method => :name, as: :check_boxes %>
+    </div>
+    <% end -%>
   <% end -%>
   
   <div class="form-actions">

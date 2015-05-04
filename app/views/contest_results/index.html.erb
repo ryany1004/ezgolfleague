@@ -1,0 +1,48 @@
+<ol class="breadcrumb">
+  <li><%= link_to "Tournaments", league_tournaments_path(current_user.selected_league) %></li>
+  <li><%= link_to @tournament.name, edit_league_tournament_path(current_user.selected_league, @tournament) %></li>
+  <li><%= link_to @contest.name, league_tournament_contests_path(current_user.selected_league, @tournament, @contest) %></li>
+  <li class="active">Manage Results</li>
+</ol>
+
+<h4><%= @page_title %></h4>
+
+<table class="table table-striped">
+	<thead>
+		<tr>
+			<th>Location</th>
+      <th>Winner</th>
+      <th>Details</th>
+      <th>Amount</th>
+      <% if user_is_league_admin(current_user, @tournament.league) && @contest.can_accept_more_results? -%>
+      <th><%= link_to 'Create Contest Result', new_league_tournament_contest_contest_result_path(@tournament.league, @tournament, @contest), :class => 'btn btn-primary' %></th>
+      <% else -%>
+      <th>&nbsp;</th>
+      <% end -%>
+		</tr>
+	</thead>
+	<tbody>
+	<% @contest_results.each do |result| %>
+		<tr>
+			<td><%= link_to result.location, edit_league_tournament_contest_contest_result_path(@tournament.league, @tournament, @contest, result) %></td>
+			<td><%= result.winner.complete_name %></td>
+      <td><%= result.result_value %></td>
+      <td><%= number_to_currency(result.payout_amount) %></td>
+      <td><%= link_to "Edit", edit_league_tournament_contest_contest_result_path(@tournament.league, @tournament, @contest, result) %> | <%= link_to 'Delete', league_tournament_contest_contest_result_path(@tournament.league, @tournament, @contest, result), :data => { :confirm => 'Are you sure you want to delete this contest result?' }, :method => :delete %></td>
+		</tr>
+	<% end %>
+	</tbody>
+  <tfoot>
+		<tr>
+			<th>&nbsp;</th>
+      <th>&nbsp;</th>
+			<th>&nbsp;</th>
+      <th>&nbsp;</th>
+      <% if user_is_league_admin(current_user, @tournament.league) && @contest.can_accept_more_results? -%>
+      <th><%= link_to 'Create Contest Result', new_league_tournament_contest_contest_result_path(@tournament.league, @tournament, @contest), :class => 'btn btn-primary' %></th>
+      <% else -%>
+      <th>&nbsp;</th>
+      <% end -%>
+		</tr>
+  </tfoot>
+</table>

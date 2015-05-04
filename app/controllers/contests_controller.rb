@@ -18,18 +18,21 @@ class ContestsController < BaseController
     @contest.tournament = @tournament
     
     if @contest.save
-      redirect_to edit_league_tournament_contest_path(@tournament.league, @tournament, @contest), :flash => { :success => "The contest was successfully created." }
+      if @contest.contest_type == 1
+        redirect_to edit_league_tournament_contest_path(@tournament.league, @tournament, @contest), :flash => { :success => "The contest was successfully created. Please verify the holes involved." }
+      else
+        redirect_to league_tournament_contests_path(@tournament.league, @tournament), :flash => { :success => "The contest was successfully created." }
+      end
     else
       render :new
     end
   end
   
   def edit
-    @contest.build_overall_winner if @contest.overall_winner.blank?
   end
   
   def update
-    if @contest.update(contest_params)
+    if @contest.update(contest_params)      
       redirect_to league_tournament_contests_path(@tournament.league, @tournament), :flash => { :success => "The contest was successfully updated." }
     else      
       render :edit
@@ -63,7 +66,7 @@ class ContestsController < BaseController
   end
   
   def contest_params
-    params.require(:contest).permit(:name, :contest_type, overall_winner_attributes: [:contest_id, :winner_id, :result_value, :payout_amount])
+    params.require(:contest).permit(:name, :contest_type, :course_hole_ids => [])
   end
   
 end

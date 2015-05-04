@@ -14,7 +14,7 @@
 ActiveRecord::Schema.define(version: 20150502220841) do
 
   create_table "contest_holes", force: :cascade do |t|
-    t.integer  "tournament_id"
+    t.integer  "contest_id"
     t.integer  "course_hole_id"
     t.datetime "created_at",     null: false
     t.datetime "updated_at",     null: false

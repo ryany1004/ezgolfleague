@@ -1,0 +1,27 @@
+<%= simple_form_for [@tournament.league, @tournament, @contest, @contest_result] do |f| %>
+  <% if notification = f.error_notification %>
+    <div class="alert alert-error fade in">
+      <a class="close" data-dismiss="alert" href="#">&times;</a>
+      <%= notification %>
+    </div>
+  <% end %>
+  
+  <legend>Contest Result Details</legend>
+  
+  <h3>Basic Details</h3>
+  <div class="well">  
+    <%= f.association :winner, collection: @tournament.league.users, label_method: :complete_name %>
+
+    <% if @contest.contest_type == 1 -%>
+      <%= f.association :contest_hole, collection: @contest.contest_holes, label_method: :hole_number %>
+    <% end -%>
+
+    <%= f.input :result_value, :label => 'Result (i.e. 300 yards)', required: true %>
+
+    <%= f.input :payout_amount, :label => "Payout Amount ($)" %>
+  </div>
+
+  <div class="form-actions">
+    <%= f.button :submit, "Save Contest", :class => 'btn btn-default' %>
+  </div>
+<% end %>
