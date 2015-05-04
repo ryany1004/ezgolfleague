@@ -41,19 +41,17 @@ class Contest < ActiveRecord::Base
   end
   
   def winners
-    # if self.contest_type == 0
-    #   return self.overall_winner.user.complete_name
-    # else
-    #   winners = []
-    #
-    #   self.contest_results.each do |result|
-    #     winners << result.winner.complete_name
-    #   end
-    #
-    #   return winners
-    # end
-  
-    return "x"
+    if self.contest_type == 0
+      return {user: self.overall_winner.user, amount: self.overall_winner.payout_amount}
+    else
+      winners = []
+
+      self.contest_results.each do |result|
+        winners << {user: result.winner, amount: result.payout_amount}
+      end
+
+      return winners
+    end
   end
-  
+
 end
