@@ -1,6 +1,8 @@
 module TournamentsHelper
   
   def is_editable?(tournament)
+    return false if tournament.blank?
+    
     if tournament.tournament_at < DateTime.now
       return false
     else

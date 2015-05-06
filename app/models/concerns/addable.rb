@@ -37,8 +37,11 @@ module Addable
       self.players.each do |p|    
         golf_outing = self.golf_outing_for_player(p)
         player_course_handicap = p.course_handicap(self.course, golf_outing.course_tee_box)
-        if player_course_handicap >= f.lower_bound && player_course_handicap <= f.upper_bound
-          f.users << p
+        
+        unless player_course_handicap.blank?
+          if player_course_handicap >= f.lower_bound && player_course_handicap <= f.upper_bound
+            f.users << p
+          end
         end
       end
     end

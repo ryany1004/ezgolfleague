@@ -51,7 +51,7 @@ module Scoreable
       sorted_course_holes_by_handicap = self.course.course_holes.order("womens_handicap")
     end
         
-    if course_handicap > 0    
+    if !course_handicap.blank? && course_handicap > 0    
       allowance = []
       while course_handicap > 0 do
         sorted_course_holes_by_handicap.each do |hole|

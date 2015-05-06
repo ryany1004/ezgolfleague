@@ -1,17 +1,17 @@
-  <% if !@tournament.new_record? -%>
-  <h3>Manage Tournament</h3>
-  <div class="well">  
-    <%= link_to 'Tee Times', league_tournament_tournament_groups_path(@tournament.league, @tournament), :class => 'btn btn-primary' %>
-    <%= link_to 'Flights & Payouts', league_tournament_flights_path(@tournament.league, @tournament), :class => 'btn btn-primary' %>
-    <%= link_to 'Contests', league_tournament_contests_path(@tournament.league, @tournament), :class => 'btn btn-primary' %>
-    <!-- <%= link_to 'Game Types', league_tournament_tournament_groups_path(@tournament.league, @tournament), :class => 'btn btn-primary' %> -->
-  </div>
-  
-  <h3>Finalize Tournament</h3>
-  <div class="well">
-    <%= link_to 'Finalize Scores & Payouts', league_tournament_finalize_path(@tournament.league, @tournament), :class => 'btn btn-danger' %>
-  </div>
-  <% end -%>
+<% if !@tournament.new_record? -%>
+<h3>Manage Tournament</h3>
+<div class="well">  
+  <%= link_to 'Tee Times', league_tournament_tournament_groups_path(@tournament.league, @tournament), :class => 'btn btn-primary' %>
+  <%= link_to 'Flights & Payouts', league_tournament_flights_path(@tournament.league, @tournament), :class => 'btn btn-primary' %>
+  <%= link_to 'Contests', league_tournament_contests_path(@tournament.league, @tournament), :class => 'btn btn-primary' %>
+  <!-- <%= link_to 'Game Types', league_tournament_tournament_groups_path(@tournament.league, @tournament), :class => 'btn btn-primary' %> -->
+</div>
+
+<h3>Finalize Tournament</h3>
+<div class="well">
+  <%= link_to 'Finalize Scores & Payouts', league_tournament_finalize_path(@tournament.league, @tournament), :class => 'btn btn-danger' %>
+</div>
+<% end -%>
 
 <% if is_editable?(@tournament) -%>
   <%= simple_form_for [current_user.selected_league, @tournament] do |f| %>
