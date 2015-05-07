@@ -3,7 +3,7 @@ module TournamentsHelper
   def is_editable?(tournament)
     return false if tournament.blank?
     
-    if tournament.tournament_at < DateTime.now
+    if is_today?(tournament)
       return false
     else
       return true
