@@ -13,7 +13,7 @@
 </div>
 <% end -%>
 
-<% if is_editable?(@tournament) -%>
+<% if @tournament.new_record? || is_editable?(@tournament) -%>
   <%= simple_form_for [current_user.selected_league, @tournament] do |f| %>
     <% if notification = f.error_notification %>
       <div class="alert alert-error fade in">
