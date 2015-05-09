@@ -31,7 +31,7 @@ class Play::TournamentsController < BaseController
       @tournament.add_player_to_group(tournament_group, current_user, course_tee_box)
       
       #other associated signup
-      if !params[:tournament][:another_member_id].blank?
+      if !params[:tournament].blank? && !params[:tournament][:another_member_id].blank?
         other_user = User.find(params[:tournament][:another_member_id])
         @tournament.add_player_to_group(tournament_group, other_user, course_tee_box, false)
       end
