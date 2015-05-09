@@ -93,6 +93,8 @@ Rails.application.routes.draw do
       get 'finalize'
       patch 'confirm_finalization'
       
+      resources :game_types
+      
       resources :flights do
         resources :payouts
       end
