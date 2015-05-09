@@ -18,7 +18,11 @@ class Contest < ActiveRecord::Base
   
   def contest_results
     if self.contest_type == 0
-      return [self.overall_winner]
+      if self.overall_winner.blank?
+        return []      
+      else
+        return [self.overall_winner]
+      end
     else
       results = []
       

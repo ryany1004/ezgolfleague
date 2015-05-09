@@ -8,7 +8,7 @@ module ContestsHelper
     winners.each do |winner|
       html << "#{winner[:user].complete_name}"
       
-      html << "<br/>" if winner == winners.last
+      html << "<br/>" if winner != winners.last
     end
     
     return html.html_safe
