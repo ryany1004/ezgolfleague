@@ -42,7 +42,11 @@ class Contest < ActiveRecord::Base
   
   def winners
     if self.contest_type == 0
-      return {user: self.overall_winner.user, amount: self.overall_winner.payout_amount}
+      if self.overall_winner.blank?
+        return nil
+      else
+        return {user: self.overall_winner.user, amount: self.overall_winner.payout_amount}
+      end
     else
       winners = []
 
