@@ -1,16 +1,18 @@
 <table class="table table-striped table-bordered">
 	<thead>
 		<tr>
-      <th width="25%">Flight</th>
-      <th width="25%">Score</th>
-      <th width="25%">Par</th>
-      <th width="25%">Course Handicap</th>
+      <th width="20%">Flight</th>
+      <th width="20%">Gross Score</th>
+      <th width="20%">Net Score</th>
+      <th width="20%">Par</th>
+      <th width="20%">Course Handicap</th>
 		</tr>
 	</thead>
 	<tbody>
 		<tr>
       <td><%= (tournament.flight_for_player(scorecard.golf_outing.user).flight_number) %></td>
       <td><%= scorecard.scores.map {|score| score.strokes }.sum %></td>
+      <td><%= scorecard.net_score %></td>
       <td><%= tournament.course_holes.map {|hole| hole.par }.sum %></td>
       <td><%= scorecard.golf_outing.user.course_handicap(tournament.course, scorecard.golf_outing.course_tee_box) %></td>
 		</tr>

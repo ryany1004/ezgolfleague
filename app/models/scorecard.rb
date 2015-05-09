@@ -3,4 +3,23 @@ class Scorecard < ActiveRecord::Base
   has_many :scores, -> { order("sort_order") }, inverse_of: :scorecard, :dependent => :destroy
   
   accepts_nested_attributes_for :scores
+  
+  def net_score    
+    net_score = 0
+    
+    handicap_allowance = self.golf_outing.team.tournament_group.tournament.handicap_allowance(self.golf_outing.user)
+    
+    self.scores.each do |score|
+      adjustment = 0
+      
+      handicap_allowance.each do |h|      
+        adjustment = h[:strokes] if score.course_hole == h[:course_hole]
+      end
+      
+      net_score += score.strokes - adjustment
+    end
+
+    return net_score
+  end
+  
 end

@@ -129,11 +129,15 @@ module Scoreable
       
       player_scores.sort! { |x,y| x[:score] <=> y[:score] }
       
+      Rails.logger.debug { "Flights: #{self.flights.count} | Users: #{f.users.count} | PS: #{player_scores.count} | Payouts: #{f.payouts.count}" }
+      
       f.payouts.each_with_index do |p, i|
-        player = player_scores[i][:player]
+        if player_scores.count > i
+          player = player_scores[i][:player]
         
-        p.user = player
-        p.save
+          p.user = player
+          p.save
+        end
       end
       
     end

@@ -17,6 +17,7 @@ class TournamentsController < BaseController
   
   def new
     @tournament = Tournament.new
+    @tournament.league = current_user.leagues.first if current_user.leagues.count == 1
   end
   
   def create

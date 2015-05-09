@@ -15,9 +15,14 @@ class ContestResultsController < BaseController
   def create
     @contest_result = ContestResult.new(contest_result_params)
     @contest_result.contest = @contest
-    
+
     if @contest_result.save
-      redirect_to league_tournament_contest_contest_results_path(@tournament.league, @tournament, @contest), :flash => { :success => "The contest result was successfully created." }
+      if @contest.contest_type == 0
+        @contest.overall_winner = @contest_result
+        @contest.save
+      end
+
+      redirect_to league_tournament_contest_contest_results_path(@tournament.league, @tournament, @contest), :flash => { :success => "The contest result was successfully added." }
     else
       render :new
     end

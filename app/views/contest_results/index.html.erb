@@ -15,7 +15,7 @@
       <th>Details</th>
       <th>Amount</th>
       <% if user_is_league_admin(current_user, @tournament.league) && @contest.can_accept_more_results? -%>
-      <th><%= link_to 'Create Contest Result', new_league_tournament_contest_contest_result_path(@tournament.league, @tournament, @contest), :class => 'btn btn-primary' %></th>
+      <th><%= link_to 'Add Contest Result', new_league_tournament_contest_contest_result_path(@tournament.league, @tournament, @contest), :class => 'btn btn-primary' %></th>
       <% else -%>
       <th>&nbsp;</th>
       <% end -%>
@@ -39,7 +39,7 @@
 			<th>&nbsp;</th>
       <th>&nbsp;</th>
       <% if user_is_league_admin(current_user, @tournament.league) && @contest.can_accept_more_results? -%>
-      <th><%= link_to 'Create Contest Result', new_league_tournament_contest_contest_result_path(@tournament.league, @tournament, @contest), :class => 'btn btn-primary' %></th>
+      <th><%= link_to 'Add Contest Result', new_league_tournament_contest_contest_result_path(@tournament.league, @tournament, @contest), :class => 'btn btn-primary' %></th>
       <% else -%>
       <th>&nbsp;</th>
       <% end -%>

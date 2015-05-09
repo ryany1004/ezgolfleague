@@ -35,7 +35,7 @@ module Playable
     return player_included
   end
   
-  def flight_for_player(user)
+  def flight_for_player(user)        
     self.flights.each do |f|
       return f if f.users.include? user
     end

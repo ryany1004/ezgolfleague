@@ -17,61 +17,61 @@ namespace :create_sample_data do
     l = League.create(name: "Danny's League", dues_amount: 20.00)
     
     c = Course.create(name: "Bushwood", phone_number: "888-888-8888", street_address_1: "123 Main Street", city: "My Zone", us_state: "CA", postal_code: "11111")
-    tee_box = CourseTeeBox.create(course: c, name: "Black", rating: 120.0, slope: 3)
+    tee_box = CourseTeeBox.create(course: c, name: "Men's Green", rating: 71.3, slope: 130)
     
-    h1 = CourseHole.create(course: c, hole_number: 1, par: 1, mens_handicap: 1, womens_handicap: 1)
-    CourseHoleTeeBox.create(course_tee_box: tee_box, course_hole: h1, yardage: 200)
+    h1 = CourseHole.create(course: c, hole_number: 1, par: 4, mens_handicap: 5, womens_handicap: 5)
+    CourseHoleTeeBox.create(course_tee_box: tee_box, course_hole: h1, yardage: 447)
     
-    h2 = CourseHole.create(course: c, hole_number: 2, par: 1, mens_handicap: 2, womens_handicap: 2)
-    CourseHoleTeeBox.create(course_tee_box: tee_box, course_hole: h2, yardage: 200)
+    h2 = CourseHole.create(course: c, hole_number: 2, par: 3, mens_handicap: 17, womens_handicap: 17)
+    CourseHoleTeeBox.create(course_tee_box: tee_box, course_hole: h2, yardage: 143)
     
-    h3 = CourseHole.create(course: c, hole_number: 3, par: 1, mens_handicap: 3, womens_handicap: 4)
-    CourseHoleTeeBox.create(course_tee_box: tee_box, course_hole: h3, yardage: 200)
+    h3 = CourseHole.create(course: c, hole_number: 3, par: 4, mens_handicap: 11, womens_handicap: 11)
+    CourseHoleTeeBox.create(course_tee_box: tee_box, course_hole: h3, yardage: 340)
     
-    h4 = CourseHole.create(course: c, hole_number: 4, par: 1, mens_handicap: 4, womens_handicap: 5)
-    CourseHoleTeeBox.create(course_tee_box: tee_box, course_hole: h4, yardage: 200)
+    h4 = CourseHole.create(course: c, hole_number: 4, par: 4, mens_handicap: 1, womens_handicap: 9)
+    CourseHoleTeeBox.create(course_tee_box: tee_box, course_hole: h4, yardage: 347)
     
-    h5 = CourseHole.create(course: c, hole_number: 5, par: 1, mens_handicap: 5, womens_handicap: 6)
-    CourseHoleTeeBox.create(course_tee_box: tee_box, course_hole: h5, yardage: 200)
+    h5 = CourseHole.create(course: c, hole_number: 5, par: 5, mens_handicap: 3, womens_handicap: 1)
+    CourseHoleTeeBox.create(course_tee_box: tee_box, course_hole: h5, yardage: 568)
     
-    h6 = CourseHole.create(course: c, hole_number: 6, par: 1, mens_handicap: 6, womens_handicap: 7)
-    CourseHoleTeeBox.create(course_tee_box: tee_box, course_hole: h6, yardage: 200)
+    h6 = CourseHole.create(course: c, hole_number: 6, par: 3, mens_handicap: 15, womens_handicap: 15)
+    CourseHoleTeeBox.create(course_tee_box: tee_box, course_hole: h6, yardage: 149)
     
-    h7 = CourseHole.create(course: c, hole_number: 7, par: 1, mens_handicap: 7, womens_handicap: 8)
-    CourseHoleTeeBox.create(course_tee_box: tee_box, course_hole: h7, yardage: 200)
+    h7 = CourseHole.create(course: c, hole_number: 7, par: 5, mens_handicap: 9, womens_handicap: 3)
+    CourseHoleTeeBox.create(course_tee_box: tee_box, course_hole: h7, yardage: 533)
     
-    h8 = CourseHole.create(course: c, hole_number: 8, par: 1, mens_handicap: 8, womens_handicap: 9)
-    CourseHoleTeeBox.create(course_tee_box: tee_box, course_hole: h8, yardage: 200)
+    h8 = CourseHole.create(course: c, hole_number: 8, par: 4, mens_handicap: 7, womens_handicap: 7)
+    CourseHoleTeeBox.create(course_tee_box: tee_box, course_hole: h8, yardage: 439)
     
-    h9 = CourseHole.create(course: c, hole_number: 9, par: 1, mens_handicap: 9, womens_handicap: 10)
-    CourseHoleTeeBox.create(course_tee_box: tee_box, course_hole: h9, yardage: 200)
+    h9 = CourseHole.create(course: c, hole_number: 9, par: 3, mens_handicap: 13, womens_handicap: 13)
+    CourseHoleTeeBox.create(course_tee_box: tee_box, course_hole: h9, yardage: 207)
     
-    h10 = CourseHole.create(course: c, hole_number: 10, par: 1, mens_handicap: 10, womens_handicap: 11)
-    CourseHoleTeeBox.create(course_tee_box: tee_box, course_hole: h10, yardage: 200)
+    h10 = CourseHole.create(course: c, hole_number: 10, par: 5, mens_handicap: 2, womens_handicap: 2)
+    CourseHoleTeeBox.create(course_tee_box: tee_box, course_hole: h10, yardage: 577)
     
-    h11 = CourseHole.create(course: c, hole_number: 11, par: 1, mens_handicap: 11, womens_handicap: 12)
-    CourseHoleTeeBox.create(course_tee_box: tee_box, course_hole: h11, yardage: 200)
+    h11 = CourseHole.create(course: c, hole_number: 11, par: 3, mens_handicap: 18, womens_handicap: 10)
+    CourseHoleTeeBox.create(course_tee_box: tee_box, course_hole: h11, yardage: 183)
     
-    h12 = CourseHole.create(course: c, hole_number: 12, par: 1, mens_handicap: 12, womens_handicap: 13)
-    CourseHoleTeeBox.create(course_tee_box: tee_box, course_hole: h12, yardage: 200)
+    h12 = CourseHole.create(course: c, hole_number: 12, par: 4, mens_handicap: 6, womens_handicap: 18)
+    CourseHoleTeeBox.create(course_tee_box: tee_box, course_hole: h12, yardage: 286)
     
-    h13 = CourseHole.create(course: c, hole_number: 13, par: 1, mens_handicap: 13, womens_handicap: 14)
-    CourseHoleTeeBox.create(course_tee_box: tee_box, course_hole: h13, yardage: 200)
+    h13 = CourseHole.create(course: c, hole_number: 13, par: 4, mens_handicap: 10, womens_handicap: 16)
+    CourseHoleTeeBox.create(course_tee_box: tee_box, course_hole: h13, yardage: 322)
     
-    h14 = CourseHole.create(course: c, hole_number: 14, par: 1, mens_handicap: 14, womens_handicap: 15)
-    CourseHoleTeeBox.create(course_tee_box: tee_box, course_hole: h14, yardage: 200)
+    h14 = CourseHole.create(course: c, hole_number: 14, par: 5, mens_handicap: 4, womens_handicap: 4)
+    CourseHoleTeeBox.create(course_tee_box: tee_box, course_hole: h14, yardage: 526)
     
-    h15 = CourseHole.create(course: c, hole_number: 15, par: 1, mens_handicap: 15, womens_handicap: 16)
-    CourseHoleTeeBox.create(course_tee_box: tee_box, course_hole: h15, yardage: 200)
+    h15 = CourseHole.create(course: c, hole_number: 15, par: 4, mens_handicap: 8, womens_handicap: 8)
+    CourseHoleTeeBox.create(course_tee_box: tee_box, course_hole: h15, yardage: 394)
     
-    h16 = CourseHole.create(course: c, hole_number: 16, par: 1, mens_handicap: 16, womens_handicap: 17)
-    CourseHoleTeeBox.create(course_tee_box: tee_box, course_hole: h16, yardage: 200)
+    h16 = CourseHole.create(course: c, hole_number: 16, par: 4, mens_handicap: 16, womens_handicap: 12)
+    CourseHoleTeeBox.create(course_tee_box: tee_box, course_hole: h16, yardage: 391)
     
-    h17 = CourseHole.create(course: c, hole_number: 17, par: 1, mens_handicap: 17, womens_handicap: 18)
-    CourseHoleTeeBox.create(course_tee_box: tee_box, course_hole: h17, yardage: 200)
+    h17 = CourseHole.create(course: c, hole_number: 17, par: 3, mens_handicap: 14, womens_handicap: 6)
+    CourseHoleTeeBox.create(course_tee_box: tee_box, course_hole: h17, yardage: 212)
     
-    h18 = CourseHole.create(course: c, hole_number: 18, par: 1, mens_handicap: 18, womens_handicap: 3)
-    CourseHoleTeeBox.create(course_tee_box: tee_box, course_hole: h18, yardage: 200)
+    h18 = CourseHole.create(course: c, hole_number: 18, par: 4, mens_handicap: 12, womens_handicap: 14)
+    CourseHoleTeeBox.create(course_tee_box: tee_box, course_hole: h18, yardage: 353)
     
     #Sample Users
     user_info = [

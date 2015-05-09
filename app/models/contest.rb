@@ -49,7 +49,7 @@ class Contest < ActiveRecord::Base
       if self.overall_winner.blank?
         return nil
       else
-        return [{user: self.overall_winner.user, amount: self.overall_winner.payout_amount}]
+        return [{user: self.overall_winner.winner, amount: self.overall_winner.payout_amount}]
       end
     else
       winners = []

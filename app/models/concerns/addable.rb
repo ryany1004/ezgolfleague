@@ -45,6 +45,10 @@ module Addable
         end
       end
     end
+    
+    self.players.each do |p|
+      raise "Player Not Flighted: #{p.id} in Tournament #{self.id}" if self.flight_for_player(p) == nil
+    end
   end 
 
 end
