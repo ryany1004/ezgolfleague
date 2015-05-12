@@ -51,7 +51,7 @@ class FlightsController < BaseController
   end
   
   def update_player_flight_membership
-    @tournament.assign_players_to_flights
+    @tournament.assign_players_to_flights(false)
   end
   
   private

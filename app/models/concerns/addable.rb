@@ -32,7 +32,7 @@ module Addable
     end
   end
 
-  def assign_players_to_flights
+  def assign_players_to_flights(confirm_all_flighted = true)
     self.flights.each do |f|  
       f.users.clear
           
@@ -48,8 +48,10 @@ module Addable
       end
     end
     
-    self.players.each do |p|
-      raise "Player Not Flighted: #{p.id} in Tournament #{self.id}" if self.flight_for_player(p) == nil
+    if confirm_all_flighted == true    
+      self.players.each do |p|
+        raise "Player Not Flighted: #{p.id} in Tournament #{self.id}" if self.flight_for_player(p) == nil
+      end
     end
   end 
 
