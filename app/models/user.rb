@@ -51,4 +51,12 @@ class User < ActiveRecord::Base
     return false
   end
   
+  def is_member_of_league?(league)  
+    if self.league_memberships.where("league_id = ?", league.id).blank?
+      return false
+    else
+      return true
+    end
+  end
+  
 end

@@ -129,8 +129,11 @@ class UserAccountsController < BaseController
         unless league_id.blank?        
           league = League.find(league_id)
         
-          if existing_user.league_memberships.where("league_id = ?", league.id).blank?
-            m = LeagueMembership.create(league: league, user: existing_user, is_admin: is_admin, state: MembershipStates::ADDED)
+          existing_membership = existing_user.league_memberships.where("league_id = ?", league.id)
+          if existing_membership.blank?
+            LeagueMembership.create(league: league, user: existing_user, is_admin: is_admin, state: MembershipStates::ADDED)
+          else
+            LeagueMailer.renew_dues(existing_user, league).deliver_later if existing_membership.has_paid == false
           end
         end
       end

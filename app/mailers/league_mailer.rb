@@ -7,4 +7,11 @@ class LeagueMailer < ApplicationMailer
     mail(to: @user.email, subject: "League Message: #{subject}")
   end
   
+  def renew_dues(user, league)
+    @user = user
+    @league = league
+
+    mail(to: @user.email, subject: 'EZGolfLeague - Renew Your League Membership')
+  end
+  
 end
