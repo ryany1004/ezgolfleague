@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150502220841) do
+ActiveRecord::Schema.define(version: 20150512221332) do
 
   create_table "contest_holes", force: :cascade do |t|
     t.integer  "contest_id"
@@ -75,10 +75,11 @@ ActiveRecord::Schema.define(version: 20150502220841) do
   create_table "course_tee_boxes", force: :cascade do |t|
     t.integer  "course_id"
     t.string   "name"
-    t.float    "rating",     default: 0.0
-    t.integer  "slope",      default: 0
-    t.datetime "created_at",               null: false
-    t.datetime "updated_at",               null: false
+    t.float    "rating",         default: 0.0
+    t.integer  "slope",          default: 0
+    t.datetime "created_at",                     null: false
+    t.datetime "updated_at",                     null: false
+    t.string   "tee_box_gender", default: "Men"
   end
 
   add_index "course_tee_boxes", ["course_id"], name: "index_course_tee_boxes_on_course_id"
@@ -98,10 +99,11 @@ ActiveRecord::Schema.define(version: 20150502220841) do
   create_table "flights", force: :cascade do |t|
     t.integer  "tournament_id"
     t.integer  "flight_number"
-    t.datetime "created_at",    null: false
-    t.datetime "updated_at",    null: false
+    t.datetime "created_at",        null: false
+    t.datetime "updated_at",        null: false
     t.integer  "lower_bound"
     t.integer  "upper_bound"
+    t.integer  "course_tee_box_id"
   end
 
   add_index "flights", ["tournament_id"], name: "index_flights_on_tournament_id"
@@ -205,12 +207,10 @@ ActiveRecord::Schema.define(version: 20150502220841) do
     t.datetime "signup_opens_at"
     t.datetime "signup_closes_at"
     t.integer  "max_players"
-    t.datetime "created_at",                        null: false
-    t.datetime "updated_at",                        null: false
-    t.float    "dues_amount",       default: 0.0
-    t.integer  "mens_tee_box_id"
-    t.integer  "womens_tee_box_id"
-    t.boolean  "is_finalized",      default: false
+    t.datetime "created_at",                       null: false
+    t.datetime "updated_at",                       null: false
+    t.float    "dues_amount",      default: 0.0
+    t.boolean  "is_finalized",     default: false
   end
 
   add_index "tournaments", ["course_id"], name: "index_tournaments_on_course_id"

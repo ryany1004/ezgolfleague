@@ -44,8 +44,8 @@ module Scoreable
   def handicap_allowance(user)
     golf_outing = self.golf_outing_for_player(user)
     course_handicap = user.course_handicap(self.course, golf_outing.course_tee_box)
-        
-    if golf_outing.course_tee_box == self.mens_tee_box
+    
+    if golf_outing.course_tee_box.tee_box_gender == "Men"
       sorted_course_holes_by_handicap = self.course.course_holes.order("mens_handicap")
     else
       sorted_course_holes_by_handicap = self.course.course_holes.order("womens_handicap")

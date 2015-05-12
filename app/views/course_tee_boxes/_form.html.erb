@@ -11,6 +11,8 @@
   <h3>Basic Details</h3>
   <div class="well">  
 	  <%= f.input :name, :label => 'Name', :placeholder => "i.e. 'Green', 'Black'", required: true %>
+    
+    <%= f.input :tee_box_gender, collection: ["Men", "Women"], :label => 'Gender' %>
   </div>
 
   <h3>Difficulty</h3>

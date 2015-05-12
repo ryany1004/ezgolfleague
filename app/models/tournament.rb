@@ -6,8 +6,6 @@ class Tournament < ActiveRecord::Base
   
   belongs_to :league, inverse_of: :tournaments
   belongs_to :course, inverse_of: :tournaments
-  belongs_to :mens_tee_box, :class_name => "CourseTeeBox", :foreign_key => "mens_tee_box_id"
-  belongs_to :womens_tee_box, :class_name => "CourseTeeBox", :foreign_key => "womens_tee_box_id"
   has_many :tournament_groups, -> { order(:tee_time_at) }, inverse_of: :tournament, :dependent => :destroy
   has_many :flights, -> { order(:flight_number) }, inverse_of: :tournament, :dependent => :destroy
   has_many :contests, inverse_of: :tournament, :dependent => :destroy
@@ -20,9 +18,7 @@ class Tournament < ActiveRecord::Base
   validates :signup_opens_at, presence: true
   validates :signup_closes_at, presence: true
   validates :max_players, presence: true
-  # validates :mens_tee_box, presence: true
-  # validates :womens_tee_box, presence: true
-
+  
   validate :dates_are_valid, on: :create
   def dates_are_valid
     now = Time.zone.now.at_beginning_of_day

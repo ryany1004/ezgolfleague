@@ -41,7 +41,7 @@ class CourseTeeBoxesController < BaseController
   private
   
   def course_tee_box_params
-    params.require(:course_tee_box).permit(:name, :rating, :slope)
+    params.require(:course_tee_box).permit(:name, :rating, :slope, :tee_box_gender)
   end
   
   def fetch_course

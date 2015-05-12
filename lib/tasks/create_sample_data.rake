@@ -17,7 +17,7 @@ namespace :create_sample_data do
     l = League.create(name: "Danny's League", dues_amount: 20.00)
     
     c = Course.create(name: "Bushwood", phone_number: "888-888-8888", street_address_1: "123 Main Street", city: "My Zone", us_state: "CA", postal_code: "11111")
-    tee_box = CourseTeeBox.create(course: c, name: "Men's Green", rating: 71.3, slope: 130)
+    tee_box = CourseTeeBox.create(course: c, name: "Men's Green", rating: 71.3, slope: 130, tee_box_gender: "Men")
     
     h1 = CourseHole.create(course: c, hole_number: 1, par: 4, mens_handicap: 5, womens_handicap: 5)
     CourseHoleTeeBox.create(course_tee_box: tee_box, course_hole: h1, yardage: 447)
@@ -109,7 +109,7 @@ namespace :create_sample_data do
     tournament_info = [{:name => "Peachwood Open", :tournament_at => DateTime.now, :create_scores => true, :finalize_tournament => false}, {:name => "Scalleywag Cup", :tournament_at => DateTime.now + 1.month, :create_scores => false, :finalize_tournament => false}, {:name => "Caddy Day", :tournament_at => DateTime.now - 1.month, :create_scores => true, :finalize_tournament => true}]
     
     tournament_info.each do |ti|
-      t = Tournament.create(league: l, course: c, name: ti[:name], max_players: 100, mens_tee_box: c.course_tee_boxes.first, womens_tee_box: c.course_tee_boxes.first, dues_amount: 20.0) {|h|
+      t = Tournament.create(league: l, course: c, name: ti[:name], max_players: 100, dues_amount: 20.0) {|h|
         h.update_attribute('tournament_at', ti[:tournament_at])
         h.update_attribute('signup_opens_at', ti[:tournament_at] - 1.month)
         h.update_attribute('signup_closes_at', ti[:tournament_at] - 1.day)
@@ -159,9 +159,9 @@ namespace :create_sample_data do
       group = TournamentGroup.create(tournament: t, tee_time_at: t.tournament_groups.last.tee_time_at + 8.minutes, max_number_of_players: 4)
       
       #create flights
-      f1 = Flight.create(flight_number: 1, tournament: t, lower_bound: 0, upper_bound: 12)
-      f2 = Flight.create(flight_number: 2, tournament: t, lower_bound: 13, upper_bound: 20)
-      f3 = Flight.create(flight_number: 3, tournament: t, lower_bound: 21, upper_bound: 100)
+      f1 = Flight.create(flight_number: 1, tournament: t, lower_bound: 0, upper_bound: 12, course_tee_box: c.course_tee_boxes.first)
+      f2 = Flight.create(flight_number: 2, tournament: t, lower_bound: 13, upper_bound: 20, course_tee_box: c.course_tee_boxes.first)
+      f3 = Flight.create(flight_number: 3, tournament: t, lower_bound: 21, upper_bound: 100, course_tee_box: c.course_tee_boxes.first)
       t.assign_players_to_flights
       
       #payouts      

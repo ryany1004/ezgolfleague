@@ -14,24 +14,15 @@
               <table class="table table-striped">
                 <thead>
                   <tr>
-                    <th>Tee Box</th>
                     <th>&nbsp;</th>
                     <th>&nbsp;</th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr>
-                    <td><strong><%= tournament.mens_tee_box.name %></strong></td>
                     <td><%= f.button :button, "Register & Pay Now", :class => "btn btn-primary", :name => "pay_now", value: tournament.mens_tee_box.id %></td>
                     <td><%= f.button :button, "Register & Pay Later", :class => "btn btn-primary", :name => "pay_later", value: tournament.mens_tee_box.id %></td>
                   </tr>
-                  <% if !tournament.womens_tee_box.blank? && tournament.womens_tee_box != tournament.mens_tee_box -%>
-                  <tr>
-                    <td><strong><%= tournament.womens_tee_box.name %></strong></td>
-                    <td><%= f.button :button, "Register & Pay Now", :class => "btn btn-primary", :name => "pay_now", value: tournament.womens_tee_box.id %></td>
-                    <td><%= f.button :button, "Register & Pay Later", :class => "btn btn-primary", :name => "pay_later", value: tournament.womens_tee_box.id %></td>
-                  </tr>
-                  <% end -%>
                 </tbody>
               </table>
                             

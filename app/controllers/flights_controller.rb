@@ -57,7 +57,7 @@ class FlightsController < BaseController
   private
   
   def flight_params
-    params.require(:flight).permit(:flight_number, :lower_bound, :upper_bound)
+    params.require(:flight).permit(:flight_number, :lower_bound, :upper_bound, :course_tee_box_id)
   end
   
   def fetch_tournament
