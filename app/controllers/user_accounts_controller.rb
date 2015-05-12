@@ -106,7 +106,7 @@ class UserAccountsController < BaseController
       if @user_account.save
         @user_account.league_memberships.each do |m|
           m.state = MembershipStates::INVITED
-          m.is_admin = true
+          m.is_admin = is_admin
           m.save
         end
       

@@ -58,6 +58,20 @@ class Tournament < ActiveRecord::Base
     end
   end
   
+  def can_be_finalized?
+    flight_payouts = 0
+    
+    self.flights.each do |f|
+      flight_payouts += f.payouts.count
+    end
+    
+    if flight_payouts == 0
+      return false
+    else
+      return true
+    end
+  end
+  
   #date parsing
   def tournament_at=(date)
     begin

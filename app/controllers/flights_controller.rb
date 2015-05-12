@@ -23,6 +23,8 @@ class FlightsController < BaseController
     @flight.tournament = @tournament
     
     if @flight.save
+      self.update_player_flight_membership
+      
       redirect_to league_tournament_flights_path(@tournament.league, @tournament), :flash => { :success => "The flight was successfully created." }
     else
       render :new
@@ -34,6 +36,8 @@ class FlightsController < BaseController
   
   def update
     if @flight.update(flight_params)
+      self.update_player_flight_membership
+      
       redirect_to league_tournament_flights_path(@tournament.league, @tournament), :flash => { :success => "The flight was successfully updated." }
     else      
       render :edit
@@ -44,6 +48,10 @@ class FlightsController < BaseController
     @flight.destroy
     
     redirect_to league_tournament_flights_path(@tournament.league, @tournament), :flash => { :success => "The flight was successfully deleted." }
+  end
+  
+  def update_player_flight_membership
+    @tournament.assign_players_to_flights
   end
   
   private

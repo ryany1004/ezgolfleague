@@ -9,7 +9,11 @@
 
 <h3>Finalize Tournament</h3>
 <div class="well">
-  <%= link_to 'Finalize Scores & Payouts', league_tournament_finalize_path(@tournament.league, @tournament), :class => 'btn btn-danger' %>
+  <% if @tournament.can_be_finalized? -%>
+    <%= link_to 'Finalize Scores & Payouts', league_tournament_finalize_path(@tournament.league, @tournament), :class => 'btn btn-danger' %>
+  <% else -%>
+  <p>The tournament is missing data required for it to be finalized. Please check that flights and payouts are in place.</p>
+  <% end -%>
 </div>
 <% end -%>
 

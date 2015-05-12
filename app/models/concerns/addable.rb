@@ -33,7 +33,9 @@ module Addable
   end
 
   def assign_players_to_flights
-    self.flights.each do |f|      
+    self.flights.each do |f|  
+      f.users.clear
+          
       self.players.each do |p|    
         golf_outing = self.golf_outing_for_player(p)
         player_course_handicap = p.course_handicap(self.course, golf_outing.course_tee_box)

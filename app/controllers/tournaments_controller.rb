@@ -97,10 +97,14 @@ class TournamentsController < BaseController
   end
   
   def confirm_finalization
-    @tournament.is_finalized = true
-    @tournament.save
+    if @tournament.can_be_finalized?
+      @tournament.is_finalized = true
+      @tournament.save
     
-    redirect_to league_tournaments_path(current_user.selected_league), :flash => { :success => "The tournament was successfully finalized." }
+      redirect_to league_tournaments_path(current_user.selected_league), :flash => { :success => "The tournament was successfully finalized." }
+    else
+      redirect_to league_tournaments_path(current_user.selected_league), :flash => { :error => "The tournament could not be finalized - it is missing required data." }
+    end
   end
   
   private
