@@ -57,7 +57,11 @@ class TournamentGroupsController < BaseController
       end
     end
     
-    redirect_to league_tournaments_path(@tournament.league), :flash => { :success => "The tee times were successfully created." }
+    if @tournament.can_be_played?
+      redirect_to league_tournaments_path(@tournament.league), :flash => { :success => "The tee times were successfully created." }
+    else
+      redirect_to league_tournament_flights_path(@tournament.league, @tournament), :flash => { :success => "The tee times were successfully created. Please add flight information." }
+    end
   end
   
   private

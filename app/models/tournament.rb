@@ -54,6 +54,13 @@ class Tournament < ActiveRecord::Base
     end
   end
   
+  def can_be_played?
+    return false if self.tournament_groups.count == 0
+    return false if self.flights.count == 0
+    
+    return true
+  end
+  
   def can_be_finalized?
     flight_payouts = 0
     
