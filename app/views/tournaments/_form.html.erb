@@ -32,6 +32,8 @@
     <div class="well">  
       <%= f.input :league_id, collection: @leagues, :label => 'League', :label_method => :name %>
     
+      <!-- <%= f.input :course_id, collection: @courses, :label_method => :name, include_blank: true, input_html: { class: 'chosen-select' } %> -->
+    
       <%= f.input :course_id, collection: @courses, :label => 'Course', :label_method => :name %>
     
   	  <%= f.input :name, :label => 'Name', required: true %>

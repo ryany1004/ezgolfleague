@@ -20,6 +20,9 @@
 //= require moment
 //= require bootstrap-datetimepicker
 //= require pickers
+  
+//= require chosen-jquery
+//= require chosen_scaffold
 
 /*menu handler*/
 $(function(){
