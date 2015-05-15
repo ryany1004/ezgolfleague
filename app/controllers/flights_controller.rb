@@ -2,6 +2,7 @@ class FlightsController < BaseController
   before_filter :fetch_tournament
   before_filter :fetch_flights, :only => [:index, :edit, :update]
   before_filter :fetch_flight, :only => [:edit, :update, :destroy]
+  before_filter :set_stage
   
   def index
   end
@@ -19,13 +20,23 @@ class FlightsController < BaseController
   end
   
   def create
+    if @tournament.flights.count == 0
+      skip_to_contests = true
+    else
+      skip_to_contests = false
+    end
+    
     @flight = Flight.new(flight_params)
     @flight.tournament = @tournament
     
     if @flight.save
       self.update_player_flight_membership
       
-      redirect_to league_tournament_flights_path(@tournament.league, @tournament), :flash => { :success => "The flight was successfully created." }
+      if skip_to_contests == true
+        redirect_to league_tournament_contests_path(@tournament.league, @tournament), :flash => { :success => "The flight was successfully created. Please specify any contest info." }
+      else
+        redirect_to league_tournament_flights_path(@tournament.league, @tournament), :flash => { :success => "The flight was successfully created." }
+      end  
     else
       render :new
     end
@@ -55,6 +66,10 @@ class FlightsController < BaseController
   end
   
   private
+  
+  def set_stage
+    @stage_name = "flights"
+  end
   
   def flight_params
     params.require(:flight).permit(:flight_number, :lower_bound, :upper_bound, :course_tee_box_id)

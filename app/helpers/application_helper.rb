@@ -72,4 +72,12 @@ module ApplicationHelper
     return 0
   end
 
+  def tournament_class_for_stage(stage, stage_option)
+    if stage == stage_option      
+      return "class=active"
+    else      
+      return ""
+    end
+  end
+
 end

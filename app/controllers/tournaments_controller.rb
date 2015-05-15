@@ -1,6 +1,7 @@
 class TournamentsController < BaseController
-  before_action :fetch_tournament, :only => [:edit, :update, :destroy, :signups, :manage_holes, :update_holes, :delete_signup, :finalize, :confirm_finalization]
-  before_action :initialize_form, :only => [:new, :edit]
+  before_filter :fetch_tournament, :only => [:edit, :update, :destroy, :signups, :manage_holes, :update_holes, :delete_signup, :finalize, :confirm_finalization]
+  before_filter :initialize_form, :only => [:new, :edit]
+  before_filter :set_stage
   
   def index   
     if current_user.is_super_user?
@@ -108,6 +109,10 @@ class TournamentsController < BaseController
   end
   
   private
+  
+  def set_stage
+    @stage_name = "basic_details"
+  end
   
   def tournament_params
     params.require(:tournament).permit(:name, :league_id, :course_id, :tournament_at, :dues_amount, :signup_opens_at, :signup_closes_at, :max_players, :course_hole_ids => [])

@@ -1,0 +1,28 @@
+<div class="well">
+  <h4>Manage Your Tournament</h4>
+  <nav>
+    <ul class="pagination">
+      <% if @tournament.new_record? -%>
+        <li class='active'><%= link_to 'Basic Details', "#" %></li>
+        <li class='disabled'><%= link_to 'Game Types', "#" %></li>
+        <li class='disabled'><%= link_to 'Tee Times', "#" %></li>
+        <li class='disabled'><%= link_to 'Flights & Payouts', "#" %></li>
+        <li class='disabled'><%= link_to 'Contests', "#" %></li>
+      <% else -%>
+        <li <%= tournament_class_for_stage(stage, "basic_details") %> ><%= link_to 'Basic Details', edit_league_tournament_path(tournament.league, tournament) %></li>
+        <li <%= tournament_class_for_stage(stage, "game_types") %>><%= link_to 'Game Types', league_tournament_game_types_path(tournament.league, tournament) %></li>
+        <li <%= tournament_class_for_stage(stage, "tee_times") %>><%= link_to 'Tee Times', league_tournament_tournament_groups_path(tournament.league, tournament) %></li>
+        <li <%= tournament_class_for_stage(stage, "flights") %>><%= link_to 'Flights & Payouts', league_tournament_flights_path(tournament.league, tournament) %></li>
+        <li <%= tournament_class_for_stage(stage, "contests") %>><%= link_to 'Contests', league_tournament_contests_path(tournament.league, tournament) %></li>
+      <% end -%>
+    
+      <% if tournament.can_be_finalized? -%>
+        <li <% if @tournament.new_record? -%>class='disabled'<% end -%>><%= link_to 'Finalize Scores & Payouts', league_tournament_finalize_path(tournament.league, tournament), :class => 'btn btn-danger' %></li>
+      <% end -%>
+    </ul>
+  </nav>
+  
+  <% if !tournament.can_be_finalized? -%>
+  <p>This tournament is missing data required for it to be finalized. Please check that flights and payouts are in place first.</p>
+  <% end -%>
+</div>

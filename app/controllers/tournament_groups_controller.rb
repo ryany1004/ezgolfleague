@@ -1,6 +1,7 @@
 class TournamentGroupsController < BaseController
   before_action :fetch_tournament
   before_action :fetch_tournament_group, :except => [:index, :new, :create, :batch_create]
+  before_action :set_stage
   
   def index
     @tournament_groups = @tournament.tournament_groups.page params[:page]
@@ -77,4 +78,9 @@ class TournamentGroupsController < BaseController
   def fetch_tournament_group
     @tournament_group = TournamentGroup.find(params[:id])
   end
+  
+  def set_stage
+    @stage_name = "tee_times"
+  end
+  
 end
