@@ -8,6 +8,7 @@
         <li class='disabled'><%= link_to '3. Tee Times', "#" %></li>
         <li class='disabled'><%= link_to '4. Flights & Payouts', "#" %></li>
         <li class='disabled'><%= link_to '5. Contests', "#" %></li>
+        <li class='disabled'><%= link_to '6. Finalize Scores & Payouts', "#" %></li>
       <% else -%>
         <li <%= tournament_class_for_stage(stage, "basic_details") %> ><%= link_to '1. Basic Details', edit_league_tournament_path(tournament.league, tournament) %></li>
         <li <%= tournament_class_for_stage(stage, "game_types") %>><%= link_to '2. Game Types', league_tournament_game_types_path(tournament.league, tournament) %></li>
@@ -17,7 +18,7 @@
       <% end -%>
     
       <% if tournament.can_be_finalized? -%>
-        <li <% if @tournament.new_record? -%>class='disabled'<% end -%>><%= link_to 'Finalize Scores & Payouts', league_tournament_finalize_path(tournament.league, tournament) %></li>
+        <li <% if @tournament.new_record? -%>class='disabled'<% end -%>><%= link_to '6. Finalize Scores & Payouts', league_tournament_finalize_path(tournament.league, tournament) %></li>
       <% end -%>
     </ul>
   </nav>
