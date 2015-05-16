@@ -54,7 +54,7 @@ class TournamentGroupsController < BaseController
       params[:tournament_group][:number_of_tee_times_to_create].to_i.times do |time|        
         TournamentGroup.create(tournament: @tournament, max_number_of_players: params[:tournament_group][:max_number_of_players].to_i, tee_time_at: tee_time)
         
-        tee_time = tee_time + 8.minutes
+        tee_time = tee_time + params[:tournament_group][:separation_interval].to_i.minutes
       end
     end
     

@@ -3,6 +3,7 @@ class PayoutsController < BaseController
   before_filter :fetch_flight
   before_filter :fetch_payout, :only => [:edit, :update, :destroy]
   before_filter :fetch_payouts, :only => [:index]
+  before_filter :set_stage
   
   def index
   end
@@ -42,6 +43,10 @@ class PayoutsController < BaseController
   end
   
   private
+  
+  def set_stage
+    @stage_name = "flights"
+  end
   
   def payout_params
     params.require(:payout).permit(:amount, :points, :sort_order)

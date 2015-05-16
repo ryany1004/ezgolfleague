@@ -87,6 +87,8 @@ class TournamentsController < BaseController
   # Finalize
   
   def finalize
+    @stage_name = "finalize"
+    
     @players = @tournament.players
     
     @tournament.assign_payouts_from_scores

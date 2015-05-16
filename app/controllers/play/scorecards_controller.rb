@@ -1,7 +1,7 @@
 class Play::ScorecardsController < BaseController
   layout "golfer"
   
-  before_action :fetch_scorecard
+  before_action :fetch_scorecard, :except => [:finalize_scorecard]
   
   def show
   end
@@ -22,7 +22,7 @@ class Play::ScorecardsController < BaseController
     scorecard.is_confirmed = true
     scorecard.save
     
-    redirect_to play_scorecard_path(scorecard), :flash => { :success => "The scorecard was successfully updated." }
+    redirect_to play_scorecard_path(scorecard), :flash => { :success => "The scorecard was successfully finalized." }
   end
   
   private

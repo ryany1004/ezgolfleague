@@ -6,6 +6,7 @@
       <th>&nbsp;</th>
 			<th>Name</th>
       <th>Group / Tee Time</th>
+      <th>Flight</th>
       <th>Teamed With</th>
       <% if is_editable?(@tournament) -%>
       <th><%= link_to 'Signup for Tournament', play_tournament_signup_path(@tournament), :class => 'btn btn-primary' %></th>
@@ -26,6 +27,7 @@
         <% end -%>
         <td><%= golf_outing.user.complete_name %></td>
         <td>#<%= i + 1 %> - <%= tournament_group.tee_time_at.to_s(:date_and_time) %></td>
+        <td><%= @tournament.flight_for_player(golf_outing.user).flight_number %></td>
         <td><%= team_member_names_without_user(team, golf_outing.user) %></td>
         <% if user_is_league_admin(current_user, @tournament.league) && is_editable?(@tournament) -%>
         <td><%= link_to "Delete Registration", league_tournament_delete_signup_path(@tournament.league, @tournament, group_id: tournament_group.id, user_id: golf_outing.user), :data => { :confirm => 'Are you sure you want to delete this registration?' }, :method => :delete %></td>

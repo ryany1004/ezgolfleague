@@ -4,6 +4,8 @@
   <li class="active">Finalize Tournament</li>
 </ol>
 
+<%= render partial: '/shared/tournaments/manage', locals: {tournament: @tournament, stage: @stage_name} %>
+
 <div class="row">
   <div class="col-md-12">
     <div class="panel panel-default">
@@ -63,6 +65,9 @@
           <div id="collapse<%= i %>" class="panel-collapse collapse <% if i == 0 -%>in<% end -%>" role="tabpanel" aria-labelledby="heading<%= i %>">
             <div class="panel-body">
               <%= render partial: '/shared/scorecards/show', locals: {scorecard: @tournament.primary_scorecard_for_user(player), split_holes: split_holes_for_course_tournament(@tournament), split_scores: split_scores_for_scorecard(@tournament.primary_scorecard_for_user(player), @tournament.course_holes.count), tournament: @tournament, handicap_allowance: @tournament.handicap_allowance(player)} %>
+              <p>
+                <%= link_to "Edit This Scorecard", edit_scorecard_path(@tournament.primary_scorecard_for_user(player)), class: "btn btn-warning", role: "button" %>
+              </p>
             </div>
           </div>
         </div>

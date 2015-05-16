@@ -59,9 +59,11 @@
     </div>
   <% end %>
   
-  <h3>Create a Batch</h3>
+  <h3>Create a Batch of Tee Times at Once</h3>
   <div class="well">  
     <%= f.input :starting_time, :label => 'First Tee Time', required: true, :as => :datetime_picker %>
+    
+    <%= f.input :separation_interval, :label => 'Minutes Between Tee Times', required: true, :as => :integer %>
     
     <%= f.input :max_number_of_players, :label => "Max Players for Each Tee Time", :as => :integer %>
     

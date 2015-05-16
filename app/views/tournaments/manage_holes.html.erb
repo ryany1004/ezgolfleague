@@ -4,6 +4,8 @@
   <li class="active">Manage Holes</li>
 </ol>
 
+<%= render partial: '/shared/tournaments/manage', locals: {tournament: @tournament, stage: @stage_name} %>
+
 <%= simple_form_for @tournament, url: league_tournament_update_holes_path(@tournament.league, @tournament) do |f| %>
   <% if notification = f.error_notification %>
     <div class="alert alert-error fade in">

@@ -3,6 +3,7 @@ class ContestResultsController < BaseController
   before_filter :fetch_contest
   before_filter :fetch_contest_results, :only => [:index]
   before_filter :fetch_contest_result, :only => [:edit, :update, :destroy]
+  before_filter :set_stage
   
   def index
     @page_title = "Contest Results"
@@ -46,6 +47,10 @@ class ContestResultsController < BaseController
   end
   
   private
+  
+  def set_stage
+    @stage_name = "contests"
+  end
   
   def fetch_contest
     @contest = @tournament.contests.find(params[:contest_id])

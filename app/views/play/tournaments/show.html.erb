@@ -23,6 +23,17 @@
       <ul class="list-group">
         <li class="list-group-item"><strong>Sign Ups:</strong> <%= @tournament.signup_opens_at.to_s(:date_and_time) %> - <%= @tournament.signup_closes_at.to_s(:date_and_time) %></li>
       </ul>
+      
+      <% if @tournament.includes_player?(current_user) -%>
+      <ul class="list-group">
+        <% if @tournament.is_finalized -%>
+          <li class="list-group-item"><span class="badge"><%= @tournament.player_score(current_user) %></span><%= link_to "View Your Scorecard", play_scorecard_path(@tournament.primary_scorecard_for_user(current_user)) %></li>
+        <% else -%>
+          <li class="list-group-item"><span class="badge"><%= @tournament.player_score(current_user) %></span><%= link_to "Edit Your Scorecard", edit_play_scorecard_path(@tournament.primary_scorecard_for_user(current_user)) %></li>
+        <% end -%>
+      </ul>
+      <% end -%>
+      
     </div>
   </div>
   

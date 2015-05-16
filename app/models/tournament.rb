@@ -58,6 +58,10 @@ class Tournament < ActiveRecord::Base
     return false if self.tournament_groups.count == 0
     return false if self.flights.count == 0
     
+    self.players.each do |p|
+      return false if self.flight_for_player(p) == nil
+    end
+    
     return true
   end
   
