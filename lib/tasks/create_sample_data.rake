@@ -11,7 +11,7 @@ namespace :create_sample_data do
   desc 'Create Sample Data'
   task all: :environment do
     League.where(name: "Danny's League").destroy_all
-    Course.where(name: "Bushwood").destroy_all
+    Course.where(name: "Glen Annie Golf Club").destroy_all
     User.where("email LIKE ?", "%sample.com").destroy_all
     
     l = League.create(name: "Danny's League", dues_amount: 20.00)

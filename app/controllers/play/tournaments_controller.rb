@@ -27,7 +27,9 @@ class Play::TournamentsController < BaseController
         course_tee_box_id = params[:pay_later]
       end
       
-      course_tee_box = @tournament.course.course_tee_boxes.find(course_tee_box_id)
+      #course_tee_box = @tournament.course.course_tee_boxes.find(course_tee_box_id)
+      #TODO: FIX THIS
+      course_tee_box = @tournament.course.course_tee_boxes.first
       @tournament.add_player_to_group(tournament_group, current_user, course_tee_box)
       
       #other associated signup

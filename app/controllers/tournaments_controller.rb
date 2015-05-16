@@ -37,6 +37,7 @@ class TournamentsController < BaseController
   end
   
   def manage_holes
+    @stage_name = "hole_information"
   end
 
   def update_holes
