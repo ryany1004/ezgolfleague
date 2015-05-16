@@ -4,7 +4,7 @@
     <ul class="pagination">
       <% if @tournament.new_record? -%>
         <li class='active'><%= link_to '1. Basic Details', "#" %></li>
-        <li class='active'><%= link_to '2. Hole Information', "#" %></li>
+        <li class='disabled'><%= link_to '2. Hole Information', "#" %></li>
         <li class='disabled'><%= link_to '3. Game Types', "#" %></li>
         <li class='disabled'><%= link_to '4. Tee Times', "#" %></li>
         <li class='disabled'><%= link_to '5. Flights & Payouts', "#" %></li>
