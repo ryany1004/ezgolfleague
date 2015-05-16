@@ -40,14 +40,11 @@
               <li><%= link_to 'Tee Times', league_tournament_tournament_groups_path(tournament.league, tournament) %></li>
               <li><%= link_to 'Flights & Payouts', league_tournament_flights_path(tournament.league, tournament) %></li>
               <li><%= link_to 'Contests', league_tournament_contests_path(tournament.league, tournament) %></li>
-              
-              <% if tournament.can_be_finalized? -%>
-                <li><%= link_to 'Finalize Tournament', league_tournament_finalize_path(tournament.league, tournament) %></li>
-              <% end -%>
+              <li><%= link_to 'Finalize Tournament', league_tournament_finalize_path(tournament.league, tournament) %></li>
             </ul>
           </div>
           </td>
-          <td><% if is_editable?(tournament) -%><%= link_to "Edit", edit_league_tournament_path(tournament.league, tournament) %> | <%= link_to 'Delete', league_tournament_path(tournament.league, tournament), :data => { :confirm => 'Are you sure you want to delete this tournament?' }, :method => :delete %><% else -%><em>Currently underway.</em><% end -%></td>
+          <td><% if is_editable?(tournament) -%><%= link_to "Edit", edit_league_tournament_path(tournament.league, tournament) %> | <%= link_to 'Delete', league_tournament_path(tournament.league, tournament), :data => { :confirm => 'Are you sure you want to delete this tournament? That will remove all player score data and results.' }, :method => :delete %><% else -%><em>Currently underway.</em><% end -%></td>
     		</tr>
     	<% end %>
     	</tbody>

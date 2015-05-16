@@ -19,12 +19,8 @@
         <li <%= tournament_class_for_stage(stage, "contests") %>><%= link_to '6. Contests', league_tournament_contests_path(tournament.league, tournament) %></li>
       <% end -%>
     
-      <% if tournament.can_be_finalized? -%>
+      <% if !@tournament.new_record? -%>
         <li <%= tournament_class_for_stage(stage, "finalize") %>><%= link_to '7. Finalize Tournament', league_tournament_finalize_path(tournament.league, tournament) %></li>
-      <% else -%>
-        <% if !@tournament.new_record? -%>
-          <li><%= link_to '7. Finalize Tournament', league_tournament_flights_path(tournament.league, tournament) %></li>
-        <% end -%>
       <% end -%>
     </ul>
   </nav>
