@@ -8,7 +8,7 @@
         <li class='disabled'><%= link_to '3. Game Types', "#" %></li>
         <li class='disabled'><%= link_to '4. Tee Times', "#" %></li>
         <li class='disabled'><%= link_to '5. Flights & Payouts', "#" %></li>
-        <li class='disabled'><%= link_to '6. Contests', "#" %></li>
+        <li class='disabled'><%= link_to '6. Contests & Results', "#" %></li>
         <li class='disabled'><%= link_to '7. Finalize Scores & Payouts', "#" %></li>
       <% else -%>
         <li <%= tournament_class_for_stage(stage, "basic_details") %> ><%= link_to '1. Basic Details', edit_league_tournament_path(tournament.league, tournament) %></li>
@@ -16,7 +16,7 @@
         <li <%= tournament_class_for_stage(stage, "game_types") %>><%= link_to '3. Game Types', league_tournament_game_types_path(tournament.league, tournament) %></li>
         <li <%= tournament_class_for_stage(stage, "tee_times") %>><%= link_to '4. Tee Times', league_tournament_tournament_groups_path(tournament.league, tournament) %></li>
         <li <%= tournament_class_for_stage(stage, "flights") %>><%= link_to '5. Flights & Payouts', league_tournament_flights_path(tournament.league, tournament) %></li>
-        <li <%= tournament_class_for_stage(stage, "contests") %>><%= link_to '6. Contests', league_tournament_contests_path(tournament.league, tournament) %></li>
+        <li <%= tournament_class_for_stage(stage, "contests") %>><%= link_to '6. Contests & Results', league_tournament_contests_path(tournament.league, tournament) %></li>
       <% end -%>
     
       <% if tournament.can_be_finalized? -%>
@@ -26,6 +26,6 @@
   </nav>
   
   <% if !tournament.can_be_finalized? -%>
-  <p>This tournament is missing data required for it to be finalized. Please check that flights and payouts are in place first.</p>
+  <p><em>This tournament is missing data required for it to be finalized. Please check that flights and payouts are in place first.</em></p>
   <% end -%>
 </div>

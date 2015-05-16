@@ -5,7 +5,6 @@ class Play::UserAccountController < BaseController
     before_action :initialize_form, :only => [:edit]
     
     def edit
-      
     end
     
     def update
