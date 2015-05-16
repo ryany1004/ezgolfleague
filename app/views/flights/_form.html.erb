@@ -18,8 +18,13 @@
     
     <%= f.input :course_tee_box_id, collection: @tournament.course.course_tee_boxes, :label => "Tee Box", :label_method => :name, required: true %>
   </div>
-  
+
   <div class="form-actions">
-    <%= f.button :submit, :class => 'btn btn-default' %>
+    <% if @flight.new_record? -%>
+      <%= f.button :submit, "Save & Create Another Flight", :class => 'btn btn-default' %>
+      <%= f.button :submit, "Save & Continue", :class => 'btn btn-primary' %>
+    <% else -%>
+      <%= f.button :submit, "Save", :class => 'btn btn-default' %>
+    <% end -%>
   </div>
 <% end %>

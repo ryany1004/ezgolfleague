@@ -27,6 +27,11 @@
   <% end -%>
   
   <div class="form-actions">
-    <%= f.button :submit, "Save Contest", :class => 'btn btn-default' %>
+    <% if @contest.new_record? || !params[:skip_to_complete].blank? -%>
+      <%= f.button :submit, "Save & Create Another Contest", :class => 'btn btn-default' %>
+      <%= f.button :submit, "Save & Complete Tournament Setup", :class => 'btn btn-primary' %>
+    <% else -%>
+      <%= f.button :submit, "Save", :class => 'btn btn-default' %>
+    <% end -%>
   </div>
 <% end %>

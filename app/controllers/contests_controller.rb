@@ -20,9 +20,19 @@ class ContestsController < BaseController
     
     if @contest.save
       if @contest.contest_type == 1
-        redirect_to edit_league_tournament_contest_path(@tournament.league, @tournament, @contest), :flash => { :success => "The contest was successfully created. Please verify the holes involved." }
+        if params[:commit] == "Save & Complete Tournament Setup"
+          skip_to_completion = true
+        else
+          skip_to_completion = false
+        end
+        
+        redirect_to edit_league_tournament_contest_path(@tournament.league, @tournament, @contest, :skip_to_complete => skip_to_completion), :flash => { :success => "The contest was successfully created. Please verify the holes involved." }
       else
-        redirect_to league_tournament_contests_path(@tournament.league, @tournament), :flash => { :success => "The contest was successfully created." }
+        if params[:commit] == "Save & Complete Tournament Setup"
+          redirect_to league_tournaments_path(current_user.selected_league), :flash => { :success => "The contest was successfully created." }
+        else
+          redirect_to league_tournament_contests_path(@tournament.league, @tournament), :flash => { :success => "The contest was successfully created." }
+        end 
       end
     else
       render :new
@@ -33,8 +43,12 @@ class ContestsController < BaseController
   end
   
   def update
-    if @contest.update(contest_params)      
-      redirect_to league_tournament_contests_path(@tournament.league, @tournament), :flash => { :success => "The contest was successfully updated." }
+    if @contest.update(contest_params)    
+      if params[:commit] == "Save & Complete Tournament Setup"
+        redirect_to league_tournaments_path(current_user.selected_league), :flash => { :success => "The contest was successfully updated." }
+      else
+        redirect_to league_tournament_contests_path(@tournament.league, @tournament), :flash => { :success => "The contest was successfully updated." }
+      end 
     else      
       render :edit
     end

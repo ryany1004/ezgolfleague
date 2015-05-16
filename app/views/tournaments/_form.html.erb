@@ -35,12 +35,8 @@
       <%= f.input :max_players, :label => 'Maximum Number of Players', required: true %>
     </div>
   
-    <% if !@tournament.new_record? -%>
-      <%= render partial: 'holes_form', locals: {tournament: @tournament, f: f} %>
-    <% end -%>
-  
     <div class="form-actions">
-      <%= f.button :submit, "Save & Continue", :class => 'btn btn-default' %>
+      <%= f.button :submit, "Save", :class => 'btn btn-default' %>
     </div>
   
   <% end %>

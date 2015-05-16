@@ -6,6 +6,9 @@
 
 <%= render partial: '/shared/tournaments/manage', locals: {tournament: @tournament, stage: @stage_name} %>
 
+<% if @tournament.players.count == 0 -%>
+<p><strong>This tournament does not yet have any players and cannot be finalized.</strong></p>
+<% else -%>
 <div class="row">
   <div class="col-md-12">
     <div class="panel panel-default">
@@ -75,3 +78,4 @@
       </div>
   </div>
 </div>
+<% end -%>

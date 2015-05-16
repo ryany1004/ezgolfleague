@@ -20,23 +20,17 @@ class FlightsController < BaseController
   end
   
   def create
-    if @tournament.flights.count == 0
-      skip_to_contests = true
-    else
-      skip_to_contests = false
-    end
-    
     @flight = Flight.new(flight_params)
     @flight.tournament = @tournament
     
     if @flight.save
       self.update_player_flight_membership
       
-      if skip_to_contests == true
+      if params[:commit] == "Save & Continue"
         redirect_to league_tournament_contests_path(@tournament.league, @tournament), :flash => { :success => "The flight was successfully created. Please specify any contest info." }
       else
         redirect_to league_tournament_flights_path(@tournament.league, @tournament), :flash => { :success => "The flight was successfully created." }
-      end  
+      end 
     else
       render :new
     end
