@@ -161,7 +161,7 @@ namespace :create_sample_data do
       #create flights
       f1 = Flight.create(flight_number: 1, tournament: t, lower_bound: 0, upper_bound: 12, course_tee_box: c.course_tee_boxes.first)
       f2 = Flight.create(flight_number: 2, tournament: t, lower_bound: 13, upper_bound: 20, course_tee_box: c.course_tee_boxes.first)
-      f3 = Flight.create(flight_number: 3, tournament: t, lower_bound: 21, upper_bound: 100, course_tee_box: c.course_tee_boxes.first)
+      f3 = Flight.create(flight_number: 3, tournament: t, lower_bound: 21, upper_bound: 1000, course_tee_box: c.course_tee_boxes.first)
       t.assign_players_to_flights
       
       #payouts      
