@@ -53,8 +53,6 @@ module Addable
             Rails.logger.debug { "Adding User #{p.id} to Flight #{f.id}" }
             
             f.users << p
-          else
-            Rails.logger.debug { "Bounding Error" }
           end
         else
           Rails.logger.debug { "Player Course Handicap Blank: #{p.id}" }

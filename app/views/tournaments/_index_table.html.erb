@@ -25,7 +25,7 @@
           <td><%= tournament.course.name %></td>
           <td><%= tournament.tournament_at.to_s(:short) %></td>
           <td><%= tournament.signup_opens_at.to_s(:short) %></td>
-          <td><%= tournament.players.count %> of <%= tournament.max_players %></td>
+          <td><%= tournament.players.count %> / <%= tournament.max_players %></td>
           <td><%= human_boolean(tournament.can_be_played?) %></td>
           <td>
           <div class="btn-group">
