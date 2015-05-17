@@ -42,7 +42,7 @@ module Addable
   def assign_players_to_flights(confirm_all_flighted = true)
     self.reload
     
-    self.flights.each do |f|  
+    self.flights.each do |f|
       f.users.clear
           
       self.players.each do |p|            
@@ -58,7 +58,17 @@ module Addable
     
     if confirm_all_flighted == true          
       self.players.each do |p|
-        raise "Player Not Flighted: #{p.id} in Tournament #{self.id}" if self.flight_for_player(p) == nil
+        if self.flight_for_player(p) == nil
+          error_massage_is_comfy = "Player Not Flighted: #{p.id} in Tournament #{self.id} | #{player_course_handicap}"
+          
+          self.flights.each do |f|
+            error_massage_is_comfy += "\n#{f.lower_bound} / #{f.upper_bound}"
+          end
+          
+          error_massage_is_comfy += "---\n"
+          
+          raise error_massage_is_comfy
+        end
       end
     end
   end 
