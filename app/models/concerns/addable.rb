@@ -58,8 +58,8 @@ module Addable
     
     if confirm_all_flighted == true          
       self.players.each do |p|
-        if self.flight_for_player(p) == nil
-          error_massage_is_comfy = "Player Not Flighted: #{p.id} in Tournament #{self.id} | #{player_course_handicap}"
+        if self.flight_for_player(p) == nil          
+          error_massage_is_comfy = "Player Not Flighted: #{p.id} in Tournament #{self.id} | Index: #{p.handicap_index}"
           
           self.flights.each do |f|
             error_massage_is_comfy += "\n#{f.lower_bound} / #{f.upper_bound}"
