@@ -1,3 +1,7 @@
+if defined?(Rails) && (Rails.env == 'development')
+  Rails.logger = Logger.new(STDOUT)
+end
+
 namespace :create_sample_data do
 
   desc 'Delete All Data'
@@ -119,6 +123,11 @@ namespace :create_sample_data do
         t.course_holes << c
         t.save
       end
+      
+      #create flights
+      f1 = Flight.create(flight_number: 1, tournament: t, lower_bound: 0, upper_bound: 12, course_tee_box: c.course_tee_boxes.first)
+      f2 = Flight.create(flight_number: 2, tournament: t, lower_bound: 13, upper_bound: 20, course_tee_box: c.course_tee_boxes.first)
+      f3 = Flight.create(flight_number: 3, tournament: t, lower_bound: 21, upper_bound: 1000, course_tee_box: c.course_tee_boxes.first)
 
       group = TournamentGroup.create(tournament: t, tee_time_at: ti[:tournament_at], max_number_of_players: 4)
 
@@ -130,7 +139,7 @@ namespace :create_sample_data do
           group = TournamentGroup.create(tournament: t, tee_time_at: group.tee_time_at + 8.minutes, max_number_of_players: 4)
         end
         
-        t.add_player_to_group(group, u, c.course_tee_boxes.first)
+        t.add_player_to_group(group, u)
         t.is_finalized = ti[:finalize_tournament] == true
         t.save
     
@@ -158,10 +167,6 @@ namespace :create_sample_data do
       
       group = TournamentGroup.create(tournament: t, tee_time_at: t.tournament_groups.last.tee_time_at + 8.minutes, max_number_of_players: 4)
       
-      #create flights
-      f1 = Flight.create(flight_number: 1, tournament: t, lower_bound: 0, upper_bound: 12, course_tee_box: c.course_tee_boxes.first)
-      f2 = Flight.create(flight_number: 2, tournament: t, lower_bound: 13, upper_bound: 20, course_tee_box: c.course_tee_boxes.first)
-      f3 = Flight.create(flight_number: 3, tournament: t, lower_bound: 21, upper_bound: 1000, course_tee_box: c.course_tee_boxes.first)
       t.assign_players_to_flights
       
       #payouts      

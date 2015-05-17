@@ -23,7 +23,7 @@ module Addable
       self.course_holes.each_with_index do |hole, i|
         score = Score.create!(scorecard: scorecard, course_hole: hole, sort_order: i)
       end
-    end
+    end 
   end
   
   def remove_player_from_group(tournament_group, user)
@@ -50,8 +50,14 @@ module Addable
         
         unless player_course_handicap.blank?
           if player_course_handicap >= f.lower_bound && player_course_handicap <= f.upper_bound
+            Rails.logger.debug { "Adding User #{p.id} to Flight #{f.id}" }
+            
             f.users << p
+          else
+            Rails.logger.debug { "Bounding Error" }
           end
+        else
+          Rails.logger.debug { "Player Course Handicap Blank: #{p.id}" }
         end
       end
     end
@@ -62,10 +68,8 @@ module Addable
           error_massage_is_comfy = "Player Not Flighted: #{p.id} in Tournament #{self.id} | Index: #{p.handicap_index}"
           
           self.flights.each do |f|
-            error_massage_is_comfy += "\n#{f.lower_bound} / #{f.upper_bound}"
+            error_massage_is_comfy += "| #{f.lower_bound} / #{f.upper_bound} |"
           end
-          
-          error_massage_is_comfy += "---\n"
           
           raise error_massage_is_comfy
         end
