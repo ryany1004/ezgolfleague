@@ -25,6 +25,10 @@ module GameTypes
       return nil
     end
     
+    def user_is_in_group?(user, tournament_group)
+      return false
+    end
+    
     ##Teams
     
     def allow_teams

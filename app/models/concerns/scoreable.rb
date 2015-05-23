@@ -61,9 +61,19 @@ module Scoreable
   
   def user_can_edit_scorecard(user, scorecard)
     return false if self.is_past?
-    return false if self.finalized == true
+    return false if self.is_finalized == true
     
     return true if scorecard.golf_outing.user == user
+    return true if scorecard.designated_editor == user
+        
+    return false
+  end
+  
+  def user_can_become_designated_scorer(user, scorecard)
+    return false if !scorecard.designated_editor.blank?
+          
+    group = scorecard.golf_outing.team.tournament_group
+    return true if self.user_is_in_group?(user, group)
     
     return false
   end

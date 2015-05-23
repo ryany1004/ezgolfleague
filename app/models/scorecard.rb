@@ -1,6 +1,7 @@
 class Scorecard < ActiveRecord::Base
   belongs_to :golf_outing, inverse_of: :scorecards
   has_many :scores, -> { order("sort_order") }, inverse_of: :scorecard, :dependent => :destroy
+  belongs_to :designated_editor, :class_name => "User", :foreign_key => "designated_editor_id"
   
   accepts_nested_attributes_for :scores
   

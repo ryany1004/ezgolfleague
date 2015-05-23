@@ -23,6 +23,16 @@ module GameTypes
       return other_members
     end
     
+    def user_is_in_group?(user, tournament_group)
+      tournament_group.teams.each do |team|
+        team.golf_outings.each do |outing|
+          return true if user == outing.user
+        end
+      end
+      
+      return false
+    end
+    
     ##Scoring
 
     def player_score(user)
