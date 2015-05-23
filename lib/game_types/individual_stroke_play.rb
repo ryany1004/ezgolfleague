@@ -10,6 +10,21 @@ module GameTypes
       return 1
     end
 
+    def other_group_members(user)
+      other_members = []
+      
+      group = self.tournament.tournament_group_for_player(user)
+      group.teams.each do |team|
+        team.golf_outings.each do |outing|
+          other_members << outing.user if outing.user != user
+        end
+      end
+      
+      return other_members
+    end
+    
+    ##Scoring
+
     def player_score(user)
       return nil if !self.tournament.includes_player?(user)
 
@@ -48,6 +63,8 @@ module GameTypes
     
       return points
     end
+    
+    ##Ranking
 
     def flights_with_rankings
       ranked_flights = []

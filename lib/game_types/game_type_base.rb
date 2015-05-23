@@ -19,6 +19,12 @@ module GameTypes
       return nil
     end
     
+    ##Group
+    
+    def other_group_members(user)
+      return nil
+    end
+    
     ##Teams
     
     def allow_teams
