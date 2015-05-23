@@ -13,7 +13,9 @@ class Tournament < ActiveRecord::Base
   has_and_belongs_to_many :course_holes, -> { order(:hole_number) }
     
   attr_accessor :another_member_id
-    
+  
+  delegate :player_score, to: :game_type
+  
   validates :name, presence: true
   validates :tournament_at, presence: true
   validates :signup_opens_at, presence: true
@@ -46,6 +48,16 @@ class Tournament < ActiveRecord::Base
   end
   
   paginates_per 50
+  
+  def game_type
+    if self.game_type_id == 1
+      new_game_type = GameTypes::IndividualStrokePlay.new
+    end
+    
+    new_game_type.tournament = self
+    
+    return new_game_type
+  end
   
   def is_past?
     if self.tournament_at > DateTime.yesterday

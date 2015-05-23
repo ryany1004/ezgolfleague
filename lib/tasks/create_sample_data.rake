@@ -117,7 +117,7 @@ namespace :create_sample_data do
     tournament_info = [{:name => "Peachwood Open", :tournament_at => DateTime.now, :create_scores => true, :finalize_tournament => false}, {:name => "Scalleywag Cup", :tournament_at => DateTime.now + 1.month, :create_scores => false, :finalize_tournament => false}, {:name => "Caddy Day", :tournament_at => DateTime.now - 1.month, :create_scores => true, :finalize_tournament => true}]
     
     tournament_info.each do |ti|
-      t = Tournament.create(league: l, course: c, name: ti[:name], max_players: 100, dues_amount: 20.0) {|h|
+      t = Tournament.create(league: l, course: c, name: ti[:name], max_players: 100, dues_amount: 20.0, game_type_id: 1) {|h|
         h.update_attribute('tournament_at', ti[:tournament_at])
         h.update_attribute('signup_opens_at', ti[:tournament_at] - 1.month)
         h.update_attribute('signup_closes_at', ti[:tournament_at] - 1.day)

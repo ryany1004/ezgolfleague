@@ -1,31 +1,5 @@
 module Scoreable
   extend ActiveSupport::Concern
-
-  def player_score(user)
-    return nil if !self.includes_player?(user)
-
-    total_score = 0
-    
-    handicap_allowance = self.handicap_allowance(user)
-
-    scorecard = self.primary_scorecard_for_user(user)
-    
-    scorecard.scores.each do |score|
-      hole_score = score.strokes
-      
-      handicap_allowance.each do |h|
-        if h[:course_hole] == score.course_hole
-          if h[:strokes] != 0
-            hole_score = hole_score - h[:strokes]
-          end
-        end
-      end
-      
-      total_score = total_score + hole_score
-    end
-    
-    return total_score
-  end
   
   def player_points(user)
     return nil if !self.includes_player?(user)
@@ -139,7 +113,6 @@ module Scoreable
           p.save
         end
       end
-      
     end
   end
 

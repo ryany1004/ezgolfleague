@@ -1,12 +1,22 @@
 <%= render partial: '/shared/tournaments/manage', locals: {tournament: @tournament, stage: @stage_name} %>
 
-<legend>Select a Game Type</legend>
+<%= simple_form_for @tournament, url: league_tournament_game_types_path(current_user.selected_league, @tournament), :method => :patch do |f| %>
+  <% if notification = f.error_notification %>
+    <div class="alert alert-error fade in">
+      <a class="close" data-dismiss="alert" href="#">&times;</a>
+      <%= notification %>
+    </div>
+  <% end %>
 
-<h3>Basic Details</h3>
-<div class="well">  
-  <input type="radio" name="group1" value="stroke_play" checked> Individual Stroke Play
-</div>
+  <legend>Select a Game Type</legend>
 
-<div class="form-actions">
-  <a class="btn btn-default" href="/leagues/<%= @tournament.league.id %>/tournaments/<%= @tournament.id %>/tournament_groups" role="button">Save</a>
-</div>
+  <h3>Basic Details</h3>
+  <div class="well">  
+    <%= f.input :game_type_id, collection: @game_types, :label => 'Game Type', :label_method => :display_name, :value_method => :game_type_id %>
+  </div>
+
+  <div class="form-actions">
+    <%= f.button :submit, "Save", :class => 'btn btn-default' %>
+  </div>
+
+<% end %>

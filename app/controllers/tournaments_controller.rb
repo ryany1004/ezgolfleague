@@ -42,7 +42,7 @@ class TournamentsController < BaseController
 
   def update_holes
     if @tournament.update(tournament_params)
-      redirect_to league_tournament_game_types_path(current_user.selected_league, @tournament), :flash => { :success => "The tournament holes were successfully updated. Please select a game type." }
+      redirect_to edit_league_tournament_game_types_path(current_user.selected_league, @tournament), :flash => { :success => "The tournament holes were successfully updated. Please select a game type." }
     else
       render :manage_holes
     end

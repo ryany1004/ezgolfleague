@@ -121,7 +121,6 @@
             <th>Flight</th>
             <th>Group</th>
             <th>Tee Time</th>
-            <th>Teamed With</th>
       		</tr>
       	</thead>
       	<tbody>
@@ -137,7 +136,6 @@
               <% end -%>
               <td><strong><%= i + 1 %></strong></td>
               <td><%= tournament_group.tee_time_at.to_s(:time_only) %></td>
-              <td><%= team_member_names_without_user(team, golf_outing.user) %></td>
             </tr>
             <% end %>
           <% end %>
