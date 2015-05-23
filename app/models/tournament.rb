@@ -9,6 +9,7 @@ class Tournament < ActiveRecord::Base
   has_many :tournament_groups, -> { order(:tee_time_at) }, inverse_of: :tournament, :dependent => :destroy
   has_many :flights, -> { order(:flight_number) }, inverse_of: :tournament, :dependent => :destroy
   has_many :contests, inverse_of: :tournament, :dependent => :destroy
+  has_many :golfer_teams, inverse_of: :tournament, :dependent => :destroy
   has_and_belongs_to_many :course_holes, -> { order(:hole_number) }
     
   attr_accessor :another_member_id

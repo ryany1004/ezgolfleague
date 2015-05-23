@@ -13,6 +13,7 @@ class User < ActiveRecord::Base
   has_many :payouts, inverse_of: :user
   belongs_to :current_league, :class_name => "League"
   has_and_belongs_to_many :flights, inverse_of: :users
+  has_and_belongs_to_many :golfer_teams, inverse_of: :users
   
   validates :email, presence: true, uniqueness: true
   validates :first_name, presence: true

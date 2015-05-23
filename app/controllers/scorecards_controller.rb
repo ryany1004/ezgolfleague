@@ -12,7 +12,7 @@ class ScorecardsController < BaseController
   end
   
   def update
-    if @scorecard.update(scorecard_params)
+    if @scorecard.update(scorecard_params)      
       redirect_to scorecards_path(tournament_id: @tournament), :flash => { :success => "The scorecard was successfully updated." }
     else      
       render :edit

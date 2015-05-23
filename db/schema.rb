@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150512221332) do
+ActiveRecord::Schema.define(version: 20150523183312) do
 
   create_table "contest_holes", force: :cascade do |t|
     t.integer  "contest_id"
@@ -128,6 +128,18 @@ ActiveRecord::Schema.define(version: 20150512221332) do
 
   add_index "golf_outings", ["team_id"], name: "index_golf_outings_on_team_id"
   add_index "golf_outings", ["user_id"], name: "index_golf_outings_on_user_id"
+
+  create_table "golfer_teams", force: :cascade do |t|
+    t.integer  "tournament_id"
+    t.integer  "max_players",   default: 2
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
+  end
+
+  create_table "golfer_teams_users", id: false, force: :cascade do |t|
+    t.integer "golfer_team_id"
+    t.integer "user_id"
+  end
 
   create_table "league_memberships", force: :cascade do |t|
     t.integer  "league_id"
