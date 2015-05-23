@@ -3,24 +3,27 @@
   <nav>
     <ul class="pagination">
       <% if @tournament.new_record? -%>
-        <li class='active'><%= link_to '1. Basic Details', "#" %></li>
-        <li class='disabled'><%= link_to '2. Holes', "#" %></li>
-        <li class='disabled'><%= link_to '3. Game Types', "#" %></li>
-        <li class='disabled'><%= link_to '4. Tee Times', "#" %></li>
-        <li class='disabled'><%= link_to '5. Flights & Payouts', "#" %></li>
-        <li class='disabled'><%= link_to '6. Contests', "#" %></li>
-        <li class='disabled'><%= link_to '7. Finalize Tournament', "#" %></li>
+        <li class='active'><%= link_to 'Basic Details', "#" %></li>
+        <li class='disabled'><%= link_to 'Holes', "#" %></li>
+        <li class='disabled'><%= link_to 'Game Types', "#" %></li>
+        <li class='disabled'><%= link_to 'Tee Times', "#" %></li>
+        <li class='disabled'><%= link_to 'Flights & Payouts', "#" %></li>
+        <li class='disabled'><%= link_to 'Contests', "#" %></li>
+        <li class='disabled'><%= link_to 'Finalize', "#" %></li>
       <% else -%>
-        <li <%= tournament_class_for_stage(stage, "basic_details") %> ><%= link_to '1. Basic Details', edit_league_tournament_path(tournament.league, tournament) %></li>
-        <li <%= tournament_class_for_stage(stage, "hole_information") %> ><%= link_to '2. Holes', league_tournament_manage_holes_path(tournament.league, tournament) %></li>
-        <li <%= tournament_class_for_stage(stage, "game_types") %>><%= link_to '3. Game Types', edit_league_tournament_game_types_path(tournament.league, tournament) %></li>
-        <li <%= tournament_class_for_stage(stage, "tee_times") %>><%= link_to '4. Tee Times', league_tournament_tournament_groups_path(tournament.league, tournament) %></li>
-        <li <%= tournament_class_for_stage(stage, "flights") %>><%= link_to '5. Flights & Payouts', league_tournament_flights_path(tournament.league, tournament) %></li>
-        <li <%= tournament_class_for_stage(stage, "contests") %>><%= link_to '6. Contests', league_tournament_contests_path(tournament.league, tournament) %></li>
+        <li <%= tournament_class_for_stage(stage, "basic_details") %> ><%= link_to 'Basic Details', edit_league_tournament_path(tournament.league, tournament) %></li>
+        <li <%= tournament_class_for_stage(stage, "hole_information") %> ><%= link_to 'Holes', league_tournament_manage_holes_path(tournament.league, tournament) %></li>
+        <li <%= tournament_class_for_stage(stage, "game_types") %>><%= link_to 'Game Types', edit_league_tournament_game_types_path(tournament.league, tournament) %></li>
+        <% if tournament.allow_teams == GameTypes::TEAMS_ALLOWED || tournament.allow_teams == GameTypes::TEAMS_REQUIRED -%>
+        <li <%= tournament_class_for_stage(stage, "teams") %>><%= link_to 'Teams', league_tournament_tournament_groups_path(tournament.league, tournament) %></li>
+        <% end -%>
+        <li <%= tournament_class_for_stage(stage, "tee_times") %>><%= link_to 'Tee Times', league_tournament_tournament_groups_path(tournament.league, tournament) %></li>
+        <li <%= tournament_class_for_stage(stage, "flights") %>><%= link_to 'Flights & Payouts', league_tournament_flights_path(tournament.league, tournament) %></li>
+        <li <%= tournament_class_for_stage(stage, "contests") %>><%= link_to 'Contests', league_tournament_contests_path(tournament.league, tournament) %></li>
       <% end -%>
     
       <% if !@tournament.new_record? -%>
-        <li <%= tournament_class_for_stage(stage, "finalize") %>><%= link_to '7. Finalize Tournament', league_tournament_finalize_path(tournament.league, tournament) %></li>
+        <li <%= tournament_class_for_stage(stage, "finalize") %>><%= link_to 'Finalize', league_tournament_finalize_path(tournament.league, tournament) %></li>
       <% end -%>
     </ul>
   </nav>

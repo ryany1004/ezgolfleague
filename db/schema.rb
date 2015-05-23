@@ -223,7 +223,7 @@ ActiveRecord::Schema.define(version: 20150523184307) do
     t.datetime "updated_at",                       null: false
     t.float    "dues_amount",      default: 0.0
     t.boolean  "is_finalized",     default: false
-    t.integer  "game_type_id",     default: 0
+    t.integer  "game_type_id",     default: 1
   end
 
   add_index "tournaments", ["course_id"], name: "index_tournaments_on_course_id"

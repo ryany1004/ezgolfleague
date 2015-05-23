@@ -2,7 +2,6 @@ class Tournament < ActiveRecord::Base
   include Playable
   include Addable
   include Scoreable
-  include Rankable
   
   belongs_to :league, inverse_of: :tournaments
   belongs_to :course, inverse_of: :tournaments
@@ -14,7 +13,8 @@ class Tournament < ActiveRecord::Base
     
   attr_accessor :another_member_id
   
-  delegate :player_score, to: :game_type
+  delegate :player_score, :player_points, :flights_with_rankings, :assign_payouts_from_scores, to: :game_type
+  delegate :allow_teams, :players_create_teams?, :show_team_scores_for_all_teammates?, to: :game_type
   
   validates :name, presence: true
   validates :tournament_at, presence: true
@@ -52,6 +52,8 @@ class Tournament < ActiveRecord::Base
   def game_type
     if self.game_type_id == 1
       new_game_type = GameTypes::IndividualStrokePlay.new
+    elsif self.game_type_id == 2
+      new_game_type = GameTypes::MatchPlay.new
     end
     
     new_game_type.tournament = self

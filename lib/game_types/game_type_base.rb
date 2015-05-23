@@ -39,6 +39,22 @@ module GameTypes
       return nil
     end
     
+    def player_points(user)
+      return nil
+    end
+    
+    ##Ranking
+    
+    def flights_with_rankings
+      return nil
+    end
+    
+    ##Payouts
+    
+    def assign_payouts_from_scores
+      return nil
+    end
+    
   end
 
 end

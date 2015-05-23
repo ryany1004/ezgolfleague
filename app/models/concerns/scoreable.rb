@@ -1,20 +1,6 @@
 module Scoreable
   extend ActiveSupport::Concern
   
-  def player_points(user)
-    return nil if !self.includes_player?(user)
-    
-    points = 0
-    
-    self.flights.each do |f|
-      f.payouts.each do |p|
-        points = points + p.points if p.user == user
-      end
-    end
-    
-    return points
-  end
-  
   def handicap_allowance(user)
     golf_outing = self.golf_outing_for_player(user)
     course_handicap = user.course_handicap(self.course, golf_outing.course_tee_box)
@@ -89,31 +75,6 @@ module Scoreable
     end
     
     return false
-  end
-
-  def assign_payouts_from_scores
-    self.flights.each do |f|
-      player_scores = []
-      
-      f.users.each do |player|
-        score = self.player_score(player)
-      
-        player_scores << {player: player, score: score}
-      end
-      
-      player_scores.sort! { |x,y| x[:score] <=> y[:score] }
-      
-      Rails.logger.debug { "Flights: #{self.flights.count} | Users: #{f.users.count} | PS: #{player_scores.count} | Payouts: #{f.payouts.count}" }
-      
-      f.payouts.each_with_index do |p, i|
-        if player_scores.count > i
-          player = player_scores[i][:player]
-        
-          p.user = player
-          p.save
-        end
-      end
-    end
   end
 
 end
