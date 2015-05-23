@@ -59,6 +59,15 @@ module Scoreable
     return nil
   end
   
+  def user_can_edit_scorecard(user, scorecard)
+    return false if self.is_past?
+    return false if self.finalized == true
+    
+    return true if scorecard.golf_outing.user == user
+    
+    return false
+  end
+  
   def has_scores?    
     eager_groups = TournamentGroup.includes(teams: [{ golf_outings: :scorecards }]).where(tournament: self)
     
