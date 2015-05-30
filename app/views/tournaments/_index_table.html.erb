@@ -37,10 +37,10 @@
               <li><%= link_to "Scorecards", scorecards_path(tournament_id: tournament) %></li>
               <li class="divider"></li>
               <li><%= link_to "Game Types", edit_league_tournament_game_types_path(tournament.league, tournament) %></li>
+              <li><%= link_to 'Tee Times', league_tournament_tournament_groups_path(tournament.league, tournament) %></li>
               <% if tournament.allow_teams == GameTypes::TEAMS_ALLOWED || tournament.allow_teams == GameTypes::TEAMS_REQUIRED -%>
               <li><%= link_to 'Teams', league_tournament_golfer_teams_path(tournament.league, tournament) %></li>
               <% end -%>
-              <li><%= link_to 'Tee Times', league_tournament_tournament_groups_path(tournament.league, tournament) %></li>
               <li><%= link_to 'Flights & Payouts', league_tournament_flights_path(tournament.league, tournament) %></li>
               <li><%= link_to 'Contests', league_tournament_contests_path(tournament.league, tournament) %></li>
               <li><%= link_to 'Finalize Tournament', league_tournament_finalize_path(tournament.league, tournament) %></li>

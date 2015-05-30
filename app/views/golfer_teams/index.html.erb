@@ -35,6 +35,7 @@
 		<tr>
 			<th>&nbsp;</th>
 			<th>&nbsp;</th>
+      <th>&nbsp;</th>
       <% if user_is_league_admin(current_user, @tournament.league) -%>
       <th><%= link_to 'Create Team', new_league_tournament_contest_path(@tournament.league, @tournament), :class => 'btn btn-primary' %></th>
       <% else -%>
