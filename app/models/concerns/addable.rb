@@ -37,6 +37,12 @@ module Addable
         end
       end
     end
+    
+    self.golfer_teams.each do |team|
+      if team.users.include? user
+        team.users.destroy(user)
+      end
+    end
   end
 
   def assign_players_to_flights(confirm_all_flighted = true)
