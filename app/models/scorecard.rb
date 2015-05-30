@@ -5,6 +5,10 @@ class Scorecard < ActiveRecord::Base
   
   accepts_nested_attributes_for :scores
   
+  def tournament
+    return self.golf_outing.team.tournament_group.tournament
+  end
+  
   def net_score    
     net_score = 0
     

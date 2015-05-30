@@ -6,7 +6,7 @@
 
 <h3><%= @scorecard.golf_outing.user.complete_name %></h3>
 
-<%= render partial: '/shared/scorecards/show', locals: {scorecard: @scorecard, split_holes: @split_holes, split_scores: @split_scores, tournament: @tournament, handicap_allowance: @handicap_allowance} %>
+<%= render partial: '/shared/scorecards/standard', locals: {primary_scorecard: @scorecard, other_scorecards: @other_scorecards} %>
 
 <% if @tournament.user_can_edit_scorecard(current_user, @scorecard) -%>
 <p>
@@ -14,38 +14,10 @@
 </p>
 <% end -%>
 
-<h3>Other Members Of This Group</h3>
-
 <% if @tournament.user_can_become_designated_scorer(current_user, @scorecard) -%>
   <p>
     <%= link_to "Become Designated Scorer", play_scorecard_become_designated_scorer_path(@scorecard), class: "btn btn-warning", method: :patch, role: "button" %>
   </p>
-<% else -%>
+<% elsif !@scorecard.designated_editor.blank? -%>
   <h4>Designated Scorer: <%= @scorecard.designated_editor.complete_name %></h4>
 <% end -%>
-
-<div class="col-md-12">
-    <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
-      <% @tournament.other_group_members(@scorecard.golf_outing.user).each_with_index do |player, i| %>
-      <div class="panel panel-default">
-        <div class="panel-heading" role="tab" id="heading<%= i %>">
-          <h4 class="panel-title">
-            <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapse<%= i %>" aria-expanded="false" aria-controls="collapse<%= i %>">
-              <%= player.complete_name %>
-            </a>
-          </h4>
-        </div>
-        <div id="collapse<%= i %>" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading<%= i %>">
-          <div class="panel-body">
-            <%= render partial: '/shared/scorecards/show', locals: {scorecard: @tournament.primary_scorecard_for_user(player), split_holes: split_holes_for_course_tournament(@tournament), split_scores: split_scores_for_scorecard(@tournament.primary_scorecard_for_user(player), @tournament.course_holes.count), tournament: @tournament, handicap_allowance: @tournament.handicap_allowance(player)} %>
-            <% if @tournament.user_can_edit_scorecard(current_user, @tournament.primary_scorecard_for_user(player)) -%>
-              <p>
-                <%= link_to "Edit This Scorecard", edit_play_scorecard_path(@tournament.primary_scorecard_for_user(player)), class: "btn btn-warning", role: "button" %>
-              </p>
-            <% end -%>
-          </div>
-        </div>
-      </div>
-      <% end -%>
-    </div>
-</div>

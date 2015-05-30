@@ -27,20 +27,30 @@ module Addable
   end
   
   def remove_player_from_group(tournament_group, user)
-    tournament_group.teams.each do |team|
-      team.golf_outings.each do |outing|
-        if outing.user == user
-          outing.destroy
-          team.destroy if team.golf_outings.count == 0
+    Tournament.transaction do    
+      tournament_group.teams.each do |team|
+        team.golf_outings.each do |outing|
+          outing.scorecards.each do |scorecard|
+            if user.id == scorecard.designated_editor_id
+              scorecard.designated_editor_id = nil
+              scorecard.save
+            end
+          end
+        
+          if outing.user == user
+            outing.destroy
+            team.destroy if team.golf_outings.count == 0
           
-          break
+            break
+          end
         end
       end
-    end
     
-    self.golfer_teams.each do |team|
-      if team.users.include? user
-        team.users.destroy(user)
+      #remove from teams
+      self.golfer_teams.each do |team|
+        if team.users.include? user
+          team.users.destroy(user)
+        end
       end
     end
   end

@@ -71,7 +71,8 @@ Rails.application.routes.draw do
       patch 'change_password'
     end
     
-    resources :scorecards, only: [:show, :edit, :update] do
+    resources :scorecards, only: [:show] do
+      patch 'update_score'
       patch 'finalize_scorecard'
       patch 'become_designated_scorer'
     end

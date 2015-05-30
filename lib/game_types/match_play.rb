@@ -28,6 +28,10 @@ module GameTypes
       return GameTypes::TEAMS_REQUIRED
     end
     
+    def show_teams?
+      return true
+    end
+    
     def number_of_players_per_team
       return 2
     end
@@ -47,8 +51,6 @@ module GameTypes
     def player_points(user) #TODO
       return 0
     end
-    
-    private
 
   end
 end

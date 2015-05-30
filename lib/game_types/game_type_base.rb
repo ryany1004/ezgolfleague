@@ -45,6 +45,10 @@ module GameTypes
       return GameTypes::TEAMS_DISALLOWED
     end
     
+    def show_teams?
+      return false
+    end
+    
     def number_of_players_per_team
       return 0
     end

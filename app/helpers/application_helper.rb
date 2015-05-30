@@ -103,5 +103,9 @@ module ApplicationHelper
     
     return names.html_safe
   end
+  
+  def handicap_allowance_for_scorecard(scorecard)
+    scorecard.tournament.handicap_allowance(scorecard.golf_outing.user)
+  end
 
 end

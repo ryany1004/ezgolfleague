@@ -1,21 +1,22 @@
 class Play::ScorecardsController < BaseController
   layout "golfer"
   
-  before_action :fetch_scorecard, :except => [:finalize_scorecard, :become_designated_scorer]
+  before_action :fetch_scorecard, :except => [:update_score, :finalize_scorecard, :become_designated_scorer]
   
   def show
     @page_title = "#{@scorecard.golf_outing.user.complete_name} Scorecard"
   end
   
-  def edit
-  end
-  
-  def update
-    if @scorecard.update(scorecard_params)
-      redirect_to play_scorecard_path(@scorecard), :flash => { :success => "The scorecard was successfully updated." }
-    else      
-      render :edit
+  def update_score
+    @scorecard = Scorecard.find(params[:scorecard_id])
+    
+    score = Score.find(params[:score_id])
+    unless score.blank?
+      score.strokes = params[:score][:strokes]
+      score.save
     end
+    
+    redirect_to play_scorecard_path(@scorecard), :flash => { :success => "The scorecard was successfully updated." }
   end
   
   def finalize_scorecard
@@ -52,10 +53,11 @@ class Play::ScorecardsController < BaseController
   def fetch_scorecard
     @scorecard = Scorecard.find(params[:id])
     @tournament = @scorecard.golf_outing.team.tournament_group.tournament
-    @handicap_allowance = @tournament.handicap_allowance(@scorecard.golf_outing.user)
     
-    @split_scores = @scorecard.scores.each_slice(@tournament.course_holes.count / 2).to_a
-    @split_holes = @tournament.course_holes.each_slice(@tournament.course_holes.count / 2).to_a
+    @other_scorecards = []
+    @tournament.other_group_members(@scorecard.golf_outing.user).each do |player|
+      @other_scorecards << @tournament.primary_scorecard_for_user(player)
+    end
   end
   
 end
