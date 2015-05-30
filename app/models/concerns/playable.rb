@@ -43,6 +43,14 @@ module Playable
     return nil
   end
   
+  def golfer_team_for_player(user)
+    self.golfer_teams.each do |t|
+      return t if t.users.include? user
+    end
+    
+    return nil
+  end
+  
   def tournament_group_for_player(user)
     self.tournament_groups.each do |group|
       group.teams.each do |team|

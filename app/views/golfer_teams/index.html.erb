@@ -1,0 +1,43 @@
+<ol class="breadcrumb">
+  <li><%= link_to "Tournaments", league_tournaments_path(current_user.selected_league) %></li>
+  <li><%= link_to @tournament.name, edit_league_tournament_path(current_user.selected_league, @tournament) %></li>
+  <li class="active">Manage Teams</li>
+</ol>
+
+<%= render partial: '/shared/tournaments/manage', locals: {tournament: @tournament, stage: @stage_name} %>
+
+<h4><%= @page_title %></h4>
+
+<table class="table table-striped">
+	<thead>
+		<tr>
+      <th>Team No.</th>
+			<th>Players</th>
+      <% if user_is_league_admin(current_user, @tournament.league) -%>
+      <th><%= link_to 'Create Team', new_league_tournament_golfer_team_path(@tournament.league, @tournament), :class => 'btn btn-primary' %></th>
+      <% else -%>
+      <th>&nbsp;</th>
+      <% end -%>
+		</tr>
+	</thead>
+	<tbody>
+	<% @golfer_teams.each_with_index do |golfer_team, i| %>
+		<tr>
+			<td><%= link_to "#{i + 1}", edit_league_tournament_golfer_team_path(@tournament.league, @tournament, golfer_team) %></td>
+			<td><%= team_member_names(golfer_team) %></td>
+      <td><%= link_to "Edit", edit_league_tournament_golfer_team_path(@tournament.league, @tournament, golfer_team) %> | <%= link_to 'Delete', league_tournament_golfer_team_path(@tournament.league, @tournament, golfer_team), :data => { :confirm => 'Are you sure you want to delete this team?' }, :method => :delete %></td>
+		</tr>
+	<% end %>
+	</tbody>
+  <tfoot>
+		<tr>
+			<th>&nbsp;</th>
+			<th>&nbsp;</th>
+      <% if user_is_league_admin(current_user, @tournament.league) -%>
+      <th><%= link_to 'Create Team', new_league_tournament_contest_path(@tournament.league, @tournament), :class => 'btn btn-primary' %></th>
+      <% else -%>
+      <th>&nbsp;</th>
+      <% end -%>
+		</tr>
+  </tfoot>
+</table>

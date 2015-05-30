@@ -16,6 +16,8 @@ class Tournament < ActiveRecord::Base
   delegate :player_score, :player_points, :flights_with_rankings, :assign_payouts_from_scores, to: :game_type
   delegate :allow_teams, :players_create_teams?, :show_team_scores_for_all_teammates?, to: :game_type
   delegate :other_group_members, :user_is_in_group?, to: :game_type
+  delegate :handicap_allowance, to: :game_type
+  delegate :can_be_played?, :can_be_finalized?, to: :game_type
   
   validates :name, presence: true
   validates :tournament_at, presence: true
@@ -64,31 +66,6 @@ class Tournament < ActiveRecord::Base
   
   def is_past?
     if self.tournament_at > DateTime.yesterday
-      return false
-    else
-      return true
-    end
-  end
-  
-  def can_be_played?
-    return false if self.tournament_groups.count == 0
-    return false if self.flights.count == 0
-    
-    self.players.each do |p|
-      return false if self.flight_for_player(p) == nil
-    end
-    
-    return true
-  end
-  
-  def can_be_finalized?
-    flight_payouts = 0
-    
-    self.flights.each do |f|
-      flight_payouts += f.payouts.count
-    end
-    
-    if flight_payouts == 0
       return false
     else
       return true

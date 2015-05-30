@@ -19,6 +19,16 @@ module GameTypes
       return nil
     end
     
+    ##Setup
+    
+    def can_be_played?
+      return false
+    end
+    
+    def can_be_finalized?
+      return false
+    end
+    
     ##Group
     
     def other_group_members(user)
@@ -33,6 +43,10 @@ module GameTypes
     
     def allow_teams
       return GameTypes::TEAMS_DISALLOWED
+    end
+    
+    def number_of_players_per_team
+      return 0
     end
     
     def players_create_teams?
@@ -50,6 +64,12 @@ module GameTypes
     end
     
     def player_points(user)
+      return nil
+    end
+    
+    ##Handicap
+    
+    def handicap_allowance(user)
       return nil
     end
     

@@ -1,0 +1,37 @@
+<%= simple_form_for [@tournament.league, @tournament, @golfer_team] do |f| %>
+  <% if notification = f.error_notification %>
+    <div class="alert alert-error fade in">
+      <a class="close" data-dismiss="alert" href="#">&times;</a>
+      <%= notification %>
+    </div>
+  <% end %>
+  
+  <legend>Team Details</legend>
+  
+  <h3>Basic Details</h3>
+  <div class="well">  
+	  <%= f.input :max_players, :label => 'Maximum Number of Players', required: true %>
+  </div>
+  
+  <% if !@golfer_team.new_record? -%>
+  <h3>Team Players</h3>
+  <span class="label label-default">Only select the number of players specified.</span>
+  <div class="well">  
+	  <%= f.association :users, label: 'Pick From Players', collection: @tournament.players, label_method: :complete_name, value_method: :id, as: :check_boxes %>
+  </div>
+  
+  <h3>Tee Time</h3>
+  <div class="well">  
+	  <%= f.input :requested_tournament_group_id, label: 'Tee Time for Team', collection: @tournament.tournament_groups, label_method: :formatted_tee_time, value_method: :id %>
+  </div>
+  <% end -%>
+  
+  <div class="form-actions">
+    <% if @golfer_team.new_record? -%>
+      <%= f.button :submit, "Save & Create Another Team", :class => 'btn btn-default' %>
+      <%= f.button :submit, "Save & Continue", :class => 'btn btn-primary' %>
+    <% else -%>
+      <%= f.button :submit, "Save", :class => 'btn btn-default' %>
+    <% end -%>
+  </div>
+<% end %>

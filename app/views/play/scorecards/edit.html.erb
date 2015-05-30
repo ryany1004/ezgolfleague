@@ -8,6 +8,14 @@
 
 <h3>Other Members Of This Group</h3>
 
+<% if @tournament.user_can_become_designated_scorer(current_user, @scorecard) -%>
+  <p>
+    <%= link_to "Become Designated Scorer", play_scorecard_become_designated_scorer_path(@scorecard), class: "btn btn-warning", role: "button" %>
+  </p>
+<% else -%>
+  <h4>Designated Scorer: <%= @scorecard.designated_editor.complete_name %></h4>
+<% end -%>
+
 <div class="col-md-12">
     <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
       <% @tournament.other_group_members(@scorecard.golf_outing.user).each_with_index do |player, i| %>
@@ -33,11 +41,3 @@
       <% end -%>
     </div>
 </div>
-
-<% if @tournament.user_can_become_designated_scorer(current_user, @scorecard) -%>
-  <p>
-    <%= link_to "Become Designated Scorer", play_scorecard_become_designated_scorer_path(@scorecard), class: "btn btn-warning", role: "button" %>
-  </p>
-<% else -%>
-  <h4>Designated Scorer: <%= @scorecard.designated_editor.complete_name %></h4>
-<% end -%>

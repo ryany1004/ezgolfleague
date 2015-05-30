@@ -10,6 +10,11 @@ class Play::TournamentsController < BaseController
   end
   
   def signup
+    if @tournament.game_type.players_create_teams? == true
+      render "signup_with_times"
+    else
+      render "signup_without_times"
+    end
   end
   
   def complete_signup

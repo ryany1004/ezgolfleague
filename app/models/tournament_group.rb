@@ -16,6 +16,10 @@ class TournamentGroup < ActiveRecord::Base
     return players
   end
   
+  def formatted_tee_time
+    return self.tee_time_at.to_s(:time_only)
+  end
+  
   #date parsing
   def tee_time_at=(date)
     begin

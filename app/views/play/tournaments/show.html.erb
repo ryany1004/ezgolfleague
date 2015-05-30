@@ -109,41 +109,11 @@
 </div>
 
 <div class="row">
-  <div class="col-md-6">
-    <div class="panel panel-default panel-success">
-      <div class="panel-heading">
-        <h3 class="panel-title">Tournament Players <span class="badge"><%= @tournament.number_of_players %></span></h3>
-      </div>
-      <table class="table table-striped">
-      	<thead>
-      		<tr>
-      			<th>Name</th>
-            <th>Flight</th>
-            <th>Group</th>
-            <th>Tee Time</th>
-      		</tr>
-      	</thead>
-      	<tbody>
-      	<% @tournament.tournament_groups.each_with_index do |tournament_group, i| %>
-          <% tournament_group.teams.each do |team| %>
-            <% team.golf_outings.each do |golf_outing| %>
-            <tr>
-              <td><%= golf_outing.user.complete_name %></td>
-              <% if @tournament.flight_for_player(golf_outing.user).blank? -%>
-              <td>&nbsp;</td>
-              <% else -%>
-              <td><strong><%= (@tournament.flight_for_player(golf_outing.user).flight_number) %></strong></td>
-              <% end -%>
-              <td><strong><%= i + 1 %></strong></td>
-              <td><%= tournament_group.tee_time_at.to_s(:time_only) %></td>
-            </tr>
-            <% end %>
-          <% end %>
-      	<% end %>
-      	</tbody>
-      </table>
-    </div>
-  </div>
+  <% if @tournament.golfer_teams.count == 0 -%>
+    <%= render partial: 'tournament_players_individual', locals: {tournament: @tournament} %>
+  <% else -%>
+    <%= render partial: 'tournament_players_teams', locals: {tournament: @tournament} %>
+  <% end -%>
   
   <div class="col-md-6">
     <div class="panel panel-default panel-success">

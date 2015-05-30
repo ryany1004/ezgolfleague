@@ -86,8 +86,7 @@ class ContestsController < BaseController
   
   def contest_params
     params.require(:contest).permit(:name, :contest_type, :course_hole_ids => [])
-  end
-  
+  end  
 end
 
 class ContestType

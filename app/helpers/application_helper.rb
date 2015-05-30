@@ -79,5 +79,29 @@ module ApplicationHelper
       return ""
     end
   end
+  
+  def team_member_names(golfer_team, show_available_text = true)
+    members = []
+    
+    golfer_team.users.each do |user|
+      members << user
+    end
+    
+    names = ""
+    
+    members.each do |m|
+      names = "#{names}#{m.complete_name}<br/>"
+    end
+    
+    if show_available_text == true    
+      if golfer_team.max_players == golfer_team.users.count
+        names = "#{names}<strong>Team Full</strong><br/>"
+      else
+        names = "#{names}<strong>Space Available</strong><br/>"
+      end
+    end
+    
+    return names.html_safe
+  end
 
 end

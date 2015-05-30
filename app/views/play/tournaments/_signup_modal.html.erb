@@ -65,17 +65,11 @@
                     <td><input type="text" name=""></td>
                   </tr>
                 </tbody>
-                <tfoot>
-              		<tr>
-              			<th><%= f.button :button, "Register & Pay Later", :class => "btn btn-default", :name => "pay_later", :value => true %></th>
-                    <th><%= f.button :button, "Register & Pay Now", :class => "btn btn-primary", :name => "pay_now", :value => true %></th>
-              		</tr>
-                </tfoot>
               </table>
                             
-              <% if (group.players_signed_up.count + 2) < group.max_number_of_players  %>
+              <% if (group.players_signed_up.count + 2) < group.max_number_of_players  %><!-- For admin,created team play, this may have unintended results as groups are not visible. -->
               <div class="well">
-                <p><em>Would you like to register another member for this tee-time? Their registration will be added but not confirmed. You will not be charged for their registration.</em></p>
+                <p><em>Would you like to register another member to play with you? Their registration will be added but not confirmed. You will not be charged for their registration.</em></p>
                 <%= f.input :another_member_id, collection: tournament.league.users_not_signed_up_for_tournament(tournament, [current_user.id]), label_method: :complete_name, value_method: :id %>
               </div>
               <% end -%>
@@ -83,7 +77,8 @@
           </div>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+          <%= f.button :button, "Register & Pay Later", :class => "btn btn-default", :name => "pay_later", :value => true %>
+          <%= f.button :button, "Register & Pay Now", :class => "btn btn-primary", :name => "pay_now", :value => true %>
         </div>
       </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->

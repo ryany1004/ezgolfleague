@@ -96,6 +96,8 @@ Rails.application.routes.draw do
       
       resource :game_types
       
+      resources :golfer_teams
+      
       resources :flights do
         resources :payouts
       end

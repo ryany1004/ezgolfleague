@@ -1,0 +1,23 @@
+<div class="col-md-6">
+  <div class="panel panel-default panel-success">
+    <div class="panel-heading">
+      <h3 class="panel-title">Tournament Teams <span class="badge"><%= tournament.golfer_teams.count %></span></h3>
+    </div>
+    <table class="table table-striped">
+    	<thead>
+    		<tr>
+    			<th>Players</th>
+          <th>Tee Time</th>
+    		</tr>
+    	</thead>
+    	<tbody>
+        <% tournament.golfer_teams.each do |golfer_team| %>
+          <tr>
+            <td><%= team_member_names(golfer_team, false) %></td>
+            <td><%= tournament.tournament_group_for_player(golfer_team.users.first).tee_time_at.to_s(:time_only) unless golfer_team.users.blank? %></td>
+          </tr>
+        <% end -%>
+    	</tbody>
+    </table>
+  </div>
+</div>
