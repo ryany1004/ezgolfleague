@@ -25,7 +25,11 @@ class TournamentGroupsController < BaseController
     
     if @tournament_group.save      
       if params[:commit] == "Save & Continue"
-        redirect_to league_tournament_flights_path(@tournament.league, @tournament), :flash => { :success => "The tee time was successfully created." }
+        if @tournament.allow_teams == GameTypes::TEAMS_ALLOWED || @tournament.allow_teams == GameTypes::TEAMS_REQUIRED
+          redirect_to league_tournament_golfer_teams_path(@tournament.league, @tournament), :flash => { :success => "The tee time was successfully created." }
+        else
+          redirect_to league_tournament_flights_path(@tournament.league, @tournament), :flash => { :success => "The tee time was successfully created." }
+        end
       else
         redirect_to league_tournament_tournament_groups_path(@tournament.league, @tournament), :flash => { :success => "The tee time was successfully created." }
       end
