@@ -15,7 +15,7 @@ namespace :create_sample_data do
   desc 'Create Sample Data'
   task all: :environment do
     League.where(name: "Danny's League").destroy_all
-    Course.where(name: "Glen Annie Golf Club").destroy_all
+    Course.where(name: "Bushwood").destroy_all
     User.where("email LIKE ?", "%sample.com").destroy_all
     
     l = League.create(name: "Danny's League", dues_amount: 20.00)
@@ -24,7 +24,7 @@ namespace :create_sample_data do
       m = LeagueMembership.create(league: l, user: u, is_admin: true)
     end
     
-    c = Course.create(name: "Glen Annie Golf Club", phone_number: "888-888-8888", street_address_1: "405 Glen Annie Road", city: "Goleta", us_state: "CA", postal_code: "93117")
+    c = Course.create(name: "Bushwood", phone_number: "888-888-8888", street_address_1: "405 Glen Annie Road", city: "Goleta", us_state: "CA", postal_code: "93117")
     tee_box = CourseTeeBox.create(course: c, name: "Men's Green", rating: 71.3, slope: 130, tee_box_gender: "Men")
     
     h1 = CourseHole.create(course: c, hole_number: 1, par: 4, mens_handicap: 5, womens_handicap: 5)
