@@ -21,7 +21,7 @@ namespace :create_sample_data do
     l = League.create(name: "Danny's League", dues_amount: 20.00)
     
     User.where("email IN (?)", ["dopp10@gmail.com", "hunter@lastonepicked.com"]).each do |u|
-      m = LeagueMembership.create(league: l, user: u, is_admin: true)
+      m = LeagueMembership.create(league: l, user: u, is_admin: true) unless u.leagues.include? l
     end
     
     c = Course.create(name: "Bushwood", phone_number: "888-888-8888", street_address_1: "405 Glen Annie Road", city: "Goleta", us_state: "CA", postal_code: "93117")

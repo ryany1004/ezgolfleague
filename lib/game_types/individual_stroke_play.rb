@@ -84,6 +84,8 @@ module GameTypes
         total_score = total_score + hole_score
       end
     
+      total_score = 0 if total_score < 0
+    
       return total_score
     end
 

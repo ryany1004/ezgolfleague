@@ -107,5 +107,15 @@ module ApplicationHelper
   def handicap_allowance_for_scorecard(scorecard)
     scorecard.tournament.handicap_allowance(scorecard.golf_outing.user)
   end
+  
+  def score_for_score_with_handicap_allowance(score, handicap_allowance)
+    net_score = score.strokes - handicap_allowance_strokes_for_hole(handicap_allowance_for_scorecard(score.scorecard), score.course_hole)
+    
+    if net_score < 0
+      return 0
+    else
+      return net_score
+    end
+  end
 
 end
