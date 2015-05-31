@@ -87,7 +87,7 @@
 <% end -%>
 
 <% other_scorecards.insert(0, primary_scorecard).each do |scorecard| %>
-  <% if scorecard.is_potentially_editable? == true and primary_scorecard.tournament.user_can_edit_scorecard(current_user, scorecard) -%>
-    <%= render partial: '/shared/scorecards/standard_edit_modal', locals: {scorecard: scorecard, edit_url: play_scorecard_path(primary_scorecard), scorecard_id: scorecard.id} %>
+  <% if scorecard.is_potentially_editable? == true && primary_scorecard.tournament.user_can_edit_scorecard(current_user, scorecard) -%>
+    <%= render partial: '/shared/scorecards/standard_edit_modal', locals: {scorecard: scorecard, edit_url: play_scorecard_path(scorecard, original_scorecard_id: primary_scorecard.id) } %>
   <% end -%>
 <% end -%>

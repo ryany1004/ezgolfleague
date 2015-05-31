@@ -8,23 +8,14 @@ class Play::ScorecardsController < BaseController
   end
     
   def update
-      if @scorecard.update(scorecard_params)
-        redirect_to play_scorecard_path(@scorecard), :flash => { :success => "The scorecard was successfully updated." }
-      else      
-        render :edit
-      end
+    if @scorecard.update(scorecard_params)
+      reload_scorecard = @scorecard
+      reload_scorecard = Scorecard.find(params[:original_scorecard_id]) unless params[:original_scorecard_id].blank?
+      
+      redirect_to play_scorecard_path(reload_scorecard), :flash => { :success => "The scorecard was successfully updated." }
+    else      
+      render :edit
     end
-  
-  def update_score
-    @scorecard = Scorecard.find(params[:scorecard_id])
-    
-    score = Score.find(params[:score_id])
-    unless score.blank?
-      score.strokes = params[:score][:strokes]
-      score.save
-    end
-    
-    redirect_to play_scorecard_path(@scorecard), :flash => { :success => "The scorecard was successfully updated." }
   end
   
   def finalize_scorecard
@@ -58,8 +49,8 @@ class Play::ScorecardsController < BaseController
     params.require(:scorecard).permit(scores_attributes: [:id, :strokes])
   end
   
-  def fetch_scorecard
-    @scorecard = Scorecard.find(params[:id])
+  def fetch_scorecard    
+    @scorecard = Scorecard.includes(:scores).find(params[:id])
     @tournament = @scorecard.golf_outing.team.tournament_group.tournament
     @other_scorecards = @tournament.related_scorecards_for_user(@scorecard.golf_outing.user)
   end
