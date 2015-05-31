@@ -61,6 +61,16 @@ module GameTypes
     end
     
     ##Scoring
+    
+    def related_scorecards_for_user(user)
+      other_scorecards = []
+      
+      self.tournament.other_group_members(user).each do |player|
+        other_scorecards << self.tournament.primary_scorecard_for_user(player)
+      end
+      
+      return other_scorecards
+    end
 
     def player_score(user)
       return nil if !self.tournament.includes_player?(user)

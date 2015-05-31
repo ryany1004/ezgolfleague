@@ -66,6 +66,10 @@ module GameTypes
     end
     
     ##Scoring
+    
+    def related_scorecards_for_user(user)
+      return []
+    end
 
     def player_score(user)
       return nil

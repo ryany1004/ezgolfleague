@@ -13,7 +13,7 @@ class Tournament < ActiveRecord::Base
     
   attr_accessor :another_member_id
   
-  delegate :player_score, :player_points, :flights_with_rankings, :assign_payouts_from_scores, to: :game_type
+  delegate :player_score, :player_points, :flights_with_rankings, :related_scorecards_for_user, :assign_payouts_from_scores, to: :game_type
   delegate :allow_teams, :show_teams?, :players_create_teams?, :show_team_scores_for_all_teammates?, to: :game_type
   delegate :other_group_members, :user_is_in_group?, to: :game_type
   delegate :handicap_allowance, to: :game_type
@@ -56,7 +56,7 @@ class Tournament < ActiveRecord::Base
     if self.game_type_id == 1
       new_game_type = GameTypes::IndividualStrokePlay.new
     elsif self.game_type_id == 2
-      new_game_type = GameTypes::MatchPlay.new
+      new_game_type = GameTypes::IndividualMatchPlay.new
     end
     
     new_game_type.tournament = self

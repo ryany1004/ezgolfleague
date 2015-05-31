@@ -1,5 +1,5 @@
 module GameTypes
-  class MatchPlayScorecard < GameTypes::DerivedScorecard
+  class IndividualMatchPlayScorecard < GameTypes::DerivedScorecard
     
     def calculate_scores    
       new_scores = []

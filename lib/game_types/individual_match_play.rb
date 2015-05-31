@@ -41,7 +41,7 @@ module GameTypes
     end
     
     def team_scorecard_for_team(golfer_team)
-      scorecard = MatchPlayScorecard.new
+      scorecard = IndividualMatchPlayScorecard.new
       scorecard.golfer_team = golfer_team
       scorecard.calculate_scores
       
@@ -58,6 +58,22 @@ module GameTypes
 
     def player_points(user) #TODO
       return 0
+    end
+    
+    def related_scorecards_for_user(user)      
+      other_scorecards = []
+      
+      team = self.tournament.golfer_team_for_player(user)
+      unless team.blank?
+        team.users.each do |u|
+          other_scorecards << self.tournament.primary_scorecard_for_user(u) if u != user
+        end
+      
+        # team_scorecard = self.tournament.game_type.team_scorecard_for_team(team)
+        # other_scorecards << team_scorecard unless team_scorecard.blank?
+      end
+      
+      return other_scorecards
     end
 
   end

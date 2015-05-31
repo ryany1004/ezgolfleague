@@ -54,22 +54,7 @@ class Play::ScorecardsController < BaseController
     @scorecard = Scorecard.find(params[:id])
     @tournament = @scorecard.golf_outing.team.tournament_group.tournament
     
-    @other_scorecards = []
-    if @tournament.show_teams? #other scorecards are teammates
-      team = @tournament.golfer_team_for_player(@scorecard.golf_outing.user)
-      unless team.blank?
-        team.users.each do |u|
-          @other_scorecards << @tournament.primary_scorecard_for_user(u) if u != @scorecard.golf_outing.user
-        end
-      
-        team_scorecard = @tournament.game_type.team_scorecard_for_team(team)
-        @other_scorecards << team_scorecard unless team_scorecard.blank?
-      end
-    else #other scorecards are group mates
-      @tournament.other_group_members(@scorecard.golf_outing.user).each do |player|
-        @other_scorecards << @tournament.primary_scorecard_for_user(player)
-      end
-    end
+    @other_scorecards = @tournament.related_scorecards_for_user(@scorecard.golf_outing.user)
   end
   
 end
