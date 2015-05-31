@@ -33,6 +33,10 @@ class Scorecard < ActiveRecord::Base
     return true
   end
   
+  def should_highlight?
+    return false
+  end
+  
   def name
     return self.golf_outing.user.complete_name
   end

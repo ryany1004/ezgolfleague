@@ -25,6 +25,10 @@ module GameTypes
     
     ##Logic
     
+    def should_highlight?
+      return true
+    end
+    
     def is_potentially_editable?
       return false
     end

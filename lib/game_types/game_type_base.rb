@@ -61,10 +61,6 @@ module GameTypes
       return true
     end
     
-    def team_scorecard_for_team(golfer_team)
-      return nil
-    end
-    
     ##Scoring
     
     def related_scorecards_for_user(user)

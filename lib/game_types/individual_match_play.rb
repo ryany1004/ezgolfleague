@@ -40,11 +40,12 @@ module GameTypes
       return false
     end
     
-    def team_scorecard_for_team(golfer_team)
+    def match_play_scorecard_for_user_in_team(user, golfer_team)
       scorecard = IndividualMatchPlayScorecard.new
+      scorecard.user = user
       scorecard.golfer_team = golfer_team
       scorecard.calculate_scores
-      
+
       return scorecard
     end
     
@@ -65,14 +66,19 @@ module GameTypes
       
       team = self.tournament.golfer_team_for_player(user)
       unless team.blank?
+        user_match_play_card = self.match_play_scorecard_for_user_in_team(user, team)
+        other_scorecards << user_match_play_card
+        
         team.users.each do |u|
-          other_scorecards << self.tournament.primary_scorecard_for_user(u) if u != user
+          if u != user
+            other_scorecards << self.tournament.primary_scorecard_for_user(u) 
+          
+            other_user_match_play_card = self.match_play_scorecard_for_user_in_team(u, team)
+            other_scorecards << other_user_match_play_card
+          end
         end
-      
-        # team_scorecard = self.tournament.game_type.team_scorecard_for_team(team)
-        # other_scorecards << team_scorecard unless team_scorecard.blank?
       end
-      
+            
       return other_scorecards
     end
 

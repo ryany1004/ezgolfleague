@@ -53,7 +53,6 @@ class Play::ScorecardsController < BaseController
   def fetch_scorecard
     @scorecard = Scorecard.find(params[:id])
     @tournament = @scorecard.golf_outing.team.tournament_group.tournament
-    
     @other_scorecards = @tournament.related_scorecards_for_user(@scorecard.golf_outing.user)
   end
   
