@@ -1,16 +1,33 @@
-<%= simple_form_for score, url: edit_url do |f| %>
-<div class="modal fade" id="Group<%= score.id %>" role="dialog" aria-labelledby="gridSystemModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
+<%= simple_form_for scorecard, url: edit_url do |f| %>
+<div class="modal fade" id="Group<%= scorecard.id %>" role="dialog" aria-labelledby="gridSystemModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
       <div class="modal-content">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-          <h4 class="modal-title" id="gridSystemModalLabel">Enter Strokes For Hole</h4>
+          <h4 class="modal-title" id="gridSystemModalLabel">Update Scores for <%= scorecard.name %></h4>
         </div>
         <div class="modal-body">
           <div class="container-fluid">
-            <div class="row">
-              <td><%= f.input :strokes, label: false %></td>
-            </div>
+            <table class="table table-striped table-bordered">
+            	<thead>
+            		<tr>
+                  <th>Hole</th>
+                  <% scorecard.tournament.course.course_holes.each do |hole| -%>
+                  <th><%= hole.hole_number %></th>
+                  <% end -%>
+            		</tr>
+            	</thead>
+            	<tbody>
+            		<tr>
+                  <td>&nbsp;</td>
+                  <% scorecard.scores.each do |score| %>
+                    <%= f.simple_fields_for :scores, score do |s| %>
+                    <td><%= s.input :strokes, label: false, as: :string %></td>
+                    <% end %>
+                  <% end %>
+            		</tr>
+            	</tbody>
+            </table>
           </div>
         </div>
         <div class="modal-footer">

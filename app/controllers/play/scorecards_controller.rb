@@ -6,6 +6,14 @@ class Play::ScorecardsController < BaseController
   def show
     @page_title = "#{@scorecard.golf_outing.user.complete_name} Scorecard"
   end
+    
+  def update
+      if @scorecard.update(scorecard_params)
+        redirect_to play_scorecard_path(@scorecard), :flash => { :success => "The scorecard was successfully updated." }
+      else      
+        render :edit
+      end
+    end
   
   def update_score
     @scorecard = Scorecard.find(params[:scorecard_id])

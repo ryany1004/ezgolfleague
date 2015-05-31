@@ -37,9 +37,9 @@
         <% scorecard.scores.each_slice(primary_scorecard.tournament.course_holes.count / 2).to_a.each_with_index do |split, j| %>
           <% split.each do |score| -%>
             <% if handicap_allowance_strokes_for_hole(handicap_allowance_for_scorecard(scorecard), score.course_hole) > 0 -%>
-            <td style="background-color: #30B82E;"><em><%= link_to_unless !primary_scorecard.tournament.user_can_edit_scorecard(current_user, scorecard), "#{score.strokes}", "#", {"data-toggle" => "modal", "data-target" => "#Group#{score.id}"} %> (-<%=  handicap_allowance_strokes_for_hole(handicap_allowance_for_scorecard(scorecard), score.course_hole) %>)</em></td>
+            <td style="background-color: #30B82E;"><em><%= link_to_unless !primary_scorecard.tournament.user_can_edit_scorecard(current_user, scorecard), "#{score.strokes}", "#", {"data-toggle" => "modal", "data-target" => "#Group#{scorecard.id}"} %> (-<%=  handicap_allowance_strokes_for_hole(handicap_allowance_for_scorecard(scorecard), score.course_hole) %>)</em></td>
             <% else -%>
-            <td><%= link_to_unless !primary_scorecard.tournament.user_can_edit_scorecard(current_user, scorecard), "#{score.strokes}", "#", {"data-toggle" => "modal", "data-target" => "#Group#{score.id}"} %></td>
+            <td><%= link_to_unless !primary_scorecard.tournament.user_can_edit_scorecard(current_user, scorecard), "#{score.strokes}", "#", {"data-toggle" => "modal", "data-target" => "#Group#{scorecard.id}"} %></td>
             <% end -%>
           <% end -%>
           <td><strong><%= split.map {|score| score.strokes }.sum %></strong></td>
@@ -87,9 +87,7 @@
 <% end -%>
 
 <% other_scorecards.insert(0, primary_scorecard).each do |scorecard| %>
-  <% if primary_scorecard.tournament.user_can_edit_scorecard(current_user, scorecard) -%>
-    <% scorecard.scores.each do |score| -%>
-      <%= render partial: '/shared/scorecards/standard_edit_modal', locals: {score: score, edit_url: play_scorecard_update_score_path(primary_scorecard, score_id: score.id)} %>
-    <% end -%>
+  <% if scorecard.is_potentially_editable? == true and primary_scorecard.tournament.user_can_edit_scorecard(current_user, scorecard) -%>
+    <%= render partial: '/shared/scorecards/standard_edit_modal', locals: {scorecard: scorecard, edit_url: play_scorecard_path(primary_scorecard), scorecard_id: scorecard.id} %>
   <% end -%>
 <% end -%>
