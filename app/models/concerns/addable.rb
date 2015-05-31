@@ -26,7 +26,7 @@ module Addable
     end 
   end
   
-  def remove_player_from_group(tournament_group, user)
+  def remove_player_from_group(tournament_group, user, remove_from_teams = false)
     Tournament.transaction do    
       tournament_group.teams.each do |team|
         team.golf_outings.each do |outing|
@@ -47,9 +47,11 @@ module Addable
       end
     
       #remove from teams
-      self.golfer_teams.each do |team|
-        if team.users.include? user
-          team.users.destroy(user)
+      if remove_from_teams == true
+        self.golfer_teams.each do |team|
+          if team.users.include? user
+            team.users.destroy(user)
+          end
         end
       end
     end

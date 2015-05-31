@@ -8,7 +8,7 @@ module GameTypes
     attr_accessor :tournament
     
     def self.available_types
-      return [GameTypes::IndividualStrokePlay.new, GameTypes::MatchPlay.new]
+      return [GameTypes::IndividualStrokePlay.new, GameTypes::IndividualMatchPlay.new]
     end
     
     def display_name
@@ -59,6 +59,10 @@ module GameTypes
     
     def show_team_scores_for_all_teammates?
       return true
+    end
+    
+    def team_scorecard_for_team(golfer_team)
+      return nil
     end
     
     ##Scoring

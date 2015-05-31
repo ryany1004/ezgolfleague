@@ -33,9 +33,7 @@ class GolferTeamsController < BaseController
   
   def update
     if @golfer_team.update(golfer_team_params)
-      if !@golfer_team.requested_tournament_group_id.blank? #handle tee times
-        Rails.logger.debug { "Updating Tee Times" }
-        
+      if !@golfer_team.requested_tournament_group_id.blank? #handle tee times        
         @golfer_team.rebalance_tournament_groups_for_request
       end
           

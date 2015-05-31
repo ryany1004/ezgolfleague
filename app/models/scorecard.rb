@@ -27,4 +27,14 @@ class Scorecard < ActiveRecord::Base
     return net_score
   end
   
+  #Team Support
+  
+  def is_potentially_editable?
+    return true
+  end
+  
+  def name
+    return self.golf_outing.user.complete_name
+  end
+  
 end

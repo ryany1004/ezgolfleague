@@ -19,7 +19,7 @@
   <tbody>
     <% tournaments.each do |t| %>
     <tr>
-      <td><%= link_to t.name, play_tournament_path(t) %></td>
+      <td><%= link_to "#{t.name} (Unpaid)", play_tournament_path(t) %></td>
       <td><%= t.course.name %></td>
       <td><%= t.tournament_at.to_s(:date_and_time) %></td>
       <% if is_current == true -%>
@@ -50,7 +50,7 @@
           <% if !t.includes_player?(current_user) -%>
            <%= link_to "Register", play_tournament_signup_path(t) %>
           <% else %>
-           <%= link_to "View", play_tournament_signup_path(t) %> | <%= link_to "Cancel", play_tournament_remove_signup_path(t), :data => { :confirm => 'Are you sure you want to cancel this registration?' }, :method => :delete %> | (Unpaid)
+           <%= link_to "View", play_tournament_signup_path(t) %> | <%= link_to "Cancel", play_tournament_remove_signup_path(t), :data => { :confirm => 'Are you sure you want to cancel this registration?' }, :method => :delete %>
           <% end -%>
         <% else -%>
           <% if t.number_of_players >= t.max_players -%>

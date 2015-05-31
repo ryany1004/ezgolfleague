@@ -1,8 +1,8 @@
 module GameTypes
-  class MatchPlay < GameTypes::GameTypeBase
+  class IndividualMatchPlay < GameTypes::GameTypeBase
 
     def display_name
-      return "Match Play"
+      return "Individual Match Play"
     end
     
     def game_type_id
@@ -40,10 +40,18 @@ module GameTypes
       return false
     end
     
+    def team_scorecard_for_team(golfer_team)
+      scorecard = MatchPlayScorecard.new
+      scorecard.golfer_team = golfer_team
+      scorecard.calculate_scores
+      
+      return scorecard
+    end
+    
     ##Handicap
     
     def handicap_allowance(user) #TODO
-      return nil
+      return []
     end
     
     ##Scoring

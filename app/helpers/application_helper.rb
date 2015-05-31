@@ -105,7 +105,11 @@ module ApplicationHelper
   end
   
   def handicap_allowance_for_scorecard(scorecard)
-    scorecard.tournament.handicap_allowance(scorecard.golf_outing.user)
+    if scorecard.golf_outing.blank?
+      return []
+    else
+      return scorecard.tournament.handicap_allowance(scorecard.golf_outing.user)
+    end
   end
   
   def score_for_score_with_handicap_allowance(score, handicap_allowance)

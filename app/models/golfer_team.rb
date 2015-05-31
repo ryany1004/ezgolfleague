@@ -30,9 +30,12 @@ class GolferTeam < ActiveRecord::Base
     
     self.users.each do |u|
       existing_group = self.tournament.tournament_group_for_player(u)
-      self.tournament.remove_player_from_group(existing_group, u) unless existing_group.blank?
       
-      self.tournament.add_player_to_group(tournament_group, u)
+      if tournament_group.id != existing_group.id
+        self.tournament.remove_player_from_group(existing_group, u, false) unless existing_group.blank?
+            
+        self.tournament.add_player_to_group(tournament_group, u)
+      end
     end
   end
 
