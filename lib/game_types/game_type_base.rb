@@ -8,7 +8,7 @@ module GameTypes
     attr_accessor :tournament
     
     def self.available_types
-      return [GameTypes::IndividualStrokePlay.new, GameTypes::IndividualMatchPlay.new]
+      return [GameTypes::IndividualStrokePlay.new, GameTypes::IndividualMatchPlay.new, GameTypes::IndividualModifiedStableford.new]
     end
     
     def display_name
