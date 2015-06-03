@@ -2,7 +2,7 @@ module GameTypes
   class IndividualMatchPlayScorecard < GameTypes::DerivedScorecard
     
     def name
-      return "Match Play Score"
+      return "Match Play"
     end
     
     def calculate_scores    

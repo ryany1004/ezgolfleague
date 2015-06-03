@@ -2,7 +2,7 @@ module GameTypes
   class IndividualStablefordScorecard < GameTypes::DerivedScorecard
     
     def name
-      return "Stableford Score"
+      return "Stableford"
     end
     
     def calculate_scores    

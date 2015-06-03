@@ -56,6 +56,10 @@ module GameTypes
     end
     
     ##Scoring
+    
+    def flights_with_rankings #TODO
+      return []
+    end
 
     def player_points(user) #TODO
       return 0
