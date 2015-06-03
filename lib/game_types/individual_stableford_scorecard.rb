@@ -8,21 +8,31 @@ module GameTypes
     def calculate_scores    
       new_scores = []
 
+      handicap_allowance = self.tournament.handicap_allowance(user)
+
       self.golfer_team.tournament.course.course_holes.each do |hole|
         score = DerivedScorecardScore.new
-        score.strokes = self.score_for_hole(user, hole)
+        score.strokes = self.score_for_hole(user, handicap_allowance, hole)
         score.course_hole = hole
         new_scores << score
       end
 
       self.scores = new_scores
     end
-    
-    def score_for_hole(user, hole)      
+
+    def score_for_hole(user, handicap_allowance, hole)      
       scorecard = self.golfer_team.tournament.primary_scorecard_for_user(user)
       
       strokes = 0
       strokes = scorecard.scores.where(course_hole: hole).first.strokes
+      
+      handicap_allowance.each do |h|
+        if h[:course_hole] == hole
+          if h[:strokes] != 0
+            strokes = strokes - h[:strokes]
+          end
+        end
+      end
       
       score = 0
       if self.is_double_eagle?(hole, strokes)
