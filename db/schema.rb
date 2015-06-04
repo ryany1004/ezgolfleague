@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150523203740) do
+ActiveRecord::Schema.define(version: 20150603233618) do
 
   create_table "contest_holes", force: :cascade do |t|
     t.integer  "contest_id"
@@ -131,10 +131,14 @@ ActiveRecord::Schema.define(version: 20150523203740) do
 
   create_table "golfer_teams", force: :cascade do |t|
     t.integer  "tournament_id"
-    t.integer  "max_players",   default: 2
-    t.datetime "created_at",                null: false
-    t.datetime "updated_at",                null: false
+    t.integer  "max_players",    default: 2
+    t.datetime "created_at",                     null: false
+    t.datetime "updated_at",                     null: false
+    t.boolean  "are_opponents",  default: false
+    t.integer  "parent_team_id"
   end
+
+  add_index "golfer_teams", ["parent_team_id"], name: "index_golfer_teams_on_parent_team_id"
 
   create_table "golfer_teams_users", id: false, force: :cascade do |t|
     t.integer "golfer_team_id"

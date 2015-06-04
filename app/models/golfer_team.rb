@@ -1,6 +1,8 @@
 class GolferTeam < ActiveRecord::Base
   belongs_to :tournament
   has_and_belongs_to_many :users
+  has_many :golfer_teams, class_name: "GolferTeam", foreign_key: "parent_team_id"
+  belongs_to :parent_team, class_name: "GolferTeam"
   
   attr_accessor :requested_tournament_group_id
   

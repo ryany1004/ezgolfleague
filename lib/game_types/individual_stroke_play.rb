@@ -113,48 +113,6 @@ module GameTypes
       return points
     end
     
-    ##Handicap
-    
-    def handicap_allowance(user)
-      golf_outing = self.tournament.golf_outing_for_player(user)
-      course_handicap = user.course_handicap(self.tournament.course, golf_outing.course_tee_box)
-    
-      if golf_outing.course_tee_box.tee_box_gender == "Men"
-        sorted_course_holes_by_handicap = self.tournament.course.course_holes.order("mens_handicap")
-      else
-        sorted_course_holes_by_handicap = self.tournament.course.course_holes.order("womens_handicap")
-      end
-        
-      if !course_handicap.blank?    
-        allowance = []
-        while course_handicap > 0 do
-          sorted_course_holes_by_handicap.each do |hole|
-            existing_hole = nil
-          
-            allowance.each do |a|
-              if hole == a[:course_hole]
-                existing_hole = a
-              end
-            end
-                    
-            if existing_hole.blank?            
-              existing_hole = {course_hole: hole, strokes: 0}
-              allowance << existing_hole
-            end
-                    
-            if course_handicap > 0
-              existing_hole[:strokes] = existing_hole[:strokes] + 1
-              course_handicap = course_handicap - 1
-            end
-          end
-        end
-      
-        return allowance
-      else
-        return nil
-      end
-    end
-    
     ##Ranking
 
     def flights_with_rankings

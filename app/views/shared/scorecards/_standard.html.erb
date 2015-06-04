@@ -36,11 +36,12 @@
         <% end -%>
         <% scorecard.scores.each_slice(primary_scorecard.tournament.course_holes.count / 2).to_a.each_with_index do |split, j| %>
           <% split.each do |score| -%>
-            <% if handicap_allowance_strokes_for_hole(handicap_allowance_for_scorecard(scorecard), score.course_hole) > 0 -%>
-            <td style="background-color: #30B82E;"><em><%= link_to_unless !primary_scorecard.tournament.user_can_edit_scorecard(current_user, scorecard), "#{score.strokes}", "#", {"data-toggle" => "modal", "data-target" => "#Group#{scorecard.id}"} %> (-<%=  handicap_allowance_strokes_for_hole(handicap_allowance_for_scorecard(scorecard), score.course_hole) %>)</em></td>
-            <% else -%>
-            <td><%= link_to_unless !primary_scorecard.tournament.user_can_edit_scorecard(current_user, scorecard), "#{score.strokes}", "#", {"data-toggle" => "modal", "data-target" => "#Group#{scorecard.id}"} %></td>
-            <% end -%>
+            <td>
+              <%= link_to_unless !primary_scorecard.tournament.user_can_edit_scorecard(current_user, scorecard), "#{score.strokes}", "#", {"data-toggle" => "modal", "data-target" => "#Group#{scorecard.id}"} %>
+              <% if handicap_allowance_strokes_for_hole(handicap_allowance_for_scorecard(scorecard), score.course_hole) > 0 -%>
+                </br><span class="label label-success">-<%=  handicap_allowance_strokes_for_hole(handicap_allowance_for_scorecard(scorecard), score.course_hole) %></span>
+              <% end -%>
+            </td>
           <% end -%>
           <td><strong><%= split.map {|score| score.strokes }.sum %></strong></td>
         <% end -%>

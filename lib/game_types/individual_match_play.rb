@@ -40,6 +40,10 @@ module GameTypes
       return false
     end
     
+    def team_players_are_opponents?
+      return true
+    end
+    
     def match_play_scorecard_for_user_in_team(user, golfer_team)
       scorecard = IndividualMatchPlayScorecard.new
       scorecard.user = user
@@ -51,7 +55,59 @@ module GameTypes
     
     ##Handicap
     
-    def handicap_allowance(user) #TODO
+    def handicap_allowance(user)
+      opponent = self.opponent_for_user(user)
+      unless opponent.blank?
+        golf_outing = self.tournament.golf_outing_for_player(user)
+        
+        user1_course_handicap = user.course_handicap(self.tournament.course, golf_outing.course_tee_box)
+        user2_course_handicap = opponent.course_handicap(self.tournament.course, golf_outing.course_tee_box)
+                
+        baseline_handicap = 0
+        if user1_course_handicap > user2_course_handicap
+          baseline_handicap = user1_course_handicap - user2_course_handicap
+          
+          if golf_outing.course_tee_box.tee_box_gender == "Men"
+            sorted_course_holes_by_handicap = self.tournament.course.course_holes.order("mens_handicap")
+          else
+            sorted_course_holes_by_handicap = self.tournament.course.course_holes.order("womens_handicap")
+          end
+          
+          allowance = []
+          while baseline_handicap > 0 do
+            sorted_course_holes_by_handicap.each do |hole|
+              existing_hole = nil
+        
+              allowance.each do |a|
+                if hole == a[:course_hole]
+                  existing_hole = a
+                end
+              end
+                  
+              if existing_hole.blank?            
+                existing_hole = {course_hole: hole, strokes: 0}
+                allowance << existing_hole
+              end
+                  
+              if baseline_handicap > 0
+                existing_hole[:strokes] = existing_hole[:strokes] + 1
+                baseline_handicap = baseline_handicap - 1
+              end
+            end
+          end
+                    
+          return allowance
+        elsif user1_course_handicap < user2_course_handicap
+          baseline_handicap = user2_course_handicap - user1_course_handicap
+          
+          return [] #user has no handicap allowance (scratch)
+        else
+          baseline_handicap = user1_course_handicap
+          
+          return []
+        end
+      end
+      
       return []
     end
     
@@ -84,6 +140,19 @@ module GameTypes
       end
             
       return other_scorecards
+    end
+    
+    def opponent_for_user(user)
+      team = self.tournament.golfer_team_for_player(user)
+      unless team.blank?
+        team.users.each do |u|
+          if u != user
+            return u
+          end
+        end
+      end
+      
+      return nil
     end
 
   end

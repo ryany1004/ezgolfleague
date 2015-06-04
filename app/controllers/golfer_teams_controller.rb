@@ -15,6 +15,7 @@ class GolferTeamsController < BaseController
   def create
     @golfer_team = GolferTeam.new(golfer_team_params)
     @golfer_team.tournament = @tournament
+    @golfer_team.are_opponents = @tournament.game_type.team_players_are_opponents?
     
     if @golfer_team.save
       if params[:commit] == "Save & Continue"
