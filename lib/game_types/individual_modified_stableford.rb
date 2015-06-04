@@ -1,6 +1,5 @@
 module GameTypes
   class IndividualModifiedStableford < GameTypes::IndividualStrokePlay
-    include Rails.application.routes.url_helpers
 
     def display_name
       return "Individual Modified Stableford"
@@ -32,6 +31,10 @@ module GameTypes
       scorecard.calculate_scores
 
       return scorecard
+    end
+
+    def flights_with_rankings #TODO
+      return nil
     end
 
   end

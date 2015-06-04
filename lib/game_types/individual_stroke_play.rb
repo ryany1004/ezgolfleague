@@ -142,30 +142,5 @@ module GameTypes
       return ranked_flights
     end
 
-    def assign_payouts_from_scores
-      self.tournament.flights.each do |f|
-        player_scores = []
-      
-        f.users.each do |player|
-          score = self.player_score(player)
-      
-          player_scores << {player: player, score: score}
-        end
-      
-        player_scores.sort! { |x,y| x[:score] <=> y[:score] }
-      
-        Rails.logger.debug { "Flights: #{self.flights.count} | Users: #{f.users.count} | PS: #{player_scores.count} | Payouts: #{f.payouts.count}" }
-      
-        f.payouts.each_with_index do |p, i|
-          if player_scores.count > i
-            player = player_scores[i][:player]
-        
-            p.user = player
-            p.save
-          end
-        end
-      end
-    end
-
   end
 end

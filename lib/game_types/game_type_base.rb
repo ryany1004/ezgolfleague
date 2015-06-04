@@ -3,12 +3,14 @@ module GameTypes
   TEAMS_ALLOWED = "Allowed"
   TEAMS_REQUIRED = "Required"
   TEAMS_DISALLOWED = "Disallowed"
+  
+  VARIABLE = -1
 
   class GameTypeBase
     attr_accessor :tournament
     
     def self.available_types
-      return [GameTypes::IndividualStrokePlay.new, GameTypes::IndividualMatchPlay.new, GameTypes::IndividualModifiedStableford.new]
+      return [GameTypes::IndividualStrokePlay.new, GameTypes::IndividualMatchPlay.new, GameTypes::IndividualModifiedStableford.new, GameTypes::TwoManShamble.new]
     end
     
     def display_name
@@ -130,7 +132,28 @@ module GameTypes
     ##Payouts
     
     def assign_payouts_from_scores
-      return nil
+      self.tournament.flights.each do |f|
+        player_scores = []
+      
+        f.users.each do |player|
+          score = self.player_score(player)
+      
+          player_scores << {player: player, score: score}
+        end
+      
+        player_scores.sort! { |x,y| x[:score] <=> y[:score] }
+      
+        Rails.logger.debug { "Flights: #{self.flights.count} | Users: #{f.users.count} | PS: #{player_scores.count} | Payouts: #{f.payouts.count}" }
+      
+        f.payouts.each_with_index do |p, i|
+          if player_scores.count > i
+            player = player_scores[i][:player]
+        
+            p.user = player
+            p.save
+          end
+        end
+      end
     end
     
   end
