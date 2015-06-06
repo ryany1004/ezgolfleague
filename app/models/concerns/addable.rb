@@ -4,6 +4,7 @@ module Addable
   def is_open_for_registration?
     return false if self.number_of_players >= self.max_players
     return false if self.signup_opens_at > Time.zone.now
+    return false if self.flights.count == 0
     
     return true
   end

@@ -34,7 +34,7 @@ module GameTypes
     end
 
     def flights_with_rankings #TODO
-      return nil
+      return []
     end
 
   end
