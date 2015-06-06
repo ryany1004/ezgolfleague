@@ -19,7 +19,7 @@ class GolferTeamsController < BaseController
     
     if @golfer_team.save
       if params[:commit] == "Save & Continue"
-        redirect_to league_tournament_tournament_groups_path(@tournament.league, @tournament), :flash => { :success => "The team was successfully created." }
+        redirect_to league_tournament_flights_path(@tournament.league, @tournament), :flash => { :success => "The team was successfully created." }
       else
         redirect_to league_tournament_golfer_teams_path(@tournament.league, @tournament), :flash => { :success => "The team was successfully created." }
       end 
