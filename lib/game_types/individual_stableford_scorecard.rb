@@ -52,6 +52,8 @@ module GameTypes
       return score
     end
 
+    #NOTE: The point values can be variable.
+
     def is_double_eagle?(hole, strokes)
       par = hole.par
       
@@ -59,7 +61,7 @@ module GameTypes
         return true
       elsif par == 5 && strokes == 2
         return true
-      elsif par ==6 && strokes == 3
+      elsif par == 6 && strokes == 3
         return true
       else
         return false
@@ -105,6 +107,8 @@ module GameTypes
         return false
       end
     end
+    
+    #TODO: albatross is 2 on a par 5
     
   end
 end

@@ -8,6 +8,8 @@
   
   <h3>Tee Box Info</h3>  
   <div class="well">
+    <%= f.input :course_tee_box_id, collection: @course.course_tee_boxes, :label => 'Tee Box', :label_method => :name %>
+    
     <%= f.input :yardage, :label => 'Yards', required: true %>
     
     <%= f.input :description, :label => "Optional Description (i.e. Men's)" %>
