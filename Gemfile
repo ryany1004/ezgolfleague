@@ -43,7 +43,7 @@ gem 'simple_form'
 gem 'momentjs-rails', '~> 2.9',  :github => 'derekprior/momentjs-rails'
 gem 'datetimepicker-rails', github: 'zpaulovics/datetimepicker-rails', branch: 'master', submodules: true
 gem 'chosen-rails'
-
+gem 'smarter_csv'
 gem "airbrake"
 
 group :development, :test do
