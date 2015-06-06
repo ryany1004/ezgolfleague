@@ -4,7 +4,6 @@ module Importers
   class TournamentImporter
     attr_accessor :flight_code_flight_mapping
     attr_accessor :tee_group_code_tee_group_mapping
-     #tournament_id,player_first_name,player_last_name,course_handicap,flight,tee_group,tee_time,payout_dollars,payout_points,course_tee_box_name,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18
     
     def import(filename)
       self.flight_code_flight_mapping = {}
@@ -32,9 +31,9 @@ module Importers
           
           #tee_group
           self.create_or_add_player_to_tee_group(player, line[:tee_group], line[:tee_time], tournament)
-                    
-          #payout_dollars
-          #payout_points
+          
+          #payouts   
+          self.create_or_add_payouts_for_player(player, line[:payout_dollars], line[:payout_points], tournament)
 
           #strokes
           course_hole_scores = []
@@ -99,9 +98,13 @@ module Importers
     def create_or_add_player_to_tee_group(player, tee_group_code, tee_time, tournament)
       tournament_group = self.tee_group_code_tee_group_mapping[tee_group_code]
       if tournament_group.blank?
-        tournament_group = TournamentGroup.create(tournament: tournament)
+        tee_time_string = "#{tournament.tournament_at.to_s(:short_year)} #{tee_time}"
+        parsed_tee_time = DateTime.strptime("#{tee_time_string} #{Time.zone.now.formatted_offset}", JAVASCRIPT_DATETIME_PICKER_FORMAT)
+        raise "No Tee Time" if parsed_tee_time.blank?
         
-        #TODO: parse tee time
+        Rails.logger.debug { "Tee Time: #{parsed_tee_time}" }
+        
+        tournament_group = TournamentGroup.create(tournament: tournament, tee_time_at: parsed_tee_time)
       end
       
       tournament.add_player_to_group(tournament_group, player)
@@ -109,8 +112,11 @@ module Importers
       self.tee_group_code_tee_group_mapping[tee_group_code] = tournament_group
     end
     
-    def create_or_add_payouts_for_player(player, payout_dollars, payout_points)
-      #
+    def create_or_add_payouts_for_player(player, payout_dollars, payout_points, tournament)
+      flight = tournament.flight_for_player(player)
+      raise "No Flight" if flight.blank?
+      
+      payout = Payout.create(flight: flight, user: player, amount: payout_dollars, points: payout_points)
     end
 
     def assign_scores(player, course_hole_scores, tournament)
