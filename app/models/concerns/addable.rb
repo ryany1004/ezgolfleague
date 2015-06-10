@@ -15,8 +15,9 @@ module Addable
       outing = GolfOuting.create!(team: team, user: user, confirmed: confirmed)
       scorecard = Scorecard.create!(golf_outing: outing)
 
-      self.assign_players_to_flights
+      self.assign_players_to_flights      
       flight = self.flight_for_player(user)
+      raise "No Flight for Player #{user.id} (#{user.complete_name})" if flight.blank?
 
       outing.course_tee_box = flight.course_tee_box
       outing.save
@@ -66,11 +67,9 @@ module Addable
           
       self.players.each do |p|            
         player_course_handicap = p.course_handicap(self.course, f.course_tee_box)
-        
+                
         unless player_course_handicap.blank?
-          if player_course_handicap >= f.lower_bound && player_course_handicap <= f.upper_bound
-            Rails.logger.debug { "Adding User #{p.id} to Flight #{f.id}" }
-            
+          if player_course_handicap >= f.lower_bound && player_course_handicap <= f.upper_bound            
             f.users << p
           end
         else

@@ -6,34 +6,41 @@ module Importers
     attr_accessor :tee_group_code_tee_group_mapping
     
     def import(filename)
-      self.flight_code_flight_mapping = {}
-      self.tee_group_code_tee_group_mapping = {}
+      Tournament.uncached do
+        self.flight_code_flight_mapping = {}
+        self.tee_group_code_tee_group_mapping = {}
       
-      tournament_lines = SmarterCSV.process(filename)
+        tournament_lines = SmarterCSV.process(filename)
       
-      Rails.logger.debug { "Number of Lines: #{tournament_lines.count}" }
+        Rails.logger.debug { "Number of Lines: #{tournament_lines.count}" }
+        
+        #clear old data
+        tournament_lines.each do |line|
+          tournament = Tournament.where(id: line[:tournament_id]).first
+          tournament.tournament_groups.destroy_all
+          tournament.flights.destroy_all
+        end
       
-      tournament_lines.each do |line|
-        Tournament.transaction do
+        tournament_lines.each do |line|
           #tournament
           tournament = Tournament.where(id: line[:tournament_id]).first
           raise "Missing Tournament" if tournament.blank?
-          
+
           course_tee_box = tournament.course.course_tee_boxes.where(name: line[:course_tee_box_name]).first
           raise "Missing Course Tee Box" if course_tee_box.blank?
-          
+
           #player
           player = self.find_or_create_player_in_league(line[:player_last_name], line[:player_first_name], line[:course_handicap], course_tee_box.rating, tournament.league)
           raise "No Player" if player.blank?
-          
+        
           #flights
           self.create_or_add_player_to_flight(player, line[:flight], tournament, course_tee_box)
-          
+        
           #tee_group
           self.create_or_add_player_to_tee_group(player, line[:tee_group], line[:tee_time], tournament)
-          
-          #payouts   
-          self.create_or_add_payouts_for_player(player, line[:payout_dollars], line[:payout_points], tournament)
+        
+          #payouts  
+          self.create_or_add_payouts_for_player(player, line[:payout_dollars], line[:payout_points], tournament) unless line[:payout_dollars].blank?
 
           #strokes
           course_hole_scores = []
@@ -55,7 +62,7 @@ module Importers
           course_hole_scores << {hole_name: "16", score: line[:h16]}
           course_hole_scores << {hole_name: "17", score: line[:h17]}
           course_hole_scores << {hole_name: "18", score: line[:h18]}
-          
+        
           self.assign_scores(player, course_hole_scores, tournament)
         end
       end
@@ -63,15 +70,19 @@ module Importers
     
     def find_or_create_player_in_league(last_name, first_name, course_handicap, rating, league)      
       player = league.users.where("last_name = ? AND first_name = ?", last_name, first_name).first
-      if player.blank?
-        Rails.logger.debug { "Creating User" }
-        
+      
+      if course_handicap > 0
         handicap_index = (course_handicap / (rating / 113.0)).round
-        
-        player = User.create!(first_name: first_name, last_name: last_name, password: "imported_user", email: "#{Time.now.to_i}@imported.com", handicap_index: handicap_index)
+      else
+        handicap_index = 0
+      end
+      
+      if player.blank?        
+        player = User.create!(first_name: first_name, last_name: last_name, password: "imported_user", email: "#{Time.now.to_i}-#{Random.rand(1000)}@imported.com", handicap_index: handicap_index)
         player.leagues << league
       else
-        Rails.logger.debug { "Player Exists: #{player}" }
+        player.handicap_index = handicap_index
+        player.save
       end
       
       return player
@@ -86,8 +97,8 @@ module Importers
         else
           flight_number = last_flight.flight_number + 1
         end
-        
-        flight = Flight.create(tournament: tournament, flight_number: flight_number, course_tee_box: course_tee_box, lower_bound: 0, upper_bound: 0)
+
+        flight = Flight.create!(tournament: tournament, flight_number: flight_number, course_tee_box: course_tee_box, lower_bound: -1, upper_bound: -1)
       end
       
       flight.users << player
@@ -95,19 +106,45 @@ module Importers
       self.flight_code_flight_mapping[flight_code] = flight
     end
     
-    def create_or_add_player_to_tee_group(player, tee_group_code, tee_time, tournament)
+    def create_or_add_player_to_tee_group(player, tee_group_code, tee_time, tournament)    
       tournament_group = self.tee_group_code_tee_group_mapping[tee_group_code]
       if tournament_group.blank?
         tee_time_string = "#{tournament.tournament_at.to_s(:short_year)} #{tee_time}"
         parsed_tee_time = DateTime.strptime("#{tee_time_string} #{Time.zone.now.formatted_offset}", JAVASCRIPT_DATETIME_PICKER_FORMAT)
         raise "No Tee Time" if parsed_tee_time.blank?
-        
-        Rails.logger.debug { "Tee Time: #{parsed_tee_time}" }
-        
+                
         tournament_group = TournamentGroup.create(tournament: tournament, tee_time_at: parsed_tee_time)
       end
+
+      flight = nil
+      tournament.flights.each do |f|
+        flight = f if f.users.include? player
+      end
+      raise "No Flight for Player #{player.id} (#{player.complete_name})" if flight.blank?
       
-      tournament.add_player_to_group(tournament_group, player)
+      # #DEBUG REMOVE
+      # if flight.blank?
+      #   Rails.logger.debug { "--------- Flight Error ----------" }
+      #
+      #   tournament.flights.each do |flight|
+      #     Rails.logger.debug { "Flight #{flight.id}: #{flight.lower_bound} to #{flight.upper_bound} | #{flight.course_tee_box_id}" }
+      #     flight.users.each do |u|
+      #       Rails.logger.debug { "#{u.id} #{u.complete_name}" }
+      #     end
+      #     Rails.logger.debug { "********" }
+      #   end
+      #
+      #   raise "No Flight for Player #{player.id} (#{player.complete_name})"
+      # end
+      # ##END REMOVE
+      
+      team = Team.create!(tournament_group: tournament_group)
+      outing = GolfOuting.create!(team: team, user: player, confirmed: true, course_tee_box: flight.course_tee_box)
+      scorecard = Scorecard.create!(golf_outing: outing)
+    
+      tournament.course_holes.each_with_index do |hole, i|
+        score = Score.create!(scorecard: scorecard, course_hole: hole, sort_order: i)
+      end
       
       self.tee_group_code_tee_group_mapping[tee_group_code] = tournament_group
     end
