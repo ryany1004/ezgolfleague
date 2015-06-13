@@ -85,7 +85,7 @@ module GameTypes
     
     def handicap_allowance(user)
       golf_outing = self.tournament.golf_outing_for_player(user)
-      course_handicap = user.course_handicap(self.tournament.course, golf_outing.course_tee_box)
+      course_handicap = golf_outing.course_handicap
     
       if golf_outing.course_tee_box.tee_box_gender == "Men"
         sorted_course_holes_by_handicap = self.tournament.course.course_holes.order("mens_handicap")

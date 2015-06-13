@@ -21,6 +21,11 @@
     <% end -%>
   </div>
   
+  <h3>GHIN Number</h3>
+  <div class="well">
+    <%= f.input :ghin_number, :label => 'GHIN System Number' %>
+  </div>
+  
   <% if current_user_is_admin_for_user(@user_account) -%>
   <h3>Handicap</h3>
   <div class="well">

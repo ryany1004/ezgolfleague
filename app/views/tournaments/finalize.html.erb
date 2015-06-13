@@ -32,7 +32,7 @@
             <td><%= payout.flight.flight_number %></td>
             <td><%= payout.user.complete_name unless payout.user.blank? %></td>
             <td><%= @tournament.player_score(payout.user) unless payout.user.blank? %></td>
-            <td><%= payout.user.course_handicap(@tournament.course, @tournament.golf_outing_for_player(payout.user).course_tee_box) unless payout.user.blank? %></td>
+            <td><%= @tournament.golf_outing_for_player(payout.user).course_handicap unless payout.user.blank? %></td>
       			<td><%= number_to_currency(payout.amount) %></td>
       			<td><%= payout.points.to_i %></td>
       		</tr>

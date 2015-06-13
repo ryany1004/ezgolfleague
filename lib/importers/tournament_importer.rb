@@ -121,23 +121,7 @@ module Importers
         flight = f if f.users.include? player
       end
       raise "No Flight for Player #{player.id} (#{player.complete_name})" if flight.blank?
-      
-      # #DEBUG REMOVE
-      # if flight.blank?
-      #   Rails.logger.debug { "--------- Flight Error ----------" }
-      #
-      #   tournament.flights.each do |flight|
-      #     Rails.logger.debug { "Flight #{flight.id}: #{flight.lower_bound} to #{flight.upper_bound} | #{flight.course_tee_box_id}" }
-      #     flight.users.each do |u|
-      #       Rails.logger.debug { "#{u.id} #{u.complete_name}" }
-      #     end
-      #     Rails.logger.debug { "********" }
-      #   end
-      #
-      #   raise "No Flight for Player #{player.id} (#{player.complete_name})"
-      # end
-      # ##END REMOVE
-      
+
       team = Team.create!(tournament_group: tournament_group)
       outing = GolfOuting.create!(team: team, user: player, confirmed: true, course_tee_box: flight.course_tee_box)
       scorecard = Scorecard.create!(golf_outing: outing)

@@ -1,5 +1,5 @@
 class TournamentsController < BaseController
-  before_filter :fetch_tournament, :only => [:edit, :update, :destroy, :signups, :manage_holes, :update_holes, :delete_signup, :finalize, :confirm_finalization]
+  before_filter :fetch_tournament, :only => [:edit, :update, :destroy, :signups, :manage_holes, :update_holes, :delete_signup, :finalize, :confirm_finalization, :update_course_handicaps]
   before_filter :initialize_form, :only => [:new, :edit]
   before_filter :set_stage
   
@@ -113,6 +113,22 @@ class TournamentsController < BaseController
     else
       redirect_to league_tournaments_path(current_user.selected_league), :flash => { :error => "The tournament could not be finalized - it is missing required data." }
     end
+  end
+  
+  #Handicaps
+  
+  def update_course_handicaps
+    @tournament.tournament_groups.each do |group|
+      group.teams.each do |team|
+        team.golf_outings.each do |outing|
+          outing.scorecards.each do |card|
+            card.set_course_handicap(true)
+          end
+        end
+      end
+    end
+    
+    redirect_to league_tournaments_path(current_user.selected_league), :flash => { :success => "The tournament's course handicaps were re-calculated." }
   end
   
   private

@@ -10,7 +10,7 @@ module Addable
   end
 
   def add_player_to_group(tournament_group, user, confirmed = true)
-    Tournament.transaction do
+    Tournament.transaction do 
       team = Team.create!(tournament_group: tournament_group)
       outing = GolfOuting.create!(team: team, user: user, confirmed: confirmed)
       scorecard = Scorecard.create!(golf_outing: outing)
@@ -66,7 +66,7 @@ module Addable
       f.users.clear
           
       self.players.each do |p|            
-        player_course_handicap = p.course_handicap(self.course, f.course_tee_box)
+        player_course_handicap = self.golf_outing_for_player(p).course_handicap
                 
         unless player_course_handicap.blank?
           if player_course_handicap >= f.lower_bound && player_course_handicap <= f.upper_bound            
@@ -81,7 +81,7 @@ module Addable
     if confirm_all_flighted == true          
       self.players.each do |p|
         if self.flight_for_player(p) == nil          
-          error_massage_is_comfy = "Player Not Flighted: #{p.id} in Tournament #{self.id} | Index: #{p.handicap_index}"
+          error_massage_is_comfy = "Player Not Flighted: #{p.id} in Tournament #{self.id} | Index: #{self.golf_outing_for_player(p).course_handicap}"
           
           self.flights.each do |f|
             error_massage_is_comfy += "| #{f.lower_bound} / #{f.upper_bound} |"

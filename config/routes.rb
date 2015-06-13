@@ -94,6 +94,8 @@ Rails.application.routes.draw do
       get 'finalize'
       patch 'confirm_finalization'
       
+      patch 'update_course_handicaps'
+      
       resource :game_types
       
       resources :golfer_teams
