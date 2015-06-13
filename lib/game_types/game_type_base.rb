@@ -84,6 +84,22 @@ module GameTypes
     def includes_extra_scoring_column?
       return false
     end
+    
+    ##Metadata
+    
+    def update_metadata(metadata)
+      #do nothing
+    end
+    
+    ##UI
+    
+    def scorecard_footer_partial
+      return nil
+    end
+
+    def associated_text_for_score(score)
+      return nil
+    end
 
     ##Handicap
     

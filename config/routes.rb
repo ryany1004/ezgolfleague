@@ -74,6 +74,7 @@ Rails.application.routes.draw do
     resources :scorecards, only: [:show, :update] do
       patch 'finalize_scorecard'
       patch 'become_designated_scorer'
+      patch 'update_game_type_metadata'
     end
     
     resources :dashboard, only: [:index] do

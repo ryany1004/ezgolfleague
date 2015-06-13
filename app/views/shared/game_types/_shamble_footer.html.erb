@@ -1,0 +1,7 @@
+<div class="well well-lg">
+  <h4>Select Golfer for Tee Shot</h4>
+  <%= simple_form_for :metadata, url: play_scorecard_update_game_type_metadata_path(scorecards.first), method: :patch do |f| %>
+    <%= f.input :scorecard_id, collection: scorecards, label_method: :name, value_method: :id %>
+    <%= f.button :submit, "Update", :class => 'btn btn-default' %>
+  <% end -%>
+</div>

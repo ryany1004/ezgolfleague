@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150613181020) do
+ActiveRecord::Schema.define(version: 20150613200313) do
 
   create_table "contest_holes", force: :cascade do |t|
     t.integer  "contest_id"
@@ -115,6 +115,23 @@ ActiveRecord::Schema.define(version: 20150613181020) do
 
   add_index "flights_users", ["flight_id"], name: "index_flights_users_on_flight_id"
   add_index "flights_users", ["user_id"], name: "index_flights_users_on_user_id"
+
+  create_table "game_type_metadata", force: :cascade do |t|
+    t.integer  "course_hole_id"
+    t.integer  "scorecard_id"
+    t.integer  "golfer_team_id"
+    t.string   "search_key"
+    t.string   "string_value"
+    t.integer  "integer_value"
+    t.datetime "created_at",     null: false
+    t.datetime "updated_at",     null: false
+  end
+
+  add_index "game_type_metadata", ["course_hole_id"], name: "index_game_type_metadata_on_course_hole_id"
+  add_index "game_type_metadata", ["golfer_team_id"], name: "index_game_type_metadata_on_golfer_team_id"
+  add_index "game_type_metadata", ["scorecard_id", "search_key"], name: "scorecard_search_key_index"
+  add_index "game_type_metadata", ["scorecard_id"], name: "index_game_type_metadata_on_scorecard_id"
+  add_index "game_type_metadata", ["search_key"], name: "index_game_type_metadata_on_search_key"
 
   create_table "golf_outings", force: :cascade do |t|
     t.integer  "team_id"

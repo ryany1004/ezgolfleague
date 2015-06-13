@@ -1,7 +1,7 @@
 class Play::ScorecardsController < BaseController
   layout "golfer"
   
-  before_action :fetch_scorecard, :except => [:update_score, :finalize_scorecard, :become_designated_scorer]
+  before_action :fetch_scorecard, :except => [:update_score, :finalize_scorecard, :become_designated_scorer, :update_game_type_metadata]
   
   def show
     @page_title = "#{@scorecard.golf_outing.user.complete_name} Scorecard"
@@ -39,6 +39,14 @@ class Play::ScorecardsController < BaseController
       scorecard.designated_editor = current_user
       scorecard.save
     end
+    
+    redirect_to play_scorecard_path(@scorecard), :flash => { :success => "The scorecard was successfully updated." }
+  end
+  
+  def update_game_type_metadata
+    @scorecard = Scorecard.find(params[:scorecard_id])
+    
+    @scorecard.tournament.game_type.update_metadata(params[:metadata])
     
     redirect_to play_scorecard_path(@scorecard), :flash => { :success => "The scorecard was successfully updated." }
   end
