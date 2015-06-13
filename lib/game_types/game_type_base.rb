@@ -81,6 +81,10 @@ module GameTypes
       return nil
     end
     
+    def includes_extra_scoring_column?
+      return false
+    end
+
     ##Handicap
     
     def handicap_allowance(user)

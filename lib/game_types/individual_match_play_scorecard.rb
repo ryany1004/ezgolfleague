@@ -1,6 +1,10 @@
 module GameTypes
   class IndividualMatchPlayScorecard < GameTypes::DerivedScorecard
     
+    attr_accessor :running_score
+    attr_accessor :opponent_running_score
+    attr_accessor :unplayed_holes
+    
     def name
       return "Match Play"
     end
@@ -16,6 +20,8 @@ module GameTypes
           user2 = u
         end
       end
+
+      self.unplayed_holes = self.golfer_team.tournament.course_holes.count
 
       self.golfer_team.tournament.course_holes.each_with_index do |hole, i|
         score = DerivedScorecardScore.new
@@ -50,8 +56,10 @@ module GameTypes
       return 0 if current_hole_strokes1 == 0 or current_hole_strokes2 == 0 #hole has not been played
 
       #if we get this far, we have stuff to calc
-      
-      user1_running_score = 0
+
+      self.unplayed_holes = self.unplayed_holes - 1
+      self.running_score = 0
+      self.opponent_running_score = 0
       
       holes.each do |hole|
         user1_score = scorecard1.scores.where(course_hole: hole).first
@@ -59,14 +67,41 @@ module GameTypes
         
         unless user1_score.blank? || user2_score.blank?
           if user1_score.strokes > user2_score.strokes
-            user1_running_score = user1_running_score - 1
+            self.running_score = self.running_score - 1
+            self.opponent_running_score = self.opponent_running_score + 1
           elsif user1_score.strokes < user2_score.strokes
-            user1_running_score = user1_running_score + 1
+            self.running_score = self.running_score + 1
+            self.opponent_running_score = self.opponent_running_score - 1
           end
         end
       end
       
-      return user1_running_score 
+      return self.running_score 
+    end
+    
+    def extra_scoring_column_data          
+      player_score_delta = (self.running_score - self.opponent_running_score).abs
+      
+      match_has_ended = false
+      match_has_ended = true if player_score_delta > self.unplayed_holes or self.unplayed_holes == 0
+      Rails.logger.debug { "MATCH HAS ENDED: #{match_has_ended} | Delta: #{player_score_delta} | Unplayed: #{self.unplayed_holes} | P1: #{self.running_score} | P2: #{self.opponent_running_score}" }
+      return nil if match_has_ended == false
+            
+      if self.running_score == self.opponent_running_score
+        return "All Square"
+      else
+        if self.running_score > self.opponent_running_score
+          if self.unplayed_holes == 0
+            return "W"
+          else
+            winning_string = "#{self.running_score} and #{self.unplayed_holes}"
+          
+            return "W / #{winning_string}"
+          end
+        else
+          return "L"
+        end
+      end
     end
     
   end

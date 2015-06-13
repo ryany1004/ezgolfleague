@@ -41,7 +41,19 @@ module GameTypes
       return 0
     end
     
+    def should_subtotal?
+      return false
+    end
+  
+    def should_total?
+      return false
+    end
+    
     def calculate_scores
+      return nil
+    end
+    
+    def extra_scoring_column_data
       return nil
     end
     

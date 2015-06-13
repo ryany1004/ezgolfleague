@@ -53,4 +53,20 @@ class Scorecard < ActiveRecord::Base
     return self.golf_outing.user.complete_name
   end
   
+  def should_subtotal?
+    return true
+  end
+  
+  def should_total?
+    return true
+  end
+  
+  def includes_extra_scoring_column?
+    return self.tournament.game_type.includes_extra_scoring_column?
+  end
+  
+  def extra_scoring_column_data
+    return nil
+  end
+  
 end

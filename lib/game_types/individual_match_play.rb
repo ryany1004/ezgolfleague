@@ -121,6 +121,10 @@ module GameTypes
       return 0
     end
     
+    def includes_extra_scoring_column?
+      return true
+    end
+    
     def related_scorecards_for_user(user)      
       other_scorecards = []
       
