@@ -23,11 +23,14 @@ module GameTypes
 
       self.unplayed_holes = self.golfer_team.tournament.course_holes.count
 
+      user1_handicap_allowance = self.tournament.handicap_allowance(user1)
+      user2_handicap_allowance = self.tournament.handicap_allowance(user2)
+
       self.golfer_team.tournament.course_holes.each_with_index do |hole, i|
         score = DerivedScorecardScore.new
         
         running_score_holes = self.golfer_team.tournament.course_holes.limit(i + 1)
-        score.strokes = self.score_for_holes(user1, user2, hole, running_score_holes)
+        score.strokes = self.score_for_holes(user1, user1_handicap_allowance, user2, user2_handicap_allowance, hole, running_score_holes)
         
         score.course_hole = hole
         new_scores << score
@@ -36,7 +39,7 @@ module GameTypes
       self.scores = new_scores
     end
     
-    def score_for_holes(user1, user2, current_hole, holes)      
+    def score_for_holes(user1, user1_handicap_allowance, user2, user2_handicap_allowance, current_hole, holes)      
       return 0 if user1.blank? or user2.blank?
             
       scorecard1 = self.golfer_team.tournament.primary_scorecard_for_user(user1)
@@ -65,11 +68,14 @@ module GameTypes
         user1_score = scorecard1.scores.where(course_hole: hole).first
         user2_score = scorecard2.scores.where(course_hole: hole).first
         
+        user1_hole_score = adjusted_strokes(user1_score.strokes, user1_handicap_allowance, hole) 
+        user2_hole_score = adjusted_strokes(user2_score.strokes, user2_handicap_allowance, hole) 
+                
         unless user1_score.blank? || user2_score.blank?
-          if user1_score.strokes > user2_score.strokes
+          if user1_hole_score > user2_hole_score
             self.running_score = self.running_score - 1
             self.opponent_running_score = self.opponent_running_score + 1
-          elsif user1_score.strokes < user2_score.strokes
+          elsif user1_hole_score < user2_hole_score
             self.running_score = self.running_score + 1
             self.opponent_running_score = self.opponent_running_score - 1
           end
@@ -79,12 +85,25 @@ module GameTypes
       return self.running_score 
     end
     
+    def adjusted_strokes(raw_strokes, handicap_allowance, course_hole)
+      hole_score = raw_strokes
+      
+      handicap_allowance.each do |h|
+        if h[:course_hole] == course_hole
+          if h[:strokes] != 0
+            hole_score = hole_score - h[:strokes]
+          end
+        end
+      end
+      
+      return hole_score
+    end
+    
     def extra_scoring_column_data          
       player_score_delta = (self.running_score - self.opponent_running_score).abs
       
       match_has_ended = false
       match_has_ended = true if player_score_delta > self.unplayed_holes or self.unplayed_holes == 0
-      Rails.logger.debug { "MATCH HAS ENDED: #{match_has_ended} | Delta: #{player_score_delta} | Unplayed: #{self.unplayed_holes} | P1: #{self.running_score} | P2: #{self.opponent_running_score}" }
       return nil if match_has_ended == false
             
       if self.running_score == self.opponent_running_score
