@@ -58,7 +58,9 @@ module GameTypes
     def handicap_allowance(user)
       opponent = self.opponent_for_user(user)
       unless opponent.blank?        
-        user1_course_handicap = self.tournament.golf_outing_for_player(user).course_handicap
+        golf_outing = self.tournament.golf_outing_for_player(user)
+        
+        user1_course_handicap = golf_outing.course_handicap
         user2_course_handicap = self.tournament.golf_outing_for_player(opponent).course_handicap
                 
         baseline_handicap = 0

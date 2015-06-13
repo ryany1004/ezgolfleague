@@ -42,6 +42,7 @@ module GameTypes
     end
     
     def calculate_scores
+      return nil
     end
     
   end

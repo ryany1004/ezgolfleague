@@ -17,9 +17,12 @@ module GameTypes
         end
       end
 
-      self.golfer_team.tournament.course.course_holes.each do |hole|
+      self.golfer_team.tournament.course_holes.each_with_index do |hole, i|
         score = DerivedScorecardScore.new
-        score.strokes = self.score_for_hole(user1, user2, hole)
+        
+        running_score_holes = self.golfer_team.tournament.course_holes.limit(i + 1)
+        score.strokes = self.score_for_holes(user1, user2, hole, running_score_holes)
+        
         score.course_hole = hole
         new_scores << score
       end
@@ -27,33 +30,43 @@ module GameTypes
       self.scores = new_scores
     end
     
-    def score_for_hole(user1, user2, hole)      
+    def score_for_holes(user1, user2, current_hole, holes)      
       return 0 if user1.blank? or user2.blank?
             
       scorecard1 = self.golfer_team.tournament.primary_scorecard_for_user(user1)
       scorecard2 = self.golfer_team.tournament.primary_scorecard_for_user(user2)
-      
-      strokes1 = 0
+
+      #verify the hole has been played
+      current_hole_strokes1 = 0
       scorecard1.scores.each do |score|
-        strokes1 = score.strokes if score.course_hole == hole
+        current_hole_strokes1 = score.strokes if score.course_hole == current_hole
       end
       
-      strokes2 = 0
+      current_hole_strokes2 = 0
       scorecard2.scores.each do |score|
-        strokes2 = score.strokes if score.course_hole == hole
+        current_hole_strokes2 = score.strokes if score.course_hole == current_hole
       end
       
-      if strokes1 == 0 or strokes2 == 0 #hole has not been played
-        return 0
-      else
-        if strokes1 < strokes2
-          return 1
-        elsif strokes2 < strokes1
-          return 0
-        else
-          return 0
+      return 0 if current_hole_strokes1 == 0 or current_hole_strokes2 == 0 #hole has not been played
+
+      #if we get this far, we have stuff to calc
+      
+      user1_running_score = 0
+      
+      holes.each do |hole|
+        user1_score = scorecard1.scores.where(course_hole: hole).first
+        user2_score = scorecard2.scores.where(course_hole: hole).first
+        
+        unless user1_score.blank? || user2_score.blank?
+          if user1_score.strokes > user2_score.strokes
+            user1_running_score = user1_running_score - 1
+          elsif user1_score.strokes < user2_score.strokes
+            user1_running_score = user1_running_score + 1
+          end
         end
       end
+      
+      return user1_running_score 
     end
     
   end

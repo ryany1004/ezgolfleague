@@ -12,6 +12,7 @@ class Tournament < ActiveRecord::Base
   has_and_belongs_to_many :course_holes, -> { order(:hole_number) }
     
   attr_accessor :another_member_id
+  attr_accessor :skip_date_validation
   
   delegate :player_score, :player_points, :flights_with_rankings, :related_scorecards_for_user, :assign_payouts_from_scores, to: :game_type
   delegate :allow_teams, :show_teams?, :players_create_teams?, :show_team_scores_for_all_teammates?, to: :game_type
@@ -25,30 +26,28 @@ class Tournament < ActiveRecord::Base
   validates :signup_closes_at, presence: true
   validates :max_players, presence: true
   
-  validate :dates_are_valid, on: :create
+  validate :dates_are_valid, on: :create, unless: "self.skip_date_validation == true"
   def dates_are_valid
-    if current_user.is_super_user == false
-      now = Time.zone.now.at_beginning_of_day
-    
-      if tournament_at.present? && tournament_at < now
-        errors.add(:tournament_at, "can't be in the past")
-      end
-    
-      if signup_opens_at.present? && signup_opens_at < now
-        errors.add(:signup_opens_at, "can't be in the past")
-      end
-    
-      if signup_closes_at.present? && signup_closes_at < now
-        errors.add(:signup_closes_at, "can't be in the past")
-      end
-    
-      if signup_opens_at.present? && tournament_at.present? && tournament_at < signup_opens_at
-        errors.add(:signup_opens_at, "can't be after the tournament")
-      end
-    
-      if signup_opens_at.present? && signup_closes_at.present? && signup_opens_at > signup_closes_at
-        errors.add(:signup_closes_at, "can't be before the sign up opening")
-      end
+    now = Time.zone.now.at_beginning_of_day
+  
+    if tournament_at.present? && tournament_at < now
+      errors.add(:tournament_at, "can't be in the past")
+    end
+  
+    if signup_opens_at.present? && signup_opens_at < now
+      errors.add(:signup_opens_at, "can't be in the past")
+    end
+  
+    if signup_closes_at.present? && signup_closes_at < now
+      errors.add(:signup_closes_at, "can't be in the past")
+    end
+  
+    if signup_opens_at.present? && tournament_at.present? && tournament_at < signup_opens_at
+      errors.add(:signup_opens_at, "can't be after the tournament")
+    end
+  
+    if signup_opens_at.present? && signup_closes_at.present? && signup_opens_at > signup_closes_at
+      errors.add(:signup_closes_at, "can't be before the sign up opening")
     end
   end
   
