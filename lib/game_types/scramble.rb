@@ -1,15 +1,15 @@
 require 'active_record'
 
 module GameTypes
-  class Shamble < GameTypes::IndividualStrokePlay
-    METADATA_KEY = "shamble_scorecard_for_best_ball"
+  class Scramble < GameTypes::IndividualStrokePlay
+    METADATA_KEY = "scramble_scorecard_for_best_ball_hole"
     
     def display_name
-      return "Shamble"
+      return "Scramble"
     end
     
     def game_type_id
-      return 4
+      return 6
     end
     
     ##Teams
@@ -36,8 +36,9 @@ module GameTypes
       scorecard = Scorecard.find(metadata[:scorecard_id])
       tournament = scorecard.tournament
       team = tournament.golfer_team_for_player(scorecard.golf_outing.user)
-    
-      metadata = GameTypeMetadatum.find_or_create_by(golfer_team: team, search_key: METADATA_KEY)
+      course_hole = CourseHole.find(metadata[:course_hole_id])
+
+      metadata = GameTypeMetadatum.find_or_create_by(golfer_team: team, course_hole: course_hole, search_key: METADATA_KEY)
       metadata.scorecard = scorecard
       metadata.save
     end
@@ -45,25 +46,29 @@ module GameTypes
     def selected_scorecard_for_score(score)
       tournament = score.scorecard.tournament
       team = tournament.golfer_team_for_player(score.scorecard.golf_outing.user)
-      metadata = GameTypeMetadatum.where(golfer_team: team, search_key: METADATA_KEY).first
-      
-      return metadata.scorecard
+      metadata = GameTypeMetadatum.where(golfer_team: team, course_hole: score.course_hole, search_key: METADATA_KEY).first
+
+      if metadata.blank?
+        return nil
+      else
+        return metadata.scorecard
+      end
     end
     
     ##UI
   
     def scorecard_score_cell_partial
-      return "shared/game_types/shamble_popup"
+      return "shared/game_types/scramble_popup"
     end
     
     def scorecard_post_embed_partial
-      return "shared/game_types/shamble_post_embed"
+      return "shared/game_types/scramble_post_embed"
     end
     
     def associated_text_for_score(score)      
       selected_card = self.selected_scorecard_for_score(score)
-      return "Selected Best Ball" if selected_card == score.scorecard && score.course_hole.hole_number == 1 unless selected_card.blank?
-      
+      return "Selected Hole" if selected_card == score.scorecard unless selected_card.blank?
+
       return nil
     end
     

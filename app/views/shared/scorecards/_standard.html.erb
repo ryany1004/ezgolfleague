@@ -51,7 +51,7 @@
               <% end -%>
               
               <% unless score.associated_text.blank? -%>
-              </br><em><%= score.associated_text %></em>
+                </br><em><%= score.associated_text %></em>
               <% end -%>
               
               <% unless primary_scorecard.tournament.game_type.scorecard_score_cell_partial.blank? -%>
@@ -74,7 +74,8 @@
         
         <td>
           <% if scorecard.should_total? -%>
-            <strong><%= scorecard.scores.map {|score| score.strokes }.sum %> (<%= scorecard.net_score %>)</strong>
+            <strong><%= scorecard.scores.map {|score| score.strokes }.sum %></strong>
+            <span class="label label-success"><%= scorecard.net_score %></span>
           <% else -%>
             &nbsp;
           <% end -%>
@@ -132,7 +133,7 @@
 </table>
 
 <% unless primary_scorecard.tournament.game_type.scorecard_post_embed_partial.blank? -%>
-  <%= render partial: primary_scorecard.tournament.game_type.scorecard_post_embed_partial, locals: {scorecards: other_scorecards} %>
+  <%= render partial: primary_scorecard.tournament.game_type.scorecard_post_embed_partial, locals: {scorecards: other_scorecards, course_holes: primary_scorecard.tournament.course_holes} %>
 <% end -%>
 
 <% if primary_scorecard.tournament.user_can_edit_scorecard(current_user, primary_scorecard) == true && primary_scorecard.tournament.is_finalized == false -%>

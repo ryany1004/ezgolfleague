@@ -62,6 +62,10 @@ class Tournament < ActiveRecord::Base
       new_game_type = GameTypes::IndividualModifiedStableford.new
     elsif self.game_type_id == 5
       new_game_type = GameTypes::TwoManShamble.new
+    elsif self.game_type_id == 7
+      new_game_type = GameTypes::TwoManScramble.new
+    elsif self.game_type_id == 8
+      new_game_type = GameTypes::FourManScramble.new
     end
     
     new_game_type.tournament = self
