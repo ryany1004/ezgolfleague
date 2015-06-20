@@ -93,7 +93,11 @@ module GameTypes
     
     ##UI
     
-    def scorecard_footer_partial
+    def scorecard_score_cell_partial
+      return nil
+    end
+    
+    def scorecard_post_embed_partial
       return nil
     end
 
