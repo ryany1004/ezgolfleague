@@ -132,15 +132,24 @@
   </tfoot>
 </table>
 
+<!-- Game Type Support -->
 <% unless primary_scorecard.tournament.game_type.scorecard_post_embed_partial.blank? -%>
   <%= render partial: primary_scorecard.tournament.game_type.scorecard_post_embed_partial, locals: {scorecards: other_scorecards, course_holes: primary_scorecard.tournament.course_holes} %>
 <% end -%>
 
+<!-- Finalize Buttons -->
 <% if primary_scorecard.tournament.user_can_edit_scorecard(current_user, primary_scorecard) == true && primary_scorecard.tournament.is_finalized == false -%>
   <p><%= link_to 'Finalize Your Scorecard', play_scorecard_finalize_scorecard_path(primary_scorecard), :class => 'btn btn-danger', :method => :patch, :data => { :confirm => 'Are you sure you want to finalize your scorecard? This indicates to the league administrator that you are ready to be ranked for this tournament.' } %></p>
 <% end -%>
 
+<!-- Modals -->
 <% other_scorecards.each do |scorecard| %>
+<!-- DEBUG -->
+<!--
+Potentially Editable: <%= scorecard.is_potentially_editable? %>
+User Can Edit: <%= primary_scorecard.tournament.user_can_edit_scorecard(current_user, scorecard) %>
+-->
+<!-- END DEBUG -->
   <% if scorecard.is_potentially_editable? == true && primary_scorecard.tournament.user_can_edit_scorecard(current_user, scorecard) -%>
     <% cache(cache_key_for_scorecard_forms) do %>
       <%= render partial: '/shared/scorecards/standard_edit_modal', locals: {scorecard: scorecard, edit_url: play_scorecard_path(scorecard, original_scorecard_id: primary_scorecard.id) } %>

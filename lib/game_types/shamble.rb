@@ -47,7 +47,11 @@ module GameTypes
       team = tournament.golfer_team_for_player(score.scorecard.golf_outing.user)
       metadata = GameTypeMetadatum.where(golfer_team: team, search_key: METADATA_KEY).first
       
-      return metadata.scorecard
+      if metadata.blank?
+        return nil
+      else
+        return metadata.scorecard
+      end
     end
     
     ##UI
