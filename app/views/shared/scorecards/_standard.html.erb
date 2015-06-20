@@ -143,16 +143,7 @@
 <% end -%>
 
 <!-- Modals -->
-<!-- DEBUG <%= other_scorecards.count %> -->
-<!-- <%= debug(other_scorecards) %> -->
 <% other_scorecards.each do |scorecard| %>
-<!-- DEBUG -->
-<!--
-Scorecard: <%= scorecard.id %>
-Potentially Editable: <%= scorecard.is_potentially_editable? %>
-User Can Edit: <%= primary_scorecard.tournament.user_can_edit_scorecard(current_user, scorecard) %>
--->
-<!-- END DEBUG -->
   <% if scorecard.is_potentially_editable? == true && primary_scorecard.tournament.user_can_edit_scorecard(current_user, scorecard) -%>
     <% cache(cache_key_for_scorecard(scorecard.id)) do %>
       <%= render partial: '/shared/scorecards/standard_edit_modal', locals: {scorecard: scorecard, edit_url: play_scorecard_path(scorecard, original_scorecard_id: primary_scorecard.id) } %>

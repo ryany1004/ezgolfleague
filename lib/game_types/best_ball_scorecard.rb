@@ -5,6 +5,14 @@ module GameTypes
       return "Best Ball"
     end
     
+    def should_subtotal?
+      return true
+    end
+  
+    def should_total?
+      return true
+    end
+    
     def calculate_scores    
       new_scores = []
 
