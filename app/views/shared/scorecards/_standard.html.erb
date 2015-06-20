@@ -154,7 +154,7 @@ User Can Edit: <%= primary_scorecard.tournament.user_can_edit_scorecard(current_
 -->
 <!-- END DEBUG -->
   <% if scorecard.is_potentially_editable? == true && primary_scorecard.tournament.user_can_edit_scorecard(current_user, scorecard) -%>
-    <% cache(cache_key_for_scorecard_forms) do %>
+    <% cache(cache_key_for_scorecard(scorecard.id)) do %>
       <%= render partial: '/shared/scorecards/standard_edit_modal', locals: {scorecard: scorecard, edit_url: play_scorecard_path(scorecard, original_scorecard_id: primary_scorecard.id) } %>
     <% end %>
   <% end -%>
