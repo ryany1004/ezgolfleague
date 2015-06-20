@@ -9,5 +9,9 @@ module GameTypes
       return -1
     end
     
+    def associated_text
+      return nil
+    end
+    
   end
 end
