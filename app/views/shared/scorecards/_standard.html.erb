@@ -143,9 +143,12 @@
 <% end -%>
 
 <!-- Modals -->
+<!-- DEBUG <%= other_scorecards.count %> -->
+<!-- <%= debug(other_scorecards) %> -->
 <% other_scorecards.each do |scorecard| %>
 <!-- DEBUG -->
 <!--
+Scorecard: <%= scorecard.id %>
 Potentially Editable: <%= scorecard.is_potentially_editable? %>
 User Can Edit: <%= primary_scorecard.tournament.user_can_edit_scorecard(current_user, scorecard) %>
 -->
