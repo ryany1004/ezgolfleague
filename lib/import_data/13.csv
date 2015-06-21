@@ -1,4 +1,4 @@
-tournament_id,player_first_name,player_last_name,course_handicap,flight,tee_group,tee_time,payout_dollars,payout_points,course_tee_box_name,h1,h2,h3,h4,h5,h6,h7,h8,h9,h10,h11,h12,h13,h14,h15,h16,h17,h18
+tournament_id,player_last_name,player_first_name,course_handicap,flight,tee_group,tee_time,payout_dollars,payout_points,course_tee_box_name,h1,h2,h3,h4,h5,h6,h7,h8,h9,h10,h11,h12,h13,h14,h15,h16,h17,h18
 13,Frost,Roger,9,A,1,8:15 AM,30,10,Blue Men's,4,4,4,3,6,5,4,3,5,4,4,5,4,4,4,5,4,4
 13,Lurie,Jim,8,A,1,8:15 AM,20,6,Blue Men's,5,6,4,4,7,4,6,3,4,5,5,3,3,5,4,5,4,5
 13,Reveal,Bill,9,A,1,8:15 AM,10,4,Blue Men's,4,4,5,5,4,6,4,3,5,4,5,5,6,5,4,6,6,5

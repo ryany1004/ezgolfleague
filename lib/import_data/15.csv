@@ -1,4 +1,4 @@
-tournament_id,player_first_name,player_last_name,course_handicap,flight,tee_group,tee_time,payout_dollars,payout_points,course_tee_box_name,h1,h2,h3,h4,h5,h6,h7,h8,h9,h10,h11,h12,h13,h14,h15,h16,h17,h18
+tournament_id,player_last_name,player_first_name,course_handicap,flight,tee_group,tee_time,payout_dollars,payout_points,course_tee_box_name,h1,h2,h3,h4,h5,h6,h7,h8,h9,h10,h11,h12,h13,h14,h15,h16,h17,h18
 15,Lurie,Jim,8,A,1,8:15 AM,30,10,White Men's,7,3,4,5,4,3,4,5,3,3,4,3,5,5,4,3,5,4
 15,Cowper,Jon,7,A,1,8:15 AM,,,White Men's,5,4,4,6,5,4,5,6,4,3,5,4,6,5,3,3,4,5
 15,Kelly,Pat,12,A,1,8:15 AM,20,6,White Men's,5,4,4,5,3,6,5,5,5,3,4,5,5,4,4,3,5,6
