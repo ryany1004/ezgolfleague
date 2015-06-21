@@ -42,7 +42,6 @@ ActiveRecord::Schema.define(version: 20150613200313) do
 
   create_table "course_hole_tee_boxes", force: :cascade do |t|
     t.integer  "course_hole_id"
-    t.string   "name"
     t.string   "description"
     t.integer  "yardage"
     t.datetime "created_at",        null: false

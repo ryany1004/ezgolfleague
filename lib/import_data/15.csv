@@ -1,35 +1,35 @@
 tournament_id,player_first_name,player_last_name,course_handicap,flight,tee_group,tee_time,payout_dollars,payout_points,course_tee_box_name,h1,h2,h3,h4,h5,h6,h7,h8,h9,h10,h11,h12,h13,h14,h15,h16,h17,h18
-15, Lurie, Jim,,A,,,,,White Men's,7,3,4,5,4,3,4,5,3,3,4,3,5,5,4,3,5,4
-15, Cowper, Jon,,A,,,,,White Men's,5,4,4,6,5,4,5,6,4,3,5,4,6,5,3,3,4,5
-15, Kelly, Pat,,A,,,,,White Men's,5,4,4,5,3,6,5,5,5,3,4,5,5,4,4,3,5,6
-15, Pawluk, Joe,,A,,,,,White Men's,5,3,4,6,4,5,4,5,4,3,4,6,7,4,4,3,5,5
-15, Frost, Roger,,A,,,,,White Men's,5,4,4,5,5,3,4,5,6,3,4,7,5,5,4,4,6,5
-15, Marsh, Tom,,A,,,,,White Men's,5,4,4,7,6,3,5,5,6,3,5,4,7,5,4,3,5,5
-15, Naserio, Turk,,A,,,,,White Men's,6,3,4,6,5,3,5,5,5,3,6,7,7,5,4,3,6,5
-15, St. Martin, Joe,,A,,,,,White Men's,7,4,6,5,5,4,4,5,5,3,6,5,4,7,5,3,6,5
-15, Doppmann, Cevin,,A,,,,,White Men's,5,4,4,7,3,3,5,6,5,6,4,4,6,9,5,4,4,5
-15, Carlevato, Bert,,A,,,,,White Men's,6,4,6,6,5,5,8,5,4,3,7,4,6,5,3,5,4,5
-15, Silveri, David,,A,,,,,White Men's,5,4,4,7,6,4,5,6,5,5,5,5,6,7,5,3,5,5
-15, Stevenson, Brad,,A,,,,,White Men's,5,3,5,5,7,4,5,6,5,3,7,5,6,5,4,5,6,6
-15, Banich, Mike,,B,,,,,White Men's, , , , , , , , , , , , , , , , , , 
-15, Prieto, AJ,,B,,,,,White Men's,4,3,3,6,5,3,3,5,4,3,5,4,6,3,6,4,4,6
-15, Parr, Bob,,B,,,,,White Men's,6,5,4,5,4,3,4,4,5,2,5,7,5,5,4,5,6,5
-15, Stahl, Steve,,B,,,,,White Men's,8,3,5,6,4,5,4,5,4,5,6,5,6,4,5,4,5,5
-15, Burnett, Jim,,B,,,,,White Men's,6,4,4,7,4,3,3,6,5,3,5,11,6,5,4,5,6,5
-15, Kirby, Tyler,,B,,,,,White Men's,6,5,5,6,5,5,5,5,5,3,4,5,7,4,6,4,6,7
-15, Kimbrel, Joe,,B,,,,,White Men's,6,3,4,7,5,5,6,6,6,4,6,4,7,6,4,5,5,8
-15, Kucera, Jake,,B,,,,,White Men's,6,3,7,6,6,5,4,4,5,4,7,6,6,6,7,4,6,6
-15, Zielke, Dan,,B,,,,,White Men's,7,5,5,5,7,6,4,7,4,3,6,8,5,7,3,3,6,8
-15, Clark, Rick,,B,,,,,White Men's,6,5,5,7,6,2,7,8,6,4,6,5,7,6,4,4,6,6
-15, Morgan, Jack,,B,,,,,White Men's,7,5,6,6,4,4,5,6,7,3,6,6,6,6,6,3,7,7
-15, Schreter, Brad,,B,,,,,White Men's,5,5,8,7,5,6,6,5,5,4,7,5,7,4,6,4,8,6
-15, Magee, Eric,,B,,,,,White Men's,6,5,4,7,7,4,6,5,7,4,6,6,7,7,5,5,7,5
-15, Neal, Gary,,C,,,,,White Men's,6,4,6,6,6,6,5,7,6,3,7,7,8,5,5,2,6,8
-15, Bilotti, Bob,,C,,,,,White Men's,6,4,6,7,6,4,5,5,4,4,6,5,9,9,7,4,6,6
-15, Millar, Mark,,C,,,,,White Men's,7,4,10,7,6,5,5,5,6,4,8,6,8,5,5,3,6,5
-15, Ducre, Julian,,C,,,,,White Men's,7,3,6,10,6,5,6,5,5,3,5,5,9,7,4,4,8,8
-15, Flint, Phillip,,C,,,,,White Men's,9,6,6,5,6,5,6,7,6,3,5,8,8,5,8,5,7,4
-15, Smeets, Ludy,,C,,,,,White Men's,6,4,6,6,5,4,7,6,5,4,10,6,6,9,7,5,9,5
-15, Cook, Mike,,C,,,,,White Men's,6,5,6,6,7,3,6,8,7,5,6,11,8,6,6,4,8,7
-15, Bryan, Bill,,C,,,,,White Men's,6,4,6,9,5,5,6,5,4,6,6,8,8,8,10,5,7,7
-15, Prieto, Jose,,C,,,,,White Men's,7,4,5,9,7,8,6,8,7,4,8,8,6,5,6,5,7,8
+15,Lurie,Jim,,A,1,8:15 AM,,,White Men's,7,3,4,5,4,3,4,5,3,3,4,3,5,5,4,3,5,4
+15,Cowper,Jon,,A,1,8:15 AM,,,White Men's,5,4,4,6,5,4,5,6,4,3,5,4,6,5,3,3,4,5
+15,Kelly,Pat,,A,1,8:15 AM,,,White Men's,5,4,4,5,3,6,5,5,5,3,4,5,5,4,4,3,5,6
+15,Pawluk,Joe,,A,1,8:15 AM,,,White Men's,5,3,4,6,4,5,4,5,4,3,4,6,7,4,4,3,5,5
+15,Frost,Roger,,A,1,8:15 AM,,,White Men's,5,4,4,5,5,3,4,5,6,3,4,7,5,5,4,4,6,5
+15,Marsh,Tom,,A,1,8:15 AM,,,White Men's,5,4,4,7,6,3,5,5,6,3,5,4,7,5,4,3,5,5
+15,Naserio,Turk,,A,1,8:15 AM,,,White Men's,6,3,4,6,5,3,5,5,5,3,6,7,7,5,4,3,6,5
+15,St. Martin,Joe,,A,1,8:15 AM,,,White Men's,7,4,6,5,5,4,4,5,5,3,6,5,4,7,5,3,6,5
+15,Doppmann,Cevin,,A,1,8:15 AM,,,White Men's,5,4,4,7,3,3,5,6,5,6,4,4,6,9,5,4,4,5
+15,Carlevato,Bert,,A,1,8:15 AM,,,White Men's,6,4,6,6,5,5,8,5,4,3,7,4,6,5,3,5,4,5
+15,Silveri,David,,A,1,8:15 AM,,,White Men's,5,4,4,7,6,4,5,6,5,5,5,5,6,7,5,3,5,5
+15,Stevenson,Brad,,A,1,8:15 AM,,,White Men's,5,3,5,5,7,4,5,6,5,3,7,5,6,5,4,5,6,6
+15,Banich,Mike,,B,1,8:15 AM,,,White Men's,,,,,,,,,,,,,,,,,,
+15,Prieto,AJ,,B,1,8:15 AM,,,White Men's,4,3,3,6,5,3,3,5,4,3,5,4,6,3,6,4,4,6
+15,Parr,Bob,,B,1,8:15 AM,,,White Men's,6,5,4,5,4,3,4,4,5,2,5,7,5,5,4,5,6,5
+15,Stahl,Steve,,B,1,8:15 AM,,,White Men's,8,3,5,6,4,5,4,5,4,5,6,5,6,4,5,4,5,5
+15,Burnett,Jim,,B,1,8:15 AM,,,White Men's,6,4,4,7,4,3,3,6,5,3,5,11,6,5,4,5,6,5
+15,Kirby,Tyler,,B,1,8:15 AM,,,White Men's,6,5,5,6,5,5,5,5,5,3,4,5,7,4,6,4,6,7
+15,Kimbrel,Joe,,B,1,8:15 AM,,,White Men's,6,3,4,7,5,5,6,6,6,4,6,4,7,6,4,5,5,8
+15,Kucera,Jake,,B,1,8:15 AM,,,White Men's,6,3,7,6,6,5,4,4,5,4,7,6,6,6,7,4,6,6
+15,Zielke,Dan,,B,1,8:15 AM,,,White Men's,7,5,5,5,7,6,4,7,4,3,6,8,5,7,3,3,6,8
+15,Clark,Rick,,B,1,8:15 AM,,,White Men's,6,5,5,7,6,2,7,8,6,4,6,5,7,6,4,4,6,6
+15,Morgan,Jack,,B,1,8:15 AM,,,White Men's,7,5,6,6,4,4,5,6,7,3,6,6,6,6,6,3,7,7
+15,Schreter,Brad,,B,1,8:15 AM,,,White Men's,5,5,8,7,5,6,6,5,5,4,7,5,7,4,6,4,8,6
+15,Magee,Eric,,B,1,8:15 AM,,,White Men's,6,5,4,7,7,4,6,5,7,4,6,6,7,7,5,5,7,5
+15,Neal,Gary,,C,1,8:15 AM,,,White Men's,6,4,6,6,6,6,5,7,6,3,7,7,8,5,5,2,6,8
+15,Bilotti,Bob,,C,1,8:15 AM,,,White Men's,6,4,6,7,6,4,5,5,4,4,6,5,9,9,7,4,6,6
+15,Millar,Mark,,C,1,8:15 AM,,,White Men's,7,4,10,7,6,5,5,5,6,4,8,6,8,5,5,3,6,5
+15,Ducre,Julian,,C,1,8:15 AM,,,White Men's,7,3,6,10,6,5,6,5,5,3,5,5,9,7,4,4,8,8
+15,Flint,Phillip,,C,1,8:15 AM,,,White Men's,9,6,6,5,6,5,6,7,6,3,5,8,8,5,8,5,7,4
+15,Smeets,Ludy,,C,1,8:15 AM,,,White Men's,6,4,6,6,5,4,7,6,5,4,10,6,6,9,7,5,9,5
+15,Cook,Mike,,C,1,8:15 AM,,,White Men's,6,5,6,6,7,3,6,8,7,5,6,11,8,6,6,4,8,7
+15,Bryan,Bill,,C,1,8:15 AM,,,White Men's,6,4,6,9,5,5,6,5,4,6,6,8,8,8,10,5,7,7
+15,Prieto,Jose,,C,1,8:15 AM,,,White Men's,7,4,5,9,7,8,6,8,7,4,8,8,6,5,6,5,7,8

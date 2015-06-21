@@ -42,7 +42,7 @@ module Importers
       course_tee_box = course_hole.course.course_tee_boxes.where(name: tee_box_name).first
       raise "Missing Required Data" if course_tee_box.blank?
       
-      course_hole_tee_box = course_hole.course_hole_tee_boxes.where(name: tee_box_name).first
+      course_hole_tee_box = course_hole.course_hole_tee_boxes.where(course_tee_box: course_tee_box).first
       if course_hole_tee_box.blank?
         course_hole_tee_box = CourseHoleTeeBox.create(course_hole: course_hole, course_tee_box: course_tee_box, yardage: yards, description: optional_description)
       else
