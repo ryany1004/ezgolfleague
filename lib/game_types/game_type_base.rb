@@ -73,7 +73,7 @@ module GameTypes
       return []
     end
 
-    def player_score(user)
+    def player_score(user, use_handicap = true)
       return nil
     end
     

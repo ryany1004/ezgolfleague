@@ -121,7 +121,7 @@
             <th>Flight</th>
       			<th>Rank</th>
             <th>Player</th>
-            <th>Score</th>
+            <th>Net/Gross</th>
             <th>Points</th>
       		</tr>
       	</thead>
@@ -132,7 +132,7 @@
               <td><strong><%= flight[:flight_number] %></strong></td>
               <td><strong><%= i + 1 %></strong></td>
               <td><%= player[:name] %></td>
-              <td><%= player[:score] %> | <%= link_to "Scorecard", player[:scorecard_url] %></td>
+              <td><%= player[:net_score] %>/<%= player[:gross_score] %> | <%= link_to "Scorecard", player[:scorecard_url] %></td>
               <td><%= player[:points].to_i %></td>
             </tr>
             <% end -%>

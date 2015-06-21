@@ -72,7 +72,7 @@ module GameTypes
       return other_scorecards
     end
 
-    def player_score(user)
+    def player_score(user, use_handicap = true)
       return nil if !self.tournament.includes_player?(user)
 
       total_score = 0
@@ -83,14 +83,16 @@ module GameTypes
       scorecard.scores.each do |score|
         hole_score = score.strokes
       
-        handicap_allowance.each do |h|
-          if h[:course_hole] == score.course_hole
-            if h[:strokes] != 0
-              hole_score = hole_score - h[:strokes]
+        if use_handicap == true
+          handicap_allowance.each do |h|
+            if h[:course_hole] == score.course_hole
+              if h[:strokes] != 0
+                hole_score = hole_score - h[:strokes]
+              end
             end
           end
         end
-      
+
         total_score = total_score + hole_score
       end
     
@@ -122,8 +124,9 @@ module GameTypes
         ranked_flight = { flight_id: f.id, flight_number: f.flight_number, players: [] }
       
         f.users.each do |player|
-          score = self.player_score(player)
-      
+          net_score = self.player_score(player, true)
+          gross_score = self.player_score(player, false)
+          
           scorecard = self.tournament.primary_scorecard_for_user(player)
           scorecard_url = play_scorecard_path(scorecard)
         
@@ -132,10 +135,9 @@ module GameTypes
             points = payout.points if payout.user == player
           end
       
-          ranked_flight[:players] << { id: player.id, name: player.complete_name, score: score, scorecard_url: scorecard_url, points: points } if !score.blank? && score > 0
+          ranked_flight[:players] << { id: player.id, name: player.complete_name, net_score: net_score, gross_score: gross_score, scorecard_url: scorecard_url, points: points } if !net_score.blank? && net_score > 0
         end
-        #ranked_flight[:players].sort! { |x,y| y[:points] <=> x[:points] }
-        ranked_flight[:players].sort! { |x,y| x[:score] <=> y[:score] }
+        ranked_flight[:players].sort! { |x,y| x[:net_score] <=> y[:net_score] }
       
         ranked_flights << ranked_flight
       end
