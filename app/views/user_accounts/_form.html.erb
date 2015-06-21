@@ -48,14 +48,6 @@
 	  <%= f.input :password_confirmation, :label => 'Password Confirmation' %>
   </div>
   <% end -%>
-  
-  <h3>Avatar</h3>
-  <div class="well">
-    <% unless @user_account.avatar.blank? -%>
-    <p><%= image_tag @user_account.avatar.url(:medium) %></p>
-    <% end -%>
-    <%= f.input :avatar, :label => 'Avatar Photo' %>
-  </div>
 
   <h3>Contact Information</h3>
   <div class="well">

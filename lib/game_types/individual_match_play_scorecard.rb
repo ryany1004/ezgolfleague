@@ -59,7 +59,6 @@ module GameTypes
       return 0 if current_hole_strokes1 == 0 or current_hole_strokes2 == 0 #hole has not been played
 
       #if we get this far, we have stuff to calc
-
       self.unplayed_holes = self.unplayed_holes - 1
       self.running_score = 0
       self.opponent_running_score = 0
@@ -115,7 +114,7 @@ module GameTypes
           else
             winning_string = "#{self.running_score} and #{self.unplayed_holes}"
           
-            return "W / #{winning_string}"
+            return "W (#{winning_string})"
           end
         else
           return "L"

@@ -46,9 +46,6 @@ module GameTypes
       
       team = self.tournament.golfer_team_for_player(user)
       unless team.blank?
-        user_best_ball_card = self.best_ball_scorecard_for_user_in_team(user, team)
-        other_scorecards << user_best_ball_card
-        
         team.users.each do |u|
           if u != user
             other_scorecards << self.tournament.primary_scorecard_for_user(u) 

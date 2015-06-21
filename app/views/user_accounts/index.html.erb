@@ -6,7 +6,6 @@
     <table class="table table-striped">
     	<thead>
     		<tr>
-          <th>&nbsp;</th>
     			<th>Name</th>
           <th>Paid Annual Dues?</th>
           <th>Date Joined</th>
@@ -16,11 +15,6 @@
     	<tbody>
     	<% @user_accounts.each do |user_account| %>
     		<tr>
-          <% unless user_account.avatar.blank? -%>
-          <td><%= link_to (image_tag user_account.avatar.url(:micro)), edit_user_account_path(user_account) %></td>
-          <% else -%>
-          <td>&nbsp;</td>
-          <% end -%>
     			<td><%= link_to user_account.complete_name, edit_user_account_path(user_account) %></td>
     			<td><%= human_boolean(user_account.has_paid) %></td>
           <td><%= user_account.created_at.to_s(:date_and_time) %></td>

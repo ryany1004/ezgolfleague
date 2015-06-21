@@ -75,7 +75,11 @@
         <td>
           <% if scorecard.should_total? -%>
             <strong><%= scorecard.scores.map {|score| score.strokes }.sum %></strong>
-            <span class="label label-success"><%= scorecard.net_score %></span>
+            <% if scorecard.net_score > 0-%>
+            <span class="label label-success">
+              <%= scorecard.net_score %>
+            </span>
+            <% end -%>
           <% else -%>
             &nbsp;
           <% end -%>
@@ -111,7 +115,6 @@
       <% if primary_scorecard.includes_extra_scoring_column? -%>
         <th>&nbsp;</th>
       <% end -%>
-      
       <th>&nbsp;</th>
 		</tr>
 		<tr>

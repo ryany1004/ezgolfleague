@@ -9,13 +9,17 @@
   <legend>Membership Details</legend>
     
   <h3>Basic Details</h3>
-  <div class="well">     
-    <%= f.association :user, collection: @users, :label => 'User', :label_method => :complete_name %>
+  <div class="well">
+    <% if @league_membership.new_record? -%>
+      <%= f.association :user, collection: @users, :label => 'User', :label_method => :complete_name %>
+    <% else -%>
+      <p><strong><%= @league_membership.user.complete_name %></strong></p>
+    <% end -%>
     
-	  <%= f.input :is_admin, :label => 'Is this user an admin for this league?' %>
+	  <%= f.input :is_admin, :label => "Is this user an admin for #{@league.name}?" %>
   </div>
   
   <div class="form-actions">
-    <%= f.button :submit, :class => 'btn btn-default' %>
+    <%= f.button :submit, "Update Membership", :class => 'btn btn-default' %>
   </div>
 <% end %>

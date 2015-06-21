@@ -21,14 +21,6 @@
   <div class="well">  
     <%= link_to "Update My Password", password_play_user_account_path %>
   </div>
-  
-  <h3>Avatar</h3>
-  <div class="well">
-    <% unless @user_account.avatar.blank? -%>
-    <p><%= image_tag @user_account.avatar.url(:medium) %></p>
-    <% end -%>
-    <%= f.input :avatar, :label => 'Avatar Photo' %>
-  </div>
 
   <h3>Contact Information</h3>
   <div class="well">
