@@ -22,7 +22,7 @@ tournament_id,player_first_name,player_last_name,course_handicap,flight,tee_grou
 16,Banich,Mike,16,B,1,8:15 AM,,,Green Men's,5,4,6,5,11,7,7,7,8,8,6,4,7,9,6,8,4,6
 16,Magee,Eric,22,C,1,8:15 AM,30,10,Green Men's,9,4,4,5,11,8,6,4,5,5,5,4,5,8,5,5,4,5
 16,Morgan,Jack,22,C,1,8:15 AM,20,6,Green Men's,7,6,4,6,10,5,5,6,6,5,6,4,5,8,4,5,3,7
-16,Suh (Guest),Ben,,C,1,8:15 AM,,,Green Men's,4,8,4,6,7,6,6,6,5,5,6,3,7,5,7,5,4,8
+16,Suh (Guest),Ben,0,C,1,8:15 AM,,,Green Men's,4,8,4,6,7,6,6,6,5,5,6,3,7,5,7,5,4,8
 16,Millar,Mark,24,C,1,8:15 AM,10,4,Green Men's,7,9,6,6,6,6,7,3,6,5,6,5,6,8,6,4,5,5
 16,Neal,Gary,24,C,1,8:15 AM,,,Green Men's,5,8,4,5,9,5,6,4,6,5,6,4,6,9,7,7,3,8
 16,Ducre,Julian,27,C,1,8:15 AM,,,Green Men's,6,4,4,8,8,8,7,5,7,6,5,4,6,8,8,7,8,5
