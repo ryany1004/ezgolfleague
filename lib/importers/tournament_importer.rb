@@ -19,6 +19,9 @@ module Importers
           tournament = Tournament.where(id: line[:tournament_id]).first
           tournament.tournament_groups.destroy_all
           tournament.flights.destroy_all
+          
+          tournament.is_finalized = false
+          tournament.save
         end
       
         tournament_lines.each do |line|

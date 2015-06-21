@@ -134,6 +134,7 @@ module GameTypes
       
           ranked_flight[:players] << { id: player.id, name: player.complete_name, score: score, scorecard_url: scorecard_url, points: points } if !score.blank? && score > 0
         end
+        #ranked_flight[:players].sort! { |x,y| y[:points] <=> x[:points] }
         ranked_flight[:players].sort! { |x,y| x[:score] <=> y[:score] }
       
         ranked_flights << ranked_flight
