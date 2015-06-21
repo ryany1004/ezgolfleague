@@ -4,8 +4,8 @@ class Play::TournamentsController < BaseController
   before_action :fetch_tournament, :except => [:show]
   
   def show
-    @tournament = Tournament.find(params[:id])
-  
+    @tournament = Tournament.includes(:flights, :course, tournament_groups:[{teams:[{golf_outings:[{scorecards: :scores}]}]}]).find(params[:id])
+
     @page_title = "#{@tournament.name}"
   end
   
