@@ -28,6 +28,11 @@ module Importers
         raise "Missing Required Data" if par.blank?
         
         course_hole = CourseHole.create(course: course, hole_number: hole_number, par: par, mens_handicap: mens_handicap, womens_handicap: womens_handicap)
+      else
+        course_hole.par = par
+        course_hole.mens_handicap = mens_handicap
+        course_hole.womens_handicap = womens_handicap
+        course_hole.save
       end
       
       return course_hole
@@ -40,6 +45,10 @@ module Importers
       course_hole_tee_box = course_hole.course_hole_tee_boxes.where(name: tee_box_name).first
       if course_hole_tee_box.blank?
         course_hole_tee_box = CourseHoleTeeBox.create(course_hole: course_hole, course_tee_box: course_tee_box, yardage: yards, description: optional_description)
+      else
+        course_hole_tee_box.yardage = yards
+        course_hole_tee_box.description = optional_description
+        course_hole_tee_box.save
       end
       
       return course_hole_tee_box
