@@ -30,6 +30,7 @@ module Importers
           raise "Missing Course Tee Box" if course_tee_box.blank?
 
           #player
+          Rails.logger.debug { "Importing For #{line[:player_last_name]}, #{line[:player_first_name]}" }
           player = self.find_or_create_player_in_league(line[:player_last_name], line[:player_first_name], line[:course_handicap], course_tee_box.rating, tournament.league)
           raise "No Player" if player.blank?
         
