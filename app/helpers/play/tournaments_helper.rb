@@ -6,7 +6,7 @@ module Play::TournamentsHelper
     html = ""
     
     winners.each do |winner|
-      html << winner[:user].complete_name + " "
+      html << winner[:user].complete_name + "<br/>"
     end
     
     return html
@@ -18,7 +18,7 @@ module Play::TournamentsHelper
     html = ""
     
     winners.each do |winner|
-      html << number_to_currency(winner[:amount]) + " "
+      html << number_to_currency(winner[:amount]) + "<br/>"
     end
     
     return html
@@ -33,7 +33,7 @@ module Play::TournamentsHelper
       if winner[:points].blank?
         html << "0 " 
       else
-        html << winner[:points].to_s + " " 
+        html << winner[:points].to_s + "<br/>" 
       end
     end
     

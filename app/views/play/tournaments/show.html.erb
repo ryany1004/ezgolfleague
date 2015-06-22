@@ -14,11 +14,13 @@
         <h4><%= @tournament.tournament_at.to_s(:date_and_time) %></h4>
         <span class="label label-default">Where</span>
         <h4><%= @tournament.course.name %></h4>
-        <p>
-          <%= @tournament.course.street_address_1 %><br/>
-          <%= @tournament.course.city %>, <%= @tournament.course.us_state %> <%= @tournament.course.postal_code %><br/>
-          <%= link_to "View on Map", "https://www.google.com/maps/place/#{@tournament.course.street_address_1}+#{@tournament.course.city}+#{@tournament.course.us_state}+#{@tournament.course.postal_code}" %>
-        </p>
+        <% unless @tournament.course.street_address_1.blank? -%>
+          <p>
+            <%= @tournament.course.street_address_1 %><br/>
+            <%= @tournament.course.city %>, <%= @tournament.course.us_state %> <%= @tournament.course.postal_code %><br/>
+            <%= link_to "View on Map", "https://www.google.com/maps/place/#{@tournament.course.street_address_1}+#{@tournament.course.city}+#{@tournament.course.us_state}+#{@tournament.course.postal_code}" %>
+          </p>
+        <% end -%>
       </div>
       <ul class="list-group">
         <li class="list-group-item"><strong>Sign Ups:</strong> <%= @tournament.signup_opens_at.to_s(:date_and_time) %> - <%= @tournament.signup_closes_at.to_s(:date_and_time) %></li>
