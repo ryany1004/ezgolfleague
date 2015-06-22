@@ -11,7 +11,7 @@ module Play::TournamentsHelper
       html << "<br/>" unless winner == winners.last
     end
     
-    return html
+    return html.html_safe
   end
   
   def format_payout(winners)
@@ -25,7 +25,7 @@ module Play::TournamentsHelper
       html << "<br/>" unless winner == winners.last
     end
     
-    return html
+    return html.html_safe
   end
   
   def format_points(winners)
@@ -43,7 +43,7 @@ module Play::TournamentsHelper
       html << "<br/>" unless winner == winners.last 
     end
     
-    return html
+    return html.html_safe
   end
     
 end
