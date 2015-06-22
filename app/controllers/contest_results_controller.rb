@@ -69,6 +69,6 @@ class ContestResultsController < BaseController
   end
 
   def contest_result_params
-    params.require(:contest_result).permit(:contest_id, :contest_hole_id, :winner_id, :result_value, :payout_amount)
+    params.require(:contest_result).permit(:contest_id, :contest_hole_id, :winner_id, :result_value, :payout_amount, :points)
   end
 end

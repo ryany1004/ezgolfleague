@@ -106,9 +106,17 @@ module GameTypes
     
       points = 0
     
+      #payouts
       self.tournament.flights.each do |f|
         f.payouts.each do |p|
           points = points + p.points if p.user == user
+        end
+      end
+      
+      #contests
+      self.tournament.contests.each do |c|
+        c.contest_results.each do |r|
+          points = points + r.points if r.winner == user
         end
       end
     

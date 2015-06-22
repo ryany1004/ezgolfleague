@@ -84,6 +84,7 @@
             <th>Contest</th>
             <th>Winner(s)</th>
             <th>Amount</th>
+            <th>Points</th>
           </tr>
         </thead>
         <tbody>
@@ -92,6 +93,7 @@
             <td><%= contest.name %></td>
             <td><%= format_winners(contest.winners) %></td>
             <td><%= format_payout(contest.winners) %></td>
+            <td><%= format_points(contest.winners) %></td>
           </tr>
           <% end %>
         </tbody>

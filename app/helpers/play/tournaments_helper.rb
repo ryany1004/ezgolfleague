@@ -19,5 +19,19 @@ module Play::TournamentsHelper
     
     return html
   end
+  
+  def format_points(winners)
+    html = ""
+    
+    winners.each do |winner|
+      if winner[:points].blank?
+        html << "0 " 
+      else
+        html << winner[:points].to_s + " " 
+      end
+    end
+    
+    return html
+  end
     
 end
