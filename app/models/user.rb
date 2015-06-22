@@ -23,6 +23,9 @@ class User < ActiveRecord::Base
   
   paginates_per 50
   
+  #this is to work around a Devise bug
+  def after_password_reset; end
+  
   def complete_name
     return "#{self.last_name}, #{self.first_name}"
   end
