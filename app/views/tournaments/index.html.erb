@@ -8,9 +8,11 @@
   <%= render partial: 'index_table', locals: {tournaments: @past_tournaments, title: "Past Tournaments", show_create: false} %>
 <% end -%>
 
-<% if @upcoming_tournaments.count == 0 && @past_tournaments.count == 0 -%>
-<h4>You don't have any tournaments yet.</h4>
-<%= link_to 'Create Tournament', new_league_tournament_path(current_user.selected_league), :class => 'btn btn-primary' %>
+<% if @upcoming_tournaments.count == 0 -%>
+  <% if @upcoming_tournaments.count == 0 && @past_tournaments.count == 0 -%>
+    <h4>You don't have any tournaments yet.</h4>
+  <% end -%>
+  <%= link_to 'Create Tournament', new_league_tournament_path(current_user.selected_league), :class => 'btn btn-primary' %>
 <% end -%>
 
 </div>
