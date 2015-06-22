@@ -1,6 +1,8 @@
 module Play::TournamentsHelper
   
   def format_winners(winners)
+    return "" if winners.blank?
+    
     html = ""
     
     winners.each do |winner|
@@ -11,6 +13,8 @@ module Play::TournamentsHelper
   end
   
   def format_payout(winners)
+    return "" if winners.blank?
+    
     html = ""
     
     winners.each do |winner|
@@ -21,6 +25,8 @@ module Play::TournamentsHelper
   end
   
   def format_points(winners)
+    return "" if winners.blank?
+    
     html = ""
     
     winners.each do |winner|
