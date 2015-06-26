@@ -21,20 +21,30 @@ class ScorecardsController < BaseController
  
   def print
     @scorecard_groups = []
+    players_with_scorecards = []
     
     tournament = Tournament.find(params[:tournament_id])
     
     tournament.players.each do |player|
-      card_hash = Hash.new
-      card_hash[:primary_scorecard] = tournament.primary_scorecard_for_user(player)
+      unless players_with_scorecards.include? player
+        players_with_scorecards << player
+        
+        card_hash = Hash.new
+        card_hash[:primary_scorecard] = tournament.primary_scorecard_for_user(player)
+
+        if tournament.allow_teams == GameTypes::TEAMS_ALLOWED || tournament.allow_teams == GameTypes::TEAMS_REQUIRED
+          related_scorecards = tournament.related_scorecards_for_user(player)
+          card_hash[:other_scorecards] = related_scorecards
+          
+          related_scorecards.each do |related|
+            players_with_scorecards << related.golf_outing.user unless related.golf_outing.blank?
+          end
+        else
+          card_hash[:other_scorecards] = []
+        end
       
-      if tournament.allow_teams == GameTypes::TEAMS_ALLOWED || tournament.allow_teams == GameTypes::TEAMS_REQUIRED
-        card_hash[:other_scorecards] = tournament.related_scorecards_for_user(player)
-      else
-        card_hash[:other_scorecards] = []
+        @scorecard_groups << card_hash
       end
-      
-      @scorecard_groups << card_hash
     end
     
     render layout: false
