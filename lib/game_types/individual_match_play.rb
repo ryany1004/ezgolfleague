@@ -113,14 +113,6 @@ module GameTypes
     
     ##Scoring
     
-    def flights_with_rankings #TODO
-      return []
-    end
-
-    def player_points(user) #TODO
-      return 0
-    end
-    
     def includes_extra_scoring_column?
       return true
     end

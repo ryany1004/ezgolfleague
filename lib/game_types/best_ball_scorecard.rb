@@ -1,8 +1,18 @@
 module GameTypes
   class BestBallScorecard < GameTypes::DerivedScorecard
+    attr_accessor :should_use_handicap
+    attr_accessor :handicap_indices
+    
+    def initialize
+      self.handicap_indices = Hash.new
+    end
     
     def name
-      return "Best Ball"
+      if self.should_use_handicap == true
+        return "Best Ball Net"
+      else
+        return "Best Ball Gross"
+      end
     end
     
     def should_subtotal?
@@ -11,6 +21,21 @@ module GameTypes
   
     def should_total?
       return true
+    end
+    
+    def handicap_allowance_for_user(user)
+      if self.should_use_handicap == false
+        return nil
+      end
+      
+      if self.handicap_indices["#{user.id}"]
+        return self.handicap_indices["#{user.id}"]
+      else
+        handicap_allowance = self.tournament.handicap_allowance(user)
+        self.handicap_indices["#{user.id}"] = handicap_allowance
+        
+        return handicap_allowance
+      end
     end
     
     def calculate_scores    
@@ -22,12 +47,22 @@ module GameTypes
         comparable_scores = []
         self.golfer_team.users.each do |user|
           scorecard = self.golfer_team.tournament.primary_scorecard_for_user(user)
-          hole_score = scorecard.scores.where(course_hole: hole).first
           
+          raw_score = scorecard.scores.where(course_hole: hole).first.strokes
+          if self.should_use_handicap == true
+            if raw_score == 0
+              hole_score = 0
+            else
+              hole_score = self.adjusted_strokes(raw_score, self.handicap_allowance_for_user(user), hole)
+            end
+          else
+            hole_score = raw_score
+          end
+
           comparable_scores << hole_score
         end
         
-        score.strokes = self.lowest_score_for_scores(comparable_scores)
+        score.strokes = self.score_for_scores(comparable_scores)
         
         score.course_hole = hole
         new_scores << score
@@ -36,16 +71,16 @@ module GameTypes
       self.scores = new_scores
     end
     
-    def lowest_score_for_scores(comparable_scores)      
+    def score_for_scores(comparable_scores)      
       return 0 if comparable_scores.blank?
       
-      lowest_score = comparable_scores.first.strokes
-            
-      comparable_scores.each do |score|
-        if score.strokes == 0 #not yet played
+      lowest_score = comparable_scores.first
+      
+      comparable_scores.each do |strokes|
+        if strokes == 0 #not yet played
           return lowest_score
         else
-          lowest_score = score.strokes if score.strokes < lowest_score
+          lowest_score = strokes if strokes < lowest_score
         end
       end
 

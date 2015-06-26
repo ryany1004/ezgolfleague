@@ -32,10 +32,11 @@ module GameTypes
     
     ##Scoring
     
-    def best_ball_scorecard_for_user_in_team(user, golfer_team)
+    def best_ball_scorecard_for_user_in_team(user, golfer_team, use_handicaps)
       scorecard = BestBallScorecard.new
       scorecard.user = user
       scorecard.golfer_team = golfer_team
+      scorecard.should_use_handicap = use_handicaps
       scorecard.calculate_scores
 
       return scorecard
@@ -49,12 +50,15 @@ module GameTypes
         team.users.each do |u|
           if u != user
             other_scorecards << self.tournament.primary_scorecard_for_user(u) 
-          
-            other_user_best_ball_card = self.best_ball_scorecard_for_user_in_team(u, team)
-            other_scorecards << other_user_best_ball_card
           end
         end
       end
+      
+      gross_best_ball_card = self.best_ball_scorecard_for_user_in_team(user, team, false)
+      net_best_ball_card = self.best_ball_scorecard_for_user_in_team(user, team, true)
+      
+      other_scorecards << net_best_ball_card
+      other_scorecards << gross_best_ball_card
             
       return other_scorecards
     end

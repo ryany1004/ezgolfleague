@@ -84,20 +84,6 @@ module GameTypes
       return self.running_score 
     end
     
-    def adjusted_strokes(raw_strokes, handicap_allowance, course_hole)
-      hole_score = raw_strokes
-      
-      handicap_allowance.each do |h|
-        if h[:course_hole] == course_hole
-          if h[:strokes] != 0
-            hole_score = hole_score - h[:strokes]
-          end
-        end
-      end
-      
-      return hole_score
-    end
-    
     def extra_scoring_column_data          
       player_score_delta = (self.running_score - self.opponent_running_score).abs
       
