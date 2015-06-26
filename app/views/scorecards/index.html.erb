@@ -4,6 +4,13 @@
   <li class="active">Scorecards</li>
 </ol>
 
+<div class="row">
+  <div class="col-md-10">&nbsp;</div>
+  <div class="col-md-2">
+    <p><%= link_to "Print Scorecards", print_scorecards_path(:tournament_id => @tournament), class: "btn btn-info", role: "button", target: "_blank" %></p>
+  </div>
+</div>
+
 <div class="col-md-12">
     <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
       <% @players.each_with_index do |player, i| %>

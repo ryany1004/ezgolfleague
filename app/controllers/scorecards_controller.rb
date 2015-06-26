@@ -19,6 +19,27 @@ class ScorecardsController < BaseController
     end
   end
  
+  def print
+    @scorecard_groups = []
+    
+    tournament = Tournament.find(params[:tournament_id])
+    
+    tournament.players.each do |player|
+      card_hash = Hash.new
+      card_hash[:primary_scorecard] = tournament.primary_scorecard_for_user(player)
+      
+      if tournament.allow_teams == GameTypes::TEAMS_ALLOWED || tournament.allow_teams == GameTypes::TEAMS_REQUIRED
+        card_hash[:other_scorecards] = tournament.related_scorecards_for_user(player)
+      else
+        card_hash[:other_scorecards] = []
+      end
+      
+      @scorecard_groups << card_hash
+    end
+    
+    render layout: false
+  end
+ 
   private
   
   def scorecard_params

@@ -118,7 +118,9 @@ Rails.application.routes.draw do
     post 'send_member_email'
   end
   
-  resources :scorecards, :except => [:delete]
+  resources :scorecards, :except => [:delete] do
+    get 'print', on: :collection
+  end
 
   resources :courses do
     resources :course_tee_boxes
