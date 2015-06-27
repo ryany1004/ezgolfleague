@@ -43,7 +43,9 @@ module GameTypes
       metadata.save
     end
     
-    def selected_scorecard_for_score(score)
+    def selected_scorecard_for_score(score) #this is the one selected as the tee shot
+      return nil if score.scorecard.golf_outing.blank?
+      
       tournament = score.scorecard.tournament
       team = tournament.golfer_team_for_player(score.scorecard.golf_outing.user)
       metadata = GameTypeMetadatum.where(golfer_team: team, course_hole: score.course_hole, search_key: METADATA_KEY).first

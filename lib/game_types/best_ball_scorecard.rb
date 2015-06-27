@@ -47,10 +47,13 @@ module GameTypes
         if self.course_hole_number_suppression_list.include? hole.hole_number
           score = DerivedScorecardScore.new
           score.strokes = 0
+          score.scorecard = self
+          score.course_hole = hole
           
           new_scores << score
         else
           score = DerivedScorecardScore.new
+          score.scorecard = self
         
           comparable_scores = []
           self.golfer_team.users.each do |user|
@@ -84,7 +87,7 @@ module GameTypes
       return 0 if comparable_scores.blank?
 
       sorted_scores = comparable_scores.sort
-      
+            
       return sorted_scores[0]
     end
     

@@ -1,5 +1,3 @@
-<% if score.scorecard.blank? == false && score.scorecard.tournament.game_type.selected_scorecard_for_score(score) != score.scorecard && score.strokes != 0 -%>
-  <% if score.course_hole.hole_number < 10 -%>
+<% if score.course_hole.hole_number < 10 && score.scorecard.blank? == false && score.scorecard.tournament.game_type.selected_scorecard_for_score(score) != score.scorecard && score.strokes != 0 -%>
     <%= link_to "Tee Shot", "#", {"data-toggle" => "modal", "data-target" => "#ScrambleGroup#{score.course_hole.id}"} %>
-  <% end -%>
 <% end -%>

@@ -55,10 +55,14 @@ module ApplicationHelper
   end
   
   def scorecard_score_helper(score)
-    if score.strokes > 0
+    if score.strokes != 0
       return score.strokes
     else
-      return "-"
+      if !score.scorecard.is_potentially_editable?
+        return 0 
+      else
+        return "-"
+      end
     end
   end
   
