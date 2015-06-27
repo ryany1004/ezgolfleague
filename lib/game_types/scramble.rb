@@ -67,7 +67,7 @@ module GameTypes
     
     def associated_text_for_score(score)      
       selected_card = self.selected_scorecard_for_score(score)
-      return "Selected Hole" if selected_card == score.scorecard unless selected_card.blank?
+      return "Tee Shot" if selected_card == score.scorecard unless selected_card.blank?
 
       return nil
     end

@@ -68,6 +68,9 @@ module Importers
           course_hole_scores << {hole_name: "18", score: line[:h18]}
         
           self.assign_scores(player, course_hole_scores, tournament)
+          
+          tournament.is_finalized = true
+          tournament.save
         end
       end
     end
