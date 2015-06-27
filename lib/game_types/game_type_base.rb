@@ -200,13 +200,13 @@ module GameTypes
       self.tournament.flights.each do |f|
         ranked_flight = { flight_id: f.id, flight_number: f.flight_number, players: [] }
       
-        f.users.each do |player|
+        f.users.each do |player|          
           net_score = self.player_score(player, true)
           gross_score = self.player_score(player, false)
-          
+
           scorecard = self.tournament.primary_scorecard_for_user(player)
           scorecard_url = play_scorecard_path(scorecard)
-        
+
           points = 0
           f.payouts.each do |payout|
             points = payout.points if payout.user == player
@@ -218,7 +218,7 @@ module GameTypes
       
         ranked_flights << ranked_flight
       end
-    
+
       return ranked_flights
     end
     

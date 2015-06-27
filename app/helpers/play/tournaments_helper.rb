@@ -1,5 +1,11 @@
 module Play::TournamentsHelper
   
+  def cache_key_for_tournament(tournament)
+    max_updated_at = tournament.updated_at.try(:utc).try(:to_s, :number)
+    
+    return "tournaments/#{tournament.id}-#{max_updated_at}"
+  end
+  
   def format_winners(winners)
     return "" if winners.blank?
     

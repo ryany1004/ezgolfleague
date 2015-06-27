@@ -105,7 +105,6 @@
     </div>
   </div>
   <% end -%>
-  
 </div>
 
 <div class="row">
@@ -133,26 +132,28 @@
       		</tr>
       	</thead>
         <tbody>
-          <% @tournament.flights_with_rankings.each_with_index do |flight, x| %>
-            <% flight[:players].each_with_index do |player, i| -%>
-            <tr>
-              <td><strong><%= flight[:flight_number] %></strong></td>
-              <td><strong><%= i + 1 %></strong></td>
-              <td><%= player[:name] %></td>
-              <td><%= player[:net_score] %></td>
-              <td><%= player[:gross_score] %> | <%= link_to "Scorecard", player[:scorecard_url] %></td>
-              <td><%= player[:points].to_i %></td>
-            </tr>
-            <% end -%>
-            <% if x < @tournament.flights_with_rankings.count - 1 -%>
-            <tr>
-              <td>&nbsp;</td>
-              <td>&nbsp;</td>
-              <td>&nbsp;</td>
-              <td>&nbsp;</td>
-              <td>&nbsp;</td>
-              <td>&nbsp;</td>
-            </tr>
+          <% cache(cache_key_for_tournament(@tournament)) do %>
+            <% @tournament.flights_with_rankings.each_with_index do |flight, x| %>
+              <% flight[:players].each_with_index do |player, i| -%>
+              <tr>
+                <td><strong><%= flight[:flight_number] %></strong></td>
+                <td><strong><%= i + 1 %></strong></td>
+                <td><%= player[:name] %></td>
+                <td><%= player[:net_score] %></td>
+                <td><%= player[:gross_score] %> | <%= link_to "Scorecard", player[:scorecard_url] %></td>
+                <td><%= player[:points].to_i %></td>
+              </tr>
+              <% end -%>
+              <% if x < @tournament.flights_with_rankings.count - 1 -%>
+              <tr>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+              </tr>
+              <% end -%>
             <% end -%>
           <% end -%>
         </tbody>
