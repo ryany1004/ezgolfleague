@@ -6,6 +6,10 @@ module GameTypes
     
     METADATA_KEY = "best_ball_scorecard_for_best_ball_hole"
     
+    def initialize
+      self.course_hole_number_suppression_list = []
+    end
+    
     def display_name
       return "Best Ball"
     end
