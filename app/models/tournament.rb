@@ -9,8 +9,9 @@ class Tournament < ActiveRecord::Base
   has_many :flights, -> { order(:flight_number) }, inverse_of: :tournament, :dependent => :destroy
   has_many :contests, inverse_of: :tournament, :dependent => :destroy
   has_many :golfer_teams, inverse_of: :tournament, :dependent => :destroy
+  has_many :tournament_payments, inverse_of: :tournament, :dependent => :destroy
   has_and_belongs_to_many :course_holes, -> { order(:hole_number) }
-    
+  
   attr_accessor :another_member_id
   attr_accessor :skip_date_validation
   
@@ -81,6 +82,16 @@ class Tournament < ActiveRecord::Base
   
   def is_past?
     if self.tournament_at > DateTime.yesterday
+      return false
+    else
+      return true
+    end
+  end
+  
+  def user_has_paid?(user)
+    payment = self.tournament_payments.where(user: user)
+    
+    if payment.blank?
       return false
     else
       return true

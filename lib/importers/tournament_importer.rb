@@ -69,6 +69,8 @@ module Importers
         
           self.assign_scores(player, course_hole_scores, tournament)
           
+          TournamentPayment.create(user: player, tournament: tournament, payment_amount: tournament.dues_amount) if !tournament.user_has_paid?(player)
+          
           tournament.is_finalized = true
           tournament.save
         end

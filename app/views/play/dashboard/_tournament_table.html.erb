@@ -18,7 +18,7 @@
   <tbody>
     <% tournaments.each do |t| %>
     <tr>
-      <td><%= link_to "#{t.name} (Unpaid)", play_tournament_path(t) %></td>
+      <td><%= link_to "#{t.name} #{tournament_paid(t, current_user)}", play_tournament_path(t) %></td>
       <td><%= t.tournament_at.to_s(:date_and_time) %> @ <%= t.course.name %></td>
       <% if is_current == true -%>
         <% if t.includes_player?(current_user) -%>

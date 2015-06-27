@@ -30,6 +30,14 @@ module ApplicationHelper
     
     return false
   end
+  
+  def tournament_paid(tournament, user)
+    if tournament.user_has_paid?(user)
+      return ""
+    else
+      return "(Unpaid)"
+    end
+  end
 
   def bootstrap_class_for(flash_type)
     case flash_type
