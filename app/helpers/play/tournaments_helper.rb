@@ -45,5 +45,19 @@ module Play::TournamentsHelper
     
     return html.html_safe
   end
+  
+  def format_results(winners)
+    return "" if winners.blank?
+    
+    html = ""
+    
+    winners.each do |winner|
+      html << winner[:result_value]
+      
+      html << "<br/>" unless winner == winners.last
+    end
+    
+    return html.html_safe
+  end
     
 end

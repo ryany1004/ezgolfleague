@@ -46,6 +46,14 @@ module ApplicationHelper
     end
   end
   
+  def scorecard_score_helper(score)
+    if score.strokes > 0
+      return score.strokes
+    else
+      return "-"
+    end
+  end
+  
   def team_member_names_without_user(team, user)
     members = []
     
