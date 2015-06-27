@@ -49,14 +49,16 @@ class Contest < ActiveRecord::Base
       if self.overall_winner.blank?
         return nil
       else
-        return [{user: self.overall_winner.winner, amount: self.overall_winner.payout_amount, points: self.overall_winner.points}]
+        return [{user: self.overall_winner.winner, result_value: self.overall_winner.result_value, amount: self.overall_winner.payout_amount, points: self.overall_winner.points}]
       end
     else
       winners = []
 
       self.contest_results.each do |result|
-        winners << {user: result.winner, amount: result.payout_amount, points: result.points}
+        winners << {user: result.winner, result_value: result.result_value, amount: result.payout_amount, points: result.points}
       end
+
+      winners.sort! { |x,y| x[:amount] <=> y[:amount] }
 
       return winners
     end

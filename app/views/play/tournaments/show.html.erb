@@ -74,7 +74,7 @@
     </div>
   </div>
   
-  <% if @tournament.contests.count > 0 -%>
+  <% if @tournament.contests.order("name").count > 0 -%>
   <div class="col-md-6">
     <div class="panel panel-default panel-success">
       <div class="panel-heading">
@@ -87,6 +87,7 @@
             <th>Winner(s)</th>
             <th>Amount</th>
             <th>Points</th>
+            <th>Details</th>
           </tr>
         </thead>
         <tbody>
@@ -96,6 +97,7 @@
             <td><%= format_winners(contest.winners) %></td>
             <td><%= format_payout(contest.winners) %></td>
             <td><%= format_points(contest.winners) %></td>
+            <td><%= format_results(contest.winners) %></td>
           </tr>
           <% end %>
         </tbody>
@@ -125,7 +127,8 @@
             <th>Flight</th>
       			<th>Rank</th>
             <th>Player</th>
-            <th>Net/Gross</th>
+            <th>Net</th>
+            <th>Gross</th>
             <th>Points</th>
       		</tr>
       	</thead>
@@ -136,12 +139,14 @@
               <td><strong><%= flight[:flight_number] %></strong></td>
               <td><strong><%= i + 1 %></strong></td>
               <td><%= player[:name] %></td>
-              <td><%= player[:net_score] %>/<%= player[:gross_score] %> | <%= link_to "Scorecard", player[:scorecard_url] %></td>
+              <td><%= player[:net_score] %></td>
+              <td><%= player[:gross_score] %> | <%= link_to "Scorecard", player[:scorecard_url] %></td>
               <td><%= player[:points].to_i %></td>
             </tr>
             <% end -%>
             <% if x < @tournament.flights_with_rankings.count - 1 -%>
             <tr>
+              <td>&nbsp;</td>
               <td>&nbsp;</td>
               <td>&nbsp;</td>
               <td>&nbsp;</td>
