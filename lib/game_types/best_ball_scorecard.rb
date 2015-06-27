@@ -82,18 +82,10 @@ module GameTypes
     
     def score_for_scores(comparable_scores)      
       return 0 if comparable_scores.blank?
-      
-      lowest_score = comparable_scores.first
-      
-      comparable_scores.each do |strokes|
-        if strokes == 0 #not yet played
-          return lowest_score
-        else
-          lowest_score = strokes if strokes < lowest_score
-        end
-      end
 
-      return lowest_score
+      sorted_scores = comparable_scores.sort
+      
+      return sorted_scores[0]
     end
     
   end

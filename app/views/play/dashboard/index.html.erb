@@ -1,13 +1,13 @@
 <%= render partial: 'league_info', locals: {has_paid_dues: current_user.has_paid} %>
 
-<% unless @todays_tournament.blank? -%>
+<% unless @todays_tournaments.blank? -%>
 <div class="row">
   <div class="col-md-12">
     <div class="panel panel-default panel-primary">
       <div class="panel-heading">
         <h3 class="panel-title">Today's League Tournament</h3>
       </div>
-      <%= render partial: 'tournament_table', locals: {tournaments: [@todays_tournament], is_previous: false, is_current: true} %>
+      <%= render partial: 'tournament_table', locals: {tournaments: @todays_tournaments, is_previous: false, is_current: true} %>
       
       <% if @has_unpaid_upcoming_tournaments == true -%>
       <div class="panel-footer">
@@ -16,7 +16,6 @@
         </div>
       </div>
       <% end -%>
-      
     </div>
   </div>
 </div>

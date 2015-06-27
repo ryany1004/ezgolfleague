@@ -157,9 +157,9 @@ module GameTypes
       course_handicap = golf_outing.course_handicap
     
       if golf_outing.course_tee_box.tee_box_gender == "Men"
-        sorted_course_holes_by_handicap = self.tournament.course.course_holes.order("mens_handicap")
+        sorted_course_holes_by_handicap = self.tournament.course_holes.reorder("mens_handicap")
       else
-        sorted_course_holes_by_handicap = self.tournament.course.course_holes.order("womens_handicap")
+        sorted_course_holes_by_handicap = self.tournament.course_holes.reorder("womens_handicap")
       end
         
       if !course_handicap.blank?    
