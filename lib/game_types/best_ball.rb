@@ -2,6 +2,8 @@ require 'active_record'
 
 module GameTypes
   class BestBall < GameTypes::IndividualStrokePlay
+    attr_accessor :course_hole_number_suppression_list
+    
     METADATA_KEY = "best_ball_scorecard_for_best_ball_hole"
     
     def display_name
@@ -34,6 +36,7 @@ module GameTypes
     
     def best_ball_scorecard_for_user_in_team(user, golfer_team, use_handicaps)
       scorecard = BestBallScorecard.new
+      scorecard.course_hole_number_suppression_list = self.course_hole_number_suppression_list
       scorecard.user = user
       scorecard.golfer_team = golfer_team
       scorecard.should_use_handicap = use_handicaps

@@ -70,6 +70,8 @@ class Tournament < ActiveRecord::Base
       new_game_type = GameTypes::TwoManBestBall.new
     elsif self.game_type_id == 11
       new_game_type = GameTypes::TwoBestBallsOfFour.new
+    elsif self.game_type_id == 12
+      new_game_type = GameTypes::TwoManComboScrambleBestBall.new
     end
     
     new_game_type.tournament = self
