@@ -4,7 +4,7 @@
 </ol>
 
 <div class="row">
-  <div class="col-md-6">
+  <div class="col-md-12">
     <div class="panel panel-default panel-success">
       <div class="panel-heading">
         <h3 class="panel-title">Tournament Info</h3>
@@ -32,7 +32,9 @@
       <% end -%>
     </div>
   </div>
-  
+</div>
+
+<div class="row">
   <div class="col-md-6">
     <div class="panel panel-default panel-success">
       <div class="panel-heading">
@@ -74,12 +76,12 @@
     </div>
   </div>
   
-  <% if @tournament.contests.order("name").count > 0 -%>
   <div class="col-md-6">
     <div class="panel panel-default panel-success">
       <div class="panel-heading">
         <h3 class="panel-title">Tournament Contests</h3>
       </div>
+      <% if @tournament.contests.order("name").count > 0 -%>
       <table class="table table-striped">
         <thead>
           <tr>
@@ -102,9 +104,13 @@
           <% end %>
         </tbody>
       </table>
+      <% else -%>
+      <div class="panel-body">
+      This tournament does not have any contests setup.
+      </div>
+      <% end -%>
     </div>
   </div>
-  <% end -%>
 </div>
 
 <div class="row">

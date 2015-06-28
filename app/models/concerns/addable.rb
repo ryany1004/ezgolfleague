@@ -78,6 +78,8 @@ module Addable
       end
     end
     
+    self.touch #bust the cache, yo.
+    
     if confirm_all_flighted == true          
       self.players.each do |p|
         if self.flight_for_player(p) == nil          
