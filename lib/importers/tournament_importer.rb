@@ -4,11 +4,13 @@ module Importers
   class TournamentImporter
     attr_accessor :flight_code_flight_mapping
     attr_accessor :tee_group_code_tee_group_mapping
+    attr_accessor :team_mapping
     
     def import(filename)
       Tournament.uncached do
         self.flight_code_flight_mapping = {}
         self.tee_group_code_tee_group_mapping = {}
+        self.team_mapping = {}
       
         tournament_lines = SmarterCSV.process(filename)
       
@@ -42,6 +44,9 @@ module Importers
         
           #tee_group
           self.create_or_add_player_to_tee_group(player, line[:tee_group], line[:tee_time], tournament)
+        
+          #teams
+          self.create_or_add_player_to_team(player, line[:team_number], tournament) unless line[:team_number].blank?
         
           #payouts  
           self.create_or_add_payouts_for_player(player, line[:payout_dollars], line[:payout_points], tournament) unless line[:payout_dollars].blank?
@@ -140,6 +145,17 @@ module Importers
       end
       
       self.tee_group_code_tee_group_mapping[tee_group_code] = tournament_group
+    end
+    
+    def create_or_add_player_to_team(player, team_code, tournament)    
+      golfer_team = self.team_mapping[team_code]
+      if golfer_team.blank?
+        golfer_team = GolferTeam.create(tournament: tournament)
+      end
+      
+      golfer_team.users << player
+      
+      self.team_mapping[team_code] = golfer_team
     end
     
     def create_or_add_payouts_for_player(player, payout_dollars, payout_points, tournament)
