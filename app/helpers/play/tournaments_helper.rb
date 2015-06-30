@@ -11,10 +11,10 @@ module Play::TournamentsHelper
     
     html = ""
     
-    winners.each do |winner|
+    winners.each_with_index do |winner, i|
       html << winner[:user].complete_name
       
-      html << "<br/>" unless winner == winners.last
+      html << "<br/>" unless i == winners.count - 1
     end
     
     return html.html_safe
@@ -25,10 +25,10 @@ module Play::TournamentsHelper
     
     html = ""
     
-    winners.each do |winner|
+    winners.each_with_index do |winner, i|
       html << number_to_currency(winner[:amount])
       
-      html << "<br/>" unless winner == winners.last
+      html << "<br/>" unless i == winners.count - 1
     end
     
     return html.html_safe
@@ -39,14 +39,14 @@ module Play::TournamentsHelper
     
     html = ""
     
-    winners.each do |winner|
+    winners.each_with_index do |winner, i|
       if winner[:points].blank?
         html << "0" 
       else
         html << winner[:points].to_s
       end
       
-      html << "<br/>" unless winner == winners.last 
+      html << "<br/>" unless i == winners.count - 1
     end
     
     return html.html_safe
@@ -57,10 +57,10 @@ module Play::TournamentsHelper
     
     html = ""
     
-    winners.each do |winner|
+    winners.each_with_index do |winner, i|
       html << winner[:result_value]
       
-      html << "<br/>" unless winner == winners.last
+      html << "<br/>" unless i == winners.count - 1
     end
     
     return html.html_safe
