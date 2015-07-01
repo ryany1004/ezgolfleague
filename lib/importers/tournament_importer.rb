@@ -20,6 +20,7 @@ module Importers
         tournament_lines.each do |line|
           tournament = Tournament.where(id: line[:tournament_id]).first
           tournament.tournament_groups.destroy_all
+          tournament.golfer_teams.destroy_all
           tournament.flights.destroy_all
           
           tournament.is_finalized = false
