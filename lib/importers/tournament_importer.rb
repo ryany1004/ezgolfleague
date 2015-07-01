@@ -180,6 +180,24 @@ module Importers
         score.save
       end
     end
-
   end
+  
+  def cleanup_bad_data
+    User.all.each do |u|
+      number_of_tournaments = 0
+  
+      Tournament.all.each do |t|
+        number_of_tournaments = number_of_tournaments + 1 if t.players.include? u
+      end
+  
+      if number_of_tournaments == 0
+        puts "#{u.complete_name} has no tournaments"
+    
+        if u.last_name != 'Hillegas'
+          u.destroy
+        end
+      end
+    end
+  end
+  
 end
