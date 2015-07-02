@@ -1,8 +1,8 @@
 module Play::TournamentsHelper
   
-  def cache_key_for_tournament(tournament)
+  def cache_key_for_tournament_with_prefix(tournament, prefix)
     max_updated_at = tournament.updated_at.try(:utc).try(:to_s, :number)
-    cache_key = "tournaments/#{tournament.id}-#{max_updated_at}"
+    cache_key = "tournaments/#{prefix}-#{tournament.id}-#{max_updated_at}"
     
     Rails.logger.debug { "Tournament Cache Key: #{cache_key}" }
     
