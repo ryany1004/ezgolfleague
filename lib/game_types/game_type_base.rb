@@ -37,7 +37,7 @@ module GameTypes
       return nil
     end
     
-    def save_setup_details
+    def save_setup_details(game_type_options)
       #do nothing
     end
     

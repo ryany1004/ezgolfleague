@@ -97,7 +97,9 @@ Rails.application.routes.draw do
       
       patch 'update_course_handicaps'
       
-      resource :game_types
+      resource :game_types do
+        get 'options', on: :collection
+      end
       
       resources :golfer_teams
       

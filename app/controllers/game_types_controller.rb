@@ -8,10 +8,33 @@ class GameTypesController < BaseController
 
   def update
     if @tournament.update(tournament_params)
+      @tournament.game_type.save_setup_details(params[:game_type_options]) unless params[:game_type_options].blank? 
+      
       redirect_to league_tournament_tournament_groups_path(current_user.selected_league, @tournament), :flash => { :success => "The tournament was successfully updated." }
     else
       render :edit
     end
+  end
+  
+  def options    
+    game_type = self.game_type_for_id(params[:game_type_id].to_i)
+    @game_type_partial_name = game_type.setup_partial
+    
+    unless @game_type_partial_name.blank?
+      respond_to do |format|
+        format.js {}
+      end
+    else
+      render :text => "There are no configurable options for this game type.", :layout => false
+    end
+  end
+  
+  def game_type_for_id(game_type_id)
+    @game_types.each do |type|
+      return type if type.game_type_id == game_type_id
+    end
+    
+    return nil
   end
   
   private
