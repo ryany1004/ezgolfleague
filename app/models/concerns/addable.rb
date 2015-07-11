@@ -25,7 +25,27 @@ module Addable
       self.course_holes.each_with_index do |hole, i|
         score = Score.create!(scorecard: scorecard, course_hole: hole, sort_order: i)
       end
+      
+      self.automatically_build_teams
     end 
+  end
+  
+  def automatically_build_teams
+    if self.game_type.show_teams? && self.admin_has_customized_teams == false && self.has_scores? == false
+      logger.info { "Updating Custom Teams for Tournament Group Save" }
+      
+      self.golfer_teams.destroy_all
+      
+      self.tournament_groups.each do |group|
+        golfer_team = GolferTeam.create(tournament: self, max_players: group.max_number_of_players)
+        
+        group.players_signed_up.each do |player|
+          golfer_team.users << player
+        end
+      end
+    else
+      logger.info { "Tournament is Not Eligible for Automatic Teams" }
+    end
   end
   
   def remove_player_from_group(tournament_group, user, remove_from_teams = false)
@@ -56,6 +76,9 @@ module Addable
           end
         end
       end
+      
+      #remove from golfer team
+      self.automatically_build_teams
     end
   end
 

@@ -1,7 +1,7 @@
 class TournamentGroup < ActiveRecord::Base
   belongs_to :tournament, inverse_of: :tournament_groups, :touch => true
   has_many :teams, inverse_of: :tournament_group, :dependent => :destroy
-  
+    
   paginates_per 50
   
   def players_signed_up
@@ -29,5 +29,5 @@ class TournamentGroup < ActiveRecord::Base
       write_attribute(:tee_time_at, date)
     end
   end
-  
+
 end

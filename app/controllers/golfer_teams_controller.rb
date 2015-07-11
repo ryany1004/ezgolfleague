@@ -37,6 +37,9 @@ class GolferTeamsController < BaseController
       if !@golfer_team.requested_tournament_group_id.blank? #handle tee times        
         @golfer_team.rebalance_tournament_groups_for_request
       end
+      
+      @tournament.admin_has_customized_teams = true
+      @tournament.save
           
       if params[:commit] == "Save & Continue"
         redirect_to league_tournament_tournament_groups_path(@tournament.league, @tournament), :flash => { :success => "The team was successfully updated." }

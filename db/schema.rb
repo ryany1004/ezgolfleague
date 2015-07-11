@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150627203344) do
+ActiveRecord::Schema.define(version: 20150711212600) do
 
   create_table "contest_holes", force: :cascade do |t|
     t.integer  "contest_id"
@@ -251,11 +251,12 @@ ActiveRecord::Schema.define(version: 20150627203344) do
     t.datetime "signup_opens_at"
     t.datetime "signup_closes_at"
     t.integer  "max_players"
-    t.datetime "created_at",                       null: false
-    t.datetime "updated_at",                       null: false
-    t.float    "dues_amount",      default: 0.0
-    t.boolean  "is_finalized",     default: false
-    t.integer  "game_type_id",     default: 1
+    t.datetime "created_at",                                 null: false
+    t.datetime "updated_at",                                 null: false
+    t.float    "dues_amount",                default: 0.0
+    t.boolean  "is_finalized",               default: false
+    t.integer  "game_type_id",               default: 1
+    t.boolean  "admin_has_customized_teams", default: false
   end
 
   add_index "tournaments", ["course_id"], name: "index_tournaments_on_course_id"
