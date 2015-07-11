@@ -41,6 +41,14 @@ module GameTypes
       return 0
     end
     
+    def front_nine_score
+      return 0
+    end
+    
+    def back_nine_score
+      return 0
+    end
+    
     def should_subtotal?
       return false
     end

@@ -23,7 +23,13 @@
         <% split.each do |score| -%>
         <th width="<%= 70 / primary_scorecard.scores.count %>%"><%= score.course_hole.hole_number %></th>
         <% end -%>
-        <th width="5%">&nbsp;</th>
+        <th width="5%">
+          <% if j == 0 -%>
+            Out
+          <% else -%>
+            Out / In
+          <% end -%>
+        </th>
       <% end -%>
       
       <% if primary_scorecard.includes_extra_scoring_column? -%>
@@ -61,7 +67,13 @@
           <% end -%>
           <td>
             <% if scorecard.should_subtotal? -%>
-              <strong><%= split.map {|score| score.strokes }.sum %></strong>
+              <strong>
+                <% if j == 0 -%>
+                  <%= scorecard.front_nine_score %>
+                <% else -%>
+                  <%= scorecard.front_nine_score %> / <%= scorecard.back_nine_score %>
+                <% end -%>
+              </strong>
             <% else -%>
               &nbsp;
             <% end -%>

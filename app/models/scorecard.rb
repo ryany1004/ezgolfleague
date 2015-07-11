@@ -22,22 +22,16 @@ class Scorecard < ActiveRecord::Base
     end
   end
   
-  def net_score    
-    net_score = 0
-    
-    handicap_allowance = self.golf_outing.team.tournament_group.tournament.handicap_allowance(self.golf_outing.user)
-    
-    self.scores.each do |score|
-      adjustment = 0
-      
-      handicap_allowance.each do |h|      
-        adjustment = h[:strokes] if score.course_hole == h[:course_hole]
-      end
-      
-      net_score += score.strokes - adjustment
-    end
-
-    return net_score
+  def net_score
+    return self.tournament.game_type.player_score(self.golf_outing.user, true)
+  end
+  
+  def front_nine_score(use_handicap = false)
+    return self.tournament.game_type.player_score(self.golf_outing.user, use_handicap, [1, 2, 3, 4, 5, 6, 7, 8, 9])
+  end
+  
+  def back_nine_score(use_handicap = false)
+    return self.tournament.game_type.player_score(self.golf_outing.user, use_handicap, [10, 11, 12, 13, 14, 15, 16, 17, 18])
   end
   
   #Team Support
