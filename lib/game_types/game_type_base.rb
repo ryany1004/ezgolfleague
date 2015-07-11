@@ -83,7 +83,7 @@ module GameTypes
       return []
     end
 
-    def player_score(user, use_handicap = true)
+    def player_score(user, use_handicap = true, holes = [])
       return nil if !self.tournament.includes_player?(user)
 
       total_score = 0
@@ -92,19 +92,26 @@ module GameTypes
 
       scorecard = self.tournament.primary_scorecard_for_user(user)
       scorecard.scores.each do |score|
-        hole_score = score.strokes
+        should_include_score = true #allows us to calculate partial scores, i.e. back 9
+        if holes.blank? == false
+          should_include_score = false if !holes.include? score.course_hole.hole_number
+        end
+        
+        if should_include_score == true
+          hole_score = score.strokes
       
-        if use_handicap == true
-          handicap_allowance.each do |h|
-            if h[:course_hole] == score.course_hole
-              if h[:strokes] != 0
-                hole_score = hole_score - h[:strokes]
+          if use_handicap == true
+            handicap_allowance.each do |h|
+              if h[:course_hole] == score.course_hole
+                if h[:strokes] != 0
+                  hole_score = hole_score - h[:strokes]
+                end
               end
             end
           end
-        end
 
-        total_score = total_score + hole_score
+          total_score = total_score + hole_score
+        end
       end
     
       total_score = 0 if total_score < 0
@@ -210,6 +217,7 @@ module GameTypes
       
         f.users.each do |player|          
           net_score = self.player_score(player, true)
+          back_nine_net_score = self.player_score(player, true, [9, 10, 11, 12, 13, 14, 15, 16, 17, 18])
           gross_score = self.player_score(player, false)
 
           scorecard = self.tournament.primary_scorecard_for_user(player)
@@ -220,14 +228,19 @@ module GameTypes
             points = payout.points if payout.user == player
           end
       
-          ranked_flight[:players] << { id: player.id, name: player.complete_name, net_score: net_score, gross_score: gross_score, scorecard_url: scorecard_url, points: points } if !net_score.blank? && net_score > 0
+          ranked_flight[:players] << { id: player.id, name: player.complete_name, net_score: net_score, back_nine_net_score: back_nine_net_score, gross_score: gross_score, scorecard_url: scorecard_url, points: points } if !net_score.blank? && net_score > 0
         end
-        ranked_flight[:players].sort! { |x,y| x[:net_score] <=> y[:net_score] }
+        
+        self.sort_rank_players_in_flight!(ranked_flight[:players])
       
         ranked_flights << ranked_flight
       end
 
       return ranked_flights
+    end
+    
+    def sort_rank_players_in_flight!(flight_players)
+      flight_players.sort! { |x,y| x[:net_score] <=> y[:net_score] }
     end
     
     ##Payouts
