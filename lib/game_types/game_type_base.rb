@@ -217,7 +217,7 @@ module GameTypes
       
         f.users.each do |player|          
           net_score = self.player_score(player, true)
-          back_nine_net_score = self.player_score(player, true, [9, 10, 11, 12, 13, 14, 15, 16, 17, 18])
+          back_nine_net_score = self.player_score(player, true, [10, 11, 12, 13, 14, 15, 16, 17, 18])
           gross_score = self.player_score(player, false)
 
           scorecard = self.tournament.primary_scorecard_for_user(player)
