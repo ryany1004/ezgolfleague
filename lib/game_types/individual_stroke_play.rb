@@ -35,6 +35,14 @@ module GameTypes
     
     ##Setup
     
+    def setup_partial
+      return "shared/game_type_setup/individual_stroke_play"
+    end
+    
+    def save_setup_details
+      #do nothing
+    end
+    
     def can_be_played?
       return false if self.tournament.tournament_groups.count == 0
       return false if self.tournament.flights.count == 0

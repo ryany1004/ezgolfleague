@@ -15,6 +15,13 @@
     <%= f.input :game_type_id, collection: @game_types, :label => 'Game Type', :label_method => :display_name, :value_method => :game_type_id %>
   </div>
 
+  <% if @tournament.game_type.blank? == false && @tournament.game_type.setup_partial.blank? == false -%>
+    <h3>Options</h3>
+    <div class="well">  
+      <%= render partial: @tournament.game_type.setup_partial, locals: {tournament: @tournament} %>
+    </div>
+  <% end -%>
+
   <div class="form-actions">
     <%= f.button :submit, "Save", :class => 'btn btn-default' %>
   </div>

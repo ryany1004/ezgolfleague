@@ -83,7 +83,7 @@ class TournamentsController < BaseController
     
     @tournament.remove_player_from_group(tournament_group, user)
     
-    redirect_to league_tournament_signups_path(tournament.league, @tournament), :flash => { :success => "The registration was successfully deleted." }
+    redirect_to league_tournament_signups_path(@tournament.league, @tournament), :flash => { :success => "The registration was successfully deleted." }
   end
   
   # Finalize

@@ -33,6 +33,14 @@ module GameTypes
       return false
     end
     
+    def setup_partial
+      return nil
+    end
+    
+    def save_setup_details
+      #do nothing
+    end
+    
     ##Group
     
     def other_group_members(user)
