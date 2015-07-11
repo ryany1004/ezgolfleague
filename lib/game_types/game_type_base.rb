@@ -41,6 +41,10 @@ module GameTypes
       #do nothing
     end
     
+    def remove_game_type_options
+      #do nothing
+    end
+    
     ##Group
     
     def other_group_members(user)

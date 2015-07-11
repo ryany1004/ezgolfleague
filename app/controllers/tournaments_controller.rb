@@ -38,6 +38,12 @@ class TournamentsController < BaseController
     end
   end
   
+  def touch_tournament
+    @tournament.touch
+    
+    redirect_to league_tournaments_path(current_user.selected_league), :flash => { :success => "Cached data for this tournament was discarded." }
+  end
+  
   def manage_holes
     @stage_name = "hole_information"
   end

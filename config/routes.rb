@@ -103,6 +103,8 @@ Rails.application.routes.draw do
       
       resources :golfer_teams
       
+      patch 'touch_tournament'
+      
       resources :flights do
         resources :payouts
       end

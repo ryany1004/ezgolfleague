@@ -52,6 +52,11 @@ module GameTypes
       metadata.save
     end
     
+    def remove_game_type_options
+      metadata = GameTypeMetadatum.where(search_key: use_back_nine_key).first
+      metadata.destroy unless metadata.blank?
+    end
+    
     def use_back_9_to_break_ties?            
       metadata = GameTypeMetadatum.where(search_key: use_back_nine_key).first
       

@@ -47,6 +47,8 @@
               <li><%= link_to 'Flights & Payouts', league_tournament_flights_path(tournament.league, tournament) %></li>
               <li><%= link_to 'Contests', league_tournament_contests_path(tournament.league, tournament) %></li>
               <li><%= link_to 'Finalize Tournament', league_tournament_finalize_path(tournament.league, tournament) %></li>
+              <li class="divider"></li>
+              <li><%= link_to "Remove Cached Data", league_tournament_touch_tournament_path(tournament.league, tournament), method: :patch %></li>
             </ul>
           </div>
           </td>

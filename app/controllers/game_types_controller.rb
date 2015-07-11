@@ -8,7 +8,11 @@ class GameTypesController < BaseController
 
   def update
     if @tournament.update(tournament_params)
-      @tournament.game_type.save_setup_details(params[:game_type_options]) unless params[:game_type_options].blank? 
+      unless params[:game_type_options].blank? 
+        @tournament.game_type.save_setup_details(params[:game_type_options])
+      else
+        @tournament.game_type.remove_game_type_options
+      end
       
       redirect_to league_tournament_tournament_groups_path(current_user.selected_league, @tournament), :flash => { :success => "The tournament was successfully updated." }
     else
