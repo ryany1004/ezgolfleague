@@ -36,13 +36,9 @@
           </tr>
         </thead>
         <tbody>
-          <% @rankings.each_with_index do |player, i| %>
+          <% @rankings.each do |player| %>
           <tr>
-            <% if player[:points].to_i == 0 -%>
-            <td><strong>N/A</strong></td>
-            <% else -%>
-            <td><strong><%= i + 1 %></strong></td>
-            <% end -%>
+            <td><strong><%= player[:ranking] %></strong></td>
             <% if current_user.id == player[:id] -%>
             <td><strong><%= player[:name] %></strong></td>
             <% else -%>
