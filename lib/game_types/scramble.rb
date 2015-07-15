@@ -91,22 +91,52 @@ module GameTypes
       end
     end
     
-    ##UI
-  
-    def scorecard_score_cell_partial
-      return "shared/game_types/scramble_popup"
+    ##Scoring
+    
+    def related_scorecards_for_user(user)
+      return []
     end
     
-    def scorecard_post_embed_partial
-      return "shared/game_types/scramble_post_embed"
+    def override_scorecard_name
+      return "Scramble"
     end
     
-    def associated_text_for_score(score)      
-      selected_card = self.selected_scorecard_for_score(score)
-      return "Tee Shot" if selected_card == score.scorecard unless selected_card.blank?
-
-      return nil
+    def after_updating_scores_for_scorecard(scorecard)   
+      Scorecard.transaction do
+        self.tournament.other_group_members(scorecard.golf_outing.user).each do |player|
+          other_scorecard = self.tournament.primary_scorecard_for_user(player)
+        
+          Rails.logger.info { "Copying Score Data From #{scorecard.golf_outing.user.id} to #{player.id}" }
+        
+          scorecard.scores.each do |score|
+            other_score = other_scorecard.scores.where(course_hole: score.course_hole).first
+            other_score.strokes = score.strokes
+            other_score.save
+          end
+        end
+      end
     end
+    
+    def handicap_allowance(user)
+      return nil #TODO: update w/ variable
+    end
+    
+    # ##UI
+    #
+    # def scorecard_score_cell_partial
+    #   return "shared/game_types/scramble_popup"
+    # end
+    #
+    # def scorecard_post_embed_partial
+    #   return "shared/game_types/scramble_post_embed"
+    # end
+    #
+    # def associated_text_for_score(score)
+    #   selected_card = self.selected_scorecard_for_score(score)
+    #   return "Tee Shot" if selected_card == score.scorecard unless selected_card.blank?
+    #
+    #   return nil
+    # end
     
   end
 end

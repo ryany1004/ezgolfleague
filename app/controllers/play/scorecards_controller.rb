@@ -9,6 +9,8 @@ class Play::ScorecardsController < BaseController
     
   def update
     if @scorecard.update(scorecard_params)
+      @scorecard.tournament.game_type.after_updating_scores_for_scorecard(@scorecard)
+      
       reload_scorecard = @scorecard
       reload_scorecard = Scorecard.find(params[:original_scorecard_id]) unless params[:original_scorecard_id].blank?
       

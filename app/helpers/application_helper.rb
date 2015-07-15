@@ -83,6 +83,8 @@ module ApplicationHelper
   end
   
   def handicap_allowance_strokes_for_hole(handicap_allowance, course_hole)  
+    return 0 if handicap_allowance.blank?
+    
     handicap_allowance.each do |h|      
       if h[:course_hole] == course_hole        
         return h[:strokes]

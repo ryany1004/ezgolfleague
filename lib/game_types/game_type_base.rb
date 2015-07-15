@@ -83,6 +83,10 @@ module GameTypes
     
     ##Scoring
     
+    def after_updating_scores_for_scorecard(scorecard)
+      #nada
+    end
+    
     def related_scorecards_for_user(user)
       return []
     end
@@ -104,7 +108,7 @@ module GameTypes
         if should_include_score == true
           hole_score = score.strokes
       
-          if use_handicap == true
+          if use_handicap == true && !handicap_allowance.blank?
             handicap_allowance.each do |h|
               if h[:course_hole] == score.course_hole
                 if h[:strokes] != 0
@@ -147,6 +151,10 @@ module GameTypes
     
     def includes_extra_scoring_column?
       return false
+    end
+    
+    def override_scorecard_name
+      return nil
     end
     
     ##Metadata
