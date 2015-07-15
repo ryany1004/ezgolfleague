@@ -121,22 +121,5 @@ module GameTypes
       return nil #TODO: update w/ variable
     end
     
-    # ##UI
-    #
-    # def scorecard_score_cell_partial
-    #   return "shared/game_types/scramble_popup"
-    # end
-    #
-    # def scorecard_post_embed_partial
-    #   return "shared/game_types/scramble_post_embed"
-    # end
-    #
-    # def associated_text_for_score(score)
-    #   selected_card = self.selected_scorecard_for_score(score)
-    #   return "Tee Shot" if selected_card == score.scorecard unless selected_card.blank?
-    #
-    #   return nil
-    # end
-    
   end
 end
