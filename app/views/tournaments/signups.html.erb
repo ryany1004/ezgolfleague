@@ -7,7 +7,7 @@
       <th>Group / Tee Time</th>
       <th>Flight</th>
       <% if is_editable?(@tournament) -%>
-      <th><%= link_to 'Signup for Tournament', play_tournament_signup_path(@tournament), :class => 'btn btn-primary' %></th>
+      <th><button type="button" class="btn btn-primary btn" data-toggle="modal" data-target="#GroupSignup">Signup for Tournament</button></th>
       <% else -%>
       <th>&nbsp;</th>
       <% end -%>
@@ -42,3 +42,30 @@
 </table>
 
 <%= paginate @tournament_groups %>
+
+<%= simple_form_for :tournament_group_signup, url: league_tournament_add_signup_path(@tournament.league, @tournament), method: :post do |f| %>
+<div class="modal fade" id="GroupSignup" role="dialog" aria-labelledby="gridSystemModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="gridSystemModalLabel">Register for Tournament</h4>
+        </div>
+        <div class="modal-body">
+          <div class="container-fluid">
+            <div class="row">
+              <div class="well">
+                <p>Add a user to this tournament:</p>
+                <%= f.input :tee_group, label: "Available Tee Groups", collection: @available_tournament_groups, label_method: :formatted_tee_time, value_method: :id %>
+                <%= f.input :another_member_id, label: "Unregistered League Members", collection: @unregistered_users, label_method: :complete_name, value_method: :id %>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <%= f.button :button, "Register", :class => "btn btn-default", :value => true %>
+        </div>
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<% end %>

@@ -1,5 +1,5 @@
 class TournamentsController < BaseController
-  before_filter :fetch_tournament, :only => [:edit, :update, :destroy, :signups, :manage_holes, :update_holes, :delete_signup, :finalize, :confirm_finalization, :update_course_handicaps]
+  before_filter :fetch_tournament, :only => [:edit, :update, :destroy, :signups, :manage_holes, :update_holes, :add_signup, :delete_signup, :finalize, :confirm_finalization, :update_course_handicaps, :touch_tournament]
   before_filter :initialize_form, :only => [:new, :edit]
   before_filter :set_stage
   
@@ -80,7 +80,23 @@ class TournamentsController < BaseController
   def signups    
     @tournament_groups = @tournament.tournament_groups.page params[:page]
     
+    @available_tournament_groups = []
+    @tournament.tournament_groups.each do |group|
+      @available_tournament_groups << group if group.players_signed_up.count < group.max_number_of_players
+    end
+    
+    @unregistered_users = @tournament.league.users_not_signed_up_for_tournament(@tournament, [])
+    
     @page_title = "Signups for #{@tournament.name}"
+  end
+  
+  def add_signup    
+    group = @tournament.tournament_groups.where(params[:tournament_group_signup][:tee_group]).first
+    user = User.find(params[:tournament_group_signup][:another_member_id])
+        
+    @tournament.add_player_to_group(group, user)
+    
+    redirect_to league_tournament_signups_path(@tournament.league, @tournament), :flash => { :success => "The registration was successfully added." }
   end
   
   def delete_signup

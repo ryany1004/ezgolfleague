@@ -30,6 +30,40 @@ module GameTypes
       return false
     end
     
+    ##Setup
+    
+    def setup_partial
+      return "shared/game_type_setup/scramble"
+    end
+    
+    def handicap_percentage_key
+      return "HandicapPercentageKey-T-#{self.tournament.id}-GT-#{self.game_type_id}"
+    end
+    
+    def save_setup_details(game_type_options)
+      handicap_percentage = 0
+      handicap_percentage = game_type_options["handicap_percentage"]
+      
+      metadata = GameTypeMetadatum.find_or_create_by(search_key: handicap_percentage_key)
+      metadata.float_value = handicap_percentage
+      metadata.save
+    end
+    
+    def remove_game_type_options
+      metadata = GameTypeMetadatum.where(search_key: handicap_percentage_key).first
+      metadata.destroy unless metadata.blank?
+    end
+    
+    def current_handicap_percentage
+      metadata = GameTypeMetadatum.where(search_key: handicap_percentage_key).first
+      
+      if metadata.blank?
+        return "0.0"
+      else
+        return metadata.float_value
+      end
+    end
+    
     ##Metadata
     
     def update_metadata(metadata)

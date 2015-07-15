@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150711212600) do
+ActiveRecord::Schema.define(version: 20150711225437) do
 
   create_table "contest_holes", force: :cascade do |t|
     t.integer  "contest_id"
@@ -126,6 +126,7 @@ ActiveRecord::Schema.define(version: 20150711212600) do
     t.integer  "integer_value"
     t.datetime "created_at",     null: false
     t.datetime "updated_at",     null: false
+    t.float    "float_value"
   end
 
   add_index "game_type_metadata", ["course_hole_id"], name: "index_game_type_metadata_on_course_hole_id"

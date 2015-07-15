@@ -87,6 +87,7 @@ Rails.application.routes.draw do
     resources :league_memberships
     resources :tournaments do #this is for setting them up
       get 'signups'
+      post 'add_signup'
       delete 'delete_signup'
       
       get 'manage_holes'
