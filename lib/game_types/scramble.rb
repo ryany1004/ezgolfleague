@@ -98,10 +98,9 @@ module GameTypes
     end
     
     def override_scorecard_name_for_scorecard(scorecard)
-      player_names = ""
+      player_names = scorecard.golf_outing.user.last_name + "/"
       
       other_members = self.tournament.other_group_members(scorecard.golf_outing.user)
-      
       other_members.each do |player|
         player_names << player.last_name
         
