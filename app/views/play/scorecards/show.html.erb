@@ -6,7 +6,9 @@
 
 <h3><%= @scorecard.golf_outing.user.complete_name %></h3>
 
-<%= render partial: '/shared/scorecards/standard', locals: {primary_scorecard: @scorecard, other_scorecards: @other_scorecards} %>
+<% cache(cache_key_for_tournament_with_prefix(@tournament, "scorecard-#{@scorecard.id}")) do %>
+  <%= render partial: '/shared/scorecards/standard', locals: {primary_scorecard: @scorecard, other_scorecards: @other_scorecards} %>
+<% end -%>
 
 <% if @scorecard.golf_outing.team.tournament_group.teams.count > 1 -%>
   <% if @tournament.user_can_become_designated_scorer(current_user, @scorecard) -%>
