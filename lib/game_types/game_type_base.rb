@@ -153,7 +153,7 @@ module GameTypes
       return false
     end
     
-    def override_scorecard_name
+    def override_scorecard_name_for_scorecard(scorecard)
       return nil
     end
     

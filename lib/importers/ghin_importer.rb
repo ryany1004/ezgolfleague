@@ -4,8 +4,6 @@ module Importers
   class GHINImporter
     
     def self.import_ghin_for_user(user)
-      #http://widgets.ghin.com/HandicapLookupResults.aspx?entry=1&ghinno=0013311&css=default&dynamic=&small=0&mode=&tab=0
-      
       return nil if user.blank? || user.ghin_number.blank?
       
       url = "http://widgets.ghin.com/HandicapLookupResults.aspx?entry=1&ghinno=#{user.ghin_number}&css=default&dynamic=&small=0&mode=&tab=0"

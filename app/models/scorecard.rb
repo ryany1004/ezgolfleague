@@ -45,8 +45,10 @@ class Scorecard < ActiveRecord::Base
   end
   
   def name
-    unless self.tournament.game_type.override_scorecard_name.blank?
-      return self.tournament.game_type.override_scorecard_name
+    override_name = self.tournament.game_type.override_scorecard_name_for_scorecard(self)
+    
+    unless override_name.blank?
+      return override_name
     else
       return self.golf_outing.user.complete_name
     end

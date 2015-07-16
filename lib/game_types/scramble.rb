@@ -97,8 +97,18 @@ module GameTypes
       return []
     end
     
-    def override_scorecard_name
-      return "Scramble"
+    def override_scorecard_name_for_scorecard(scorecard)
+      player_names = ""
+      
+      other_members = self.tournament.other_group_members(scorecard.golf_outing.user)
+      
+      other_members.each do |player|
+        player_names << player.last_name
+        
+        player_names << "/" if player != other_members.last
+      end
+  
+      return "#{player_names} Scramble"
     end
     
     def after_updating_scores_for_scorecard(scorecard)   
