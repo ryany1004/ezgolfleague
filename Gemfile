@@ -45,6 +45,7 @@ gem 'datetimepicker-rails', github: 'zpaulovics/datetimepicker-rails', branch: '
 gem 'chosen-rails'
 gem 'smarter_csv'
 gem "airbrake"
+gem 'nokogiri'
 
 group :development, :test do
   gem 'sqlite3', :require => "sqlite3"

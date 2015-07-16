@@ -6,6 +6,12 @@ class TournamentGroupsController < BaseController
   def index
     @tournament_groups = @tournament.tournament_groups.page params[:page]
     
+    if @tournament.tournament_groups.count > 0      
+      @starting_tee_time = @tournament.tournament_groups.last.tee_time_at + 8.minutes
+    else      
+      @starting_tee_time = @tournament.tournament_at
+    end
+        
     @page_title = "Tee Times for #{@tournament.name}"
   end
   
