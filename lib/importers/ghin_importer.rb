@@ -17,7 +17,7 @@ module Importers
         unless root_node.blank?
           handicap_index = root_node.children.last.children.to_s.to_f
       
-          puts "HI: #{handicap_index}"
+          puts "Handicap Index: #{handicap_index}"
       
           unless handicap_index.blank?
             user.handicap_index = handicap_index
@@ -27,7 +27,7 @@ module Importers
           puts "Root node was blank"
         end
       else
-        puts "Doc Was Blank"
+        puts "Doc was blank"
       end
     end
     

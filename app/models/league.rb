@@ -86,7 +86,11 @@ class League < ActiveRecord::Base
       ids_to_omit << eid
     end
     
-    return self.users.where("users.id NOT IN (?)", ids_to_omit).order("last_name, first_name")
+    if ids_to_omit.blank?
+      return self.users.order("last_name, first_name")
+    else
+      return self.users.where("users.id NOT IN (?)", ids_to_omit).order("last_name, first_name")
+    end
   end
   
 end

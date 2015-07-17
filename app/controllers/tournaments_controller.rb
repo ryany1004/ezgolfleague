@@ -90,8 +90,8 @@ class TournamentsController < BaseController
     @page_title = "Signups for #{@tournament.name}"
   end
   
-  def add_signup    
-    group = @tournament.tournament_groups.where(params[:tournament_group_signup][:tee_group]).first
+  def add_signup   
+    group = @tournament.tournament_groups.where("id = ?", params[:tournament_group_signup][:tee_group]).first
     user = User.find(params[:tournament_group_signup][:another_member_id])
         
     @tournament.add_player_to_group(group, user)
