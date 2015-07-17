@@ -3,6 +3,12 @@ require 'open-uri'
 module Importers
   class GHINImporter
     
+    def self.import_for_all_users
+      User.all.each do |user|
+        Importers::GHINImporter.import_ghin_for_user(user)
+      end
+    end
+    
     def self.import_ghin_for_user(user)
       return nil if user.blank? || user.ghin_number.blank?
       
@@ -16,10 +22,10 @@ module Importers
         
         unless root_node.blank?
           handicap_index = root_node.children.last.children.to_s.to_f
-      
-          puts "Handicap Index: #{handicap_index}"
-      
+
           unless handicap_index.blank?
+            puts "Handicap Index: #{handicap_index}"
+            
             user.handicap_index = handicap_index
             user.save
           end

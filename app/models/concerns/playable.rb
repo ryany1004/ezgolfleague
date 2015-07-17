@@ -1,6 +1,18 @@
 module Playable
   extend ActiveSupport::Concern
 
+  def update_course_handicaps
+    self.tournament_groups.each do |group|
+      group.teams.each do |team|
+        team.golf_outings.each do |outing|
+          outing.scorecards.each do |card|
+            card.set_course_handicap(true)
+          end
+        end
+      end
+    end
+  end
+
   def players
     players = []
     

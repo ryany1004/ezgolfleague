@@ -142,15 +142,7 @@ class TournamentsController < BaseController
   #Handicaps
   
   def update_course_handicaps
-    @tournament.tournament_groups.each do |group|
-      group.teams.each do |team|
-        team.golf_outings.each do |outing|
-          outing.scorecards.each do |card|
-            card.set_course_handicap(true)
-          end
-        end
-      end
-    end
+    @tournament.update_course_handicaps
     
     redirect_to league_tournaments_path(current_user.selected_league), :flash => { :success => "The tournament's course handicaps were re-calculated." }
   end
