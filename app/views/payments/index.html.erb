@@ -24,6 +24,8 @@
           <td><%= payment.payment_details %></td>
           <% if payment.modifiable? -%>
             <td><%= link_to "Edit", edit_payment_path(payment) %> | <%= link_to 'Delete', payment_path(payment), :data => { :confirm => 'Are you sure you want to delete this payment?' }, :method => :delete %></td>
+          <% else -%>
+            <td>&nbsp;</td>
           <% end -%>
     		</tr>
     	<% end %>

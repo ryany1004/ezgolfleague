@@ -179,11 +179,14 @@ ActiveRecord::Schema.define(version: 20150719200436) do
 
   create_table "leagues", force: :cascade do |t|
     t.string   "name"
-    t.datetime "created_at",                                           null: false
-    t.datetime "updated_at",                                           null: false
-    t.float    "dues_amount",                            default: 0.0
+    t.datetime "created_at",                                                 null: false
+    t.datetime "updated_at",                                                 null: false
+    t.float    "dues_amount",                                 default: 0.0
     t.string   "encrypted_stripe_test_secret_key"
     t.string   "encrypted_stripe_production_secret_key"
+    t.string   "encrypted_stripe_test_publishable_key"
+    t.string   "encrypted_stripe_production_publishable_key"
+    t.boolean  "stripe_test_mode",                            default: true
   end
 
   create_table "payments", force: :cascade do |t|

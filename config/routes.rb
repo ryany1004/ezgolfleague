@@ -61,7 +61,8 @@ Rails.application.routes.draw do
   #this is for playing tournaments
   namespace :play do
     resources :payments, only: [:new, :create] do
-      get 'thank_you'
+      get 'thank_you', on: :collection
+      get 'error', on: :collection
     end
     
     resources :tournaments, only: [:show] do

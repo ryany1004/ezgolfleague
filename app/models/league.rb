@@ -10,6 +10,24 @@ class League < ActiveRecord::Base
   
   attr_encrypted :stripe_test_secret_key, :key => ENCRYPYTED_ATTRIBUTES_KEY
   attr_encrypted :stripe_production_secret_key, :key => ENCRYPYTED_ATTRIBUTES_KEY
+  attr_encrypted :stripe_test_publishable_key, :key => ENCRYPYTED_ATTRIBUTES_KEY
+  attr_encrypted :stripe_production_publishable_key, :key => ENCRYPYTED_ATTRIBUTES_KEY
+  
+  def stripe_publishable_key
+    if self.stripe_test_mode == true
+      return self.stripe_test_publishable_key
+    else
+      return self.stripe_production_publishable_key
+    end
+  end
+  
+  def stripe_secret_key
+    if self.stripe_test_mode == true
+      return self.stripe_test_secret_key
+    else
+      return self.stripe_production_secret_key
+    end
+  end
   
   def membership_for_user(user)
     return self.league_memberships.where(user: user).first

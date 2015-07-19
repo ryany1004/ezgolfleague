@@ -1,3 +1,36 @@
+<script>
+jQuery(function($) {
+  $('#payment-form').submit(function(event) {
+    var $form = $(this);
+
+    // Disable the submit button to prevent repeated clicks
+    $form.find('submit_button').prop('disabled', true);
+
+    Stripe.card.createToken($form, stripeResponseHandler);
+
+    // Prevent the form from submitting with the default action
+    return false;
+  });
+});
+
+function stripeResponseHandler(status, response) {
+  var $form = $('#payment-form');
+
+  if (response.error) {
+    // Show the errors on the form
+    $form.find('.payment-errors').text(response.error.message);
+    $form.find('submit_button').prop('disabled', false);
+  } else {
+    // response contains id and card, which contains additional card details
+    var token = response.id;
+    // Insert the token into the form so it gets submitted to the server
+    $form.append($('<input type="hidden" name="stripeToken" />').val(token));
+    // and submit
+    $form.get(0).submit();
+  }
+};
+</script>
+
 <ol class="breadcrumb">
   <li><%= link_to "My Dashboard", play_dashboard_index_path %></li>
   <li>New Payment</li>
@@ -19,76 +52,40 @@
 
 <div class="row">
   <div class="col-md-12">
-    <div class="panel panel-default panel-success">
-      <%= simple_form_for :payment, url: play_payments_path, method: :post do |f| %>
+    <div class="panel panel-default">
+      <%= simple_form_for :payment, url: play_payments_path, method: :post, :html => {id: "payment-form"} do |f| %>
+      <div class="panel-body">
+        <span class="payment-errors"></span>
+      </div>
       <table class="table table-striped">
-      	<thead>
-      		<tr>
-            <th>&nbsp;</th>
-            <th>&nbsp;</th>
-      		</tr>
-      	</thead>
         <tbody>
           <tr>
-            <td>First Name</td>
-            <td><input type="text" name=""></td>
-          </tr>
-          <tr>
-            <td>Last Name</td>
-            <td><input type="text" name=""></td>
-          </tr>
-          <tr>
-            <td>Address Line One</td>
-            <td><input type="text" name=""></td>
-          </tr>
-          <tr>
-            <td>Address Line Two (Optional)</td>
-            <td><input type="text" name=""></td>
-          </tr>
-          <tr>
-            <td>City</td>
-            <td><input type="text" name=""></td>
-          </tr>
-          <tr>
-            <td>State</td>
-            <td>
-              <select>
-                <option>Select a State</option>
-                <option>CA</option>
-              </select>
-            </td>
-          </tr>
-          <tr>
-            <td>Zip Code</td>
-            <td><input type="text" name=""></td>
-          </tr>
-          <tr>
             <td>Card Number</td>
-            <td><input type="text" name=""></td>
+            <td><input type="text" size="20" data-stripe="number"/></td>
           </tr>
           <tr>
-            <td>Expiration Date</td>
-            <td>
-              <select>
-                <option>Month</option>
-              </select>
-              <select>
-                <option>Year</option>
-              </select>
-            </td>
+            <td>Expiration (MM/YYYY)</td>
+            <td><input type="text" size="2" data-stripe="exp-month"/> <input type="text" size="4" data-stripe="exp-year"/></td>
           </tr>
           <tr>
-            <td>CVV</td>
-            <td><input type="text" name=""></td>
+            <td>CVC</td>
+            <td><input type="text" size="4" data-stripe="cvc"/></td>
           </tr>
         </tbody>
       	<tfoot>
       		<tr>
             <th>&nbsp;</th>
-            <th><%= f.button :button, "Submit Payment", :class => "btn btn-primary" %></th>
+            <th><%= f.button :button, "Submit Payment", :class => "btn btn-primary", :id => "submit_button" %></th>
       		</tr>
       	</tfoot>
       </table>
+        <% unless @league.blank? -%>
+          <input type="hidden" name="league_id" value="<%= @league.id %>" />
+        <% end -%>
+      
+        <% unless @tournament.blank? -%>
+          <input type="hidden" name="tournament_id" value="<%= @tournament.id %>" />
+        <% end -%>
       <% end %>
     </div>
   </div>
