@@ -8,8 +8,8 @@ class AddDetailsToPayment < ActiveRecord::Migration
     
     Tournament.all.each do |t|
       t.players.each do |p|
-        Payment.create(tournament: t, payment_amount: t.dues_amount * -1.0, user: p, payment_method: "Tournament Dues")
-        Payment.create(tournament: t, payment_amount: t.dues_amount, user: p, payment_method: "System Credit")
+        Payment.create(tournament: t, payment_amount: t.dues_amount * -1.0, user: p, payment_source: "Tournament Dues")
+        Payment.create(tournament: t, payment_amount: t.dues_amount, user: p, payment_source: "System Credit")
       end
     end
     
