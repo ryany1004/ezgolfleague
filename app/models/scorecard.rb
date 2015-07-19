@@ -56,6 +56,10 @@ class Scorecard < ActiveRecord::Base
   
   ##Customization
   
+  def can_display_handicap?    
+    return true
+  end
+  
   def should_subtotal?
     return true
   end

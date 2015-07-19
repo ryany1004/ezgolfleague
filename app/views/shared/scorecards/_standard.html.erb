@@ -23,7 +23,7 @@
         <% split.each do |score| -%>
         <th width="<%= 70 / primary_scorecard.scores.count %>%"><%= score.course_hole.hole_number %></th>
         <% end -%>
-        <th width="5%">
+        <th width="7%">
           <% if j == 0 -%>
             Out
           <% else -%>
@@ -69,9 +69,9 @@
             <% if scorecard.should_subtotal? -%>
               <strong>
                 <% if j == 0 -%>
-                  <%= scorecard.front_nine_score %>
+                  <%= scorecard.front_nine_score %> <%= front_nine_handicap_for_scorecard(scorecard) %>
                 <% else -%>
-                  <%= scorecard.front_nine_score %> / <%= scorecard.back_nine_score %>
+                  <%= scorecard.front_nine_score %> <%= front_nine_handicap_for_scorecard(scorecard) %> / <%= scorecard.back_nine_score %> <%= back_nine_handicap_for_scorecard(scorecard) %>
                 <% end -%>
               </strong>
             <% else -%>

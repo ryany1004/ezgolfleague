@@ -267,7 +267,7 @@ module GameTypes
           player_scores << {player: player, score: score}
         end
       
-        player_scores.sort! { |x,y| x[:score] <=> y[:score] }
+        player_scores.sort! { |x,y| x[:score] <=> y[:score] } #TODO: this does not include the back 9 tie breaking. Should it?
             
         f.payouts.each_with_index do |p, i|
           if player_scores.count > i

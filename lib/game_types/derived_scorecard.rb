@@ -53,6 +53,10 @@ module GameTypes
       return false
     end
   
+    def can_display_handicap?
+      return true
+    end
+  
     def should_total?
       return false
     end
