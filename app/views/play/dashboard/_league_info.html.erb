@@ -4,6 +4,11 @@
       <div class="panel-heading">
         <h3 class="panel-title"><%= current_user.selected_league.name %></h3>
       </div>
+      <% if Payment.balance_for_user(current_user) > 0 -%>
+      <div class="panel-body">
+        <p><em>Your current league balance is <%= number_to_currency(Payment.balance_for_user(current_user)) %>. You can use balances to pay league dues and tournament fees.</em></p>
+      </div>
+      <% end -%>
       <% if has_paid_dues == false -%>
       <table class="table">
         <tbody>
