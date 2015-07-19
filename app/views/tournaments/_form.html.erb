@@ -24,6 +24,11 @@
       <%= f.input :tournament_at, :label => 'Tournament Date', required: true, :as => :datetime_picker %>
     </div>
 
+    <h3>Options</h3>
+    <div class="well">
+      <%= f.input :show_players_tee_times, :label => 'Players Should See Tee-Times at Signup' %>
+    </div>
+
     <h3>Sign Up Info</h3>
     <div class="well">
       <%= f.input :signup_opens_at, :label => 'Signup Opening Date', :as => :datetime_picker, required: true %>
