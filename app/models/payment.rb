@@ -1,3 +1,5 @@
+PAYMENT_METHOD_CREDIT_CARD = "Credit Card"
+
 class Payment < ActiveRecord::Base
   belongs_to :user, inverse_of: :payments
   belongs_to :tournament, inverse_of: :payments
@@ -27,7 +29,7 @@ class Payment < ActiveRecord::Base
   end
   
   def modifiable?
-    if self.payment_method == 'Credit Card'
+    if self.payment_method == PAYMENT_METHOD_CREDIT_CARD
       return false
     else
       return true
