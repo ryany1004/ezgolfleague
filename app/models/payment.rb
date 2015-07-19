@@ -37,7 +37,7 @@ class Payment < ActiveRecord::Base
   end
   
   def modifiable?
-    if self.payment_method == PAYMENT_METHOD_CREDIT_CARD
+    if self.payment_source == PAYMENT_METHOD_CREDIT_CARD
       return false
     else
       return true

@@ -47,7 +47,7 @@ class Play::PaymentsController < BaseController
       )
       
       #create payment record
-      p = Payment.new(payment_amount: amount, user: current_user, payment_method: charge_description, payment_method: PAYMENT_METHOD_CREDIT_CARD)
+      p = Payment.new(payment_amount: amount, user: current_user, payment_type: charge_description, payment_source: PAYMENT_METHOD_CREDIT_CARD)
       p.transaction_id = charge.id
       p.tournament = tournament unless tournament.blank?
       p.league = league unless league.blank?

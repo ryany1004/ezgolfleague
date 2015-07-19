@@ -8,7 +8,7 @@
   <h4><%= @payment.user.complete_name %></h4>
   <h4><%= @payment.created_at.to_s %></h4>
   <h4><%= number_to_currency(@payment.payment_amount) %></h4>
-  <h4><%= @payment.payment_method %></h4>
+  <h4><%= @payment.payment_source %></h4>
   <h4><%= @payment.payment_details %></h4>
   <h4><%= @payment.transaction_id %></h4>
 </div>
@@ -33,7 +33,7 @@
 		<tr>
       <td><%= payment.created_at.to_s(:short) %></td>
       <td><%= number_to_currency(payment.payment_amount) %></td>
-      <td><%= payment.payment_method %></td>
+      <td><%= payment.payment_source %></td>
       <td><%= payment.payment_details %></td>
 		</tr>
 	<% end %>
