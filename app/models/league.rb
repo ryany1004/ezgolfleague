@@ -8,6 +8,9 @@ class League < ActiveRecord::Base
   
   paginates_per 50
   
+  attr_encrypted :stripe_test_secret_key, :key => ENCRYPYTED_ATTRIBUTES_KEY
+  attr_encrypted :stripe_production_secret_key, :key => ENCRYPYTED_ATTRIBUTES_KEY
+  
   def membership_for_user(user)
     return self.league_memberships.where(user: user).first
   end

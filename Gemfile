@@ -46,6 +46,7 @@ gem 'chosen-rails'
 gem 'smarter_csv'
 gem "airbrake"
 gem 'nokogiri'
+gem 'attr_encrypted'
 
 group :development, :test do
   gem 'sqlite3', :require => "sqlite3"

@@ -100,4 +100,6 @@ Rails.application.configure do
       :secret_access_key => ENV['AWS_SECRET_ACCESS_KEY']
     }
   }
+  
+  ENCRYPYTED_ATTRIBUTES_KEY = ENV["ATTRIBUTE_ENCRYPTION_KEY"]
 end
