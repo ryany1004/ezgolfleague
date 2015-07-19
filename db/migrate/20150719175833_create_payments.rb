@@ -14,6 +14,9 @@ class CreatePayments < ActiveRecord::Migration
     end
     
     change_column :tournaments, :dues_amount, :decimal
+    change_column :leagues, :dues_amount, :decimal
+    
+    remove_column :users, :has_paid
     
     drop_table :tournament_payments
     

@@ -9,11 +9,10 @@ class Play::DashboardController < BaseController
     @past_tournaments = current_user.selected_league.tournaments.where("tournament_at < ?", Time.zone.now.at_beginning_of_day).order("tournament_at")
 
     @rankings = current_user.selected_league.ranked_users_for_year(Date.today.year.to_s)
-    
-    #TODO: look at who has paid what
+  
     @has_unpaid_upcoming_tournaments = false
-    unless @todays_tournament.blank?
-      @has_unpaid_upcoming_tournaments = true if @todays_tournament.includes_player?(current_user)
+    @todays_tournaments.each do |t|
+      @has_unpaid_upcoming_tournaments = false if !t.user_has_paid?(current_user)
     end
   end
   

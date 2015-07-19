@@ -26,6 +26,8 @@ module Addable
         score = Score.create!(scorecard: scorecard, course_hole: hole, sort_order: i)
       end
       
+      Payment.create(tournament: self, payment_amount: self.dues_amount * -1.0, user: user, payment_method: "Tournament Dues")
+      
       self.automatically_build_teams
     end 
   end
@@ -76,6 +78,9 @@ module Addable
           end
         end
       end
+      
+      #credit
+      Payment.create(tournament: self, payment_amount: self.dues_amount, user: user, payment_method: "Tournament Dues Credit")
       
       #remove from golfer team
       self.automatically_build_teams

@@ -12,7 +12,7 @@
   <div class="well">      
     <%= f.input :user_id, collection: @users, :label => 'User', :label_method => :complete_name %>
     
-	  <%= f.input :payment_amount, :label => 'Amount ($)', required: true, :hint => "Positive amounts for player payments, negative amounts for wins / cash outs." %>
+	  <%= f.input :payment_amount, :label => 'Amount ($)', required: true, :hint => "Positive amounts reflect player payments (i.e. cash in to league), negative amounts for wins / cash outs from league." %>
   </div>
   
   <h3>Pick One of These Options</h3>

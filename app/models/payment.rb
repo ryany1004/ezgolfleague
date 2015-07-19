@@ -20,9 +20,17 @@ class Payment < ActiveRecord::Base
   
   def payment_details
     if !self.tournament.blank?
-      return "Payment for #{self.tournament.name}"
+      if self.payment_amount < 0.0
+        return "Dues for #{self.tournament.name}"
+      else
+        return "Payment for #{self.tournament.name}"
+      end
     elsif !self.league.blank?
-      return "Dues for #{self.league.name}"
+      if self.payment_amount < 0.0
+        return "Dues for #{self.league.name}"
+      else
+        return "Payment for #{self.league.name}"
+      end
     else
       return self.payment_type
     end
