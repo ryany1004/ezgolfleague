@@ -89,7 +89,7 @@ Rails.application.routes.draw do
       get 'signups'
       post 'add_signup'
       delete 'delete_signup'
-      
+
       get 'manage_holes'
       patch 'update_holes'
       
@@ -118,6 +118,8 @@ Rails.application.routes.draw do
         post 'batch_create', on: :collection
       end
     end
+    
+    patch 'update_from_ghin'
     
     get 'write_member_email'
     post 'send_member_email'
@@ -149,6 +151,7 @@ Rails.application.routes.draw do
   resources :crontab do
     get 'send_tournament_registration_emails', on: :collection
     get 'send_tournament_registration_reminder_emails', on: :collection
+    get 'update_all_players_from_ghin', on: :collection
   end
   
 end

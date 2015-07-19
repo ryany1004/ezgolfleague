@@ -44,6 +44,16 @@ class LeaguesController < BaseController
     redirect_to leagues_path, :flash => { :success => "The league was successfully deleted." }
   end
   
+  def update_from_ghin
+    @league = League.find(params[:league_id])
+    
+    @league.users.where("ghin_number IS NOT NULL").each do |u|
+      Importers::GHINImporter.import_ghin_for_user(u)
+    end
+    
+    redirect_to leagues_path, :flash => { :success => "League members were updated from GHIN." }
+  end
+  
   def write_member_email
     @league = League.find(params[:league_id])
   end

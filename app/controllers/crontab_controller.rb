@@ -1,5 +1,13 @@
 class CrontabController < ApplicationController
   
+  def update_all_players_from_ghin
+    logger.info { "Importing From GHIN" }
+    
+    Importers::GHINImporter.import_for_all_users
+    
+    render :nothing => true
+  end
+  
   def send_tournament_registration_emails
     tournaments = Tournament.where("signup_opens_at >= ? AND signup_opens_at < ?", Date.today, Date.tomorrow)
     
