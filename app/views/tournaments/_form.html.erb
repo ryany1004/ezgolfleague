@@ -21,12 +21,7 @@
     
       <%= f.input :dues_amount, :label => 'Dues Amount ($)' %>
     
-      <%= f.input :tournament_at, :label => 'Tournament Date', required: true, :as => :datetime_picker %>
-    </div>
-
-    <h3>Options</h3>
-    <div class="well">
-      <%= f.input :show_players_tee_times, :label => 'Players Should See Tee-Times at Signup' %>
+      <%= f.input :tournament_at, :label => 'Tournament Date', required: true, :as => :datetime_picker, :input_html => {:onchange => "$('#tournament_signup_closes_at').val(this.val());"} %>
     </div>
 
     <h3>Sign Up Info</h3>
@@ -36,8 +31,10 @@
       <%= f.input :signup_closes_at, :label => 'Signup Closing Date', :as => :datetime_picker, required: true %>
   
       <%= f.input :max_players, :label => 'Maximum Number of Players', required: true %>
+      
+      <%= f.input :show_players_tee_times, :label => 'Players Should See Tee-Times at Signup' %>
     </div>
-  
+    
     <div class="form-actions">
       <%= f.button :submit, "Save", :class => 'btn btn-default' %>
     </div>

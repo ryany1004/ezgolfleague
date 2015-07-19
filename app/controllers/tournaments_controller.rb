@@ -19,6 +19,8 @@ class TournamentsController < BaseController
   def new
     @tournament = Tournament.new
     @tournament.league = current_user.leagues.first if current_user.leagues.count == 1
+    @tournament.tournament_at = DateTime.now
+    @tournament.signup_opens_at = DateTime.now
   end
   
   def create
