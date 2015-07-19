@@ -1,0 +1,31 @@
+<div class="col-md-12">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h3 class="panel-title"><%= @page_title %></h3>
+    </div>
+    <table class="table table-striped">
+    	<thead>
+    		<tr>
+    			<th>Name</th>
+          <th>Date</th>
+          <th>Amount</th>
+          <th>Method</th>
+          <th>Details</th>
+    		</tr>
+    	</thead>
+    	<tbody>
+    	<% @payments.each do |payment| %>
+    		<tr>
+    			<td><%= link_to payment.user.complete_name, payment_path(payment) %></td>
+          <td><%= payment.created_at.to_s(:short) %></td>
+          <td><%= number_to_currency(payment.payment_amount) %></td>
+          <td><%= payment.payment_method %></td>
+          <td><%= payment.payment_details %></td>
+    		</tr>
+    	<% end %>
+    	</tbody>
+    </table>
+  </div>
+</div>
+
+<%= paginate @payments %>

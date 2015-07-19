@@ -1,0 +1,8 @@
+<h3>Basic Details</h3>
+<div class="well">  
+  <h4><%= @payment.user.complete_name %></h4>
+  <h4><%= @payment.created_at.to_s %></h4>
+  <h4><%= number_to_currency(@payment.payment_amount) %></h4>
+  <h4><%= @payment.payment_method %></h4>
+  <h4><%= @payment.payment_details %></h4>
+</div>
