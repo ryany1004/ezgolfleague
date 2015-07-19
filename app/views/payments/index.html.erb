@@ -11,6 +11,7 @@
           <th>Amount</th>
           <th>Method</th>
           <th>Details</th>
+          <th><%= link_to 'Create Payment', new_payment_path, :class => 'btn btn-primary' %></th>
     		</tr>
     	</thead>
     	<tbody>
@@ -21,6 +22,9 @@
           <td><%= number_to_currency(payment.payment_amount) %></td>
           <td><%= payment.payment_method %></td>
           <td><%= payment.payment_details %></td>
+          <% if payment.modifiable? -%>
+            <td><%= link_to "Edit", edit_payment_path(payment) %> | <%= link_to 'Delete', payment_path(payment), :data => { :confirm => 'Are you sure you want to delete this payment?' }, :method => :delete %></td>
+          <% end -%>
     		</tr>
     	<% end %>
     	</tbody>

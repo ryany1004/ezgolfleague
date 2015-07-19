@@ -125,7 +125,7 @@ Rails.application.routes.draw do
     post 'send_member_email'
   end
   
-  resources :payments, only: [:index, :show]
+  resources :payments
   
   resources :scorecards, :except => [:delete] do
     get 'print', on: :collection

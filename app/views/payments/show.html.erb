@@ -1,3 +1,8 @@
+<ol class="breadcrumb">
+  <li><%= link_to "Payments", payments_path %></li>
+  <li class="active">Details</li>
+</ol>
+
 <h3>Basic Details</h3>
 <div class="well">  
   <h4><%= @payment.user.complete_name %></h4>
@@ -5,4 +10,10 @@
   <h4><%= number_to_currency(@payment.payment_amount) %></h4>
   <h4><%= @payment.payment_method %></h4>
   <h4><%= @payment.payment_details %></h4>
+  <h4><%= @payment.transaction_id %></h4>
+</div>
+
+<h3>User Balance</h3>
+<div class="well">  
+  <h4><%= number_to_currency(Payment.balance_for_user(@payment.user)) %></h4>
 </div>
