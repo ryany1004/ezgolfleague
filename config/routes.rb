@@ -60,6 +60,10 @@ Rails.application.routes.draw do
   
   #this is for playing tournaments
   namespace :play do
+    resources :payments, only: [:new, :create] do
+      get 'thank_you'
+    end
+    
     resources :tournaments, only: [:show] do
       get 'signup'
       put 'complete_signup'

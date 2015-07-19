@@ -10,7 +10,7 @@ class Play::TournamentsController < BaseController
   end
   
   def signup
-    if @tournament.game_type.show_players_tee_times == true
+    if @tournament.show_players_tee_times == true
       render "signup_with_times"
     else
       render "signup_without_times"
@@ -23,16 +23,6 @@ class Play::TournamentsController < BaseController
     if @tournament.includes_player?(current_user)
       redirect_to play_tournament_signup_path(@tournament), :flash => { :error => "You are already registered for this tournament. Remove your existing registration and try again." }
     else
-      #primary user
-      if !params[:pay_now].blank?        
-        pay_now = true
-        
-        #TODO REDO
-        #payment = TournamentPayment.create(user: current_user, tournament: @tournament, payment_amount: @tournament.dues_amount) if !@tournament.user_has_paid?(current_user)
-      else        
-        pay_now = false
-      end
-
       @tournament.add_player_to_group(tournament_group, current_user)
       
       #other associated signup
@@ -41,7 +31,12 @@ class Play::TournamentsController < BaseController
         @tournament.add_player_to_group(tournament_group, other_user, false)
       end
       
-      redirect_to play_dashboard_index_path, :flash => { :success => "You are registered for the tournament." }
+      #payment
+      if !params[:pay_now].blank?        
+        redirect_to new_play_payment_path(:payment_type => "tournament_dues", :tournament_id => @tournament.id)
+      else        
+        redirect_to play_dashboard_index_path, :flash => { :success => "You are registered for the tournament." }
+      end
     end
   end
   

@@ -9,7 +9,7 @@
         <tbody>
           <tr>
             <td><em>Your annual league dues are unpaid. Please pay them now to remain in good standing.</em></td>
-            <td><button type="button" class="btn btn-primary btn" data-toggle="modal" data-target="#PayModal">Pay Now</button></td>
+            <td><%= link_to "Pay Now", new_play_payment_path(:payment_type => "league_dues", :league_id => current_user.selected_league.id), :class => 'btn btn-primary' %></td>
           </tr>
         </tbody>
       </table>

@@ -1,0 +1,95 @@
+<ol class="breadcrumb">
+  <li><%= link_to "My Dashboard", play_dashboard_index_path %></li>
+  <li>New Payment</li>
+</ol>
+
+<div class="row">
+  <div class="col-md-12">
+    <div class="panel panel-default panel-success">
+      <div class="panel-heading">
+        <h3 class="panel-title">Payment Details</h3>
+      </div>
+      <div class="panel-body">
+        <p><em><%= @payment_instructions %></em></p>
+        <p><strong>Payment Amount: <%= number_to_currency(@payment_amount) %></strong></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-12">
+    <div class="panel panel-default panel-success">
+      <%= simple_form_for :payment, url: play_payments_path, method: :post do |f| %>
+      <table class="table table-striped">
+      	<thead>
+      		<tr>
+            <th>&nbsp;</th>
+            <th>&nbsp;</th>
+      		</tr>
+      	</thead>
+        <tbody>
+          <tr>
+            <td>First Name</td>
+            <td><input type="text" name=""></td>
+          </tr>
+          <tr>
+            <td>Last Name</td>
+            <td><input type="text" name=""></td>
+          </tr>
+          <tr>
+            <td>Address Line One</td>
+            <td><input type="text" name=""></td>
+          </tr>
+          <tr>
+            <td>Address Line Two (Optional)</td>
+            <td><input type="text" name=""></td>
+          </tr>
+          <tr>
+            <td>City</td>
+            <td><input type="text" name=""></td>
+          </tr>
+          <tr>
+            <td>State</td>
+            <td>
+              <select>
+                <option>Select a State</option>
+                <option>CA</option>
+              </select>
+            </td>
+          </tr>
+          <tr>
+            <td>Zip Code</td>
+            <td><input type="text" name=""></td>
+          </tr>
+          <tr>
+            <td>Card Number</td>
+            <td><input type="text" name=""></td>
+          </tr>
+          <tr>
+            <td>Expiration Date</td>
+            <td>
+              <select>
+                <option>Month</option>
+              </select>
+              <select>
+                <option>Year</option>
+              </select>
+            </td>
+          </tr>
+          <tr>
+            <td>CVV</td>
+            <td><input type="text" name=""></td>
+          </tr>
+        </tbody>
+      	<tfoot>
+      		<tr>
+            <th>&nbsp;</th>
+            <th><%= f.button :button, "Submit Payment", :class => "btn btn-primary" %></th>
+      		</tr>
+      	</tfoot>
+      </table>
+      <% end %>
+    </div>
+  </div>
+</div>
