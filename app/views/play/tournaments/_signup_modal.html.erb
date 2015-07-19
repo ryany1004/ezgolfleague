@@ -21,8 +21,12 @@
           </div>
         </div>
         <div class="modal-footer">
-          <%= f.button :button, "Register & Pay Later", :class => "btn btn-default", :name => "pay_later", :value => true %>
-          <%= f.button :button, "Register & Pay Now", :class => "btn btn-primary", :name => "pay_now", :value => true %>
+          <% if Payment.balance_for_user(current_user) > @tournament.dues_amount -%>
+            <%= f.button :button, "Register & Pay w/ Balance", :class => "btn btn-default", :name => "pay_later", :value => true %>
+          <% else -%>
+            <%= f.button :button, "Register & Pay Later", :class => "btn btn-default", :name => "pay_later", :value => true %>
+            <%= f.button :button, "Register & Pay Now", :class => "btn btn-primary", :name => "pay_now", :value => true %>
+          <% end -%>
         </div>
       </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
