@@ -9,7 +9,7 @@ class Tournament < ActiveRecord::Base
   has_many :flights, -> { order(:flight_number) }, inverse_of: :tournament, :dependent => :destroy
   has_many :contests, inverse_of: :tournament, :dependent => :destroy
   has_many :golfer_teams, inverse_of: :tournament, :dependent => :destroy
-  has_many :tournament_payments, inverse_of: :tournament, :dependent => :destroy
+  has_many :payments, inverse_of: :tournament
   has_and_belongs_to_many :course_holes, -> { order(:hole_number) }
   
   attr_accessor :another_member_id
@@ -89,12 +89,16 @@ class Tournament < ActiveRecord::Base
   end
   
   def user_has_paid?(user)
-    payment = self.tournament_payments.where(user: user)
+    total_paid = 0.0
     
-    if payment.blank?
-      return false
-    else
+    self.payments.where(user: user).each do |p|
+      total_paid = total_paid + p.payment_amount
+    end
+    
+    if total_paid >= self.dues_amount
       return true
+    else
+      return false
     end
   end
   

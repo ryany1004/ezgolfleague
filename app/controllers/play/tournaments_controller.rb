@@ -27,7 +27,8 @@ class Play::TournamentsController < BaseController
       if !params[:pay_now].blank?        
         pay_now = true
         
-        payment = TournamentPayment.create(user: current_user, tournament: @tournament, payment_amount: @tournament.dues_amount) if !@tournament.user_has_paid?(current_user)
+        #TODO REDO
+        #payment = TournamentPayment.create(user: current_user, tournament: @tournament, payment_amount: @tournament.dues_amount) if !@tournament.user_has_paid?(current_user)
       else        
         pay_now = false
       end

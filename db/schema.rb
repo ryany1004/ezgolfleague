@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150719172212) do
+ActiveRecord::Schema.define(version: 20150719175833) do
 
   create_table "contest_holes", force: :cascade do |t|
     t.integer  "contest_id"
@@ -184,6 +184,19 @@ ActiveRecord::Schema.define(version: 20150719172212) do
     t.float    "dues_amount", default: 0.0
   end
 
+  create_table "payments", force: :cascade do |t|
+    t.integer  "user_id"
+    t.integer  "tournament_id"
+    t.decimal  "payment_amount"
+    t.integer  "league_id"
+    t.datetime "created_at",     null: false
+    t.datetime "updated_at",     null: false
+  end
+
+  add_index "payments", ["league_id"], name: "index_payments_on_league_id"
+  add_index "payments", ["tournament_id"], name: "index_payments_on_tournament_id"
+  add_index "payments", ["user_id"], name: "index_payments_on_user_id"
+
   create_table "payouts", force: :cascade do |t|
     t.integer  "flight_id"
     t.integer  "user_id"
@@ -236,14 +249,6 @@ ActiveRecord::Schema.define(version: 20150719172212) do
 
   add_index "tournament_groups", ["tournament_id"], name: "index_tournament_groups_on_tournament_id"
 
-  create_table "tournament_payments", force: :cascade do |t|
-    t.integer  "user_id"
-    t.integer  "tournament_id"
-    t.decimal  "payment_amount"
-    t.datetime "created_at",     null: false
-    t.datetime "updated_at",     null: false
-  end
-
   create_table "tournaments", force: :cascade do |t|
     t.integer  "league_id"
     t.integer  "course_id"
@@ -254,7 +259,7 @@ ActiveRecord::Schema.define(version: 20150719172212) do
     t.integer  "max_players"
     t.datetime "created_at",                                 null: false
     t.datetime "updated_at",                                 null: false
-    t.float    "dues_amount",                default: 0.0
+    t.decimal  "dues_amount",                default: 0.0
     t.boolean  "is_finalized",               default: false
     t.integer  "game_type_id",               default: 1
     t.boolean  "admin_has_customized_teams", default: false
