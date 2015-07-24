@@ -16,7 +16,7 @@ module Playable
   def players
     players = []
     
-    self.tournament_groups.includes(:teams).each do |group|
+    self.tournament_groups.each do |group|
       group.players_signed_up.each do |player|
         players << player
       end
