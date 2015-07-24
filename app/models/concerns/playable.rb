@@ -38,7 +38,7 @@ module Playable
   def includes_player?(user)
     player_included = false
     
-    self.tournament_groups.includes(:teams).each do |group|
+    self.tournament_groups.each do |group|
       group.players_signed_up.each do |player|
         player_included = true if player == user
       end
