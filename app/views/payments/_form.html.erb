@@ -12,14 +12,16 @@
   <div class="well">      
     <%= f.input :user_id, collection: @users, :label => 'User', :label_method => :complete_name %>
     
-	  <%= f.input :payment_amount, :label => 'Amount ($)', required: true, :hint => "Positive amounts reflect player payments (i.e. cash in to league), negative amounts for wins / cash outs from league." %>
+	  <%= f.input :payment_amount, :label => 'Amount ($)', required: true, :hint => "Positive amounts reflect player payments (i.e. in to league), negative amounts for wins / out from league." %>
+    
+    <%= f.input :payment_details, :label => 'Notes' %>
   </div>
   
   <h3>Pick One of These Options</h3>
   <div class="well">
-    <%= f.input :league_id, collection: @leagues, :label => 'League', :label_method => :name, :hint => "Specify a league if this payment is for dues." %>
+    <%= f.input :league_id, collection: @leagues, :label => 'League', :label_method => :name, :hint => "Specify a league if this credit is for dues." %>
       
-    <%= f.input :tournament_id, collection: @tournaments, :label => 'Tournament', :label_method => :name, :hint => "Specify a tournament if this payment is for play." %>
+    <%= f.input :tournament_id, collection: @tournaments, :label => 'Tournament', :label_method => :name, :hint => "Specify a tournament if this credit is for play." %>
   </div>
   
   <div class="form-actions">

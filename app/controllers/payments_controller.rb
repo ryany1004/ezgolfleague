@@ -54,7 +54,7 @@ class PaymentsController < BaseController
   end
   
   def payment_params
-    params.require(:payment).permit(:user_id, :payment_amount, :league_id, :tournament_id)
+    params.require(:payment).permit(:user_id, :payment_amount, :league_id, :tournament_id, :payment_details)
   end
   
   private

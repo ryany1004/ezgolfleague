@@ -42,4 +42,10 @@ Rails.application.configure do
   config.action_mailer.default_url_options = { host: 'localhost', port: 3000 }
   
   ENCRYPYTED_ATTRIBUTES_KEY = "gobleskyasdfasdf"
+  
+  config.after_initialize do
+    Bullet.enable = true
+    Bullet.bullet_logger = true
+    Bullet.add_footer = true
+  end
 end

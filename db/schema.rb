@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150719200436) do
+ActiveRecord::Schema.define(version: 20150724015527) do
 
   create_table "contest_holes", force: :cascade do |t|
     t.integer  "contest_id"
@@ -43,7 +43,6 @@ ActiveRecord::Schema.define(version: 20150719200436) do
 
   create_table "course_hole_tee_boxes", force: :cascade do |t|
     t.integer  "course_hole_id"
-    t.string   "name"
     t.string   "description"
     t.integer  "yardage"
     t.datetime "created_at",        null: false
@@ -181,7 +180,7 @@ ActiveRecord::Schema.define(version: 20150719200436) do
     t.string   "name"
     t.datetime "created_at",                                                 null: false
     t.datetime "updated_at",                                                 null: false
-    t.float    "dues_amount",                                 default: 0.0
+    t.decimal  "dues_amount",                                 default: 0.0
     t.string   "encrypted_stripe_test_secret_key"
     t.string   "encrypted_stripe_production_secret_key"
     t.string   "encrypted_stripe_test_publishable_key"
@@ -194,11 +193,12 @@ ActiveRecord::Schema.define(version: 20150719200436) do
     t.integer  "tournament_id"
     t.decimal  "payment_amount"
     t.integer  "league_id"
-    t.datetime "created_at",     null: false
-    t.datetime "updated_at",     null: false
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
     t.string   "payment_type"
-    t.string   "payment_method"
+    t.string   "payment_source"
     t.string   "transaction_id"
+    t.text     "payment_details"
   end
 
   add_index "payments", ["league_id"], name: "index_payments_on_league_id"
@@ -313,7 +313,6 @@ ActiveRecord::Schema.define(version: 20150719200436) do
     t.integer  "invitations_count",      default: 0
     t.integer  "current_league_id"
     t.float    "handicap_index",         default: 0.0
-    t.boolean  "has_paid",               default: false
     t.string   "ghin_number"
   end
 

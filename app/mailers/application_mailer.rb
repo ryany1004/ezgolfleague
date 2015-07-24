@@ -1,4 +1,4 @@
 class ApplicationMailer < ActionMailer::Base
-  default from: "ezgolfleague@hanchorllc.com" #TODO: UPDATE
+  default from: "do_not_reply@ezgolfleague.com"
   layout 'mailer'
 end

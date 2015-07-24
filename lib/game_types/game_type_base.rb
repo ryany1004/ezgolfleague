@@ -131,8 +131,7 @@ module GameTypes
       return nil if !self.tournament.includes_player?(user)
     
       points = 0
-    
-      #payouts
+
       self.tournament.flights.each do |f|
         f.payouts.each do |p|
           points = points + p.points if p.user == user
