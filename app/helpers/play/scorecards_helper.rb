@@ -12,7 +12,7 @@ module Play::ScorecardsHelper
     non_handicap_score = scorecard.front_nine_score(false)
     
     if scorecard.can_display_handicap? && handicap_score != non_handicap_score
-      return "<span class='label label-success'>#{handicap_score}</span>"
+      return "<span class='label label-success'>#{handicap_score}</span>".html_safe
     else
       return nil
     end
@@ -23,7 +23,7 @@ module Play::ScorecardsHelper
     non_handicap_score = scorecard.back_nine_score(false)
     
     if scorecard.can_display_handicap? && handicap_score != non_handicap_score
-      return "<span class='label label-success'>#{handicap_score}</span>"
+      return "<span class='label label-success'>#{handicap_score}</span>".html_safe
     else
       return nil
     end

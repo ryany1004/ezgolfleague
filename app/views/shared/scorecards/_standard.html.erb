@@ -10,7 +10,7 @@
     <tr>
       <td><%= primary_scorecard.tournament.flight_for_player(primary_scorecard.golf_outing.user).flight_number %></td>
       <td><%= primary_scorecard.golf_outing.team.tournament_group.tee_time_at.to_s(:date_and_time) %></td>
-      <td><%= primary_scorecard.golf_outing.course_handicap %></td>
+      <td><%= primary_scorecard.golf_outing.course_handicap.to_i %></td>
     </tr>
   </tbody>
 </table>
@@ -71,7 +71,7 @@
                 <% if j == 0 -%>
                   <%= scorecard.front_nine_score %> <%= front_nine_handicap_for_scorecard(scorecard) %>
                 <% else -%>
-                  <%= scorecard.front_nine_score %> <%= front_nine_handicap_for_scorecard(scorecard) %> / <%= scorecard.back_nine_score %> <%= back_nine_handicap_for_scorecard(scorecard) %>
+                  <%= scorecard.front_nine_score %> <%= front_nine_handicap_for_scorecard(scorecard) %><br/><%= scorecard.back_nine_score %> <%= back_nine_handicap_for_scorecard(scorecard) %>
                 <% end -%>
               </strong>
             <% else -%>

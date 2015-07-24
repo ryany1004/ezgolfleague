@@ -62,7 +62,12 @@ class Play::ScorecardsController < BaseController
   def fetch_scorecard    
     @scorecard = Scorecard.includes(:scores).find(params[:id])
     @tournament = @scorecard.golf_outing.team.tournament_group.tournament
-    @other_scorecards = @tournament.related_scorecards_for_user(@scorecard.golf_outing.user)
+    
+    if @tournament.is_past? && @tournament.game_type.allow_teams == GameTypes::TEAMS_DISALLOWED #in the past, non-team tournament
+      @other_scorecards = []
+    else
+      @other_scorecards = @tournament.related_scorecards_for_user(@scorecard.golf_outing.user)
+    end
   end
   
 end
