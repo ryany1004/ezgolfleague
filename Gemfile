@@ -70,4 +70,5 @@ group :production do
   gem 'rails_12factor'
   gem 'dalli'
   gem 'puma'
+  gem 'newrelic_rpm'
 end
