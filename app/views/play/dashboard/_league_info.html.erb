@@ -4,21 +4,10 @@
       <div class="panel-heading">
         <h3 class="panel-title"><%= current_user.selected_league.name %></h3>
       </div>
-      <% if Payment.balance_for_user(current_user) > 0 -%>
       <div class="panel-body">
-        <p><em>Your current league balance is <%= number_to_currency(Payment.balance_for_user(current_user)) %>. You can use balances to pay league dues and tournament fees.</em></p>
+        <p><em>Your current league balance is <%= number_to_currency(Payment.balance_for_user(current_user)) %>. You can use positive balances to pay league dues and tournament fees.</em> <%= link_to "View your transaction history.", play_payments_path %></p>
+        <p><%= link_to "Pay League Dues Now", new_play_payment_path(:payment_type => "league_dues", :league_id => current_user.selected_league.id), :class => 'btn btn-primary' %></p>
       </div>
-      <% end -%>
-      <% if has_paid_dues == false -%>
-      <table class="table">
-        <tbody>
-          <tr>
-            <td><em>Your annual league dues are unpaid. Please pay them now to remain in good standing.</em></td>
-            <td><%= link_to "Pay Now", new_play_payment_path(:payment_type => "league_dues", :league_id => current_user.selected_league.id), :class => 'btn btn-primary' %></td>
-          </tr>
-        </tbody>
-      </table>
-      <% end -%>
     </div>
   </div>
 </div>

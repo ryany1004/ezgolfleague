@@ -7,7 +7,7 @@
     	<thead>
     		<tr>
     			<th>Name</th>
-          <th>Paid Annual Dues?</th>
+          <th>Current Balance</th>
           <th>Date Joined</th>
           <th><%= link_to 'Create User', new_user_account_path, :class => 'btn btn-primary' %></th>
     		</tr>
@@ -16,7 +16,7 @@
     	<% @user_accounts.each do |user_account| %>
     		<tr>
     			<td><%= link_to user_account.complete_name, edit_user_account_path(user_account) %></td>
-    			<td><%= human_boolean(user_account.has_paid) %></td>
+    			<td><%= number_to_currency(Payment.balance_for_user(user_account)) %></td>
           <td><%= user_account.created_at.to_s(:date_and_time) %></td>
           <td><%= link_to "Edit", edit_user_account_path(user_account) %> | <%= link_to 'Delete', user_account_path(user_account), :data => { :confirm => 'Are you sure you want to delete this user?' }, :method => :delete %></td>
     		</tr>

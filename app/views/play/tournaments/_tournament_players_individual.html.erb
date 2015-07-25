@@ -7,6 +7,7 @@
     	<thead>
     		<tr>
     			<th>Name</th>
+          <th>Course Handicap</th>
           <th>Flight</th>
           <th>Group</th>
           <th>Tee Time</th>
@@ -18,6 +19,7 @@
           <% team.golf_outings.each do |golf_outing| %>
           <tr>
             <td><%= golf_outing.user.complete_name %></td>
+            <td><%= golf_outing.course_handicap.to_i %></td>
             <% if tournament.flight_for_player(golf_outing.user).blank? -%>
             <td>&nbsp;</td>
             <% else -%>

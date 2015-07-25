@@ -1,6 +1,9 @@
 class Play::PaymentsController < BaseController
   layout "golfer"
   
+  def index
+  end
+  
   def new
     if params[:payment_type] == 'league_dues'
       @league = League.find(params[:league_id])

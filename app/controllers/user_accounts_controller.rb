@@ -1,5 +1,5 @@
 class UserAccountsController < BaseController
-  before_action :fetch_user, :only => [:edit, :update, :destroy]
+  before_action :fetch_user_account, :only => [:edit, :update, :destroy]
   before_action :initialize_form, :only => [:new, :edit]
   
   def index
@@ -148,7 +148,7 @@ class UserAccountsController < BaseController
     params.require(:user).permit!
   end
   
-  def fetch_user
+  def fetch_user_account
     @user_account = User.find(params[:id])
   end
   
