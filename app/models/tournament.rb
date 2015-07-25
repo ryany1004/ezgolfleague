@@ -89,13 +89,13 @@ class Tournament < ActiveRecord::Base
   end
   
   def user_has_paid?(user)
-    total_paid = 0.0
+    tournament_balance = 0.0
     
     self.payments.where(user: user).each do |p|
-      total_paid = total_paid + p.payment_amount
+      tournament_balance = total_paid + p.payment_amount
     end
     
-    if total_paid >= self.dues_amount
+    if tournament_balance == 0.0
       return true
     else
       return false
