@@ -42,6 +42,8 @@ class Play::ScorecardsController < BaseController
       scorecard.save
     end
     
+    @tournament.touch
+    
     redirect_to play_scorecard_path(@scorecard), :flash => { :success => "The scorecard was successfully updated." }
   end
   
