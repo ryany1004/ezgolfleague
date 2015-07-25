@@ -4,7 +4,7 @@
   <li class="active"><%= @tournament.game_type.display_name %> Scorecard</li>
 </ol>
 
-<h3><%= @scorecard.golf_outing.user.complete_name %></h3>
+<h3><%= @scorecard.golf_outing.user.complete_name %> <%= link_to "View Leaderboard", play_tournament_leaderboard_path(@tournament), class: "btn btn-primary btn-xs", role: "button" %></h3>
 
 <% cache(cache_key_for_scorecard(@scorecard.id)) do %>
   <%= render partial: '/shared/scorecards/standard', locals: {primary_scorecard: @scorecard, other_scorecards: @other_scorecards} %>
@@ -17,5 +17,3 @@
     <p>Designated Scorer: <%= @scorecard.designated_editor.complete_name %></p>
   <% end -%>
 <% end -%>
-
-<p><%= link_to "Leaderboard", play_tournament_leaderboard_path(@tournament), class: "btn btn-info", role: "button" %></p>
