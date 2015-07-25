@@ -92,7 +92,7 @@ class Tournament < ActiveRecord::Base
     tournament_balance = 0.0
     
     self.payments.where(user: user).each do |p|
-      tournament_balance = total_paid + p.payment_amount
+      tournament_balance = tournament_balance + p.payment_amount
     end
     
     if tournament_balance == 0.0
