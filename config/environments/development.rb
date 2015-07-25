@@ -43,9 +43,9 @@ Rails.application.configure do
   
   ENCRYPYTED_ATTRIBUTES_KEY = "gobleskyasdfasdf"
   
-  config.after_initialize do
-    Bullet.enable = true
-    Bullet.bullet_logger = true
-    Bullet.add_footer = true
-  end
+  # config.after_initialize do
+  #   Bullet.enable = true
+  #   Bullet.bullet_logger = true
+  #   Bullet.add_footer = true
+  # end
 end

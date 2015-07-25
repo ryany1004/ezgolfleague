@@ -1,23 +1,32 @@
 class Play::ScorecardsController < BaseController
   layout "golfer"
   
-  before_action :fetch_scorecard, :except => [:update_score, :finalize_scorecard, :become_designated_scorer, :update_game_type_metadata]
+  before_action :fetch_scorecard, :except => [:finalize_scorecard, :become_designated_scorer, :update_game_type_metadata]
   
   def show
     @page_title = "#{@scorecard.golf_outing.user.complete_name} Scorecard"
   end
-    
+  
   def update
-    if @scorecard.update(scorecard_params)
-      @scorecard.tournament.game_type.after_updating_scores_for_scorecard(@scorecard)
+    params[:scorecard][:scores].each do |score_param|
+      logger.info { "#{score_param}" }
       
-      reload_scorecard = @scorecard
-      reload_scorecard = Scorecard.find(params[:original_scorecard_id]) unless params[:original_scorecard_id].blank?
+      score_id = score_param[0].to_i
+      strokes = score_param[1][:strokes]
       
-      redirect_to play_scorecard_path(reload_scorecard), :flash => { :success => "The scorecard was successfully updated." }
-    else      
-      render :edit
+      logger.info { "#{score_id} #{strokes}" }
+      
+      score = Score.find(score_id)
+      score.strokes = strokes
+      score.save
     end
+
+    @scorecard.tournament.game_type.after_updating_scores_for_scorecard(@scorecard)
+
+    reload_scorecard = @scorecard
+    reload_scorecard = Scorecard.find(params[:original_scorecard_id]) unless params[:original_scorecard_id].blank?
+
+    redirect_to play_scorecard_path(reload_scorecard), :flash => { :success => "The scorecard was successfully updated." }
   end
   
   def finalize_scorecard
@@ -56,7 +65,8 @@ class Play::ScorecardsController < BaseController
   private
   
   def scorecard_params
-    params.require(:scorecard).permit(scores_attributes: [:id, :strokes])
+    # params.require(:scorecard).permit(scores_attributes: [:id, :strokes])
+    params.require(:scorecard).permit(scores: [:id, :strokes])
   end
   
   def fetch_scorecard    

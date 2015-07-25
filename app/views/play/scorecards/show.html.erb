@@ -17,3 +17,5 @@
     <p>Designated Scorer: <%= @scorecard.designated_editor.complete_name %></p>
   <% end -%>
 <% end -%>
+
+<p><%= link_to "Leaderboard", play_tournament_leaderboard_path(@tournament), class: "btn btn-info", role: "button" %></p>

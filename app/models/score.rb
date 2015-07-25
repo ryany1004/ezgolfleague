@@ -1,5 +1,5 @@
 class Score < ActiveRecord::Base
-  belongs_to :scorecard, inverse_of: :scores
+  belongs_to :scorecard, inverse_of: :scores, touch: true
   belongs_to :course_hole
   
   after_save :touch_tournament

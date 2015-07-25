@@ -1,0 +1,65 @@
+<ol class="breadcrumb">
+  <li><%= link_to "My Dashboard", play_dashboard_index_path %></li>
+  <li><%= link_to @tournament.name, play_tournament_path(@tournament) %></li>
+  <li class="active">Tournament Rankings</li>
+</ol>
+
+<div class="row">
+  <div class="col-md-12">
+    <div class="panel panel-default panel-success">
+      <div class="panel-heading">
+        <h3 class="panel-title">Tournament Rankings</h3>
+      </div>
+      <% if @tournament.has_scores? -%>
+      <table class="table table-striped">
+      	<thead>
+      		<tr>
+            <th>Flight</th>
+      			<th>Rank</th>
+            <th>Player</th>
+            <th>Net</th>
+            <th>Gross</th>
+            <th>Points</th>
+      		</tr>
+      	</thead>
+        <tbody>
+          <% cache(cache_key_for_tournament_with_prefix(@tournament, "tournament-rankings")) do %>
+            <% @tournament.flights_with_rankings.each_with_index do |flight, x| %>
+              <% flight[:players].each_with_index do |player, i| -%>
+              <tr>
+                <td><strong><%= flight[:flight_number] %></strong></td>
+                <td><strong><%= i + 1 %></strong></td>
+                <td><%= player[:name] %></td>
+                <td><%= player[:net_score] %></td>
+                <td><%= player[:gross_score] %> | <%= link_to "Scorecard", player[:scorecard_url] %></td>
+                <td><%= player[:points].to_i %></td>
+              </tr>
+              <% end -%>
+              <% if x < @tournament.flights_with_rankings.count - 1 -%>
+              <tr>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+              </tr>
+              <% end -%>
+            <% end -%>
+          <% end -%>
+        </tbody>
+      </table>
+      <% else -%>
+      <div class="panel-body">
+        Rankings will be available once the tournament is underway.
+      </div>
+      <% end -%>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-12">
+    <p><%= link_to "<< Go back to your scorecard", play_scorecard_path(@tournament.primary_scorecard_for_user(current_user)) %></p>
+  </div>
+</div>

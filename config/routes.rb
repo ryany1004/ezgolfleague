@@ -66,6 +66,7 @@ Rails.application.routes.draw do
     end
     
     resources :tournaments, only: [:show] do
+      get 'leaderboard'
       get 'signup'
       put 'complete_signup'
       delete 'remove_signup'

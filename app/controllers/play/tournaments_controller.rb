@@ -9,6 +9,10 @@ class Play::TournamentsController < BaseController
     @page_title = "#{@tournament.name}"
   end
   
+  def leaderboard
+    @tournament = Tournament.find(params[:tournament_id])
+  end
+  
   def signup
     if @tournament.show_players_tee_times == true
       render "signup_with_times"

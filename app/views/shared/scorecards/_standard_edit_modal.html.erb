@@ -1,41 +1,38 @@
-<%= simple_form_for scorecard, url: edit_url do |f| %>
-<div class="modal fade" id="Group<%= scorecard.id %>" role="dialog" aria-labelledby="gridSystemModalLabel" aria-hidden="true">
+<%= simple_form_for primary_scorecard, url: edit_url do |f| %>
+<div class="modal fade" id="Group<%= course_hole.id %>" role="dialog" aria-labelledby="gridSystemModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-          <h4 class="modal-title" id="gridSystemModalLabel">Update Strokes for <%= scorecard.name %></h4>
-          <p>Enter the actual strokes for the hole - handicaps and points will be determined automatically.</p>
+          <h4 class="modal-title" id="gridSystemModalLabel">Update Strokes for Hole <%= course_hole.hole_number %></h4>
+          <p>Enter the actual strokes for the hole - net strokes and points will be determined automatically.</p>
         </div>
         <div class="modal-body">
           <div class="container-fluid">
-            <% sliced_scores = scorecard.scores.each_slice(scorecard.tournament.course_holes.count / 2).to_a -%>
-            <% scorecard.tournament.course_holes.each_slice(scorecard.tournament.course_holes.count / 2).to_a.each_with_index do |slice, i| -%>
             <table class="table table-striped table-bordered">
             	<thead>
             		<tr>
-                  <th>Hole</th>
-                  <% slice.each do |hole| -%>
-                  <th><%= hole.hole_number %></th>
-                  <% end -%>
+                  <th>Player</th>
+                  <th>Strokes</th>
             		</tr>
             	</thead>
             	<tbody>
-            		<tr>
-                  <td>&nbsp;</td>
-                  <% sliced_scores[i].each do |score| %>
-                    <%= f.simple_fields_for :scores, score do |s| %>
-                    <td><%= s.input :strokes, label: false, as: :string %></td>
-                    <% end %>
-                  <% end %>
-            		</tr>
+                <% scores.each do |score| %>
+                  <% if primary_scorecard.tournament.user_can_edit_scorecard(current_user, score.scorecard) %>
+                    <%= f.simple_fields_for "scores[]", score do |s| %>
+                  		<tr>
+                        <td><%= s.object.scorecard.golf_outing.user.complete_name %></td>
+                        <td><%= s.input :strokes, label: false %></td>
+                  		</tr>
+                    <% end -%>
+                  <% end -%>
+                <% end -%>
             	</tbody>
             </table>
-            <% end -%>
           </div>
         </div>
         <div class="modal-footer">
-          <%= f.button :button, "Save Scorecard", :class => "btn btn-default" %>
+          <%= f.button :button, "Save Strokes", :class => "btn btn-default" %>
         </div>
       </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
