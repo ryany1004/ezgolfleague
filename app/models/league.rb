@@ -38,15 +38,15 @@ class League < ActiveRecord::Base
     
     return membership.state
   end
-  
+
   def user_has_paid?(user)
-    total_paid = 0.0
+    balance = 0.0
     
     self.payments.where(user: user).each do |p|
-      total_paid = total_paid + p.payment_amount
+      balance = balance + p.payment_amount
     end
     
-    if total_paid >= self.dues_amount
+    if balance == 0.0
       return true
     else
       return false
