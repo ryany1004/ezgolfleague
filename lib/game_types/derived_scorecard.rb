@@ -41,11 +41,11 @@ module GameTypes
       return 0
     end
     
-    def front_nine_score
+    def front_nine_score(use_handicap = false)
       return 0
     end
     
-    def back_nine_score
+    def back_nine_score(use_handicap = false)
       return 0
     end
     
