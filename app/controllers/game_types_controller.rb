@@ -25,6 +25,8 @@ class GameTypesController < BaseController
     @game_type_partial_name = game_type.setup_partial
     
     unless @game_type_partial_name.blank?
+      @tournament.game_type_id = game_type.game_type_id
+      
       respond_to do |format|
         format.js {}
       end
