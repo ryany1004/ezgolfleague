@@ -44,19 +44,11 @@ class Payment < ActiveRecord::Base
     end
   end
   
-  def self.balance_for_user(u, constrained_to_league = nil)
+  def self.balance_for_user(u)
     total_balance = 0
     
     u.payments.each do |p|
-      include_payment = false
-      
-      if constrained_to_league.blank?
-        include_payment = true
-      else        
-        include_payment = true if p.league = constrained_to_league || p.tournament.league = constrained_to_league
-      end
-      
-      total_balance = total_balance + p.payment_amount if include_payment == true
+      total_balance = total_balance + p.payment_amount
     end
     
     return total_balance
