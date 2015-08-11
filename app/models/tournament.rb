@@ -4,13 +4,14 @@ class Tournament < ActiveRecord::Base
   include Scoreable
   
   belongs_to :league, inverse_of: :tournaments
-  belongs_to :course, inverse_of: :tournaments
-  has_many :tournament_groups, -> { order(:tee_time_at) }, inverse_of: :tournament, :dependent => :destroy
-  has_many :flights, -> { order(:flight_number) }, inverse_of: :tournament, :dependent => :destroy
-  has_many :contests, inverse_of: :tournament, :dependent => :destroy
-  has_many :golfer_teams, inverse_of: :tournament, :dependent => :destroy
+  # belongs_to :course, inverse_of: :tournaments
+  has_many :tournament_days, -> { order(:tournament_at) }, inverse_of: :tournament, :dependent => :destroy
+  # has_many :tournament_groups, -> { order(:tee_time_at) }, inverse_of: :tournament, :dependent => :destroy
+  # has_many :flights, -> { order(:flight_number) }, inverse_of: :tournament, :dependent => :destroy
+  # has_many :contests, inverse_of: :tournament, :dependent => :destroy
+  # has_many :golfer_teams, inverse_of: :tournament, :dependent => :destroy
   has_many :payments, inverse_of: :tournament
-  has_and_belongs_to_many :course_holes, -> { order(:hole_number) }
+  # has_and_belongs_to_many :course_holes, -> { order(:hole_number) }
   
   attr_accessor :another_member_id
   attr_accessor :skip_date_validation
@@ -22,7 +23,7 @@ class Tournament < ActiveRecord::Base
   delegate :can_be_played?, :can_be_finalized?, to: :game_type
   
   validates :name, presence: true
-  validates :tournament_at, presence: true
+  # validates :tournament_at, presence: true
   validates :signup_opens_at, presence: true
   validates :signup_closes_at, presence: true
   validates :max_players, presence: true
@@ -31,6 +32,7 @@ class Tournament < ActiveRecord::Base
   def dates_are_valid
     now = Time.zone.now.at_beginning_of_day
   
+    #TODO: MOVE
     if tournament_at.present? && tournament_at < now
       errors.add(:tournament_at, "can't be in the past")
     end
@@ -54,6 +56,7 @@ class Tournament < ActiveRecord::Base
   
   paginates_per 50
   
+  #TODO: MOVE
   def game_type
     if self.game_type_id == 1
       new_game_type = GameTypes::IndividualStrokePlay.new
@@ -80,6 +83,7 @@ class Tournament < ActiveRecord::Base
     return new_game_type
   end
   
+  #TODO: MOVE
   def is_past?
     if self.tournament_at > DateTime.yesterday
       return false
@@ -103,6 +107,7 @@ class Tournament < ActiveRecord::Base
   end
   
   #date parsing
+  #TODO: MOVE
   def tournament_at=(date)
     begin
       parsed = DateTime.strptime("#{date} #{Time.zone.now.formatted_offset}", JAVASCRIPT_DATETIME_PICKER_FORMAT)
