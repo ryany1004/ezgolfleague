@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150724015527) do
+ActiveRecord::Schema.define(version: 20150811173115) do
 
   create_table "contest_holes", force: :cascade do |t|
     t.integer  "contest_id"
@@ -32,13 +32,13 @@ ActiveRecord::Schema.define(version: 20150724015527) do
   end
 
   create_table "contests", force: :cascade do |t|
-    t.integer  "tournament_id"
     t.string   "name"
     t.integer  "contest_type"
     t.integer  "overall_winner_contest_result_id"
     t.decimal  "overall_winner_payout_amount"
     t.datetime "created_at",                       null: false
     t.datetime "updated_at",                       null: false
+    t.integer  "tournament_day_id"
   end
 
   create_table "course_hole_tee_boxes", force: :cascade do |t|
@@ -64,13 +64,13 @@ ActiveRecord::Schema.define(version: 20150724015527) do
 
   add_index "course_holes", ["course_id"], name: "index_course_holes_on_course_id"
 
-  create_table "course_holes_tournaments", id: false, force: :cascade do |t|
+  create_table "course_holes_tournament_days", id: false, force: :cascade do |t|
     t.integer "course_hole_id"
-    t.integer "tournament_id"
+    t.integer "tournament_day_id"
   end
 
-  add_index "course_holes_tournaments", ["course_hole_id"], name: "index_course_holes_tournaments_on_course_hole_id"
-  add_index "course_holes_tournaments", ["tournament_id"], name: "index_course_holes_tournaments_on_tournament_id"
+  add_index "course_holes_tournament_days", ["course_hole_id"], name: "index_course_holes_tournament_days_on_course_hole_id"
+  add_index "course_holes_tournament_days", ["tournament_day_id"], name: "index_course_holes_tournament_days_on_tournament_day_id"
 
   create_table "course_tee_boxes", force: :cascade do |t|
     t.integer  "course_id"
@@ -97,16 +97,14 @@ ActiveRecord::Schema.define(version: 20150724015527) do
   end
 
   create_table "flights", force: :cascade do |t|
-    t.integer  "tournament_id"
     t.integer  "flight_number"
     t.datetime "created_at",        null: false
     t.datetime "updated_at",        null: false
     t.integer  "lower_bound"
     t.integer  "upper_bound"
     t.integer  "course_tee_box_id"
+    t.integer  "tournament_day_id"
   end
-
-  add_index "flights", ["tournament_id"], name: "index_flights_on_tournament_id"
 
   create_table "flights_users", id: false, force: :cascade do |t|
     t.integer "flight_id"
@@ -149,12 +147,12 @@ ActiveRecord::Schema.define(version: 20150724015527) do
   add_index "golf_outings", ["user_id"], name: "index_golf_outings_on_user_id"
 
   create_table "golfer_teams", force: :cascade do |t|
-    t.integer  "tournament_id"
-    t.integer  "max_players",    default: 2
-    t.datetime "created_at",                     null: false
-    t.datetime "updated_at",                     null: false
-    t.boolean  "are_opponents",  default: false
+    t.integer  "max_players",       default: 2
+    t.datetime "created_at",                        null: false
+    t.datetime "updated_at",                        null: false
+    t.boolean  "are_opponents",     default: false
     t.integer  "parent_team_id"
+    t.integer  "tournament_day_id"
   end
 
   add_index "golfer_teams", ["parent_team_id"], name: "index_golfer_teams_on_parent_team_id"
@@ -247,21 +245,26 @@ ActiveRecord::Schema.define(version: 20150724015527) do
 
   add_index "teams", ["tournament_group_id"], name: "index_teams_on_tournament_group_id"
 
-  create_table "tournament_groups", force: :cascade do |t|
+  create_table "tournament_days", force: :cascade do |t|
     t.integer  "tournament_id"
+    t.integer  "course_id"
+    t.integer  "game_type_id"
+    t.datetime "tournament_at"
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
+  end
+
+  create_table "tournament_groups", force: :cascade do |t|
     t.datetime "tee_time_at"
     t.datetime "created_at",                        null: false
     t.datetime "updated_at",                        null: false
     t.integer  "max_number_of_players", default: 4
+    t.integer  "tournament_day_id"
   end
-
-  add_index "tournament_groups", ["tournament_id"], name: "index_tournament_groups_on_tournament_id"
 
   create_table "tournaments", force: :cascade do |t|
     t.integer  "league_id"
-    t.integer  "course_id"
     t.string   "name"
-    t.datetime "tournament_at"
     t.datetime "signup_opens_at"
     t.datetime "signup_closes_at"
     t.integer  "max_players"
@@ -269,12 +272,10 @@ ActiveRecord::Schema.define(version: 20150724015527) do
     t.datetime "updated_at",                                 null: false
     t.decimal  "dues_amount",                default: 0.0
     t.boolean  "is_finalized",               default: false
-    t.integer  "game_type_id",               default: 1
     t.boolean  "admin_has_customized_teams", default: false
     t.boolean  "show_players_tee_times",     default: false
   end
 
-  add_index "tournaments", ["course_id"], name: "index_tournaments_on_course_id"
   add_index "tournaments", ["league_id"], name: "index_tournaments_on_league_id"
 
   create_table "users", force: :cascade do |t|

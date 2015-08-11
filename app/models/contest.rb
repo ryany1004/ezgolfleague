@@ -1,5 +1,5 @@
 class Contest < ActiveRecord::Base
-  belongs_to :tournament, inverse_of: :contests, :touch => true
+  belongs_to :tournament_day, inverse_of: :contests, :touch => true
   
   #handle single winner contests
   belongs_to :overall_winner, :class_name => "ContestResult", :foreign_key => "overall_winner_contest_result_id", :dependent => :destroy

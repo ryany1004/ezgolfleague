@@ -1,5 +1,5 @@
 class TournamentGroup < ActiveRecord::Base
-  belongs_to :tournament, inverse_of: :tournament_groups, :touch => true
+  belongs_to :tournament_day, inverse_of: :tournament_groups, :touch => true
   has_many :teams, inverse_of: :tournament_group, :dependent => :destroy
     
   paginates_per 50

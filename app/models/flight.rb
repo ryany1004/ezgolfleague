@@ -1,5 +1,5 @@
 class Flight < ActiveRecord::Base
-  belongs_to :tournament, inverse_of: :flights, :touch => true
+  belongs_to :tournament_day, inverse_of: :flights, :touch => true
   belongs_to :course_tee_box
   has_many :payouts, -> { order(:sort_order, "amount DESC") }, inverse_of: :flight, :dependent => :destroy
   has_and_belongs_to_many :users, inverse_of: :flights
@@ -7,7 +7,6 @@ class Flight < ActiveRecord::Base
   validates :flight_number, presence: true
   validates :lower_bound, presence: true
   validates :upper_bound, presence: true
-  #validates :flight_number, uniqueness: { scope: :tournament_id } #TODO: FIX
 
   validate :bounds_are_correct
   def bounds_are_correct
@@ -25,7 +24,9 @@ class Flight < ActiveRecord::Base
   validate :does_not_overlap
   def does_not_overlap
     if upper_bound >= 0 and lower_bound >= 0 #special case for imported data
-      other_flights = self.tournament.flights.where("id != ?", self.id)
+      return if self.tournament_day.blank? #TODO: REMOVE POST MIGRATION
+      
+      other_flights = self.tournament_day.flights.where("id != ?", self.id)
     
       other_flights.each do |f|
         if lower_bound.between?(f.lower_bound, f.upper_bound)
