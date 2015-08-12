@@ -58,8 +58,10 @@ class CreateTournamentDays < ActiveRecord::Migration
     drop_table :course_holes_tournaments
   end
   
+  #TODO: Split out the concerns
   #TODO: Cache Busting Must Move to Tournament Day
   #TODO: All GameType references to tournament
   #TODO: Importers
+  #TODO: Game Type Metadata
   
 end

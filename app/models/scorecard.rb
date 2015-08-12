@@ -8,8 +8,8 @@ class Scorecard < ActiveRecord::Base
   
   accepts_nested_attributes_for :scores
   
-  def tournament
-    return self.golf_outing.team.tournament_group.tournament
+  def tournament_day
+    return self.golf_outing.team.tournament_group.tournament_day
   end
   
   def set_course_handicap(force_recalculation = false)

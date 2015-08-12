@@ -51,7 +51,7 @@ class TournamentDay < ActiveRecord::Base
       new_game_type = GameTypes::TwoManComboScrambleBestBall.new
     end
     
-    new_game_type.tournament = self
+    new_game_type.tournament_day = self
     
     return new_game_type
   end

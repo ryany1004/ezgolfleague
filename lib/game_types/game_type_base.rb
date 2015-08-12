@@ -9,7 +9,7 @@ module GameTypes
   class GameTypeBase
     include Rails.application.routes.url_helpers
     
-    attr_accessor :tournament
+    attr_accessor :tournament_day
     
     def self.available_types
       return [GameTypes::IndividualStrokePlay.new, GameTypes::IndividualMatchPlay.new, GameTypes::IndividualModifiedStableford.new, GameTypes::TwoManShamble.new, GameTypes::TwoManScramble.new, GameTypes::FourManScramble.new, GameTypes::TwoManBestBall.new, GameTypes::TwoBestBallsOfFour.new, GameTypes::TwoManComboScrambleBestBall.new]
@@ -21,6 +21,10 @@ module GameTypes
     
     def game_type_id
       return nil
+    end
+    
+    def tournament
+      return self.tournament_day.tournament
     end
     
     ##Setup
@@ -96,9 +100,9 @@ module GameTypes
 
       total_score = 0
     
-      handicap_allowance = self.tournament.handicap_allowance(user)
+      handicap_allowance = self.tournament_day.handicap_allowance(user)
 
-      scorecard = self.tournament.primary_scorecard_for_user(user)
+      scorecard = self.tournament_day.primary_scorecard_for_user(user)
       scorecard.scores.each do |score|
         should_include_score = true #allows us to calculate partial scores, i.e. back 9
         if holes.blank? == false
@@ -132,14 +136,14 @@ module GameTypes
     
       points = 0
 
-      self.tournament.flights.each do |f|
+      self.tournament_day.flights.each do |f|
         f.payouts.each do |p|
           points = points + p.points if p.user == user
         end
       end
       
       #contests
-      self.tournament.contests.each do |c|
+      self.tournament_day.contests.each do |c|
         c.contest_results.each do |r|
           points = points + r.points if r.winner == user
         end
@@ -179,13 +183,13 @@ module GameTypes
     ##Handicap
     
     def handicap_allowance(user)
-      golf_outing = self.tournament.golf_outing_for_player(user)
+      golf_outing = self.tournament_day.golf_outing_for_player(user)
       course_handicap = golf_outing.course_handicap
     
       if golf_outing.course_tee_box.tee_box_gender == "Men"
-        sorted_course_holes_by_handicap = self.tournament.course_holes.reorder("mens_handicap")
+        sorted_course_holes_by_handicap = self.tournament_day.course_holes.reorder("mens_handicap")
       else
-        sorted_course_holes_by_handicap = self.tournament.course_holes.reorder("womens_handicap")
+        sorted_course_holes_by_handicap = self.tournament_day.course_holes.reorder("womens_handicap")
       end
         
       if !course_handicap.blank?    
@@ -223,7 +227,7 @@ module GameTypes
     def flights_with_rankings
       ranked_flights = []
     
-      self.tournament.flights.each do |f|
+      self.tournament_day.flights.each do |f|
         ranked_flight = { flight_id: f.id, flight_number: f.flight_number, players: [] }
       
         f.users.each do |player|          
@@ -231,7 +235,7 @@ module GameTypes
           back_nine_net_score = self.player_score(player, true, [10, 11, 12, 13, 14, 15, 16, 17, 18])
           gross_score = self.player_score(player, false)
 
-          scorecard = self.tournament.primary_scorecard_for_user(player)
+          scorecard = self.tournament_day.primary_scorecard_for_user(player)
           scorecard_url = play_scorecard_path(scorecard)
 
           points = 0
@@ -257,7 +261,7 @@ module GameTypes
     ##Payouts
     
     def assign_payouts_from_scores
-      self.tournament.flights.each do |f|
+      self.tournament_day.flights.each do |f|
         player_scores = []
       
         f.users.each do |player|
@@ -280,6 +284,4 @@ module GameTypes
     end
     
   end
-
 end
-

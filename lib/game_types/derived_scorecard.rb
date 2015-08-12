@@ -15,8 +15,8 @@ module GameTypes
       return -1
     end
     
-    def tournament
-      return self.golfer_team.tournament
+    def tournament_day
+      return self.golfer_team.tournament_day
     end
     
     def golf_outing

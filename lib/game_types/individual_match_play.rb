@@ -12,11 +12,13 @@ module GameTypes
     ##Setup
     
     def can_be_played?
-      return false if self.tournament.tournament_groups.count == 0
-      return false if self.tournament.flights.count == 0
+      #TODO: should work on sums?
+      
+      return false if self.tournament_day.tournament_groups.count == 0
+      return false if self.tournament_day.flights.count == 0
     
       self.tournament.players.each do |p|
-        return false if self.tournament.golfer_team_for_player(p) == nil
+        return false if self.tournament_day.golfer_team_for_player(p) == nil
       end
     
       return true
@@ -58,19 +60,19 @@ module GameTypes
     def handicap_allowance(user)      
       opponent = self.opponent_for_user(user)
       unless opponent.blank?        
-        golf_outing = self.tournament.golf_outing_for_player(user)
+        golf_outing = self.tournament_day.golf_outing_for_player(user)
         
         user1_course_handicap = golf_outing.course_handicap
-        user2_course_handicap = self.tournament.golf_outing_for_player(opponent).course_handicap
+        user2_course_handicap = self.tournament_day.golf_outing_for_player(opponent).course_handicap
                 
         baseline_handicap = 0
         if user1_course_handicap > user2_course_handicap
           baseline_handicap = user1_course_handicap - user2_course_handicap
           
           if golf_outing.course_tee_box.tee_box_gender == "Men"
-            sorted_course_holes_by_handicap = self.tournament.course.course_holes.order("mens_handicap")
+            sorted_course_holes_by_handicap = self.tournament_day.course.course_holes.order("mens_handicap")
           else
-            sorted_course_holes_by_handicap = self.tournament.course.course_holes.order("womens_handicap")
+            sorted_course_holes_by_handicap = self.tournament_day.course.course_holes.order("womens_handicap")
           end
           
           allowance = []
@@ -120,14 +122,14 @@ module GameTypes
     def related_scorecards_for_user(user)      
       other_scorecards = []
       
-      team = self.tournament.golfer_team_for_player(user)
+      team = self.tournament_day.golfer_team_for_player(user)
       unless team.blank?
         user_match_play_card = self.match_play_scorecard_for_user_in_team(user, team)
         other_scorecards << user_match_play_card
         
         team.users.each do |u|
           if u != user
-            other_scorecards << self.tournament.primary_scorecard_for_user(u) 
+            other_scorecards << self.tournament_day.primary_scorecard_for_user(u) 
           
             other_user_match_play_card = self.match_play_scorecard_for_user_in_team(u, team)
             other_scorecards << other_user_match_play_card
@@ -139,7 +141,7 @@ module GameTypes
     end
     
     def opponent_for_user(user)
-      team = self.tournament.golfer_team_for_player(user)
+      team = self.tournament_day.golfer_team_for_player(user)
       unless team.blank?
         team.users.each do |u|
           if u != user

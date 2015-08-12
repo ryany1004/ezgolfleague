@@ -33,7 +33,7 @@ module GameTypes
       if self.handicap_indices["#{user.id}"]
         return self.handicap_indices["#{user.id}"]
       else
-        handicap_allowance = self.tournament.handicap_allowance(user)
+        handicap_allowance = self.tournament_day.handicap_allowance(user)
         self.handicap_indices["#{user.id}"] = handicap_allowance
         
         return handicap_allowance
@@ -43,7 +43,7 @@ module GameTypes
     def calculate_scores    
       new_scores = []
 
-      self.golfer_team.tournament.course_holes.each_with_index do |hole, i|
+      self.golfer_team.tournament_day.course_holes.each_with_index do |hole, i|
         if self.course_hole_number_suppression_list.include? hole.hole_number
           score = DerivedScorecardScore.new
           score.strokes = 0
@@ -57,7 +57,7 @@ module GameTypes
         
           comparable_scores = []
           self.golfer_team.users.each do |user|
-            scorecard = self.golfer_team.tournament.primary_scorecard_for_user(user)
+            scorecard = self.golfer_team.tournament_day.primary_scorecard_for_user(user)
           
             raw_score = scorecard.scores.where(course_hole: hole).first.strokes
             if self.should_use_handicap == true

@@ -33,7 +33,7 @@ module GameTypes
       course_hole = CourseHole.find(metadata[:course_hole_id])
       if course_hole.hole_number < 10
         game_type = Scramble.new
-        game_type.tournament = self.tournament
+        game_type.tournament_day = self.tournament_day
         
         return game_type.update_metadata(metadata)
       end
@@ -42,7 +42,7 @@ module GameTypes
     def selected_scorecard_for_score(score)
       if score.course_hole.hole_number < 10
         game_type = Scramble.new
-        game_type.tournament = self.tournament
+        game_type.tournament_day = self.tournament_day
         
         return game_type.selected_scorecard_for_score(score)
       end
@@ -60,14 +60,14 @@ module GameTypes
     
     def best_ball_scorecard_for_user_in_team(user, golfer_team, use_handicaps)
       game_type = BestBall.new
-      game_type.tournament = self.tournament
+      game_type.tournament_day = self.tournament_day
       
       return game_type.best_ball_scorecard_for_user_in_team(user, golfer_team, use_handicaps)
     end
     
     def related_scorecards_for_user(user)      
       game_type = BestBall.new
-      game_type.tournament = self.tournament
+      game_type.tournament_day = self.tournament_day
       game_type.course_hole_number_suppression_list = [1,2,3,4,5,6,7,8,9]
       
       return game_type.related_scorecards_for_user(user) 

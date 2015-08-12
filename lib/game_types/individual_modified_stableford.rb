@@ -14,11 +14,11 @@ module GameTypes
     def related_scorecards_for_user(user)
       other_scorecards = []
       
-      other_scorecards << self.stableford_scorecard_for_user(user, self.tournament.tournament_group_for_player(user))
+      other_scorecards << self.stableford_scorecard_for_user(user, self.tournament_day.tournament_group_for_player(user))
       
-      self.tournament.other_group_members(user).each do |player|
-        other_scorecards << self.tournament.primary_scorecard_for_user(player)
-        other_scorecards << self.stableford_scorecard_for_user(player, self.tournament.tournament_group_for_player(player))
+      self.tournament_day.other_group_members(user).each do |player|
+        other_scorecards << self.tournament_day.primary_scorecard_for_user(player)
+        other_scorecards << self.stableford_scorecard_for_user(player, self.tournament_day.tournament_group_for_player(player))
       end
       
       return other_scorecards

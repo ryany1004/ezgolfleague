@@ -37,7 +37,7 @@ module GameTypes
     end
     
     def handicap_percentage_key
-      return "HandicapPercentageKey-T-#{self.tournament.id}-GT-#{self.game_type_id}"
+      return "HandicapPercentageKey-T-#{self.tournament_day.id}-GT-#{self.game_type_id}"
     end
     
     def save_setup_details(game_type_options)
@@ -68,8 +68,8 @@ module GameTypes
     
     def update_metadata(metadata)
       scorecard = Scorecard.find(metadata[:scorecard_id])
-      tournament = scorecard.tournament
-      team = tournament.golfer_team_for_player(scorecard.golf_outing.user)
+      tournament_day = scorecard.tournament_day
+      team = tournament_day.golfer_team_for_player(scorecard.golf_outing.user)
       course_hole = CourseHole.find(metadata[:course_hole_id])
 
       metadata = GameTypeMetadatum.find_or_create_by(golfer_team: team, course_hole: course_hole, search_key: METADATA_KEY)
@@ -80,8 +80,8 @@ module GameTypes
     def selected_scorecard_for_score(score) #this is the one selected as the tee shot
       return nil if score.scorecard.golf_outing.blank?
       
-      tournament = score.scorecard.tournament
-      team = tournament.golfer_team_for_player(score.scorecard.golf_outing.user)
+      tournament_day = score.scorecard.tournament_day
+      team = tournament_day.golfer_team_for_player(score.scorecard.golf_outing.user)
       metadata = GameTypeMetadatum.where(golfer_team: team, course_hole: score.course_hole, search_key: METADATA_KEY).first
 
       if metadata.blank?
@@ -100,7 +100,7 @@ module GameTypes
     def override_scorecard_name_for_scorecard(scorecard)
       player_names = scorecard.golf_outing.user.last_name + "/"
       
-      other_members = self.tournament.other_group_members(scorecard.golf_outing.user)
+      other_members = self.tournament_day.other_group_members(scorecard.golf_outing.user)
       other_members.each do |player|
         player_names << player.last_name
         
@@ -112,8 +112,8 @@ module GameTypes
     
     def after_updating_scores_for_scorecard(scorecard)   
       Scorecard.transaction do
-        self.tournament.other_group_members(scorecard.golf_outing.user).each do |player|
-          other_scorecard = self.tournament.primary_scorecard_for_user(player)
+        self.tournament_day.other_group_members(scorecard.golf_outing.user).each do |player|
+          other_scorecard = self.tournament_day.primary_scorecard_for_user(player)
         
           Rails.logger.info { "Copying Score Data From #{scorecard.golf_outing.user.id} to #{player.id}" }
         

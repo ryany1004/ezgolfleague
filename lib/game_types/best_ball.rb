@@ -52,11 +52,11 @@ module GameTypes
     def related_scorecards_for_user(user)      
       other_scorecards = []
       
-      team = self.tournament.golfer_team_for_player(user)
+      team = self.tournament_day.golfer_team_for_player(user)
       unless team.blank?
         team.users.each do |u|
           if u != user
-            other_scorecards << self.tournament.primary_scorecard_for_user(u) 
+            other_scorecards << self.tournament_day.primary_scorecard_for_user(u) 
           end
         end
       end

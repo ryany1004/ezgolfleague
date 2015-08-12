@@ -13,7 +13,7 @@ module GameTypes
     def other_group_members(user)
       other_members = []
       
-      group = self.tournament.tournament_group_for_player(user)
+      group = self.tournament_day.tournament_group_for_player(user)
       group.teams.each do |team|
         team.golf_outings.each do |outing|
           other_members << outing.user if outing.user != user
@@ -40,7 +40,7 @@ module GameTypes
     end
     
     def use_back_nine_key
-      return "ShouldUseBackNineForTies-T-#{self.tournament.id}-GT-#{self.game_type_id}"
+      return "ShouldUseBackNineForTies-T-#{self.tournament_day.id}-GT-#{self.game_type_id}"
     end
     
     def save_setup_details(game_type_options)
@@ -68,11 +68,11 @@ module GameTypes
     end
     
     def can_be_played?
-      return false if self.tournament.tournament_groups.count == 0
-      return false if self.tournament.flights.count == 0
+      return false if self.tournament_day.tournament_groups.count == 0
+      return false if self.tournament_day.flights.count == 0
     
       self.tournament.players.each do |p|
-        return false if self.tournament.flight_for_player(p) == nil
+        return false if self.tournament_day.flight_for_player(p) == nil
       end
     
       return true
@@ -81,7 +81,7 @@ module GameTypes
     def can_be_finalized?
       flight_payouts = 0
     
-      self.tournament.flights.each do |f|
+      self.tournament_day.flights.each do |f|
         flight_payouts += f.payouts.count
       end
     
@@ -107,8 +107,8 @@ module GameTypes
     def related_scorecards_for_user(user)
       other_scorecards = []
       
-      self.tournament.other_group_members(user).each do |player|
-        other_scorecards << self.tournament.primary_scorecard_for_user(player)
+      self.tournament_day.other_group_members(user).each do |player|
+        other_scorecards << self.tournament_day.primary_scorecard_for_user(player)
       end
       
       return other_scorecards
