@@ -11,6 +11,8 @@ class Play::TournamentsController < BaseController
   
   def leaderboard
     @tournament = Tournament.find(params[:tournament_id])
+    @tournament_day = @tournament.tournament_days.find(params[:day])
+    @user_scorecard = @tournament_day.primary_scorecard_for_user(current_user)
   end
   
   def signup

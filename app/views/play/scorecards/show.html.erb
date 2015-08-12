@@ -1,17 +1,17 @@
 <ol class="breadcrumb">
   <li><%= link_to "My Dashboard", play_dashboard_index_path %></li>
   <li><%= link_to @tournament.name, play_tournament_path(@tournament) %></li>
-  <li class="active"><%= @tournament.game_type.display_name %> Scorecard</li>
+  <li class="active"><%= @tournament_day.game_type.display_name %> Scorecard</li>
 </ol>
 
-<h3><%= @scorecard.golf_outing.user.complete_name %> <%= link_to "View Leaderboard", play_tournament_leaderboard_path(@tournament), class: "btn btn-primary btn-xs", role: "button" %></h3>
+<h3><%= @scorecard.golf_outing.user.complete_name %> <%= link_to "View Leaderboard", play_tournament_leaderboard_path(@tournament, day: @tournament_day), class: "btn btn-primary btn-xs", role: "button" %></h3>
 
 <% cache(cache_key_for_scorecard(@scorecard.id)) do %>
   <%= render partial: '/shared/scorecards/standard', locals: {primary_scorecard: @scorecard, other_scorecards: @other_scorecards} %>
 <% end -%>
 
 <% if @scorecard.golf_outing.team.tournament_group.teams.count > 1 -%>
-  <% if @tournament.user_can_become_designated_scorer(current_user, @scorecard) -%>
+  <% if @tournament_day.user_can_become_designated_scorer(current_user, @scorecard) -%>
     <p><%= link_to "Become Designated Scorer", play_scorecard_become_designated_scorer_path(@scorecard), class: "btn btn-warning", method: :patch, role: "button" %></p>
   <% elsif !@scorecard.designated_editor.blank? -%>
     <p>Designated Scorer: <%= @scorecard.designated_editor.complete_name %></p>

@@ -20,15 +20,15 @@ module Scoreable
   end
   
   def user_can_edit_scorecard(user, scorecard)
-    return false if self.is_past?
-    return false if self.is_finalized == true
+    return false if self.tournament.is_past?
+    return false if self.tournament.is_finalized == true
     return false if scorecard.is_potentially_editable? == false
     
     return true if scorecard.golf_outing.user == user
     return true if scorecard.designated_editor == user
     
     #check if they are on a team together
-    team = scorecard.tournament.golfer_team_for_player(user)
+    team = scorecard.tournament_day.golfer_team_for_player(user)
     unless team.blank?
       team.users.each do |u|
         if u == user and team.users.include? scorecard.golf_outing.user

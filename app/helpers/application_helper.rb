@@ -130,7 +130,7 @@ module ApplicationHelper
     if scorecard.golf_outing.blank?
       return []
     else
-      allowance = scorecard.tournament.handicap_allowance(scorecard.golf_outing.user)
+      allowance = scorecard.tournament_day.handicap_allowance(scorecard.golf_outing.user)
             
       return allowance
     end

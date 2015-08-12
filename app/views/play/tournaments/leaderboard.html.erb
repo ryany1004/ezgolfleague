@@ -1,16 +1,16 @@
 <ol class="breadcrumb">
   <li><%= link_to "My Dashboard", play_dashboard_index_path %></li>
   <li><%= link_to @tournament.name, play_tournament_path(@tournament) %></li>
-  <li class="active">Tournament Rankings</li>
+  <li class="active"><%= @tournament_day.pretty_day(true) %>Tournament Rankings</li>
 </ol>
 
 <div class="row">
   <div class="col-md-12">
     <div class="panel panel-default panel-success">
       <div class="panel-heading">
-        <h3 class="panel-title">Tournament Rankings</h3>
+        <h3 class="panel-title"><%= @tournament_day.pretty_day(true) %>Tournament Rankings</h3>
       </div>
-      <% if @tournament.has_scores? -%>
+      <% if @tournament_day.has_scores? -%>
       <table class="table table-striped">
       	<thead>
       		<tr>
@@ -24,7 +24,7 @@
       	</thead>
         <tbody>
           <% cache(cache_key_for_tournament_with_prefix(@tournament, "tournament-rankings")) do %>
-            <% @tournament.flights_with_rankings.each_with_index do |flight, x| %>
+            <% @tournament_day.flights_with_rankings.each_with_index do |flight, x| %>
               <% flight[:players].each_with_index do |player, i| -%>
               <tr>
                 <td><strong><%= flight[:flight_number] %></strong></td>
@@ -35,7 +35,7 @@
                 <td><%= player[:points].to_i %></td>
               </tr>
               <% end -%>
-              <% if x < @tournament.flights_with_rankings.count - 1 -%>
+              <% if x < @tournament_day.flights_with_rankings.count - 1 -%>
               <tr>
                 <td>&nbsp;</td>
                 <td>&nbsp;</td>
@@ -58,8 +58,10 @@
   </div>
 </div>
 
+<% unless @user_scorecard.blank? -%>
 <div class="row">
   <div class="col-md-12">
-    <p><%= link_to "<< Go back to scorecard", play_scorecard_path(@tournament.primary_scorecard_for_user(current_user)) %></p>
+    <p><%= link_to "<< Go back to scorecard", play_scorecard_path(@user_scorecard) %></p>
   </div>
 </div>
+<% end -%>

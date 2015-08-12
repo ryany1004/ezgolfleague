@@ -21,7 +21,7 @@ class Play::ScorecardsController < BaseController
       score.save
     end
 
-    @scorecard.tournament.game_type.after_updating_scores_for_scorecard(@scorecard)
+    @scorecard.tournament_day.game_type.after_updating_scores_for_scorecard(@scorecard)
 
     reload_scorecard = @scorecard
     reload_scorecard = Scorecard.find(params[:original_scorecard_id]) unless params[:original_scorecard_id].blank?
@@ -42,10 +42,10 @@ class Play::ScorecardsController < BaseController
     @scorecard.designated_editor = current_user
     @scorecard.save
     
-    @tournament = @scorecard.golf_outing.team.tournament_group.tournament
+    @tournament_day = @scorecard.golf_outing.team.tournament_group.tournament_day
     
-    @tournament.other_group_members(current_user).each do |user|
-      scorecard = @tournament.primary_scorecard_for_user(user)
+    @tournament_day.other_group_members(current_user).each do |user|
+      scorecard = @tournament_day.primary_scorecard_for_user(user)
       
       scorecard.designated_editor = current_user
       scorecard.save
@@ -57,7 +57,7 @@ class Play::ScorecardsController < BaseController
   def update_game_type_metadata
     @scorecard = Scorecard.find(params[:scorecard_id])
     
-    @scorecard.tournament.game_type.update_metadata(params[:metadata])
+    @scorecard.tournament_day.game_type.update_metadata(params[:metadata])
     
     redirect_to play_scorecard_path(@scorecard), :flash => { :success => "The scorecard was successfully updated." }
   end
@@ -65,18 +65,18 @@ class Play::ScorecardsController < BaseController
   private
   
   def scorecard_params
-    # params.require(:scorecard).permit(scores_attributes: [:id, :strokes])
     params.require(:scorecard).permit(scores: [:id, :strokes])
   end
   
   def fetch_scorecard    
     @scorecard = Scorecard.includes(:scores).find(params[:id])
-    @tournament = @scorecard.golf_outing.team.tournament_group.tournament
+    @tournament_day = @scorecard.golf_outing.team.tournament_group.tournament_day
+    @tournament = @tournament_day.tournament
     
-    if @tournament.is_past? && @tournament.game_type.allow_teams == GameTypes::TEAMS_DISALLOWED #in the past, non-team tournament
+    if @tournament.is_past? && @tournament_day.game_type.allow_teams == GameTypes::TEAMS_DISALLOWED #in the past, non-team tournament
       @other_scorecards = []
     else
-      @other_scorecards = @tournament.related_scorecards_for_user(@scorecard.golf_outing.user)
+      @other_scorecards = @tournament_day.related_scorecards_for_user(@scorecard.golf_outing.user)
     end
   end
   

@@ -8,7 +8,7 @@
   </thead>
   <tbody>
     <tr>
-      <td><%= primary_scorecard.tournament.flight_for_player(primary_scorecard.golf_outing.user).flight_number %></td>
+      <td><%= primary_scorecard.tournament_day.flight_for_player(primary_scorecard.golf_outing.user).flight_number %></td>
       <td><%= primary_scorecard.golf_outing.team.tournament_group.tee_time_at.to_s(:date_and_time) %></td>
       <td><%= primary_scorecard.golf_outing.course_handicap.to_i %></td>
     </tr>
@@ -19,7 +19,7 @@
 	<thead>
 		<tr>
       <th width="5%">Hole</th>
-      <% primary_scorecard.scores.each_slice(primary_scorecard.tournament.course_holes.count / 2).to_a.each_with_index do |split, j| %>
+      <% primary_scorecard.scores.each_slice(primary_scorecard.tournament_day.course_holes.count / 2).to_a.each_with_index do |split, j| %>
         <% split.each do |score| -%>
         <th width="<%= 70 / primary_scorecard.scores.count %>%"><%= score.course_hole.hole_number %></th>
         <% end -%>
@@ -47,10 +47,10 @@
         <% else -%>
           <td><%= scorecard.name %></td>
         <% end -%>
-        <% scorecard.scores.each_slice(primary_scorecard.tournament.course_holes.count / 2).to_a.each_with_index do |split, j| %>
+        <% scorecard.scores.each_slice(primary_scorecard.tournament_day.course_holes.count / 2).to_a.each_with_index do |split, j| %>
           <% split.each do |score| -%>
             <td>
-              <%= link_to_unless !primary_scorecard.tournament.user_can_edit_scorecard(current_user, scorecard), "#{scorecard_score_helper(score)}", "#", {"data-toggle" => "modal", "data-target" => "#Group#{score.course_hole.id}"} %>
+              <%= link_to_unless !primary_scorecard.tournament_day.user_can_edit_scorecard(current_user, scorecard), "#{scorecard_score_helper(score)}", "#", {"data-toggle" => "modal", "data-target" => "#Group#{score.course_hole.id}"} %>
               
               <% if handicap_allowance_strokes_for_hole(handicap_allowance_for_scorecard(scorecard), score.course_hole) > 0 -%>
                 </br><span class="label label-success">-<%= handicap_allowance_strokes_for_hole(handicap_allowance_for_scorecard(scorecard), score.course_hole) %></span>
@@ -60,8 +60,8 @@
                 </br><em><%= score.associated_text %></em>
               <% end -%>
               
-              <% unless primary_scorecard.tournament.game_type.scorecard_score_cell_partial.blank? -%>
-                </br><%= render partial: primary_scorecard.tournament.game_type.scorecard_score_cell_partial, locals: {score: score, scorecards: other_scorecards} %>
+              <% unless primary_scorecard.tournament_day.game_type.scorecard_score_cell_partial.blank? -%>
+                </br><%= render partial: primary_scorecard.tournament_day.game_type.scorecard_score_cell_partial, locals: {score: score, scorecards: other_scorecards} %>
               <% end -%>
             </td>
           <% end -%>
@@ -102,7 +102,7 @@
   <tfoot>
 		<tr>
 			<th>Par</th>
-      <% primary_scorecard.scores.each_slice(primary_scorecard.tournament.course_holes.count / 2).to_a.each_with_index do |split, j| %>
+      <% primary_scorecard.scores.each_slice(primary_scorecard.tournament_day.course_holes.count / 2).to_a.each_with_index do |split, j| %>
         <% split.each do |score| -%>
           <th><%= score.course_hole.par %></th>
         <% end -%>
@@ -113,11 +113,11 @@
         <th>&nbsp;</th>
       <% end -%>
       
-      <th><%= primary_scorecard.tournament.course_holes.map {|hole| hole.par }.sum %></th>
+      <th><%= primary_scorecard.tournament_day.course_holes.map {|hole| hole.par }.sum %></th>
 		</tr>
 		<tr>
 			<th>Men's Handicap</th>
-      <% primary_scorecard.scores.each_slice(primary_scorecard.tournament.course_holes.count / 2).to_a.each_with_index do |split, j| %>
+      <% primary_scorecard.scores.each_slice(primary_scorecard.tournament_day.course_holes.count / 2).to_a.each_with_index do |split, j| %>
         <% split.each do |score| -%>      
           <th><%= score.course_hole.mens_handicap %></th>
         <% end -%>
@@ -131,7 +131,7 @@
 		</tr>
 		<tr>
 			<th>Women's Handicap</th>
-      <% primary_scorecard.scores.each_slice(primary_scorecard.tournament.course_holes.count / 2).to_a.each_with_index do |split, j| %>
+      <% primary_scorecard.scores.each_slice(primary_scorecard.tournament_day.course_holes.count / 2).to_a.each_with_index do |split, j| %>
         <% split.each do |score| -%>      
           <th><%= score.course_hole.mens_handicap %></th>
         <% end -%>
@@ -148,18 +148,18 @@
 </table>
 
 <!-- Game Type Support -->
-<% unless primary_scorecard.tournament.game_type.scorecard_post_embed_partial.blank? -%>
-  <%= render partial: primary_scorecard.tournament.game_type.scorecard_post_embed_partial, locals: {scorecards: other_scorecards, course_holes: primary_scorecard.tournament.course_holes} %>
+<% unless primary_scorecard.tournament_day.game_type.scorecard_post_embed_partial.blank? -%>
+  <%= render partial: primary_scorecard.tournament_day.game_type.scorecard_post_embed_partial, locals: {scorecards: other_scorecards, course_holes: primary_scorecard.tournament_day.course_holes} %>
 <% end -%>
 
 <!-- Finalize Buttons -->
-<% if primary_scorecard.tournament.user_can_edit_scorecard(current_user, primary_scorecard) == true && primary_scorecard.tournament.is_finalized == false -%>
+<% if primary_scorecard.tournament_day.user_can_edit_scorecard(current_user, primary_scorecard) == true && primary_scorecard.tournament_day.tournament.is_finalized == false -%>
   <p><%= link_to 'Finalize Your Scorecard', play_scorecard_finalize_scorecard_path(primary_scorecard), :class => 'btn btn-danger', :method => :patch, :data => { :confirm => 'Are you sure you want to finalize your scorecard? This indicates to the league administrator that you are ready to be ranked for this tournament.' } %></p>
 <% end -%>
 
 <!-- Modals -->
 <% cache(cache_key_for_scorecard(primary_scorecard.id)) do %>
-  <% primary_scorecard.tournament.course_holes.each do |course_hole| %>
+  <% primary_scorecard.tournament_day.course_holes.each do |course_hole| %>
     <%= render partial: '/shared/scorecards/standard_edit_modal', locals: {primary_scorecard: primary_scorecard, course_hole: course_hole, scores: scores_for_scorecards_for_course_hole(other_scorecards, course_hole), edit_url: play_scorecard_path(primary_scorecard, original_scorecard_id: primary_scorecard.id) } %>
   <% end -%>
 <% end %>

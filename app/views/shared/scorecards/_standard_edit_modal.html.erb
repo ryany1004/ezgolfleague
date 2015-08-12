@@ -18,7 +18,7 @@
             	</thead>
             	<tbody>
                 <% scores.each do |score| %>
-                  <% if primary_scorecard.tournament.user_can_edit_scorecard(current_user, score.scorecard) %>
+                  <% if primary_scorecard.tournament_day.user_can_edit_scorecard(current_user, score.scorecard) %>
                     <%= f.simple_fields_for "scores[]", score do |s| %>
                   		<tr>
                         <td><%= s.object.scorecard.golf_outing.user.complete_name %></td>
