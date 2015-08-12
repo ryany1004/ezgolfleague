@@ -29,7 +29,7 @@ module Findable
 
       relation = relation.order("tournament_at")
     
-      return relation
+      return relation.distinct
     end
   end
 

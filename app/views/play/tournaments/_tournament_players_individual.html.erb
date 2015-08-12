@@ -1,7 +1,7 @@
 <div class="col-md-6">
   <div class="panel panel-default panel-success">
     <div class="panel-heading">
-      <h3 class="panel-title">Tournament Players <span class="badge"><%= tournament.number_of_players %></span></h3>
+      <h3 class="panel-title">Tournament Players <span class="badge"><%= tournament_day.tournament.number_of_players %></span></h3>
     </div>
     <table class="table table-striped">
     	<thead>
@@ -14,16 +14,16 @@
     		</tr>
     	</thead>
     	<tbody>
-    	<% tournament.tournament_groups.each_with_index do |tournament_group, i| %>
+    	<% tournament_day.tournament_groups.each_with_index do |tournament_group, i| %>
         <% tournament_group.teams.each do |team| %>
           <% team.golf_outings.each do |golf_outing| %>
           <tr>
             <td><%= golf_outing.user.complete_name %></td>
             <td><%= golf_outing.course_handicap.to_i %></td>
-            <% if tournament.flight_for_player(golf_outing.user).blank? -%>
+            <% if tournament_day.flight_for_player(golf_outing.user).blank? -%>
             <td>&nbsp;</td>
             <% else -%>
-            <td><strong><%= (tournament.flight_for_player(golf_outing.user).flight_number) %></strong></td>
+            <td><strong><%= (tournament_day.flight_for_player(golf_outing.user).flight_number) %></strong></td>
             <% end -%>
             <td><strong><%= i + 1 %></strong></td>
             <td><%= tournament_group.tee_time_at.to_s(:time_only) %></td>

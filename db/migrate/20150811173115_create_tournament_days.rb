@@ -19,7 +19,9 @@ class CreateTournamentDays < ActiveRecord::Migration
     end
         
     Tournament.all.each do |t|
-      day = TournamentDay.create(tournament: t, course_id: t.course_id, game_type_id: t.game_type_id, tournament_at: t.tournament_at)
+      day = TournamentDay.new(tournament: t, course_id: t.course_id, game_type_id: t.game_type_id, tournament_at: t.tournament_at)
+      day.skip_date_validation = true
+      day.save!
       
       TournamentGroup.where(tournament_id: t.id).each do |group|
         group.tournament_day_id = day.id
@@ -44,6 +46,12 @@ class CreateTournamentDays < ActiveRecord::Migration
       Course.where(id: t.course_id).first.course_holes.each do |hole|
         day.course_holes << hole
       end
+      
+      if day.game_type_id == 1
+        metadata = GameTypeMetadatum.find_or_create_by(search_key: day.game_type.use_back_nine_key)
+        metadata.integer_value = 1
+        metadata.save
+      end
     end
     
     remove_column :tournaments, :course_id
@@ -58,10 +66,9 @@ class CreateTournamentDays < ActiveRecord::Migration
     drop_table :course_holes_tournaments
   end
   
-  #TODO: Split out the concerns
+  #TODO: primary_scorecard_for_user
   #TODO: Cache Busting Must Move to Tournament Day
-  #TODO: All GameType references to tournament
   #TODO: Importers
-  #TODO: Game Type Metadata
+  #TODO: Game Type Metadata Conversion (rebuild?)
   
 end

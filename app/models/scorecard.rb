@@ -14,7 +14,7 @@ class Scorecard < ActiveRecord::Base
   
   def set_course_handicap(force_recalculation = false)
     if force_recalculation == true or (self.golf_outing.course_handicap.blank? or self.golf_outing.course_handicap == 0)
-      calculated_course_handicap = self.golf_outing.user.course_handicap(self.tournament.course, self.golf_outing.course_tee_box)
+      calculated_course_handicap = self.golf_outing.user.course_handicap(self.tournament_day.course, self.golf_outing.course_tee_box)
       calculated_course_handicap = 0 if calculated_course_handicap.blank?
       
       self.golf_outing.course_handicap = calculated_course_handicap
@@ -23,15 +23,15 @@ class Scorecard < ActiveRecord::Base
   end
   
   def net_score
-    return self.tournament.game_type.player_score(self.golf_outing.user, true)
+    return self.tournament_day.game_type.player_score(self.golf_outing.user, true)
   end
   
   def front_nine_score(use_handicap = false)
-    return self.tournament.game_type.player_score(self.golf_outing.user, use_handicap, [1, 2, 3, 4, 5, 6, 7, 8, 9])
+    return self.tournament_day.game_type.player_score(self.golf_outing.user, use_handicap, [1, 2, 3, 4, 5, 6, 7, 8, 9])
   end
   
   def back_nine_score(use_handicap = false)
-    return self.tournament.game_type.player_score(self.golf_outing.user, use_handicap, [10, 11, 12, 13, 14, 15, 16, 17, 18])
+    return self.tournament_day.game_type.player_score(self.golf_outing.user, use_handicap, [10, 11, 12, 13, 14, 15, 16, 17, 18])
   end
   
   #Team Support
@@ -45,7 +45,7 @@ class Scorecard < ActiveRecord::Base
   end
   
   def name
-    override_name = self.tournament.game_type.override_scorecard_name_for_scorecard(self)
+    override_name = self.tournament_day.game_type.override_scorecard_name_for_scorecard(self)
     
     unless override_name.blank?
       return override_name
@@ -69,7 +69,7 @@ class Scorecard < ActiveRecord::Base
   end
   
   def includes_extra_scoring_column?
-    return self.tournament.game_type.includes_extra_scoring_column?
+    return self.tournament_day.game_type.includes_extra_scoring_column?
   end
   
   def extra_scoring_column_data

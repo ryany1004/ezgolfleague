@@ -1,90 +1,62 @@
 module Playable
   extend ActiveSupport::Concern
 
-  def update_course_handicaps
-    self.tournament_groups.each do |group|
-      group.teams.each do |team|
-        team.golf_outings.each do |outing|
-          outing.scorecards.each do |card|
-            card.set_course_handicap(true)
-          end
+  def players
+    players = []
+  
+    self.tournament_days.each do |day|
+      day.tournament_groups.each do |group|
+        group.players_signed_up.each do |player|
+          players << player unless players.include? player
         end
       end
     end
-  end
 
-  def players
-    players = []
-    
-    self.tournament_groups.each do |group|
-      group.players_signed_up.each do |player|
-        players << player
-      end
-    end
-    
     return players
   end
 
   def number_of_players
     number_of_players = 0
-    
-    self.tournament_groups.each do |group|
+  
+    self.first_day.tournament_groups.each do |group|
       number_of_players = number_of_players + group.players_signed_up.count
     end
-    
+  
     return number_of_players
   end
 
   def includes_player?(user)
     player_included = false
-    
-    self.tournament_groups.each do |group|
-      group.players_signed_up.each do |player|
-        player_included = true if player == user
+  
+    self.tournament_days.each do |day|
+      day.tournament_groups.each do |group|
+        group.players_signed_up.each do |player|
+          player_included = true if player == user
+        end
       end
     end
-    
+  
     return player_included
   end
   
-  def flight_for_player(user)        
-    self.flights.each do |f|
-      return f if f.users.include? user
+  def total_score(user)
+    total_score = 0
+    
+    self.tournament_days.each do |day|
+      total_score += day.player_score(user)
     end
     
-    return nil
+    return total_score
   end
   
-  def golfer_team_for_player(user)
-    self.golfer_teams.each do |t|
-      return t if t.users.include? user
+  def total_points(user)
+    total_points = 0
+    
+    self.tournament_days.each do |day|
+      total_points += day.player_points(user)
     end
     
-    return nil
-  end
-  
-  def tournament_group_for_player(user)
-    self.tournament_groups.each do |group|
-      group.teams.each do |team|
-        team.golf_outings.each do |outing|
-          return group if outing.user == user
-        end
-      end
-    end
-    
-    return nil
-  end
-  
-  def golf_outing_for_player(user)
-    self.tournament_groups.each do |group|
-      group.teams.each do |team|
-        team.golf_outings.each do |outing|
-          return outing if outing.user == user
-        end
-      end
-    end
-    
-    return nil
+    return total_points
   end
   
 end

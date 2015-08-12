@@ -12,8 +12,6 @@ module GameTypes
     ##Setup
     
     def can_be_played?
-      #TODO: should work on sums?
-      
       return false if self.tournament_day.tournament_groups.count == 0
       return false if self.tournament_day.flights.count == 0
     

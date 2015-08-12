@@ -2,7 +2,7 @@ module Scoreable
   extend ActiveSupport::Concern
   
   def primary_scorecard_for_user(user)
-    eager_groups = TournamentGroup.includes(teams: [{ golf_outings: :scorecards }]).where(tournament: self)
+    eager_groups = TournamentGroup.includes(teams: [{ golf_outings: :scorecards }]).where(tournament_day: self)
     
     eager_groups.each do |group|
       group.teams.each do |team|
@@ -50,7 +50,7 @@ module Scoreable
   end
   
   def has_scores?    
-    eager_groups = TournamentGroup.includes(teams: [{ golf_outings: :scorecards }]).where(tournament: self)
+    eager_groups = TournamentGroup.includes(teams: [{ golf_outings: :scorecards }]).where(tournament_day: self)
     
     eager_groups.each do |group|
       group.teams.each do |team|

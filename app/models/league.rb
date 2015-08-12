@@ -60,23 +60,24 @@ class League < ActiveRecord::Base
 
     tournaments = Tournament.tournaments_happening_at_some_point(year_date.at_beginning_of_year, year_date.at_end_of_year, self)
     tournaments.each do |t|
-      t.tournament_days.each do |day|
-        day.players.each do |p|
+      t.players.each do |p|
+        points = 0
+        t.tournament_days.each do |day|
           points = day.player_points(p)
-      
-          found_existing_player = false
+        end
         
-          ranked_players.each do |r|
-            if r[:id] == p.id
-              r[:points] = r[:points] + points
-            
-              found_existing_player = true
-            end
-          end
+        found_existing_player = false
       
-          if found_existing_player == false
-            ranked_players << { id: p.id, name: p.complete_name, points: points, ranking: 0 }
+        ranked_players.each do |r|
+          if r[:id] == p.id
+            r[:points] = r[:points] + points
+          
+            found_existing_player = true
           end
+        end
+    
+        if found_existing_player == false
+          ranked_players << { id: p.id, name: p.complete_name, points: points, ranking: 0 }
         end
       end
     end

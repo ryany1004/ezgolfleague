@@ -1,9 +1,9 @@
 class TournamentDay < ActiveRecord::Base
-  include Playable
   include Addable
   include Scoreable
+  include FindPlayers
   
-  belongs_to :tournament, inverse_of: :tournament_days
+  belongs_to :tournament, inverse_of: :tournament_days, :touch => true
   belongs_to :course, inverse_of: :tournament_days
   has_many :tournament_groups, -> { order(:tee_time_at) }, inverse_of: :tournament_day, :dependent => :destroy
   has_many :flights, -> { order(:flight_number) }, inverse_of: :tournament_day, :dependent => :destroy
@@ -54,6 +54,21 @@ class TournamentDay < ActiveRecord::Base
     new_game_type.tournament_day = self
     
     return new_game_type
+  end
+  
+  def pretty_day(add_space = false)
+    return nil if self.tournament.tournament_days.count == 1
+    
+    day_index = 0
+    
+    self.tournament.tournament_days.each_with_index do |d, i|
+      day_index = i if d == self
+    end
+    
+    day_string = "Day #{day_index + 1}"
+    day_string = day_string + " " if add_space == true
+
+    return day_string
   end
   
   #date parsing

@@ -11,15 +11,25 @@
       </div>
       <div class="panel-body">
         <span class="label label-default">When</span>
-        <h4><%= @tournament.tournament_at.to_s(:date_and_time) %></h4>
+        <h4>
+          <% @tournament.tournament_days.each do |day| -%>
+            <%= day.tournament_at.to_s(:date_and_time) %><br/>
+          <% end -%>
+        </h4>
         <span class="label label-default">Where</span>
-        <h4><%= @tournament.course.name %></h4>
-        <% unless @tournament.course.street_address_1.blank? -%>
-          <p>
-            <%= @tournament.course.street_address_1 %><br/>
-            <%= @tournament.course.city %>, <%= @tournament.course.us_state %> <%= @tournament.course.postal_code %><br/>
-            <%= link_to "View on Map", "https://www.google.com/maps/place/#{@tournament.course.street_address_1}+#{@tournament.course.city}+#{@tournament.course.us_state}+#{@tournament.course.postal_code}" %>
-          </p>
+        <h4>
+          <% @tournament.courses.each do |course| -%>
+            <%= course.name %><br/>
+          <% end -%>
+        </h4>
+        <% @tournament.courses.each do |course| -%>
+          <% unless course.street_address_1.blank? -%>
+            <p>
+              <%= course.street_address_1 %><br/>
+              <%= course.city %>, <%= course.us_state %> <%= course.postal_code %><br/>
+              <%= link_to "View on Map", "https://www.google.com/maps/place/#{course.street_address_1}+#{course.city}+#{course.us_state}+#{course.postal_code}" %>
+            </p>
+          <% end -%>
         <% end -%>
       </div>
       <ul class="list-group">
@@ -27,7 +37,11 @@
       </ul>
       <% if @tournament.includes_player?(current_user) -%>
       <ul class="list-group">
-        <li class="list-group-item"><span class="badge"><%= @tournament.player_score(current_user) %></span><%= link_to "Your Scorecard", play_scorecard_path(@tournament.primary_scorecard_for_user(current_user)) %></li>
+        <% @tournament.tournament_days.each do |day| -%>
+          <li class="list-group-item">
+            <span class="badge"><%= day.player_score(current_user) %></span><%= link_to "Your Scorecard", play_scorecard_path(day.primary_scorecard_for_user(current_user)) %>
+          </li>
+        <% end -%>
       </ul>
       <% end -%>
     </div>
@@ -35,10 +49,11 @@
 </div>
 
 <div class="row">
+  <% @tournament.tournament_days.each do |day| -%>
   <div class="col-md-6">
     <div class="panel panel-default panel-success">
       <div class="panel-heading">
-        <h3 class="panel-title">Tournament Payouts</h3>
+        <h3 class="panel-title"><%= day.pretty_day(true) %>Tournament Payouts</h3>
       </div>
       <% if @tournament.is_finalized -%>
       <table class="table table-striped">
@@ -51,7 +66,7 @@
         </thead>
         <tbody>
           <% cache(cache_key_for_tournament_with_prefix(@tournament, "tournament-payouts")) do %>
-            <% @tournament.flights.each_with_index do |f, x| %>
+            <% day.flights.each_with_index do |f, x| %>
               <% f.payouts.each do |p| %>
               <tr>
                 <td><strong><%= f.flight_number %></strong></td>
@@ -59,7 +74,7 @@
                 <td><%= number_to_currency(p.amount) %></td>
               </tr>
               <% end %>
-              <% if x < @tournament.flights_with_rankings.count - 1 -%>
+              <% if x < day.flights_with_rankings.count - 1 -%>
               <tr>
                 <td>&nbsp;</td>
                 <td>&nbsp;</td>
@@ -77,14 +92,16 @@
       <% end -%>
     </div>
   </div>
+  <% end -%>
   
+  <% @tournament.tournament_days.each do |day| -%>
   <div class="col-md-6">
     <div class="panel panel-default panel-success">
       <div class="panel-heading">
-        <h3 class="panel-title">Tournament Contests</h3>
+        <h3 class="panel-title"><%= day.pretty_day(true) %>Tournament Contests</h3>
       </div>
       <% cache(cache_key_for_tournament_with_prefix(@tournament, "tournament-contests")) do %>
-        <% if @tournament.contests.order("name").count > 0 -%>
+        <% if day.contests.order("name").count > 0 -%>
         <table class="table table-striped">
           <thead>
             <tr>
@@ -96,7 +113,7 @@
             </tr>
           </thead>
           <tbody>
-            <% @tournament.contests.each do |contest| %>
+            <% day.contests.each do |contest| %>
             <tr>
               <td><%= contest.name %></td>
               <td><%= format_winners(contest.winners) %></td>
@@ -109,29 +126,33 @@
         </table>
         <% else -%>
         <div class="panel-body">
-        This tournament does not have any contests setup.
+        No contests setup.
         </div>
         <% end -%>
       <% end -%>
     </div>
   </div>
+  <% end -%>
 </div>
 
 <div class="row">
   <% cache(cache_key_for_tournament_with_prefix(@tournament, "tournament-players")) do %>
-    <% if @tournament.golfer_teams.count == 0 -%>
-      <%= render partial: 'tournament_players_individual', locals: {tournament: @tournament} %>
-    <% else -%>
-      <%= render partial: 'tournament_players_teams', locals: {tournament: @tournament} %>
+    <% @tournament.tournament_days.each do |day| -%>
+      <% if day.golfer_teams.count == 0 -%>
+        <%= render partial: 'tournament_players_individual', locals: {tournament_day: day} %>
+      <% else -%>
+        <%= render partial: 'tournament_players_teams', locals: {tournament_day: day} %>
+      <% end -%>
     <% end -%>
   <% end -%>
   
+  <% @tournament.tournament_days.each do |day| -%>
   <div class="col-md-6">
     <div class="panel panel-default panel-success">
       <div class="panel-heading">
-        <h3 class="panel-title">Tournament Rankings</h3>
+        <h3 class="panel-title"><%= day.pretty_day(true) %>Tournament Rankings</h3>
       </div>
-      <% if @tournament.has_scores? -%>
+      <% if day.has_scores? -%>
       <table class="table table-striped">
       	<thead>
       		<tr>
@@ -145,7 +166,7 @@
       	</thead>
         <tbody>
           <% cache(cache_key_for_tournament_with_prefix(@tournament, "tournament-rankings")) do %>
-            <% @tournament.flights_with_rankings.each_with_index do |flight, x| %>
+            <% day.flights_with_rankings.each_with_index do |flight, x| %>
               <% flight[:players].each_with_index do |player, i| -%>
               <tr>
                 <td><strong><%= flight[:flight_number] %></strong></td>
@@ -156,7 +177,7 @@
                 <td><%= player[:points].to_i %></td>
               </tr>
               <% end -%>
-              <% if x < @tournament.flights_with_rankings.count - 1 -%>
+              <% if x < day.flights_with_rankings.count - 1 -%>
               <tr>
                 <td>&nbsp;</td>
                 <td>&nbsp;</td>
@@ -177,4 +198,5 @@
       <% end -%>
     </div>
   </div>
+  <% end -%>
 </div>
