@@ -18,7 +18,7 @@ module Addable
         score = Score.create!(scorecard: scorecard, course_hole: hole, sort_order: i)
       end
     
-      Payment.create(tournament: self, payment_amount: self.dues_amount * -1.0, user: user, payment_source: "Tournament Dues")
+      Payment.create(tournament: self.tournament, payment_amount: self.tournament.dues_amount * -1.0, user: user, payment_source: "Tournament Dues")
     
       self.automatically_build_teams
     end 
@@ -72,7 +72,7 @@ module Addable
       end
     
       #credit
-      Payment.create(tournament: self, payment_amount: self.dues_amount, user: user, payment_source: "Tournament Dues Credit")
+      Payment.create(tournament: self.tournament, payment_amount: self.tournament.dues_amount, user: user, payment_source: "Tournament Dues Credit")
     
       #remove from golfer team
       self.automatically_build_teams
@@ -85,7 +85,7 @@ module Addable
     self.flights.each do |f|
       f.users.clear
         
-      self.players.each do |p|            
+      self.tournament.players.each do |p|            
         player_course_handicap = self.golf_outing_for_player(p).course_handicap
               
         unless player_course_handicap.blank?
@@ -101,7 +101,7 @@ module Addable
     self.touch #bust the cache, yo.
   
     if confirm_all_flighted == true          
-      self.players.each do |p|
+      self.tournament.players.each do |p|
         if self.flight_for_player(p) == nil          
           error_massage_is_comfy = "Player Not Flighted: #{p.id} in Tournament #{self.id} | Index: #{self.golf_outing_for_player(p).course_handicap}"
         

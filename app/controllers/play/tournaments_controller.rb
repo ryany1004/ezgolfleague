@@ -29,12 +29,12 @@ class Play::TournamentsController < BaseController
     if @tournament.includes_player?(current_user)
       redirect_to play_tournament_signup_path(@tournament), :flash => { :error => "You are already registered for this tournament. Remove your existing registration and try again." }
     else
-      @tournament.add_player_to_group(tournament_group, current_user)
+      @tournament.first_day.add_player_to_group(tournament_group, current_user)
       
       #other associated signup
       if !params[:tournament].blank? && !params[:tournament][:another_member_id].blank?
         other_user = User.find(params[:tournament][:another_member_id])
-        @tournament.add_player_to_group(tournament_group, other_user, false)
+        @tournament.first_day.add_player_to_group(tournament_group, other_user, false)
       end
       
       #payment
@@ -47,14 +47,16 @@ class Play::TournamentsController < BaseController
   end
   
   def remove_signup
-    @tournament.tournament_groups.each do |tg|
-      tg.teams.each do |team|
-        team.golf_outings.each do |outing|
-          @tournament.remove_player_from_group(tg, current_user) if outing.user == current_user
+    @tournament.tournament_days.each do |day|
+      day.tournament_groups.each do |tg|
+        tg.teams.each do |team|
+          team.golf_outings.each do |outing|
+            day.remove_player_from_group(tg, current_user) if outing.user == current_user
+          end
         end
       end
     end
-    
+
     redirect_to play_dashboard_index_path, :flash => { :success => "Your registration has been canceled." }
   end
   
