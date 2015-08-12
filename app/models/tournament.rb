@@ -1,4 +1,6 @@
-class Tournament < ActiveRecord::Base  
+class Tournament < ActiveRecord::Base
+  include Findable
+    
   belongs_to :league, inverse_of: :tournaments
   has_many :tournament_days, -> { order(:tournament_at) }, inverse_of: :tournament, :dependent => :destroy
   has_many :payments, inverse_of: :tournament

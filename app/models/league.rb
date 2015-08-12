@@ -57,24 +57,26 @@ class League < ActiveRecord::Base
     ranked_players = []
     
     year_date = Date.parse("#{year}-01-01")
-    tournaments = Tournament.where(league: self).where("tournament_at >= ? AND tournament_at <= ?", year_date.at_beginning_of_year, year_date.at_end_of_year).includes(tournament_groups: [teams: :golf_outings])
-    
+
+    tournaments = Tournament.tournaments_happening_at_some_point(year_date.at_beginning_of_year, year_date.at_end_of_year, self)
     tournaments.each do |t|
-      t.players.each do |p|
-        points = t.player_points(p)
+      t.tournament_days.each do |day|
+        day.players.each do |p|
+          points = day.player_points(p)
       
-        found_existing_player = false
+          found_existing_player = false
         
-        ranked_players.each do |r|
-          if r[:id] == p.id
-            r[:points] = r[:points] + points
+          ranked_players.each do |r|
+            if r[:id] == p.id
+              r[:points] = r[:points] + points
             
-            found_existing_player = true
+              found_existing_player = true
+            end
           end
-        end
       
-        if found_existing_player == false
-          ranked_players << { id: p.id, name: p.complete_name, points: points, ranking: 0 }
+          if found_existing_player == false
+            ranked_players << { id: p.id, name: p.complete_name, points: points, ranking: 0 }
+          end
         end
       end
     end

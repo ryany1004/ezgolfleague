@@ -92,37 +92,38 @@ Rails.application.routes.draw do
   resources :leagues do
     resources :league_memberships
     resources :tournaments do #this is for setting them up
+      resources :tournament_days do
+        resource :game_types do
+          get 'options', on: :collection
+        end
+      
+        resources :golfer_teams
+        
+        resources :flights do
+          resources :payouts
+        end
+      
+        resources :contests do
+          resources :contest_results
+        end
+      
+        resources :tournament_groups do
+          post 'batch_create', on: :collection
+        end
+        
+        get 'manage_holes'
+        patch 'update_holes'
+      end
+      
       get 'signups'
       post 'add_signup'
       delete 'delete_signup'
-
-      get 'manage_holes'
-      patch 'update_holes'
       
       get 'finalize'
       patch 'confirm_finalization'
       
       patch 'update_course_handicaps'
-      
-      resource :game_types do
-        get 'options', on: :collection
-      end
-      
-      resources :golfer_teams
-      
       patch 'touch_tournament'
-      
-      resources :flights do
-        resources :payouts
-      end
-      
-      resources :contests do
-        resources :contest_results
-      end
-      
-      resources :tournament_groups do
-        post 'batch_create', on: :collection
-      end
     end
     
     patch 'update_from_ghin'

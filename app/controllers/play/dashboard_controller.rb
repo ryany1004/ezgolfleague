@@ -3,10 +3,10 @@ class Play::DashboardController < BaseController
     
   def index
     @page_title = "My Dashboard"
-      
-    @todays_tournaments = current_user.selected_league.tournaments.where("tournament_at >= ? AND tournament_at < ?", Time.zone.now.at_beginning_of_day, Time.zone.now.at_end_of_day).order("tournament_at")
-    @upcoming_tournaments = current_user.selected_league.tournaments.where("tournament_at >= ?", Time.zone.now.at_end_of_day).order("tournament_at")
-    @past_tournaments = current_user.selected_league.tournaments.where("tournament_at < ?", Time.zone.now.at_beginning_of_day).order("tournament_at")
+    
+    @todays_tournaments = Tournament.all_today(current_user.selected_league)
+    @upcoming_tournaments = Tournament.all_upcoming(current_user.selected_league)
+    @past_tournaments = Tournament.all_past(current_user.selected_league)
 
     @rankings = current_user.selected_league.ranked_users_for_year(Date.today.year.to_s)
   
