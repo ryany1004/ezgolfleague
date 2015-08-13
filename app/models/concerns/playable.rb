@@ -1,6 +1,14 @@
 module Playable
   extend ActiveSupport::Concern
 
+  def display_teams?
+    self.tournament_days.each do |day|
+      return true if day.allow_teams == GameTypes::TEAMS_ALLOWED || day.allow_teams == GameTypes::TEAMS_REQUIRED
+    end
+    
+    return false
+  end
+
   def players
     players = []
   

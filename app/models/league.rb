@@ -58,7 +58,7 @@ class League < ActiveRecord::Base
     
     year_date = Date.parse("#{year}-01-01")
 
-    tournaments = Tournament.tournaments_happening_at_some_point(year_date.at_beginning_of_year, year_date.at_end_of_year, self)
+    tournaments = Tournament.tournaments_happening_at_some_point(year_date.at_beginning_of_year, year_date.at_end_of_year, [self])
     tournaments.each do |t|
       t.players.each do |p|
         points = 0

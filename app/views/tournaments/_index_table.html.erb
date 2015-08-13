@@ -22,11 +22,23 @@
     		<tr>
           <td><%= link_to tournament.name, edit_league_tournament_path(tournament.league, tournament) %></td>
           <td><%= tournament.league.name %></td>
-          <td><%= tournament.course.name %></td>
-          <td><%= tournament.tournament_at.to_s(:short) %></td>
+          <td>
+            <% tournament.tournament_days.each do |day| -%>
+              <%= day.course.name %><br/>
+            <% end -%>
+          </td>
+          <td>
+            <% tournament.tournament_days.each do |day| -%>
+              <%= day.tournament_at.to_s(:short) %><br/>
+            <% end -%>
+          </td>
           <td><%= tournament.signup_opens_at.to_s(:short) %></td>
           <td><%= tournament.players.count %> / <%= tournament.max_players %></td>
-          <td><%= human_boolean(tournament.can_be_played?) %></td>
+          <td>
+            <% tournament.tournament_days.each do |day| -%>
+              <%= human_boolean(day.can_be_played?) %><br/>
+            <% end -%>
+          </td>
           <td>
           <div class="btn-group">
             <button class="btn btn-default btn-xs dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false">
@@ -37,12 +49,13 @@
               <li><%= link_to "Scorecards", scorecards_path(tournament_id: tournament) %></li>
               <li class="divider"></li>
               <li><%= link_to "Game Type", edit_league_tournament_game_types_path(tournament.league, tournament) %></li>
-              <li><%= link_to 'Tee Times', league_tournament_tournament_groups_path(tournament.league, tournament) %></li>
-              <% if tournament.allow_teams == GameTypes::TEAMS_ALLOWED || tournament.allow_teams == GameTypes::TEAMS_REQUIRED -%>
-              <li><%= link_to 'Teams', league_tournament_golfer_teams_path(tournament.league, tournament) %></li>
+              <li><%= link_to "Tee Times", league_tournament_tournament_groups_path(tournament.league, tournament) %></li>
+              <% if tournament.display_teams? -%>
+              <li><%= link_to "Teams", league_tournament_golfer_teams_path(tournament.league, tournament) %></li>
               <% end -%>
-              <li><%= link_to 'Flights & Payouts', league_tournament_flights_path(tournament.league, tournament) %></li>
-              <li><%= link_to 'Contests', league_tournament_contests_path(tournament.league, tournament) %></li>
+              <li><%= link_to "Flights & Payouts", league_tournament_flights_path(tournament.league, tournament) %></li>
+              <li><%= link_to "Contests", league_tournament_contests_path(tournament.league, tournament) %></li>
+              <li class="divider"></li>
               <li><%= link_to 'Finalize Tournament', league_tournament_finalize_path(tournament.league, tournament) %></li>
               <li class="divider"></li>
               <% if tournament.is_past? == false -%>

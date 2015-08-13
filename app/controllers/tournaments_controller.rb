@@ -3,14 +3,13 @@ class TournamentsController < BaseController
   before_filter :initialize_form, :only => [:new, :edit]
   before_filter :set_stage
   
-  def index   
+  def index
     if current_user.is_super_user?
-      @upcoming_tournaments = Tournament.where("tournament_at >= ?", Date.today).includes([:league, :course]).page params[:page]
-      @past_tournaments = Tournament.where("tournament_at < ?", Date.today).includes([:league, :course]).page params[:page]
-    else      
-      membership_ids = current_user.leagues.map { |n| n.id }
-      @upcoming_tournaments = Tournament.joins(:league).where("leagues.id IN (?)", membership_ids).where("tournament_at >= ?", Date.today).page params[:page]
-      @past_tournaments = Tournament.joins(:league).where("leagues.id IN (?)", membership_ids).where("tournament_at < ?", Date.today).page params[:page]
+      @upcoming_tournaments = Tournament.all_upcoming(nil).page params[:page]
+      @past_tournaments = Tournament.all_past(nil).page params[:page]
+    else
+      @upcoming_tournaments = Tournament.all_upcoming(current_user.leagues).page params[:page]
+      @past_tournaments = Tournament.all_past(current_user.leagues).page params[:page]
     end
 
     @page_title = "Tournaments"
@@ -19,15 +18,12 @@ class TournamentsController < BaseController
   def new
     @tournament = Tournament.new
     @tournament.league = current_user.leagues.first if current_user.leagues.count == 1
-    @tournament.tournament_at = DateTime.now
+    @tournament.number_of_days_to_create = 1
     @tournament.signup_opens_at = DateTime.now
   end
   
   def create
     @tournament = Tournament.new(tournament_params)
-    @tournament.course.course_holes.each do |ch|
-      @tournament.course_holes << ch
-    end
     
     @tournament.skip_date_validation = current_user.is_super_user
     
@@ -42,21 +38,14 @@ class TournamentsController < BaseController
   
   def touch_tournament
     @tournament.touch
+    @tournament.tournament_days.each do |day|
+      day.touch
+    end
     
     redirect_to league_tournaments_path(current_user.selected_league), :flash => { :success => "Cached data for this tournament was discarded." }
   end
   
-  def manage_holes
-    @stage_name = "hole_information"
-  end
 
-  def update_holes
-    if @tournament.update(tournament_params)
-      redirect_to edit_league_tournament_game_types_path(current_user.selected_league, @tournament), :flash => { :success => "The tournament holes were successfully updated. Please select a game type." }
-    else
-      render :manage_holes
-    end
-  end
 
   def edit
   end
@@ -156,7 +145,7 @@ class TournamentsController < BaseController
   end
   
   def tournament_params
-    params.require(:tournament).permit(:name, :league_id, :course_id, :tournament_at, :dues_amount, :signup_opens_at, :signup_closes_at, :max_players, :show_players_tee_times, :course_hole_ids => [])
+    params.require(:tournament).permit(:name, :league_id, :number_of_days_to_create, :dues_amount, :signup_opens_at, :signup_closes_at, :max_players, :show_players_tee_times)
   end
   
   def fetch_tournament
@@ -167,9 +156,7 @@ class TournamentsController < BaseController
     end
   end
   
-  def initialize_form    
-    @courses = Course.all.order("name")
-    
+  def initialize_form        
     if current_user.is_super_user?
       @leagues = League.all.order("name")
     else

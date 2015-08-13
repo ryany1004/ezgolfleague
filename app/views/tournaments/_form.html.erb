@@ -14,14 +14,16 @@
     <h3>Basic Details</h3>
     <div class="well">  
       <%= f.input :league_id, collection: @leagues, :label => 'League', :label_method => :name %>
-        
-      <%= f.input :course_id, collection: @courses, :label => 'Course', :label_method => :name %>
-    
+
   	  <%= f.input :name, :label => 'Name', required: true %>
     
       <%= f.input :dues_amount, :label => 'Dues Amount ($)' %>
+    </div>
     
-      <%= f.input :tournament_at, :label => 'Tournament Date', required: true, :as => :datetime_picker, :input_html => {:onchange => "$('#tournament_signup_closes_at').val(this.val());"} %>
+    <h3>Tournament Days</h3>
+    <div class="well">  
+  	  <%= f.input :number_of_days_to_create, :label => 'Number of Tournament Days', required: true, as: :integer, input_html: {value: @tournament.tournament_days.count || '1'} %>
+      <p><em>Dates for the tournament day(s) will be specified on the next page.</em></p>
     </div>
 
     <h3>Sign Up Info</h3>
