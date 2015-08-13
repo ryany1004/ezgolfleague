@@ -18,7 +18,6 @@ class TournamentsController < BaseController
   def new
     @tournament = Tournament.new
     @tournament.league = current_user.leagues.first if current_user.leagues.count == 1
-    @tournament.number_of_days_to_create = 1
     @tournament.signup_opens_at = DateTime.now
   end
   
@@ -44,8 +43,6 @@ class TournamentsController < BaseController
     
     redirect_to league_tournaments_path(current_user.selected_league), :flash => { :success => "Cached data for this tournament was discarded." }
   end
-  
-
 
   def edit
   end
@@ -145,7 +142,7 @@ class TournamentsController < BaseController
   end
   
   def tournament_params
-    params.require(:tournament).permit(:name, :league_id, :number_of_days_to_create, :dues_amount, :signup_opens_at, :signup_closes_at, :max_players, :show_players_tee_times)
+    params.require(:tournament).permit(:name, :league_id, :dues_amount, :signup_opens_at, :signup_closes_at, :max_players, :show_players_tee_times)
   end
   
   def fetch_tournament

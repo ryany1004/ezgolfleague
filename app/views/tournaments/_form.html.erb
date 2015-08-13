@@ -20,12 +20,6 @@
       <%= f.input :dues_amount, :label => 'Dues Amount ($)' %>
     </div>
     
-    <h3>Tournament Days</h3>
-    <div class="well">  
-  	  <%= f.input :number_of_days_to_create, :label => 'Number of Tournament Days', required: true, as: :integer, input_html: {value: @tournament.tournament_days.count || '1'} %>
-      <p><em>Dates for the tournament day(s) will be specified on the next page.</em></p>
-    </div>
-
     <h3>Sign Up Info</h3>
     <div class="well">
       <%= f.input :signup_opens_at, :label => 'Signup Opening Date', :as => :datetime_picker, required: true %>

@@ -1,7 +1,7 @@
 <ol class="breadcrumb">
   <li><%= link_to "Tournaments", league_tournaments_path(current_user.selected_league) %></li>
   <li><%= link_to @tournament.name, edit_league_tournament_path(current_user.selected_league, @tournament) %></li>
-  <li class="active">Manage Teams</li>
+  <li class="active">Tournament Days</li>
 </ol>
 
 <%= render partial: '/shared/tournaments/manage', locals: {tournament: @tournament, stage: @stage_name} %>
@@ -11,33 +11,30 @@
 <table class="table table-striped">
 	<thead>
 		<tr>
-      <th>Team No.</th>
-			<th>Players</th>
-      <th>Tee Time</th>
+      <th>Date</th>
+			<th>Course</th>
       <% if user_is_league_admin(current_user, @tournament.league) -%>
-      <th><%= link_to 'Create Team', new_league_tournament_golfer_team_path(@tournament.league, @tournament), :class => 'btn btn-primary' %></th>
+      <th><%= link_to 'Add Day', new_league_tournament_tournament_day_path(@tournament.league, @tournament), :class => 'btn btn-primary' %></th>
       <% else -%>
       <th>&nbsp;</th>
       <% end -%>
 		</tr>
 	</thead>
 	<tbody>
-	<% @golfer_teams.each_with_index do |golfer_team, i| %>
+	<% @tournament.tournament_days.each do |day| %>
 		<tr>
-			<td><%= link_to "#{i + 1}", edit_league_tournament_golfer_team_path(@tournament.league, @tournament, golfer_team) %></td>
-			<td><%= team_member_names(golfer_team) %></td>
-      <td><%= @tournament.tournament_group_for_player(golfer_team.users.first).tee_time_at.to_s(:time_only) unless golfer_team.users.blank? %></td>
-      <td><%= link_to "Edit", edit_league_tournament_golfer_team_path(@tournament.league, @tournament, golfer_team) %> | <%= link_to 'Delete', league_tournament_golfer_team_path(@tournament.league, @tournament, golfer_team), :data => { :confirm => 'Are you sure you want to delete this team?' }, :method => :delete %></td>
+			<td><%= day.tournament_at.to_s(:short) %></td>
+      <td><%= day.course.name %></td>
+      <td><%= link_to "Edit", edit_league_tournament_tournament_day_path(@tournament.league, @tournament, day) %> | <%= link_to 'Delete', league_tournament_tournament_day_path(@tournament.league, @tournament, day), :data => { :confirm => 'Are you sure you want to delete this day? It will remove all flights, scores, contents and related data.' }, :method => :delete %></td>
 		</tr>
 	<% end %>
 	</tbody>
   <tfoot>
 		<tr>
 			<th>&nbsp;</th>
-			<th>&nbsp;</th>
       <th>&nbsp;</th>
       <% if user_is_league_admin(current_user, @tournament.league) -%>
-      <th><%= link_to 'Create Team', new_league_tournament_contest_path(@tournament.league, @tournament), :class => 'btn btn-primary' %></th>
+      <th><%= link_to 'Add Day', new_league_tournament_tournament_day_path(@tournament.league, @tournament), :class => 'btn btn-primary' %></th>
       <% else -%>
       <th>&nbsp;</th>
       <% end -%>

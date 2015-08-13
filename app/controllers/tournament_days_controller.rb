@@ -2,26 +2,57 @@ class TournamentDaysController < BaseController
   before_filter :set_stage
   before_filter :initialize_form, :only => [:new, :edit]
   before_filter :fetch_tournament
-  before_filter :fetch_tournament_day, :only => [:edit, :update]
+  before_filter :fetch_tournament_day, :only => [:edit, :update, :destroy]
 
   def index
   end
   
   def new
+    @tournament_day = TournamentDay.new
+    @tournament_day.tournament_at = @tournament.signup_closes_at
   end
   
-  def create
-    #@tournament.skip_date_validation = current_user.is_super_user
+  def create        
+    @tournament_day = TournamentDay.new(tournament_day_params)
+    @tournament_day.tournament = @tournament
+    @tournament_day.game_type_id = 1
     
-    # @tournament.course.course_holes.each do |ch|
-    #   @tournament.course_holes << ch
-    # end
+    @tournament_day.course.course_holes.each do |ch|
+      @tournament_day.course_holes << ch
+    end
+    
+    @tournament_day.skip_date_validation = current_user.is_super_user
+    
+    if @tournament_day.save
+      if params[:commit] == "Save & Continue"
+        redirect_to league_tournament_manage_holes_path(@tournament.league, @tournament), :flash => { :success => "The day was successfully created." }
+      else
+        redirect_to league_tournament_tournament_days_path(@tournament.league, @tournament), :flash => { :success => "The day was successfully created." }
+      end 
+    else    
+      initialize_form
+        
+      render :new
+    end
   end
   
   def edit
   end
   
   def update
+    if @tournament_day.update(tournament_day_params)
+      redirect_to league_tournament_tournament_days_path(@tournament.league, @tournament), :flash => { :success => "The day was successfully updated." }
+    else
+      initialize_form
+      
+      render :edit
+    end
+  end
+  
+  def destroy
+    @tournament_day.destroy
+    
+    redirect_to league_tournament_tournament_days_path(@tournament.league, @tournament), :flash => { :success => "The day was successfully deleted." }
   end
   
   #Course Holes
@@ -41,7 +72,7 @@ class TournamentDaysController < BaseController
   private
   
   def tournament_day_params
-    #params.require(:tournament).permit(:name, :league_id, :course_id, :tournament_at, :dues_amount, :signup_opens_at, :signup_closes_at, :max_players, :show_players_tee_times, :course_hole_ids => [])
+    params.require(:tournament_day).permit(:course_id, :tournament_at, :course_hole_ids => [])
   end
   
   def fetch_tournament_day

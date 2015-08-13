@@ -66,9 +66,7 @@ class CreateTournamentDays < ActiveRecord::Migration
     drop_table :course_holes_tournaments
   end
   
-  #TODO: primary_scorecard_for_user
   #TODO: Cache Busting Must Move to Tournament Day
   #TODO: Importers
-  #TODO: Game Type Metadata Conversion (rebuild?)
   
 end

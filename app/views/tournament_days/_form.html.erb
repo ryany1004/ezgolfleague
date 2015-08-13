@@ -1,5 +1,5 @@
 <% if is_editable?(@tournament) -%>
-  <%= simple_form_for [@tournament.league, @tournament, @golfer_team] do |f| %>
+  <%= simple_form_for [@tournament.league, @tournament, @tournament_day] do |f| %>
     <% if notification = f.error_notification %>
       <div class="alert alert-error fade in">
         <a class="close" data-dismiss="alert" href="#">&times;</a>
@@ -7,19 +7,18 @@
       </div>
     <% end %>
   
-    <legend>Day Details</legend>
+    <legend>Tournament Day Details</legend>
     
     <h3>Basic Details</h3>
     <div class="well">  
       <%= f.input :course_id, collection: @courses, :label => 'Course', :label_method => :name %>
       
-      <%= f.input :tournament_at, :label => 'Tournament Date', required: true, :as => :datetime_picker, :input_html => {:onchange => "$('#tournament_signup_closes_at').val(this.val());"} %>
+      <%= f.input :tournament_at, :label => 'Tournament Date', required: true, :as => :datetime_picker %>
     </div>
-  
-  
+
     <div class="form-actions">
-      <% if @golfer_team.new_record? -%>
-        <%= f.button :submit, "Save & Create Another Team", :class => 'btn btn-default' %>
+      <% if @tournament_day.new_record? -%>
+        <%= f.button :submit, "Save & Create Another Day", :class => 'btn btn-default' %>
         <%= f.button :submit, "Save & Continue", :class => 'btn btn-primary' %>
       <% else -%>
         <%= f.button :submit, "Save", :class => 'btn btn-default' %>
@@ -28,6 +27,6 @@
   <% end %>
 <% else -%>
   <div class="well">
-    Teams cannot be edited because the tournament is underway.
+    This tournament day cannot be edited because the tournament is underway.
   </div>
 <% end %>

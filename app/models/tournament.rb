@@ -7,7 +7,6 @@ class Tournament < ActiveRecord::Base
   has_many :payments, inverse_of: :tournament
 
   attr_accessor :another_member_id
-  attr_accessor :number_of_days_to_create
   attr_accessor :skip_date_validation
   
   validates :name, presence: true
