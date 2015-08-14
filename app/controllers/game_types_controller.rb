@@ -8,12 +8,14 @@ class GameTypesController < BaseController
 
   def update
     if @tournament.update(tournament_params)
-      unless params[:game_type_options].blank? 
-        @tournament.game_type.save_setup_details(params[:game_type_options])
-      else
-        @tournament.game_type.remove_game_type_options
+      @tournament.tournament_days.each do |day|
+        unless params[:game_type_options][day.id.to_s].blank?          
+          day.game_type.save_setup_details(params[:game_type_options][day.id.to_s])
+        else          
+          day.game_type.remove_game_type_options
+        end
       end
-      
+
       redirect_to league_tournament_tournament_groups_path(current_user.selected_league, @tournament), :flash => { :success => "The tournament was successfully updated." }
     else
       render :edit
@@ -25,7 +27,8 @@ class GameTypesController < BaseController
     @game_type_partial_name = game_type.setup_partial
     
     unless @game_type_partial_name.blank?
-      @tournament.game_type_id = game_type.game_type_id
+      @tournament_day = @tournament.tournament_days.find(params[:day])
+      @tournament_day.game_type_id = game_type.game_type_id
       
       respond_to do |format|
         format.js {}
@@ -50,7 +53,7 @@ class GameTypesController < BaseController
   end
   
   def tournament_params
-    params.require(:tournament).permit(:game_type_id)
+    params.require(:tournament).permit(tournament_days_attributes: [:id, :game_type_id])
   end
   
   def fetch_tournament

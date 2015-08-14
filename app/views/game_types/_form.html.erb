@@ -10,21 +10,20 @@
 
   <legend>Select a Game Type</legend>
 
-  <h3>Basic Details</h3>
-  <div class="well">  
-    <%= f.input :game_type_id, collection: @game_types, :label => 'Game Type', :label_method => :display_name, :value_method => :game_type_id, :include_blank => false, :input_html => {:onchange => "loadGameTypeOptions(#{current_user.selected_league.id}, #{@tournament.id}, this)"} %>
-  </div>
-
-  <h3>Game Type Options</h3>
-  <div class="well">
-    <div id="gameTypeOptions">
-      <% if @tournament.game_type.blank? == false && @tournament.game_type.setup_partial.blank? == false -%>
-        <%= render partial: @tournament.game_type.setup_partial, locals: {tournament: @tournament} %>
-      <% else -%>
-        <p>No configurable options for this game type.</p>
-      <% end -%>
+  <%= f.simple_fields_for :tournament_days do |p| %>
+    <h3><%= p.object.pretty_day(true) %> Details</h3>
+    <div class="well">  
+      <%= p.input :game_type_id, collection: @game_types, :label => 'Game Type', :label_method => :display_name, :value_method => :game_type_id, :include_blank => false, :input_html => {:onchange => "loadGameTypeOptions(#{current_user.selected_league.id}, #{@tournament.id}, #{p.object.id}, this)"} %>
+      
+      <div id="gameTypeOptions<%= p.object.id %>">
+        <% if p.object.game_type.blank? == false && p.object.game_type.setup_partial.blank? == false -%>
+          <%= render partial: p.object.game_type.setup_partial, locals: {tournament_day: p.object} %>
+        <% else -%>
+          <p>No configurable options for this game type.</p>
+        <% end -%>
+      </div>
     </div>
-  </div>
+  <% end -%>
 
   <div class="form-actions">
     <%= f.button :submit, "Save", :class => 'btn btn-default' %>

@@ -6,6 +6,8 @@ class Tournament < ActiveRecord::Base
   has_many :tournament_days, -> { order(:tournament_at) }, inverse_of: :tournament, :dependent => :destroy
   has_many :payments, inverse_of: :tournament
 
+  accepts_nested_attributes_for :tournament_days
+
   attr_accessor :another_member_id
   attr_accessor :skip_date_validation
   

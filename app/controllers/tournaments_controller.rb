@@ -63,6 +63,20 @@ class TournamentsController < BaseController
     redirect_to league_tournaments_path(current_user.selected_league), :flash => { :success => "The tournament was successfully deleted." }
   end
   
+  #Course Holes
+  
+  def manage_holes
+    @stage_name = "hole_information"
+  end
+
+  def update_holes    
+    if @tournament.update(tournament_params)
+      redirect_to edit_league_tournament_game_types_path(current_user.selected_league, @tournament), :flash => { :success => "The tournament holes were successfully updated. Please select a game type." }
+    else
+      render :manage_holes
+    end
+  end
+  
   # Signups
   
   def signups    
@@ -142,7 +156,7 @@ class TournamentsController < BaseController
   end
   
   def tournament_params
-    params.require(:tournament).permit(:name, :league_id, :dues_amount, :signup_opens_at, :signup_closes_at, :max_players, :show_players_tee_times)
+    params.require(:tournament).permit(:name, :league_id, :dues_amount, :signup_opens_at, :signup_closes_at, :max_players, :show_players_tee_times, tournament_days_attributes: [:id, :course_hole_ids => []])
   end
   
   def fetch_tournament

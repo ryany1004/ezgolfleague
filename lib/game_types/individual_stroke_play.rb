@@ -43,7 +43,7 @@ module GameTypes
       return "ShouldUseBackNineForTies-T-#{self.tournament_day.id}-GT-#{self.game_type_id}"
     end
     
-    def save_setup_details(game_type_options)
+    def save_setup_details(game_type_options)      
       should_use_back_nine_for_ties = 0
       should_use_back_nine_for_ties = 1 if game_type_options["use_back_9_to_handle_ties"] == 'true'
       

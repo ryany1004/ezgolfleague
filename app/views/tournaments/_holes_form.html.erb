@@ -1,4 +1,4 @@
-<h3>Holes and Game Info</h3>
+<h3><%= tournament_day.pretty_day(true) %>Course Holes</h3>
 <div class="well">
-  <%= f.association :course_holes, collection: tournament.course.course_holes, :label => 'Which holes are included?', :label_method => :name, as: :check_boxes %>
+  <%= p.association :course_holes, collection: tournament_day.course.course_holes, :label => 'Which holes are included?', :label_method => :name, as: :check_boxes %>
 </div>

@@ -14,7 +14,9 @@
     </div>
   <% end %>
 
-  <%= render partial: 'holes_form', locals: {tournament: @tournament, f: f} %>
+  <%= f.simple_fields_for :tournament_days do |p| %>
+    <%= render partial: 'holes_form', locals: {tournament_day: p.object, p: p} %>
+  <% end -%>
 
   <div class="form-actions">
     <%= f.button :submit, "Save", :class => 'btn btn-default' %>

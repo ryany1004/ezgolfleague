@@ -92,9 +92,7 @@ Rails.application.routes.draw do
   resources :leagues do
     resources :league_memberships
     resources :tournaments do #this is for setting them up
-      resources :tournament_days do
-        patch 'update_holes'
-      end
+      resources :tournament_days
       
       resource :game_types do
         get 'options', on: :collection
@@ -115,6 +113,7 @@ Rails.application.routes.draw do
       end
    
       get 'manage_holes'
+      patch 'update_holes'
    
       get 'signups'
       post 'add_signup'
