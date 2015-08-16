@@ -1,5 +1,14 @@
 <h4><%= @page_title %></h4>
 
+<% if @tournament.tournament_days.count > 1 -%>
+  <% @tournament.tournament_days.each do |day| -%>
+    <%= link_to_unless day == @tournament_day, day.pretty_day, league_tournament_signups_path(@tournament.league, @tournament, tournament_day: day) %>
+    <% if day != @tournament.tournament_days.last -%>
+      | 
+    <% end -%>
+  <% end -%>
+<% end -%>
+
 <table class="table table-striped">
 	<thead>
 		<tr>
@@ -20,7 +29,7 @@
       <tr>
         <td><%= golf_outing.user.complete_name %></td>
         <td>#<%= i + 1 %> - <%= tournament_group.tee_time_at.to_s(:date_and_time) %></td>
-        <td><%= @tournament.flight_for_player(golf_outing.user).flight_number %></td>
+        <td><%= @tournament_day.flight_for_player(golf_outing.user).flight_number %></td>
         <% if user_is_league_admin(current_user, @tournament.league) && is_editable?(@tournament) -%>
         <td><%= link_to "Delete Registration", league_tournament_delete_signup_path(@tournament.league, @tournament, group_id: tournament_group.id, user_id: golf_outing.user), :data => { :confirm => 'Are you sure you want to delete this registration?' }, :method => :delete %></td>
         <% else -%>
@@ -43,7 +52,7 @@
 
 <%= paginate @tournament_groups %>
 
-<%= simple_form_for :tournament_group_signup, url: league_tournament_add_signup_path(@tournament.league, @tournament), method: :post do |f| %>
+<%= simple_form_for :tournament_group_signup, url: league_tournament_add_signup_path(@tournament.league, @tournament, tournament_day: @tournament_day), method: :post do |f| %>
 <div class="modal fade" id="GroupSignup" role="dialog" aria-labelledby="gridSystemModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">

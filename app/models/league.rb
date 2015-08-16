@@ -117,8 +117,13 @@ class League < ActiveRecord::Base
     return ranked_players
   end
   
-  def users_not_signed_up_for_tournament(tournament, extra_ids_to_omit)
-    tournament_users = tournament.players
+  def users_not_signed_up_for_tournament(tournament, tournament_day, extra_ids_to_omit)
+    if tournament_day.blank?
+      tournament_users = tournament.players
+    else
+      tournament_users = tournament.players_for_day(tournament_day)
+    end
+    
     ids_to_omit = tournament_users.map { |n| n.id }
     
     extra_ids_to_omit.each do |eid|

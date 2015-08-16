@@ -13,10 +13,20 @@ module Playable
     players = []
   
     self.tournament_days.each do |day|
-      day.tournament_groups.each do |group|
-        group.players_signed_up.each do |player|
-          players << player unless players.include? player
-        end
+      self.players_for_day(day).each do |player|
+        players << player unless players.include? player
+      end
+    end
+
+    return players
+  end
+  
+  def players_for_day(day)
+    players = []
+  
+    day.tournament_groups.each do |group|
+      group.players_signed_up.each do |player|
+        players << player unless players.include? player
       end
     end
 
