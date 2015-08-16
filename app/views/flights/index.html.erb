@@ -12,7 +12,7 @@
       <h3 class="panel-title">Flights</h3>
     </div>
     <div class="panel-body">
-      By specifying handicap ranges when creating flights, players can automatically be placed based on their current course handicap. <strong>Verify that all players will be flighted.</strong>
+      By specifying handicap ranges when creating flights, players can automatically be placed based on their current course handicap. <strong>It's important to create enough flights that all players will be flighted.</strong>
     </div>
     <table class="table table-striped">
     	<thead>
@@ -22,7 +22,7 @@
           <th>Handicap Upper Bound</th>
           <th>Tee Box</th>
           <th>Payouts</th>
-          <th><%= link_to 'Create Flight', new_league_tournament_flight_path, :class => 'btn btn-primary' %></th>
+          <th><%= link_to 'Create Flight', new_league_tournament_flight_path(tournament_day: @tournament_day), :class => 'btn btn-primary' %></th>
     		</tr>
     	</thead>
     	<tbody>
@@ -32,8 +32,8 @@
     			<td><%= flight.lower_bound %></td>
           <td><%= flight.upper_bound %></td>
           <td><%= flight.course_tee_box.name %></td>
-          <td><%= link_to "Setup (#{flight.payouts.count})", league_tournament_flight_payouts_path(@tournament.league, @tournament, flight) %></td>
-          <td><%= link_to "Edit", edit_league_tournament_flight_path(@tournament.league, @tournament, flight) %> | <%= link_to 'Delete', league_tournament_flight_path(@tournament.league, @tournament, flight), :data => { :confirm => 'Are you sure you want to delete this flight? It will remove all associated payout information.' }, :method => :delete %></td>
+          <td><%= link_to "Setup (#{flight.payouts.count})", league_tournament_flight_payouts_path(@tournament.league, @tournament, flight, tournament_day: @tournament_day) %></td>
+          <td><%= link_to "Edit", edit_league_tournament_flight_path(@tournament.league, @tournament, flight, tournament_day: @tournament_day) %> | <%= link_to 'Delete', league_tournament_flight_path(@tournament.league, @tournament, flight, tournament_day: @tournament_day), :data => { :confirm => 'Are you sure you want to delete this flight? It will remove all associated payout information.' }, :method => :delete %></td>
     		</tr>
     	<% end %>
     	</tbody>
@@ -44,7 +44,7 @@
           <th>&nbsp;</th>
           <th>&nbsp;</th>
           <th>&nbsp;</th>
-          <th><%= link_to 'Create Flight', new_league_tournament_flight_path, :class => 'btn btn-primary' %></th>
+          <th><%= link_to 'Create Flight', new_league_tournament_flight_path(tournament_day: @tournament_day), :class => 'btn btn-primary' %></th>
     		</tr>
       </tfoot>
     </table>

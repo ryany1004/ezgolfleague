@@ -27,7 +27,7 @@ class TournamentsController < BaseController
     @tournament.skip_date_validation = current_user.is_super_user
     
     if @tournament.save
-      redirect_to league_tournament_manage_holes_path(@tournament.league, @tournament), :flash => { :success => "The tournament was successfully created. Please update course information." }
+      redirect_to league_tournament_tournament_days_path(@tournament.league, @tournament), :flash => { :success => "The tournament was successfully created. Please update course information." }
     else
       initialize_form
 

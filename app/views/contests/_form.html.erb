@@ -1,4 +1,4 @@
-<%= simple_form_for [@tournament.league, @tournament, @contest] do |f| %>
+<%= simple_form_for [@tournament.league, @tournament, @tournament_day, @contest] do |f| %>
   <% if notification = f.error_notification %>
     <div class="alert alert-error fade in">
       <a class="close" data-dismiss="alert" href="#">&times;</a>
@@ -21,7 +21,7 @@
     <% if @contest.course_holes.count == 0 -%>
     <h3>Please Select Course Holes</h3>
     <div class="well">  
-        <%= f.association :course_holes, collection: @tournament.course.course_holes, :label => 'Which holes are included?', :label_method => :name, as: :check_boxes %>
+        <%= f.association :course_holes, collection: @tournament_day.course.course_holes, :label => 'Which holes are included?', :label_method => :name, as: :check_boxes %>
     </div>
     <% end -%>
   <% end -%>

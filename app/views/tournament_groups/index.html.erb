@@ -1,7 +1,7 @@
 <ol class="breadcrumb">
   <li><%= link_to "Tournaments", league_tournaments_path(current_user.selected_league) %></li>
   <li><%= link_to @tournament.name, edit_league_tournament_path(current_user.selected_league, @tournament) %></li>
-  <li class="active">Manage Tee-Times<%= @tournament_day.pretty_day(true) %></li>
+  <li class="active">Manage Tee-Times <%= @tournament_day.pretty_day(true) %></li>
 </ol>
 
 <%= render partial: '/shared/tournaments/manage', locals: {tournament: @tournament, stage: @stage_name} %>
@@ -15,7 +15,7 @@
       <th>Max Players</th>
       <th>Currently Signed Up</th>
       <% if user_is_league_admin(current_user, @tournament.league) -%>
-      <th><%= link_to 'Create Tee Time', new_league_tournament_tournament_group_path(@tournament.league, @tournament), :class => 'btn btn-primary' %></th>
+      <th><%= link_to 'Create Tee Time', new_league_tournament_tournament_group_path(@tournament.league, @tournament, tournament_day: @tournament_day), :class => 'btn btn-primary' %></th>
       <% else -%>
       <th>&nbsp;</th>
       <% end -%>
@@ -24,11 +24,11 @@
 	<tbody>
 	<% @tournament_groups.each do |tournament_group| %>
 		<tr>
-			<td><%= link_to tournament_group.tee_time_at.to_s(:date_and_time), edit_league_tournament_tournament_group_path(@tournament.league, @tournament, tournament_group) %></td>
+			<td><%= link_to tournament_group.tee_time_at.to_s(:date_and_time), edit_league_tournament_tournament_group_path(@tournament.league, @tournament, tournament_group, tournament_day: @tournament_day) %></td>
 			<td><%= tournament_group.max_number_of_players %></td>
       <td><%= tournament_group.players_signed_up.count %></td>
       <% if user_is_league_admin(current_user, @tournament.league) %>
-      <td><%= link_to "Edit", edit_league_tournament_tournament_group_path(@tournament.league, @tournament, tournament_group) %> | <%= link_to 'Delete', league_tournament_tournament_group_path(@tournament.league, @tournament, tournament_group), :data => { :confirm => 'Are you sure you want to delete this tee time?' }, :method => :delete %></td>
+      <td><%= link_to "Edit", edit_league_tournament_tournament_group_path(@tournament.league, @tournament, tournament_group, tournament_day: @tournament_day) %> | <%= link_to 'Delete', league_tournament_tournament_group_path(@tournament.league, @tournament, tournament_group, tournament_day: @tournament_day), :data => { :confirm => 'Are you sure you want to delete this tee time?' }, :method => :delete %></td>
       <% else -%>
       <td>&nbsp;</td>
       <% end -%>
@@ -41,7 +41,7 @@
       <th>&nbsp;</th>
 			<th>&nbsp;</th>
       <% if user_is_league_admin(current_user, @tournament.league) -%>
-      <th><%= link_to 'Create Tee Time', new_league_tournament_tournament_group_path(@tournament.league, @tournament), :class => 'btn btn-primary' %></th>
+      <th><%= link_to 'Create Tee Time', new_league_tournament_tournament_group_path(@tournament.league, @tournament, tournament_day: @tournament_day), :class => 'btn btn-primary' %></th>
       <% else -%>
       <th>&nbsp;</th>
       <% end -%>

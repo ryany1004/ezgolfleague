@@ -92,7 +92,16 @@ Rails.application.routes.draw do
   resources :leagues do
     resources :league_memberships
     resources :tournaments do #this is for setting them up
-      resources :tournament_days
+      resources :tournament_days do
+        resources :flights, only: [:create, :update] do
+          resources :payouts, only: [:new, :create, :update]
+        end
+        resources :tournament_groups, only: [:create, :update]
+        resources :golfer_teams, only: [:create, :update]
+        resources :contests, only: [:create, :update] do
+          resources :contest_results, only: [:new, :create, :update]
+        end
+      end
       
       resource :game_types do
         get 'options', on: :collection

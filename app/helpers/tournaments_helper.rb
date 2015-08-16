@@ -11,7 +11,7 @@ module TournamentsHelper
   end
   
   def is_today?(tournament)
-    
+    return false if tournament.tournament_days.count == 0
     
     if tournament.first_day.tournament_at >= Time.zone.now.at_beginning_of_day && tournament.last_day.tournament_at < Time.zone.now.at_end_of_day
       return true

@@ -9,7 +9,9 @@
   
     <legend>Team Details</legend>
   
+    <% if !@golfer_team.new_record? -%>
     <div class="alert alert-warning" role="alert">NOTE: Customizing teams will disable automatic team balancing features. Future team edits will need to be done manually.</div>
+    <% end -%>
   
     <h3>Basic Details</h3>
     <div class="well">  
@@ -25,7 +27,7 @@
   
     <h3>Tee Time</h3>
     <div class="well">  
-  	  <%= f.input :requested_tournament_group_id, label: 'Tee Time for Team', collection: @tournament.tournament_groups, label_method: :formatted_tee_time, value_method: :id %>
+  	  <%= f.input :requested_tournament_group_id, label: 'Tee Time for Team', collection: @tournament_day.tournament_groups, label_method: :formatted_tee_time, value_method: :id %>
     </div>
     <% end -%>
   

@@ -91,6 +91,10 @@ module Addable
         unless player_course_handicap.blank?
           if player_course_handicap >= f.lower_bound && player_course_handicap <= f.upper_bound            
             f.users << p
+            
+            Rails.logger.debug { "Player Flighted: #{p.id}" }
+          else
+            Rails.logger.debug { "Handicap Not In Bounds: #{player_course_handicap} for Player: #{p.id}" }
           end
         else
           Rails.logger.debug { "Player Course Handicap Blank: #{p.id}" }
@@ -100,7 +104,7 @@ module Addable
   
     self.touch #bust the cache, yo.
   
-    if confirm_all_flighted == true          
+    if confirm_all_flighted == true && self.flights.count > 0          
       self.tournament.players.each do |p|
         if self.flight_for_player(p) == nil          
           error_massage_is_comfy = "Player Not Flighted: #{p.id} in Tournament #{self.id} | Index: #{self.golf_outing_for_player(p).course_handicap}"

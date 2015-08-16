@@ -16,7 +16,13 @@ class GameTypesController < BaseController
         end
       end
 
-      redirect_to league_tournament_tournament_groups_path(current_user.selected_league, @tournament), :flash => { :success => "The tournament was successfully updated." }
+      if params[:tournament_day].blank?
+        @tournament_day = @tournament.first_day
+      else
+        @tournament_day = @tournament.tournament_days.find(params[:tournament_day])
+      end
+
+      redirect_to league_tournament_tournament_groups_path(current_user.selected_league, @tournament, tournament_day: @tournament_day), :flash => { :success => "The tournament was successfully updated." }
     else
       render :edit
     end

@@ -66,7 +66,6 @@ class CreateTournamentDays < ActiveRecord::Migration
     drop_table :course_holes_tournaments
   end
   
-  #TODO: Cache Busting Must Move to Tournament Day
   #TODO: Importers
   
 end

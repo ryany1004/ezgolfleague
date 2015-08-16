@@ -17,7 +17,7 @@
       <th>Details</th>
       <th>Amount</th>
       <% if user_is_league_admin(current_user, @tournament.league) && @contest.can_accept_more_results? -%>
-      <th><%= link_to 'Add Contest Result', new_league_tournament_contest_contest_result_path(@tournament.league, @tournament, @contest), :class => 'btn btn-primary' %></th>
+      <th><%= link_to 'Add Contest Result', new_league_tournament_tournament_day_contest_contest_result_path(@tournament.league, @tournament, @tournament_day, @contest), :class => 'btn btn-primary' %></th>
       <% else -%>
       <th>&nbsp;</th>
       <% end -%>
@@ -26,11 +26,11 @@
 	<tbody>
 	<% @contest_results.each do |result| %>
 		<tr>
-			<td><%= link_to result.location, edit_league_tournament_contest_contest_result_path(@tournament.league, @tournament, @contest, result) %></td>
+			<td><%= link_to result.location, edit_league_tournament_contest_contest_result_path(@tournament.league, @tournament, @contest, result, tournament_day: @tournament_day) %></td>
 			<td><%= result.winner.complete_name %></td>
       <td><%= result.result_value %></td>
       <td><%= number_to_currency(result.payout_amount) %></td>
-      <td><%= link_to "Edit", edit_league_tournament_contest_contest_result_path(@tournament.league, @tournament, @contest, result) %> | <%= link_to 'Delete', league_tournament_contest_contest_result_path(@tournament.league, @tournament, @contest, result), :data => { :confirm => 'Are you sure you want to delete this contest result?' }, :method => :delete %></td>
+      <td><%= link_to "Edit", edit_league_tournament_contest_contest_result_path(@tournament.league, @tournament, @contest, result, tournament_day: @tournament_day) %> | <%= link_to 'Delete', league_tournament_contest_contest_result_path(@tournament.league, @tournament, @contest, result, tournament_day: @tournament_day), :data => { :confirm => 'Are you sure you want to delete this contest result?' }, :method => :delete %></td>
 		</tr>
 	<% end %>
 	</tbody>
@@ -41,7 +41,7 @@
 			<th>&nbsp;</th>
       <th>&nbsp;</th>
       <% if user_is_league_admin(current_user, @tournament.league) && @contest.can_accept_more_results? -%>
-      <th><%= link_to 'Add Contest Result', new_league_tournament_contest_contest_result_path(@tournament.league, @tournament, @contest), :class => 'btn btn-primary' %></th>
+      <th><%= link_to 'Add Contest Result', new_league_tournament_tournament_day_contest_contest_result_path(@tournament.league, @tournament, @tournament_day, @contest), :class => 'btn btn-primary' %></th>
       <% else -%>
       <th>&nbsp;</th>
       <% end -%>
