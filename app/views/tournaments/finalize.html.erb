@@ -18,6 +18,7 @@
       <table class="table table-striped">
       	<thead>
       		<tr>
+            <th>Day</th>
             <th>Flight</th>
             <th>Player</th>
             <th>Strokes</th>
@@ -27,19 +28,25 @@
       		</tr>
       	</thead>
       	<tbody>
-      	<% @payouts.each do |payout| %>
-      		<tr>
-            <td><%= payout.flight.flight_number %></td>
-            <td><%= payout.user.complete_name unless payout.user.blank? %></td>
-            <td><%= @tournament.player_score(payout.user) unless payout.user.blank? %></td>
-            <td><%= @tournament.golf_outing_for_player(payout.user).course_handicap unless payout.user.blank? %></td>
-      			<td><%= number_to_currency(payout.amount) %></td>
-      			<td><%= payout.points.to_i %></td>
-      		</tr>
-      	<% end %>
+          <% @tournament.tournament_days.each do |day| -%>
+            <% day.flights.each do |flight| -%>
+              <% flight.payouts.each do |payout| -%>
+            		<tr>
+                  <td><%= day.tournament_at.to_s(:short) %></td>
+                  <td><%= payout.flight.flight_number %></td>
+                  <td><%= payout.user.complete_name unless payout.user.blank? %></td>
+                  <td><%= day.player_score(payout.user) unless payout.user.blank? %></td>
+                  <td><%= day.golf_outing_for_player(payout.user).course_handicap unless payout.user.blank? %></td>
+            			<td><%= number_to_currency(payout.amount) %></td>
+            			<td><%= payout.points.to_i %></td>
+            		</tr>
+              <% end -%>
+            <% end -%>
+          <% end -%>
       	</tbody>
         <tfoot>
       		<tr>
+            <th>&nbsp;</th>
       			<th>&nbsp;</th>
             <th>&nbsp;</th>
       			<th>&nbsp;</th>
@@ -52,30 +59,34 @@
     </div>
   </div>
   
-  <div class="col-md-12">
-      <h2>Scorecards</h2>
+  <% @tournament.tournament_days.each do |day| -%>
+    <div class="col-md-12">
+        <h2><%= day.pretty_day(true) %>Scorecards</h2>
     
-      <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
-        <% @players.each_with_index do |player, i| %>
-        <div class="panel panel-default">
-          <div class="panel-heading" role="tab" id="heading<%= i %>">
-            <h4 class="panel-title">
-              <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapse<%= i %>" aria-expanded="false" aria-controls="collapse<%= i %>">
-                <%= player.complete_name %><% if !@tournament.primary_scorecard_for_user(player).is_confirmed? -%> (Unconfirmed by Player)<% end -%>
-              </a>
-            </h4>
-          </div>
-          <div id="collapse<%= i %>" class="panel-collapse collapse <% if i == 0 -%>in<% end -%>" role="tabpanel" aria-labelledby="heading<%= i %>">
-            <div class="panel-body">
-              <%= render partial: '/shared/scorecards/show', locals: {scorecard: @tournament.primary_scorecard_for_user(player), split_holes: split_holes_for_course_tournament(@tournament), split_scores: split_scores_for_scorecard(@tournament.primary_scorecard_for_user(player), @tournament.course_holes.count), tournament: @tournament, handicap_allowance: @tournament.handicap_allowance(player)} %>
-              <p>
-                <%= link_to "Edit This Scorecard", edit_scorecard_path(@tournament.primary_scorecard_for_user(player)), class: "btn btn-warning", role: "button" %>
-              </p>
+        <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+          <% @players.each_with_index do |player, i| %>
+            <% unless day.primary_scorecard_for_user(player).blank? -%>
+            <div class="panel panel-default">
+              <div class="panel-heading" role="tab" id="heading<%= i %>">
+                <h4 class="panel-title">
+                  <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapse<%= i %>" aria-expanded="false" aria-controls="collapse<%= i %>">
+                    <%= player.complete_name %><% if !day.primary_scorecard_for_user(player).is_confirmed? -%> (Unconfirmed by Player)<% end -%>
+                  </a>
+                </h4>
+              </div>
+              <div id="collapse<%= i %>" class="panel-collapse collapse <% if i == 0 -%>in<% end -%>" role="tabpanel" aria-labelledby="heading<%= i %>">
+                <div class="panel-body">
+                  <%= render partial: '/shared/scorecards/show', locals: {scorecard: day.primary_scorecard_for_user(player), split_holes: split_holes_for_course_tournament(day), split_scores: split_scores_for_scorecard(day.primary_scorecard_for_user(player), day.course_holes.count), tournament_day: day, handicap_allowance: day.handicap_allowance(player)} %>
+                  <p>
+                    <%= link_to "Edit This Scorecard", edit_scorecard_path(day.primary_scorecard_for_user(player)), class: "btn btn-warning", role: "button" %>
+                  </p>
+                </div>
+              </div>
             </div>
-          </div>
+            <% end -%>
+          <% end -%>
         </div>
-        <% end -%>
-      </div>
-  </div>
+    </div>
+  <% end -%>
 </div>
 <% end -%>

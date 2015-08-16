@@ -6,6 +6,7 @@ class FlightsController < BaseController
   before_filter :set_stage
   
   def index
+    @page_title = "Flights for #{@tournament.name} #{@tournament_day.pretty_day}"
   end
   
   def new

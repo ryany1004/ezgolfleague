@@ -48,12 +48,15 @@
             <li <%= tournament_class_for_stage(stage, "teams#{day.id}") %>><%= link_to 'Teams', league_tournament_golfer_teams_path(tournament.league, tournament, tournament_day: day) %></li>
           <% end -%>
           <li <%= tournament_class_for_stage(stage, "contests#{day.id}") %>><%= link_to 'Contests', league_tournament_contests_path(tournament.league, tournament, tournament_day: day) %></li>
-          
-          <% if day == @tournament.tournament_days.last -%>
-            <li <%= tournament_class_for_stage(stage, "finalize#{day.id}") %>><%= link_to 'Finalize', league_tournament_finalize_path(tournament.league, tournament, tournament_day: day) %></li>
-          <% end -%>
         </ul>
       </nav>
     <% end -%>
+    
+    <nav>
+      <ul class="pagination">
+        <li <%= tournament_class_for_stage(stage, "finalize") %>><%= link_to 'Finalize Tournament', league_tournament_finalize_path(tournament.league, tournament) %></li>
+      </ul>
+    </nav>
+    
   <% end -%>
 </div>

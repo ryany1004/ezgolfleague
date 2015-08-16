@@ -58,7 +58,11 @@
                 <li class="divider"></li>
                 <li>
                   <% t.tournament_days.each do |d| -%>
-                    <%= link_to "#{d.pretty_day} Scorecard", play_scorecard_path(d.primary_scorecard_for_user(current_user)) %>
+                    <% unless d.primary_scorecard_for_user(current_user).blank? -%>
+                      <%= link_to "#{d.pretty_day} Scorecard", play_scorecard_path(d.primary_scorecard_for_user(current_user)) %>
+                    <% else -%>
+                      <%= link_to "#{d.pretty_day} Not Tee-Timed", "#" %>
+                    <% end -%>
                   <% end -%>
                 </li>
               </ul>

@@ -31,7 +31,7 @@ module Addable
       self.golfer_teams.destroy_all
     
       self.tournament_groups.each do |group|
-        golfer_team = GolferTeam.create(tournament: self, max_players: group.max_number_of_players)
+        golfer_team = GolferTeam.create(tournament_day: self, max_players: group.max_number_of_players)
       
         group.players_signed_up.each do |player|
           golfer_team.users << player

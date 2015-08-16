@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150816181241) do
+ActiveRecord::Schema.define(version: 20150816193403) do
 
   create_table "contest_holes", force: :cascade do |t|
     t.integer  "contest_id"
@@ -268,8 +268,9 @@ ActiveRecord::Schema.define(version: 20150816181241) do
     t.integer  "course_id"
     t.integer  "game_type_id"
     t.datetime "tournament_at"
-    t.datetime "created_at",    null: false
-    t.datetime "updated_at",    null: false
+    t.datetime "created_at",                                 null: false
+    t.datetime "updated_at",                                 null: false
+    t.boolean  "admin_has_customized_teams", default: false
   end
 
   add_index "tournament_days", ["tournament_at"], name: "index_tournament_days_on_tournament_at"
@@ -290,12 +291,11 @@ ActiveRecord::Schema.define(version: 20150816181241) do
     t.datetime "signup_opens_at"
     t.datetime "signup_closes_at"
     t.integer  "max_players"
-    t.datetime "created_at",                                 null: false
-    t.datetime "updated_at",                                 null: false
-    t.decimal  "dues_amount",                default: 0.0
-    t.boolean  "is_finalized",               default: false
-    t.boolean  "admin_has_customized_teams", default: false
-    t.boolean  "show_players_tee_times",     default: false
+    t.datetime "created_at",                             null: false
+    t.datetime "updated_at",                             null: false
+    t.decimal  "dues_amount",            default: 0.0
+    t.boolean  "is_finalized",           default: false
+    t.boolean  "show_players_tee_times", default: false
   end
 
   add_index "tournaments", ["league_id"], name: "index_tournaments_on_league_id"

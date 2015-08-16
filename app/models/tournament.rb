@@ -57,6 +57,16 @@ class Tournament < ActiveRecord::Base
     return distinct_courses
   end
 
+  def can_be_finalized?
+    all_days_finalize = true
+    
+    self.tournament_days.each do |day|
+      all_days_finalize = false if day.can_be_finalized? == false
+    end
+    
+    return all_days_finalize
+  end
+
   ##
 
   def is_past?

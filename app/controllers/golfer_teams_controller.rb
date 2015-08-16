@@ -39,8 +39,8 @@ class GolferTeamsController < BaseController
         @golfer_team.rebalance_tournament_groups_for_request
       end
       
-      @tournament.admin_has_customized_teams = true
-      @tournament.save
+      @tournament_day.admin_has_customized_teams = true
+      @tournament_day.save
       
       if params[:commit] == "Save & Continue"
         redirect_to league_tournament_tournament_groups_path(@tournament.league, @tournament, tournament_day: @tournament_day), :flash => { :success => "The team was successfully updated." }
