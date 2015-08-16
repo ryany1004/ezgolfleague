@@ -1,43 +1,44 @@
 class TournamentGroupsController < BaseController
   before_action :fetch_tournament
+  before_action :fetch_tournament_day
   before_action :fetch_tournament_group, :except => [:index, :new, :create, :batch_create]
   before_action :set_stage
   
   def index
-    @tournament_groups = @tournament.tournament_groups.page params[:page]
+    @tournament_groups = @tournament_day.tournament_groups.page params[:page]
     
-    if @tournament.tournament_groups.count > 0      
-      @starting_tee_time = @tournament.tournament_groups.last.tee_time_at + 8.minutes
+    if @tournament_groups.count > 0      
+      @starting_tee_time = @tournament_day.tournament_groups.last.tee_time_at + 8.minutes
     else      
-      @starting_tee_time = @tournament.tournament_at
+      @starting_tee_time = @tournament_day.tournament_at
     end
         
-    @page_title = "Tee Times for #{@tournament.name}"
+    @page_title = "Tee Times for #{@tournament.name} #{@tournament_day.pretty_day}"
   end
   
   def new
     @tournament_group = TournamentGroup.new
     
-    if @tournament.tournament_groups.count > 0      
-      @tournament_group.tee_time_at = @tournament.tournament_groups.last.tee_time_at + 8.minutes
+    if @tournament_day.tournament_groups.count > 0      
+      @tournament_group.tee_time_at = @tournament_day.tournament_groups.last.tee_time_at + 8.minutes
     else      
-      @tournament_group.tee_time_at = @tournament.tournament_at
+      @tournament_group.tee_time_at = @tournament_day.tournament_at
     end
   end
   
   def create
     @tournament_group = TournamentGroup.new(tournament_group_params)
-    @tournament_group.tournament = @tournament
+    @tournament_group.tournament_day = @tournament_day
     
     if @tournament_group.save      
       if params[:commit] == "Save & Continue"
-        if @tournament.show_teams? == true
-          redirect_to league_tournament_golfer_teams_path(@tournament.league, @tournament), :flash => { :success => "The tee time was successfully created." }
+        if @tournament_day.show_teams? == true
+          redirect_to league_tournament_golfer_teams_path(@tournament.league, @tournament, tournament_day: @tournament_day), :flash => { :success => "The tee time was successfully created." }
         else
-          redirect_to league_tournament_flights_path(@tournament.league, @tournament), :flash => { :success => "The tee time was successfully created." }
+          redirect_to league_tournament_flights_path(@tournament.league, @tournament, tournament_day: @tournament_day), :flash => { :success => "The tee time was successfully created." }
         end
       else
-        redirect_to league_tournament_tournament_groups_path(@tournament.league, @tournament), :flash => { :success => "The tee time was successfully created." }
+        redirect_to league_tournament_tournament_groups_path(@tournament.league, @tournament, tournament_day: @tournament_day), :flash => { :success => "The tee time was successfully created." }
       end
     else            
       render :new
@@ -46,7 +47,7 @@ class TournamentGroupsController < BaseController
   
   def update
     if @tournament_group.update(tournament_group_params)
-      redirect_to league_tournament_tournament_groups_path(@tournament.league, @tournament), :flash => { :success => "The tee time was successfully updated." }
+      redirect_to league_tournament_tournament_groups_path(@tournament.league, @tournament, tournament_day: @tournament_day), :flash => { :success => "The tee time was successfully updated." }
     else      
       render :edit
     end
@@ -55,7 +56,7 @@ class TournamentGroupsController < BaseController
   def destroy
     @tournament_group.destroy
     
-    redirect_to league_tournament_tournament_groups_path(@tournament.league, @tournament), :flash => { :success => "The tee time was successfully deleted." }
+    redirect_to league_tournament_tournament_groups_path(@tournament.league, @tournament, tournament_day: @tournament_day), :flash => { :success => "The tee time was successfully deleted." }
   end
   
   #batch processing
@@ -66,19 +67,19 @@ class TournamentGroupsController < BaseController
       tee_time = starting_time
       
       params[:tournament_group][:number_of_tee_times_to_create].to_i.times do |time|        
-        TournamentGroup.create(tournament: @tournament, max_number_of_players: params[:tournament_group][:max_number_of_players].to_i, tee_time_at: tee_time)
+        TournamentGroup.create(tournament_day: @tournament_day, max_number_of_players: params[:tournament_group][:max_number_of_players].to_i, tee_time_at: tee_time)
         
         tee_time = tee_time + params[:tournament_group][:separation_interval].to_i.minutes
       end
     end
     
-    if @tournament.can_be_played?
+    if @tournament_day.can_be_played?
       redirect_to league_tournaments_path(@tournament.league), :flash => { :success => "The tee times were successfully created." }
     else
-      if @tournament.show_teams? == true
-        redirect_to league_tournament_golfer_teams_path(@tournament.league, @tournament), :flash => { :success => "The tee time was successfully created." }
+      if @tournament_day.show_teams? == true
+        redirect_to league_tournament_golfer_teams_path(@tournament.league, @tournament, tournament_day: @tournament_day), :flash => { :success => "The tee time was successfully created." }
       else
-        redirect_to league_tournament_flights_path(@tournament.league, @tournament), :flash => { :success => "The tee times were successfully created. Please add flight information." }
+        redirect_to league_tournament_flights_path(@tournament.league, @tournament, tournament_day: @tournament_day), :flash => { :success => "The tee times were successfully created. Please add flight information." }
       end
     end
   end
@@ -93,12 +94,24 @@ class TournamentGroupsController < BaseController
     @tournament = Tournament.find(params[:tournament_id])
   end
   
+  def fetch_tournament_day
+    if params[:tournament_day].blank?
+      @tournament_day = @tournament.first_day
+    else
+      @tournament_day = @tournament.tournament_days.find(params[:tournament_day])
+    end
+  end
+  
   def fetch_tournament_group
     @tournament_group = TournamentGroup.find(params[:id])
   end
   
   def set_stage
-    @stage_name = "tee_times"
+    if params[:tournament_day].blank?
+      @stage_name = "tee_times"
+    else
+      @stage_name = "tee_times#{@tournament_day.id}"
+    end
   end
   
 end

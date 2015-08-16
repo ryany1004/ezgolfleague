@@ -1,7 +1,7 @@
 <ol class="breadcrumb">
   <li><%= link_to "Tournaments", league_tournaments_path(current_user.selected_league) %></li>
   <li><%= link_to @tournament.name, edit_league_tournament_path(current_user.selected_league, @tournament) %></li>
-  <li class="active">Manage Tee-Times</li>
+  <li class="active">Manage Tee-Times<%= @tournament_day.pretty_day(true) %></li>
 </ol>
 
 <%= render partial: '/shared/tournaments/manage', locals: {tournament: @tournament, stage: @stage_name} %>
@@ -51,7 +51,7 @@
 
 <%= paginate @tournament_groups %>
 
-<%= simple_form_for :tournament_group, url: batch_create_league_tournament_tournament_groups_path(@tournament.league, @tournament) do |f| %>
+<%= simple_form_for :tournament_group, url: batch_create_league_tournament_tournament_groups_path(@tournament.league, @tournament, tournament_day: @tournament_day) do |f| %>
   <% if notification = f.error_notification %>
     <div class="alert alert-error fade in">
       <a class="close" data-dismiss="alert" href="#">&times;</a>
