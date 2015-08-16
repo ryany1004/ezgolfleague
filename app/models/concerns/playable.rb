@@ -43,10 +43,17 @@ module Playable
     return number_of_players
   end
 
-  def includes_player?(user)
+  def includes_player?(user, restrict_to_day = nil)
     player_included = false
   
-    self.tournament_days.each do |day|
+    days = []
+    if restrict_to_day.blank?
+      days = self.tournament_days
+    else
+      days = [restrict_to_day]
+    end
+  
+    days.each do |day|
       day.tournament_groups.each do |group|
         group.players_signed_up.each do |player|
           player_included = true if player == user

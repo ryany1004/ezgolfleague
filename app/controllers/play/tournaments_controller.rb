@@ -5,6 +5,12 @@ class Play::TournamentsController < BaseController
   
   def show
     @tournament = Tournament.find(params[:id])
+    
+    if params[:tournament_day].blank?
+      @tournament_day = @tournament.first_day
+    else
+      @tournament_day = @tournament.tournament_days.find(params[:tournament_day])
+    end
 
     @page_title = "#{@tournament.name}"
   end

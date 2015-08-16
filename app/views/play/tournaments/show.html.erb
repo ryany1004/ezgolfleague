@@ -35,25 +35,43 @@
       <ul class="list-group">
         <li class="list-group-item"><strong>Sign Ups:</strong> <%= @tournament.signup_opens_at.to_s(:date_and_time) %> - <%= @tournament.signup_closes_at.to_s(:date_and_time) %></li>
       </ul>
-      <% if @tournament.includes_player?(current_user) -%>
+      <% if @tournament.includes_player?(current_user, @tournament_day) -%>
       <ul class="list-group">
-        <% @tournament.tournament_days.each do |day| -%>
-          <li class="list-group-item">
-            <span class="badge"><%= day.player_score(current_user) %></span><%= link_to "Your Scorecard", play_scorecard_path(day.primary_scorecard_for_user(current_user)) %>
-          </li>
-        <% end -%>
+        <li class="list-group-item">
+          <span class="badge"><%= @tournament_day.player_score(current_user) %></span><%= link_to "Your #{@tournament_day.pretty_day(false)} Scorecard", play_scorecard_path(@tournament_day.primary_scorecard_for_user(current_user)) %>
+        </li>
       </ul>
       <% end -%>
     </div>
   </div>
 </div>
 
+<% if @tournament.tournament_days.count > 1 -%>
 <div class="row">
-  <% @tournament.tournament_days.each do |day| -%>
+  <div class="col-md-12">
+    <div class="panel panel-default panel-success">
+      <div class="panel-heading">
+        <h3 class="panel-title">Switch Between Days</h3>
+      </div>
+      <div class="panel-body">
+        <ul class="nav nav-pills">
+          <% @tournament.tournament_days.each do |day| -%>
+            <li role="presentation" <% if day == @tournament_day -%>class='active'<% end -%>>
+              <%= link_to day.pretty_day, play_tournament_path(@tournament, tournament_day: day) %>
+            </li>
+          <% end -%>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+<% end -%>
+
+<div class="row">
   <div class="col-md-6">
     <div class="panel panel-default panel-success">
       <div class="panel-heading">
-        <h3 class="panel-title"><%= day.pretty_day(true) %>Tournament Payouts</h3>
+        <h3 class="panel-title"><%= @tournament_day.pretty_day(true) %>Tournament Payouts</h3>
       </div>
       <% if @tournament.is_finalized -%>
       <table class="table table-striped">
@@ -66,7 +84,7 @@
         </thead>
         <tbody>
           <% cache(cache_key_for_tournament_with_prefix(@tournament, "tournament-payouts")) do %>
-            <% day.flights.each_with_index do |f, x| %>
+            <% @tournament_day.flights.each_with_index do |f, x| %>
               <% f.payouts.each do |p| %>
               <tr>
                 <td><strong><%= f.flight_number %></strong></td>
@@ -74,7 +92,7 @@
                 <td><%= number_to_currency(p.amount) %></td>
               </tr>
               <% end %>
-              <% if x < day.flights_with_rankings.count - 1 -%>
+              <% if x < @tournament_day.flights_with_rankings.count - 1 -%>
               <tr>
                 <td>&nbsp;</td>
                 <td>&nbsp;</td>
@@ -92,16 +110,14 @@
       <% end -%>
     </div>
   </div>
-  <% end -%>
   
-  <% @tournament.tournament_days.each do |day| -%>
   <div class="col-md-6">
     <div class="panel panel-default panel-success">
       <div class="panel-heading">
-        <h3 class="panel-title"><%= day.pretty_day(true) %>Tournament Contests</h3>
+        <h3 class="panel-title"><%= @tournament_day.pretty_day(true) %>Tournament Contests</h3>
       </div>
       <% cache(cache_key_for_tournament_with_prefix(@tournament, "tournament-contests")) do %>
-        <% if day.contests.order("name").count > 0 -%>
+        <% if @tournament_day.contests.order("name").count > 0 -%>
         <table class="table table-striped">
           <thead>
             <tr>
@@ -113,7 +129,7 @@
             </tr>
           </thead>
           <tbody>
-            <% day.contests.each do |contest| %>
+            <% @tournament_day.contests.each do |contest| %>
             <tr>
               <td><%= contest.name %></td>
               <td><%= format_winners(contest.winners) %></td>
@@ -132,27 +148,23 @@
       <% end -%>
     </div>
   </div>
-  <% end -%>
 </div>
 
 <div class="row">
   <% cache(cache_key_for_tournament_with_prefix(@tournament, "tournament-players")) do %>
-    <% @tournament.tournament_days.each do |day| -%>
-      <% if day.golfer_teams.count == 0 -%>
-        <%= render partial: 'tournament_players_individual', locals: {tournament_day: day} %>
-      <% else -%>
-        <%= render partial: 'tournament_players_teams', locals: {tournament_day: day} %>
-      <% end -%>
+    <% if @tournament_day.golfer_teams.count == 0 -%>
+      <%= render partial: 'tournament_players_individual', locals: {tournament_day: @tournament_day} %>
+    <% else -%>
+      <%= render partial: 'tournament_players_teams', locals: {tournament_day: @tournament_day} %>
     <% end -%>
   <% end -%>
   
-  <% @tournament.tournament_days.each do |day| -%>
   <div class="col-md-6">
     <div class="panel panel-default panel-success">
       <div class="panel-heading">
-        <h3 class="panel-title"><%= day.pretty_day(true) %>Tournament Rankings</h3>
+        <h3 class="panel-title"><%= @tournament_day.pretty_day(true) %>Tournament Rankings</h3>
       </div>
-      <% if day.has_scores? -%>
+      <% if @tournament_day.has_scores? -%>
       <table class="table table-striped">
       	<thead>
       		<tr>
@@ -166,7 +178,7 @@
       	</thead>
         <tbody>
           <% cache(cache_key_for_tournament_with_prefix(@tournament, "tournament-rankings")) do %>
-            <% day.flights_with_rankings.each_with_index do |flight, x| %>
+            <% @tournament_day.flights_with_rankings.each_with_index do |flight, x| %>
               <% flight[:players].each_with_index do |player, i| -%>
               <tr>
                 <td><strong><%= flight[:flight_number] %></strong></td>
@@ -177,7 +189,7 @@
                 <td><%= player[:points].to_i %></td>
               </tr>
               <% end -%>
-              <% if x < day.flights_with_rankings.count - 1 -%>
+              <% if x < @tournament_day.flights_with_rankings.count - 1 -%>
               <tr>
                 <td>&nbsp;</td>
                 <td>&nbsp;</td>
@@ -198,5 +210,4 @@
       <% end -%>
     </div>
   </div>
-  <% end -%>
 </div>
