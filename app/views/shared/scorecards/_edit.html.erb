@@ -10,10 +10,10 @@
 	</thead>
 	<tbody>
 		<tr>
-      <td><%= (tournament.flight_for_player(scorecard.golf_outing.user).flight_number) %></td>
+      <td><%= (tournament_day.flight_for_player(scorecard.golf_outing.user).flight_number) %></td>
       <td><%= scorecard.scores.map {|score| score.strokes }.sum %></td>
       <td><%= scorecard.net_score %></td>
-      <td><%= tournament.course_holes.map {|hole| hole.par }.sum %></td>
+      <td><%= tournament_day.course_holes.map {|hole| hole.par }.sum %></td>
       <td><%= scorecard.golf_outing.course_handicap %></td>
 		</tr>
 	</tbody>
@@ -78,8 +78,8 @@
 <% end -%>
 
 <%= f.button :submit, :class => 'btn btn-default' %>
-<% if tournament.is_finalized == false -%>
-<%= link_to 'Finalize Scorecard', play_scorecard_finalize_scorecard_path(scorecard), :class => 'btn btn-danger', :method => :patch, :data => { :confirm => 'Are you sure you want to finalize your scorecard? This indicates to the league administrator that you are ready to be ranked for this tournament.' } %>
+<% if tournament_day.tournament.is_finalized == false -%>
+  <%= link_to 'Finalize Scorecard', play_scorecard_finalize_scorecard_path(scorecard), :class => 'btn btn-danger', :method => :patch, :data => { :confirm => 'Are you sure you want to finalize your scorecard? This indicates to the league administrator that you are ready to be ranked for this tournament.' } %>
 <% end -%>
 
 <% end %>

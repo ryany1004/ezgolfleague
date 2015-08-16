@@ -28,7 +28,7 @@
           </thead>
           <tbody>
             <tr>
-              <td><%= primary_scorecard.tournament.flight_for_player(primary_scorecard.golf_outing.user).flight_number %></td>
+              <td><%= primary_scorecard.tournament_day.flight_for_player(primary_scorecard.golf_outing.user).flight_number %></td>
               <td><%= primary_scorecard.golf_outing.team.tournament_group.tee_time_at.to_s(:date_and_time) %></td>
               <td><%= primary_scorecard.golf_outing.course_handicap %></td>
             </tr>
@@ -39,7 +39,7 @@
         	<thead>
         		<tr>
               <th width="5%">Hole</th>
-              <% primary_scorecard.scores.each_slice(primary_scorecard.tournament.course_holes.count / 2).to_a.each_with_index do |split, j| %>
+              <% primary_scorecard.scores.each_slice(primary_scorecard.tournament_day.course_holes.count / 2).to_a.each_with_index do |split, j| %>
                 <% split.each do |score| -%>
                 <th width="<%= 70 / primary_scorecard.scores.count %>%"><%= score.course_hole.hole_number %></th>
                 <% end -%>
@@ -61,7 +61,7 @@
               <% else -%>
                 <td><%= scorecard.name %></td>
               <% end -%>
-              <% scorecard.scores.each_slice(primary_scorecard.tournament.course_holes.count / 2).to_a.each_with_index do |split, j| %>
+              <% scorecard.scores.each_slice(primary_scorecard.tournament_day.course_holes.count / 2).to_a.each_with_index do |split, j| %>
                 <% split.each do |score| -%>
                   <td>
                     <p>&nbsp;</p>
@@ -87,7 +87,7 @@
           <tfoot>
         		<tr>
         			<th>Par</th>
-              <% primary_scorecard.scores.each_slice(primary_scorecard.tournament.course_holes.count / 2).to_a.each_with_index do |split, j| %>
+              <% primary_scorecard.scores.each_slice(primary_scorecard.tournament_day.course_holes.count / 2).to_a.each_with_index do |split, j| %>
                 <% split.each do |score| -%>
                   <th><%= score.course_hole.par %></th>
                 <% end -%>
@@ -98,11 +98,11 @@
                 <th>&nbsp;</th>
               <% end -%>
       
-              <th><%= primary_scorecard.tournament.course_holes.map {|hole| hole.par }.sum %></th>
+              <th><%= primary_scorecard.tournament_day.course_holes.map {|hole| hole.par }.sum %></th>
         		</tr>
         		<tr>
         			<th>Men's Handicap</th>
-              <% primary_scorecard.scores.each_slice(primary_scorecard.tournament.course_holes.count / 2).to_a.each_with_index do |split, j| %>
+              <% primary_scorecard.scores.each_slice(primary_scorecard.tournament_day.course_holes.count / 2).to_a.each_with_index do |split, j| %>
                 <% split.each do |score| -%>      
                   <th><%= score.course_hole.mens_handicap %></th>
                 <% end -%>
@@ -116,7 +116,7 @@
         		</tr>
         		<tr>
         			<th>Women's Handicap</th>
-              <% primary_scorecard.scores.each_slice(primary_scorecard.tournament.course_holes.count / 2).to_a.each_with_index do |split, j| %>
+              <% primary_scorecard.scores.each_slice(primary_scorecard.tournament_day.course_holes.count / 2).to_a.each_with_index do |split, j| %>
                 <% split.each do |score| -%>      
                   <th><%= score.course_hole.mens_handicap %></th>
                 <% end -%>

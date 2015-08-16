@@ -25,25 +25,29 @@ class ScorecardsController < BaseController
     
     tournament = Tournament.find(params[:tournament_id])
     
-    tournament.players.each do |player|
-      unless players_with_scorecards.include? player
-        players_with_scorecards << player
+    tournament.tournament_days.each do |day|
+      tournament.players.each do |player|
+        unless players_with_scorecards.include? player
+          players_with_scorecards << player
         
-        card_hash = Hash.new
-        card_hash[:primary_scorecard] = tournament.primary_scorecard_for_user(player)
+          unless day.primary_scorecard_for_user(player).blank?
+            card_hash = Hash.new
+            card_hash[:primary_scorecard] = day.primary_scorecard_for_user(player)
 
-        if tournament.allow_teams == GameTypes::TEAMS_ALLOWED || tournament.allow_teams == GameTypes::TEAMS_REQUIRED
-          related_scorecards = tournament.related_scorecards_for_user(player)
-          card_hash[:other_scorecards] = related_scorecards
+            if day.allow_teams == GameTypes::TEAMS_ALLOWED || day.allow_teams == GameTypes::TEAMS_REQUIRED
+              related_scorecards = day.related_scorecards_for_user(player)
+              card_hash[:other_scorecards] = related_scorecards
           
-          related_scorecards.each do |related|
-            players_with_scorecards << related.golf_outing.user unless related.golf_outing.blank?
-          end
-        else
-          card_hash[:other_scorecards] = []
-        end
+              related_scorecards.each do |related|
+                players_with_scorecards << related.golf_outing.user unless related.golf_outing.blank?
+              end
+            else
+              card_hash[:other_scorecards] = []
+            end
       
-        @scorecard_groups << card_hash
+            @scorecard_groups << card_hash
+          end
+        end
       end
     end
     
@@ -59,8 +63,9 @@ class ScorecardsController < BaseController
   def fetch_all_params
     @scorecard = Scorecard.find(params[:id])
     @player = @scorecard.golf_outing.user
-    @tournament = @scorecard.golf_outing.team.tournament_group.tournament
-    @handicap_allowance = @tournament.handicap_allowance(@scorecard.golf_outing.user)
+    @tournament_day = @scorecard.golf_outing.team.tournament_group.tournament_day
+    @tournament = @tournament_day.tournament
+    @handicap_allowance = @tournament_day.handicap_allowance(@scorecard.golf_outing.user)
   end
   
 end
