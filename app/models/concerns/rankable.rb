@@ -16,7 +16,6 @@ module Rankable
                 outer_player[:back_nine_net_score] += inner_player[:back_nine_net_score]
                 outer_player[:gross_score] += inner_player[:gross_score]
                 outer_player[:points] += inner_player[:points]
-                outer_player[:scorecard_url] = inner_player[:scorecard_url]
               
                 Rails.logger.debug { "Players Matched. Adding #{inner_player[:net_score]} to #{outer_player[:net_score]}" }
               end
@@ -30,4 +29,5 @@ module Rankable
 
     return last_day_flights
   end
+  
 end

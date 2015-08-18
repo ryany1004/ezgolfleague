@@ -59,13 +59,7 @@ class Tournament < ActiveRecord::Base
   end
 
   def can_be_finalized?
-    all_days_finalize = true
-    
-    self.tournament_days.each do |day|
-      all_days_finalize = false if day.can_be_finalized? == false
-    end
-    
-    return all_days_finalize
+    return self.last_day.can_be_finalized?
   end
 
   ##

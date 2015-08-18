@@ -103,6 +103,8 @@ module GameTypes
       handicap_allowance = self.tournament_day.handicap_allowance(user)
 
       scorecard = self.tournament_day.primary_scorecard_for_user(user)
+      return 0 if scorecard.blank?
+      
       scorecard.scores.each do |score|
         should_include_score = true #allows us to calculate partial scores, i.e. back 9
         if holes.blank? == false
@@ -184,6 +186,8 @@ module GameTypes
     
     def handicap_allowance(user)
       golf_outing = self.tournament_day.golf_outing_for_player(user)
+      return nil if golf_outing.blank? #did not play
+
       course_handicap = golf_outing.course_handicap
     
       if golf_outing.course_tee_box.tee_box_gender == "Men"
@@ -260,25 +264,54 @@ module GameTypes
     end
     
     ##Payouts
-    
+  
     def assign_payouts_from_scores
-      self.tournament_day.flights.each do |f|
-        player_scores = []
-      
-        f.users.each do |player|
-          score = self.player_score(player)
-      
-          player_scores << {player: player, score: score}
+      eligible_player_list = []
+      if self.tournament.tournament_days.count == 1
+        eligible_player_list = self.tournament.players
+      else
+        self.tournament.players.each do |player|
+          player_played_all_days = true
+          
+          self.tournament.tournament_days.each do |day|
+            player_played_all_days = false if self.tournament.includes_player?(player, day) == false
+          end
+          
+          eligible_player_list << player if player_played_all_days == true
         end
+      end
       
-        player_scores.sort! { |x,y| x[:score] <=> y[:score] } #TODO: this does not include the back 9 tie breaking. Should it?
-            
-        f.payouts.each_with_index do |p, i|
-          if player_scores.count > i
-            player = player_scores[i][:player]
+      combined_scores = []
+      
+      self.tournament.tournament_days.each do |day|
+        day.flights.each do |f|
+          f.users.each do |player|
+            if eligible_player_list.include? player
+              score = day.player_score(player)
+                        
+              existing_player_index = combined_scores.find_index { |item| item[:player] == player }
+              if existing_player_index.blank?
+                combined_scores << {player: player, score: score, flight_number: f.flight_number}
+              else
+                existing_item = combined_scores[existing_player_index]
+                existing_item[:score] += score
+              end
+            end
+          end
+        end
         
-            p.user = player
-            p.save
+        combined_scores.sort! { |x,y| x[:score] <=> y[:score] } #TODO: this does not include the back 9 tie breaking. Should it?
+        
+        self.tournament.tournament_days.each do |day|
+          day.flights.each do |f|
+            f.payouts.each_with_index do |p, i|
+              if combined_scores.count > i
+                player = combined_scores[i][:player]
+
+                p.user = player
+                p.save
+              end
+            end
           end
         end
       end
