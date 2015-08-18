@@ -11,6 +11,20 @@ class Play::TournamentsController < BaseController
     else
       @tournament_day = @tournament.tournament_days.find(params[:tournament_day])
     end
+    
+    if @tournament.tournament_days.count > 1 && @tournament_day == @tournament.last_day
+      rankings = []
+      
+      @tournament.tournament_days.each do |day|
+        rankings << day.flights_with_rankings
+      end
+      
+      Rails.logger.debug { "Attempting to Combine Rankings Across #{rankings.count} Days" }
+      
+      @flights_with_rankings = @tournament.combine_rankings(rankings)
+    else
+      @flights_with_rankings = @tournament_day.flights_with_rankings
+    end
 
     @page_title = "#{@tournament.name}"
   end

@@ -51,7 +51,7 @@
   <div class="col-md-12">
     <div class="panel panel-default panel-success">
       <div class="panel-heading">
-        <h3 class="panel-title">Switch Between Days</h3>
+        <h3 class="panel-title">View Tournament Days</h3>
       </div>
       <div class="panel-body">
         <ul class="nav nav-pills">
@@ -83,7 +83,7 @@
           </tr>
         </thead>
         <tbody>
-          <% cache(cache_key_for_tournament_with_prefix(@tournament, "tournament-payouts")) do %>
+          <% cache(cache_key_for_tournament_with_prefix(@tournament_day, "tournament-payouts")) do %>
             <% @tournament_day.flights.each_with_index do |f, x| %>
               <% f.payouts.each do |p| %>
               <tr>
@@ -116,7 +116,7 @@
       <div class="panel-heading">
         <h3 class="panel-title"><%= @tournament_day.pretty_day(true) %>Tournament Contests</h3>
       </div>
-      <% cache(cache_key_for_tournament_with_prefix(@tournament, "tournament-contests")) do %>
+      <% cache(cache_key_for_tournament_with_prefix(@tournament_day, "tournament-contests")) do %>
         <% if @tournament_day.contests.order("name").count > 0 -%>
         <table class="table table-striped">
           <thead>
@@ -151,7 +151,7 @@
 </div>
 
 <div class="row">
-  <% cache(cache_key_for_tournament_with_prefix(@tournament, "tournament-players")) do %>
+  <% cache(cache_key_for_tournament_with_prefix(@tournament_day, "tournament-players")) do %>
     <% if @tournament_day.golfer_teams.count == 0 -%>
       <%= render partial: 'tournament_players_individual', locals: {tournament_day: @tournament_day} %>
     <% else -%>
@@ -174,23 +174,26 @@
             <th>Net</th>
             <th>Gross</th>
             <th>Points</th>
+            <th>&nbsp;</th>
       		</tr>
       	</thead>
         <tbody>
-          <% cache(cache_key_for_tournament_with_prefix(@tournament, "tournament-rankings")) do %>
-            <% @tournament_day.flights_with_rankings.each_with_index do |flight, x| %>
+          <% cache(cache_key_for_tournament_with_prefix(@tournament_day, "tournament-rankings")) do %>
+            <% @flights_with_rankings.each_with_index do |flight, x| %>
               <% flight[:players].each_with_index do |player, i| -%>
               <tr>
                 <td><strong><%= flight[:flight_number] %></strong></td>
                 <td><strong><%= i + 1 %></strong></td>
                 <td><%= player[:name] %></td>
                 <td><%= player[:net_score] %></td>
-                <td><%= player[:gross_score] %> | <%= link_to "Scorecard", player[:scorecard_url] %></td>
+                <td><%= player[:gross_score] %></td>
                 <td><%= player[:points].to_i %></td>
+                <td><%= link_to "Scorecard", player[:scorecard_url] %></td>
               </tr>
               <% end -%>
               <% if x < @tournament_day.flights_with_rankings.count - 1 -%>
               <tr>
+                <td>&nbsp;</td>
                 <td>&nbsp;</td>
                 <td>&nbsp;</td>
                 <td>&nbsp;</td>

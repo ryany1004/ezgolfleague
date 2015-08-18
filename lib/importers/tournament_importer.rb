@@ -6,6 +6,8 @@ module Importers
     attr_accessor :tee_group_code_tee_group_mapping
     attr_accessor :team_mapping
     
+    #NOTE: input file should be sorted by 
+    
     def import(filename)
       Tournament.uncached do
         self.flight_code_flight_mapping = {}
@@ -77,10 +79,11 @@ module Importers
         
           self.assign_scores(player, course_hole_scores, tournament_day)
           
-          Payment.create(user: player, tournament: tournament_day.tournament, payment_amount: tournament_day.tournament.dues_amount) if !tournament.user_has_paid?(player)
+          tournament = tournament_day.tournament
+          Payment.create(user: player, tournament: tournament, payment_amount: tournament.dues_amount) if !tournament.user_has_paid?(player)
           
-          tournament_day.tournament.is_finalized = true
-          tournament_day.tournament.save
+          tournament.is_finalized = true
+          tournament.save
         end
       end
     end
