@@ -94,7 +94,7 @@ Rails.application.routes.draw do
     resources :tournaments do #this is for setting them up
       resources :tournament_days do
         resources :flights, only: [:create, :update] do
-          resources :payouts, only: [:new, :create, :update]
+          resources :payouts, only: [:new, :edit, :create, :update]
         end
         resources :tournament_groups, only: [:create, :update]
         resources :golfer_teams, only: [:create, :update]
