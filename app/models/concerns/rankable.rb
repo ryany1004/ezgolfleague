@@ -3,7 +3,9 @@ module Rankable
 
   def combine_rankings(days)
     return days.first if days.count == 1
-        
+    
+    Rails.logger.debug { "Combining Rankings" }
+    
     last_day_flights = days.delete(days.last)
 
     last_day_flights.each do |last_day_flight|

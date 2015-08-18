@@ -23,12 +23,14 @@ module Findable
         relation = relation.joins(:league).where("leagues.id IN (?)", league_ids)
       end
 
-      unless start_date.blank? #OUTER JOIN INSTEAD?!?
+      unless start_date.blank?
         relation = relation.joins(:tournament_days).where("tournament_at >= ?", start_date)
+        #relation = relation.joins('LEFT OUTER JOIN tournament_days ON tournament_days.tournament_id = tournaments.id').where("tournament_at >= ?", start_date)
       end
     
       unless end_date.blank?
         relation = relation.joins(:tournament_days).where("tournament_at <= ?", end_date)
+        #relation = relation.joins('LEFT OUTER JOIN tournament_days ON tournament_days.tournament_id = tournaments.id').where("tournament_at <= ?", end_date)
       end
 
       relation = relation.order("tournament_at")

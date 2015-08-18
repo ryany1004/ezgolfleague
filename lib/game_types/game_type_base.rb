@@ -264,12 +264,12 @@ module GameTypes
     end
     
     ##Payouts
-  
-    def assign_payouts_from_scores
+    
+    def eligible_players_for_payouts
       eligible_player_list = []
       if self.tournament.tournament_days.count == 1
         eligible_player_list = self.tournament.players
-      else
+      else #only players that play all days can win
         self.tournament.players.each do |player|
           player_played_all_days = true
           
@@ -277,43 +277,73 @@ module GameTypes
             player_played_all_days = false if self.tournament.includes_player?(player, day) == false
           end
           
-          eligible_player_list << player if player_played_all_days == true
+          eligible_player_list << player.id if player_played_all_days == true
         end
       end
       
-      combined_scores = []
+      eligible_player_list.each do |p|
+        Rails.logger.debug { "Eligible: #{p}" }
+      end
       
-      self.tournament.tournament_days.each do |day|
-        day.flights.each do |f|
-          f.users.each do |player|
-            if eligible_player_list.include? player
-              score = day.player_score(player)
-                        
-              existing_player_index = combined_scores.find_index { |item| item[:player] == player }
-              if existing_player_index.blank?
-                combined_scores << {player: player, score: score}
-              else
-                existing_item = combined_scores[existing_player_index]
-                existing_item[:score] += score
-              end
-            end
-          end
-          
-          #score needs to be combined by still separated by flight
-          
-          combined_scores.sort! { |x,y| x[:score] <=> y[:score] } #NOTE: this does not include the back 9 tie breaking. Should it?
-          
-          day.flights.each do |f|
-            f.payouts.each_with_index do |p, i|
-              if combined_scores.count > i
-                player = combined_scores[i][:player]
+      return eligible_player_list
+    end
+  
+    def assign_payouts_from_scores
+      payout_count = 0
+      self.tournament_day.flights.each do |flight|
+        payout_count += flight.payouts.count
+        
+        flight.payouts.each do |p|
+          p.user = nil
+          p.save
+        end
+      end
+      
+      return if payout_count == 0
 
+      if self.tournament.tournament_days.count > 1 && self.tournament_day == self.tournament.last_day        
+        eligible_player_list = self.eligible_players_for_payouts
+      
+        rankings = []
+        self.tournament.tournament_days.each do |day|
+          rankings << day.flights_with_rankings
+        end
+        
+        ranked_flights = self.tournament.combine_rankings(rankings)
+      else
+        eligible_player_list = self.tournament.players
+        
+        ranked_flights = self.flights_with_rankings
+      end
+      
+      ##
+      Rails.logger.debug { "DEBUG DEBUG DEBUG" }
+      ranked_flights.each do |ranked_flight|
+        Rails.logger.debug { "Flight: #{ranked_flight[:flight_id]} #{ranked_flight[:flight_number]}" }
+        
+        ranked_flight[:players].each do |player|
+          Rails.logger.debug { "#{player[:id]} #{player[:name]} #{player[:net_score]}" }
+        end
+      end
+      ##
+
+      ranked_flights.each do |flight_ranking|
+        flight_ranking[:players].each do |p|
+          if eligible_player_list.include? p[:id]
+            flight = Flight.find(flight_ranking[:flight_id])
+            flight.payouts.each_with_index do |p, i|              
+              if flight_ranking[:players].count > i
+                player = User.find(flight_ranking[:players][i][:id])
+                
+                Rails.logger.debug { "Assigning #{player.complete_name} to #{p.id}" }
+                
                 p.user = player
-                p.save
+                p.save!
               end
             end
+          else
+            Rails.logger.debug { "Player Not Eligible: #{p}" }
           end
-          
         end
       end
     end

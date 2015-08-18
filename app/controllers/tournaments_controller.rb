@@ -137,9 +137,12 @@ class TournamentsController < BaseController
       @stage_name = "finalize"
     
       @players = @tournament.players
+
       @tournament.tournament_days.each do |day|
         day.assign_payouts_from_scores
       end
+      
+      @tournament.reload
     else
       redirect_to league_tournament_flights_path(current_user.selected_league, @tournament), :flash => { :error => "This tournament requires flights and payouts before it can be finalized." }
     end
