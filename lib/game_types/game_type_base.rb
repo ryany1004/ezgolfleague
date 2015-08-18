@@ -281,10 +281,6 @@ module GameTypes
         end
       end
       
-      eligible_player_list.each do |p|
-        Rails.logger.debug { "Eligible: #{p}" }
-      end
-      
       return eligible_player_list
     end
   
@@ -315,17 +311,6 @@ module GameTypes
         
         ranked_flights = self.flights_with_rankings
       end
-      
-      ##
-      Rails.logger.debug { "DEBUG DEBUG DEBUG" }
-      ranked_flights.each do |ranked_flight|
-        Rails.logger.debug { "Flight: #{ranked_flight[:flight_id]} #{ranked_flight[:flight_number]}" }
-        
-        ranked_flight[:players].each do |player|
-          Rails.logger.debug { "#{player[:id]} #{player[:name]} #{player[:net_score]}" }
-        end
-      end
-      ##
 
       ranked_flights.each do |flight_ranking|
         flight_ranking[:players].each do |p|
