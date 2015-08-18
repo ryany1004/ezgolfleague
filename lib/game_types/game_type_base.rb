@@ -291,18 +291,18 @@ module GameTypes
                         
               existing_player_index = combined_scores.find_index { |item| item[:player] == player }
               if existing_player_index.blank?
-                combined_scores << {player: player, score: score, flight_number: f.flight_number}
+                combined_scores << {player: player, score: score}
               else
                 existing_item = combined_scores[existing_player_index]
                 existing_item[:score] += score
               end
             end
           end
-        end
-        
-        combined_scores.sort! { |x,y| x[:score] <=> y[:score] } #TODO: this does not include the back 9 tie breaking. Should it?
-        
-        self.tournament.tournament_days.each do |day|
+          
+          #score needs to be combined by still separated by flight
+          
+          combined_scores.sort! { |x,y| x[:score] <=> y[:score] } #NOTE: this does not include the back 9 tie breaking. Should it?
+          
           day.flights.each do |f|
             f.payouts.each_with_index do |p, i|
               if combined_scores.count > i
@@ -313,6 +313,7 @@ module GameTypes
               end
             end
           end
+          
         end
       end
     end
