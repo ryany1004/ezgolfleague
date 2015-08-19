@@ -246,6 +246,45 @@ module GameTypes
     end
     
     ##Ranking
+    
+    def players_for_flight(flight)
+      if self.tournament_day.golfer_teams.count == 0
+        return flight.users
+      else
+        players = []
+        players_to_omit = []
+        
+        flight.users.each do |u|
+          players << u if (!players.include? u)&& (!players_to_omit.include? u)
+          
+          team = self.tournament_day.golfer_team_for_player(u)
+          unless team.blank?
+            team.users.each do |team_user|
+              players_to_omit << team_user
+            end
+          end
+        end
+      
+        return players
+      end
+    end
+    
+    def player_team_name_for_player(player)
+      if self.tournament_day.golfer_teams.count == 0
+        return player.complete_name
+      else
+        team_name = ""
+        
+        team = self.tournament_day.golfer_team_for_player(player)
+        team.users.each do |team_user|
+          team_name = team_name + "#{team_user.last_name}"
+          
+          team_name = team_name + "/" unless team_user == team.users.last
+        end
+        
+        return team_name
+      end
+    end
 
     def flights_with_rankings
       ranked_flights = []
@@ -253,7 +292,8 @@ module GameTypes
       self.tournament_day.flights.each do |f|
         ranked_flight = { flight_id: f.id, flight_number: f.flight_number, players: [] }
       
-        f.users.each do |player|        
+        rankable_players = self.players_for_flight(f)
+        rankable_players.each do |player|        
           net_score = self.player_score(player, true)
           back_nine_net_score = self.player_score(player, true, [10, 11, 12, 13, 14, 15, 16, 17, 18])
           gross_score = self.player_score(player, false)
@@ -266,7 +306,7 @@ module GameTypes
             points = payout.points if payout.user == player
           end
       
-          ranked_flight[:players] << { id: player.id, name: player.complete_name, net_score: net_score, back_nine_net_score: back_nine_net_score, gross_score: gross_score, scorecard_url: scorecard_url, points: points } if !net_score.blank? && net_score > 0
+          ranked_flight[:players] << { id: player.id, name: self.player_team_name_for_player(player), net_score: net_score, back_nine_net_score: back_nine_net_score, gross_score: gross_score, scorecard_url: scorecard_url, points: points } if !net_score.blank? && net_score > 0
         end
         
         self.sort_rank_players_in_flight!(ranked_flight[:players])
