@@ -57,10 +57,10 @@
               <li><%= link_to "Contests", league_tournament_contests_path(tournament.league, tournament) %></li>
               <% if tournament.auto_schedule_for_multi_day != 0 -%>
               <li class="divider"></li>
-              <li><%= link_to "Auto-Schedule For Secondary Days", league_tournament_auto_schedule_path(tournament.league, tournament), method: :patch %></li>
+              <li><%= link_to "Auto-Schedule For Secondary Days", league_tournament_auto_schedule_path(tournament.league, tournament), :data => { :confirm => 'Are you sure you want to schedule secondary days? This will remove any existing scores for those days.' }, method: :patch %></li>
               <% end -%>
               <li class="divider"></li>
-              <li><%= link_to 'Finalize Tournament', league_tournament_finalize_path(tournament.league, tournament) %></li>
+              <li><%= link_to 'Finalize Tournament', league_tournament_finalize_path(tournament.league, tournament), :data => { :confirm => 'Are you sure you want to finalize the tournament? This will remove any existing payout calculations.' } %></li>
               <li class="divider"></li>
               <% if tournament.is_past? == false -%>
               <li><%= link_to "Recalculate Course Handicaps", league_tournament_update_course_handicaps_path(tournament.league, tournament), method: :patch %></li>
