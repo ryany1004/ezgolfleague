@@ -44,7 +44,7 @@ module GameTypes
       new_scores = []
 
       if golfer_team.blank?
-        Rails.logger.debug { "RETURN!!!!" }
+        Rails.logger.debug { "Calculate Scores - No Team" }
         
         return
       end

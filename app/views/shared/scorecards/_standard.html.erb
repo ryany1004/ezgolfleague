@@ -41,6 +41,7 @@
 	</thead>
 	<tbody>
     <% other_scorecards.insert(0, primary_scorecard).each do |scorecard| -%>
+      <!-- Scorecard ID: <%= scorecard.id %> -->
       <tr>
         <% if scorecard.should_highlight? -%>
           <td><em><%= scorecard.name %></em></td>
