@@ -234,7 +234,7 @@ module GameTypes
       self.tournament_day.flights.each do |f|
         ranked_flight = { flight_id: f.id, flight_number: f.flight_number, players: [] }
       
-        f.users.each do |player|          
+        f.users.each do |player|        
           net_score = self.player_score(player, true)
           back_nine_net_score = self.player_score(player, true, [10, 11, 12, 13, 14, 15, 16, 17, 18])
           gross_score = self.player_score(player, false)

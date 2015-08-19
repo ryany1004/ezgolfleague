@@ -137,13 +137,22 @@ class TournamentsController < BaseController
   end
   
   def auto_schedule
-    if @tournament.auto_schedule_for_multi_day != 0
-      @tournament.tournament_days.each do |day|
-        day.schedule_golfers if day != @tournament.first_day
-      end
+    groups_error = false
+    @tournament.tournament_days.each do |day|
+      groups_error = true if day.tournament_groups.count == 0
     end
     
-    redirect_to league_tournaments_path(current_user.selected_league), :flash => { :success => "The days were re-scheduled." }
+    if groups_error == true
+      redirect_to league_tournaments_path(current_user.selected_league), :flash => { :error => "One or more days had no tee-times. Re-scheduling was aborted." }
+    else
+      if @tournament.auto_schedule_for_multi_day != 0
+        @tournament.tournament_days.each do |day|
+          day.schedule_golfers if day != @tournament.first_day
+        end
+      end
+    
+      redirect_to league_tournaments_path(current_user.selected_league), :flash => { :success => "The days were re-scheduled." }
+    end
   end
   
   # Finalize
