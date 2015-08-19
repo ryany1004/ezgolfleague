@@ -20,7 +20,9 @@ class Play::ScorecardsController < BaseController
       score.strokes = strokes
       score.save
     end
-
+    
+    @scorecard.tournament_day.score_user(@scorecard.golf_outing.user)
+    
     @scorecard.tournament_day.game_type.after_updating_scores_for_scorecard(@scorecard)
 
     reload_scorecard = @scorecard
@@ -33,6 +35,8 @@ class Play::ScorecardsController < BaseController
     scorecard = Scorecard.find(params[:scorecard_id])
     scorecard.is_confirmed = true
     scorecard.save
+    
+    scorecard.tournament_day.score_user(scorecard.golf_outing.user)
     
     redirect_to play_scorecard_path(scorecard), :flash => { :success => "The scorecard was successfully finalized." }
   end

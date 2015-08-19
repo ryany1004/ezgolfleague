@@ -84,6 +84,8 @@ module Importers
           
           tournament.is_finalized = true
           tournament.save
+          
+          tournament_day.score_users
         end
       end
     end

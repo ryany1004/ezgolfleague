@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150818230729) do
+ActiveRecord::Schema.define(version: 20150819034102) do
 
   create_table "contest_holes", force: :cascade do |t|
     t.integer  "contest_id"
@@ -262,6 +262,23 @@ ActiveRecord::Schema.define(version: 20150818230729) do
   end
 
   add_index "teams", ["tournament_group_id"], name: "index_teams_on_tournament_group_id"
+
+  create_table "tournament_day_results", force: :cascade do |t|
+    t.integer  "tournament_day_id"
+    t.integer  "user_id"
+    t.integer  "user_primary_scorecard_id"
+    t.integer  "flight_id"
+    t.integer  "gross_score"
+    t.integer  "net_score"
+    t.integer  "back_nine_net_score"
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
+  end
+
+  add_index "tournament_day_results", ["flight_id"], name: "index_tournament_day_results_on_flight_id"
+  add_index "tournament_day_results", ["tournament_day_id"], name: "index_tournament_day_results_on_tournament_day_id"
+  add_index "tournament_day_results", ["user_id"], name: "index_tournament_day_results_on_user_id"
+  add_index "tournament_day_results", ["user_primary_scorecard_id"], name: "index_tournament_day_results_on_user_primary_scorecard_id"
 
   create_table "tournament_days", force: :cascade do |t|
     t.integer  "tournament_id"

@@ -39,6 +39,7 @@ class TournamentsController < BaseController
     @tournament.touch
     @tournament.tournament_days.each do |day|
       day.touch
+      day.score_users
     end
     
     redirect_to league_tournaments_path(current_user.selected_league), :flash => { :success => "Cached data for this tournament was discarded." }

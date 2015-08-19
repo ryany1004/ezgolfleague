@@ -43,6 +43,12 @@ module GameTypes
     def calculate_scores    
       new_scores = []
 
+      if golfer_team.blank?
+        Rails.logger.debug { "RETURN!!!!" }
+        
+        return
+      end
+
       self.golfer_team.tournament_day.course_holes.each_with_index do |hole, i|
         if self.course_hole_number_suppression_list.include? hole.hole_number
           score = DerivedScorecardScore.new

@@ -96,6 +96,25 @@ module GameTypes
     end
 
     def player_score(user, use_handicap = true, holes = [])
+      tournament_day_result = self.tournament_day.tournament_day_results.where(user: user).first
+      tournament_day_result = self.tournament_day.score_user(user) if tournament_day_result.blank?
+
+      if holes == [10, 11, 12, 13, 14, 15, 16, 17, 18]
+        if use_handicap == true
+          return tournament_day_result.back_nine_net_score
+        else
+          return self.compute_player_score(user, false, holes)
+        end
+      else
+        if use_handicap == true
+          return tournament_day_result.net_score
+        else
+          return tournament_day_result.gross_score
+        end
+      end
+    end
+    
+    def compute_player_score(user, use_handicap = true, holes = [])
       return nil if !self.tournament.includes_player?(user)
 
       total_score = 0
@@ -131,7 +150,7 @@ module GameTypes
       total_score = 0 if total_score < 0
     
       return total_score
-    end
+    end  
     
     def player_points(user)
       return nil if !self.tournament.includes_player?(user)
@@ -238,7 +257,7 @@ module GameTypes
           net_score = self.player_score(player, true)
           back_nine_net_score = self.player_score(player, true, [10, 11, 12, 13, 14, 15, 16, 17, 18])
           gross_score = self.player_score(player, false)
-
+          
           scorecard = self.tournament_day.primary_scorecard_for_user(player)
           scorecard_url = play_scorecard_path(scorecard)
 

@@ -66,5 +66,26 @@ module Scoreable
     
     return false
   end
+  
+  def score_users
+    self.tournament.players.each do |player|
+      self.score_user(player)
+    end
+  end
+  
+  def score_user(user)
+    existing_result = self.tournament_day_results.where(user: user).first
+    existing_result.destroy unless existing_result.blank?
+    
+    primary_scorecard = self.primary_scorecard_for_user(user)
+    
+    net_score = self.compute_player_score(user, true)
+    back_nine_net_score = self.compute_player_score(user, true, [10, 11, 12, 13, 14, 15, 16, 17, 18])
+    gross_score = self.compute_player_score(user, false)
+    
+    result = TournamentDayResult.create(tournament_day: self, user: user, primary_scorecard: primary_scorecard, flight: self.flight_for_player(user), gross_score: gross_score, net_score: net_score, back_nine_net_score: back_nine_net_score)
+    
+    return result
+  end
 
 end

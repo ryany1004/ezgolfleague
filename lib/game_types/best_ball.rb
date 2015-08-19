@@ -38,14 +38,14 @@ module GameTypes
     
     ##Scoring
     
-    def player_score(user, use_handicap = true, holes = [])
+    def compute_player_score(user, use_handicap = true, holes = [])
       return nil if !self.tournament.includes_player?(user)
 
       total_score = 0
 
       team = self.tournament_day.golfer_team_for_player(user)
       scorecard = self.best_ball_scorecard_for_user_in_team(user, team, use_handicap)
-      return 0 if scorecard.blank?
+      return 0 if scorecard.blank? || scorecard.scores.blank?
 
       scorecard.scores.each do |score|
         should_include_score = true #allows us to calculate partial scores, i.e. back 9

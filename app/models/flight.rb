@@ -2,6 +2,7 @@ class Flight < ActiveRecord::Base
   belongs_to :tournament_day, inverse_of: :flights, :touch => true
   belongs_to :course_tee_box
   has_many :payouts, -> { order(:sort_order, "amount DESC") }, inverse_of: :flight, :dependent => :destroy
+  has_many :tournament_day_results, inverse_of: :flight, :dependent => :destroy
   has_and_belongs_to_many :users, inverse_of: :flights
   
   validates :flight_number, presence: true
