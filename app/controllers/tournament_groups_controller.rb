@@ -12,7 +12,7 @@ class TournamentGroupsController < BaseController
     else      
       @starting_tee_time = @tournament_day.tournament_at
     end
-        
+   
     @page_title = "Tee Times for #{@tournament.name} #{@tournament_day.pretty_day}"
   end
   

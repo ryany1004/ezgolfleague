@@ -239,7 +239,6 @@ module GameTypes
           back_nine_net_score = self.player_score(player, true, [10, 11, 12, 13, 14, 15, 16, 17, 18])
           gross_score = self.player_score(player, false)
 
-          Rails.logger.debug { "Looking up Scorecard for #{player.id}" }
           scorecard = self.tournament_day.primary_scorecard_for_user(player)
           scorecard_url = play_scorecard_path(scorecard)
 

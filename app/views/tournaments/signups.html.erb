@@ -1,12 +1,31 @@
 <h4><%= @page_title %></h4>
 
 <% if @tournament.tournament_days.count > 1 -%>
+  <p>
   <% @tournament.tournament_days.each do |day| -%>
     <%= link_to_unless day == @tournament_day, day.pretty_day, league_tournament_signups_path(@tournament.league, @tournament, tournament_day: day) %>
     <% if day != @tournament.tournament_days.last -%>
       | 
     <% end -%>
   <% end -%>
+  </p>
+<% end -%>
+
+<% if @tournament.tournament_days.count > 1 -%>
+<div class="panel panel-default">
+  <div class="panel-body">
+    <%= simple_form_for :tournament, url: league_tournament_update_auto_schedule_path(@tournament.league, @tournament, tournament_day: @tournament_day), method: :patch do |f| %>  
+      <h3>Configure Post-Day 1 Scheduling</h3>
+      <div class="well">        
+        <%= f.input :auto_schedule_for_multi_day, collection: @schedule_options.sort.map {|k,v| [v,k]}, :label => 'How Should Later Days Be Scheduled?' %>
+      </div>
+  
+      <div class="form-actions">
+        <%= f.button :submit, "Save", :class => 'btn btn-default' %>
+      </div>
+    <% end %>
+  </div>
+</div>
 <% end -%>
 
 <table class="table table-striped">

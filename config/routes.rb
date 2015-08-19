@@ -123,10 +123,13 @@ Rails.application.routes.draw do
    
       get 'manage_holes'
       patch 'update_holes'
+      
+      patch 'auto_schedule'
    
       get 'signups'
       post 'add_signup'
       delete 'delete_signup'
+      patch 'update_auto_schedule'
       
       get 'finalize'
       patch 'confirm_finalization'

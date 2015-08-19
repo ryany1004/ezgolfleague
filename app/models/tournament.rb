@@ -1,3 +1,9 @@
+module AutoScheduleType
+  MANUAL = 0
+  AUTOMATIC_WORST_FIRST = 1
+  AUTOMATIC_BEST_FIRST = 2
+end
+
 class Tournament < ActiveRecord::Base
   include Findable
   include Playable

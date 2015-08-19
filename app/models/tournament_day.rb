@@ -2,6 +2,7 @@ class TournamentDay < ActiveRecord::Base
   include Addable
   include Scoreable
   include FindPlayers
+  include AutoSchedulable
   
   belongs_to :tournament, inverse_of: :tournament_days, :touch => true
   belongs_to :course, inverse_of: :tournament_days

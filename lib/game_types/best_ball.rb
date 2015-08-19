@@ -38,6 +38,33 @@ module GameTypes
     
     ##Scoring
     
+    def player_score(user, use_handicap = true, holes = [])
+      return nil if !self.tournament.includes_player?(user)
+
+      total_score = 0
+
+      team = self.tournament_day.golfer_team_for_player(user)
+      scorecard = self.best_ball_scorecard_for_user_in_team(user, team, use_handicap)
+      return 0 if scorecard.blank?
+
+      scorecard.scores.each do |score|
+        should_include_score = true #allows us to calculate partial scores, i.e. back 9
+        if holes.blank? == false
+          should_include_score = false if !holes.include? score.course_hole.hole_number
+        end
+
+        if should_include_score == true
+          hole_score = score.strokes
+
+          total_score = total_score + hole_score
+        end
+      end
+
+      total_score = 0 if total_score < 0
+
+      return total_score
+    end
+    
     def best_ball_scorecard_for_user_in_team(user, golfer_team, use_handicaps)
       scorecard = BestBallScorecard.new
       scorecard.course_hole_number_suppression_list = self.course_hole_number_suppression_list

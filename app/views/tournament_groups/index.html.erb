@@ -51,26 +51,30 @@
 
 <%= paginate @tournament_groups %>
 
-<%= simple_form_for :tournament_group, url: batch_create_league_tournament_tournament_groups_path(@tournament.league, @tournament, tournament_day: @tournament_day) do |f| %>
-  <% if notification = f.error_notification %>
-    <div class="alert alert-error fade in">
-      <a class="close" data-dismiss="alert" href="#">&times;</a>
-      <%= notification %>
-    </div>
-  <% end %>
+<div class="panel panel-default">
+  <div class="panel-body">
+    <%= simple_form_for :tournament_group, url: batch_create_league_tournament_tournament_groups_path(@tournament.league, @tournament, tournament_day: @tournament_day) do |f| %>
+      <% if notification = f.error_notification %>
+        <div class="alert alert-error fade in">
+          <a class="close" data-dismiss="alert" href="#">&times;</a>
+          <%= notification %>
+        </div>
+      <% end %>
   
-  <h3>Create a Batch of Tee Times at Once</h3>
-  <div class="well">  
-    <%= f.input :starting_time, :label => 'First Tee Time', required: true, :as => :datetime_picker, input_html: { value: @starting_tee_time.to_s(:date_and_time) } %>
+      <h3>Create a Batch of Tee Times at Once</h3>
+      <div class="well">  
+        <%= f.input :starting_time, :label => 'First Tee Time', required: true, :as => :datetime_picker, input_html: { value: @starting_tee_time.to_s(:date_and_time) } %>
     
-    <%= f.input :separation_interval, :label => 'Minutes Between Tee Times', required: true, :as => :integer %>
+        <%= f.input :separation_interval, :label => 'Minutes Between Tee Times', required: true, :as => :integer %>
     
-    <%= f.input :max_number_of_players, :label => "Max Players for Each Tee Time", :as => :integer %>
+        <%= f.input :max_number_of_players, :label => "Max Players for Each Tee Time", :as => :integer %>
     
-    <%= f.input :number_of_tee_times_to_create, :label => "Number of Tee Times", :as => :integer %>
-  </div>
+        <%= f.input :number_of_tee_times_to_create, :label => "Number of Tee Times", :as => :integer %>
+      </div>
   
-  <div class="form-actions">
-    <%= f.button :submit, "Save Tee Time Batch", :class => 'btn btn-default' %>
+      <div class="form-actions">
+        <%= f.button :submit, "Save Tee Time Batch", :class => 'btn btn-default' %>
+      </div>
+    <% end %>
   </div>
-<% end %>
+</div>

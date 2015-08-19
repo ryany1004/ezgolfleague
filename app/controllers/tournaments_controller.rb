@@ -1,5 +1,5 @@
 class TournamentsController < BaseController
-  before_filter :fetch_tournament, :only => [:edit, :update, :destroy, :signups, :manage_holes, :update_holes, :add_signup, :delete_signup, :finalize, :confirm_finalization, :update_course_handicaps, :touch_tournament]
+  before_filter :fetch_tournament, :only => [:edit, :update, :destroy, :signups, :manage_holes, :update_holes, :add_signup, :delete_signup, :finalize, :confirm_finalization, :update_course_handicaps, :touch_tournament, :update_auto_schedule, :auto_schedule]
   before_filter :initialize_form, :only => [:new, :edit]
   before_filter :set_stage
   
@@ -95,7 +95,15 @@ class TournamentsController < BaseController
     
     @unregistered_users = @tournament.league.users_not_signed_up_for_tournament(@tournament, @tournament_day, [])
     
+    @schedule_options = { 0 => "Manual", 1 => "Automatic: Worst Score First", 2 => "Automatic: Best Score First" }
+        
     @page_title = "Signups for #{@tournament.name}"
+  end
+  
+  def update_auto_schedule
+    if @tournament.update(tournament_params)
+      redirect_to league_tournament_signups_path(@tournament.league, @tournament, tournament_day: @tournament_day), :flash => { :success => "The registration was successfully added." }
+    end
   end
   
   def add_signup
@@ -126,6 +134,16 @@ class TournamentsController < BaseController
     @tournament_day.remove_player_from_group(tournament_group, user)
     
     redirect_to league_tournament_signups_path(@tournament.league, @tournament, tournament_day: @tournament_day), :flash => { :success => "The registration was successfully deleted." }
+  end
+  
+  def auto_schedule
+    if @tournament.auto_schedule_for_multi_day != 0
+      @tournament.tournament_days.each do |day|
+        day.schedule_golfers if day != @tournament.first_day
+      end
+    end
+    
+    redirect_to league_tournaments_path(current_user.selected_league), :flash => { :success => "The days were re-scheduled." }
   end
   
   # Finalize
@@ -174,7 +192,7 @@ class TournamentsController < BaseController
   end
   
   def tournament_params
-    params.require(:tournament).permit(:name, :league_id, :dues_amount, :signup_opens_at, :signup_closes_at, :max_players, :show_players_tee_times, tournament_days_attributes: [:id, :course_hole_ids => []])
+    params.require(:tournament).permit(:name, :league_id, :dues_amount, :signup_opens_at, :signup_closes_at, :max_players, :show_players_tee_times, :auto_schedule_for_multi_day, tournament_days_attributes: [:id, :course_hole_ids => []])
   end
   
   def fetch_tournament
