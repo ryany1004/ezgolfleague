@@ -53,6 +53,21 @@ class Tournament < ActiveRecord::Base
   def last_day
     return self.tournament_days.last
   end
+  
+  def previous_day_for_day(day)
+    index_for_day = self.tournament_days.index(day)
+    unless index_for_day.blank?
+      if self.tournament_days.count >= (index_for_day - 1)
+        self.tournament_days[index_for_day - 1]
+      else
+        return nil
+      end
+    else
+      return nil
+    end
+  end
+  
+  ##
 
   def courses
     distinct_courses = []

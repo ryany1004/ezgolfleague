@@ -6,7 +6,7 @@ module Importers
     attr_accessor :tee_group_code_tee_group_mapping
     attr_accessor :team_mapping
     
-    #NOTE: input file should be sorted by 
+    #NOTE: input file should be sorted by flight
     
     def import(filename)
       Tournament.uncached do
