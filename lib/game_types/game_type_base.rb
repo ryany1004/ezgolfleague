@@ -279,7 +279,7 @@ module GameTypes
         team.users.each do |team_user|
           team_name = team_name + "#{team_user.last_name}"
           
-          team_name = team_name + "/" unless team_user == team.users.last
+          team_name = team_name + " / " unless team_user == team.users.last
         end
         
         return team_name

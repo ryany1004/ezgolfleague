@@ -41,14 +41,14 @@ module Importers
 
           #player
           Rails.logger.debug { "Importing For #{line[:player_last_name]}, #{line[:player_first_name]}" }
-          player = self.find_or_create_player_in_league(line[:player_last_name], line[:player_first_name], line[:course_handicap], course_tee_box.rating, tournament_day.tournament.league)
+          player = self.find_or_create_player_in_league(line[:player_last_name], line[:player_first_name], line[:course_handicap], course_tee_box.slope, tournament_day.tournament.league)
           raise "No Player" if player.blank?
         
           #flights
           self.create_or_add_player_to_flight(player, line[:flight], tournament_day, course_tee_box)
         
           #tee_group
-          self.create_or_add_player_to_tee_group(player, line[:tee_group], line[:tee_time], tournament_day)
+          self.create_or_add_player_to_tee_group(player, line[:tee_group], line[:tee_time], tournament_day, line[:course_handicap])
         
           #teams
           self.create_or_add_player_to_team(player, line[:team_number], tournament_day) unless line[:team_number].blank?
@@ -85,16 +85,16 @@ module Importers
           tournament.is_finalized = true
           tournament.save
           
-          tournament_day.score_users
+          tournament_day.score_user(player)
         end
       end
     end
     
-    def find_or_create_player_in_league(last_name, first_name, course_handicap, rating, league)      
+    def find_or_create_player_in_league(last_name, first_name, course_handicap, slope, league)      
       player = league.users.where("last_name = ? AND first_name = ?", last_name, first_name).first
-      
+            
       if course_handicap > 0
-        handicap_index = (course_handicap / (rating / 113.0)).round
+        handicap_index = (course_handicap / (slope / 113.0)).round
       else
         handicap_index = 0
       end
@@ -128,7 +128,7 @@ module Importers
       self.flight_code_flight_mapping[flight_code] = flight
     end
     
-    def create_or_add_player_to_tee_group(player, tee_group_code, tee_time, tournament_day)    
+    def create_or_add_player_to_tee_group(player, tee_group_code, tee_time, tournament_day, course_handicap)    
       tournament_group = self.tee_group_code_tee_group_mapping[tee_group_code]
       if tournament_group.blank?
         tee_time_string = "#{tournament_day.tournament_at.to_s(:short_year)} #{tee_time}"
@@ -147,6 +147,10 @@ module Importers
       team = Team.create!(tournament_group: tournament_group)
       outing = GolfOuting.create!(team: team, user: player, confirmed: true, course_tee_box: flight.course_tee_box)
       scorecard = Scorecard.create!(golf_outing: outing)
+    
+      #force handicap
+      outing.course_handicap = course_handicap
+      outing.save
     
       tournament_day.course_holes.each_with_index do |hole, i|
         score = Score.create!(scorecard: scorecard, course_hole: hole, sort_order: i)
