@@ -1,6 +1,7 @@
 class Contest < ActiveRecord::Base
   include ContestScoreable
   
+  has_many :payments, inverse_of: :contest
   belongs_to :tournament_day, inverse_of: :contests, :touch => true
   
   #handle single winner contests

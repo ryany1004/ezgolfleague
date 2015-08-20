@@ -66,8 +66,23 @@ class User < ActiveRecord::Base
   def payments_for_current_league    
     league_payments = self.payments.where("league_id = ?", self.selected_league.id)
     tournament_payments = self.payments.joins(:tournament).where(tournaments: {league_id: self.selected_league.id})
-
-    return league_payments + tournament_payments
+    
+    contest_ids = []
+    self.selected_league.tournaments.each do |t|
+      t.tournament_days.each do |d|
+        d.contests.each do |c|
+          contest_ids << c
+        end
+      end
+    end
+    
+    unless contest_ids.blank?
+      contest_payments = self.payments.where("contest_id IN (?)", contest_ids)
+      
+      return league_payments + tournament_payments + contest_payments
+    else
+      return league_payments + tournament_payments
+    end
   end
 
 end

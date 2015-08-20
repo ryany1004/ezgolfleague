@@ -4,15 +4,17 @@ class Payment < ActiveRecord::Base
   belongs_to :user, inverse_of: :payments
   belongs_to :tournament, inverse_of: :payments
   belongs_to :league, inverse_of: :payments
+  belongs_to :contest, inverse_of: :payments
   
   validates :user, presence: true
   validates :payment_amount, presence: true
   
   validate :has_tournament_or_league
   def has_tournament_or_league  
-    if tournament.blank? && league.blank?
-      errors.add(:tournament_id, "can't both be blank")
-      errors.add(:league_id, "can't both be blank")
+    if tournament.blank? && league.blank? && contest.blank?
+      errors.add(:tournament_id, "can't all be blank")
+      errors.add(:league_id, "can't all be blank")
+      errors.add(:contest_id, "can't all be blank")
     end
   end
   

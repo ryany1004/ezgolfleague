@@ -68,8 +68,13 @@ Rails.application.routes.draw do
     resources :tournaments, only: [:show] do
       get 'leaderboard'
       get 'signup'
+      
       put 'complete_signup'
       delete 'remove_signup'
+      
+      resources :tournament_days, only: [:index] do
+        resources :contests, only: [:index]
+      end
     end
     
     resource :user_account, only: [:edit, :update], controller: "user_account" do

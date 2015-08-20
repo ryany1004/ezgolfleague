@@ -10,6 +10,11 @@ class Play::PaymentsController < BaseController
       
       @payment_instructions = "Thanks for paying your league dues via EZ Golf League. Please enter your information below."
       @payment_amount = @league.dues_amount
+    elsif params[:payment_type] == 'contest_dues'
+      @contest = Contest.find(params[:contest_id])
+      
+      @payment_instructions = "Thanks for paying your contest dues via EZ Golf League. Please enter your information below."
+      @payment_amount = @contest.dues_amount
     elsif params[:payment_type] == 'tournament_dues'
       @tournament = Tournament.find(params[:tournament_id])
       
@@ -27,6 +32,12 @@ class Play::PaymentsController < BaseController
       amount = tournament.dues_amount
       api_key = tournament.league.stripe_secret_key
       charge_description = "Tournament: #{tournament.name}"
+    elsif params[:contest_id] != nil
+      contest = Contest.find(params[:contest_id])
+      
+      amount = contest.dues_amount
+      api_key = contest.tournament_day.tournament.league.stripe_secret_key
+      charge_description = "Contest Dues"
     elsif params[:league_id] != nil
       league = League.find(params[:league_id])
       
@@ -54,7 +65,12 @@ class Play::PaymentsController < BaseController
       p.transaction_id = charge.id
       p.tournament = tournament unless tournament.blank?
       p.league = league unless league.blank?
+      p.contest = contest unless contest.blank?
       p.save
+      
+      unless contest.blank?
+        contest.users << current_user unless contest.users.include? current_user
+      end
       
       redirect_to thank_you_play_payments_path
     rescue Stripe::CardError => e
