@@ -1,4 +1,6 @@
 class Contest < ActiveRecord::Base
+  include ContestScoreable
+  
   belongs_to :tournament_day, inverse_of: :contests, :touch => true
   
   #handle single winner contests
@@ -7,23 +9,41 @@ class Contest < ActiveRecord::Base
   #handle multiple hole contests
   has_many :contest_holes, :dependent => :destroy
   has_many :course_holes, through: :contest_holes  
+  
+  has_and_belongs_to_many :users #contestants
 
   def human_type
     if self.contest_type == 0
-      return "Overall Winner"
+      return "Custom: Overall Winner"
+    elsif self.contest_type == 1
+      return "Custom: By Hole"
+    elsif self.contest_type == 2
+      return "Net Skins"
+    elsif self.contest_type == 3
+      return "Gross Skins"
+    elsif self.contest_type == 4
+      return "Net Low"
+    elsif self.contest_type == 5
+      return "Gross Low"
+    end
+  end
+  
+  def manual_results_entry?
+    if self.contest_type < 2
+      return true
     else
-      return "By Hole"
+      return false
     end
   end
   
   def contest_results
-    if self.contest_type == 0
+    if self.is_by_hole? == false
       if self.overall_winner.blank?
         return []      
       else
         return [self.overall_winner]
       end
-    else
+    else      
       results = []
       
       self.contest_holes.each do |hole|
@@ -36,6 +56,14 @@ class Contest < ActiveRecord::Base
     end
   end
   
+  def is_by_hole?
+    return false if self.contest_type == 0
+    return false if self.contest_type == 4
+    return false if self.contest_type == 5
+    
+    return true
+  end
+  
   def can_accept_more_results?
     if self.contest_type == 0 && !self.overall_winner.blank?
       return false
@@ -45,7 +73,7 @@ class Contest < ActiveRecord::Base
   end
   
   def winners
-    if self.contest_type == 0
+    if self.is_by_hole? == false
       if self.overall_winner.blank?
         return nil
       else

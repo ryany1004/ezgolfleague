@@ -1,7 +1,7 @@
 module ContestsHelper
   
   def humanize_winners(winners)
-    return nil if winners.blank?
+    return "-" if winners.blank?
     
     html = ""
     

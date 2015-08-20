@@ -27,7 +27,7 @@
 			<td><%= link_to contest.name, edit_league_tournament_contest_path(@tournament.league, @tournament, contest, tournament_day: @tournament_day) %></td>
 			<td><%= contest.human_type %></td>
       <td><%= humanize_winners(contest.winners) %></td>
-      <td><%= link_to "Results", league_tournament_contest_contest_results_path(@tournament.league, @tournament, contest, tournament_day: @tournament_day) %> | <%= link_to "Edit", edit_league_tournament_contest_path(@tournament.league, @tournament, contest) %> | <%= link_to 'Delete', league_tournament_contest_path(@tournament.league, @tournament, contest, tournament_day: @tournament_day), :data => { :confirm => 'Are you sure you want to delete this contest?' }, :method => :delete %></td>
+      <td><% if contest.manual_results_entry? -%><%= link_to "Results", league_tournament_contest_contest_results_path(@tournament.league, @tournament, contest, tournament_day: @tournament_day) %> |<% end -%> <%= link_to "Edit", edit_league_tournament_contest_path(@tournament.league, @tournament, contest) %> | <%= link_to 'Delete', league_tournament_contest_path(@tournament.league, @tournament, contest, tournament_day: @tournament_day), :data => { :confirm => 'Are you sure you want to delete this contest?' }, :method => :delete %></td>
 		</tr>
 	<% end %>
 	</tbody>

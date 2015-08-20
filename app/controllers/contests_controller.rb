@@ -20,14 +20,28 @@ class ContestsController < BaseController
     @contest.tournament_day = @tournament_day
     
     if @contest.save
-      if @contest.contest_type == 1
+      if @contest.contest_type >= 1
         if params[:commit] == "Save & Complete Tournament Setup"
           skip_to_completion = true
         else
           skip_to_completion = false
         end
         
-        redirect_to edit_league_tournament_contest_path(@tournament.league, @tournament, @contest, :skip_to_complete => skip_to_completion, tournament_day: @tournament_day), :flash => { :success => "The contest was successfully created. Please verify the holes involved." }
+        if @contest.contest_type == 1
+          success_message = "The contest was successfully created. Please verify the holes involved."
+        elsif @contest.contest_type >= 2
+          success_message = "The contest was successfully created. Please specify the dues for each player entering."
+          
+          if @contest.is_by_hole? == true
+            @tournament_day.course_holes.each do |hole|
+              @contest.course_holes << hole
+            end
+            
+            @contest.save
+          end
+        end
+        
+        redirect_to edit_league_tournament_contest_path(@tournament.league, @tournament, @contest, :skip_to_complete => skip_to_completion, tournament_day: @tournament_day), :flash => { :success => success_message }
       else
         if params[:commit] == "Save & Complete Tournament Setup"
           redirect_to league_tournaments_path(current_user.selected_league), :flash => { :success => "The contest was successfully created." }
@@ -77,8 +91,12 @@ class ContestsController < BaseController
   
   def setup_form  
     @contest_types = []
-    @contest_types << ContestType.new("Overall Winner", 0)
-    @contest_types << ContestType.new("By Hole", 1)
+    @contest_types << ContestType.new("Custom: Overall Winner", 0)
+    @contest_types << ContestType.new("Custom: By Hole", 1)
+    @contest_types << ContestType.new("Net Skins", 2)
+    @contest_types << ContestType.new("Gross Skins", 3)
+    @contest_types << ContestType.new("Net Low", 4)
+    @contest_types << ContestType.new("Gross Low", 5)
   end
   
   def fetch_tournament_day
@@ -106,7 +124,7 @@ class ContestsController < BaseController
   end
   
   def contest_params
-    params.require(:contest).permit(:name, :contest_type, :course_hole_ids => [])
+    params.require(:contest).permit(:name, :contest_type, :dues_amount, :course_hole_ids => [])
   end  
 end
 

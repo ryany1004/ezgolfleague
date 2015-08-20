@@ -26,6 +26,13 @@
     <% end -%>
   <% end -%>
   
+  <% if @contest.new_record? == false && @contest.contest_type >= 2 -%>
+    <h3>Please Specify Entry Dues</h3>
+    <div class="well">  
+        <%= f.input :dues_amount, :label => 'Dues Amount ($)' %>
+    </div>
+  <% end -%>
+  
   <div class="form-actions">
     <% if @contest.new_record? || !params[:skip_to_complete].blank? -%>
       <%= f.button :submit, "Save & Create Another Contest", :class => 'btn btn-default' %>
