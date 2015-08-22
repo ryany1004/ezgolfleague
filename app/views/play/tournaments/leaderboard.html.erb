@@ -19,20 +19,22 @@
             <th>Player</th>
             <th>Net</th>
             <th>Gross</th>
-            <th>Points</th>
+            <th>Total</th>
       		</tr>
       	</thead>
         <tbody>
           <% cache(cache_key_for_tournament_with_prefix(@tournament, "tournament-rankings")) do %>
-            <% @tournament_day.flights_with_rankings.each_with_index do |flight, x| %>
+            <% @combined_flights_with_rankings.each_with_index do |flight, x| %>
+              <% @current_day_flight = @day_flights_with_rankings[x] -%>
               <% flight[:players].each_with_index do |player, i| -%>
+              <% current_day_player = @current_day_flight[:players][i] %>
               <tr>
                 <td><strong><%= flight[:flight_number] %></strong></td>
                 <td><strong><%= i + 1 %></strong></td>
                 <td><%= player[:name] %></td>
+                <td><%= current_day_player[:net_score] %></td>
+                <td><%= current_day_player[:gross_score] %></td>
                 <td><%= player[:net_score] %></td>
-                <td><%= player[:gross_score] %></td>
-                <td><%= player[:points].to_i %></td>
               </tr>
               <% end -%>
               <% if x < @tournament_day.flights_with_rankings.count - 1 -%>

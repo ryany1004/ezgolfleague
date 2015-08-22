@@ -90,18 +90,24 @@ module Addable
       f.users.clear
         
       self.tournament.players_for_day(self).each do |p|
-        player_course_handicap = self.golf_outing_for_player(p).course_handicap unless self.golf_outing_for_player(p).blank? #in multi-day with manual registration, might not match
-              
+        golf_outing = self.golf_outing_for_player(p) #in multi-day with manual registration, might not match
+        unless golf_outing.blank?
+          golf_outing.scorecards.first.set_course_handicap(true) if self.golf_outing_for_player(p).course_handicap == 0 #re-calc handicap if we do not have one
+          player_course_handicap = self.golf_outing_for_player(p).course_handicap
+
+          Rails.logger.debug { "Player Course Handicap for Course/Outing: #{player_course_handicap}" }
+        end
+ 
         unless player_course_handicap.blank?
           if player_course_handicap >= f.lower_bound && player_course_handicap <= f.upper_bound            
             f.users << p
             
-            Rails.logger.debug { "Player Flighted: #{p.id}" }
+            Rails.logger.debug { "Flighted: #{player_course_handicap} (#{f.lower_bound} to #{f.upper_bound}) for Player: #{p.id} #{p.complete_name} for Flight Num #{f.flight_number}" }
           else
-            Rails.logger.debug { "Handicap Not In Bounds: #{player_course_handicap} for Player: #{p.id}" }
+            Rails.logger.debug { "NOT Flighted: #{player_course_handicap} (#{f.lower_bound} to #{f.upper_bound}) for Player: #{p.id} #{p.complete_name} for Flight Num #{f.flight_number}" }
           end
         else
-          Rails.logger.debug { "Player Course Handicap Blank: #{p.id}" }
+          Rails.logger.debug { "Player Course Handicap Blank: #{p.id} #{p.complete_name}" }
         end
       end
     end

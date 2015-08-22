@@ -21,6 +21,8 @@ class GameTypesController < BaseController
       else
         @tournament_day = @tournament.tournament_days.find(params[:tournament_day])
       end
+      
+      @tournament_day.tournament_day_results.destroy_all #removed cached results as gametype influences scores
 
       redirect_to league_tournament_tournament_groups_path(current_user.selected_league, @tournament, tournament_day: @tournament_day), :flash => { :success => "The tournament was successfully updated." }
     else

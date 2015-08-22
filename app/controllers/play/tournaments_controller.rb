@@ -12,19 +12,7 @@ class Play::TournamentsController < BaseController
       @tournament_day = @tournament.tournament_days.find(params[:tournament_day])
     end
     
-    if @tournament.tournament_days.count > 1 && @tournament_day == @tournament.last_day
-      rankings = []
-      
-      @tournament.tournament_days.each do |day|
-        rankings << day.flights_with_rankings
-      end
-      
-      Rails.logger.debug { "Attempting to Combine Rankings Across #{rankings.count} Days" }
-      
-      @flights_with_rankings = @tournament.combine_rankings(rankings)
-    else
-      @flights_with_rankings = @tournament_day.flights_with_rankings
-    end
+    @flights_with_rankings = self.flights_with_rankings_could_be_combined
 
     @page_title = "#{@tournament.name}"
   end
@@ -33,6 +21,9 @@ class Play::TournamentsController < BaseController
     @tournament = Tournament.find(params[:tournament_id])
     @tournament_day = @tournament.tournament_days.find(params[:day])
     @user_scorecard = @tournament_day.primary_scorecard_for_user(current_user)
+    
+    @day_flights_with_rankings = @tournament_day.flights_with_rankings
+    @combined_flights_with_rankings = self.flights_with_rankings_could_be_combined
   end
   
   def signup
@@ -78,6 +69,24 @@ class Play::TournamentsController < BaseController
     end
 
     redirect_to play_dashboard_index_path, :flash => { :success => "Your registration has been canceled." }
+  end
+  
+  def flights_with_rankings_could_be_combined
+    if @tournament.tournament_days.count > 1 && @tournament_day == @tournament.last_day
+      rankings = []
+      
+      @tournament.tournament_days.each do |day|
+        rankings << day.flights_with_rankings
+      end
+      
+      Rails.logger.debug { "Attempting to Combine Rankings Across #{rankings.count} Days" }
+      
+      @flights_with_rankings = @tournament.combine_rankings(rankings)
+    else
+      @flights_with_rankings = @tournament_day.flights_with_rankings
+    end
+    
+    return @flights_with_rankings
   end
   
   private
