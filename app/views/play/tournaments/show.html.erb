@@ -40,7 +40,11 @@
           <% if @tournament.includes_player?(current_user, @tournament_day) && @tournament_day.can_be_played? -%>
             <span class="badge"><%= @tournament_day.player_score(current_user) %></span><%= link_to "Your #{@tournament_day.pretty_day(false)} Scorecard", play_scorecard_path(@tournament_day.primary_scorecard_for_user(current_user)) %>
           <% else -%>
+            <% if @tournament.includes_player?(current_user, @tournament_day) %>
             Your scorecard will be available once the league admin has completed entering the required information.
+            <% else -%>
+            DNP
+            <% end -%>
           <% end -%>
         </li>
       </ul>
@@ -150,8 +154,7 @@
         </div>
         <% end -%>
       <% end -%>
-      
-      <% if @tournament_day.contests.count > 0 -%>
+      <% if @tournament_day.contests.count > 0 && @tournament.includes_player?(current_user, @tournament_day) && @tournament_day.can_be_played? -%>
       <div class="panel-footer">
         <%= link_to "Sign Up For Contests", play_tournament_tournament_day_contests_path(@tournament_day.tournament, @tournament_day) %>
       </div>

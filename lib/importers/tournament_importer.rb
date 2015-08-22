@@ -5,6 +5,7 @@ module Importers
     attr_accessor :flight_code_flight_mapping
     attr_accessor :tee_group_code_tee_group_mapping
     attr_accessor :team_mapping
+    attr_accessor :tournament_day_ids_processed
     
     #NOTE: input file should be sorted by flight
     
@@ -13,6 +14,7 @@ module Importers
         self.flight_code_flight_mapping = {}
         self.tee_group_code_tee_group_mapping = {}
         self.team_mapping = {}
+        self.tournament_day_ids_processed = []
       
         tournament_lines = SmarterCSV.process(filename)
         
@@ -35,6 +37,9 @@ module Importers
           #tournament_day
           tournament_day = TournamentDay.where(id: line[:tournament_day_id]).first
           raise "Missing Tournament Day" if tournament_day.blank?
+
+          #keep for scoring
+          self.tournament_day_ids_processed << tournament_day.id unless self.tournament_day_ids_processed.include? tournament_day.id
 
           course_tee_box = tournament_day.course.course_tee_boxes.where(name: line[:course_tee_box_name]).first
           raise "Missing Course Tee Box" if course_tee_box.blank?
@@ -85,7 +90,15 @@ module Importers
           tournament.is_finalized = true
           tournament.save
           
-          tournament_day.score_user(player)
+          tournament_day.data_was_imported = true
+          tournament_day.save
+        end
+        
+        self.tournament_day_ids_processed.each do |day_id|
+          day = TournamentDay.find(day_id)
+          day.tournament.players.each do |p|
+            day.score_user(p)
+          end
         end
       end
     end

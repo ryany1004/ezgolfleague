@@ -14,12 +14,12 @@ module Rankable
           last_day_flight[:players].each do |outer_player| #outer players
             flight[:players].each do |inner_player|
               if outer_player[:id] == inner_player[:id] #same player
+                Rails.logger.debug { "Players Matched For #{outer_player[:id]}. Adding #{inner_player[:net_score]} to #{outer_player[:net_score]}" }
+                
                 outer_player[:net_score] += inner_player[:net_score]
                 outer_player[:back_nine_net_score] += inner_player[:back_nine_net_score]
                 outer_player[:gross_score] += inner_player[:gross_score]
                 outer_player[:points] += inner_player[:points]
-              
-                Rails.logger.debug { "Players Matched. Adding #{inner_player[:net_score]} to #{outer_player[:net_score]}" }
               end
             end
           end

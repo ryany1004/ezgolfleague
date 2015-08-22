@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150820003707) do
+ActiveRecord::Schema.define(version: 20150822191350) do
 
   create_table "contest_holes", force: :cascade do |t|
     t.integer  "contest_id"
@@ -295,6 +295,7 @@ ActiveRecord::Schema.define(version: 20150820003707) do
     t.datetime "created_at",                                 null: false
     t.datetime "updated_at",                                 null: false
     t.boolean  "admin_has_customized_teams", default: false
+    t.boolean  "data_was_imported",          default: false
   end
 
   add_index "tournament_days", ["tournament_at"], name: "index_tournament_days_on_tournament_at"

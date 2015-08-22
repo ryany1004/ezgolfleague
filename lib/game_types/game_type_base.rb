@@ -149,6 +149,8 @@ module GameTypes
     
       total_score = 0 if total_score < 0
     
+      Rails.logger.debug { "Base Score Computed: #{total_score}. User: #{user.complete_name} handicap: #{use_handicap} holes: #{holes}" }
+    
       return total_score
     end  
     
