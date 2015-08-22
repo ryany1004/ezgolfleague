@@ -23,7 +23,7 @@
       		</tr>
       	</thead>
         <tbody>
-          <% cache(cache_key_for_tournament_with_prefix(@tournament, "tournament-rankings")) do %>
+          <% cache(cache_key_for_tournament_day_with_prefix(@tournament_day, "tournament-leaderboard")) do %>
             <% @combined_flights_with_rankings.each_with_index do |flight, x| %>
               <% @current_day_flight = @day_flights_with_rankings[x] -%>
               <% flight[:players].each_with_index do |player, i| -%>
