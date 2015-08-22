@@ -5,9 +5,9 @@ module Play::DashboardHelper
     
     tournament.tournament_days.each do |day|
       if tournament.is_finalized
-        link_html << link_to("View", play_scorecard_path(tournament.primary_scorecard_for_user(user)))
+        link_html << link_to("View", play_scorecard_path(day.primary_scorecard_for_user(user)))
       else
-        link_html << link_to("Edit", play_scorecard_path(tournament.primary_scorecard_for_user(user)))
+        link_html << link_to("Edit", play_scorecard_path(day.primary_scorecard_for_user(user)))
       end
     
       link_html << "<br/>" if day != tournament.tournament_days.last
