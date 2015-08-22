@@ -38,10 +38,13 @@
       <% if @tournament.includes_player?(current_user, @tournament_day) && @tournament_day.can_be_played? -%>
       <ul class="list-group">
         <li class="list-group-item">
-          <span class="badge"><%= @tournament_day.player_score(current_user) %></span><%= link_to "Your #{@tournament_day.pretty_day(false)} Scorecard", play_scorecard_path(@tournament_day.primary_scorecard_for_user(current_user)) %>
+          <% if @tournament.includes_player?(current_user, @tournament_day) && @tournament_day.can_be_played? -%>
+            <span class="badge"><%= @tournament_day.player_score(current_user) %></span><%= link_to "Your #{@tournament_day.pretty_day(false)} Scorecard", play_scorecard_path(@tournament_day.primary_scorecard_for_user(current_user)) %>
+          <% else -%>
+            Your scorecard will be available once the league admin has completed entering the required information.
+          <% end -%>
         </li>
       </ul>
-      <% end -%>
     </div>
   </div>
 </div>
