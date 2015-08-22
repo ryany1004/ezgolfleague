@@ -70,6 +70,7 @@ module GameTypes
     def can_be_played?
       return false if self.tournament_day.tournament_groups.count == 0
       return false if self.tournament_day.flights.count == 0
+      return false if self.tournament_day.course_holes.count == 0
     
       self.tournament.players.each do |p|
         return false if self.tournament_day.flight_for_player(p) == nil
