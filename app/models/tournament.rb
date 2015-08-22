@@ -101,7 +101,7 @@ class Tournament < ActiveRecord::Base
     self.tournament_days.each do |day|
       unplayable_days = true if day.can_be_played? == false
     end
-    return false if days_without_flights == true
+    return false if unplayable_days == true
   
     return true
   end
