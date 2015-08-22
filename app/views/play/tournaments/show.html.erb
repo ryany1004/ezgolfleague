@@ -35,7 +35,6 @@
       <ul class="list-group">
         <li class="list-group-item"><strong>Sign Ups:</strong> <%= @tournament.signup_opens_at.to_s(:date_and_time) %> - <%= @tournament.signup_closes_at.to_s(:date_and_time) %></li>
       </ul>
-      <% if @tournament.includes_player?(current_user, @tournament_day) && @tournament_day.can_be_played? -%>
       <ul class="list-group">
         <li class="list-group-item">
           <% if @tournament.includes_player?(current_user, @tournament_day) && @tournament_day.can_be_played? -%>
