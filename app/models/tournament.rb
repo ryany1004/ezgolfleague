@@ -97,9 +97,9 @@ class Tournament < ActiveRecord::Base
     return false if self.number_of_players >= self.max_players
     return false if self.signup_opens_at > Time.zone.now
     
-    days_without_flights = false
+    unplayable_days = false
     self.tournament_days.each do |day|
-      days_without_flights = true if day.flights.count == 0
+      unplayable_days = true if day.can_be_played? == false
     end
     return false if days_without_flights == true
   
