@@ -109,7 +109,7 @@ module GameTypes
         if use_handicap == true
           return tournament_day_result.front_nine_net_score
         else
-          return self.compute_player_score(user, false, holes)
+          return tournament_day_result.front_nine_gross_score
         end
       else
         if use_handicap == true
