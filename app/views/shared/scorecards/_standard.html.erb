@@ -1,16 +1,16 @@
+<p>
+  <%= link_to "View Leaderboard", play_tournament_leaderboard_path(primary_scorecard.tournament_day.tournament, day: primary_scorecard.tournament_day), class: "btn btn-primary btn-xs", role: "button" %>
+</p>
+
 <table class="table table-striped table-bordered">
   <thead>
     <tr>
-      <th width="33%">Flight</th>
-      <th width="33%">Tee-Time</th>
-      <th width="33%">Course Handicap</th>
+      <th>Tee-Time</th>
     </tr>
   </thead>
   <tbody>
     <tr>
-      <td><%= primary_scorecard.tournament_day.flight_for_player(primary_scorecard.golf_outing.user).flight_number %></td>
       <td><%= primary_scorecard.golf_outing.team.tournament_group.tee_time_at.to_s(:date_and_time) %></td>
-      <td><%= primary_scorecard.golf_outing.course_handicap.to_i %></td>
     </tr>
   </tbody>
 </table>
@@ -18,12 +18,13 @@
 <table class="table table-striped table-bordered">
 	<thead>
 		<tr>
+      <th width="3%">Flight</th>
       <th width="5%">Hole</th>
       <% primary_scorecard.scores.each_slice(primary_scorecard.tournament_day.course_holes.count / 2).to_a.each_with_index do |split, j| %>
         <% split.each do |score| -%>
         <th width="<%= 70 / primary_scorecard.scores.count %>%"><%= score.course_hole.hole_number %></th>
         <% end -%>
-        <th width="7%">
+        <th width="6%">
           <% if j == 0 -%>
             Out
           <% else -%>
@@ -32,17 +33,20 @@
         </th>
       <% end -%>
       
+      <th width="3%">HDCP</th>
+      
       <% if primary_scorecard.includes_extra_scoring_column? -%>
         <th width="5%">&nbsp;</th>
       <% end -%>
       
-      <th width="5%">Totals</th>
+      <th width="7%">Gross</th>
 		</tr>
 	</thead>
 	<tbody>
     <% other_scorecards.insert(0, primary_scorecard).each do |scorecard| -%>
       <!-- Scorecard ID: <%= scorecard.id %> -->
       <tr>
+        <td><%= scorecard.flight_number %></td>
         <% if scorecard.should_highlight? -%>
           <td><em><%= scorecard.name %></em></td>
         <% else -%>
@@ -80,11 +84,13 @@
             <% end -%>
           </td>
         <% end -%>
+
+        <td><%= scorecard.course_handicap %></td>
         
         <% if primary_scorecard.includes_extra_scoring_column? -%>
           <td><strong><%= scorecard.extra_scoring_column_data %></strong></td>
         <% end -%>
-        
+
         <td>
           <% if scorecard.should_total? -%>
             <strong><%= scorecard.scores.map {|score| score.strokes }.sum %></strong>
@@ -102,6 +108,7 @@
 	</tbody>
   <tfoot>
 		<tr>
+      <th>&nbsp;</th>
 			<th>Par</th>
       <% primary_scorecard.scores.each_slice(primary_scorecard.tournament_day.course_holes.count / 2).to_a.each_with_index do |split, j| %>
         <% split.each do |score| -%>
@@ -110,6 +117,8 @@
         <th>&nbsp;</th>
       <% end -%>
       
+      <th>&nbsp;</th>
+      
       <% if primary_scorecard.includes_extra_scoring_column? -%>
         <th>&nbsp;</th>
       <% end -%>
@@ -117,6 +126,7 @@
       <th><%= primary_scorecard.tournament_day.course_holes.map {|hole| hole.par }.sum %></th>
 		</tr>
 		<tr>
+      <th>&nbsp;</th>
 			<th>Men's Handicap</th>
       <% primary_scorecard.scores.each_slice(primary_scorecard.tournament_day.course_holes.count / 2).to_a.each_with_index do |split, j| %>
         <% split.each do |score| -%>      
@@ -125,12 +135,15 @@
         <th>&nbsp;</th>
       <% end -%>
       
+      <th>&nbsp;</th>
+      
       <% if primary_scorecard.includes_extra_scoring_column? -%>
         <th>&nbsp;</th>
       <% end -%>
       <th>&nbsp;</th>
 		</tr>
 		<tr>
+      <th>&nbsp;</th>
 			<th>Women's Handicap</th>
       <% primary_scorecard.scores.each_slice(primary_scorecard.tournament_day.course_holes.count / 2).to_a.each_with_index do |split, j| %>
         <% split.each do |score| -%>      
@@ -138,6 +151,8 @@
         <% end -%>
         <th>&nbsp;</th>
       <% end -%>
+      
+      <th>&nbsp;</th>
       
       <% if primary_scorecard.includes_extra_scoring_column? -%>
         <th>&nbsp;</th>

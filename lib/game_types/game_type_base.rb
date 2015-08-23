@@ -105,6 +105,12 @@ module GameTypes
         else
           return self.compute_player_score(user, false, holes)
         end
+      elsif holes == [1, 2, 3, 4, 5, 6, 7, 8, 9]
+        if use_handicap == true
+          return tournament_day_result.front_nine_net_score
+        else
+          return self.compute_player_score(user, false, holes)
+        end
       else
         if use_handicap == true
           return tournament_day_result.net_score

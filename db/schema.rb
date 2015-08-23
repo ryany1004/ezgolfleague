@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150822191350) do
+ActiveRecord::Schema.define(version: 20150823174649) do
 
   create_table "contest_holes", force: :cascade do |t|
     t.integer  "contest_id"
@@ -280,6 +280,7 @@ ActiveRecord::Schema.define(version: 20150822191350) do
     t.integer  "back_nine_net_score"
     t.datetime "created_at",                null: false
     t.datetime "updated_at",                null: false
+    t.integer  "front_nine_net_score"
   end
 
   add_index "tournament_day_results", ["flight_id"], name: "index_tournament_day_results_on_flight_id"

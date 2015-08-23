@@ -80,10 +80,11 @@ module Scoreable
     primary_scorecard = self.primary_scorecard_for_user(user)
     
     net_score = self.compute_player_score(user, true)
+    front_nine_net_score = self.compute_player_score(user, true, [1, 2, 3, 4, 5, 6, 7, 8, 9])
     back_nine_net_score = self.compute_player_score(user, true, [10, 11, 12, 13, 14, 15, 16, 17, 18])
     gross_score = self.compute_player_score(user, false)
     
-    result = TournamentDayResult.create(tournament_day: self, user: user, primary_scorecard: primary_scorecard, flight: self.flight_for_player(user), gross_score: gross_score, net_score: net_score, back_nine_net_score: back_nine_net_score)
+    result = TournamentDayResult.create(tournament_day: self, user: user, primary_scorecard: primary_scorecard, flight: self.flight_for_player(user), gross_score: gross_score, net_score: net_score, front_nine_net_score: front_nine_net_score, back_nine_net_score: back_nine_net_score)
     
     return result
   end

@@ -37,6 +37,20 @@ class Scorecard < ActiveRecord::Base
     return self.tournament_day.game_type.player_score(self.golf_outing.user, use_handicap, [10, 11, 12, 13, 14, 15, 16, 17, 18])
   end
   
+  def flight_number
+    flight = self.tournament_day.flight_for_player(self.golf_outing.user)
+    
+    unless flight.blank?
+      return flight.flight_number
+    else
+      return nil
+    end
+  end
+  
+  def course_handicap
+    return self.golf_outing.course_handicap.to_i
+  end
+  
   #Team Support
   
   def is_potentially_editable?

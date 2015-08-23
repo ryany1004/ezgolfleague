@@ -23,6 +23,14 @@ module GameTypes
       return nil
     end
     
+    def flight_number
+      return nil
+    end
+  
+    def course_handicap
+      return nil
+    end
+    
     ##Logic
     
     def should_highlight?
