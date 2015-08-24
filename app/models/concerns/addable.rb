@@ -95,6 +95,12 @@ module Addable
           golf_outing.scorecards.first.set_course_handicap(true) if self.golf_outing_for_player(p).course_handicap == 0 #re-calc handicap if we do not have one
           player_course_handicap = self.golf_outing_for_player(p).course_handicap
 
+          if self.golf_outing_for_player(p).course_handicap == 0 #re-calc handicap if we do not have one
+            golf_outing.scorecards.first.set_course_handicap(true) unless golf_outing.scorecards.blank?
+            
+            player_course_handicap = p.course_handicap(self.course, f.course_tee_box)
+          end
+          
           Rails.logger.debug { "Player Course Handicap for Course/Outing: #{player_course_handicap}" }
         end
  
@@ -114,6 +120,7 @@ module Addable
   
     self.touch #bust the cache, yo.
   
+    #TODO: convert this to a validation error or something? just blowing up seems bad.
     if confirm_all_flighted == true && self.flights.count > 0
       self.tournament.players_for_day(self).each do |p|
         if self.flight_for_player(p) == nil

@@ -11,6 +11,13 @@ class Flight < ActiveRecord::Base
 
   validate :bounds_are_correct
   def bounds_are_correct
+    if upper_bound.blank? || lower_bound.blank?
+      errors.add(:upper_bound, "cannot validate an empty value")
+      errors.add(:lower_bound, "cannot validate an empty value")
+      
+      return
+    end
+    
     if upper_bound >= 0 and lower_bound >= 0 #special case for imported data         
       if upper_bound <= lower_bound
         errors.add(:upper_bound, "can't be less than or equal to lower bound")
@@ -24,6 +31,13 @@ class Flight < ActiveRecord::Base
   
   validate :does_not_overlap
   def does_not_overlap
+    if upper_bound.blank? || lower_bound.blank?
+      errors.add(:upper_bound, "cannot validate an empty value")
+      errors.add(:lower_bound, "cannot validate an empty value")
+      
+      return
+    end
+    
     if upper_bound >= 0 and lower_bound >= 0 #special case for imported data
       return if self.tournament_day.blank? #TODO: REMOVE POST MIGRATION
       
