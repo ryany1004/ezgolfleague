@@ -28,7 +28,7 @@
     	<tbody>
     	<% @flights.each do |flight| %>
     		<tr>
-    			<td><%= link_to flight.flight_number, edit_league_tournament_flight_path(@tournament.league, @tournament, flight) %></td>
+    			<td><%= link_to flight.flight_number, edit_league_tournament_flight_path(@tournament.league, @tournament, flight, tournament_day: @tournament_day) %></td>
     			<td><%= flight.lower_bound %></td>
           <td><%= flight.upper_bound %></td>
           <td><%= flight.course_tee_box.name %></td>

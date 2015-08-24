@@ -307,7 +307,13 @@ module GameTypes
           gross_score = self.player_score(player, false)
           
           scorecard = self.tournament_day.primary_scorecard_for_user(player)
-          scorecard_url = play_scorecard_path(scorecard)
+          unless scorecard.blank?
+            scorecard_url = play_scorecard_path(scorecard)
+          else
+            Rails.logger.debug { "Error Finding Scorecard For #{player.id}" }
+            
+            scorecard_url = "#"
+          end
 
           points = 0
           f.payouts.each do |payout|
