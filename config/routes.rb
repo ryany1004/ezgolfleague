@@ -115,6 +115,8 @@ Rails.application.routes.draw do
       resources :golfer_teams
       
       resources :flights do
+        patch 'reflight_players', on: :collection
+        
         resources :payouts
       end
     

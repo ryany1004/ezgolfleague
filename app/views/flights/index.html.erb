@@ -13,6 +13,9 @@
     </div>
     <div class="panel-body">
       By specifying handicap ranges when creating flights, players can automatically be placed based on their current course handicap. <strong>It's important to create enough flights that all players will be flighted.</strong>
+      <p>
+        <%= link_to 'Re-Flight Players', reflight_players_league_tournament_flights_path(@tournament.league, @tournament), :class => 'btn btn-primary' %>
+      </p>
     </div>
     <table class="table table-striped">
     	<thead>

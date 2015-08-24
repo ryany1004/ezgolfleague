@@ -61,6 +61,12 @@ class FlightsController < BaseController
     redirect_to league_tournament_flights_path(@tournament.league, @tournament, tournament_day: @tournament_day), :flash => { :success => "The flight was successfully deleted." }
   end
   
+  def reflight_players
+    self.update_player_flight_membership
+    
+    redirect_to league_tournament_flights_path(@tournament.league, @tournament), :flash => { :success => "The players were re-flighted." }
+  end
+  
   def update_player_flight_membership
     @tournament_day.assign_players_to_flights(false)
   end
