@@ -47,7 +47,7 @@ class LeaguesController < BaseController
   def update_from_ghin
     @league = League.find(params[:league_id])
     
-    @league.users.where("ghin_number IS NOT NULL").each do |u|
+    @league.users.where("ghin_number IS NOT NULL").order("last_name").each do |u|
       Importers::GHINImporter.import_ghin_for_user(u)
     end
     

@@ -128,7 +128,11 @@ module GameTypes
       handicap_allowance = self.tournament_day.handicap_allowance(user)
 
       scorecard = self.tournament_day.primary_scorecard_for_user(user)
-      return 0 if scorecard.blank?
+      if scorecard.blank?
+        Rails.logger.debug { "Returning 0 - No Scorecard" }
+        
+        return 0 
+      end
       
       scorecard.scores.each do |score|
         should_include_score = true #allows us to calculate partial scores, i.e. back 9
@@ -139,11 +143,18 @@ module GameTypes
         if should_include_score == true
           hole_score = score.strokes
       
+          Rails.logger.debug { "Hole: #{score.course_hole.hole_number} - Strokes #{score.strokes}" }
+      
           if use_handicap == true && !handicap_allowance.blank?
             handicap_allowance.each do |h|
               if h[:course_hole] == score.course_hole
                 if h[:strokes] != 0
-                  hole_score = hole_score - h[:strokes]
+                  Rails.logger.debug { "Adjusting Hole Score From #{hole_score} w/ #{h[:strokes]}" }
+                  
+                  adjusted_hole_score = hole_score - h[:strokes]
+                  hole_score = adjusted_hole_score if adjusted_hole_score > 0
+                  
+                  Rails.logger.debug { "Adjusted: #{hole_score}" }
                 end
               end
             end
@@ -301,7 +312,9 @@ module GameTypes
         ranked_flight = { flight_id: f.id, flight_number: f.flight_number, players: [] }
       
         rankable_players = self.players_for_flight(f)
-        rankable_players.each do |player|        
+        rankable_players.each do |player|
+          Rails.logger.debug { "Ranking Player: #{player.complete_name}" }
+             
           net_score = self.player_score(player, true)
           back_nine_net_score = self.player_score(player, true, [10, 11, 12, 13, 14, 15, 16, 17, 18])
           gross_score = self.player_score(player, false)
@@ -319,8 +332,12 @@ module GameTypes
           f.payouts.each do |payout|
             points = payout.points if payout.user == player
           end
-      
-          ranked_flight[:players] << { id: player.id, name: self.player_team_name_for_player(player), net_score: net_score, back_nine_net_score: back_nine_net_score, gross_score: gross_score, scorecard_url: scorecard_url, points: points } if !net_score.blank? && net_score > 0
+          
+          if !net_score.blank? && net_score > 0
+            ranked_flight[:players] << { id: player.id, name: self.player_team_name_for_player(player), net_score: net_score, back_nine_net_score: back_nine_net_score, gross_score: gross_score, scorecard_url: scorecard_url, points: points } 
+          else
+            Rails.logger.debug { "Not Including Player in Ranking. Net Score: #{net_score}" }
+          end
         end
         
         self.sort_rank_players_in_flight!(ranked_flight[:players])

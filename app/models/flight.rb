@@ -8,6 +8,7 @@ class Flight < ActiveRecord::Base
   validates :flight_number, presence: true
   validates :lower_bound, presence: true
   validates :upper_bound, presence: true
+  validates :course_tee_box, presence: true
 
   validate :bounds_are_correct
   def bounds_are_correct
