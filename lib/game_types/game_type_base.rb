@@ -305,6 +305,17 @@ module GameTypes
       end
     end
 
+    def player_par_relation_for_tournament_day(player, tournament_day, use_handicap = true)
+      result = tournament_day.tournament_day_results.where(user: player).first
+      return nil if result.blank?
+      
+      if use_handicap == true
+        return result.par_related_net_score
+      else
+        return result.par_related_gross_score
+      end
+    end
+
     def flights_with_rankings
       ranked_flights = []
     
@@ -318,6 +329,9 @@ module GameTypes
           net_score = self.player_score(player, true)
           back_nine_net_score = self.player_score(player, true, [10, 11, 12, 13, 14, 15, 16, 17, 18])
           gross_score = self.player_score(player, false)
+          
+          par_related_net_score = self.player_par_relation_for_tournament_day(player, self.tournament_day, true)
+          par_related_gross_score = self.player_par_relation_for_tournament_day(player, self.tournament_day, false)
           
           scorecard = self.tournament_day.primary_scorecard_for_user(player)
           unless scorecard.blank?
@@ -334,7 +348,7 @@ module GameTypes
           end
           
           if !net_score.blank? && net_score > 0
-            ranked_flight[:players] << { id: player.id, name: self.player_team_name_for_player(player), net_score: net_score, back_nine_net_score: back_nine_net_score, gross_score: gross_score, scorecard_url: scorecard_url, points: points } 
+            ranked_flight[:players] << { id: player.id, name: self.player_team_name_for_player(player), net_score: net_score, back_nine_net_score: back_nine_net_score, gross_score: gross_score, scorecard_url: scorecard_url, points: points, par_related_net_score: par_related_net_score, par_related_gross_score: par_related_gross_score } 
           else
             Rails.logger.debug { "Not Including Player in Ranking. Net Score: #{net_score}" }
           end

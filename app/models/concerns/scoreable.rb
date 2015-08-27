@@ -78,6 +78,7 @@ module Scoreable
     existing_result.destroy unless existing_result.blank?
     
     primary_scorecard = self.primary_scorecard_for_user(user)
+    flight = self.flight_for_player(user)
     
     net_score = self.compute_player_score(user, true)
     gross_score = self.compute_player_score(user, false)
@@ -85,12 +86,48 @@ module Scoreable
     front_nine_gross_score = self.compute_player_score(user, false, [1, 2, 3, 4, 5, 6, 7, 8, 9])
     front_nine_net_score = self.compute_player_score(user, true, [1, 2, 3, 4, 5, 6, 7, 8, 9])
     back_nine_net_score = self.compute_player_score(user, true, [10, 11, 12, 13, 14, 15, 16, 17, 18])
-    
-    flight = self.flight_for_player(user)
-    
-    result = TournamentDayResult.create(tournament_day: self, user: user, primary_scorecard: primary_scorecard, flight: flight, gross_score: gross_score, net_score: net_score, front_nine_gross_score: front_nine_gross_score, front_nine_net_score: front_nine_net_score, back_nine_net_score: back_nine_net_score)
+
+    user_gross_par = self.user_par_for_played_holes(user, false)
+    user_net_par = self.user_par_for_played_holes(user, true)
+    par_related_net_score =  net_score - user_net_par
+    par_related_gross_score =  gross_score - user_gross_par
+
+    result = TournamentDayResult.create(tournament_day: self, user: user, primary_scorecard: primary_scorecard, flight: flight, gross_score: gross_score, net_score: net_score, front_nine_gross_score: front_nine_gross_score, front_nine_net_score: front_nine_net_score, back_nine_net_score: back_nine_net_score, par_related_net_score: par_related_net_score, par_related_gross_score: par_related_gross_score)
     
     return result
+  end
+  
+  def user_par_for_played_holes(user, use_handicap = true)
+    par = 0
+    
+    primary_scorecard = self.primary_scorecard_for_user(user)
+    handicap_allowance = self.handicap_allowance(user)
+    
+    primary_scorecard.scores.each do |s|
+      if s.strokes > 0
+        par_adjustment = s.course_hole.par
+        
+        if use_handicap == true && !handicap_allowance.blank?
+          handicap_allowance.each do |h|
+            if h[:course_hole] == s.course_hole
+              if h[:strokes] != 0
+                Rails.logger.debug { "Adjusting Par From #{par_adjustment} w/ #{h[:strokes]}" }
+            
+                par_adjustment = par_adjustment - h[:strokes]
+            
+                Rails.logger.debug { "Adjusted Par: #{par_adjustment}" }
+              end
+            end
+          end
+        end
+        
+        par = par + par_adjustment
+      end
+    end
+
+    Rails.logger.debug { "User Par: #{par}" }
+
+    return par
   end
 
 end

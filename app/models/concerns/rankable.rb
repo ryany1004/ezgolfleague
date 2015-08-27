@@ -20,6 +20,9 @@ module Rankable
                 outer_player[:back_nine_net_score] += inner_player[:back_nine_net_score]
                 outer_player[:gross_score] += inner_player[:gross_score]
                 outer_player[:points] += inner_player[:points]
+                
+                outer_player[:par_related_gross_score] += inner_player[:par_related_gross_score]
+                outer_player[:par_related_net_score] += inner_player[:par_related_net_score]
               end
             end
           end

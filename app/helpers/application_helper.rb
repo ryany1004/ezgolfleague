@@ -66,6 +66,16 @@ module ApplicationHelper
     end
   end
   
+  def par_helper(par)
+    if par == 0
+      return "Even"
+    elsif par > 0
+      return "+#{par}"
+    else
+      return par
+    end
+  end
+  
   def team_member_names_without_user(team, user)
     members = []
     
