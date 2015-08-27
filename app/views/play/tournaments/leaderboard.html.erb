@@ -19,8 +19,8 @@
             <th>Player</th>
             <th>Net</th>
             <th>Gross</th>
-            <th>Par Gross</th>
             <th>Par Net</th>
+            <th>Par Net Total</th>
             <th>Total</th>
       		</tr>
       	</thead>
@@ -35,8 +35,8 @@
               <td><%= player[:name] %></td>
               <td><%= current_day_player[:net_score] %></td>
               <td><%= current_day_player[:gross_score] %></td>
-              <td><%= par_helper(current_day_player[:par_related_gross_score]) %></td>
               <td><%= par_helper(current_day_player[:par_related_net_score]) %></td>
+              <td><%= par_helper(player[:par_related_net_score]) %></td>
               <td><%= player[:net_score] %></td>
             </tr>
             <% end -%>
