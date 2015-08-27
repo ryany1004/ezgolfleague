@@ -24,6 +24,8 @@ class Play::TournamentsController < BaseController
     
     @day_flights_with_rankings = @tournament_day.flights_with_rankings
     @combined_flights_with_rankings = self.flights_with_rankings_could_be_combined
+    
+    @page_title = "#{@tournament.name} Leaderboard"
   end
   
   def signup
