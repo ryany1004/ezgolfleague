@@ -101,6 +101,8 @@ module Scoreable
     par = 0
     
     primary_scorecard = self.primary_scorecard_for_user(user)
+    return 0 if primary_scorecard.blank?
+    
     handicap_allowance = self.handicap_allowance(user)
     
     primary_scorecard.scores.each do |s|
