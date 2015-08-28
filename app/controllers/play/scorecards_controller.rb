@@ -22,8 +22,12 @@ class Play::ScorecardsController < BaseController
     end
     
     @scorecard.tournament_day.score_user(@scorecard.golf_outing.user)
-    
     @scorecard.tournament_day.game_type.after_updating_scores_for_scorecard(@scorecard)
+    
+    @other_scorecards.each do |other_scorecard|
+      @scorecard.tournament_day.score_user(other_scorecard.golf_outing.user)
+      @scorecard.tournament_day.game_type.after_updating_scores_for_scorecard(other_scorecard)
+    end
 
     reload_scorecard = @scorecard
     reload_scorecard = Scorecard.find(params[:original_scorecard_id]) unless params[:original_scorecard_id].blank?
