@@ -9,7 +9,7 @@ class GameTypesController < BaseController
   def update
     if @tournament.update(tournament_params)
       @tournament.tournament_days.each do |day|
-        unless params[:game_type_options][day.id.to_s].blank?          
+        unless params[:game_type_options].blank? || params[:game_type_options][day.id.to_s].blank?          
           day.game_type.save_setup_details(params[:game_type_options][day.id.to_s])
         else          
           day.game_type.remove_game_type_options

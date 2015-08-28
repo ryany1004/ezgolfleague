@@ -25,7 +25,7 @@ class Play::ScorecardsController < BaseController
     @scorecard.tournament_day.game_type.after_updating_scores_for_scorecard(@scorecard)
     
     @other_scorecards.each do |other_scorecard|
-      @scorecard.tournament_day.score_user(other_scorecard.golf_outing.user)
+      @scorecard.tournament_day.score_user(other_scorecard.golf_outing.user) unless other_scorecard.golf_outing.blank?
       @scorecard.tournament_day.game_type.after_updating_scores_for_scorecard(other_scorecard)
     end
 
