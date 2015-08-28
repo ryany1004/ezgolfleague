@@ -99,9 +99,9 @@ module GameTypes
     
     def sort_rank_players_in_flight!(flight_players)
       if self.use_back_9_to_break_ties?        
-        flight_players.sort_by! {|x| [x[:net_score], x[:back_nine_net_score]]} #a.sort_by{|x| [x.name, -x.date]}
+        flight_players.sort_by! {|x| [x[:par_related_net_score], x[:back_nine_net_score]]} #a.sort_by{|x| [x.name, -x.date]}
       else
-        flight_players.sort! { |x,y| x[:net_score] <=> y[:net_score] } #NOTE: Not DRY but there's some sort of binding error with just calling super. :-(
+        flight_players.sort! { |x,y| x[:par_related_net_score] <=> y[:par_related_net_score] } #NOTE: Not DRY but there's some sort of binding error with just calling super. :-(
       end
     end
     

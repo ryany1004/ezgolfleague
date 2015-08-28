@@ -318,7 +318,7 @@ module GameTypes
 
     def flights_with_rankings
       ranked_flights = []
-    
+
       self.tournament_day.flights.each do |f|
         ranked_flight = { flight_id: f.id, flight_number: f.flight_number, players: [] }
       

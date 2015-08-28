@@ -28,7 +28,7 @@ module Rankable
           end
         end
       end
-      
+
       last_day_flight[:players].sort! { |x,y| x[:par_related_net_score] <=> y[:par_related_net_score] }
     end
 

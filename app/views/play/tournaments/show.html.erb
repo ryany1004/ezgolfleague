@@ -37,6 +37,7 @@
       </ul>
       <ul class="list-group">
         <li class="list-group-item">
+          <%= link_to "View Leaderboard", play_tournament_leaderboard_path(@tournament, day: @tournament_day) %> | 
           <% if @tournament.includes_player?(current_user, @tournament_day) && @tournament_day.can_be_played? -%>
             <span class="badge"><%= @tournament_day.player_score(current_user) %></span><%= link_to "Your #{@tournament_day.pretty_day(false)} Scorecard", play_scorecard_path(@tournament_day.primary_scorecard_for_user(current_user)) %>
           <% else -%>
