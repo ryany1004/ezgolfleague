@@ -29,7 +29,7 @@ module Rankable
         end
       end
       
-      last_day_flight[:players].sort! { |x,y| x[:net_score] <=> y[:net_score] }
+      last_day_flight[:players].sort! { |x,y| x[:par_related_net_score] <=> y[:par_related_net_score] }
     end
 
     return last_day_flights

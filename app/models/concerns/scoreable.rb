@@ -31,9 +31,7 @@ module Scoreable
     team = scorecard.tournament_day.golfer_team_for_player(user)
     unless team.blank?
       team.users.each do |u|
-        if u == user and team.users.include? scorecard.golf_outing.user
-          return true
-        end
+        return true if u == user and team.users.include? scorecard.golf_outing.user
       end
     end
     
