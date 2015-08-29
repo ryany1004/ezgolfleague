@@ -16,9 +16,11 @@ class Play::ScorecardsController < BaseController
       
       logger.info { "#{score_id} #{strokes}" }
       
-      score = Score.find(score_id)
-      score.strokes = strokes
-      score.save
+      unless strokes.blank? or score_id.blank?
+        score = Score.find(score_id)
+        score.strokes = strokes
+        score.save
+      end
     end
     
     @scorecard.tournament_day.score_user(@scorecard.golf_outing.user)
