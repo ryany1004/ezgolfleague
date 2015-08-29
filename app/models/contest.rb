@@ -57,6 +57,14 @@ class Contest < ActiveRecord::Base
     end
   end
   
+  def remove_results
+    self.overall_winner = nil
+    
+    self.contest_holes.each do |hole|
+      hole.contest_results.destroy_all
+    end
+  end
+  
   def is_by_hole?
     return false if self.contest_type == 0
     return false if self.contest_type == 4

@@ -14,7 +14,7 @@ module ContestScoreable
   end
   
   def score_skins_contest(use_gross)
-    self.contest_results.destroy_all
+    self.remove_results
     
     all_winners = []
   
