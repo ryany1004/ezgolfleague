@@ -274,7 +274,7 @@ module GameTypes
         players_to_omit = []
         
         flight.users.each do |u|
-          players << u if (!players.include? u)&& (!players_to_omit.include? u)
+          players << u if (!players.include? u) && (!players_to_omit.include? u)
           
           team = self.tournament_day.golfer_team_for_player(u)
           unless team.blank?
