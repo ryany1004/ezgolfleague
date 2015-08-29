@@ -38,6 +38,8 @@ class TournamentsController < BaseController
   def touch_tournament
     @tournament.touch
     
+    Rails.cache.clear
+    
     @tournament.tournament_days.each do |day|
       day.touch
       
