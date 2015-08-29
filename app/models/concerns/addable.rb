@@ -63,6 +63,10 @@ module Addable
           end
         end
       end
+      
+      #remove from flight
+      flight = self.flight_for_player(user)
+      flight.users.delete(user) unless flight.blank?
   
       #remove from teams
       if remove_from_teams == true
