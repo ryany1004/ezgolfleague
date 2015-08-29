@@ -43,7 +43,11 @@ class TournamentsController < BaseController
     @tournament.tournament_days.each do |day|
       day.touch
       
-      #day.tournament_day_results.destroy_all #TODO: re-enable
+      day.tournament_day_results.each do |result|
+        result.touch
+      end
+      
+      #day.tournament_day_results.destroy_all #TODO: re-enable as a delayed job thing?
     end
     
     redirect_to league_tournaments_path(current_user.selected_league), :flash => { :success => "Cached data for this tournament was discarded." }
