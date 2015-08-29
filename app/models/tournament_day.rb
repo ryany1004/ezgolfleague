@@ -73,6 +73,13 @@ class TournamentDay < ActiveRecord::Base
     return day_string
   end
   
+  def tournament_day_results_cache_key(prefix)
+    max_updated_at = self.tournament_day_results.maximum(:updated_at).try(:utc).try(:to_s, :number)
+    cache_key = "tournament_days/#{prefix}-#{self.id}-#{max_updated_at}"
+    
+    return cache_key
+  end
+  
   def has_payouts?
     self.flights.each do |flight|
       return true if flight.payouts.count > 0

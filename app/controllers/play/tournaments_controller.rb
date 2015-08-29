@@ -12,8 +12,8 @@ class Play::TournamentsController < BaseController
       @tournament_day = @tournament.tournament_days.find(params[:tournament_day])
     end
     
-    @flights_with_rankings = @tournament_day.flights_with_rankings
-    @flights_with_rankings = self.flights_with_rankings_could_be_combined(@flights_with_rankings)
+    @flights_with_rankings = self.fetch_flights_with_rankings(@tournament_day)
+    @flights_with_rankings = self.fetch_combined_flights_with_rankings(@tournament_day, @flights_with_rankings)
 
     @page_title = "#{@tournament.name}"
   end
@@ -23,8 +23,8 @@ class Play::TournamentsController < BaseController
     @tournament_day = @tournament.tournament_days.find(params[:day])
     @user_scorecard = @tournament_day.primary_scorecard_for_user(current_user)
     
-    @day_flights_with_rankings = @tournament_day.flights_with_rankings
-    @combined_flights_with_rankings = self.flights_with_rankings_could_be_combined(@day_flights_with_rankings)
+    @day_flights_with_rankings = self.fetch_flights_with_rankings(@tournament_day)
+    @combined_flights_with_rankings = self.fetch_combined_flights_with_rankings(@tournament_day, @day_flights_with_rankings)
     
     @page_title = "#{@tournament.name} Leaderboard"
   end
@@ -90,6 +90,26 @@ class Play::TournamentsController < BaseController
     else
       return day_rankings
     end
+  end
+  
+  def fetch_flights_with_rankings(tournament_day)
+    cache_key = tournament_day.tournament_day_results_cache_key("flights_with_rankings")
+    
+    flights_with_rankings = Rails.cache.fetch(cache_key, expires_in: 7.minutes) do
+      tournament_day.flights_with_rankings
+    end
+        
+    return flights_with_rankings
+  end
+  
+  def fetch_combined_flights_with_rankings(tournament_day, day_flights_with_rankings)
+    cache_key = tournament_day.tournament_day_results_cache_key("combined_flights_with_rankings")
+
+    combined_flights_with_rankings = Rails.cache.fetch(cache_key, expires_in: 7.minutes) do
+      self.flights_with_rankings_could_be_combined(day_flights_with_rankings)
+    end
+    
+    return combined_flights_with_rankings
   end
   
   private

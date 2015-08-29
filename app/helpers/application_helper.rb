@@ -67,6 +67,8 @@ module ApplicationHelper
   end
   
   def par_helper(par)
+    return nil if par.blank?
+    
     if par == 0
       return "Even"
     elsif par > 0

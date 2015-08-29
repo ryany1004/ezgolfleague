@@ -10,8 +10,7 @@ module Play::TournamentsHelper
   end
   
   def cache_key_for_tournament_day_leaderboard_with_prefix(tournament_day, prefix)
-    max_updated_at = tournament_day.tournament_day_results.maximum(:updated_at).try(:utc).try(:to_s, :number)
-    cache_key = "tournament_days/#{prefix}-#{tournament_day.id}-#{max_updated_at}"
+    cache_key = tournament_day.tournament_day_results_cache_key(prefix)
     
     Rails.logger.debug { "Tournament Day Leaderboard Cache Key: #{cache_key}" }
     
