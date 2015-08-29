@@ -72,8 +72,7 @@ module Scoreable
   end
   
   def score_user(user)
-    existing_result = self.tournament_day_results.where(user: user).first
-    existing_result.destroy unless existing_result.blank?
+    self.tournament_day_results.where(user: user).destroy_all
     
     primary_scorecard = self.primary_scorecard_for_user(user)
     flight = self.flight_for_player(user)
