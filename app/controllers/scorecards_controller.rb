@@ -5,6 +5,12 @@ class ScorecardsController < BaseController
     @tournament = Tournament.find(params[:tournament_id])
     @players = @tournament.players
     
+    if params[:tournament_day].blank?
+      @tournament_day = @tournament.first_day
+    else
+      @tournament_day = @tournament.tournament_days.find(params[:tournament_day])
+    end
+    
     @page_title = "Scorecards"
   end
   
@@ -27,28 +33,32 @@ class ScorecardsController < BaseController
     
     tournament = Tournament.find(params[:tournament_id])
     
-    tournament.tournament_days.each do |day|
-      tournament.players.each do |player|
-        unless players_with_scorecards.include? player
-          players_with_scorecards << player
-        
-          unless day.primary_scorecard_for_user(player).blank?
-            card_hash = Hash.new
-            card_hash[:primary_scorecard] = day.primary_scorecard_for_user(player)
-
-            if day.allow_teams == GameTypes::TEAMS_ALLOWED || day.allow_teams == GameTypes::TEAMS_REQUIRED
-              related_scorecards = day.related_scorecards_for_user(player)
-              card_hash[:other_scorecards] = related_scorecards
-          
-              related_scorecards.each do |related|
-                players_with_scorecards << related.golf_outing.user unless related.golf_outing.blank?
-              end
-            else
-              card_hash[:other_scorecards] = []
-            end
+    if params[:tournament_day].blank?
+      tournament_day = tournament.first_day
+    else
+      tournament_day = tournament.tournament_days.find(params[:tournament_day])
+    end
+    
+    tournament.players.each do |player|
+      unless players_with_scorecards.include? player
+        players_with_scorecards << player
       
-            @scorecard_groups << card_hash
+        unless tournament_day.primary_scorecard_for_user(player).blank?
+          card_hash = Hash.new
+          card_hash[:primary_scorecard] = tournament_day.primary_scorecard_for_user(player)
+
+          if tournament_day.allow_teams == GameTypes::TEAMS_ALLOWED || tournament_day.allow_teams == GameTypes::TEAMS_REQUIRED
+            related_scorecards = tournament_day.related_scorecards_for_user(player)
+            card_hash[:other_scorecards] = related_scorecards
+        
+            related_scorecards.each do |related|
+              players_with_scorecards << related.golf_outing.user unless related.golf_outing.blank?
+            end
+          else
+            card_hash[:other_scorecards] = []
           end
+    
+          @scorecard_groups << card_hash
         end
       end
     end

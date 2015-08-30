@@ -4,37 +4,48 @@
   <li class="active">Scorecards</li>
 </ol>
 
+<h4><%= @page_title %></h4>
+
+<% if @tournament.tournament_days.count > 1 -%>
+  <p>
+  <% @tournament.tournament_days.each do |day| -%>
+    <%= link_to_unless day == @tournament_day, day.pretty_day, scorecards_path(tournament_id: @tournament, tournament_day: day) %>
+    <% if day != @tournament.tournament_days.last -%>
+      | 
+    <% end -%>
+  <% end -%>
+  </p>
+<% end -%>
+
 <div class="row">
   <div class="col-md-10">&nbsp;</div>
   <div class="col-md-2">
-    <p><%= link_to "Print Scorecards", print_scorecards_path(:tournament_id => @tournament), class: "btn btn-info", role: "button", target: "_blank" %></p>
+    <p><%= link_to "Print Scorecards", print_scorecards_path(:tournament_id => @tournament, tournament_day: @tournament_day), class: "btn btn-info", role: "button", target: "_blank" %></p>
   </div>
 </div>
 
-<% @tournament.tournament_days.each do |day| -%>
-  <div class="col-md-12">
-      <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
-        <% @players.each_with_index do |player, i| %>
-          <% unless day.primary_scorecard_for_user(player).blank? -%>
-            <div class="panel panel-default">
-              <div class="panel-heading" role="tab" id="heading<%= i %>">
-                <h4 class="panel-title">
-                  <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapse<%= i %>" aria-expanded="false" aria-controls="collapse<%= i %>">
-                    <%= player.complete_name %> <% if day.primary_scorecard_for_user(player).is_confirmed == true -%>(Confirmed)<% else -%>(Unconfirmed)<% end -%>
-                  </a>
-                </h4>
-              </div>
-              <div id="collapse<%= i %>" class="panel-collapse collapse <% if i == 0 -%>in<% end -%>" role="tabpanel" aria-labelledby="heading<%= i %>">
-                <div class="panel-body">
-                  <%= render partial: '/shared/scorecards/show', locals: {scorecard: day.primary_scorecard_for_user(player), split_holes: split_holes_for_course_tournament(day), split_scores: split_scores_for_scorecard(day.primary_scorecard_for_user(player), day.course_holes.count), tournament_day: day, handicap_allowance: day.handicap_allowance(player)} %>
-                  <p>
-                    <%= link_to "Edit This Scorecard", edit_scorecard_path(day.primary_scorecard_for_user(player)), class: "btn btn-warning", role: "button" %>
-                  </p>
-                </div>
+<div class="col-md-12">
+    <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+      <% @players.each_with_index do |player, i| %>
+        <% unless @tournament_day.primary_scorecard_for_user(player).blank? -%>
+          <div class="panel panel-default">
+            <div class="panel-heading" role="tab" id="heading<%= i %>">
+              <h4 class="panel-title">
+                <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapse<%= i %>" aria-expanded="false" aria-controls="collapse<%= i %>">
+                  <%= player.complete_name %> <% if @tournament_day.primary_scorecard_for_user(player).is_confirmed == true -%>(Confirmed)<% else -%>(Unconfirmed)<% end -%>
+                </a>
+              </h4>
+            </div>
+            <div id="collapse<%= i %>" class="panel-collapse collapse <% if i == 0 -%>in<% end -%>" role="tabpanel" aria-labelledby="heading<%= i %>">
+              <div class="panel-body">
+                <%= render partial: '/shared/scorecards/show', locals: {scorecard: @tournament_day.primary_scorecard_for_user(player), split_holes: split_holes_for_course_tournament(@tournament_day), split_scores: split_scores_for_scorecard(@tournament_day.primary_scorecard_for_user(player), @tournament_day.course_holes.count), tournament_day: @tournament_day, handicap_allowance: @tournament_day.handicap_allowance(player)} %>
+                <p>
+                  <%= link_to "Edit This Scorecard", edit_scorecard_path(@tournament_day.primary_scorecard_for_user(player)), class: "btn btn-warning", role: "button" %>
+                </p>
               </div>
             </div>
-          <% end -%>
+          </div>
         <% end -%>
-      </div>
-  </div>
-<% end -%>
+      <% end -%>
+    </div>
+</div>
