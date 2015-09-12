@@ -73,13 +73,13 @@ class PaymentsController < BaseController
   def fetch_collections
     if current_user.is_super_user?
       @users = User.all.order("last_name, first_name")
-      @tournaments = Tournament.all.order("tournament_at DESC")
+      @tournaments = Tournament.all.order("signup_closes_at DESC")
       @leagues = League.all.order("name")
     else
       selected_league = self.selected_league
       
       @users = selected_league.users.order("last_name, first_name")
-      @tournaments = selected_league.tournaments.order("tournament_at DESC")
+      @tournaments = selected_league.tournaments.order("signup_closes_at DESC")
       @leagues = League.where("id = ?", selected_league.id)
     end
   end
