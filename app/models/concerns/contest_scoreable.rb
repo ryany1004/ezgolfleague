@@ -43,7 +43,7 @@ module ContestScoreable
       end
       
       user_scores.sort! { |x,y| x[:score] <=> y[:score] }
-      users_getting_skins << user_scores[0][:user]
+      users_getting_skins << user_scores[0][:user] unless user_scores.blank?
       
       all_winners << {hole: hole, winners: users_getting_skins}
     end
