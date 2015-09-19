@@ -17,6 +17,7 @@ class Tournament < ActiveRecord::Base
 
   attr_accessor :another_member_id
   attr_accessor :skip_date_validation
+  attr_accessor :contests_to_enter
   
   validates :name, presence: true
   validates :signup_opens_at, presence: true
@@ -78,6 +79,20 @@ class Tournament < ActiveRecord::Base
     
     return distinct_courses
   end
+
+  def paid_contests
+    contests = []
+    
+    self.tournament_days.each do |td|
+      td.contests.each do |c|
+        contests << c if c.dues_amount > 0
+      end
+    end
+    
+    return contests
+  end
+  
+  ##
 
   def can_be_finalized?
     return self.last_day.can_be_finalized?

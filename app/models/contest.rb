@@ -33,6 +33,10 @@ class Contest < ActiveRecord::Base
     end
   end
   
+  def name_with_cost
+    return "#{self.name} ($#{self.dues_amount.to_i})"
+  end
+  
   def manual_results_entry?
     if self.contest_type < 2
       return true

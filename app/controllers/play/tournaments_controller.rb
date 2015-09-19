@@ -51,6 +51,17 @@ class Play::TournamentsController < BaseController
         @tournament.first_day.add_player_to_group(tournament_group, other_user, false)
       end
       
+      #contests
+      if !params[:tournament].blank? && !params[:tournament][:contests_to_enter].blank?
+        params[:tournament][:contests_to_enter].each do |contest_id|
+          unless contest_id.blank?
+            contest = Contest.find(contest_id)
+            
+            contest.add_user(current_user)
+          end
+        end
+      end
+      
       #payment
       if !params[:pay_now].blank?        
         redirect_to new_play_payment_path(:payment_type => "tournament_dues", :tournament_id => @tournament.id)

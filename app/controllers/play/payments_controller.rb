@@ -20,6 +20,13 @@ class Play::PaymentsController < BaseController
       
       @payment_instructions = "Thanks for paying your tournament dues via EZ Golf League. Please enter your information below."
       @payment_amount = @tournament.dues_amount
+      
+      #add in any contest dues required
+      @tournament.paid_contests.each do |c|
+        if c.users.include? current_user
+          @payment_amount += c.dues_amount
+        end
+      end
     else
       @payment_instructions = "Thanks for paying via EZ Golf League. Please enter your information below."
     end

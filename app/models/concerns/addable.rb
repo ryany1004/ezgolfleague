@@ -81,7 +81,7 @@ module Addable
       
       #contests
       self.contests.each do |c|
-        c.users.destroy(user) if c.users.include? user
+        c.remove_user(user)
       end
     
       #credit
@@ -97,7 +97,7 @@ module Addable
   def add_player_to_free_contests(user)
     self.contests.each do |c|
       if c.dues_amount.blank? or c.dues_amount == 0
-        c.users << user
+        c.add_user(user)
       end
     end
   end
