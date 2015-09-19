@@ -84,9 +84,9 @@ module ContestScoreable
           
           if existing_user.blank?
             if use_gross == true
-              results << {user: result.user, score: result.gross_score}
+              results << {user: result.user, score: result.gross_score} unless result.gross_score.blank?
             else
-              results << {user: result.user, score: result.net_score}
+              results << {user: result.user, score: result.net_score} unless result.net_score.blank?
             end
           else
             if use_gross == true
@@ -98,14 +98,16 @@ module ContestScoreable
         end
       end
     else
-      self.tournament_day.tournament_day_results.each do |r|
+      self.tournament_day.tournament_day_results.each do |result|
         if use_gross == true
-          results << {user: r.user, score: r.gross_score}
+          results << {user: result.user, score: result.gross_score} unless result.gross_score.blank?
         else
-          results << {user: r.user, score: r.net_score}
+          results << {user: result.user, score: result.net_score} unless result.net_score.blank?
         end
       end
     end
+    
+    Rails.logger.debug { "#{results}" }
     
     #sort
     results.sort! { |x,y| x[:score] <=> y[:score] }
@@ -113,9 +115,7 @@ module ContestScoreable
     #set winner
     unless results.blank? || results.count == 0
       total_value = self.users.count * self.dues_amount
-      
-      Rails.logger.debug { "#{results}" }
-            
+                  
       winner = results[0][:user]
       result_value = results[0][:score]
       
@@ -123,45 +123,5 @@ module ContestScoreable
       self.save
     end
   end
-  
-  # def score_net_contest(use_gross, across_all_days = false)
-  #   self.overall_winner = nil
-  #   self.save
-  #
-  #   if use_gross == true
-  #     sort_by = "gross_score DESC"
-  #   else
-  #     sort_by = "net_score DESC"
-  #   end
-  #
-  #   total_value = self.users.count * self.dues_amount
-  #
-  #   if across_all_days == true
-  #     results = nil
-  #
-  #     self.tournament_day.tournament.tournament_days.each do |td|
-  #       results << td.tournament_day_results.order(sort_by)
-  #     end
-  #   else
-  #     results = self.tournament_day.tournament_day_results.order(sort_by)
-  #   end
-  #
-  #   results.each do |result|
-  #     if use_gross == true
-  #       result_value = result.gross_score
-  #     else
-  #       result_value = result.net_score
-  #     end
-  #
-  #     self.users.each do |u|
-  #       if result.user == u
-  #         self.overall_winner = ContestResult.create(winner: u, payout_amount: total_value, result_value: "#{result_value}")
-  #         self.save
-  #
-  #         return
-  #       end
-  #     end
-  #   end
-  # end
   
 end
