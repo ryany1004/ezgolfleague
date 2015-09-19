@@ -119,6 +119,7 @@ class ContestsController < BaseController
     @contest_types << ContestType.new("Custom: By Hole", 1)
     @contest_types << ContestType.new("Net Skins", 2)
     @contest_types << ContestType.new("Gross Skins", 3)
+    @contest_types << ContestType.new("Net Skins + Gross Skins", 8)
     @contest_types << ContestType.new("Net Low", 4)
     @contest_types << ContestType.new("Gross Low", 5)
     

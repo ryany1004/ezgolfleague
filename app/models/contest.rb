@@ -22,6 +22,8 @@ class Contest < ActiveRecord::Base
       return "Net Skins"
     elsif self.contest_type == 3
       return "Gross Skins"
+    elsif self.contest_type == 8
+      return "Net Skins + Gross Skins"
     elsif self.contest_type == 4
       return "Net Low"
     elsif self.contest_type == 5
@@ -86,6 +88,7 @@ class Contest < ActiveRecord::Base
   def should_sum_winners?
     return true if self.contest_type == 2
     return true if self.contest_type == 3
+    return true if self.contest_type == 8
     
     return false
   end

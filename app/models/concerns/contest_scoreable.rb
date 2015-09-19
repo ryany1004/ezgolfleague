@@ -14,43 +14,41 @@ module ContestScoreable
       self.score_net_contest(false, true)
     elsif self.contest_type == 7
       self.score_net_contest(true, true)
+    elsif self.contest_type == 8
+      self.score_total_skins_contest
     end
+  end
+  
+  def score_total_skins_contest
+    self.remove_results
+    self.save
+    
+    gross_winners = self.users_with_skins(true)
+    net_winners = self.users_with_skins(false)
+    
+    all_winners = []
+    
+    gross_winners.each do |w|
+      all_winners << w
+    end
+    
+    net_winners.each do |w|
+      all_winners << w
+    end
+    
+    self.calculate_skins_winners(all_winners)
   end
   
   def score_skins_contest(use_gross)
     self.remove_results
     self.save
     
-    all_winners = []
+    all_winners = self.users_with_skins(use_gross)
+    
+    self.calculate_skins_winners(all_winners)
+  end
   
-    self.course_holes.each do |hole|
-      users_getting_skins = []
-      user_scores = []
-      
-      self.users.each do |user|
-        score = self.tournament_day.player_score(user, !use_gross, holes = [hole.hole_number])
-        
-        unless score.blank?
-          user_scores << {user: user, score: score}
-        
-          #check if gross birdie
-          if use_gross == true
-            gross_score = score
-          else
-            gross_score = self.tournament_day.player_score(user, true, holes = [hole.hole_number])
-          end
-        
-          if gross_score == (hole.par - 1)
-            users_getting_skins << user
-          end
-        end
-      end
-      
-      user_scores.sort! { |x,y| x[:score] <=> y[:score] }
-      users_getting_skins << user_scores[0][:user] unless user_scores.blank?
-      
-      all_winners << {hole: hole, winners: users_getting_skins}
-    end
+  def calculate_skins_winners(all_winners)
     winners_sum = 0
     all_winners.each do |w|
       winners_sum += w[:winners].count
@@ -66,6 +64,46 @@ module ContestScoreable
         ContestResult.create(contest: self, winner: winner, payout_amount: value_per_skin, contest_hole: contest_hole, result_value: "Hole #{hole.hole_number}")
       end
     end
+  end
+  
+  def users_with_skins(use_gross)
+    all_winners = []
+
+    self.course_holes.each do |hole|
+      users_getting_skins = []
+      gross_birdie_skins = []
+      user_scores = []
+
+      self.users.each do |user|
+        score = self.tournament_day.player_score(user, !use_gross, holes = [hole.hole_number])
+
+        unless score.blank? || score == 0
+          user_scores << {user: user, score: score}
+
+          #check if gross birdie
+          if use_gross == true
+            gross_score = score
+          else
+            gross_score = self.tournament_day.player_score(user, true, holes = [hole.hole_number])
+          end
+
+          if gross_score == (hole.par - 1)
+            birdie_skins << user
+          end
+        end
+      end
+
+      user_scores.sort! { |x,y| x[:score] <=> y[:score] }
+      users_getting_skins << user_scores[0][:user] unless user_scores.blank?
+      
+      gross_birdie_skins.each do |user|
+        users_getting_skins << user
+      end
+
+      all_winners << {hole: hole, winners: users_getting_skins}
+    end
+
+    return all_winners
   end
   
   def score_net_contest(use_gross, across_all_days = false)
