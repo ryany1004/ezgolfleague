@@ -73,6 +73,13 @@ class Contest < ActiveRecord::Base
     return true
   end
   
+  def should_sum_winners?
+    return true if self.contest_type == 2
+    return true if self.contest_type == 3
+    
+    return false
+  end
+  
   def can_accept_more_results?
     if self.contest_type == 0 && !self.overall_winner.blank?
       return false
@@ -92,7 +99,24 @@ class Contest < ActiveRecord::Base
       winners = []
 
       self.contest_results.each do |result|
-        winners << {user: result.winner, result_value: result.result_value, amount: result.payout_amount, points: result.points}
+        if self.should_sum_winners?
+          existing_winner = nil
+          winners.each do |w|
+            existing_winner = w if w[:user] == result.winner
+          end
+          
+          if existing_winner.blank?
+            winners << {user: result.winner, result_value: result.result_value, amount: result.payout_amount, points: result.points, number_of_wins: 1}
+          else
+            existing_winner[:number_of_wins] += 1
+            existing_winner[:amount] += result.payout_amount
+            existing_winner[:points] += result.points
+            
+            existing_winner[:result_value] = "#{existing_winner[:number_of_wins]}"
+          end
+        else
+          winners << {user: result.winner, result_value: result.result_value, amount: result.payout_amount, points: result.points}
+        end
       end
 
       winners.sort! { |x,y| x[:amount] <=> y[:amount] }
