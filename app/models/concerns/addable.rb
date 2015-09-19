@@ -18,6 +18,8 @@ module Addable
         score = Score.create!(scorecard: scorecard, course_hole: hole, sort_order: i)
       end
     
+      self.add_player_to_free_contests(user)
+    
       if self == self.tournament.first_day
         Payment.create(tournament: self.tournament, payment_amount: self.tournament.dues_amount * -1.0, user: user, payment_source: "Tournament Dues")
       end
@@ -76,6 +78,11 @@ module Addable
           end
         end
       end
+      
+      #contests
+      self.contests.each do |c|
+        c.users.destroy(user) if c.users.include? user
+      end
     
       #credit
       if self == self.tournament.first_day
@@ -84,6 +91,14 @@ module Addable
     
       #remove from golfer team
       self.automatically_build_teams
+    end
+  end
+  
+  def add_player_to_free_contests(user)
+    self.contests.each do |c|
+      if c.dues_amount.blank? or c.dues_amount == 0
+        c.users << user
+      end
     end
   end
 

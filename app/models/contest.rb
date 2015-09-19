@@ -124,5 +124,16 @@ class Contest < ActiveRecord::Base
       return winners
     end
   end
+  
+  def users_not_signed_up
+    tournament_user_ids = self.tournament_day.tournament.players_for_day(self.tournament_day).map { |n| n.id }
+    ids_to_omit = self.users.map { |n| n.id }
+    
+    if ids_to_omit.blank?
+      return self.tournament_day.tournament.league.users.where("users.id IN (?)", tournament_user_ids).order("last_name, first_name")
+    else
+      return self.tournament_day.tournament.league.users.where("users.id IN (?)", tournament_user_ids).where("users.id NOT IN (?)", ids_to_omit).order("last_name, first_name")
+    end
+  end
 
 end

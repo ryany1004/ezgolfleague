@@ -122,6 +122,10 @@ Rails.application.routes.draw do
     
       resources :contests do
         resources :contest_results
+        
+        get 'registrations'
+        delete 'remove_registration'
+        post 'add_registration'
       end
     
       resources :tournament_groups do

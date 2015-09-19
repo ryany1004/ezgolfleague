@@ -14,6 +14,7 @@
 			<th>Name</th>
       <th>Type</th>
       <th>Winner(s)</th>
+      <th>Registrants</th>
       <% if user_is_league_admin(current_user, @tournament.league) -%>
       <th><%= link_to 'Create Contest', new_league_tournament_contest_path(@tournament.league, @tournament, tournament_day: @tournament_day), :class => 'btn btn-primary' %></th>
       <% else -%>
@@ -27,7 +28,8 @@
 			<td><%= link_to contest.name, edit_league_tournament_contest_path(@tournament.league, @tournament, contest, tournament_day: @tournament_day) %></td>
 			<td><%= contest.human_type %></td>
       <td><%= humanize_winners(contest.winners) %></td>
-      <td><% if contest.manual_results_entry? -%><%= link_to "Results", league_tournament_contest_contest_results_path(@tournament.league, @tournament, contest, tournament_day: @tournament_day) %> |<% end -%> <%= link_to "Edit", edit_league_tournament_contest_path(@tournament.league, @tournament, contest) %> | <%= link_to 'Delete', league_tournament_contest_path(@tournament.league, @tournament, contest, tournament_day: @tournament_day), :data => { :confirm => 'Are you sure you want to delete this contest?' }, :method => :delete %></td>
+      <td><%= link_to "Show (#{contest.users.count})", league_tournament_contest_registrations_path(@tournament.league, @tournament, contest, tournament_day: @tournament_day) %></td>
+      <td><% if contest.manual_results_entry? -%><%= link_to "Results", league_tournament_contest_contest_results_path(@tournament.league, @tournament, contest, tournament_day: @tournament_day) %> |<% end -%> <%= link_to "Edit", edit_league_tournament_contest_path(@tournament.league, @tournament, contest, tournament_day: @tournament_day) %> | <%= link_to 'Delete', league_tournament_contest_path(@tournament.league, @tournament, contest, tournament_day: @tournament_day), :data => { :confirm => 'Are you sure you want to delete this contest?' }, :method => :delete %></td>
 		</tr>
 	<% end %>
 	</tbody>
@@ -36,6 +38,7 @@
 			<th>&nbsp;</th>
       <th>&nbsp;</th>
 			<th>&nbsp;</th>
+      <th>&nbsp;</th>
       <% if user_is_league_admin(current_user, @tournament.league) -%>
       <th><%= link_to 'Create Contest', new_league_tournament_contest_path(@tournament.league, @tournament, tournament_day: @tournament_day), :class => 'btn btn-primary' %></th>
       <% else -%>
