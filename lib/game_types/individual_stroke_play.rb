@@ -74,8 +74,8 @@ module GameTypes
       return false if self.tournament_day.flights.count == 0
       return false if self.tournament_day.course_holes.count == 0
     
-      self.tournament.players.each do |p|
-        return false if self.tournament_day.flight_for_player(p) == nil
+      self.tournament.players.each do |p|        
+        return self.tournament_day.player_can_be_flighted(p)
       end
     
       return true
@@ -99,7 +99,7 @@ module GameTypes
     
     def sort_rank_players_in_flight!(flight_players)
       if self.use_back_9_to_break_ties?        
-        flight_players.sort_by! {|x| [x[:par_related_net_score], x[:back_nine_net_score]]} #a.sort_by{|x| [x.name, -x.date]}
+        flight_players.sort_by! {|x| [x[:par_related_net_score], x[:back_nine_net_score]]}
       else
         flight_players.sort! { |x,y| x[:par_related_net_score] <=> y[:par_related_net_score] } #NOTE: Not DRY but there's some sort of binding error with just calling super. :-(
       end

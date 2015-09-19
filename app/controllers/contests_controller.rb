@@ -85,11 +85,7 @@ class ContestsController < BaseController
     contest = Contest.find(params[:contest_id])
     user = User.find(params[:user])
     
-    contest.users.delete(user)
-    
-    if contest.dues_amount > 0
-      Payment.create(contest: contest, payment_amount: contest.dues_amount, user: user, payment_source: "Contest Dues Credit")
-    end
+    contest.remove_user(user)
     
     redirect_to league_tournament_contests_path(@tournament.league, @tournament, tournament_day: @tournament_day), :flash => { :success => "The contest was successfully updated." }
   end
@@ -98,11 +94,7 @@ class ContestsController < BaseController
     contest = Contest.find(params[:contest_id])
     user = User.find(params[:contest_registration][:another_member_id])
     
-    contest.users << user unless user.blank?
-    
-    if contest.dues_amount > 0
-      Payment.create(contest: contest, payment_amount: contest.dues_amount * -1, user: user, payment_source: "Contest Dues")
-    end
+    contest.add_user(user)
     
     redirect_to league_tournament_contests_path(@tournament.league, @tournament, tournament_day: @tournament_day), :flash => { :success => "The contest was successfully updated." }
   end

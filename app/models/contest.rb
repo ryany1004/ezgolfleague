@@ -131,6 +131,22 @@ class Contest < ActiveRecord::Base
     end
   end
   
+  def add_user(user)
+    self.users << user unless user.blank?
+    
+    if self.dues_amount > 0
+      Payment.create(contest: self, payment_amount: self.dues_amount * -1, user: user, payment_source: "Contest Dues")
+    end
+  end
+  
+  def remove_user(user)
+    self.users.delete(user) unless user.blank?
+    
+    if self.dues_amount > 0
+      Payment.create(contest: self, payment_amount: self.dues_amount, user: user, payment_source: "Contest Dues Credit")
+    end
+  end
+  
   def users_not_signed_up
     tournament_user_ids = self.tournament_day.tournament.players_for_day(self.tournament_day).map { |n| n.id }
     ids_to_omit = self.users.map { |n| n.id }

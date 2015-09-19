@@ -102,6 +102,40 @@ module Addable
     end
   end
 
+  def player_can_be_flighted(user)
+    any_flight_possible = false
+    
+    self.flights.each do |f|
+      player_course_handicap = user.course_handicap(self.course, f.course_tee_box)
+      
+      if player_course_handicap >= f.lower_bound && player_course_handicap <= f.upper_bound
+        any_flight_possible = true
+      end
+    end
+    
+    return any_flight_possible
+  end
+
+  def player_course_handicap_for_player(p, f = nil)
+    golf_outing = self.golf_outing_for_player(p) #in multi-day with manual registration, might not match
+    unless golf_outing.blank?
+      golf_outing.scorecards.first.set_course_handicap(true) if self.golf_outing_for_player(p).course_handicap == 0 #re-calc handicap if we do not have one
+      player_course_handicap = self.golf_outing_for_player(p).course_handicap
+
+      unless f.blank?
+        if self.golf_outing_for_player(p).course_handicap == 0 #re-calc handicap if we do not have one
+          golf_outing.scorecards.first.set_course_handicap(true) unless golf_outing.scorecards.blank?
+        
+          player_course_handicap = p.course_handicap(self.course, f.course_tee_box)
+        end
+      end
+ 
+      Rails.logger.debug { "Player Course Handicap for Course/Outing: #{player_course_handicap}" }
+    end
+    
+    return player_course_handicap
+  end
+
   def assign_players_to_flights(confirm_all_flighted = true)
     self.reload
   
@@ -109,19 +143,7 @@ module Addable
       f.users.clear
         
       self.tournament.players_for_day(self).each do |p|
-        golf_outing = self.golf_outing_for_player(p) #in multi-day with manual registration, might not match
-        unless golf_outing.blank?
-          golf_outing.scorecards.first.set_course_handicap(true) if self.golf_outing_for_player(p).course_handicap == 0 #re-calc handicap if we do not have one
-          player_course_handicap = self.golf_outing_for_player(p).course_handicap
-
-          if self.golf_outing_for_player(p).course_handicap == 0 #re-calc handicap if we do not have one
-            golf_outing.scorecards.first.set_course_handicap(true) unless golf_outing.scorecards.blank?
-            
-            player_course_handicap = p.course_handicap(self.course, f.course_tee_box)
-          end
-          
-          Rails.logger.debug { "Player Course Handicap for Course/Outing: #{player_course_handicap}" }
-        end
+        player_course_handicap = self.player_course_handicap_for_player(p, f)
  
         unless player_course_handicap.blank?
           if player_course_handicap >= f.lower_bound && player_course_handicap <= f.upper_bound            
