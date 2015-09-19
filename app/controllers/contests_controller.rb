@@ -129,6 +129,11 @@ class ContestsController < BaseController
     @contest_types << ContestType.new("Gross Skins", 3)
     @contest_types << ContestType.new("Net Low", 4)
     @contest_types << ContestType.new("Gross Low", 5)
+    
+    if @tournament.tournament_days.count > 1
+      @contest_types << ContestType.new("Net Low Tournament Total", 6)
+      @contest_types << ContestType.new("Gross Low Tournament Total", 7)
+    end
   end
   
   def fetch_tournament_day

@@ -26,6 +26,10 @@ class Contest < ActiveRecord::Base
       return "Net Low"
     elsif self.contest_type == 5
       return "Gross Low"
+    elsif self.contest_type == 6
+      return "Net Low Tournament Total"
+    elsif self.contest_type == 7
+      return "Gross Low Tournament Total"
     end
   end
   
@@ -69,6 +73,8 @@ class Contest < ActiveRecord::Base
     return false if self.contest_type == 0
     return false if self.contest_type == 4
     return false if self.contest_type == 5
+    return false if self.contest_type == 6
+    return false if self.contest_type == 7
     
     return true
   end
