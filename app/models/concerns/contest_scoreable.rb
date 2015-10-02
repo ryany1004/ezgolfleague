@@ -110,28 +110,34 @@ module ContestScoreable
     self.overall_winner = nil
     self.save
 
+    eligible_player_ids = self.tournament_day.game_type.eligible_players_for_payouts
+
     results = []
     if across_all_days == true
       self.tournament_day.tournament.tournament_days.each do |td|
         td.tournament_day_results.each do |result|
-          existing_user = nil
+          if eligible_player_ids.include? result.user.id
+            existing_user = nil
         
-          results.each do |r|
-            existing_user = r if r[:user] == result.user
-          end
+            results.each do |r|
+              existing_user = r if r[:user] == result.user
+            end
           
-          if existing_user.blank?
-            if use_gross == true
-              results << {user: result.user, score: result.gross_score} unless result.gross_score.blank?
+            if existing_user.blank?
+              if use_gross == true
+                results << {user: result.user, score: result.gross_score} unless result.gross_score.blank?
+              else
+                results << {user: result.user, score: result.net_score} unless result.net_score.blank?
+              end
             else
-              results << {user: result.user, score: result.net_score} unless result.net_score.blank?
+              if use_gross == true
+                existing_user[:score] += result.gross_score
+              else
+                existing_user[:score] += result.net_score
+              end
             end
           else
-            if use_gross == true
-              existing_user[:score] += result.gross_score
-            else
-              existing_user[:score] += result.net_score
-            end
+            Rails.logger.debug { "Player Not Eligible for Contest: #{result.user}" }
           end
         end
       end
