@@ -1,7 +1,7 @@
 class LeagueSeason < ActiveRecord::Base
   belongs_to :league
 
-  validates :starts_at, :ends_at, :league, presence: true
+  validates :name, :starts_at, :ends_at, :league, presence: true
 
   validate :dates_are_valid
   def dates_are_valid
@@ -25,6 +25,8 @@ class LeagueSeason < ActiveRecord::Base
 
     other_league_seasons = self.league.league_seasons
     other_league_seasons.each do |s|
+      return if s == self
+      
       if s.starts_at < self.starts_at && s.ends_at > self.starts_at
         errors.add(:starts_at, "can't be in inside the range of an existing season for this league")
       end
@@ -38,7 +40,7 @@ class LeagueSeason < ActiveRecord::Base
   #date parsing
   def starts_at=(date)
     begin
-      parsed = DateTime.strptime("#{date} 12:01 AM #{Time.zone.now.formatted_offset}", JAVASCRIPT_DATETIME_PICKER_FORMAT)
+      parsed = DateTime.strptime("#{date} 12:01 AM #{Time.zone.now.formatted_offset}", JAVASCRIPT_DATETIME_PICKER_FORMAT) #does this need to be the offset of the actual time to match DST?!?
       super parsed
     rescue      
       write_attribute(:starts_at, date)

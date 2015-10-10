@@ -47,6 +47,16 @@ class Tournament < ActiveRecord::Base
   
   paginates_per 50
 
+  def season_name
+    self.league.league_seasons.each do |s|
+      if self.first_day.tournament_at >= s.starts_at && self.first_day.tournament_at < s.ends_at
+        return s.name
+      end
+    end
+    
+    return "?"
+  end
+
   def first_day
     return self.tournament_days.first
   end
