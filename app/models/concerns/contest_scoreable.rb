@@ -117,7 +117,7 @@ module ContestScoreable
       self.tournament_day.tournament.tournament_days.each do |td|
         td.tournament_day_results.each do |result|
           if eligible_player_ids.include? result.user.id and self.users.include? result.user
-            Rails.logger.debug { "Player Eligible for Contest: #{result.user}" }
+            Rails.logger.debug { "Player Eligible for Contest: #{result.user.id}" }
             
             existing_user = nil
         

@@ -95,6 +95,7 @@ Rails.application.routes.draw do
   
   #this is for admin
   resources :leagues do
+    resources :league_seasons
     resources :league_memberships
     resources :tournaments do #this is for setting them up
       resources :tournament_days do

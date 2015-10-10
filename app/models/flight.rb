@@ -39,9 +39,7 @@ class Flight < ActiveRecord::Base
       return
     end
     
-    if upper_bound >= 0 and lower_bound >= 0 #special case for imported data
-      return if self.tournament_day.blank? #TODO: REMOVE POST MIGRATION
-      
+    if upper_bound >= 0 and lower_bound >= 0 #special case for imported data      
       other_flights = self.tournament_day.flights.where("id != ?", self.id)
     
       other_flights.each do |f|

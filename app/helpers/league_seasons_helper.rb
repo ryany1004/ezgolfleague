@@ -1,0 +1,2 @@
+module LeagueSeasonsHelper
+end
