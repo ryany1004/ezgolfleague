@@ -54,12 +54,10 @@ class League < ActiveRecord::Base
     end
   end
   
-  def ranked_users_for_year(year)
+  def ranked_users_for_year(starts_at, ends_at)
     ranked_players = []
     
-    year_date = Date.parse("#{year}-01-01")
-
-    tournaments = Tournament.tournaments_happening_at_some_point(year_date.at_beginning_of_year, year_date.at_end_of_year, [self])
+    tournaments = Tournament.tournaments_happening_at_some_point(starts_at, ends_at, [self])
     tournaments.each do |t|
       t.players.each do |p|
         points = 0

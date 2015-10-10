@@ -1,5 +1,26 @@
 <%= render partial: 'league_info', locals: {has_paid_dues: current_user.selected_league.user_has_paid?(current_user)} %>
 
+<% if current_user.selected_league.league_seasons.count > 1 -%>
+<div class="row">
+  <div class="col-md-12">
+    <div class="panel panel-default panel-success">
+      <div class="panel-heading">
+        <h3 class="panel-title">Select Season</h3>
+      </div>
+      <div class="panel-body">
+        <ul class="nav nav-pills">
+          <% current_user.selected_league.league_seasons.each do |season| -%>
+            <li role="presentation" <% if season == @league_season -%>class='active'<% end -%>>
+              <%= link_to season.name, play_dashboard_switch_seasons_path(current_user.selected_league, season_id: season.id), :method => :put %>
+            </li>
+          <% end -%>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+<% end -%>
+
 <% unless @todays_tournaments.blank? -%>
 <div class="row">
   <div class="col-md-12">
@@ -25,7 +46,7 @@
   <div class="col-md-6">
     <div class="panel panel-default panel-success">
       <div class="panel-heading">
-        <h3 class="panel-title">League Rankings</h3>
+        <h3 class="panel-title"><%= @league_season.name %> League Rankings</h3>
       </div>
       <table class="table table-striped">
         <thead>

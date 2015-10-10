@@ -6,12 +6,12 @@ module Findable
       return Tournament.tournaments_happening_at_some_point(Time.zone.now.at_beginning_of_day, Time.zone.now.at_end_of_day, leagues)
     end
     
-    def all_upcoming(leagues = nil)
-      return Tournament.tournaments_happening_at_some_point(Time.zone.now.at_beginning_of_day, nil, leagues)
+    def all_upcoming(leagues = nil, end_date = nil)
+      return Tournament.tournaments_happening_at_some_point(Time.zone.now.at_beginning_of_day, end_date, leagues)
     end
     
-    def all_past(leagues = nil)
-      return Tournament.tournaments_happening_at_some_point(nil, Time.zone.now.at_beginning_of_day, leagues)
+    def all_past(leagues = nil, start_date = nil)
+      return Tournament.tournaments_happening_at_some_point(start_date, Time.zone.now.at_beginning_of_day, leagues)
     end
   
     def tournaments_happening_at_some_point(start_date, end_date, leagues)
