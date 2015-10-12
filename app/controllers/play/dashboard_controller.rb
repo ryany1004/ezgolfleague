@@ -38,6 +38,8 @@ class Play::DashboardController < BaseController
     current_user.current_league = league
     current_user.save
     
+    session[:selected_season_id] = nil
+    
     redirect_to play_dashboard_index_path
   end
   
