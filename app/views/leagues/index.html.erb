@@ -30,6 +30,7 @@
             <ul class="dropdown-menu" role="menu">
               <li><%= link_to "Manage Memberships (#{league.league_memberships.count})", league_league_memberships_path(league) %></li>
               <li><%= link_to "Manage Seasons", league_league_seasons_path(league) %></li>
+              <li><%= link_to "Charge League Members", league_charge_league_members_path(league), :data => { :confirm => 'This will add a new charge in the amount of the current league dues to all members.' }, :method => :put %></li>
               <li><%= link_to "Update Members from GHIN", league_update_from_ghin_path(league), method: :patch %></li>
             </ul>
           </div>

@@ -17,7 +17,11 @@
   
   <h3>Credit Card Info</h3>
   <div class="well">  
-    Include info required to charge credit cards here.
+    <%= f.input :stripe_production_secret_key, :label => 'Stripe Secret Key (Production)' %>
+    <%= f.input :stripe_production_publishable_key, :label => 'Stripe Publishable Key (Production)' %>
+    <%= f.input :stripe_test_secret_key, :label => 'Stripe Secret Key (Test)' %>
+    <%= f.input :stripe_test_publishable_key, :label => 'Stripe Publishable Key (Test)' %>
+    <%= f.input :stripe_test_mode, :label => 'Use Test Mode?' %>
   </div>
   
   <% if !@league.new_record? -%>

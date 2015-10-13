@@ -1,5 +1,5 @@
 class LeaguesController < BaseController
-  before_action :fetch_league, :only => [:edit, :update, :destroy]
+  before_action :fetch_league, :only => [:edit, :update, :destroy, :charge_league_members]
   
   def index
     if current_user.is_super_user?
@@ -44,6 +44,14 @@ class LeaguesController < BaseController
     redirect_to leagues_path, :flash => { :success => "The league was successfully deleted." }
   end
   
+  def charge_league_members
+    @league.league_memberships.each do |m|
+      Payment.create(user: m.user, payment_amount: @league.dues_amount * -1, league: @league, payment_details: "Dues for #{@league.name}")
+    end
+    
+    redirect_to leagues_path, :flash => { :success => "The league members were charged." }
+  end
+  
   def update_from_ghin
     @league = League.find(params[:league_id])
     
@@ -69,9 +77,9 @@ class LeaguesController < BaseController
   end
   
   private
-  
+
   def league_params
-    params.require(:league).permit(:name, :dues_amount)
+    params.require(:league).permit(:name, :dues_amount, :stripe_production_secret_key, :stripe_production_publishable_key, :stripe_test_secret_key, :stripe_test_publishable_key, :stripe_test_mode)
   end
   
   def fetch_league
