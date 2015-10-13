@@ -1,5 +1,5 @@
 class LeaguesController < BaseController
-  before_action :fetch_league, :only => [:edit, :update, :destroy, :charge_league_members]
+  before_action :fetch_league, :only => [:edit, :update, :destroy]
   
   def index
     if current_user.is_super_user?
@@ -45,6 +45,8 @@ class LeaguesController < BaseController
   end
   
   def charge_league_members
+    @league = League.find(params[:league_id])
+    
     @league.league_memberships.each do |m|
       Payment.create(user: m.user, payment_amount: @league.dues_amount * -1, league: @league, payment_details: "Dues for #{@league.name}")
     end
