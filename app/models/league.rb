@@ -6,6 +6,7 @@ class League < ActiveRecord::Base
   has_many :payments, inverse_of: :league
   
   validates :name, presence: true
+  validates :credit_card_fee_percentage, numericality: { greater_than_or_equal_to: 0.01, less_than_or_equal_to: 1.0 }
   
   paginates_per 50
   

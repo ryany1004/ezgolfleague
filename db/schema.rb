@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151009235452) do
+ActiveRecord::Schema.define(version: 20151031230408) do
 
   create_table "contest_holes", force: :cascade do |t|
     t.integer  "contest_id"
@@ -187,10 +187,11 @@ ActiveRecord::Schema.define(version: 20151009235452) do
   create_table "league_memberships", force: :cascade do |t|
     t.integer  "league_id"
     t.integer  "user_id"
-    t.boolean  "is_admin",   default: false
-    t.datetime "created_at",                 null: false
-    t.datetime "updated_at",                 null: false
+    t.boolean  "is_admin",             default: false
+    t.datetime "created_at",                           null: false
+    t.datetime "updated_at",                           null: false
     t.string   "state"
+    t.decimal  "league_dues_discount", default: 0.0
   end
 
   add_index "league_memberships", ["league_id"], name: "index_league_memberships_on_league_id"
@@ -215,6 +216,7 @@ ActiveRecord::Schema.define(version: 20151009235452) do
     t.string   "encrypted_stripe_test_publishable_key"
     t.string   "encrypted_stripe_production_publishable_key"
     t.boolean  "stripe_test_mode",                            default: true
+    t.float    "credit_card_fee_percentage",                  default: 0.0
   end
 
   create_table "payments", force: :cascade do |t|

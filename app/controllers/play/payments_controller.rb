@@ -9,14 +9,16 @@ class Play::PaymentsController < BaseController
       @league = League.find(params[:league_id])
       
       @payment_instructions = "Thanks for paying your league dues via EZ Golf League. Please enter your information below."
-      @payment_amount = @league.dues_amount
+      @payment_amount = @league.dues_amount - current_user.discount_amount_for_league(@league)
     elsif params[:payment_type] == 'contest_dues'
       @contest = Contest.find(params[:contest_id])
+      @league = @contest.tournament_day.tournament.league
       
       @payment_instructions = "Thanks for paying your contest dues via EZ Golf League. Please enter your information below."
       @payment_amount = @contest.dues_amount
     elsif params[:payment_type] == 'tournament_dues'
       @tournament = Tournament.find(params[:tournament_id])
+      @league = @tournament.league
       
       @payment_instructions = "Thanks for paying your tournament dues via EZ Golf League. Please enter your information below."
       @payment_amount = @tournament.dues_amount
@@ -27,6 +29,10 @@ class Play::PaymentsController < BaseController
           @payment_amount += c.dues_amount
         end
       end
+      
+      #add fee percentage
+      credit_card_fee_amount = @league.credit_card_fee_percentage * @payment_amount
+      @payment_amount = @payment_amount + credit_card_fee_amount
     else
       @payment_instructions = "Thanks for paying via EZ Golf League. Please enter your information below."
     end

@@ -84,7 +84,12 @@ class UserAccountsController < BaseController
   
   def setup_golfer_invite
     @user_account = User.new
-    @leagues = current_user.leagues.order("name")
+    
+    if current_user.is_super_user?
+      @leagues = League.all.order("name")
+    else
+      @leagues = current_user.leagues.order("name")
+    end    
   end
   
   def send_golfer_invite
