@@ -16,6 +16,8 @@
       <p><strong><%= @league_membership.user.complete_name %></strong></p>
     <% end -%>
     
+    <%= f.input :league_dues_discount, :label => "User discount on dues" %>
+    
 	  <%= f.input :is_admin, :label => "Is this user an admin for #{@league.name}?" %>
   </div>
   

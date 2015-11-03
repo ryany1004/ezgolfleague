@@ -44,7 +44,7 @@ class LeagueMembershipsController < BaseController
   private
   
   def membership_params
-    params.require(:league_membership).permit(:user, :user_id, :league, :is_admin)
+    params.require(:league_membership).permit(:user, :user_id, :league, :is_admin, :league_dues_discount)
   end
   
   def fetch_membership
