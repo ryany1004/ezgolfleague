@@ -29,12 +29,13 @@ class Play::PaymentsController < BaseController
           @payment_amount += c.dues_amount
         end
       end
-      
-      #add fee percentage
-      credit_card_fee_amount = @league.credit_card_fee_percentage * @payment_amount
-      @payment_amount = @payment_amount + credit_card_fee_amount
     else
       @payment_instructions = "Thanks for paying via EZ Golf League. Please enter your information below."
+    end
+    
+    unless @league.blank? #add fee percentage
+      credit_card_fee_amount = @league.credit_card_fee_percentage * @payment_amount
+      @payment_amount = @payment_amount + credit_card_fee_amount
     end
   end
   
