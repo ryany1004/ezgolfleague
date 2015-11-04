@@ -64,7 +64,7 @@ class User < ActiveRecord::Base
   end
   
   def discount_amount_for_league(league)
-    membership = self.league_memberships.where("league_id = ?", league.id)
+    membership = self.league_memberships.where("league_id = ?", league.id).first
     
     unless membership.blank?
       return membership.league_dues_discount
