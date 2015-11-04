@@ -36,6 +36,8 @@ class Play::PaymentsController < BaseController
     unless @league.blank? #add fee percentage
       credit_card_fee_amount = @league.credit_card_fee_percentage * @payment_amount
       @payment_amount = @payment_amount + credit_card_fee_amount
+      
+      @payment_instructions = @payment_instructions + " Your dues amount includes a credit card processing fee."
     end
   end
   
