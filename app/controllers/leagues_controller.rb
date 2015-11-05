@@ -49,7 +49,7 @@ class LeaguesController < BaseController
     @league = League.find(params[:league_id])
     
     @league.league_memberships.each do |m|
-      Payment.create(user: m.user, payment_amount: @league.dues_amount * -1, league: @league, payment_details: "Dues for #{@league.name}")
+      Payment.create(user: m.user, payment_amount: @league.dues_for_user(m.user) * -1, league: @league, payment_details: "Dues for #{@league.name}")
     end
     
     redirect_to leagues_path, :flash => { :success => "The league members were charged." }
