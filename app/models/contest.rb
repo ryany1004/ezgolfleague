@@ -46,7 +46,7 @@ class Contest < ActiveRecord::Base
 
     unless membership.blank?
       dues_amount = self.dues_amount
-      credit_card_fees = self.tournament_day.tournament.credit_card_fee_percentage * dues_amount
+      credit_card_fees = self.tournament_day.tournament.league.credit_card_fee_percentage * dues_amount
       
       return dues_amount + credit_card_fees
     else
@@ -158,16 +158,18 @@ class Contest < ActiveRecord::Base
   def add_user(user)
     self.users << user unless user.blank?
     
-    if self.dues_amount > 0
-      Payment.create(contest: self, payment_amount: self.dues_amount * -1, user: user, payment_source: "Contest Dues")
+    dues = self.dues_for_user(user)
+    if dues > 0
+      Payment.create(contest: self, payment_amount: dues * -1, user: user, payment_source: "Contest Dues")
     end
   end
   
   def remove_user(user)
     self.users.delete(user) unless user.blank?
     
-    if self.dues_amount > 0
-      Payment.create(contest: self, payment_amount: self.dues_amount, user: user, payment_source: "Contest Dues Credit")
+    dues = self.dues_for_user(user)
+    if dues > 0
+      Payment.create(contest: self, payment_amount: dues, user: user, payment_source: "Contest Dues Credit")
     end
   end
   

@@ -21,7 +21,7 @@ module Addable
       self.add_player_to_free_contests(user)
     
       if self == self.tournament.first_day
-        Payment.create(tournament: self.tournament, payment_amount: self.tournament.dues_amount * -1.0, user: user, payment_source: "Tournament Dues")
+        Payment.create(tournament: self.tournament, payment_amount: self.tournament.dues_for_user(user) * -1.0, user: user, payment_source: "Tournament Dues")
       end
     
       self.automatically_build_teams
@@ -86,7 +86,7 @@ module Addable
     
       #credit
       if self == self.tournament.first_day
-        Payment.create(tournament: self.tournament, payment_amount: self.tournament.dues_amount, user: user, payment_source: "Tournament Dues Credit")
+        Payment.create(tournament: self.tournament, payment_amount: self.tournament.dues_for_user(user), user: user, payment_source: "Tournament Dues Credit")
       end
     
       #remove from golfer team
@@ -96,7 +96,7 @@ module Addable
   
   def add_player_to_free_contests(user)
     self.contests.each do |c|
-      if c.dues_amount.blank? or c.dues_amount == 0
+      if c.dues_for_user(user).blank? or c.dues_for_user(user) == 0
         c.add_user(user)
       end
     end
