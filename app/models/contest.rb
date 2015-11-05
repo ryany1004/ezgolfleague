@@ -39,6 +39,23 @@ class Contest < ActiveRecord::Base
     return "#{self.name} ($#{self.dues_amount.to_i})"
   end
   
+  ##
+  
+  def dues_for_user(user)
+    membership = user.league_memberships.where("league_id = ?", self.tournament_day.tournament.league.id).first
+
+    unless membership.blank?
+      dues_amount = self.dues_amount
+      credit_card_fees = self.tournament_day.tournament.credit_card_fee_percentage * dues_amount
+      
+      return dues_amount + credit_card_fees
+    else
+      return 0
+    end
+  end
+  
+  ##
+  
   def manual_results_entry?
     if self.contest_type < 2
       return true

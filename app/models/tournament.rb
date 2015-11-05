@@ -79,6 +79,21 @@ class Tournament < ActiveRecord::Base
   end
   
   ##
+  
+  def dues_for_user(user)
+    membership = user.league_memberships.where("league_id = ?", self.league.id).first
+
+    unless membership.blank?
+      dues_amount = self.dues_amount
+      credit_card_fees = self.league.credit_card_fee_percentage * dues_amount
+      
+      return dues_amount + credit_card_fees
+    else
+      return 0
+    end
+  end
+  
+  ##
 
   def courses
     distinct_courses = []

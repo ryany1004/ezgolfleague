@@ -35,6 +35,20 @@ class League < ActiveRecord::Base
     return self.league_memberships.where(user: user).first
   end
   
+  def dues_for_user(user)
+    membership = user.league_memberships.where("league_id = ?", self.id).first
+
+    unless membership.blank?
+      dues_amount = self.dues_amount
+      discount_amount = dues_amount - membership.league_dues_discount
+      credit_card_fees = self.credit_card_fee_percentage * discount_amount
+      
+      return discount_amount + credit_card_fees
+    else
+      return 0
+    end
+  end
+  
   def state_for_user(user)
     membership = self.membership_for_user(user)
     

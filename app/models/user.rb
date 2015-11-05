@@ -63,16 +63,6 @@ class User < ActiveRecord::Base
     end
   end
   
-  def discount_amount_for_league(league)
-    membership = self.league_memberships.where("league_id = ?", league.id).first
-    
-    unless membership.blank?
-      return membership.league_dues_discount
-    else
-      return 0
-    end
-  end
-  
   def payments_for_current_league    
     league_payments = self.payments.where("league_id = ?", self.selected_league.id)
     tournament_payments = self.payments.joins(:tournament).where(tournaments: {league_id: self.selected_league.id})

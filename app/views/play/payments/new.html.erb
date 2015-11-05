@@ -44,6 +44,27 @@ function stripeResponseHandler(status, response) {
       </div>
       <div class="panel-body">
         <p><em><%= @payment_instructions %></em></p>
+        <!-- <br/>
+
+        <table class="table">
+          <tr>
+            <td>Glen Annie League Fees</td>
+            <td align="right">$125</td>
+          </tr>
+          <tr>
+            <td>Early Renewal Discount</td>
+            <td align="right">($25)</td>
+          </tr>
+          <tr>
+            <td>Credit Card Processing</td>
+            <td align="right">$3</td>
+          </tr>
+          <tr>
+            <td><strong>Total</strong></td>
+            <td align="right"><strong>$103</strong></td>
+          </tr>
+        </table> -->
+        
         <p><strong>Payment Amount: <%= number_to_currency(@payment_amount) %></strong></p>
       </div>
     </div>
