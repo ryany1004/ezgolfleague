@@ -67,6 +67,11 @@ class Play::PaymentsController < BaseController
         :description => charge_description
       )
       
+      #update the charge amount to reflect discounts
+      #NOTE: this is a hack that needs to be changed
+      amount = league.dues_amount unless league.blank?
+      ##END HACK
+      
       #create payment record
       p = Payment.new(payment_amount: amount, user: current_user, payment_type: charge_description, payment_source: PAYMENT_METHOD_CREDIT_CARD)
       p.transaction_id = charge.id
