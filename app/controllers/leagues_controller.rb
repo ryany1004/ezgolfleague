@@ -15,7 +15,6 @@ class LeaguesController < BaseController
   
   def new
     @league = League.new
-    @league.credit_card_fee_percentage = 0.03
   end
   
   def create
@@ -82,7 +81,7 @@ class LeaguesController < BaseController
   private
 
   def league_params
-    params.require(:league).permit(:name, :dues_amount, :stripe_production_secret_key, :stripe_production_publishable_key, :stripe_test_secret_key, :stripe_test_publishable_key, :stripe_test_mode, :credit_card_fee_percentage)
+    params.require(:league).permit(:name, :dues_amount, :stripe_production_secret_key, :stripe_production_publishable_key, :stripe_test_secret_key, :stripe_test_publishable_key, :stripe_test_mode)
   end
   
   def fetch_league

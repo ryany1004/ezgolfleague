@@ -85,7 +85,7 @@ class Tournament < ActiveRecord::Base
 
     unless membership.blank?
       dues_amount = self.dues_amount
-      credit_card_fees = self.league.credit_card_fee_percentage * dues_amount
+      credit_card_fees = Stripe::StripeFees.fees_for_transaction_amount(dues_amount)
       
       return dues_amount + credit_card_fees
     else

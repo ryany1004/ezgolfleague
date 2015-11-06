@@ -6,7 +6,6 @@ class League < ActiveRecord::Base
   has_many :payments, inverse_of: :league
   
   validates :name, presence: true
-  validates :credit_card_fee_percentage, numericality: { greater_than_or_equal_to: 0.01, less_than_or_equal_to: 1.0 }
   
   paginates_per 50
   
@@ -41,7 +40,7 @@ class League < ActiveRecord::Base
     unless membership.blank?
       dues_amount = self.dues_amount
       discount_amount = dues_amount - membership.league_dues_discount
-      credit_card_fees = self.credit_card_fee_percentage * discount_amount
+      credit_card_fees = Stripe::StripeFees.fees_for_transaction_amount(discount_amount)
       
       return discount_amount + credit_card_fees
     else
