@@ -87,7 +87,7 @@ class Tournament < ActiveRecord::Base
       dues_amount = self.dues_amount
       credit_card_fees = Stripe::StripeFees.fees_for_transaction_amount(dues_amount)
       
-      return dues_amount + credit_card_fees
+      return (dues_amount + credit_card_fees).round(2)
     else
       return 0
     end
