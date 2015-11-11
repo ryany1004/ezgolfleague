@@ -4,7 +4,7 @@ class Play::DashboardController < BaseController
   def index
     @page_title = "My Dashboard"
     
-    active_season = current_user.selected_league.league_seasons.where("starts_at < ? AND ends_at > ?", Date.today, Date.today).first
+    active_season = find_active_season
     if session[:selected_season_id].blank?      
       @league_season = active_season
     else
@@ -21,10 +21,27 @@ class Play::DashboardController < BaseController
       end
     end
 
-    @upcoming_tournaments = Tournament.all_upcoming([current_user.selected_league], @league_season.ends_at)
-    @past_tournaments = Tournament.all_past([current_user.selected_league], @league_season.starts_at)
+    unless @league_season.blank?
+      @upcoming_tournaments = Tournament.all_upcoming([current_user.selected_league], @league_season.ends_at)
+      @past_tournaments = Tournament.all_past([current_user.selected_league], @league_season.starts_at)
 
-    @rankings = current_user.selected_league.ranked_users_for_year(@league_season.starts_at, @league_season.ends_at)
+      @rankings = current_user.selected_league.ranked_users_for_year(@league_season.starts_at, @league_season.ends_at)
+    else
+      @upcoming_tournaments = Tournament.all_upcoming([current_user.selected_league], nil)
+      @past_tournaments = Tournament.all_past([current_user.selected_league], nil)
+
+      @rankings = current_user.selected_league.ranked_users_for_year(nil, nil)
+    end
+  end
+  
+  def find_active_season
+    this_year_season = current_user.selected_league.league_seasons.where("starts_at < ? AND ends_at > ?", Date.today, Date.today).first
+    
+    unless this_year_season.blank?
+      return this_year_season
+    else
+      return current_user.selected_league.league_seasons.last
+    end
   end
   
   def switch_seasons
