@@ -30,6 +30,8 @@ class League < ActiveRecord::Base
     end
   end
   
+  ##
+  
   def membership_for_user(user)
     return self.league_memberships.where(user: user).first
   end
@@ -47,6 +49,20 @@ class League < ActiveRecord::Base
       return 0
     end
   end
+  
+  def cost_breakdown_for_user(user)
+    membership = user.league_memberships.where("league_id = ?", self.id).first
+    
+    cost_lines = [
+      {:name => "#{self.name} League Fees", :price => self.dues_amount},
+      {:name => "Dues Discount", :price => (membership.league_dues_discount * -1.0)},
+      {:name => "Credit Card Fees", :price => Stripe::StripeFees.fees_for_transaction_amount(self.dues_amount - membership.league_dues_discount)}
+    ]
+
+    return cost_lines
+  end
+  
+  ##
   
   def state_for_user(user)
     membership = self.membership_for_user(user)

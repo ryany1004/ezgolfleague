@@ -10,16 +10,19 @@ class Play::PaymentsController < BaseController
       
       @payment_instructions = "Thanks for paying your league dues via EZ Golf League. Please enter your information below."
       @payment_amount = @league.dues_for_user(current_user)
+      @cost_breakdown_lines = @league.cost_breakdown_for_user(current_user)
     elsif params[:payment_type] == 'contest_dues'
       @contest = Contest.find(params[:contest_id])
       
       @payment_instructions = "Thanks for paying your contest dues via EZ Golf League. Please enter your information below."
       @payment_amount = @contest.dues_for_user(current_user)
+      @cost_breakdown_lines = @contest.cost_breakdown_for_user(current_user)
     elsif params[:payment_type] == 'tournament_dues'
       @tournament = Tournament.find(params[:tournament_id])
       
       @payment_instructions = "Thanks for paying your tournament dues via EZ Golf League. Please enter your information below."
       @payment_amount = @tournament.dues_for_user(current_user)
+      @cost_breakdown_lines = @tournament.cost_breakdown_for_user(current_user)      
       
       #add in any contest dues required
       @tournament.paid_contests.each do |c|
