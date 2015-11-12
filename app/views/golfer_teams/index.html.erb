@@ -6,7 +6,20 @@
 
 <%= render partial: '/shared/tournaments/manage', locals: {tournament: @tournament, stage: @stage_name} %>
 
+<% if @tournament_day.game_type.number_of_players_per_team != GameTypes::VARIABLE -%>
+<div class="col-md-12">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h3 class="panel-title">Teams</h3>
+    </div>
+    <div class="panel-body">
+      The number of players per team is fixed at <%= @tournament_day.game_type.number_of_players_per_team %> for this game type.
+    </div>
+  </div>
+</div>
+<% else -%>
 <h4><%= @page_title %></h4>
+<% end -%>
 
 <table class="table table-striped">
 	<thead>
@@ -15,7 +28,7 @@
 			<th>Players</th>
       <th>Tee Time</th>
       <% if user_is_league_admin(current_user, @tournament.league) -%>
-      <th><%= link_to 'Create Team', new_league_tournament_golfer_team_path(@tournament.league, @tournament, tournament_day: @tournament_day), :class => 'btn btn-primary' %></th>
+      <th><%= link_to 'Create a New Team', new_league_tournament_golfer_team_path(@tournament.league, @tournament, tournament_day: @tournament_day), :class => 'btn btn-primary' %></th>
       <% else -%>
       <th>&nbsp;</th>
       <% end -%>
@@ -37,7 +50,7 @@
 			<th>&nbsp;</th>
       <th>&nbsp;</th>
       <% if user_is_league_admin(current_user, @tournament.league) -%>
-      <th><%= link_to 'Create Team', new_league_tournament_contest_path(@tournament.league, @tournament), :class => 'btn btn-primary' %></th>
+      <th><%= link_to 'Create a New Team', new_league_tournament_contest_path(@tournament.league, @tournament), :class => 'btn btn-primary' %></th>
       <% else -%>
       <th>&nbsp;</th>
       <% end -%>

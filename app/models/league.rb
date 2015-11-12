@@ -37,7 +37,7 @@ class League < ActiveRecord::Base
   end
   
   def dues_for_user(user)
-    membership = user.league_memberships.where("league_id = ?", self.id).first
+    membership = user.league_memberships.where("league_id = ?", self.id).first #TODO change to method above
 
     unless membership.blank?
       dues_amount = self.dues_amount
@@ -51,7 +51,7 @@ class League < ActiveRecord::Base
   end
   
   def cost_breakdown_for_user(user)
-    membership = user.league_memberships.where("league_id = ?", self.id).first
+    membership = user.league_memberships.where("league_id = ?", self.id).first #TODO change to method above
     
     cost_lines = [
       {:name => "#{self.name} League Fees", :price => self.dues_amount},

@@ -14,8 +14,12 @@
     <% end -%>
   
     <h3>Basic Details</h3>
-    <div class="well">  
-  	  <%= f.input :max_players, :label => 'Maximum Number of Players', required: true %>
+    <div class="well">
+      <% if @tournament_day.game_type.number_of_players_per_team == GameTypes::VARIABLE -%>
+        <%= f.input :max_players, :label => 'Maximum Number of Players', required: true %>
+      <% else -%>
+        <%= f.hidden :max_players, :value => @tournament_day.game_type.number_of_players_per_team %>
+      <% end -%>
     </div>
   
     <% if !@golfer_team.new_record? -%>
