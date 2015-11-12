@@ -21,7 +21,7 @@
                   <% if primary_scorecard.tournament_day.user_can_edit_scorecard(current_user, score.scorecard) %>
                     <%= f.simple_fields_for "scores[]", score do |s| %>
                   		<tr>
-                        <td><%= s.object.scorecard.golf_outing.user.complete_name %></td>
+                        <td><%= s.object.scorecard.name %></td>
                         <td><%= s.input :strokes, label: false %></td>
                   		</tr>
                     <% end -%>
