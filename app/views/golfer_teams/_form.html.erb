@@ -18,7 +18,7 @@
       <% if @tournament_day.game_type.number_of_players_per_team == GameTypes::VARIABLE -%>
         <%= f.input :max_players, :label => 'Maximum Number of Players', required: true %>
       <% else -%>
-        <%= f.input :max_players, :as => :hidden :value => @tournament_day.game_type.number_of_players_per_team %>
+        <%= f.input :max_players, :as => :hidden, :value => @tournament_day.game_type.number_of_players_per_team %>
       <% end -%>
     </div>
   
