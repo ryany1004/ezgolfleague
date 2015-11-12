@@ -23,7 +23,7 @@ class TournamentsController < BaseController
   
   def create
     @tournament = Tournament.new(tournament_params)
-    
+    @tournament.auto_schedule_for_multi_day = 0 #default
     @tournament.skip_date_validation = current_user.is_super_user
     
     if @tournament.save
