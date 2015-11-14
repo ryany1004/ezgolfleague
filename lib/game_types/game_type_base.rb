@@ -99,8 +99,6 @@ module GameTypes
       tournament_day_result = self.tournament_day.tournament_day_results.where(user: user).first
       tournament_day_result = self.tournament_day.score_user(user) if tournament_day_result.blank?
 
-      logger.info { "player_score: Net #{tournament_day_result.net_score} for #{user.complete_name}" }
-
       if holes == [10, 11, 12, 13, 14, 15, 16, 17, 18]
         if use_handicap == true
           return tournament_day_result.back_nine_net_score
