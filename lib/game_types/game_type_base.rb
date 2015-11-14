@@ -99,6 +99,8 @@ module GameTypes
       tournament_day_result = self.tournament_day.tournament_day_results.where(user: user).first
       tournament_day_result = self.tournament_day.score_user(user) if tournament_day_result.blank?
 
+      logger.info { "player_score: Net #{tournament_day_result.net_score} for #{user.complete_name}" }
+
       if holes == [10, 11, 12, 13, 14, 15, 16, 17, 18]
         if use_handicap == true
           return tournament_day_result.back_nine_net_score
@@ -323,15 +325,15 @@ module GameTypes
         ranked_flight = { flight_id: f.id, flight_number: f.flight_number, players: [] }
       
         rankable_players = self.players_for_flight(f)
-        rankable_players.each do |player|
-          Rails.logger.info { "Ranking Player: #{player.complete_name}" }
-             
+        rankable_players.each do |player|             
           net_score = self.player_score(player, true)
           back_nine_net_score = self.player_score(player, true, [10, 11, 12, 13, 14, 15, 16, 17, 18])
           gross_score = self.player_score(player, false)
           
           par_related_net_score = self.player_par_relation_for_tournament_day(player, self.tournament_day, true)
           par_related_gross_score = self.player_par_relation_for_tournament_day(player, self.tournament_day, false)
+          
+          Rails.logger.info { "Ranking Player: #{player.complete_name}. Net: #{net_score} Gross: #{gross_score}" }
           
           scorecard = self.tournament_day.primary_scorecard_for_user(player)
           unless scorecard.blank?

@@ -25,7 +25,7 @@ class Play::ScorecardsController < BaseController
     
     logger.info { "---" }
     logger.info { "Re-Scoring For Scorecard: #{@scorecard.id}. User: #{@scorecard.golf_outing.user.complete_name}. Max: #{@scorecard.tournament_day.tournament_day_results.maximum(:updated_at).try(:utc).try(:to_s, :number)}" }
-    logger.info { "#{@scorecard.golf_outing.user.complete_name} Net Score: #{@scorecard.tournament_day.tournament_day_results.where(:user_primary_scorecard_id => @scorecard.id).first.net_score}" }
+    logger.info { "#{@scorecard.golf_outing.user.complete_name}. Net Score: #{@scorecard.tournament_day.tournament_day_results.where(:user_primary_scorecard_id => @scorecard.id).first.net_score}" }
     logger.info { "---" }
     
     @scorecard.tournament_day.score_user(@scorecard.golf_outing.user)
@@ -38,7 +38,7 @@ class Play::ScorecardsController < BaseController
     
     logger.info { "---" }
     logger.info { "Re-Scored For Scorecard: #{@scorecard.id}. User: #{@scorecard.golf_outing.user.complete_name}. Max: #{@scorecard.tournament_day.tournament_day_results.maximum(:updated_at).try(:utc).try(:to_s, :number)}" }
-    logger.info { "#{@scorecard.golf_outing.user.complete_name} Net Score: #{@scorecard.tournament_day.tournament_day_results.where(:user_primary_scorecard_id => @scorecard.id).first.net_score}" }
+    logger.info { "#{@scorecard.golf_outing.user.complete_name}. Net Score: #{@scorecard.tournament_day.tournament_day_results.where(:user_primary_scorecard_id => @scorecard.id).first.net_score}" }
     logger.info { "---" }
 
     reload_scorecard = @scorecard
