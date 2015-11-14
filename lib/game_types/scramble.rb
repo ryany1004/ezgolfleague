@@ -132,7 +132,7 @@ module GameTypes
           end
           
           #make sure the results get updated also
-          self.tournament_day.tournament_day_results.where(user: user).destroy_all
+          self.tournament_day.tournament_day_results.where(user: player).destroy_all
         end
       end
     end
