@@ -324,7 +324,7 @@ module GameTypes
       
         rankable_players = self.players_for_flight(f)
         rankable_players.each do |player|
-          Rails.logger.debug { "Ranking Player: #{player.complete_name}" }
+          Rails.logger.info { "Ranking Player: #{player.complete_name}" }
              
           net_score = self.player_score(player, true)
           back_nine_net_score = self.player_score(player, true, [10, 11, 12, 13, 14, 15, 16, 17, 18])
@@ -337,7 +337,7 @@ module GameTypes
           unless scorecard.blank?
             scorecard_url = play_scorecard_path(scorecard)
           else
-            Rails.logger.debug { "Error Finding Scorecard For #{player.id}" }
+            Rails.logger.info { "Error Finding Scorecard For #{player.id}" }
             
             scorecard_url = "#"
           end
@@ -350,7 +350,7 @@ module GameTypes
           if !net_score.blank? && net_score > 0
             ranked_flight[:players] << { id: player.id, name: self.player_team_name_for_player(player), net_score: net_score, back_nine_net_score: back_nine_net_score, gross_score: gross_score, scorecard_url: scorecard_url, points: points, par_related_net_score: par_related_net_score, par_related_gross_score: par_related_gross_score } 
           else
-            Rails.logger.debug { "Not Including Player in Ranking. Net Score: #{net_score}" }
+            Rails.logger.info { "Not Including Player in Ranking. Net Score: #{net_score}" }
           end
         end
         
