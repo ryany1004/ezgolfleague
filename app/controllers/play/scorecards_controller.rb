@@ -7,9 +7,7 @@ class Play::ScorecardsController < BaseController
     @page_title = "#{@scorecard.golf_outing.user.complete_name} Scorecard"
   end
   
-  def update
-    Rails.logger.debug { "Raw Scores: #{params[:scorecard]}" }
-    
+  def update    
     params[:scorecard][:scores].each do |score_param|
       logger.info { "#{score_param}" }
       

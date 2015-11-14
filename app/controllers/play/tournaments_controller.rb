@@ -103,24 +103,36 @@ class Play::TournamentsController < BaseController
     end
   end
   
-  def fetch_flights_with_rankings(tournament_day)
-    cache_key = tournament_day.tournament_day_results_cache_key("flights_with_rankings")
-    
-    flights_with_rankings = Rails.cache.fetch(cache_key, expires_in: 7.minutes) do
-      tournament_day.flights_with_rankings
-    end
-        
-    return flights_with_rankings
+  # def fetch_flights_with_rankings(tournament_day)
+  #   cache_key = tournament_day.tournament_day_results_cache_key("flights_with_rankings")
+  #
+  #   logger.info { "fetch_flights_with_rankings cache key: #{cache_key}" }
+  #
+  #   flights_with_rankings = Rails.cache.fetch(cache_key, expires_in: 7.minutes) do
+  #     tournament_day.flights_with_rankings
+  #   end
+  #
+  #   return flights_with_rankings
+  # end
+  #
+  # def fetch_combined_flights_with_rankings(tournament_day, day_flights_with_rankings)
+  #   cache_key = tournament_day.tournament_day_results_cache_key("combined_flights_with_rankings")
+  #
+  #   logger.info { "fetch_combined_flights_with_rankings cache key: #{cache_key}" }
+  #
+  #   combined_flights_with_rankings = Rails.cache.fetch(cache_key, expires_in: 7.minutes) do
+  #     self.flights_with_rankings_could_be_combined(day_flights_with_rankings)
+  #   end
+  #
+  #   return combined_flights_with_rankings
+  # end
+  
+  def fetch_flights_with_rankings(tournament_day)  
+    return tournament_day.flights_with_rankings
   end
   
   def fetch_combined_flights_with_rankings(tournament_day, day_flights_with_rankings)
-    cache_key = tournament_day.tournament_day_results_cache_key("combined_flights_with_rankings")
-
-    combined_flights_with_rankings = Rails.cache.fetch(cache_key, expires_in: 7.minutes) do
-      self.flights_with_rankings_could_be_combined(day_flights_with_rankings)
-    end
-    
-    return combined_flights_with_rankings
+    return self.flights_with_rankings_could_be_combined(day_flights_with_rankings)
   end
   
   private
