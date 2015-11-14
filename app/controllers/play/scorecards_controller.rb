@@ -8,6 +8,8 @@ class Play::ScorecardsController < BaseController
   end
   
   def update
+    Rails.logger.debug { "Raw Scores: #{params[:scorecard]}" }
+    
     params[:scorecard][:scores].each do |score_param|
       logger.info { "#{score_param}" }
       
@@ -22,6 +24,8 @@ class Play::ScorecardsController < BaseController
         score.save
       end
     end
+    
+    logger.info { "Re-Scoring For Scorecard: #{@scorecard.id} User: #{@scorecard.golf_outing.user}" }
     
     @scorecard.tournament_day.score_user(@scorecard.golf_outing.user)
     @scorecard.tournament_day.game_type.after_updating_scores_for_scorecard(@scorecard)
