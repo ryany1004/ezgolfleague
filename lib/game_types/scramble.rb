@@ -130,6 +130,9 @@ module GameTypes
             other_score.strokes = score.strokes
             other_score.save
           end
+          
+          #make sure the results get updated also
+          self.tournament_day.tournament_day_results.where(user: user).destroy_all
         end
       end
     end
