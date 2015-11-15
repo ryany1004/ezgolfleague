@@ -123,7 +123,7 @@ module GameTypes
         self.tournament_day.other_group_members(scorecard.golf_outing.user).each do |player|
           other_scorecard = self.tournament_day.primary_scorecard_for_user(player)
         
-          Rails.logger.info { "Copying Score Data From #{scorecard.golf_outing.user.id} to #{player.id}" }
+          Rails.logger.info { "Copying Score Data From #{scorecard.golf_outing.user.complete_name} to #{player.complete_name}" }
         
           scorecard.scores.each do |score|
             other_score = other_scorecard.scores.where(course_hole: score.course_hole).first

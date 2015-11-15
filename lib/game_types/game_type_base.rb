@@ -273,7 +273,7 @@ module GameTypes
         players = []
         players_to_omit = []
         
-        flight.users.each do |u|
+        flight.users.each do |u| #NOTE: should we sort the users so that they come back in a consistent order #could matter re: scorecards and teams
           players << u if (!players.include? u) && (!players_to_omit.include? u)
           
           team = self.tournament_day.golfer_team_for_player(u)

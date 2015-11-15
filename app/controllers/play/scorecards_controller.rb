@@ -23,10 +23,7 @@ class Play::ScorecardsController < BaseController
       end
     end
     
-    logger.info { "---" }
-    logger.info { "Re-Scoring For Scorecard: #{@scorecard.id}. User: #{@scorecard.golf_outing.user.complete_name}. Max: #{@scorecard.tournament_day.tournament_day_results.maximum(:updated_at).try(:utc).try(:to_s, :number)}" }
-    logger.info { "#{@scorecard.golf_outing.user.complete_name}. Net Score: #{@scorecard.tournament_day.tournament_day_results.where(:user_primary_scorecard_id => @scorecard.id).first.net_score}" }
-    logger.info { "---" }
+    logger.info { "SCORE: Re-Scoring For Scorecard: #{@scorecard.id}. User: #{@scorecard.golf_outing.user.complete_name}. Net Score: #{@scorecard.tournament_day.tournament_day_results.where(:user_primary_scorecard_id => @scorecard.id).first.net_score}" }
     
     @scorecard.tournament_day.score_user(@scorecard.golf_outing.user)
     @scorecard.tournament_day.game_type.after_updating_scores_for_scorecard(@scorecard)
@@ -36,10 +33,7 @@ class Play::ScorecardsController < BaseController
       @scorecard.tournament_day.game_type.after_updating_scores_for_scorecard(other_scorecard)
     end
     
-    logger.info { "---" }
-    logger.info { "Re-Scored For Scorecard: #{@scorecard.id}. User: #{@scorecard.golf_outing.user.complete_name}. Max: #{@scorecard.tournament_day.tournament_day_results.maximum(:updated_at).try(:utc).try(:to_s, :number)}" }
-    logger.info { "#{@scorecard.golf_outing.user.complete_name}. Net Score: #{@scorecard.tournament_day.tournament_day_results.where(:user_primary_scorecard_id => @scorecard.id).first.net_score}" }
-    logger.info { "---" }
+    logger.info { "SCORE: Re-Scored For Scorecard: #{@scorecard.id}. User: #{@scorecard.golf_outing.user.complete_name}. Net Score: #{@scorecard.tournament_day.tournament_day_results.where(:user_primary_scorecard_id => @scorecard.id).first.net_score}" }
 
     reload_scorecard = @scorecard
     reload_scorecard = Scorecard.find(params[:original_scorecard_id]) unless params[:original_scorecard_id].blank?
