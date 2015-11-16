@@ -41,19 +41,19 @@ class Play::PaymentsController < BaseController
       
       amount = tournament.dues_for_user(current_user)
       api_key = tournament.league.stripe_secret_key
-      charge_description = "Tournament: #{tournament.name}"
+      charge_description = "#{current_user.complete_name} Tournament: #{tournament.name}"
     elsif params[:contest_id] != nil
       contest = Contest.find(params[:contest_id])
       
       amount = contest.dues_for_user(current_user)
       api_key = contest.tournament_day.tournament.league.stripe_secret_key
-      charge_description = "Contest Dues"
+      charge_description = "#{current_user.complete_name} Contest Dues"
     elsif params[:league_id] != nil
       league = League.find(params[:league_id])
       
       amount = league.dues_for_user(current_user)
       api_key = league.stripe_secret_key
-      charge_description = "League Dues"
+      charge_description = "#{current_user.complete_name} League Dues"
     end
     
     Stripe.api_key = api_key
