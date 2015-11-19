@@ -57,17 +57,17 @@ class PaymentsController < BaseController
     params.require(:payment).permit(:user_id, :payment_amount, :league_id, :tournament_id, :payment_details)
   end
   
-  private
-  
-  def fetch_payment
-    @payment = Payment.find(params[:id])
-  end
-  
   def selected_league
     selected_league = current_user.leagues.first
     selected_league = current_user.leagues.find(params[:league_id]) unless params[:league_id].blank?
     
     return selected_league
+  end
+  
+  private
+  
+  def fetch_payment
+    @payment = Payment.find(params[:id])
   end
   
   def fetch_collections
