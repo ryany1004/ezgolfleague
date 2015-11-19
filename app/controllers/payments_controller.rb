@@ -1,6 +1,7 @@
 class PaymentsController < BaseController
   before_filter :fetch_collections, :except => [:index]
   before_filter :fetch_payment, :only => [:edit, :update, :destroy]
+  before_filter :payment_options, :only => [:new, :edit]
   
   def index
     if current_user.is_super_user?
@@ -20,8 +21,6 @@ class PaymentsController < BaseController
   
   def new
     @payment = Payment.new
-    
-    @payment_options = [ "Check", "Cash" ]
   end
   
   def create
@@ -35,7 +34,10 @@ class PaymentsController < BaseController
   end
   
   def edit
-    @payment_options = [ "Check", "Cash" ]
+  end
+  
+  def payment_options
+    @payment_options = [ "Check", "Cash", "Other" ]
   end
   
   def update
