@@ -20,6 +20,8 @@ class PaymentsController < BaseController
   
   def new
     @payment = Payment.new
+    
+    @payment_options = [ "Check", "Cash" ]
   end
   
   def create
@@ -33,6 +35,7 @@ class PaymentsController < BaseController
   end
   
   def edit
+    @payment_options = [ "Check", "Cash" ]
   end
   
   def update

@@ -14,6 +14,8 @@
     
 	  <%= f.input :payment_amount, :label => 'Amount ($)', required: true, :hint => "Positive amounts reflect player payments (i.e. in to league), negative amounts for wins / out from league." %>
     
+    <%= f.input :payment_source, collection: @payment_options, :label => 'Payment Source' %>
+    
     <%= f.input :payment_details, :label => 'Notes' %>
   </div>
   
