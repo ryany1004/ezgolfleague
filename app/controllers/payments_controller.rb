@@ -51,10 +51,16 @@ class PaymentsController < BaseController
   
   def show
     @payment = Payment.find(params[:id])
+    
+    if current_user.is_super_user?
+      @payments = @payment.user.payments
+    else      
+      @payments = @payment.user.payments.where("league_id = ?", self.selected_league.id)
+    end
   end
   
   def payment_params
-    params.require(:payment).permit(:user_id, :payment_amount, :league_id, :tournament_id, :payment_details)
+    params.require(:payment).permit(:user_id, :payment_amount, :league_id, :tournament_id, :payment_details, :payment_source)
   end
   
   def selected_league

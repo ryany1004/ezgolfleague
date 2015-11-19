@@ -20,7 +20,7 @@ class Payment < ActiveRecord::Base
   
   paginates_per 50
   
-  def payment_details
+  def generated_description
     if !self.tournament.blank?
       if self.payment_amount < 0.0
         return "Dues for #{self.tournament.name}"
