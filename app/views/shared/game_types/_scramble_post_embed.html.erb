@@ -9,7 +9,8 @@
           </div>
           <div class="modal-body">
             <div class="container-fluid">
-              <%= f.input :scorecard_id, collection: scorecards.select!{|i| (i.is_potentially_editable?) }, label_method: :name, value_method: :id %>
+              <% editable_scorecards = scorecards.select{|i| (i.is_potentially_editable?) } %>
+              <%= f.input :scorecard_id, collection: editable_scorecards, label_method: :name, value_method: :id %>
               <%= f.input :course_hole_id, :as => :hidden, :input_html => { :value => hole.id } %>
             </div>
           </div>

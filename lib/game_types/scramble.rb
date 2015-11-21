@@ -36,13 +36,13 @@ module GameTypes
       return "shared/game_type_setup/scramble"
     end
     
-    # def scorecard_score_cell_partial
-    #   return "shared/game_types/scramble_popup"
-    # end
-    #
-    # def scorecard_post_embed_partial
-    #   return "shared/game_types/scramble_post_embed"
-    # end
+    def scorecard_score_cell_partial
+      return "shared/game_types/scramble_popup"
+    end
+
+    def scorecard_post_embed_partial
+      return "shared/game_types/scramble_post_embed"
+    end
     
     def handicap_percentage_key
       return "HandicapPercentageKey-T-#{self.tournament_day.id}-GT-#{self.game_type_id}"
