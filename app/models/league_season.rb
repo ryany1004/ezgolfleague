@@ -1,5 +1,6 @@
 class LeagueSeason < ActiveRecord::Base
   belongs_to :league
+  has_many :payments, inverse_of: :league_season
 
   validates :name, :starts_at, :ends_at, :league, presence: true
 
@@ -53,6 +54,20 @@ class LeagueSeason < ActiveRecord::Base
       super parsed
     rescue      
       write_attribute(:ends_at, date)
+    end
+  end
+  
+  def complete_name
+    return "#{self.name} (#{self.league.name})"
+  end
+  
+  def user_has_paid?(user)
+    payments = self.payments.where(user: user)
+    
+    if payments.length > 0
+      return true
+    else
+      return false
     end
   end
 

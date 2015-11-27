@@ -50,10 +50,13 @@ class Play::PaymentsController < BaseController
       charge_description = "#{current_user.complete_name} Contest Dues"
     elsif params[:league_id] != nil
       league = League.find(params[:league_id])
+      league_season = league.league_seasons.last
       
       amount = league.dues_for_user(current_user)
       api_key = league.stripe_secret_key
       charge_description = "#{current_user.complete_name} League Dues"
+      
+      Payment.create(payment_amount: (amount * -1.0), user: current_user, payment_type: charge_description, league_season: league_season)
     end
     
     Stripe.api_key = api_key
@@ -76,7 +79,7 @@ class Play::PaymentsController < BaseController
       p = Payment.new(payment_amount: amount, user: current_user, payment_type: charge_description, payment_source: PAYMENT_METHOD_CREDIT_CARD)
       p.transaction_id = charge.id
       p.tournament = tournament unless tournament.blank?
-      p.league = league unless league.blank?
+      p.league_season = league_season unless league_season.blank?
       p.contest = contest unless contest.blank?
       p.save
       

@@ -44,16 +44,6 @@ class LeaguesController < BaseController
     redirect_to leagues_path, :flash => { :success => "The league was successfully deleted." }
   end
   
-  def charge_league_members
-    @league = League.find(params[:league_id])
-    
-    @league.league_memberships.each do |m|
-      Payment.create(user: m.user, payment_amount: @league.dues_for_user(m.user) * -1, league: @league, payment_details: "Dues for #{@league.name}")
-    end
-    
-    redirect_to leagues_path, :flash => { :success => "The league members were charged." }
-  end
-  
   def update_from_ghin
     @league = League.find(params[:league_id])
     

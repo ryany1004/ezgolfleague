@@ -27,6 +27,10 @@ class PaymentsController < BaseController
     @payment = Payment.new(payment_params)
     
     if @payment.save
+      unless @payment.league_season.blank?
+        Payment.create(payment_amount: (@payment.payment_amount * -1.0), user: @payment.user, payment_type: "#{@payment.user.complete_name} League Dues", league_season: @payment.league_season)
+      end
+      
       redirect_to payments_path, :flash => { :success => "The payment was successfully created." }
     else
       render :new
@@ -65,7 +69,7 @@ class PaymentsController < BaseController
   end
   
   def payment_params
-    params.require(:payment).permit(:user_id, :payment_amount, :league_id, :tournament_id, :payment_details, :payment_source)
+    params.require(:payment).permit(:user_id, :payment_amount, :league_season_id, :tournament_id, :payment_details, :payment_source)
   end
   
   def selected_league
@@ -85,13 +89,13 @@ class PaymentsController < BaseController
     if current_user.is_super_user?
       @users = User.all.order("last_name, first_name")
       @tournaments = Tournament.all.order("signup_closes_at DESC")
-      @leagues = League.all.order("name")
+      @league_seasons = LeagueSeason.all.order("starts_at DESC")
     else
       selected_league = self.selected_league
       
       @users = selected_league.users.order("last_name, first_name")
       @tournaments = selected_league.tournaments.order("signup_closes_at DESC")
-      @leagues = League.where("id = ?", selected_league.id)
+      @league_seasons = LeagueSeason.where("league_id = ?", selected_league.id).order("starts_at DESC")
     end
   end
   

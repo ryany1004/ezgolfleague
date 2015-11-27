@@ -3,7 +3,7 @@ PAYMENT_METHOD_CREDIT_CARD = "Credit Card"
 class Payment < ActiveRecord::Base
   belongs_to :user, inverse_of: :payments
   belongs_to :tournament, inverse_of: :payments
-  belongs_to :league, inverse_of: :payments
+  belongs_to :league_season, inverse_of: :payments
   belongs_to :contest, inverse_of: :payments
   
   validates :user, presence: true
@@ -11,9 +11,9 @@ class Payment < ActiveRecord::Base
   
   validate :has_tournament_or_league
   def has_tournament_or_league  
-    if tournament.blank? && league.blank? && contest.blank?
+    if tournament.blank? && league_season.blank? && contest.blank?
       errors.add(:tournament_id, "can't all be blank")
-      errors.add(:league_id, "can't all be blank")
+      errors.add(:league_season_id, "can't all be blank")
       errors.add(:contest_id, "can't all be blank")
     end
   end
@@ -27,11 +27,11 @@ class Payment < ActiveRecord::Base
       else
         return "Payment for #{self.tournament.name}"
       end
-    elsif !self.league.blank?
+    elsif !self.league_season.blank?
       if self.payment_amount < 0.0
-        return "Dues for #{self.league.name}"
+        return "Dues for #{self.league_season.league.name} #{self.league_season.name}"
       else
-        return "Payment for #{self.league.name}"
+        return "Payment for #{self.league_season.league.name} #{self.league_season.name}"
       end
     elsif !self.contest.blank?
       if self.payment_amount < 0.0

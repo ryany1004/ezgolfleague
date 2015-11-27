@@ -63,8 +63,13 @@ class User < ActiveRecord::Base
     end
   end
   
-  def payments_for_current_league    
-    league_payments = self.payments.where("league_id = ?", self.selected_league.id)
+  def payments_for_current_league
+    league_season_ids = []
+    self.selected_league.league_seasons.each do |l|
+      league_season_ids << l.id
+    end
+    
+    league_payments = self.payments.where("league_season_id IN ()", league_season_ids)
     tournament_payments = self.payments.joins(:tournament).where(tournaments: {league_id: self.selected_league.id})
     
     contest_ids = []

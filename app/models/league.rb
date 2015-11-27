@@ -3,7 +3,6 @@ class League < ActiveRecord::Base
   has_many :league_memberships, :dependent => :destroy
   has_many :users, through: :league_memberships
   has_many :tournaments, :dependent => :destroy, inverse_of: :league
-  has_many :payments, inverse_of: :league
   
   validates :name, presence: true
   
@@ -36,14 +35,16 @@ class League < ActiveRecord::Base
     return self.league_memberships.where(user: user).first
   end
   
-  def dues_for_user(user)
-    membership = user.league_memberships.where("league_id = ?", self.id).first #TODO change to method above
+  def dues_for_user(user, include_credit_card_fees = true)
+    membership = self.league_memberships.where(user: user).first
 
     unless membership.blank?
       dues_amount = self.dues_amount
       discount_amount = dues_amount - membership.league_dues_discount
-      credit_card_fees = Stripe::StripeFees.fees_for_transaction_amount(discount_amount)
+      credit_card_fees = 0.0
       
+      credit_card_fees = Stripe::StripeFees.fees_for_transaction_amount(discount_amount) if include_credit_card_fees == true
+
       return (discount_amount + credit_card_fees).round(2)
     else
       return 0
@@ -51,7 +52,7 @@ class League < ActiveRecord::Base
   end
   
   def cost_breakdown_for_user(user)
-    membership = user.league_memberships.where("league_id = ?", self.id).first #TODO change to method above
+    membership = self.league_memberships.where(user: user).first
     
     cost_lines = [
       {:name => "#{self.name} League Fees", :price => self.dues_amount},
@@ -68,20 +69,6 @@ class League < ActiveRecord::Base
     membership = self.membership_for_user(user)
     
     return membership.state
-  end
-
-  def user_has_paid?(user)
-    balance = 0.0
-    
-    self.payments.where(user: user).each do |p|
-      balance = balance + p.payment_amount
-    end
-    
-    if balance == 0.0
-      return true
-    else
-      return false
-    end
   end
   
   def ranked_users_for_year(starts_at, ends_at)

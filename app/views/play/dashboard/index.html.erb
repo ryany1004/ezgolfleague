@@ -1,4 +1,4 @@
-<%= render partial: 'league_info', locals: {has_paid_dues: current_user.selected_league.user_has_paid?(current_user)} %>
+<%= render partial: 'league_info', locals: {has_paid_dues: current_user.selected_league.league_seasons.last.user_has_paid?(current_user)} %>
 
 <% if current_user.selected_league.league_seasons.count > 1 -%>
 <div class="row">

@@ -58,6 +58,9 @@ class Play::ScorecardsController < BaseController
       other_scorecards = tournament_day.related_scorecards_for_user(scorecard.golf_outing.user)
       
       other_scorecards.each do |other_scorecard|
+        other_scorecard.is_confirmed = true
+        other_scorecard.save
+        
         scorecard.tournament_day.score_user(other_scorecard.golf_outing.user) unless other_scorecard.golf_outing.blank?
         scorecard.tournament_day.game_type.after_updating_scores_for_scorecard(other_scorecard)
       end
