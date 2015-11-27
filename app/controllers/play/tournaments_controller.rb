@@ -47,7 +47,7 @@ class Play::TournamentsController < BaseController
   def signup
     if @tournament.show_players_tee_times == true
       render "signup_with_times"
-    else
+    else      
       render "signup_without_times"
     end
   end
