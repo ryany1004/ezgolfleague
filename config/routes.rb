@@ -144,6 +144,8 @@ Rails.application.routes.draw do
       delete 'delete_signup'
       patch 'update_auto_schedule'
       
+      get 'confirmed_players'
+      
       get 'finalize'
       patch 'confirm_finalization'
       

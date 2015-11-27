@@ -1,0 +1,27 @@
+<h4>Tournament Players</h4>
+
+<table class="table table-striped">
+	<thead>
+		<tr>
+			<th>Name</th>
+      <th>Confirmed?</th>
+      <th>Has Paid?</th>
+		</tr>
+	</thead>
+	<tbody>
+    <% @confirmed_players.each do |player| %>
+      <tr>
+        <td><%= player.complete_name %></td>
+        <td><%= human_boolean(@tournament_day.player_is_confirmed?(player)) %></td>
+        <td><%= human_boolean(@tournament.user_has_paid?(player)) %></td>
+      </tr>
+    <% end -%>
+	</tbody>
+  <tfoot>
+		<tr>
+      <th>&nbsp;</th>
+      <th>&nbsp;</th>
+			<th>&nbsp;</th>
+		</tr>
+  </tfoot>
+</table>

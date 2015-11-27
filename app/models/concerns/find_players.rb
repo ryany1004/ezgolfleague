@@ -41,4 +41,14 @@ module FindPlayers
     return nil
   end
   
+  def player_is_confirmed?(user)    
+    outing = self.golf_outing_for_player(user)
+
+    if outing.blank?
+      return false
+    else
+      return outing.is_confirmed
+    end
+  end
+  
 end
