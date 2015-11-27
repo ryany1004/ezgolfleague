@@ -9,8 +9,10 @@
           </div>
           <div class="modal-body">
             <div class="container-fluid">
-              <% editable_scorecards = scorecards.select{|i| (i.is_potentially_editable?) } %>
-              <%= f.input :scorecard_id, collection: editable_scorecards, label_method: :name, value_method: :id %>
+              <% all_scorecards = scorecards.first.tournament_day.game_type.individual_team_scorecards_for_scorecard(scorecards.first) %>
+              <% editable_scorecards = all_scorecards.select{|i| (i.is_potentially_editable?) } %>
+              
+              <%= f.input :scorecard_id, collection: editable_scorecards, label_method: :individual_name, value_method: :id %>
               <%= f.input :course_hole_id, :as => :hidden, :input_html => { :value => hole.id } %>
             </div>
           </div>

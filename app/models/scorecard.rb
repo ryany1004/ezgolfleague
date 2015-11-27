@@ -79,6 +79,10 @@ class Scorecard < ActiveRecord::Base
     end
   end
   
+  def individual_name
+    return self.golf_outing.user.complete_name
+  end
+  
   ##Customization
   
   def can_display_handicap?    

@@ -118,6 +118,19 @@ module GameTypes
       return "#{player_names} Scramble"
     end
     
+    def individual_team_scorecards_for_scorecard(scorecard)
+      scorecards = [scorecard]
+      
+      other_members = self.tournament_day.other_group_members(scorecard.golf_outing.user)
+      other_members.each do |player|
+        other_scorecard = self.tournament_day.primary_scorecard_for_user(player)
+        
+        scorecards << other_scorecard
+      end
+      
+      return scorecards
+    end
+    
     def after_updating_scores_for_scorecard(scorecard)   
       Scorecard.transaction do
         self.tournament_day.other_group_members(scorecard.golf_outing.user).each do |player|

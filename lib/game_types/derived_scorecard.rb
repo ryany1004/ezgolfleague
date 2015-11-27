@@ -49,6 +49,10 @@ module GameTypes
       return "Derived Score"
     end
     
+    def individual_name
+      return name
+    end
+    
     def net_score
       return 0
     end

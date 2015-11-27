@@ -1,3 +1,5 @@
 <% if score.scorecard.tournament_day.game_type.selected_scorecard_for_score(score) != score.scorecard && score.strokes != 0 -%>
   <%= link_to "Tee Shot", "#", {"data-toggle" => "modal", "data-target" => "#ScrambleGroup#{score.course_hole.id}"} %>
+<% elsif score.scorecard.tournament_day.game_type.selected_scorecard_for_score(score) == score.scorecard -%>
+  Tee: <%= score.scorecard.tournament_day.game_type.selected_scorecard_for_score(score).individual_name %>
 <% end -%>
