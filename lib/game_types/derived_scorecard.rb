@@ -41,6 +41,10 @@ module GameTypes
       return false
     end
     
+    def has_empty_scores?
+      return false
+    end
+    
     def name
       return "Derived Score"
     end

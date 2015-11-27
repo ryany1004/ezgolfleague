@@ -3,6 +3,22 @@
   <li class="active"><%= @tournament.name %></li>
 </ol>
 
+<% if @tournament.includes_player?(current_user, @tournament_day) && @tournament_day.can_be_played? && @tournament_day.player_is_confirmed?(current_user) == false -%>
+<div class="row">
+  <div class="col-md-12">
+    <div class="panel panel-default panel-danger">
+      <div class="panel-heading">
+        <h3 class="panel-title">You Are Not Confirmed For This Tournament</h3>
+      </div>
+      <div class="panel-body">
+        <p>When you confirm, that's how we know you're coming.</p>
+        <p><%= link_to "Click here to confirm you'll be playing.", play_tournament_confirm_path(@tournament), method: :put %></p>
+      </div>
+    </div>
+  </div>
+</div>
+<% end -%>
+
 <div class="row">
   <div class="col-md-12">
     <div class="panel panel-default panel-success">

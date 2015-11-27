@@ -29,6 +29,21 @@ class Play::TournamentsController < BaseController
     @page_title = "#{@tournament.name} Leaderboard"
   end
   
+  ##
+  
+  def confirm
+    @tournament = Tournament.find(params[:tournament_id])
+    @tournament_day = @tournament.first_day
+    
+    outing = @tournament_day.golf_outing_for_player(current_user)
+    outing.is_confirmed = true
+    outing.save
+    
+    redirect_to play_dashboard_index_path, :flash => { :success => "You are confirmed for the tournament." } 
+  end
+  
+  ##
+  
   def signup
     if @tournament.show_players_tee_times == true
       render "signup_with_times"

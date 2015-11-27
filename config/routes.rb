@@ -72,6 +72,8 @@ Rails.application.routes.draw do
       put 'complete_signup'
       delete 'remove_signup'
       
+      put 'confirm'
+      
       resources :tournament_days, only: [:index] do
         resources :contests, only: [:index]
       end

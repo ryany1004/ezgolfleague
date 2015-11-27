@@ -51,6 +51,14 @@ class Scorecard < ActiveRecord::Base
     return self.golf_outing.course_handicap.to_i
   end
   
+  def has_empty_scores?
+    self.scores.each do |s|
+      return true if s.strokes == 0 or s.strokes.blank?
+    end
+    
+    return false
+  end
+  
   #Team Support
   
   def is_potentially_editable?

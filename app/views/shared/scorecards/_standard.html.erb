@@ -169,8 +169,8 @@
 <% end -%>
 
 <!-- Finalize Buttons -->
-<% if primary_scorecard.tournament_day.user_can_edit_scorecard(current_user, primary_scorecard) == true && primary_scorecard.tournament_day.tournament.is_finalized == false -%>
-  <p><%= link_to 'Finalize Your Scorecard', play_scorecard_finalize_scorecard_path(primary_scorecard), :class => 'btn btn-danger', :method => :patch, :data => { :confirm => 'Are you sure you want to finalize your scorecard? This indicates to the league administrator that you are ready to be ranked for this tournament.' } %></p>
+<% if primary_scorecard.has_empty_scores? == false && primary_scorecard.tournament_day.user_can_edit_scorecard(current_user, primary_scorecard) == true && primary_scorecard.tournament_day.tournament.is_finalized == false -%>
+  <p><%= link_to 'Finalize Scorecard', play_scorecard_finalize_scorecard_path(primary_scorecard), :class => 'btn btn-danger', :method => :patch, :data => { :confirm => 'Are you sure you want to finalize your scorecard? This indicates to the league administrator that you are ready to be ranked for this tournament.' } %></p>
 <% end -%>
 
 <!-- Modals -->
