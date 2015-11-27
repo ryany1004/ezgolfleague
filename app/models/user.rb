@@ -30,6 +30,14 @@ class User < ActiveRecord::Base
     return "#{self.last_name}, #{self.first_name}"
   end
   
+  def requires_additional_profile_data?
+    if self.phone_number.blank? and self.street_address_1.blank?
+      return true
+    else
+      return false
+    end
+  end
+  
   def selected_league
     unless self.current_league.blank?
       return self.current_league
