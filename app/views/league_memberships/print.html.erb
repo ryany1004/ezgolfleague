@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <% if @page_title.blank? -%>
+  <title>EZ Golf League</title>
+  <% else -%>
+  <title><%= @page_title %> || EZ Golf League</title>
+  <% end -%>
+  <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
+  <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+  <%= csrf_meta_tags %>
+</head>
+  <body "data-no-turbolink">
+    <div class="container master-container">
+      <script>
+          javascript:window.print()
+      </script>
+
+        <table class="table table-striped table-bordered">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Phone</th>
+              <th>Address</th>
+              <th>GHIN</th>
+              <th>Email</th>
+            </tr>
+          </thead>
+          <tbody>
+             <% @league_memberships.each do |lm| -%>
+            <tr>
+              <td><%= lm.user.complete_name %></td>
+              <td><%= lm.user.phone_number %></td>
+              <td><%= lm.user.street_address_1 %></td>
+              <td><%= lm.user.ghin_number %></td>
+              <td><%= lm.user.email %></td>
+            </tr>
+            <% end -%>
+          </tbody>
+        </table>
+    </div>
+  </body>
+</html>

@@ -9,6 +9,12 @@ class LeagueMembershipsController < BaseController
     @page_title = "League Memberships"
   end
   
+  def print
+    @league_memberships = @league.league_memberships.order("created_at DESC")
+    
+    render layout: false
+  end
+  
   def new
     @league_membership = LeagueMembership.new
   end
