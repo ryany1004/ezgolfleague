@@ -1,9 +1,9 @@
 <ol class="breadcrumb">
   <li><%= link_to "Leagues", leagues_path %></li>
-  <li class="active">League Seasons</li>
+  <li class="active"><%= @league.name %> League Seasons</li>
 </ol>
 
-<h4>League Seasons</h4>
+<h4>League Seasons for <%= @league.name %></h4>
 
 <table class="table table-striped">
 	<thead>

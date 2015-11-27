@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151127202606) do
+ActiveRecord::Schema.define(version: 20151127211430) do
 
   create_table "contest_holes", force: :cascade do |t|
     t.integer  "contest_id"
@@ -216,6 +216,7 @@ ActiveRecord::Schema.define(version: 20151127202606) do
     t.string   "encrypted_stripe_test_publishable_key"
     t.string   "encrypted_stripe_production_publishable_key"
     t.boolean  "stripe_test_mode",                            default: true
+    t.string   "dues_payment_receipt_email_addresses"
   end
 
   create_table "payments", force: :cascade do |t|
