@@ -79,7 +79,7 @@ class User < ActiveRecord::Base
     
     tournament_payments = []
     unless league_season_ids.blank?
-      league_payments = self.payments.where("league_season_id IN ()", league_season_ids)
+      league_payments = self.payments.where("league_season_id IN (?)", league_season_ids)
       tournament_payments = self.payments.joins(:tournament).where(tournaments: {league_id: self.selected_league.id})
     end
     
