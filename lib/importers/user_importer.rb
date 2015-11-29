@@ -34,7 +34,7 @@ module Importers
       stripped_last_name = strip_string(last_name)
       stripped_email = strip_string(email)
       stripped_email = stripped_email.downcase
-      stripped_ghin = string_string(ghin_number)
+      stripped_ghin = strip_string(ghin_number)
       
       player = User.where("last_name = ? AND first_name = ? AND (email = ? OR email LIKE ? OR email IS NULL)", stripped_last_name, stripped_first_name, stripped_email, "%imported.com%").first
       
