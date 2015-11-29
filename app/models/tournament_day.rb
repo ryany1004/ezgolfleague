@@ -51,6 +51,8 @@ class TournamentDay < ActiveRecord::Base
       new_game_type = GameTypes::TwoBestBallsOfFour.new
     elsif self.game_type_id == 12
       new_game_type = GameTypes::TwoManComboScrambleBestBall.new
+    elsif self.game_type_id == 13
+      new_game_type = GameTypes::OneTwoThreeBestBallsOfFour.new
     end
     
     new_game_type.tournament_day = self

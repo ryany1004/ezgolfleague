@@ -1,0 +1,8 @@
+<%= label_tag("game_type_options[#{tournament_day.id}][best_ball_1]", "Best Ball Take 1 Hole Par") %>
+<%= select_tag "game_type_options[#{tournament_day.id}][best_ball_1]", options_for_select(tournament_day.game_type.selection_options, tournament_day.game_type.current_one_selection) %>
+<br/>
+<%= label_tag("game_type_options[#{tournament_day.id}][best_ball_2]", "Best Ball Take 2 Hole Par") %>
+<%= select_tag "game_type_options[#{tournament_day.id}][best_ball_2]", options_for_select(tournament_day.game_type.selection_options, tournament_day.game_type.current_two_selection) %>
+<br/>
+<%= label_tag("game_type_options[#{tournament_day.id}][best_ball_3]", "Best Ball Take 3 Hole Par") %>
+<%= select_tag "game_type_options[#{tournament_day.id}][best_ball_3]", options_for_select(tournament_day.game_type.selection_options, tournament_day.game_type.current_three_selection) %>

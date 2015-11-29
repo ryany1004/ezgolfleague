@@ -5,6 +5,8 @@ module GameTypes
     attr_accessor :course_hole_number_suppression_list
     
     def initialize
+      super
+      
       self.handicap_indices = Hash.new
       self.course_hole_number_suppression_list = []
     end
@@ -79,7 +81,7 @@ module GameTypes
             comparable_scores << hole_score
           end
         
-          score.strokes = self.score_for_scores(comparable_scores)
+          score.strokes = self.score_for_scores(comparable_scores, hole)
         
           score.course_hole = hole
           new_scores << score
@@ -89,7 +91,7 @@ module GameTypes
       self.scores = new_scores
     end
     
-    def score_for_scores(comparable_scores)      
+    def score_for_scores(comparable_scores, hole)      
       return 0 if comparable_scores.blank?
 
       sorted_scores = comparable_scores.sort

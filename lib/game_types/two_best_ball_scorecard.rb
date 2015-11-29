@@ -1,7 +1,7 @@
 module GameTypes
   class TwoBestBallScorecard < GameTypes::BestBallScorecard
     
-    def score_for_scores(comparable_scores)            
+    def score_for_scores(comparable_scores, hole)            
       return 0 if comparable_scores.blank?
     
       sorted_scores = comparable_scores.sort
