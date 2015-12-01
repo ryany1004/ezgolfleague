@@ -10,10 +10,11 @@ class PaymentsController < BaseController
       @page_title = "All Payments"
     else
       selected_league = self.selected_league
-    
+
+      league_season_ids = selected_league.league_seasons.map {|n| n.id}    
       tournament_ids = selected_league.tournaments.map {|n| n.id}
     
-      @payments = Payment.where("league_id = ? OR tournament_id IN (?)", selected_league.id, tournament_ids).page params[:page]
+      @payments = Payment.where("league_season_id IN (?) OR tournament_id IN (?)", league_season_ids, tournament_ids).page params[:page]
   
       @page_title = "#{selected_league.name} Payments"
     end
