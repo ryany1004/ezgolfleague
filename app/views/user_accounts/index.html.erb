@@ -18,7 +18,11 @@
     			<td><%= link_to user_account.complete_name, edit_user_account_path(user_account) %></td>
     			<td><%= number_to_currency(Payment.balance_for_user(user_account)) %></td>
           <td><%= user_account.created_at.to_s(:date_and_time) %></td>
+          <% if current_user.is_super_user? %>
           <td><%= link_to "Edit", edit_user_account_path(user_account) %> | <%= link_to 'Delete', user_account_path(user_account), :data => { :confirm => 'Are you sure you want to delete this user?' }, :method => :delete %></td>
+          <% else -%>
+          <td>&nbsp;</td>
+          <% end -%>
     		</tr>
     	<% end %>
     	</tbody>
