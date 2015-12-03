@@ -101,4 +101,30 @@ class User < ActiveRecord::Base
     end
   end
 
+  ##Custom Devise
+  
+  def league_names_string
+    league_names = self.leagues.map {|n| n.name}
+    
+    return league_names.join(",")
+  end
+  
+  def invite_email_subject
+    unless self.leagues.count == 0
+      
+      
+      return self.league_names_string + " - You Have Been Invited!"
+    else
+      return "EZ Golf League - You Have Been Invited!"
+    end
+  end
+  
+  # This method is called internally during the Devise invitation process. We are
+  # using it to allow for a custom email subject. These options get merged into the
+  # internal devise_invitable options. Tread Carefully.
+  def headers_for(action)
+    return {} unless action == :invitation_instructions
+    { subject: self.invite_email_subject }
+  end
+
 end
