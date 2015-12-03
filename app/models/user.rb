@@ -117,14 +117,14 @@ class User < ActiveRecord::Base
     end
   end
   
-  # This method is called internally during the Devise invitation process. We are
-  # using it to allow for a custom email subject. These options get merged into the
-  # internal devise_invitable options. Tread Carefully.
-  def headers_for(action)
-    logger.info { "Headers For Called: #{action}" }
-    
-    return {} unless action == :invitation_instructions
-    { subject: self.invite_email_subject }
-  end
+  # # This method is called internally during the Devise invitation process. We are
+  # # using it to allow for a custom email subject. These options get merged into the
+  # # internal devise_invitable options. Tread Carefully.
+  # def headers_for(action)
+  #   logger.info { "Headers For Called: #{action}" }
+  #
+  #   return {} unless action == :invitation_instructions
+  #   { subject: self.invite_email_subject }
+  # end
 
 end

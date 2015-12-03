@@ -14,7 +14,7 @@ en:
         submit_button: "Set my password"
     mailer:
       invitation_instructions:
-        subject: 'EZ Golf League - You Have Been Invited!'
+        subject: "Men's Golf Club - You Have Been Invited"
         hello: 'Hello %{name}'
         someone_invited_you: '%{league_names} has invited you to join, you can accept it through the link below.'
         accept: 'Accept Invitation'
