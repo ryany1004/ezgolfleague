@@ -111,8 +111,6 @@ class User < ActiveRecord::Base
   
   def invite_email_subject
     unless self.leagues.count == 0
-      
-      
       return self.league_names_string + " - You Have Been Invited!"
     else
       return "EZ Golf League - You Have Been Invited!"
@@ -123,6 +121,8 @@ class User < ActiveRecord::Base
   # using it to allow for a custom email subject. These options get merged into the
   # internal devise_invitable options. Tread Carefully.
   def headers_for(action)
+    logger.info { "Headers For Called: #{action}" }
+    
     return {} unless action == :invitation_instructions
     { subject: self.invite_email_subject }
   end
