@@ -3,7 +3,7 @@ LEAGUE DUES PAYMENT CONFIRMATION
 A payment was made by <%= @user.complete_name %>:
 
 <%= @league_season.complete_name %>
-<%= number_to_currency(@league.dues_amount) %>
+<%= number_to_currency(@league.dues_for_user(@user, false)) %>
 
 --
 
