@@ -36,8 +36,10 @@ class Tournament < ActiveRecord::Base
       errors.add(:signup_closes_at, "can't be in the past")
     end
   
-    if signup_opens_at.present? && self.first_day.tournament_at.present? && self.first_day.tournament_at < signup_opens_at
-      errors.add(:signup_opens_at, "can't be after the tournament")
+    unless self.first_day.blank?
+      if signup_opens_at.present? && self.first_day.tournament_at.present? && self.first_day.tournament_at < signup_opens_at
+        errors.add(:signup_opens_at, "can't be after the tournament")
+      end
     end
   
     if signup_opens_at.present? && signup_closes_at.present? && signup_opens_at > signup_closes_at

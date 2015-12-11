@@ -65,6 +65,18 @@ class League < ActiveRecord::Base
   
   ##
   
+  def active_season_for_user(user)
+    this_year_season = user.selected_league.league_seasons.where("starts_at < ? AND ends_at > ?", Date.today, Date.today).first
+    
+    unless this_year_season.blank?
+      return this_year_season
+    else
+      return user.selected_league.league_seasons.last
+    end
+  end
+  
+  ##
+  
   def state_for_user(user)
     membership = self.membership_for_user(user)
     

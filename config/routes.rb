@@ -96,6 +96,14 @@ Rails.application.routes.draw do
     end
   end
   
+  #API
+  namespace "api" do
+    namespace "v1" do
+      resources :sessions, only: [:create]
+      resources :tournaments
+    end
+  end
+  
   #this is for admin
   resources :leagues do    
     resources :league_seasons

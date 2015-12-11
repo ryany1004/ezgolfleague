@@ -7,7 +7,7 @@ class UserAccountsController < BaseController
       @user_accounts = User.order("last_name").page params[:page]
     else
       membership_ids = current_user.leagues.map { |n| n.id }
-      @user_accounts = User.joins(:league_memberships).where("league_memberships.league_id IN (?)", membership_ids).page params[:page]
+      @user_accounts = User.joins(:league_memberships).where("league_memberships.league_id IN (?)", membership_ids).order("last_name").page params[:page]
     end
     
     @page_title = "User Accounts"

@@ -4,13 +4,13 @@ class LeagueMembershipsController < BaseController
   before_action :fetch_users
   
   def index 
-    @league_memberships = @league.league_memberships.order("created_at DESC").page params[:page]
+    @league_memberships = @league.league_memberships.includes(:user).order("users.last_name").page params[:page]
     
     @page_title = "League Memberships"
   end
   
   def print
-    @league_memberships = @league.league_memberships.order("created_at DESC")
+    @league_memberships = @league.league_memberships.includes(:user).order("users.last_name")
     
     render layout: false
   end
