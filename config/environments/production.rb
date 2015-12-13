@@ -82,7 +82,7 @@ Rails.application.configure do
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
   
-  config.action_mailer.default_url_options = { :host => 'ezgolfleague.herokuapp.com' } #TODO: update
+  config.action_mailer.default_url_options = { :host => 'app.ezgolfleague.com' } #TODO: update
   ActionMailer::Base.smtp_settings = {
     :address        => "smtp.sendgrid.net",
     :port           => "25",

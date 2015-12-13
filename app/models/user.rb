@@ -106,7 +106,7 @@ class User < ActiveRecord::Base
   def league_names_string
     league_names = self.leagues.map {|n| n.name}
     
-    return league_names.join(",")
+    return league_names.join(", ")
   end
   
   def invite_email_subject
