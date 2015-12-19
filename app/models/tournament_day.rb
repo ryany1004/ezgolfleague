@@ -3,6 +3,7 @@ class TournamentDay < ActiveRecord::Base
   include Scoreable
   include FindPlayers
   include AutoSchedulable
+  include Servable
   
   belongs_to :tournament, inverse_of: :tournament_days, :touch => true
   belongs_to :course, inverse_of: :tournament_days
@@ -99,4 +100,5 @@ class TournamentDay < ActiveRecord::Base
       write_attribute(:tournament_at, date)
     end
   end
+  
 end

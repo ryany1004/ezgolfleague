@@ -8,6 +8,7 @@ class Tournament < ActiveRecord::Base
   include Findable
   include Playable
   include Rankable
+  include Servable
   
   belongs_to :league, inverse_of: :tournaments
   has_many :tournament_days, -> { order(:tournament_at) }, inverse_of: :tournament, :dependent => :destroy
@@ -208,6 +209,31 @@ class Tournament < ActiveRecord::Base
     rescue
       write_attribute(:signup_closes_at, date)
     end
+  end
+  
+  #JSON
+  
+  def as_json(options={})
+    super(
+      :only => :name,
+      :methods => [:server_id, :number_of_players],
+      :include => {
+        :league => {
+          :only => [:name],
+          :methods => [:server_id]
+        },
+        :tournament_days => {
+          :only => [:tournament_at],
+          :methods => [:server_id],
+          :include => {
+            :course => {
+              :only => [:name],
+              :methods => [:server_id]
+            }
+          }
+        }
+      }
+    )
   end
   
 end

@@ -1,4 +1,6 @@
 class League < ActiveRecord::Base
+  include Servable
+  
   has_many :league_seasons, ->{ order 'starts_at' }, :dependent => :destroy
   has_many :league_memberships, :dependent => :destroy
   has_many :users, through: :league_memberships
