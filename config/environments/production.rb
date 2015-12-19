@@ -82,7 +82,7 @@ Rails.application.configure do
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
   
-  config.action_mailer.default_url_options = { :host => 'app.ezgolfleague.com' }
+  config.action_mailer.default_url_options = { protocol: 'https', :host => 'app.ezgolfleague.com' }
   
   ActionMailer::Base.smtp_settings = {
     :address        => "smtp.sendgrid.net",
@@ -103,4 +103,8 @@ Rails.application.configure do
   }
   
   ENCRYPYTED_ATTRIBUTES_KEY = ENV["ATTRIBUTE_ENCRYPTION_KEY"]
+  
+  config.to_prepare { Devise::SessionsController.force_ssl }
+  config.to_prepare { Devise::RegistrationsController.force_ssl }
+  config.to_prepare { Devise::PasswordsController.force_ssl }
 end
