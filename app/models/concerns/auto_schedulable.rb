@@ -42,7 +42,7 @@ module AutoSchedulable
         existing_group = self.tournament_group_for_player(player)
         self.remove_player_from_group(existing_group, player, true) unless existing_group.blank?
         
-        self.add_player_to_group(slot, player, true)
+        self.add_player_to_group(slot, player, false, true)
       end
     end
   end

@@ -1,7 +1,7 @@
 module Addable
   extend ActiveSupport::Concern
 
-  def add_player_to_group(tournament_group, user, confirmed = true)
+  def add_player_to_group(tournament_group, user, paying_with_credit_card = false, confirmed = true)
     Tournament.transaction do 
       team = Team.create!(tournament_group: tournament_group)
       outing = GolfOuting.create!(team: team, user: user, confirmed: confirmed)
@@ -21,7 +21,7 @@ module Addable
       self.add_player_to_free_contests(user)
     
       if self == self.tournament.first_day
-        Payment.create(tournament: self.tournament, payment_amount: self.tournament.dues_for_user(user) * -1.0, user: user, payment_source: "Tournament Dues")
+        Payment.create(tournament: self.tournament, payment_amount: self.tournament.dues_for_user(user, paying_with_credit_card) * -1.0, user: user, payment_source: "Tournament Dues")
       end
     
       self.automatically_build_teams
@@ -97,6 +97,7 @@ module Addable
     
       #credit
       if self == self.tournament.first_day
+        #NOTE: this should actually find the payment for the tournament and use that amount since this could have changed in the interim
         Payment.create(tournament: self.tournament, payment_amount: self.tournament.dues_for_user(user), user: user, payment_source: "Tournament Dues Credit")
       end
     

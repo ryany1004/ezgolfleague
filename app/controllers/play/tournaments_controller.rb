@@ -58,12 +58,16 @@ class Play::TournamentsController < BaseController
     if @tournament.includes_player?(current_user)
       redirect_to play_tournament_signup_path(@tournament), :flash => { :error => "You are already registered for this tournament. Remove your existing registration and try again." }
     else
-      @tournament.first_day.add_player_to_group(tournament_group, current_user)
+      paying_now = false
+      paying_now = true if !params[:pay_now].blank?
+      
+      @tournament.first_day.add_player_to_group(tournament_group, current_user, paying_now)
       
       #other associated signup
       if !params[:tournament].blank? && !params[:tournament][:another_member_id].blank?
         other_user = User.find(params[:tournament][:another_member_id])
-        @tournament.first_day.add_player_to_group(tournament_group, other_user, false)
+        
+        @tournament.first_day.add_player_to_group(tournament_group, other_user, false, false)
       end
       
       #contests
@@ -78,7 +82,7 @@ class Play::TournamentsController < BaseController
       end
       
       #payment
-      if !params[:pay_now].blank?        
+      if paying_now == true       
         redirect_to new_play_payment_path(:payment_type => "tournament_dues", :tournament_id => @tournament.id)
       else        
         redirect_to play_dashboard_index_path, :flash => { :success => "You are registered for the tournament." }
