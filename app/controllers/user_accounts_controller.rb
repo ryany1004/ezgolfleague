@@ -82,6 +82,14 @@ class UserAccountsController < BaseController
   
   # Golfer Invite
   
+  def resend_league_invite
+    user = User.find(params[:user_account_id])
+    
+    user.invite!(current_user)
+    
+    redirect_to user_accounts_path, :flash => { :success => "The golfer was successfully re-invited." }
+  end
+  
   def setup_golfer_invite
     @user_account = User.new
     

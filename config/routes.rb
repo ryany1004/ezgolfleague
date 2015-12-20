@@ -198,6 +198,7 @@ Rails.application.routes.draw do
     get 'setup_league_admin_invite', on: :collection
     post 'send_league_admin_invite', on: :collection
     
+    patch 'resend_league_invite'
     
     get 'setup_golfer_invite', on: :collection
     post 'send_golfer_invite', on: :collection

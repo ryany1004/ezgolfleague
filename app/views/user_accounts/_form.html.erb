@@ -90,5 +90,9 @@
   
   <div class="form-actions">
     <%= f.button :submit, :class => 'btn btn-default' %>
+    
+    <% if @user_account.new_record? == false -%>
+      <%= link_to "Re-Send Invite", user_account_resend_league_invite_path(@user_account), :method => :patch, :role => "button", :class => "btn btn-info" %>
+    <% end -%>
   </div>
 <% end %>
