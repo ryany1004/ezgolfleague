@@ -105,7 +105,11 @@ Rails.application.routes.draw do
   namespace "api" do
     namespace "v1" do
       resources :sessions, only: [:create]
-      resources :tournaments
+      resources :tournaments do
+        resources :tournament_days, only: [:show] do
+          get 'tournament_groups'
+        end
+      end
     end
   end
   

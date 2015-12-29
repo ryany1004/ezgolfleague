@@ -14,7 +14,7 @@ class Api::V1::SessionsController < Api::V1::ApiBaseController
       else
         self.assign_user_session_token(user) if user.session_token.blank?
         
-        render json: {:user_token => user.session_token}
+        render json: {:user_token => user.session_token, :user_id => user.id.to_s}
       end
     end
   end

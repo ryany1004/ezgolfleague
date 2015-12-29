@@ -1,4 +1,6 @@
 class GolferTeam < ActiveRecord::Base
+  include Servable
+  
   belongs_to :tournament_day
   has_and_belongs_to_many :users
   has_many :golfer_teams, class_name: "GolferTeam", foreign_key: "parent_team_id"

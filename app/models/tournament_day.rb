@@ -91,6 +91,16 @@ class TournamentDay < ActiveRecord::Base
     return false
   end
   
+  def registered_user_ids
+    user_ids = []
+    
+    self.tournament.players_for_day(self).each do |player|
+      user_ids << player.id.to_s
+    end
+    
+    return user_ids
+  end
+  
   #date parsing
   def tournament_at=(date)
     begin

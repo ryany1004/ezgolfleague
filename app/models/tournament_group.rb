@@ -1,4 +1,6 @@
 class TournamentGroup < ActiveRecord::Base
+  include Servable
+  
   belongs_to :tournament_day, inverse_of: :tournament_groups, :touch => true
   has_many :teams, inverse_of: :tournament_group, :dependent => :destroy
     
@@ -28,6 +30,37 @@ class TournamentGroup < ActiveRecord::Base
     rescue
       write_attribute(:tee_time_at, date)
     end
+  end
+
+  #JSON
+  
+  def as_json(options={})
+    super(
+      :only => [:tee_time_at],
+      :methods => [:server_id],
+      :include => {
+        :teams => {
+          :only => [:id],
+          :methods => [:server_id],
+          :include => {
+            :golf_outings => {
+              :only => [:course_handicap],
+              :methods => [:server_id],
+              :include => {
+                :user => {
+                  :only => [:first_name, :last_name],
+                  :methods => [:server_id]
+                },
+                :course_tee_box => {
+                  :only => [:name],
+                  :methods => [:server_id]
+                }
+              }
+            }
+          }
+        }
+      }
+    )
   end
 
 end

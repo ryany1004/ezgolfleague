@@ -226,10 +226,10 @@ class Tournament < ActiveRecord::Base
         },
         :tournament_days => {
           :only => [:tournament_at],
-          :methods => [:server_id],
+          :methods => [:server_id, :can_be_played?, :registered_user_ids],
           :include => {
             :course => {
-              :only => [:name],
+              :only => [:name, :city, :us_state],
               :methods => [:server_id]
             }
           }

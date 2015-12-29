@@ -1,5 +1,6 @@
 class User < ActiveRecord::Base
   include Handicapable
+  include Servable
   
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable, :registerable

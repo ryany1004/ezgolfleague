@@ -1,4 +1,6 @@
 class GolfOuting < ActiveRecord::Base
+  include Servable
+  
   belongs_to :team, inverse_of: :golf_outings
   belongs_to :user
   belongs_to :course_tee_box
