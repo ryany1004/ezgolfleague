@@ -54,6 +54,16 @@ class TournamentGroup < ActiveRecord::Base
                 :course_tee_box => {
                   :only => [:name],
                   :methods => [:server_id]
+                },
+                :scorecards => {
+                  :only => [:id],
+                  :methods => [:server_id],
+                  :include => {
+                    :scores => {
+                      :only => [:id, :strokes],
+                      :methods => [:server_id, :course_hole_number, :course_hole_par]
+                    }
+                  }
                 }
               }
             }

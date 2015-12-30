@@ -1,4 +1,6 @@
 class Scorecard < ActiveRecord::Base
+  include Servable
+  
   belongs_to :golf_outing, inverse_of: :scorecards
   has_many :scores, -> { order("sort_order") }, inverse_of: :scorecard, :dependent => :destroy
   has_many :game_type_metadatum, inverse_of: :scorecard, :dependent => :destroy
