@@ -9,7 +9,9 @@ class Api::V1::SessionsController < Api::V1::ApiBaseController
     else
       user = User.where(email: email).first
 
-      if user.blank? || !user.valid_password?(password)             
+      if user.blank? || !user.valid_password?(password)
+        logger.info { "User #{user} has incorrect password #{password}" }
+                
         render text: "Incorrect Password", :status => :bad_request
       else
         self.assign_user_session_token(user) if user.session_token.blank?
