@@ -8,7 +8,7 @@ class Play::DashboardController < BaseController
     if session[:selected_season_id].blank?      
       @league_season = active_season
     else
-      @league_season = current_user.selected_league.league_seasons.find(session[:selected_season_id])
+      @league_season = current_user.selected_league.league_seasons.where(id: session[:selected_season_id]).first
     end
     
     @has_unpaid_upcoming_tournaments = false
