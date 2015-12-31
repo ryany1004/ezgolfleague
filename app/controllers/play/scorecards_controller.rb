@@ -8,30 +8,7 @@ class Play::ScorecardsController < BaseController
   end
   
   def update    
-    params[:scorecard][:scores].each do |score_param|
-      logger.info { "#{score_param}" }
-      
-      score_id = score_param[0].to_i
-      strokes = score_param[1][:strokes]
-      
-      logger.info { "#{score_id} #{strokes}" }
-      
-      unless strokes.blank? or score_id.blank?
-        score = Score.find(score_id)
-        score.strokes = strokes
-        score.save
-      end
-    end
-    
-    logger.info { "SCORE: Re-Scoring For Scorecard: #{@scorecard.id}. User: #{@scorecard.golf_outing.user.complete_name}. Net Score: #{@scorecard.tournament_day.tournament_day_results.where(:user_primary_scorecard_id => @scorecard.id).first.net_score}" }
-    
-    @scorecard.tournament_day.score_user(@scorecard.golf_outing.user)
-    @scorecard.tournament_day.game_type.after_updating_scores_for_scorecard(@scorecard)
-    
-    @other_scorecards.each do |other_scorecard|
-      @scorecard.tournament_day.score_user(other_scorecard.golf_outing.user) unless other_scorecard.golf_outing.blank?
-      @scorecard.tournament_day.game_type.after_updating_scores_for_scorecard(other_scorecard)
-    end
+    UpdatingTools::ScorecardUpdating.update_scorecards_for_scores(params[:scorecard][:scores], @scorecard, @other_scorecards)
     
     logger.info { "SCORE: Re-Scored For Scorecard: #{@scorecard.id}. User: #{@scorecard.golf_outing.user.complete_name}. Net Score: #{@scorecard.tournament_day.tournament_day_results.where(:user_primary_scorecard_id => @scorecard.id).first.net_score}" }
 
@@ -101,15 +78,12 @@ class Play::ScorecardsController < BaseController
   end
   
   def fetch_scorecard    
-    @scorecard = Scorecard.includes(:scores).find(params[:id])
-    @tournament_day = @scorecard.golf_outing.team.tournament_group.tournament_day
-    @tournament = @tournament_day.tournament
-    
-    if @tournament.is_past? && @tournament_day.game_type.allow_teams == GameTypes::TEAMS_DISALLOWED #in the past, non-team tournament
-      @other_scorecards = []
-    else
-      @other_scorecards = @tournament_day.related_scorecards_for_user(@scorecard.golf_outing.user)
-    end
+    scorecard_info = FetchingTools::ScorecardFetching.fetch_scorecards_and_related(params[:id])
+        
+    @scorecard = scorecard_info[:scorecard]
+    @tournament_day = scorecard_info[:tournament_day]
+    @tournament = scorecard_info[:tournament]
+    @other_scorecards = scorecard_info[:other_scorecards]
   end
   
 end

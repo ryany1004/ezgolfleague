@@ -109,6 +109,8 @@ Rails.application.routes.draw do
         resources :tournament_days, only: [:show] do
           get 'tournament_groups'
         end
+        
+        resources :scorecards, only: [:update]
       end
     end
   end
