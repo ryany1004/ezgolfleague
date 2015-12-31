@@ -105,12 +105,15 @@ Rails.application.routes.draw do
   namespace "api" do
     namespace "v1" do
       resources :sessions, only: [:create]
+      
+      resources :scores do
+        put 'batch_update', on: :collection
+      end
+      
       resources :tournaments do
         resources :tournament_days, only: [:show] do
           get 'tournament_groups'
         end
-        
-        resources :scorecards, only: [:update]
       end
     end
   end
