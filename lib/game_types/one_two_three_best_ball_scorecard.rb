@@ -13,11 +13,26 @@ module GameTypes
       if one_ball_selection == hole.par
         return sorted_scores[0]
       elsif two_ball_selection == hole.par
-        return sorted_scores[0] + sorted_scores[1]
-      elsif three_ball_selection == hole.par
-        return sorted_scores[0] + sorted_scores[1] + sorted_scores[2]
+        score_for_scores = 0
+        score_for_scores += sorted_scores[0] unless sorted_scores[0].blank?
+        score_for_scores += sorted_scores[1] unless sorted_scores[1].blank?
+        
+        return score_for_scores
+      elsif three_ball_selection == hole.par        
+        score_for_scores = 0
+        score_for_scores += sorted_scores[0] unless sorted_scores[0].blank?
+        score_for_scores += sorted_scores[1] unless sorted_scores[1].blank?
+        score_for_scores += sorted_scores[2] unless sorted_scores[2].blank?
+        
+        return score_for_scores
       else
-        return sorted_scores[0] + sorted_scores[1] + sorted_scores[2] + sorted_scores[3]
+        score_for_scores = 0
+        score_for_scores += sorted_scores[0] unless sorted_scores[0].blank?
+        score_for_scores += sorted_scores[1] unless sorted_scores[1].blank?
+        score_for_scores += sorted_scores[2] unless sorted_scores[2].blank?
+        score_for_scores += sorted_scores[3] unless sorted_scores[3].blank?
+        
+        return score_for_scores
       end
     end
     

@@ -33,22 +33,13 @@ module Addable
       logger.info { "Updating Custom Teams for Tournament Group Save" }
     
       self.golfer_teams.destroy_all
-    
-      number_of_teams_to_create = self.tournament.players_for_day(self).count / self.game_type.number_of_players_per_team
-      number_of_teams_to_create.times do 
-        GolferTeam.create(tournament_day: self, max_players: self.game_type.number_of_players_per_team)
-      end
-
-      self.reload
 
       self.tournament_groups.each do |group|
-        group.players_signed_up.each do |player|
-          self.golfer_teams.each do |golfer_team|
-            if golfer_team.has_available_space?
-              golfer_team.users << player
-    
-              break
-            end
+        if group.players_signed_up.count > 0
+          golfer_team = GolferTeam.create(tournament_day: self, max_players: self.game_type.number_of_players_per_team)
+      
+          group.players_signed_up.each do |player|
+            golfer_team.users << player
           end
         end
       end
