@@ -26,6 +26,7 @@
       <th>Amount</th>
       <th>Method</th>
       <th>Details</th>
+      <th>Description</th>
 		</tr>
 	</thead>
 	<tbody>
@@ -35,6 +36,7 @@
       <td><%= number_to_currency(payment.payment_amount) %></td>
       <td><%= payment.payment_source %></td>
       <td><%= payment.payment_details %></td>
+      <td><%= payment.generated_description %></td>
 		</tr>
 	<% end %>
 	</tbody>

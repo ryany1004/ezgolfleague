@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151219201238) do
+ActiveRecord::Schema.define(version: 20160102205055) do
 
   create_table "contest_holes", force: :cascade do |t|
     t.integer  "contest_id"
@@ -233,6 +233,7 @@ ActiveRecord::Schema.define(version: 20151219201238) do
     t.text     "payment_details"
     t.integer  "contest_id"
     t.integer  "league_season_id"
+    t.integer  "payment_id"
   end
 
   add_index "payments", ["tournament_id"], name: "index_payments_on_tournament_id"

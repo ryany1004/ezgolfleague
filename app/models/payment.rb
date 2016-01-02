@@ -6,6 +6,9 @@ class Payment < ActiveRecord::Base
   belongs_to :league_season, inverse_of: :payments
   belongs_to :contest, inverse_of: :payments
   
+  has_many :credits, class_name: "Payment", foreign_key: "payment_id", inverse_of: :original_payment
+  belongs_to :original_payment, class_name: "Payment", foreign_key: "payment_id", inverse_of: :credits
+  
   validates :user, presence: true
   validates :payment_amount, presence: true
   

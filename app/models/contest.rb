@@ -178,9 +178,20 @@ class Contest < ActiveRecord::Base
   def remove_user(user)
     self.users.delete(user) unless user.blank?
     
-    dues = self.dues_for_user(user)
-    if dues > 0
-      Payment.create(contest: self, payment_amount: dues, user: user, payment_source: "Contest Dues Credit")
+    #credit
+    previous_payments = Payment.where(user: user, contest: self).where("payment_amount < 0")
+    previous_unrefunded_payments = previous_payments.select{|item| item.credits.count == 0}
+    total_unrefunded_payment_amount = previous_unrefunded_payments.map(&:payment_amount).sum
+
+    Rails.logger.debug { "Unrefunded Amount: #{total_unrefunded_payment_amount} From # of Transactions: #{previous_unrefunded_payments.count}" }
+
+    if total_unrefunded_payment_amount != 0
+      refund = Payment.create(contest: self, payment_amount: total_unrefunded_payment_amount * -1.0, user: user, payment_source: "Contest Dues Credit")
+    
+      previous_unrefunded_payments.each do |p|
+        p.credits << refund
+        p.save
+      end
     end
   end
   
