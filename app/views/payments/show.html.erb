@@ -14,8 +14,10 @@
 </div>
 
 <h3>User Balance</h3>
-<div class="well">  
-  <h4><%= number_to_currency(Payment.balance_for_user(@payment.user)) %></h4>
+<div class="well">
+  <% @payment.user.leagues.each do |l| -%>
+    <%= l.name %>: <%= number_to_currency(@payment.user.payments_for_league(l).map(&:payment_amount).sum) %><br/>
+  <% end -%>
 </div>
 
 <h3>User Transactions</h3>

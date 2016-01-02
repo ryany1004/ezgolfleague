@@ -72,16 +72,16 @@ class User < ActiveRecord::Base
     end
   end
   
-  def payments_for_current_league
+  def payments_for_league(league)
     league_season_ids = []
-    self.selected_league.league_seasons.each do |l|
+    league.league_seasons.each do |l|
       league_season_ids << l.id
     end
     
     tournament_payments = []
     unless league_season_ids.blank?
       league_payments = self.payments.where("league_season_id IN (?)", league_season_ids)
-      tournament_payments = self.payments.joins(:tournament).where(tournaments: {league_id: self.selected_league.id})
+      tournament_payments = self.payments.joins(:tournament).where(tournaments: {league_id: league.id})
     end
     
     contest_ids = []
@@ -101,7 +101,7 @@ class User < ActiveRecord::Base
       return league_payments + tournament_payments
     end
   end
-
+  
   ##Custom Devise
   
   def league_names_string

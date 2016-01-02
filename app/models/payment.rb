@@ -55,14 +55,4 @@ class Payment < ActiveRecord::Base
     end
   end
   
-  def self.balance_for_user(u)
-    total_balance = 0
-    
-    u.payments.each do |p|
-      total_balance = total_balance + p.payment_amount
-    end
-    
-    return total_balance
-  end
-  
 end

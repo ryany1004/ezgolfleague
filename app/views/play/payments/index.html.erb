@@ -14,7 +14,7 @@
 		</tr>
 	</thead>
 	<tbody>
-	<% current_user.payments_for_current_league.each do |payment| %>
+	<% current_user.payments_for_league(current_user.selected_league).each do |payment| %>
 		<tr>
       <td><%= payment.created_at.to_s(:short) %></td>
       <td><%= number_to_currency(payment.payment_amount) %></td>
