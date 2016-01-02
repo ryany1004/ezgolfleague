@@ -46,8 +46,10 @@ class Contest < ActiveRecord::Base
 
     unless membership.blank?
       dues_amount = self.dues_amount
-      credit_card_fees = Stripe::StripeFees.fees_for_transaction_amount(dues_amount)
       
+      credit_card_fees = 0
+      credit_card_fees = Stripe::StripeFees.fees_for_transaction_amount(dues_amount) if dues_amount != 0
+
       return (dues_amount + credit_card_fees).round(2)
     else
       return 0
