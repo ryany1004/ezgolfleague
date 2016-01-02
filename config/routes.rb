@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  if Rails.env.production?
+  if Rails.env.production? #TODO: split this for staging / production
     default_url_options :host => "app.ezgolfleague.com"
   end
   

@@ -136,10 +136,17 @@ module Addable
 
       unless f.blank?
         if self.golf_outing_for_player(p).course_handicap == 0 #re-calc handicap if we do not have one
+          Rails.logger.debug { "Re-Calculating Course Handicap AGAIN for #{p.complete_name}" }
+          
           golf_outing.scorecards.first.set_course_handicap(true) unless golf_outing.scorecards.blank?
-        
+
           player_course_handicap = p.course_handicap(self.course, f.course_tee_box)
+          
+          golf_outing.course_handicap = player_course_handicap
+          golf_outing.save
         end
+      else
+        Rails.logger.debug { "Not Setting Course Handicap - Player Not Flighted #{p.complete_name}" }
       end
  
       Rails.logger.debug { "Player Course Handicap for Course/Outing: #{player_course_handicap}" }
