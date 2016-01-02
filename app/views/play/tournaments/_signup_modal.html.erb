@@ -11,6 +11,8 @@
             <div class="row">
               <% if tournament.allow_credit_card_payment == true -%>
                 <p>You can choose to register and also if you'd like to pay your registration dues (<%= number_to_currency(tournament.dues_amount) %>) now. Please note that dues are non-refundable.</p>
+              <% else -%>
+                <p>Payment for this tournament will be handled by the league at the course.</p>
               <% end -%>
             
               <% if (group.players_signed_up.count + 2) < group.max_number_of_players  %><!-- For admin,created team play, this may have unintended results as groups are not visible. -->

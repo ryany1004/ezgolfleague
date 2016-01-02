@@ -72,6 +72,10 @@ class User < ActiveRecord::Base
     end
   end
   
+  def payments_for_current_league
+    return self.payments_for_league(self.selected_league)
+  end
+  
   def payments_for_league(league)
     league_season_ids = []
     league.league_seasons.each do |l|
