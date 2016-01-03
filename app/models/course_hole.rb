@@ -23,4 +23,12 @@ class CourseHole < ActiveRecord::Base
     end
   end
   
+  def yards_for_flight(flight)
+    self.course_hole_tee_boxes.each do |b|
+      return b.yardage if b.course_tee_box.name == flight.course_tee_box.name
+    end
+    
+    return nil
+  end
+  
 end

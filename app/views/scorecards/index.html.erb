@@ -25,27 +25,32 @@
 </div>
 
 <div class="col-md-12">
-    <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
-      <% @players.each_with_index do |player, i| %>
-        <% unless @tournament_day.primary_scorecard_for_user(player).blank? -%>
-          <div class="panel panel-default">
-            <div class="panel-heading" role="tab" id="heading<%= i %>">
-              <h4 class="panel-title">
-                <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapse<%= i %>" aria-expanded="false" aria-controls="collapse<%= i %>">
-                  <%= player.complete_name %> <% if @tournament_day.primary_scorecard_for_user(player).is_confirmed == true -%>(Confirmed)<% else -%>(Unconfirmed)<% end -%>
-                </a>
-              </h4>
-            </div>
-            <div id="collapse<%= i %>" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading<%= i %>">
-              <div class="panel-body">
-                <%= render partial: '/shared/scorecards/show', locals: {scorecard: @tournament_day.primary_scorecard_for_user(player), split_holes: split_holes_for_course_tournament(@tournament_day), split_scores: split_scores_for_scorecard(@tournament_day.primary_scorecard_for_user(player), @tournament_day.course_holes.count), tournament_day: @tournament_day, handicap_allowance: @tournament_day.handicap_allowance(player)} %>
-                <p>
-                  <%= link_to "Edit This Scorecard", edit_scorecard_path(@tournament_day.primary_scorecard_for_user(player)), class: "btn btn-warning", role: "button" %>
-                </p>
-              </div>
-            </div>
-          </div>
+  <table class="table table-striped">
+  	<thead>
+  		<tr>
+  			<th>Tee-Group</th>
+        <th>Players</th>
+        <th>&nbsp;</th>
+  		</tr>
+  	</thead>
+  	<tbody>
+      <% @tournament_day.tournament_groups.each_with_index do |group, index| -%>
+        <% if group.players_signed_up.count > 0 -%>
+      		<tr>
+            <td><%= index + 1 %></td>
+      			<td>
+      			  <% group.players_signed_up.each do |player| -%>
+                <%= player.complete_name %> <% if @tournament_day.primary_scorecard_for_user(player).is_confirmed == true -%>(Confirmed)<% else -%>(Unconfirmed)<% end -%></br>
+              <% end -%>
+      			</td>
+            <td>
+      			  <% group.players_signed_up.each do |player| -%>
+                <%= link_to "View", scorecard_path( @tournament_day.primary_scorecard_for_user(player)) %> | <%= link_to "Edit", edit_scorecard_path(@tournament_day.primary_scorecard_for_user(player)) %></br>
+              <% end -%>
+            </td>
+      		</tr>
         <% end -%>
       <% end -%>
-    </div>
+  	</tbody>
+  </table>
 </div>

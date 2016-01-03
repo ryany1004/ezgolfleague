@@ -1,10 +1,10 @@
 class ScorecardsController < BaseController
-  before_action :fetch_all_params, :only => [:update, :edit]
+  before_action :fetch_all_params, :only => [:edit]
+  before_action :fetch_scorecard, :only => [:show, :update]
   
   def index
     @tournament = Tournament.find(params[:tournament_id])
-    @players = @tournament.players
-    
+
     if params[:tournament_day].blank?
       @tournament_day = @tournament.first_day
     else
@@ -14,56 +14,59 @@ class ScorecardsController < BaseController
     @page_title = "Scorecards"
   end
   
+  def show
+  end
+  
   def edit
   end
   
   def update
-    if @scorecard.update(scorecard_params)
-      @scorecard.tournament_day.score_user(@scorecard.golf_outing.user)
+    scores_to_update = Hash.new
+    
+    params[:scorecard][:scores_attributes].keys.each do |key|
+      score_id = params[:scorecard][:scores_attributes][key]["id"]
+      strokes = params[:scorecard][:scores_attributes][key]["strokes"]
       
-      redirect_to scorecards_path(tournament_id: @tournament), :flash => { :success => "The scorecard was successfully updated." }
-    else      
-      render :edit
+      scores_to_update[score_id] = {:strokes => strokes}
     end
+
+    logger.debug { "Sending: #{scores_to_update}" }
+
+    UpdatingTools::ScorecardUpdating.update_scorecards_for_scores(scores_to_update, @scorecard, @other_scorecards)
+
+    redirect_to scorecards_path(tournament_id: @tournament), :flash => { :success => "The scorecard was successfully updated." }
   end
  
   def print
-    @scorecard_groups = []
-    players_with_scorecards = []
-    
-    tournament = Tournament.find(params[:tournament_id])
-    
+    @tournament = Tournament.find(params[:tournament_id])
+
     if params[:tournament_day].blank?
-      tournament_day = tournament.first_day
+      @tournament_day = @tournament.first_day
     else
-      tournament_day = tournament.tournament_days.find(params[:tournament_day])
+      @tournament_day = @tournament.tournament_days.find(params[:tournament_day])
     end
     
-    tournament.players.each do |player|
-      unless players_with_scorecards.include? player
-        players_with_scorecards << player
-      
-        unless tournament_day.primary_scorecard_for_user(player).blank?
-          card_hash = Hash.new
-          card_hash[:primary_scorecard] = tournament_day.primary_scorecard_for_user(player)
-
-          if tournament_day.allow_teams == GameTypes::TEAMS_ALLOWED || tournament_day.allow_teams == GameTypes::TEAMS_REQUIRED
-            related_scorecards = tournament_day.related_scorecards_for_user(player)
-            card_hash[:other_scorecards] = related_scorecards
-        
-            related_scorecards.each do |related|
-              players_with_scorecards << related.golf_outing.user unless related.golf_outing.blank?
-            end
-          else
-            card_hash[:other_scorecards] = []
-          end
+    @print_cards = []
     
-          @scorecard_groups << card_hash
+    @tournament.players_for_day(@tournament_day).each do |player|
+      @print_cards << {:primary => @tournament_day.primary_scorecard_for_user(player), :other => @tournament_day.related_scorecards_for_user(player)} if !self.printable_cards_includes_player?(@print_cards, player)
+    end
+      
+    render layout: false
+  end
+ 
+  def printable_cards_includes_player?(printable_cards, player)
+    printable_cards.each do |card|
+      return true if card[:primary].golf_outing.user == player
+      
+      card[:other].each do |other|
+        unless other.golf_outing.blank?
+          return true if other.golf_outing.user == player
         end
       end
     end
     
-    render layout: false
+    return false
   end
  
   private
@@ -78,6 +81,15 @@ class ScorecardsController < BaseController
     @tournament_day = @scorecard.golf_outing.team.tournament_group.tournament_day
     @tournament = @tournament_day.tournament
     @handicap_allowance = @tournament_day.handicap_allowance(@scorecard.golf_outing.user)
+  end
+  
+  def fetch_scorecard
+    scorecard_info = FetchingTools::ScorecardFetching.fetch_scorecards_and_related(params[:id])
+        
+    @scorecard = scorecard_info[:scorecard]
+    @tournament_day = scorecard_info[:tournament_day]
+    @tournament = scorecard_info[:tournament]
+    @other_scorecards = scorecard_info[:other_scorecards]
   end
   
 end

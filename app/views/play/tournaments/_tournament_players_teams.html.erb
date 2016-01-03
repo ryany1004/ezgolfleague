@@ -11,10 +11,11 @@
     		</tr>
     	</thead>
     	<tbody>
-        <% tournament_day.golfer_teams.each do |golfer_team| %>
+        <% tournament_day.golfer_teams do |golfer_team| %>
           <tr>
             <td><%= team_member_names(golfer_team, false) %></td>
-            <td><%= tournament_day.tournament_group_for_player(golfer_team.users.first).tee_time_at.to_s(:time_only) unless golfer_team.users.blank? %></td>
+            
+            <td><%= display_tee_time_or_position(tournament_day.tournament_group_for_player(golfer_team.users.first)) unless golfer_team.users.blank? %></td>
           </tr>
         <% end -%>
     	</tbody>

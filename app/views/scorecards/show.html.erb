@@ -1,0 +1,9 @@
+<ol class="breadcrumb">
+  <li><%= link_to "Tournaments", league_tournaments_path(current_user.selected_league) %></li>
+  <li><%= link_to @tournament.name, edit_league_tournament_path(current_user.selected_league, @tournament) %></li>
+  <li class="active"><%= @scorecard.name %></li>
+</ol>
+
+<% cache(cache_key_for_scorecard(@scorecard.id)) do %>
+  <%= render partial: '/shared/scorecards/standard', locals: {primary_scorecard: @scorecard, other_scorecards: @other_scorecards} %>
+<% end -%>

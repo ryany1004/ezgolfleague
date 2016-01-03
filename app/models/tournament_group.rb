@@ -19,7 +19,24 @@ class TournamentGroup < ActiveRecord::Base
   end
   
   def formatted_tee_time
-    return self.tee_time_at.to_s(:time_only)
+    if self.tournament_day.tournament.show_players_tee_times == true
+      return self.tee_time_at.to_s(:time_only)
+    else
+      return "#{self.tee_time_at.to_s(:time_only)} - #{self.time_description}"
+    end
+  end
+  
+  def time_description
+    count = self.tournament_day.tournament_groups.count
+    index = self.tournament_day.tournament_groups.index(self)
+    
+    if index == 0
+      return "Early"
+    elsif index == (count / 3)
+      return "Middle"
+    elsif index == (count / 3) * 2
+      return "Late"
+    end
   end
   
   #date parsing

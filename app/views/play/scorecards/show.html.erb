@@ -4,6 +4,10 @@
   <li class="active"><%= @tournament_day.game_type.display_name %> Scorecard</li>
 </ol>
 
+<p>
+  <%= link_to "View Leaderboard", play_tournament_leaderboard_path(@scorecard.tournament_day.tournament, day: @scorecard.tournament_day), class: "btn btn-primary btn-xs", role: "button" %>
+</p>
+
 <% cache(cache_key_for_scorecard(@scorecard.id)) do %>
   <%= render partial: '/shared/scorecards/standard', locals: {primary_scorecard: @scorecard, other_scorecards: @other_scorecards} %>
 <% end -%>

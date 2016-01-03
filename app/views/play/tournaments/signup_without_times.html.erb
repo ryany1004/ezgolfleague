@@ -6,14 +6,11 @@
 
 <h4>Available Slots for <%= @tournament.name %></h4>
 
-<% @tournament.first_day.tournament_groups.each_with_index do |group, j| %>
-  <% if j == 0 -%>
-  <h4>Early</h4>
-  <% elsif j == (@tournament.first_day.tournament_groups.count / 3) -%>
-  <h4>Middle</h4>
-  <% elsif j == (@tournament.first_day.tournament_groups.count / 3) * 2 -%>
-  <h4>Late</h3>
-  <% end -%>
+<br/>
+
+<% @tournament.first_day.tournament_groups.each do |group| %>
+  <h4><%= tee_time_position(group) %></h4>
+  
   <table class="table table-striped table-bordered">
   	<thead>
   		<tr>

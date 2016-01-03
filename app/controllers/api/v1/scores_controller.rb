@@ -10,13 +10,15 @@ class Api::V1::ScoresController < Api::V1::ApiBaseController
     unless score.blank?
       self.fetch_scorecards_for_id(score.scorecard.id)
       
-      scores.each do |update_score|        
-        scores_to_update = {update_score["scoreServerID"] => {:strokes => update_score["score"]}}
-                
-        logger.debug { "Sending: #{scores_to_update}" }
-        
-        UpdatingTools::ScorecardUpdating.update_scorecards_for_scores(scores_to_update, @scorecard, @other_scorecards)
+      scores_to_update = Hash.new
+      
+      scores.each do |update_score|
+        scores_to_update[update_score["scoreServerID"]] = {:strokes => update_score["score"]}
       end
+      
+      logger.debug { "Sending: #{scores_to_update}" }
+      
+      UpdatingTools::ScorecardUpdating.update_scorecards_for_scores(scores_to_update, @scorecard, @other_scorecards)
       
       render json: {:text => "Success"}
     else

@@ -26,7 +26,8 @@
             <td><strong><%= (tournament_day.flight_for_player(golf_outing.user).flight_number) %></strong></td>
             <% end -%>
             <td><strong><%= i + 1 %></strong></td>
-            <td><%= tournament_group.tee_time_at.to_s(:time_only) %></td>
+            
+            <td><%= display_tee_time_or_position(tournament_group) %></td>
           </tr>
           <% end %>
         <% end %>
