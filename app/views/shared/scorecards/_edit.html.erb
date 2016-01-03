@@ -43,37 +43,6 @@
       <td><%= split_scores[j].map {|score| score.strokes }.sum %></td>
 		</tr>
 	</tbody>
-  <tfoot>
-		<tr>
-			<th>Par</th>
-      <% split.each do |hole| -%>
-      <th><%= hole.par %></th>
-      <% end -%>
-      <th><%= split.map {|hole| hole.par }.sum %></th>
-		</tr>
-		<tr>
-			<th>Men's Handicap</th>
-      <% split.each do |hole| -%>      
-        <% if handicap_allowance_strokes_for_hole(handicap_allowance, hole) > 0 -%>
-        <th><%= hole.mens_handicap %> (-<%=  handicap_allowance_strokes_for_hole(handicap_allowance, hole) %>)</th>
-        <% else -%>
-        <th><%= hole.mens_handicap %></th>
-        <% end -%>
-      <% end -%>
-      <th>&nbsp;</th>
-		</tr>
-		<tr>
-			<th>Women's Handicap</th>
-      <% split.each do |hole| -%>
-        <% if handicap_allowance_strokes_for_hole(handicap_allowance, hole) > 0 -%>
-        <th><%= hole.womens_handicap %> (-<%=  handicap_allowance_strokes_for_hole(handicap_allowance, hole) %>)</th>
-        <% else -%>
-        <th><%= hole.womens_handicap %></th>
-        <% end -%>
-      <% end -%>
-      <th>&nbsp;</th>
-		</tr>
-  </tfoot>
 </table>
 <% end -%>
 
