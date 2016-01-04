@@ -91,7 +91,7 @@ module GameTypes
       #nada
     end
     
-    def related_scorecards_for_user(user)
+    def related_scorecards_for_user(user, only_human_scorecards = false)
       return []
     end
 

@@ -49,7 +49,7 @@ class ScorecardsController < BaseController
     @print_cards = []
     
     @tournament.players_for_day(@tournament_day).each do |player|
-      @print_cards << {:primary => @tournament_day.primary_scorecard_for_user(player), :other => @tournament_day.related_scorecards_for_user(player)} if !self.printable_cards_includes_player?(@print_cards, player)
+      @print_cards << {:primary => @tournament_day.primary_scorecard_for_user(player), :other => @tournament_day.related_scorecards_for_user(player, true)} if !self.printable_cards_includes_player?(@print_cards, player)
     end
       
     render layout: false

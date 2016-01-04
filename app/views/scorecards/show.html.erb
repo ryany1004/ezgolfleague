@@ -5,5 +5,5 @@
 </ol>
 
 <% cache(cache_key_for_scorecard(@scorecard.id)) do %>
-  <%= render partial: '/shared/scorecards/standard', locals: {primary_scorecard: @scorecard, other_scorecards: @other_scorecards} %>
+  <%= render partial: '/shared/scorecards/standard', locals: {primary_scorecard: @scorecard, other_scorecards: @other_scorecards, print_mode: false} %>
 <% end -%>

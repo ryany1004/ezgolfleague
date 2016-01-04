@@ -107,7 +107,7 @@ module GameTypes
     
     ##Scoring
     
-    def related_scorecards_for_user(user)
+    def related_scorecards_for_user(user, only_human_scorecards = false)
       other_scorecards = []
       
       self.tournament_day.other_group_members(user).each do |player|

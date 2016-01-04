@@ -54,14 +54,18 @@ module ApplicationHelper
     end
   end
   
-  def scorecard_score_helper(score)
+  def scorecard_score_helper(score, print_mode = false)
     if score.strokes != 0
       return score.strokes
     else
       if !score.scorecard.is_potentially_editable?
         return 0 
       else
-        return "-"
+        if print_mode == true
+          return ""
+        else
+          return "-"
+        end
       end
     end
   end

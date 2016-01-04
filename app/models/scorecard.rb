@@ -79,7 +79,7 @@ class Scorecard < ActiveRecord::Base
     unless override_name.blank?
       return override_name
     else
-      return self.golf_outing.user.complete_name
+      return self.golf_outing.user.short_name
     end
   end
   

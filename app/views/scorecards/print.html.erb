@@ -6,7 +6,7 @@
   <% else -%>
   <title><%= @page_title %> || EZ Golf League</title>
   <% end -%>
-  <%= stylesheet_link_tag    'application', media: 'all' %>
+  <%= stylesheet_link_tag 'application', media: 'all' %>
   <%= javascript_include_tag 'application' %>
   <%= csrf_meta_tags %>
 </head>
@@ -16,10 +16,14 @@
           javascript:window.print()
       </script>
       
-      <% @print_cards.each_with_index do |print_card, index| -%>      
-        <%= render partial: '/shared/scorecards/standard', locals: {primary_scorecard: print_card[:primary], other_scorecards: print_card[:other]} %>
-      <% end -%>
+      <% @print_cards.each_with_index do |print_card, index| -%>
+        <% if index % 2 == 0 -%>
+          <h2/>
+        <% end -%>
       
+        <%= render partial: '/shared/scorecards/standard', locals: {primary_scorecard: print_card[:primary], other_scorecards: print_card[:other], print_mode: true} %>
+      <% end -%>
+
     </div>
   </body>
 </html>

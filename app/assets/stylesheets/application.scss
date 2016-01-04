@@ -26,10 +26,19 @@
   }
   
   body {
-    font: 10px Arial, Helvetica,"Lucida Grande", serif;
+    font: 10px Arial, Helvetica, "Lucida Grande", serif;
+    margin: 0;
+    padding: 0;
+    line-height: 1em;
+    word-spacing: 1px;
+    letter-spacing: 0.2px;
   }
   
   table.print-friendly tr td, table.print-friendly tr th {
       page-break-inside: avoid;
+  }
+  
+  @page {
+    size: landscape
   }
 }

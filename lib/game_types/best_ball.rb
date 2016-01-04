@@ -78,7 +78,7 @@ module GameTypes
       return scorecard
     end
     
-    def related_scorecards_for_user(user)      
+    def related_scorecards_for_user(user, only_human_scorecards = false)      
       other_scorecards = []
       
       team = self.tournament_day.golfer_team_for_player(user)
@@ -90,11 +90,13 @@ module GameTypes
         end
       end
       
-      gross_best_ball_card = self.best_ball_scorecard_for_user_in_team(user, team, false)
-      net_best_ball_card = self.best_ball_scorecard_for_user_in_team(user, team, true)
+      if only_human_scorecards == false
+        gross_best_ball_card = self.best_ball_scorecard_for_user_in_team(user, team, false)
+        net_best_ball_card = self.best_ball_scorecard_for_user_in_team(user, team, true)
       
-      other_scorecards << net_best_ball_card
-      other_scorecards << gross_best_ball_card
+        other_scorecards << net_best_ball_card
+        other_scorecards << gross_best_ball_card
+      end
             
       return other_scorecards
     end

@@ -65,7 +65,7 @@ module GameTypes
       return game_type.best_ball_scorecard_for_user_in_team(user, golfer_team, use_handicaps)
     end
     
-    def related_scorecards_for_user(user)      
+    def related_scorecards_for_user(user, only_human_scorecards = false)      
       game_type = BestBall.new
       game_type.tournament_day = self.tournament_day
       game_type.course_hole_number_suppression_list = [1,2,3,4,5,6,7,8,9]

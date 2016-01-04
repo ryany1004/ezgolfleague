@@ -117,20 +117,24 @@ module GameTypes
       return true
     end
     
-    def related_scorecards_for_user(user)      
+    def related_scorecards_for_user(user, only_human_scorecards = false)      
       other_scorecards = []
       
       team = self.tournament_day.golfer_team_for_player(user)
       unless team.blank?
-        user_match_play_card = self.match_play_scorecard_for_user_in_team(user, team)
-        other_scorecards << user_match_play_card
+        if only_human_scorecards == false
+          user_match_play_card = self.match_play_scorecard_for_user_in_team(user, team)
+          other_scorecards << user_match_play_card
+        end
         
         team.users.each do |u|
           if u != user
             other_scorecards << self.tournament_day.primary_scorecard_for_user(u) 
           
-            other_user_match_play_card = self.match_play_scorecard_for_user_in_team(u, team)
-            other_scorecards << other_user_match_play_card
+            if only_human_scorecards == false
+              other_user_match_play_card = self.match_play_scorecard_for_user_in_team(u, team)
+              other_scorecards << other_user_match_play_card
+            end
           end
         end
       end
