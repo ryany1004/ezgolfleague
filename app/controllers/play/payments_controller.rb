@@ -39,7 +39,7 @@ class Play::PaymentsController < BaseController
     if params[:tournament_id] != nil
       tournament = Tournament.find(params[:tournament_id])
       
-      amount = tournament.dues_for_user(current_user)
+      amount = tournament.dues_for_user(current_user, true)
       api_key = tournament.league.stripe_secret_key
       charge_description = "#{current_user.complete_name} Tournament: #{tournament.name}"
     elsif params[:contest_id] != nil
