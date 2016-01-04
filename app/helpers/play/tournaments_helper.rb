@@ -84,9 +84,5 @@ module Play::TournamentsHelper
       return tournament_group.time_description
     end
   end
-  
-  def tee_time_position(tournament_group, index, count)
-    return tournament_group.time_description
-  end
 
 end
