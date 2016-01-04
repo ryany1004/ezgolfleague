@@ -49,7 +49,21 @@ class ScorecardsController < BaseController
     @print_cards = []
     
     @tournament.players_for_day(@tournament_day).each do |player|
-      @print_cards << {:primary => @tournament_day.primary_scorecard_for_user(player), :other => @tournament_day.related_scorecards_for_user(player, true)} if !self.printable_cards_includes_player?(@print_cards, player)
+      primary_scorecard = @tournament_day.primary_scorecard_for_user(player)
+      other_scorecards = @tournament_day.related_scorecards_for_user(player, true)
+      
+      if other_scorecards.count < 4
+        number_to_create = (4 - other_scorecards.count) - 1
+        
+        number_to_create.times do 
+          extra_scorecard = GameTypes::EmptyLineScorecard.new
+          extra_scorecard.scores_for_course_holes(@tournament_day.course_holes)
+          
+          other_scorecards << extra_scorecard
+        end
+      end
+      
+      @print_cards << {:primary => primary_scorecard, :other => other_scorecards} if !self.printable_cards_includes_player?(@print_cards, player)
     end
       
     render layout: false

@@ -66,7 +66,7 @@ class Play::PaymentsController < BaseController
     # Get the credit card details submitted by the form
     token = params[:stripeToken]
 
-    Rails.logger.debug { "Sending Stripe Charge: #{amount}" }
+    Rails.logger.info { "Sending Stripe Charge: #{amount} for #{charge_description}" }
 
     # Create the charge on Stripe's servers - this will charge the user's card
     begin
