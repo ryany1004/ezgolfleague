@@ -155,6 +155,7 @@ class Tournament < ActiveRecord::Base
   def is_open_for_registration?
     return false if self.number_of_players >= self.max_players
     return false if self.signup_opens_at > Time.zone.now
+    return false if self.signup_closes_at < Time.zone.now
     
     unplayable_days = false
     self.tournament_days.each do |day|
