@@ -113,6 +113,7 @@ Rails.application.routes.draw do
       resources :tournaments do
         resources :tournament_days, only: [:show] do
           get 'tournament_groups'
+          get 'leaderboard'
         end
       end
     end

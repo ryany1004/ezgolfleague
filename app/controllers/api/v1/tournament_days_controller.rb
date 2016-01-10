@@ -1,15 +1,30 @@
 class Api::V1::TournamentDaysController < Api::V1::ApiBaseController
   before_filter :protect_with_token
+  before_filter :fetch_details
   
   respond_to :json
   
   def tournament_groups
-    tournament = Tournament.find(params[:tournament_id])
-    tournament_day = tournament.tournament_days.find(params[:tournament_day_id])
-    
-    respond_with(tournament_day.tournament_groups) do |format|
+    respond_with(@tournament_day.tournament_groups) do |format|
       format.json { render :json => tournament_day.tournament_groups }
     end
   end
+   
+  def leaderboard
+    #TODO: cache
+    day_flights_with_rankings = @tournament_day.flights_with_rankings
+    combined_flights_with_rankings = FetchingTools::LeaderboardFetching.flights_with_rankings_could_be_combined(@tournament_day, day_flights_with_rankings)
     
+    leaderboard = {:day_flights => day_flights_with_rankings, :combined_flights => combined_flights_with_rankings}
+    
+    respond_with(leaderboard) do |format|
+      format.json { render :json => leaderboard }
+    end
+  end
+  
+  def fetch_details
+    @tournament = Tournament.find(params[:tournament_id])
+    @tournament_day = @tournament.tournament_days.find(params[:tournament_day_id])
+  end
+  
 end
