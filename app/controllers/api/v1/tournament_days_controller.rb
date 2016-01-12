@@ -6,7 +6,7 @@ class Api::V1::TournamentDaysController < Api::V1::ApiBaseController
   
   def tournament_groups
     respond_with(@tournament_day.tournament_groups) do |format|
-      format.json { render :json => tournament_day.tournament_groups }
+      format.json { render :json => @tournament_day.tournament_groups }
     end
   end
    
