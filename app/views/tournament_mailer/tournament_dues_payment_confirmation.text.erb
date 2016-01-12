@@ -1,0 +1,10 @@
+TOURNAMENT DUES PAYMENT CONFIRMATION
+
+A payment was made by <%= @user.complete_name %>:
+
+<%= @tournament.name %>
+<%= number_to_currency(@tournament.dues_for_user(@user, false)) %>
+
+--
+
+Sent by EZGolfLeague

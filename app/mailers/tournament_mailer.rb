@@ -16,6 +16,14 @@ class TournamentMailer < ApplicationMailer
     mail(to: @user.email, subject: 'EZGolfLeague - Tournament Registration is About to Close')
   end
   
+  def tournament_dues_payment_confirmation(user, tournament)
+    @user = user
+    @tournament = tournament
+    @league_season = @tournament.league_season
+    
+    mail(to: @league_season.league.dues_payment_receipt_email_addresses, subject: "Tournament Dues Payment: #{@user.complete_name}")
+  end
+  
   def tournament_coming_up(tournament, user)
     @tournament = tournament
     @user = user

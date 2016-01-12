@@ -42,6 +42,8 @@ class Play::PaymentsController < BaseController
       amount = tournament.dues_for_user(current_user, true)
       api_key = tournament.league.stripe_secret_key
       charge_description = "#{current_user.complete_name} Tournament: #{tournament.name}"
+      
+      TournamentMailer.tournament_dues_payment_confirmation(current_user, tournament).deliver_later unless tournament.league.dues_payment_receipt_email_addresses.blank?
     elsif params[:contest_id] != nil
       contest = Contest.find(params[:contest_id])
       
