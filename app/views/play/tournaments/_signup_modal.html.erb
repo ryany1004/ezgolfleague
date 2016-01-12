@@ -32,7 +32,9 @@
           </div>
         </div>
         <div class="modal-footer">
-          <% if @tournament.dues_amount > 0.0 && current_user.payments_for_current_league.map(&:payment_amount).sum > @tournament.dues_amount -%>
+          <% if @tournament.dues_amount == 0.0 -%>
+            <%= f.button :button, "Register", :class => "btn btn-default", :name => "pay_later", :value => true %>
+          <% elsif current_user.payments_for_current_league.map(&:payment_amount).sum > @tournament.dues_amount -%>
             <%= f.button :button, "Register & Pay w/ Balance", :class => "btn btn-default", :name => "pay_later", :value => true %>
           <% else -%>
             <%= f.button :button, "Register & Pay Later", :class => "btn btn-default", :name => "pay_later", :value => true %>
