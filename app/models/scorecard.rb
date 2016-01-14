@@ -63,6 +63,14 @@ class Scorecard < ActiveRecord::Base
     return false
   end
   
+  def last_hole_played
+    self.scores.each_with_index do |score, i|
+      return "#{i}" if score.strokes == 0
+    end
+    
+    return nil
+  end
+  
   #Team Support
   
   def is_potentially_editable?
