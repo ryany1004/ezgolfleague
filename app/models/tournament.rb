@@ -197,11 +197,11 @@ class Tournament < ActiveRecord::Base
   def user_has_paid?(user)
     tournament_balance = 0.0
     
-    self.payments.where(user: user).each do |p|
-      tournament_balance = tournament_balance + p.payment_amount
+    self.payments.where(user: u).each do |p|
+      tournament_balance = tournament_balance + p.payment_amount if p.payment_amount > 0
     end
     
-    if tournament_balance == 0.0
+    if tournament_balance >= self.dues_for_user(user)
       return true
     else
       return false
