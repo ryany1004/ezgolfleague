@@ -101,6 +101,24 @@ class TournamentDay < ActiveRecord::Base
     return user_ids
   end
   
+  #are you sure you really want to do this?!?
+  def clear_scores
+    self.tournament_groups.each do |group|
+      group.teams.each do |team|
+        team.golf_outings.each do |outing|
+          outing.scorecards.each do |scorecard|
+            scorecard.scores.each do |score|
+              score.strokes = 0
+              score.save
+            end
+          end
+        end
+      end
+    end
+    
+    self.tournament_day_results.destroy_all
+  end
+  
   #date parsing
   def tournament_at=(date)
     begin
