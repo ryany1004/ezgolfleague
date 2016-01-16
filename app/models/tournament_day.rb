@@ -83,6 +83,10 @@ class TournamentDay < ActiveRecord::Base
     return cache_key
   end
   
+  def leaderboard_api_cache_key
+    return "leaderboard-json#{self.id}"
+  end
+  
   def has_payouts?
     self.flights.each do |flight|
       return true if flight.payouts.count > 0
