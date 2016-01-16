@@ -13,7 +13,7 @@ class Api::V1::ScoresController < Api::V1::ApiBaseController
       scores_to_update = Hash.new
       
       scores.each do |update_score|
-        scores_to_update[update_score["scoreServerID"]] = {:strokes => update_score["score"]}
+        scores_to_update[update_score["scoreServerID"]] = {:strokes => update_score["score"], :date_scored => update_score["dateScored"]}
       end
       
       logger.debug { "Sending: #{scores_to_update}" }

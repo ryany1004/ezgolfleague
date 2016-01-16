@@ -10,7 +10,7 @@ module UpdatingTools
       
         Rails.logger.info { "#{score_id} #{strokes}" }
       
-        unless strokes.blank? or score_id.blank?
+        unless strokes.blank? or score_id.blank? #TODO: need to factor in the date to determine if the score should be included
           score = Score.find(score_id)
           score.strokes = strokes
           score.save

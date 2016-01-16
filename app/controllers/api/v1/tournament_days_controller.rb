@@ -11,7 +11,6 @@ class Api::V1::TournamentDaysController < Api::V1::ApiBaseController
   end
    
   def leaderboard
-    #TODO: cache
     day_flights_with_rankings = @tournament_day.flights_with_rankings
     combined_flights_with_rankings = FetchingTools::LeaderboardFetching.flights_with_rankings_could_be_combined(@tournament_day, day_flights_with_rankings)
     
