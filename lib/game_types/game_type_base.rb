@@ -333,7 +333,7 @@ module GameTypes
           par_related_net_score = self.player_par_relation_for_tournament_day(player, self.tournament_day, true)
           par_related_gross_score = self.player_par_relation_for_tournament_day(player, self.tournament_day, false)
           
-          Rails.logger.info { "Ranking Player: #{player.complete_name}. Net: #{net_score} Gross: #{gross_score}" }
+          Rails.logger.info { "Ranking Player: #{player.complete_name} in Flight #{f.flight_number}. Net: #{net_score} Gross: #{gross_score}" }
           
           scorecard = self.tournament_day.primary_scorecard_for_user(player)
           unless scorecard.blank?
@@ -421,6 +421,10 @@ module GameTypes
 
       Rails.logger.info { "Eligible Players: #{eligible_player_list.count}" }
       Rails.logger.info { "Ranked Flights: #{ranked_flights.count}" }
+
+      eligible_player_list.each do |p|
+        Rails.logger.info { "Eligible: #{p}" }
+      end
 
       ranked_flights.each do |flight_ranking|
         flight_ranking[:players].each do |p|
