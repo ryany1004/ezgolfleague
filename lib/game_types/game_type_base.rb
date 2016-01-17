@@ -400,7 +400,7 @@ module GameTypes
         end
       end
       
-      logger.info { "Payouts: #{payout_count}" }
+      Rails.logger.info { "Payouts: #{payout_count}" }
       
       return if payout_count == 0
 
@@ -419,8 +419,8 @@ module GameTypes
         ranked_flights = self.flights_with_rankings
       end
 
-      logger.info { "Eligible Players: #{eligible_player_list.count}" }
-      logger.info { "Ranked Flights: #{ranked_flights.count}" }
+      Rails.logger.info { "Eligible Players: #{eligible_player_list.count}" }
+      Rails.logger.info { "Ranked Flights: #{ranked_flights.count}" }
 
       ranked_flights.each do |flight_ranking|
         flight_ranking[:players].each do |p|
