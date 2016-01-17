@@ -12,6 +12,7 @@ class Play::TournamentsController < BaseController
       @tournament_day = @tournament.tournament_days.find(params[:tournament_day])
     end
     
+    #TODO: cache this
     @flights_with_rankings = self.fetch_flights_with_rankings(@tournament_day)
     @flights_with_rankings = self.fetch_combined_flights_with_rankings(@tournament_day, @flights_with_rankings)
 
@@ -23,6 +24,7 @@ class Play::TournamentsController < BaseController
     @tournament_day = @tournament.tournament_days.find(params[:day])
     @user_scorecard = @tournament_day.primary_scorecard_for_user(current_user)
     
+    #TODO: cache this
     @day_flights_with_rankings = self.fetch_flights_with_rankings(@tournament_day)
     @combined_flights_with_rankings = self.fetch_combined_flights_with_rankings(@tournament_day, @day_flights_with_rankings)
     

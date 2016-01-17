@@ -199,6 +199,10 @@ class TournamentsController < BaseController
     if @tournament.can_be_finalized?
       @tournament.is_finalized = true
       @tournament.save
+      
+      @tournament.tournament_days.each do |day|
+        day.touch #bust the cache
+      end
     
       redirect_to league_tournaments_path(current_user.selected_league), :flash => { :success => "The tournament was successfully finalized." }
     else
