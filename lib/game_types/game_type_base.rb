@@ -423,7 +423,7 @@ module GameTypes
       Rails.logger.info { "Ranked Flights: #{ranked_flights.count}" }
 
       eligible_player_list.each do |p|
-        Rails.logger.info { "Eligible: #{p}" }
+        Rails.logger.info { "Eligible: #{p.id} #{p.complete_name}" }
       end
 
       ranked_flights.each do |flight_ranking|
