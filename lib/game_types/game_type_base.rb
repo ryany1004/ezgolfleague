@@ -422,15 +422,9 @@ module GameTypes
       Rails.logger.info { "Eligible Players: #{eligible_player_list.count}" }
       Rails.logger.info { "Ranked Flights: #{ranked_flights.count}" }
 
-      eligible_player_list.each do |p|
-        Rails.logger.info { "Eligible: #{p.id} #{p.complete_name}" }
-      end
-
       ranked_flights.each do |flight_ranking|
-        flight_ranking[:players].each do |p|
-          Rails.logger.info { "Ranked Player: #{p[:id]} #{p[:name]}" }
-          
-          if eligible_player_list.include? p[:id]
+        flight_ranking[:players].each do |p|          
+          if eligible_player_list.map(&:id).include? p[:id]
             flight = Flight.find(flight_ranking[:flight_id])
             flight.payouts.each_with_index do |p, i|              
               if flight_ranking[:players].count > i
