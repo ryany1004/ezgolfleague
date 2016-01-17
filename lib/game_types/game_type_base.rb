@@ -428,7 +428,7 @@ module GameTypes
 
       ranked_flights.each do |flight_ranking|
         flight_ranking[:players].each do |p|
-          Rails.logger.info { "Ranked Player: #{p.id} #{p.complete_name}" }
+          Rails.logger.info { "Ranked Player: #{p[:id]} #{p[:name]}" }
           
           if eligible_player_list.include? p[:id]
             flight = Flight.find(flight_ranking[:flight_id])
