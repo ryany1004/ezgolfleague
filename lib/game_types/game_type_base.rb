@@ -418,22 +418,19 @@ module GameTypes
         
         ranked_flights = self.flights_with_rankings
       end
-
-      Rails.logger.info { "Eligible Players: #{eligible_player_list.count}" }
-      Rails.logger.info { "Ranked Flights: #{ranked_flights.count}" }
-
+      
       ranked_flights.each do |flight_ranking|
         flight_ranking[:players].each do |p|          
           if eligible_player_list.map(&:id).include? p[:id]
             flight = Flight.find(flight_ranking[:flight_id])
-            flight.payouts.each_with_index do |p, i|              
+            flight.payouts.each_with_index do |payout, i|              
               if flight_ranking[:players].count > i
                 player = User.find(flight_ranking[:players][i][:id])
                 
-                Rails.logger.info { "Assigning #{player.complete_name} to #{p.id}" }
+                Rails.logger.info { "Assigning #{player.complete_name} to Payout #{payout.id}" }
                 
-                p.user = player
-                p.save!
+                payout.user = player
+                payout.save!
               end
             end
           else

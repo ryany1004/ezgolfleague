@@ -76,7 +76,9 @@
               </div>
               <div id="collapse<%= i %>" class="panel-collapse collapse <% if i == 0 -%>in<% end -%>" role="tabpanel" aria-labelledby="heading<%= i %>">
                 <div class="panel-body">
-                  <%= render partial: '/shared/scorecards/show', locals: {scorecard: day.primary_scorecard_for_user(player), split_holes: split_holes_for_course_tournament(day), split_scores: split_scores_for_scorecard(day.primary_scorecard_for_user(player), day.course_holes.count), tournament_day: day, handicap_allowance: day.handicap_allowance(player)} %>
+                  <% cache(cache_key_for_scorecard(day.primary_scorecard_for_user(player).id)) do %>
+                    <%= render partial: '/shared/scorecards/show', locals: {scorecard: day.primary_scorecard_for_user(player), split_holes: split_holes_for_course_tournament(day), split_scores: split_scores_for_scorecard(day.primary_scorecard_for_user(player), day.course_holes.count), tournament_day: day, handicap_allowance: day.handicap_allowance(player)} %>
+                  <% end -%>
                   <p>
                     <%= link_to "Edit This Scorecard", edit_scorecard_path(day.primary_scorecard_for_user(player)), class: "btn btn-warning", role: "button" %>
                   </p>
