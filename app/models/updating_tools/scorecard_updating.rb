@@ -30,8 +30,6 @@ module UpdatingTools
         end
       end
     
-      Rails.logger.info { "SCORE: Re-Scoring For Scorecard: #{primary_scorecard.id}. User: #{primary_scorecard.golf_outing.user.complete_name}. Net Score: #{primary_scorecard.tournament_day.tournament_day_results.where(:user_primary_scorecard_id => primary_scorecard.id).first.net_score}" }
-    
       primary_scorecard.tournament_day.score_user(primary_scorecard.golf_outing.user)
       primary_scorecard.tournament_day.game_type.after_updating_scores_for_scorecard(primary_scorecard)
     
@@ -41,6 +39,10 @@ module UpdatingTools
       end
       
       Rails.cache.delete(primary_scorecard.tournament_day.leaderboard_api_cache_key)
+      
+      unless primary_scorecard.tournament_day.tournament_day_results.where(:user_primary_scorecard_id => primary_scorecard.id).blank?
+        Rails.logger.info { "SCORE: Re-Scoring For Scorecard: #{primary_scorecard.id}. User: #{primary_scorecard.golf_outing.user.complete_name}. Net Score: #{primary_scorecard.tournament_day.tournament_day_results.where(:user_primary_scorecard_id => primary_scorecard.id).first.net_score}" }
+      end
     end
     
   end
