@@ -400,6 +400,8 @@ module GameTypes
         end
       end
       
+      logger.info { "Payouts: #{payout_count}" }
+      
       return if payout_count == 0
 
       if self.tournament.tournament_days.count > 1 && self.tournament_day == self.tournament.last_day        
@@ -417,6 +419,9 @@ module GameTypes
         ranked_flights = self.flights_with_rankings
       end
 
+      logger.info { "Eligible Players: #{eligible_player_list.count}" }
+      logger.info { "Ranked Flights: #{ranked_flights.count}" }
+
       ranked_flights.each do |flight_ranking|
         flight_ranking[:players].each do |p|
           if eligible_player_list.include? p[:id]
@@ -425,14 +430,14 @@ module GameTypes
               if flight_ranking[:players].count > i
                 player = User.find(flight_ranking[:players][i][:id])
                 
-                Rails.logger.debug { "Assigning #{player.complete_name} to #{p.id}" }
+                Rails.logger.info { "Assigning #{player.complete_name} to #{p.id}" }
                 
                 p.user = player
                 p.save!
               end
             end
           else
-            Rails.logger.debug { "Player Not Eligible: #{p}" }
+            Rails.logger.info { "Player Not Eligible: #{p}" }
           end
         end
       end

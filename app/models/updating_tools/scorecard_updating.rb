@@ -39,6 +39,8 @@ module UpdatingTools
         primary_scorecard.tournament_day.score_user(other_scorecard.golf_outing.user) unless other_scorecard.golf_outing.blank?
         primary_scorecard.tournament_day.game_type.after_updating_scores_for_scorecard(other_scorecard)
       end
+      
+      Rails.cache.delete(primary_scorecard.tournament_day.leaderboard_api_cache_key)
     end
     
   end

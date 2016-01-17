@@ -19,10 +19,7 @@ class Api::V1::ScoresController < Api::V1::ApiBaseController
       logger.debug { "Sending: #{scores_to_update}" }
       
       UpdatingTools::ScorecardUpdating.update_scorecards_for_scores(scores_to_update, @scorecard, @other_scorecards)
-      
-      #clear JSON cache
-      Rails.cache.delete(@tournament_day.leaderboard_api_cache_key)
-      
+
       render json: {:text => "Success"}
     else
       render text: "Score Updating Failure", :status => :bad_request
