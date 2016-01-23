@@ -45,7 +45,8 @@
       			</td>
             <td>
       			  <% group.players_signed_up.each do |player| -%>
-                <%= link_to "View", scorecard_path( @tournament_day.primary_scorecard_for_user(player)) %> | <%= link_to "Edit", edit_scorecard_path(@tournament_day.primary_scorecard_for_user(player)) %></br>
+                <% scorecard = @tournament_day.primary_scorecard_for_user(player) %>
+                <%= link_to "View", scorecard_path(scorecard) %> | <%= link_to "Edit", edit_scorecard_path(scorecard) %></br>
               <% end -%>
             </td>
       		</tr>
