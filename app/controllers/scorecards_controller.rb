@@ -12,6 +12,8 @@ class ScorecardsController < BaseController
     end
     
     @page_title = "Scorecards"
+    
+    @eager_groups = TournamentGroup.includes(teams: [{ golf_outings: [{ scorecards: :scores }] }]).where(tournament_day: @tournament_day)
   end
   
   def show

@@ -34,7 +34,7 @@
   		</tr>
   	</thead>
   	<tbody>
-      <% @tournament_day.tournament_groups.each_with_index do |group, index| -%>
+      <% @eager_groups.each_with_index do |group, index| -%>
         <% if group.players_signed_up.count > 0 -%>
       		<tr>
             <td><%= index + 1 %></td>

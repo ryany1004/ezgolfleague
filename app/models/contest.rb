@@ -22,8 +22,6 @@ class Contest < ActiveRecord::Base
       return "Net Skins"
     elsif self.contest_type == 3
       return "Gross Skins"
-    elsif self.contest_type == 8
-      return "Net Skins + Gross Skins"
     elsif self.contest_type == 4
       return "Net Low"
     elsif self.contest_type == 5
@@ -32,6 +30,8 @@ class Contest < ActiveRecord::Base
       return "Net Low Tournament Total"
     elsif self.contest_type == 7
       return "Gross Low Tournament Total"
+    elsif self.contest_type == 8
+      return "Net Skins + Gross Skins"
     end
   end
   
