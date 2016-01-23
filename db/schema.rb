@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160102205055) do
+ActiveRecord::Schema.define(version: 20160123012438) do
 
   create_table "contest_holes", force: :cascade do |t|
     t.integer  "contest_id"
@@ -49,12 +49,16 @@ ActiveRecord::Schema.define(version: 20160102205055) do
     t.decimal  "dues_amount",                      default: 0.0
   end
 
+  add_index "contests", ["overall_winner_contest_result_id"], name: "index_contests_on_overall_winner_contest_result_id"
   add_index "contests", ["tournament_day_id"], name: "index_contests_on_tournament_day_id"
 
   create_table "contests_users", id: false, force: :cascade do |t|
     t.integer "contest_id"
     t.integer "user_id"
   end
+
+  add_index "contests_users", ["contest_id"], name: "index_contests_users_on_contest_id"
+  add_index "contests_users", ["user_id"], name: "index_contests_users_on_user_id"
 
   create_table "course_hole_tee_boxes", force: :cascade do |t|
     t.integer  "course_hole_id"
@@ -186,6 +190,9 @@ ActiveRecord::Schema.define(version: 20160102205055) do
     t.integer "user_id"
   end
 
+  add_index "golfer_teams_users", ["golfer_team_id"], name: "index_golfer_teams_users_on_golfer_team_id"
+  add_index "golfer_teams_users", ["user_id"], name: "index_golfer_teams_users_on_user_id"
+
   create_table "league_memberships", force: :cascade do |t|
     t.integer  "league_id"
     t.integer  "user_id"
@@ -207,6 +214,8 @@ ActiveRecord::Schema.define(version: 20160102205055) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
+
+  add_index "league_seasons", ["league_id"], name: "index_league_seasons_on_league_id"
 
   create_table "leagues", force: :cascade do |t|
     t.string   "name"
@@ -236,6 +245,7 @@ ActiveRecord::Schema.define(version: 20160102205055) do
     t.integer  "payment_id"
   end
 
+  add_index "payments", ["league_season_id"], name: "index_payments_on_league_season_id"
   add_index "payments", ["tournament_id"], name: "index_payments_on_tournament_id"
   add_index "payments", ["user_id"], name: "index_payments_on_user_id"
 
@@ -251,6 +261,7 @@ ActiveRecord::Schema.define(version: 20160102205055) do
 
   add_index "payouts", ["flight_id"], name: "index_payouts_on_flight_id"
   add_index "payouts", ["sort_order"], name: "index_payouts_on_sort_order"
+  add_index "payouts", ["user_id"], name: "index_payouts_on_user_id"
 
   create_table "scorecards", force: :cascade do |t|
     t.integer  "golf_outing_id"
@@ -315,7 +326,9 @@ ActiveRecord::Schema.define(version: 20160102205055) do
     t.boolean  "data_was_imported",          default: false
   end
 
+  add_index "tournament_days", ["course_id"], name: "index_tournament_days_on_course_id"
   add_index "tournament_days", ["tournament_at"], name: "index_tournament_days_on_tournament_at"
+  add_index "tournament_days", ["tournament_id"], name: "index_tournament_days_on_tournament_id"
 
   create_table "tournament_groups", force: :cascade do |t|
     t.datetime "tee_time_at"
