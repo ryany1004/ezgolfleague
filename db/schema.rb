@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160123012438) do
+ActiveRecord::Schema.define(version: 20160124175554) do
 
   create_table "contest_holes", force: :cascade do |t|
     t.integer  "contest_id"
@@ -159,18 +159,20 @@ ActiveRecord::Schema.define(version: 20160123012438) do
   create_table "golf_outings", force: :cascade do |t|
     t.integer  "team_id"
     t.integer  "user_id"
-    t.datetime "created_at",                        null: false
-    t.datetime "updated_at",                        null: false
-    t.boolean  "has_paid",          default: false
+    t.datetime "created_at",                          null: false
+    t.datetime "updated_at",                          null: false
+    t.boolean  "has_paid",            default: false
     t.integer  "course_tee_box_id"
-    t.boolean  "confirmed",         default: false
-    t.float    "course_handicap",   default: 0.0
-    t.boolean  "is_confirmed",      default: false
+    t.boolean  "confirmed",           default: false
+    t.float    "course_handicap",     default: 0.0
+    t.boolean  "is_confirmed",        default: false
+    t.integer  "tournament_group_id"
   end
 
   add_index "golf_outings", ["course_tee_box_id"], name: "index_golf_outings_on_course_tee_box_id"
   add_index "golf_outings", ["is_confirmed"], name: "index_golf_outings_on_is_confirmed"
   add_index "golf_outings", ["team_id"], name: "index_golf_outings_on_team_id"
+  add_index "golf_outings", ["tournament_group_id"], name: "index_golf_outings_on_tournament_group_id"
   add_index "golf_outings", ["user_id"], name: "index_golf_outings_on_user_id"
 
   create_table "golfer_teams", force: :cascade do |t|
@@ -285,14 +287,6 @@ ActiveRecord::Schema.define(version: 20160123012438) do
   add_index "scores", ["course_hole_id"], name: "index_scores_on_course_hole_id"
   add_index "scores", ["scorecard_id"], name: "index_scores_on_scorecard_id"
   add_index "scores", ["sort_order"], name: "index_scores_on_sort_order"
-
-  create_table "teams", force: :cascade do |t|
-    t.integer  "tournament_group_id"
-    t.datetime "created_at",          null: false
-    t.datetime "updated_at",          null: false
-  end
-
-  add_index "teams", ["tournament_group_id"], name: "index_teams_on_tournament_group_id"
 
   create_table "tournament_day_results", force: :cascade do |t|
     t.integer  "tournament_day_id"

@@ -47,7 +47,8 @@ module Scoreable
     return false
   end
   
-  def has_scores?    
+  def has_scores?
+    #TODO: short-cut - check for tournament day results objects? is that dangerous? 
     eager_groups = TournamentGroup.includes(teams: [{ golf_outings: :scorecards }]).where(tournament_day: self)
     
     eager_groups.each do |group|

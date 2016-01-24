@@ -2,8 +2,9 @@ class TournamentGroup < ActiveRecord::Base
   include Servable
   
   belongs_to :tournament_day, inverse_of: :tournament_groups, :touch => true
-  has_many :teams, inverse_of: :tournament_group, :dependent => :destroy
-    
+  has_many :teams, inverse_of: :tournament_group, :dependent => :destroy #TODO: REMOVE
+  has_many :golf_outings, inverse_of: :tournament_group, :dependent => :destroy
+  
   paginates_per 50
   
   def players_signed_up
