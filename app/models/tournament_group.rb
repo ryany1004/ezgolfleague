@@ -54,31 +54,25 @@ class TournamentGroup < ActiveRecord::Base
       :only => [:tee_time_at],
       :methods => [:server_id],
       :include => {
-        :teams => {
-          :only => [:id],
+        :golf_outings => {
+          :only => [:course_handicap],
           :methods => [:server_id],
           :include => {
-            :golf_outings => {
-              :only => [:course_handicap],
+            :user => {
+              :only => [:first_name, :last_name],
+              :methods => [:server_id]
+            },
+            :course_tee_box => {
+              :only => [:name],
+              :methods => [:server_id]
+            },
+            :scorecard => {
+              :only => [:id],
               :methods => [:server_id],
               :include => {
-                :user => {
-                  :only => [:first_name, :last_name],
-                  :methods => [:server_id]
-                },
-                :course_tee_box => {
-                  :only => [:name],
-                  :methods => [:server_id]
-                },
-                :scorecards => {
-                  :only => [:id],
-                  :methods => [:server_id],
-                  :include => {
-                    :scores => {
-                      :only => [:id, :strokes],
-                      :methods => [:server_id, :course_hole_number, :course_hole_par]
-                    }
-                  }
+                :scores => {
+                  :only => [:id, :strokes],
+                  :methods => [:server_id, :course_hole_number, :course_hole_par]
                 }
               }
             }
