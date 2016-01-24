@@ -32,3 +32,4 @@ pickle-email-*.html
 bower.json
 
 .DS_Store
+.byebug_history

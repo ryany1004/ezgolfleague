@@ -75,20 +75,22 @@ module ContestScoreable
       user_scores = []
 
       self.users.each do |user|
-        score = self.tournament_day.player_score(user, !use_gross, holes = [hole.hole_number])
+        if self.tournament_day.tournament.includes_player?(user)
+          score = self.tournament_day.player_score(user, !use_gross, holes = [hole.hole_number])
 
-        unless score.blank? || score == 0
-          user_scores << {user: user, score: score}
+          unless score.blank? || score == 0
+            user_scores << {user: user, score: score}
 
-          #check if gross birdie
-          if use_gross == true
-            gross_score = score
-          else
-            gross_score = self.tournament_day.player_score(user, true, holes = [hole.hole_number])
-          end
+            #check if gross birdie
+            if use_gross == true
+              gross_score = score
+            else
+              gross_score = self.tournament_day.player_score(user, true, holes = [hole.hole_number])
+            end
 
-          if gross_score == (hole.par - 1)
-            birdie_skins << user
+            if gross_score == (hole.par - 1)
+              birdie_skins << user
+            end
           end
         end
       end

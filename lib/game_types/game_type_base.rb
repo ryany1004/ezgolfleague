@@ -382,7 +382,7 @@ module GameTypes
     def eligible_players_for_payouts
       eligible_player_list = []
       if self.tournament.tournament_days.count == 1
-        eligible_player_list = self.tournament.players
+        eligible_player_list = self.tournament.players.map(&:id)
       else #only players that play all days can win
         self.tournament.players.each do |player|
           player_played_all_days = true
@@ -429,8 +429,8 @@ module GameTypes
       end
       
       ranked_flights.each do |flight_ranking|
-        flight_ranking[:players].each do |p|          
-          if eligible_player_list.map(&:id).include? p[:id]
+        flight_ranking[:players].each do |p|
+          if eligible_player_list.include? p[:id]
             flight = Flight.find(flight_ranking[:flight_id])
             flight.payouts.each_with_index do |payout, i|              
               if flight_ranking[:players].count > i

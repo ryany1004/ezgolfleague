@@ -76,8 +76,8 @@ module Scoreable
     back_nine_net_score = self.compute_player_score(user, true, [10, 11, 12, 13, 14, 15, 16, 17, 18])
 
     user_par = self.user_par_for_played_holes(user)
-    par_related_net_score =  net_score - user_par
-    par_related_gross_score =  gross_score - user_par
+    par_related_net_score = net_score - user_par
+    par_related_gross_score = gross_score - user_par
 
     result = TournamentDayResult.create(tournament_day: self, user: user, primary_scorecard: primary_scorecard, flight: flight, gross_score: gross_score, net_score: net_score, front_nine_gross_score: front_nine_gross_score, front_nine_net_score: front_nine_net_score, back_nine_net_score: back_nine_net_score, par_related_net_score: par_related_net_score, par_related_gross_score: par_related_gross_score)
     

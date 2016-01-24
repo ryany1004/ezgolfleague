@@ -39,7 +39,11 @@ module GameTypes
     ##Scoring
     
     def compute_player_score(user, use_handicap = true, holes = [])
-      return nil if !self.tournament.includes_player?(user)
+      if !self.tournament.includes_player?(user)
+        Rails.logger.info { "Tournament Does Not Include Player: #{user.complete_name}" }
+      
+        return nil
+      end
 
       total_score = 0
 
