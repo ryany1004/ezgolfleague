@@ -9,7 +9,7 @@ class TournamentGroup < ActiveRecord::Base
   def players_signed_up
     players = []
     
-    self.golf_outings.includes(:user).each do |t|
+    self.golf_outings.includes(:user).each do |g|
       players << g.user
     end
     

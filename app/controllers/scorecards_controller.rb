@@ -13,8 +13,8 @@ class ScorecardsController < BaseController
     
     @page_title = "Scorecards"
     
-    @eager_groups = TournamentGroup.includes(teams: [{ golf_outings: [{ scorecards: :scores }, :user] }]).where(tournament_day: @tournament_day)
-    
+    @eager_groups = TournamentGroup.includes(golf_outings: [{scorecards: :scores}, :user]).where(tournament_day: @tournament_day)
+        
     #Fetch scorecards and group into groups, vs other way around
     #@scorecards = Scorecard.where()
   end
@@ -97,7 +97,7 @@ class ScorecardsController < BaseController
   def fetch_all_params
     @scorecard = Scorecard.find(params[:id])
     @player = @scorecard.golf_outing.user
-    @tournament_day = @scorecard.golf_outing.team.tournament_group.tournament_day
+    @tournament_day = @scorecard.golf_outing.tournament_group.tournament_day
     @tournament = @tournament_day.tournament
     @handicap_allowance = @tournament_day.handicap_allowance(@scorecard.golf_outing.user)
   end

@@ -26,7 +26,7 @@ class Play::ScorecardsController < BaseController
     scorecard.tournament_day.score_user(scorecard.golf_outing.user)
     
     #update team scorecards if that's a thing
-    tournament_day = scorecard.golf_outing.team.tournament_group.tournament_day
+    tournament_day = scorecard.golf_outing.tournament_group.tournament_day
     tournament = tournament_day.tournament
     
     if scorecard.designated_editor == current_user && tournament.is_past? == false && tournament_day.game_type.allow_teams != GameTypes::TEAMS_DISALLOWED #in the past, non-team tournament
@@ -51,7 +51,7 @@ class Play::ScorecardsController < BaseController
     @scorecard.designated_editor = current_user
     @scorecard.save
     
-    @tournament_day = @scorecard.golf_outing.team.tournament_group.tournament_day
+    @tournament_day = @scorecard.golf_outing.tournament_group.tournament_day
     
     @tournament_day.other_group_members(current_user).each do |user|
       scorecard = @tournament_day.primary_scorecard_for_user(user)

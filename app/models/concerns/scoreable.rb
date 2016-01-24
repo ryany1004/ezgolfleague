@@ -2,7 +2,7 @@ module Scoreable
   extend ActiveSupport::Concern
   
   def primary_scorecard_for_user(user)
-    eager_groups = TournamentGroup.includes(teams: [{ golf_outings: [{ scorecards: :scores }] }]).where(tournament_day: self)
+    eager_groups = TournamentGroup.includes(golf_outings: [{scorecards: :scores}, :user]).where(tournament_day: self)
     
     eager_groups.each do |group|
       group.golf_outings.each do |golf_outing|
@@ -39,7 +39,7 @@ module Scoreable
   def user_can_become_designated_scorer(user, scorecard)
     return false if !scorecard.designated_editor.blank?
           
-    group = scorecard.golf_outing.team.tournament_group
+    group = scorecard.golf_outing.tournament_group
     return true if self.user_is_in_group?(user, group)
     
     return false
@@ -47,7 +47,7 @@ module Scoreable
   
   def has_scores?
     #TODO: short-cut - check for tournament day results objects? is that dangerous? 
-    eager_groups = TournamentGroup.includes(teams: [{ golf_outings: :scorecards }]).where(tournament_day: self)
+    eager_groups = TournamentGroup.includes(golf_outings: [{scorecards: :scores}, :user]).where(tournament_day: self)
     
     eager_groups.each do |group|
       group.golf_outings.each do |golf_outing|

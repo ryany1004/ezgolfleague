@@ -3,7 +3,7 @@ module FetchingTools
     
     def self.fetch_scorecards_and_related(scorecard_id)
       scorecard = Scorecard.includes(:scores).find(scorecard_id)
-      tournament_day = scorecard.golf_outing.team.tournament_group.tournament_day
+      tournament_day = scorecard.golf_outing.tournament_group.tournament_day
       tournament = tournament_day.tournament
     
       if tournament.is_past? && tournament_day.game_type.allow_teams == GameTypes::TEAMS_DISALLOWED #in the past, non-team tournament

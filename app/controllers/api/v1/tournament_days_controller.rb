@@ -5,7 +5,7 @@ class Api::V1::TournamentDaysController < Api::V1::ApiBaseController
   respond_to :json
   
   def tournament_groups
-    eager_groups = TournamentGroup.includes(teams: [{ golf_outings: [{ scorecards: [{scores: :course_hole}] }] }]).where(tournament_day: @tournament_day)
+    eager_groups = TournamentGroup.includes(golf_outings: [{scorecards: :scores}, :user]).where(tournament_day: @tournament_day)
     
     respond_with(eager_groups) do |format|
       format.json { render :json => eager_groups }
