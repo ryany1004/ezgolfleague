@@ -181,11 +181,9 @@ class Tournament < ActiveRecord::Base
   def update_course_handicaps
     self.tournament_days.each do |day|
       day.tournament_groups.each do |group|
-        group.teams.each do |team|
-          team.golf_outings.each do |outing|
-            outing.scorecards.each do |card|
-              card.set_course_handicap(true)
-            end
+        group.golf_outings.each do |outing|
+          outing.scorecards.each do |card|
+            card.set_course_handicap(true)
           end
         end
       end

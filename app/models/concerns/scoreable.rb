@@ -5,13 +5,11 @@ module Scoreable
     eager_groups = TournamentGroup.includes(teams: [{ golf_outings: [{ scorecards: :scores }] }]).where(tournament_day: self)
     
     eager_groups.each do |group|
-      group.teams.each do |team|
-        team.golf_outings.each do |golf_outing|
-          if golf_outing.user == user
-            scorecard = golf_outing.scorecards.first
+      group.golf_outings.each do |golf_outing|
+        if golf_outing.user == user
+          scorecard = golf_outing.scorecards.first
 
-            return scorecard
-          end
+          return scorecard
         end
       end
     end
@@ -52,12 +50,10 @@ module Scoreable
     eager_groups = TournamentGroup.includes(teams: [{ golf_outings: :scorecards }]).where(tournament_day: self)
     
     eager_groups.each do |group|
-      group.teams.each do |team|
-        team.golf_outings.each do |golf_outing|
-          golf_outing.scorecards.each do |scorecard|
-            scorecard.scores.each do |score|
-              return true if score.strokes > 0
-            end
+      group.golf_outings.each do |golf_outing|
+        golf_outing.scorecards.each do |scorecard|
+          scorecard.scores.each do |score|
+            return true if score.strokes > 0
           end
         end
       end

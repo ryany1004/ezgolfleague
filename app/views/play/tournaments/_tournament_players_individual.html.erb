@@ -15,21 +15,19 @@
     	</thead>
     	<tbody>
     	<% tournament_day.tournament_groups.each_with_index do |tournament_group, i| %>
-        <% tournament_group.teams.each do |team| %>
-          <% team.golf_outings.each do |golf_outing| %>
-          <tr>
-            <td><%= golf_outing.user.complete_name %></td>
-            <td><%= golf_outing.course_handicap.to_i %></td>
-            <% if tournament_day.flight_for_player(golf_outing.user).blank? -%>
-            <td>&nbsp;</td>
-            <% else -%>
-            <td><strong><%= (tournament_day.flight_for_player(golf_outing.user).flight_number) %></strong></td>
-            <% end -%>
-            <td><strong><%= i + 1 %></strong></td>
-            
-            <td><%= display_tee_time_or_position(tournament_group) %></td>
-          </tr>
-          <% end %>
+        <% tournament_group.golf_outings.each do |golf_outing| %>
+        <tr>
+          <td><%= golf_outing.user.complete_name %></td>
+          <td><%= golf_outing.course_handicap.to_i %></td>
+          <% if tournament_day.flight_for_player(golf_outing.user).blank? -%>
+          <td>&nbsp;</td>
+          <% else -%>
+          <td><strong><%= (tournament_day.flight_for_player(golf_outing.user).flight_number) %></strong></td>
+          <% end -%>
+          <td><strong><%= i + 1 %></strong></td>
+          
+          <td><%= display_tee_time_or_position(tournament_group) %></td>
+        </tr>
         <% end %>
     	<% end %>
     	</tbody>

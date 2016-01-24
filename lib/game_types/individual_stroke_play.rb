@@ -14,20 +14,16 @@ module GameTypes
       other_members = []
       
       group = self.tournament_day.tournament_group_for_player(user)
-      group.teams.each do |team|
-        team.golf_outings.each do |outing|
-          other_members << outing.user if outing.user != user
-        end
+      group.golf_outings.each do |outing|
+        other_members << outing.user if outing.user != user
       end
       
       return other_members
     end
     
     def user_is_in_group?(user, tournament_group)
-      tournament_group.teams.each do |team|
-        team.golf_outings.each do |outing|
-          return true if user == outing.user
-        end
+      tournament_group.golf_outings.each do |outing|
+        return true if user == outing.user
       end
       
       return false

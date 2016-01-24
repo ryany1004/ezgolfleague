@@ -108,13 +108,11 @@ class TournamentDay < ActiveRecord::Base
   #are you sure you really want to do this?!?
   def clear_scores
     self.tournament_groups.each do |group|
-      group.teams.each do |team|
-        team.golf_outings.each do |outing|
-          outing.scorecards.each do |scorecard|
-            scorecard.scores.each do |score|
-              score.strokes = 0
-              score.save
-            end
+      group.golf_outings.each do |outing|
+        outing.scorecards.each do |scorecard|
+          scorecard.scores.each do |score|
+            score.strokes = 0
+            score.save
           end
         end
       end

@@ -43,19 +43,17 @@
 	</thead>
 	<tbody>
 	<% @tournament_groups.each_with_index do |tournament_group, i| %>
-    <% tournament_group.teams.each do |team| %>
-      <% team.golf_outings.each do |golf_outing| %>
-      <tr>
-        <td><%= golf_outing.user.complete_name %></td>
-        <td>#<%= i + 1 %> - <%= tournament_group.tee_time_at.to_s(:date_and_time) %></td>
-        <td><%= @tournament_day.flight_for_player(golf_outing.user).flight_number %></td>
-        <% if user_is_league_admin(current_user, @tournament.league) && is_editable?(@tournament) -%>
-        <td><%= link_to "Delete Registration", league_tournament_delete_signup_path(@tournament.league, @tournament, group_id: tournament_group.id, user_id: golf_outing.user), :data => { :confirm => 'Are you sure you want to delete this registration?' }, :method => :delete %></td>
-        <% else -%>
-        <td>&nbsp;</td>
-        <% end -%>
-      </tr>
-      <% end %>
+    <% tournament_group.golf_outings.each do |golf_outing| %>
+    <tr>
+      <td><%= golf_outing.user.complete_name %></td>
+      <td>#<%= i + 1 %> - <%= tournament_group.tee_time_at.to_s(:date_and_time) %></td>
+      <td><%= @tournament_day.flight_for_player(golf_outing.user).flight_number %></td>
+      <% if user_is_league_admin(current_user, @tournament.league) && is_editable?(@tournament) -%>
+      <td><%= link_to "Delete Registration", league_tournament_delete_signup_path(@tournament.league, @tournament, group_id: tournament_group.id, user_id: golf_outing.user), :data => { :confirm => 'Are you sure you want to delete this registration?' }, :method => :delete %></td>
+      <% else -%>
+      <td>&nbsp;</td>
+      <% end -%>
+    </tr>
     <% end %>
 	<% end %>
 	</tbody>

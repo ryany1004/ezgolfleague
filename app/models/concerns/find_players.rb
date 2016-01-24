@@ -19,10 +19,8 @@ module FindPlayers
 
   def tournament_group_for_player(user)
     self.tournament_groups.each do |group|
-      group.teams.each do |team|
-        team.golf_outings.each do |outing|
-          return group if outing.user == user
-        end
+      group.golf_outings.each do |outing|
+        return group if outing.user == user
       end
     end
   
@@ -31,10 +29,8 @@ module FindPlayers
 
   def golf_outing_for_player(user)
     self.tournament_groups.each do |group|
-      group.teams.each do |team|
-        team.golf_outings.each do |outing|
-          return outing if outing.user == user
-        end
+      group.golf_outings.each do |outing|
+        return outing if outing.user == user
       end
     end
   

@@ -95,10 +95,8 @@ class Play::TournamentsController < BaseController
   def remove_signup
     @tournament.tournament_days.each do |day|
       day.tournament_groups.each do |tg|
-        tg.teams.each do |team|
-          team.golf_outings.each do |outing|
-            day.remove_player_from_group(tg, current_user) if outing.user == current_user
-          end
+        tg.golf_outings.each do |outing|
+          day.remove_player_from_group(tg, current_user) if outing.user == current_user
         end
       end
     end
