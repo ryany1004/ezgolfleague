@@ -30,7 +30,7 @@ class TournamentGroup < ActiveRecord::Base
     
     early = 0
     middle = (count / 3)
-    #late = (count / 3) * 2
+    late = (count / 3) * 2
     
     if index >= early && index < middle 
       return "Early"
