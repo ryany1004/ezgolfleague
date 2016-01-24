@@ -21,8 +21,8 @@
           <h2/>
         <% end -%>
         
-        <% cache(cache_key_for_scorecard(print_card[:primary].id)) do %>
-          <%= render partial: '/shared/scorecards/standard', locals: {primary_scorecard: print_card[:primary], other_scorecards: print_card[:other], print_mode: true} %>
+        <% cache(cache_key_for_scorecard(print_card[:p].primary_scorecard.id)) do %>
+          <%= render partial: '/shared/scorecards/standard', locals: {p: print_card[:p], print_mode: true} %>
         <% end -%>
       
       <% end -%>

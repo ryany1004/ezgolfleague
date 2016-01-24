@@ -28,11 +28,15 @@ class TournamentGroup < ActiveRecord::Base
     count = self.tournament_day.tournament_groups.count
     index = self.tournament_day.tournament_groups.index(self)
     
-    if index == 0
+    early = 0
+    middle = (count / 3)
+    #late = (count / 3) * 2
+    
+    if index >= early && index < middle 
       return "Early"
-    elsif index == (count / 3)
+    elsif index >= middle && index < late
       return "Middle"
-    elsif index == (count / 3) * 2
+    else
       return "Late"
     end
   end

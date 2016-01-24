@@ -14,7 +14,7 @@ class ScorecardsController < BaseController
     @page_title = "Scorecards"
     
     @eager_groups = TournamentGroup.includes(golf_outings: [{scorecard: :scores}, :user]).where(tournament_day: @tournament_day)
-    
+
     #TODO: Fetch scorecards and group into groups, vs other way around
     #@scorecards = Scorecard.where()
   end
@@ -68,7 +68,9 @@ class ScorecardsController < BaseController
         end
       end
       
-      @print_cards << {:primary => primary_scorecard, :other => other_scorecards} if !self.printable_cards_includes_player?(@print_cards, player)
+      scorecard_presenter = Presenters::ScorecardPresenter.new({primary_scorecard: primary_scorecard, secondary_scorecards: other_scorecards})
+      
+      @print_cards << {p: scorecard_presenter} if !self.printable_cards_includes_player?(@print_cards, player)
     end
       
     render layout: false
@@ -76,9 +78,9 @@ class ScorecardsController < BaseController
  
   def printable_cards_includes_player?(printable_cards, player)
     printable_cards.each do |card|
-      return true if card[:primary].golf_outing.user == player
+      return true if card[:p].primary_scorecard.golf_outing.user == player
       
-      card[:other].each do |other|
+      card[:p].secondary_scorecards.each do |other|
         unless other.golf_outing.blank?
           return true if other.golf_outing.user == player
         end
@@ -104,11 +106,14 @@ class ScorecardsController < BaseController
   
   def fetch_scorecard
     scorecard_info = FetchingTools::ScorecardFetching.fetch_scorecards_and_related(params[:id])
-        
-    @scorecard = scorecard_info[:scorecard]
+    
     @tournament_day = scorecard_info[:tournament_day]
     @tournament = scorecard_info[:tournament]
-    @other_scorecards = scorecard_info[:other_scorecards]
+    
+    scorecard = scorecard_info[:scorecard]
+    other_scorecards = scorecard_info[:other_scorecards]
+    
+    @scorecard_presenter = Presenters::ScorecardPresenter.new({primary_scorecard: @scorecard, secondary_scorecards: @other_scorecards})
   end
   
 end

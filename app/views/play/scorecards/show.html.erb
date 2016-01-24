@@ -5,17 +5,15 @@
 </ol>
 
 <p>
-  <%= link_to "View Leaderboard", play_tournament_leaderboard_path(@scorecard.tournament_day.tournament, day: @scorecard.tournament_day), class: "btn btn-primary btn-xs", role: "button" %>
+  <%= link_to "View Leaderboard", play_tournament_leaderboard_path(@tournament, day: @tournament_day), class: "btn btn-primary btn-xs", role: "button" %>
 </p>
 
 <% cache(cache_key_for_scorecard(@scorecard.id)) do %>
-  <%= render partial: '/shared/scorecards/standard', locals: {primary_scorecard: @scorecard, other_scorecards: @other_scorecards, print_mode: false} %>
+  <%= render partial: '/shared/scorecards/standard', locals: {p: @scorecard_presenter, print_mode: false} %>
 <% end -%>
 
-<% if @scorecard.golf_outing.tournament_group.golf_outings.count > 1 -%>
-  <% if @tournament_day.user_can_become_designated_scorer(current_user, @scorecard) -%>
-    <p><%= link_to "Become Designated Scorer", play_scorecard_become_designated_scorer_path(@scorecard), class: "btn btn-warning", method: :patch, role: "button" %></p>
-  <% elsif !@scorecard.designated_editor.blank? -%>
-    <p>Designated Scorer: <%= @scorecard.designated_editor.complete_name %></p>
-  <% end -%>
+<% if @scorecard_presenter.user_can_become_designated_scorer?(current_user) -%>
+  <p><%= link_to "Become Designated Scorer", play_scorecard_become_designated_scorer_path(@scorecard_presenter.primary_scorecard), class: "btn btn-warning", method: :patch, role: "button" %></p>
+<% elsif !@scorecard_presenter.designated_scorer.blank? -%>
+  <p>Designated Scorer: <%= @scorecard_presenter.designated_scorer.complete_name %></p>
 <% end -%>

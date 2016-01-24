@@ -80,10 +80,13 @@ class Play::ScorecardsController < BaseController
   def fetch_scorecard    
     scorecard_info = FetchingTools::ScorecardFetching.fetch_scorecards_and_related(params[:id])
         
-    @scorecard = scorecard_info[:scorecard]
     @tournament_day = scorecard_info[:tournament_day]
     @tournament = scorecard_info[:tournament]
+    
+    @scorecard = scorecard_info[:scorecard]
     @other_scorecards = scorecard_info[:other_scorecards]
+    
+    @scorecard_presenter = Presenters::ScorecardPresenter.new({primary_scorecard: @scorecard, secondary_scorecards: @other_scorecards})
   end
   
 end
