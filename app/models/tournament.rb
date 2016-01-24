@@ -182,9 +182,7 @@ class Tournament < ActiveRecord::Base
     self.tournament_days.each do |day|
       day.tournament_groups.each do |group|
         group.golf_outings.each do |outing|
-          outing.scorecards.each do |card|
-            card.set_course_handicap(true)
-          end
+          outing.scorecard.set_course_handicap(true)
         end
       end
     end

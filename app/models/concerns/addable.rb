@@ -51,11 +51,9 @@ module Addable
   def remove_player_from_group(tournament_group, user, remove_from_teams = false)
     Tournament.transaction do    
       self.golf_outings.each do |outing|
-        outing.scorecards.each do |scorecard|
-          if user.id == scorecard.designated_editor_id
-            scorecard.designated_editor_id = nil
-            scorecard.save
-          end
+        if user.id == outing.scorecard.designated_editor_id
+          scorecard.designated_editor_id = nil
+          scorecard.save
         end
     
         if outing.user == user
@@ -130,14 +128,14 @@ module Addable
   def player_course_handicap_for_player(p, f = nil)
     golf_outing = self.golf_outing_for_player(p) #in multi-day with manual registration, might not match
     unless golf_outing.blank?
-      golf_outing.scorecards.first.set_course_handicap(true) if self.golf_outing_for_player(p).course_handicap == 0 #re-calc handicap if we do not have one
+      golf_outing.scorecard.set_course_handicap(true) if self.golf_outing_for_player(p).course_handicap == 0 #re-calc handicap if we do not have one
       player_course_handicap = self.golf_outing_for_player(p).course_handicap
 
       unless f.blank?
         if self.golf_outing_for_player(p).course_handicap == 0 #re-calc handicap if we do not have one
           Rails.logger.debug { "Re-Calculating Course Handicap AGAIN for #{p.complete_name}" }
           
-          golf_outing.scorecards.first.set_course_handicap(true) unless golf_outing.scorecards.blank?
+          golf_outing.scorecard.set_course_handicap(true) unless golf_outing.scorecard.blank?
 
           player_course_handicap = p.course_handicap(self.course, f.course_tee_box)
           

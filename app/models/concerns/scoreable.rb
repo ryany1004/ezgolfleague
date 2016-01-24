@@ -2,15 +2,11 @@ module Scoreable
   extend ActiveSupport::Concern
   
   def primary_scorecard_for_user(user)
-    eager_groups = TournamentGroup.includes(golf_outings: [{scorecards: :scores}, :user]).where(tournament_day: self)
+    eager_groups = TournamentGroup.includes(golf_outings: [{scorecard: :scores}, :user]).where(tournament_day: self)
     
     eager_groups.each do |group|
       group.golf_outings.each do |golf_outing|
-        if golf_outing.user == user
-          scorecard = golf_outing.scorecards.first
-
-          return scorecard
-        end
+        return golf_outing.scorecard if golf_outing.user == user
       end
     end
     
@@ -47,14 +43,12 @@ module Scoreable
   
   def has_scores?
     #TODO: short-cut - check for tournament day results objects? is that dangerous? 
-    eager_groups = TournamentGroup.includes(golf_outings: [{scorecards: :scores}, :user]).where(tournament_day: self)
+    eager_groups = TournamentGroup.includes(golf_outings: [{scorecard: :scores}, :user]).where(tournament_day: self)
     
     eager_groups.each do |group|
       group.golf_outings.each do |golf_outing|
-        golf_outing.scorecards.each do |scorecard|
-          scorecard.scores.each do |score|
-            return true if score.strokes > 0
-          end
+        golf_outing.scorecard.scores.each do |score|
+          return true if score.strokes > 0
         end
       end
     end

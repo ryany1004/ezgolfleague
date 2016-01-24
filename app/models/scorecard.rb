@@ -1,7 +1,7 @@
 class Scorecard < ActiveRecord::Base
   include Servable
   
-  belongs_to :golf_outing, inverse_of: :scorecards
+  belongs_to :golf_outing, inverse_of: :scorecard
   has_many :scores, -> { order("sort_order") }, inverse_of: :scorecard, :dependent => :destroy
   has_many :game_type_metadatum, inverse_of: :scorecard, :dependent => :destroy
   has_many :tournament_day_results, inverse_of: :primary_scorecard, :dependent => :destroy, :foreign_key => "user_primary_scorecard_id"

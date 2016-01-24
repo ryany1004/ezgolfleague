@@ -13,9 +13,9 @@ class ScorecardsController < BaseController
     
     @page_title = "Scorecards"
     
-    @eager_groups = TournamentGroup.includes(golf_outings: [{scorecards: :scores}, :user]).where(tournament_day: @tournament_day)
-        
-    #Fetch scorecards and group into groups, vs other way around
+    @eager_groups = TournamentGroup.includes(golf_outings: [{scorecard: :scores}, :user]).where(tournament_day: @tournament_day)
+    
+    #TODO: Fetch scorecards and group into groups, vs other way around
     #@scorecards = Scorecard.where()
   end
   
