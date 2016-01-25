@@ -91,6 +91,16 @@ class Tournament < ActiveRecord::Base
     end
   end
   
+  def finalize
+    self.tournament_days.each do |day|
+      day.assign_payouts_from_scores
+      
+      day.contests.each do |contest|
+        contest.score_contest
+      end
+    end
+  end
+  
   ##
   
   def dues_for_user(user, include_credit_card_fees = false)

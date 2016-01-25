@@ -2,10 +2,13 @@ module Addable
   extend ActiveSupport::Concern
 
   def add_player_to_group(tournament_group, user, paying_with_credit_card = false, confirmed = true)
-    Tournament.transaction do 
-      team = Team.create!(tournament_group: tournament_group)
-      outing = GolfOuting.create!(team: team, user: user, confirmed: confirmed)
+    Tournament.transaction do
+      Rails.logger.debug { "Adding to Group" }
+      
+      outing = GolfOuting.create!(tournament_group: tournament_group, user: user, confirmed: confirmed)
       scorecard = Scorecard.create!(golf_outing: outing)
+
+      Rails.logger.debug { "Added to Group" }
 
       self.assign_players_to_flights      
       flight = self.flight_for_player(user)
@@ -13,6 +16,8 @@ module Addable
 
       outing.course_tee_box = flight.course_tee_box
       outing.save
+      
+      Rails.logger.debug { "Outing Saved" }
     
       self.course_holes.each_with_index do |hole, i|
         score = Score.create!(scorecard: scorecard, course_hole: hole, sort_order: i)

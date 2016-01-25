@@ -16,6 +16,12 @@ class Scorecard < ActiveRecord::Base
   end
   
   def set_course_handicap(force_recalculation = false)
+    if self.tournament_day.flight_for_player(self.golf_outing.user).blank?
+      logger.info { "No Flight for User: #{self.golf_outing.user.complete_name}" }
+    
+      return
+    end
+    
     if force_recalculation == true or (self.golf_outing.course_handicap.blank? or self.golf_outing.course_handicap == 0)
       calculated_course_handicap = self.golf_outing.user.course_handicap(self.tournament_day.course, self.golf_outing.course_tee_box)
       calculated_course_handicap = 0 if calculated_course_handicap.blank?

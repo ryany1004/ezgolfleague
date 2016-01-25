@@ -4,8 +4,8 @@
 # model remove the '{}' from the fixture names and add the columns immediately
 # below each fixture, per the syntax in the comments below
 #
-one: {}
-# column: value
-#
-two: {}
-#  column: value
+brunswickjune2016payout1:
+  flight: brunswickjune2016flight1
+  amount: 100.0
+  points: 10
+  sort_order: 1

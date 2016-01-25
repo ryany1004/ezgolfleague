@@ -181,13 +181,7 @@ class TournamentsController < BaseController
     
       @players = @tournament.players
 
-      @tournament.tournament_days.each do |day|
-        day.assign_payouts_from_scores
-        
-        day.contests.each do |contest|
-          contest.score_contest
-        end
-      end
+      @tournament.finalize
       
       @tournament.reload
     else

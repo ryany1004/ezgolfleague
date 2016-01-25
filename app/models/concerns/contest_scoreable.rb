@@ -20,11 +20,13 @@ module ContestScoreable
   end
   
   def score_total_skins_contest
+    Rails.logger.debug { "Scoring Total Skins Contest" }
+    
     self.remove_results
     self.save
     
     gross_winners = self.users_with_skins(true, true)
-    net_winners = self.users_with_skins(false)
+    net_winners = self.users_with_skins(false, false)
     
     all_winners = []
     
@@ -68,7 +70,7 @@ module ContestScoreable
   
   def users_with_skins(use_gross, gross_skins_require_birdies = false)
     all_winners = []
-
+    
     self.course_holes.each do |hole|
       users_getting_skins = []
       gross_birdie_skins = []
@@ -76,31 +78,33 @@ module ContestScoreable
 
       self.users.each do |user|
         if self.tournament_day.tournament.includes_player?(user)
-          score = self.tournament_day.player_score(user, use_gross, holes = [hole.hole_number])
+          score = self.tournament_day.compute_player_score(user, use_gross, holes = [hole.hole_number])
 
           unless score.blank? || score == 0
-            if gross_skins_require_birdies == true #check if gross birdie
-              if gross_score <= (hole.par - 1) #gross birdies or better count
-                birdie_skins << user
-              end
-            else #regular counting
+            if gross_skins_require_birdies == true #check if gross birdie                            
+              gross_birdie_skins << user if score <= (hole.par - 1) #gross birdies or better count
+            else #regular counting              
               user_scores << {user: user, score: score}
             end
+          else
+            Rails.logger.debug { "Score Blank - Not Scoring Contest. This is weird. #{user.complete_name}" }
           end
+        else
+          Rails.logger.debug { "Tournament Day Does Not Include Contest Player - This is Weird. #{user.complete_name}" }
         end
       end
 
       if gross_skins_require_birdies == true
-        gross_birdie_skins.each do |user|
+        gross_birdie_skins.each do |user|          
           users_getting_skins << user
         end
       else
         user_scores.sort! { |x,y| x[:score] <=> y[:score] }
         
         unless user_scores.blank?
-          if user_scores.count == 1
+          if user_scores.count == 1            
             users_getting_skins << user_scores[0][:user]
-          elsif user_scores.count > 1
+          elsif user_scores.count > 1            
             users_getting_skins << user_scores[0][:user] if  user_scores[0] != user_scores[1] #if there is a tie, they do not count
           end
         end
