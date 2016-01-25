@@ -268,7 +268,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  airbrake
+  airbrake (~> 5.0)
   attr_encrypted
   aws-sdk
   bootstrap-sass (~> 3.3.4)
