@@ -55,7 +55,7 @@ module Addable
 
   def remove_player_from_group(tournament_group, user, remove_from_teams = false)
     Tournament.transaction do    
-      self.golf_outings.each do |outing|
+      tournament_group.golf_outings.each do |outing|
         if user.id == outing.scorecard.designated_editor_id
           scorecard.designated_editor_id = nil
           scorecard.save
