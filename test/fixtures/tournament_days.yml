@@ -4,8 +4,9 @@
 # model remove the '{}' from the fixture names and add the columns immediately
 # below each fixture, per the syntax in the comments below
 #
-one: {}
-# column: value
-#
-two: {}
-#  column: value
+brunswickjune2016dayone:
+  tournament: tournamentjune2016
+  course: beachwood
+  game_type_id: 1
+  tournament_at: 2016-06-10 08:00:00
+  course_holes: beachwood1, beachwood2, beachwood3, beachwood4, beachwood5, beachwood6, beachwood7, beachwood8, beachwood9, beachwood10, beachwood11, beachwood12, beachwood13, beachwood14, beachwood15, beachwood16, beachwood17, beachwood18

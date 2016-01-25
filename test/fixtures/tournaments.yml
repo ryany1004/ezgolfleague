@@ -4,8 +4,10 @@
 # model remove the '{}' from the fixture names and add the columns immediately
 # below each fixture, per the syntax in the comments below
 #
-one: {}
-# column: value
-#
-two: {}
-#  column: value
+tournamentjune2016:
+  league: brunswick
+  name: Brunswick June 2016
+  signup_opens_at: 2016-01-01
+  signup_closes_at: 2016-06-01
+  max_players: 100
+  dues_amount: 100.0

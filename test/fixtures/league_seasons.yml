@@ -4,8 +4,9 @@
 # model remove the '{}' from the fixture names and add the columns immediately
 # below each fixture, per the syntax in the comments below
 #
-one: {}
-# column: value
-#
-two: {}
-#  column: value
+
+brunswick2016:
+  name: Brunswick 2016
+  starts_at: 2016-01-01
+  ends_at: 2016-12-31
+  league: brunswick

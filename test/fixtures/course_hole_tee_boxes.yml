@@ -4,8 +4,111 @@
 # model remove the '{}' from the fixture names and add the columns immediately
 # below each fixture, per the syntax in the comments below
 #
-one: {}
-# column: value
-#
-two: {}
-#  column: value
+
+chtb1:
+  course_hole: beachwood1
+  course_tee_box: mens_green
+  description: Men's Green
+  yardage: 447
+
+chtb2:
+  course_hole: beachwood2
+  course_tee_box: mens_green
+  description: Men's Green
+  yardage: 143
+
+chtb3:
+  course_hole: beachwood3
+  course_tee_box: mens_green
+  description: Men's Green
+  yardage: 340
+
+chtb4:
+  course_hole: beachwood4
+  course_tee_box: mens_green
+  description: Men's Green
+  yardage: 347
+
+chtb5:
+  course_hole: beachwood5
+  course_tee_box: mens_green
+  description: Men's Green
+  yardage: 568
+
+chtb6:
+  course_hole: beachwood6
+  course_tee_box: mens_green
+  description: Men's Green
+  yardage: 149
+
+chtb7:
+  course_hole: beachwood7
+  course_tee_box: mens_green
+  description: Men's Green
+  yardage: 533
+
+chtb8:
+  course_hole: beachwood8
+  course_tee_box: mens_green
+  description: Men's Green
+  yardage: 439
+
+chtb9:
+  course_hole: beachwood9
+  course_tee_box: mens_green
+  description: Men's Green
+  yardage: 207
+
+chtb10:
+  course_hole: beachwood10
+  course_tee_box: mens_green
+  description: Men's Green
+  yardage: 577
+
+chtb11:
+  course_hole: beachwood11
+  course_tee_box: mens_green
+  description: Men's Green
+  yardage: 183
+
+chtb12:
+  course_hole: beachwood12
+  course_tee_box: mens_green
+  description: Men's Green
+  yardage: 286
+
+chtb13:
+  course_hole: beachwood13
+  course_tee_box: mens_green
+  description: Men's Green
+  yardage: 322
+
+chtb14:
+  course_hole: beachwood14
+  course_tee_box: mens_green
+  description: Men's Green
+  yardage: 526
+
+chtb15:
+  course_hole: beachwood15
+  course_tee_box: mens_green
+  description: Men's Green
+  yardage: 394
+
+chtb16:
+  course_hole: beachwood16
+  course_tee_box: mens_green
+  description: Men's Green
+  yardage: 391
+
+chtb17:
+  course_hole: beachwood17
+  course_tee_box: mens_green
+  description: Men's Green
+  yardage: 212
+
+chtb18:
+  course_hole: beachwood18
+  course_tee_box: mens_green
+  description: Men's Green
+  yardage: 353

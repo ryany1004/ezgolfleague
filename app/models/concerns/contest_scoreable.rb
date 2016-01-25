@@ -23,7 +23,7 @@ module ContestScoreable
     self.remove_results
     self.save
     
-    gross_winners = self.users_with_skins(true)
+    gross_winners = self.users_with_skins(true, true)
     net_winners = self.users_with_skins(false)
     
     all_winners = []
@@ -66,7 +66,7 @@ module ContestScoreable
     end
   end
   
-  def users_with_skins(use_gross)
+  def users_with_skins(use_gross, gross_skins_require_birdies = false)
     all_winners = []
 
     self.course_holes.each do |hole|
@@ -76,30 +76,34 @@ module ContestScoreable
 
       self.users.each do |user|
         if self.tournament_day.tournament.includes_player?(user)
-          score = self.tournament_day.player_score(user, !use_gross, holes = [hole.hole_number])
+          score = self.tournament_day.player_score(user, use_gross, holes = [hole.hole_number])
 
           unless score.blank? || score == 0
-            user_scores << {user: user, score: score}
-
-            #check if gross birdie
-            if use_gross == true
-              gross_score = score
-            else
-              gross_score = self.tournament_day.player_score(user, true, holes = [hole.hole_number])
-            end
-
-            if gross_score == (hole.par - 1)
-              birdie_skins << user
+            if gross_skins_require_birdies == true #check if gross birdie
+              if gross_score <= (hole.par - 1) #gross birdies or better count
+                birdie_skins << user
+              end
+            else #regular counting
+              user_scores << {user: user, score: score}
             end
           end
         end
       end
 
-      user_scores.sort! { |x,y| x[:score] <=> y[:score] }
-      users_getting_skins << user_scores[0][:user] unless user_scores.blank?
-      
-      gross_birdie_skins.each do |user|
-        users_getting_skins << user
+      if gross_skins_require_birdies == true
+        gross_birdie_skins.each do |user|
+          users_getting_skins << user
+        end
+      else
+        user_scores.sort! { |x,y| x[:score] <=> y[:score] }
+        
+        unless user_scores.blank?
+          if user_scores.count == 1
+            users_getting_skins << user_scores[0][:user]
+          elsif user_scores.count > 1
+            users_getting_skins << user_scores[0][:user] if  user_scores[0] != user_scores[1] #if there is a tie, they do not count
+          end
+        end
       end
 
       all_winners << {hole: hole, winners: users_getting_skins}

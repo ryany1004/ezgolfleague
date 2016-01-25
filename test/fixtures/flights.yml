@@ -4,8 +4,9 @@
 # model remove the '{}' from the fixture names and add the columns immediately
 # below each fixture, per the syntax in the comments below
 #
-one: {}
-# column: value
-#
-two: {}
-#  column: value
+brunswickjune2016flight1:
+  flight_number: 1
+  lower_bound: 0
+  upper_bound: 1000
+  course_tee_box: mens_green
+  tournament_day: brunswickjune2016dayone
