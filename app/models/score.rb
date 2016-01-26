@@ -6,7 +6,7 @@ class Score < ActiveRecord::Base
   
   after_save :touch_tournament
   
-  def touch_tournament
+  def touch_tournament #NOTE: Do we want to move this?
     self.scorecard.tournament_day.touch
     self.scorecard.tournament_day.tournament.touch
   end
