@@ -15,7 +15,7 @@ class Play::PaymentsController < BaseController
       @contest = Contest.find(params[:contest_id])
       
       @payment_instructions = "Thanks for paying your contest dues via EZ Golf League. Please enter your information below."
-      @payment_amount = @contest.dues_for_user(current_user)
+      @payment_amount = @contest.dues_for_user(current_user, true)
       @cost_breakdown_lines = @contest.cost_breakdown_for_user(current_user)
     elsif params[:payment_type] == 'tournament_dues'
       @tournament = Tournament.find(params[:tournament_id])
@@ -47,7 +47,7 @@ class Play::PaymentsController < BaseController
     elsif params[:contest_id] != nil
       contest = Contest.find(params[:contest_id])
       
-      amount = contest.dues_for_user(current_user)
+      amount = contest.dues_for_user(current_user, true)
       api_key = contest.tournament_day.tournament.league.stripe_secret_key
       charge_description = "#{current_user.complete_name} Contest Dues"
     elsif params[:league_id] != nil

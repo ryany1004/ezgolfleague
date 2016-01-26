@@ -41,14 +41,14 @@ class Contest < ActiveRecord::Base
   
   ##
   
-  def dues_for_user(user)
+  def dues_for_user(user, include_credit_card_fees = false)
     membership = user.league_memberships.where("league_id = ?", self.tournament_day.tournament.league.id).first
 
     unless membership.blank?
       dues_amount = self.dues_amount
       
       credit_card_fees = 0
-      credit_card_fees = Stripe::StripeFees.fees_for_transaction_amount(dues_amount) if dues_amount != 0
+      credit_card_fees = Stripe::StripeFees.fees_for_transaction_amount(dues_amount) if include_credit_card_fees == true
 
       return (dues_amount + credit_card_fees).round(2)
     else
