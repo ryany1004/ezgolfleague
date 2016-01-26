@@ -170,12 +170,16 @@ module ContestScoreable
     
     #set winner
     unless results.blank? || results.count == 0
-      total_value = self.users.count * self.dues_amount
+      if self.overall_winner_payout_amount.blank?
+        total_value = self.users.count * self.dues_amount #automatic distribution
+      else
+        total_value = self.overall_winner_payout_amount
+      end
                   
       winner = results[0][:user]
       result_value = results[0][:score]
-      
-      self.overall_winner = ContestResult.create(winner: winner, payout_amount: total_value, result_value: "#{result_value}")
+
+      self.overall_winner = ContestResult.create(winner: winner, payout_amount: total_value, result_value: "#{result_value}", points: self.overall_winner_points)
       self.save
     end
   end

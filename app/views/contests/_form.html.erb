@@ -31,6 +31,16 @@
     <div class="well">  
         <%= f.input :dues_amount, :label => 'Dues Amount ($)' %>
     </div>
+    
+    <% if @contest.allows_overall_winner_points_and_payouts? -%>    
+      <h3>Overall Winner Payout & Points</h3>
+      <p>Specifying a payout amount will override the automatic distribution of entry dues to the winner.</p>
+      <div class="well">  
+          <%= f.input :overall_winner_payout_amount, :label => 'Payout Amount ($)' %>
+          
+          <%= f.input :overall_winner_points, :label => 'Points' %>
+      </div>
+    <% end -%>
   <% end -%>
   
   <div class="form-actions">

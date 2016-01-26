@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160124175554) do
+ActiveRecord::Schema.define(version: 20160126011858) do
 
   create_table "contest_holes", force: :cascade do |t|
     t.integer  "contest_id"
@@ -43,10 +43,12 @@ ActiveRecord::Schema.define(version: 20160124175554) do
     t.integer  "contest_type"
     t.integer  "overall_winner_contest_result_id"
     t.decimal  "overall_winner_payout_amount"
-    t.datetime "created_at",                                     null: false
-    t.datetime "updated_at",                                     null: false
+    t.datetime "created_at",                                             null: false
+    t.datetime "updated_at",                                             null: false
     t.integer  "tournament_day_id"
-    t.decimal  "dues_amount",                      default: 0.0
+    t.decimal  "dues_amount",                             default: 0.0
+    t.boolean  "overall_winner_payment_amount_automatic", default: true
+    t.integer  "overall_winner_points",                   default: 0
   end
 
   add_index "contests", ["overall_winner_contest_result_id"], name: "index_contests_on_overall_winner_contest_result_id"
@@ -157,7 +159,6 @@ ActiveRecord::Schema.define(version: 20160124175554) do
   add_index "game_type_metadata", ["search_key"], name: "index_game_type_metadata_on_search_key"
 
   create_table "golf_outings", force: :cascade do |t|
-    t.integer  "team_id"
     t.integer  "user_id"
     t.datetime "created_at",                          null: false
     t.datetime "updated_at",                          null: false
@@ -171,7 +172,6 @@ ActiveRecord::Schema.define(version: 20160124175554) do
 
   add_index "golf_outings", ["course_tee_box_id"], name: "index_golf_outings_on_course_tee_box_id"
   add_index "golf_outings", ["is_confirmed"], name: "index_golf_outings_on_is_confirmed"
-  add_index "golf_outings", ["team_id"], name: "index_golf_outings_on_team_id"
   add_index "golf_outings", ["tournament_group_id"], name: "index_golf_outings_on_tournament_group_id"
   add_index "golf_outings", ["user_id"], name: "index_golf_outings_on_user_id"
 

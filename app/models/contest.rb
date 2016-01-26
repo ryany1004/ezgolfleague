@@ -77,6 +77,14 @@ class Contest < ActiveRecord::Base
     end
   end
   
+  def allows_overall_winner_points_and_payouts?
+    if self.contest_type >= 4 && self.contest_type <= 7
+      return true
+    else
+      return false
+    end
+  end
+  
   def contest_results
     if self.is_by_hole? == false
       if self.overall_winner.blank?

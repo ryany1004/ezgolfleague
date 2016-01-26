@@ -154,7 +154,7 @@ class ContestsController < BaseController
   end
   
   def contest_params
-    params.require(:contest).permit(:name, :contest_type, :dues_amount, :course_hole_ids => [])
+    params.require(:contest).permit(:name, :contest_type, :dues_amount, :overall_winner_payout_amount, :overall_winner_points, :course_hole_ids => [])
   end  
 end
 
