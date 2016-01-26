@@ -9,3 +9,11 @@ brunswickjune2016netgrossskinscontest:
   name: Net + Gross Skins
   contest_type: 8
   dues_amount: 10.0
+  
+netlowwithmanualoverride:
+  tournament_day: brunswickjune2016dayone
+  name: Manual Net Low w/ Override
+  contest_type: 4
+  dues_amount: 10.0
+  overall_winner_payout_amount: 100.0
+  overall_winner_points: 10
