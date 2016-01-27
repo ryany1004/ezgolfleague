@@ -56,9 +56,10 @@ module ContestScoreable
       winners_sum += w[:winners].count
     end
         
-    value_per_skin = ((self.users.count * self.dues_amount) / winners_sum).floor
+    total_pot = (self.users.count * self.dues_amount)
+    value_per_skin = (total_pot / winners_sum).floor
     
-    Rails.logger.info { "Value Per Skin: #{value_per_skin}" }
+    Rails.logger.info { "Value Per Skin: #{value_per_skin}. Total pot: #{total_pot}. Number of winners: #{winners_sum}" }
     
     all_winners.each do |winner_info|
       hole = winner_info[:hole]
