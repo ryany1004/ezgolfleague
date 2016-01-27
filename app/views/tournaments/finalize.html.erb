@@ -7,88 +7,38 @@
 <%= render partial: '/shared/tournaments/manage', locals: {tournament: @tournament, stage: @stage_name} %>
 
 <% if @tournament.players.count == 0 -%>
-<p><strong>This tournament does not yet have any players and cannot be finalized.</strong></p>
+  <p><strong>This tournament does not yet have any players and cannot be finalized.</strong></p>
 <% else -%>
-<div class="row">
-  <div class="col-md-12">
-    <div class="panel panel-default">
-      <div class="panel-heading">
-        <h3 class="panel-title">Calculated Payouts</h3>
-      </div>
-      <table class="table table-striped">
-      	<thead>
-      		<tr>
-            <th>Day</th>
-            <th>Flight</th>
-            <th>Player</th>
-            <th>Gross</th>
-            <th>Course Handicap</th>
-      			<th>Amount</th>
-            <th>Points</th>
-      		</tr>
-      	</thead>
-      	<tbody>
-          <% @tournament.tournament_days.each do |day| -%>
-            <% day.flights.each do |flight| -%>
-              <% flight.payouts.each do |payout| -%>
-            		<tr>
-                  <td><%= day.tournament_at.to_s(:short) %></td>
-                  <td><%= payout.flight.flight_number %></td>
-                  <td><%= payout.user.complete_name unless payout.user.blank? %></td>
-                  <td><%= day.player_score(payout.user) unless payout.user.blank? %></td>
-                  <td><%= day.golf_outing_for_player(payout.user).course_handicap.to_i unless payout.user.blank? || day.golf_outing_for_player(payout.user).blank? %></td>
-            			<td><%= number_to_currency(payout.amount) %></td>
-            			<td><%= payout.points.to_i %></td>
-            		</tr>
-              <% end -%>
-            <% end -%>
-          <% end -%>
-      	</tbody>
-        <tfoot>
-      		<tr>
-            <th>&nbsp;</th>
-      			<th>&nbsp;</th>
-            <th>&nbsp;</th>
-      			<th>&nbsp;</th>
-            <th>&nbsp;</th>
-      			<th>&nbsp;</th>
-            <th><%= link_to 'Confirm & Finalize', league_tournament_confirm_finalization_path(@tournament.league, @tournament), :method => :patch, :class => 'btn btn-danger' %></th>
-      		</tr>
-        </tfoot>
-      </table>
-    </div>
-  </div>
-  
-  <% @tournament.tournament_days.each do |day| -%>
-    <div class="col-md-12">
-        <h2><%= day.pretty_day(true) %>Scorecards</h2>
-    
-        <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
-          <% @players.each_with_index do |player, i| %>
-            <% unless day.primary_scorecard_for_user(player).blank? -%>
-            <div class="panel panel-default">
-              <div class="panel-heading" role="tab" id="heading<%= i %>">
-                <h4 class="panel-title">
-                  <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapse<%= i %>" aria-expanded="false" aria-controls="collapse<%= i %>">
-                    <%= player.complete_name %><% if !day.primary_scorecard_for_user(player).is_confirmed? -%> (Unconfirmed by Player)<% end -%>
-                  </a>
-                </h4>
-              </div>
-              <div id="collapse<%= i %>" class="panel-collapse collapse <% if i == 0 -%>in<% end -%>" role="tabpanel" aria-labelledby="heading<%= i %>">
-                <div class="panel-body">
-                  <% cache(cache_key_for_scorecard(day.primary_scorecard_for_user(player).id)) do %>
-                    <%= render partial: '/shared/scorecards/show', locals: {scorecard: day.primary_scorecard_for_user(player), split_holes: split_holes_for_course_tournament(day), split_scores: split_scores_for_scorecard(day.primary_scorecard_for_user(player), day.course_holes.count), tournament_day: day, handicap_allowance: day.handicap_allowance(player)} %>
-                  <% end -%>
-                  <p>
-                    <%= link_to "Edit This Scorecard", edit_scorecard_path(day.primary_scorecard_for_user(player)), class: "btn btn-warning", role: "button" %>
-                  </p>
-                </div>
+  <!-- Progress Bar -->
+  <div class="modal fade" id="progressModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title">Finalize Tournament</h4>
+        </div>
+        <div class="modal-body">
+          <p>Finalizing a tournament will analyze scores and determine payouts by flight as well as for contests. This process takes a few moments.</p>
+          <%= link_to "Start Finalization", league_tournament_run_finalization_path(current_user.selected_league, @tournament), :class => 'btn btn-primary', :role => 'button', remote: true %>
+          <br/><br/>
+          <div class='progress-status text-primary'>
+            
+          </div>
+          <div class='progress progress-striped active'>
+            <div class='progress-bar'>
+              <div class='text-primary'>
+                
               </div>
             </div>
-            <% end -%>
-          <% end -%>
+          </div>
         </div>
-    </div>
-  <% end -%>
-</div>
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+  </div><!-- /.modal -->
+  <script>
+  $(document).ready(function() {
+      $('#progressModal').modal('show');
+  });
+  </script>
+  <!-- End PB -->
 <% end -%>

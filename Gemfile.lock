@@ -179,6 +179,8 @@ GEM
       cocaine (~> 0.5.5)
       mime-types
     pg (0.17.1)
+    progress_job (0.0.4)
+      delayed_job
     puma (2.15.3)
     rack (1.6.4)
     rack-mini-profiler (0.9.8)
@@ -294,6 +296,7 @@ DEPENDENCIES
   nokogiri
   paperclip (~> 4.2.0)
   pg (~> 0.17.1)
+  progress_job
   puma
   rack-mini-profiler
   rails (= 4.2.5.1)

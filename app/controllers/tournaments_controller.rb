@@ -1,5 +1,5 @@
 class TournamentsController < BaseController
-  before_filter :fetch_tournament, :only => [:edit, :update, :destroy, :signups, :manage_holes, :update_holes, :add_signup, :delete_signup, :finalize, :confirm_finalization, :update_course_handicaps, :touch_tournament, :update_auto_schedule, :auto_schedule, :confirmed_players]
+  before_filter :fetch_tournament, :only => [:edit, :update, :destroy, :signups, :manage_holes, :update_holes, :add_signup, :delete_signup, :finalize, :run_finalization, :display_finalization, :confirm_finalization, :update_course_handicaps, :touch_tournament, :update_auto_schedule, :auto_schedule, :confirmed_players]
   before_filter :initialize_form, :only => [:new, :edit]
   before_filter :set_stage
   
@@ -178,15 +178,27 @@ class TournamentsController < BaseController
     
     if @tournament.can_be_finalized?
       @stage_name = "finalize"
-    
-      @players = @tournament.players
 
-      @tournament.finalize
-      
-      @tournament.reload
+      # @tournament.finalize
     else
       redirect_to league_tournament_flights_path(current_user.selected_league, @tournament), :flash => { :error => "This tournament requires flights and payouts before it can be finalized." }
     end
+  end
+  
+  def run_finalization
+    @job = Delayed::Job.enqueue FinalizeJob.new(@tournament)
+  
+    @display_path = league_tournament_display_finalization_path(current_user.selected_league, @tournament)
+  end
+  
+  def display_finalization
+    @page_title = "Finalize Tournament"
+    
+    @stage_name = "finalize"
+  
+    @players = @tournament.players
+
+    @tournament_days = @tournament.tournament_days.includes(tournament_groups: [golf_outings: [:user, :course_tee_box, scorecard: [{scores: :course_hole}]]])
   end
   
   def confirm_finalization

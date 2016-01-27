@@ -176,6 +176,8 @@ Rails.application.routes.draw do
       get 'confirmed_players'
       
       get 'finalize'
+      get 'run_finalization'
+      get 'display_finalization'
       patch 'confirm_finalization'
       
       patch 'update_course_handicaps'

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160126173559) do
+ActiveRecord::Schema.define(version: 20160126221857) do
 
   create_table "contest_holes", force: :cascade do |t|
     t.integer  "contest_id"
@@ -119,9 +119,9 @@ ActiveRecord::Schema.define(version: 20160126173559) do
   end
 
   create_table "delayed_jobs", force: :cascade do |t|
-    t.integer  "priority",   default: 0, null: false
-    t.integer  "attempts",   default: 0, null: false
-    t.text     "handler",                null: false
+    t.integer  "priority",         default: 0, null: false
+    t.integer  "attempts",         default: 0, null: false
+    t.text     "handler",                      null: false
     t.text     "last_error"
     t.datetime "run_at"
     t.datetime "locked_at"
@@ -130,6 +130,9 @@ ActiveRecord::Schema.define(version: 20160126173559) do
     t.string   "queue"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "progress_stage"
+    t.integer  "progress_current", default: 0
+    t.integer  "progress_max",     default: 0
   end
 
   add_index "delayed_jobs", ["priority", "run_at"], name: "delayed_jobs_priority"
