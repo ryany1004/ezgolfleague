@@ -84,7 +84,7 @@ module ContestScoreable
             if gross_skins_require_birdies == true #check if gross birdie                            
               gross_birdie_skins << user if score <= (hole.par - 1) #gross birdies or better count
               
-              Rails.logger.info { "User #{user.complete_name} scored a gross birdie skin for hole #{hole.hole_number}" }
+              Rails.logger.info { "User #{user.complete_name} scored a gross birdie skin for hole #{hole.hole_number} w/ score #{score}" }
             else #regular counting              
               user_scores << {user: user, score: score}
             end
