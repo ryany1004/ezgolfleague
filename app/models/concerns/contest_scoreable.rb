@@ -78,13 +78,19 @@ module ContestScoreable
 
       self.users.each do |user|
         if self.tournament_day.tournament.includes_player?(user)
-          score = self.tournament_day.compute_player_score(user, !use_gross, holes = [hole.hole_number])
+          if use_gross == true
+            use_handicap = false
+          else
+            use_handicap = true
+          end
+          
+          score = self.tournament_day.compute_player_score(user, use_handicap, holes = [hole.hole_number])
 
           unless score.blank? || score == 0
             if gross_skins_require_birdies == true #check if gross birdie                            
               gross_birdie_skins << user if score <= (hole.par - 1) #gross birdies or better count
               
-              Rails.logger.info { "User #{user.complete_name} scored a gross birdie skin for hole #{hole.hole_number} w/ score #{score}" }
+              Rails.logger.info { "User #{user.complete_name} scored a gross birdie skin for hole #{hole.hole_number} w/ score #{score}. UH #{use_handicap}" }
             else #regular counting              
               user_scores << {user: user, score: score}
             end
