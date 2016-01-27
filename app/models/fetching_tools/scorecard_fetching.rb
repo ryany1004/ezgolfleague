@@ -6,7 +6,7 @@ module FetchingTools
       tournament_day = scorecard.golf_outing.tournament_group.tournament_day
       tournament = tournament_day.tournament
     
-      if tournament.is_past? && tournament_day.game_type.allow_teams == GameTypes::TEAMS_DISALLOWED #in the past, non-team tournament
+      if tournament_day.game_type.allow_teams == GameTypes::TEAMS_DISALLOWED #in the past, non-team tournament
         other_scorecards = []
       else
         other_scorecards = tournament_day.related_scorecards_for_user(scorecard.golf_outing.user)
