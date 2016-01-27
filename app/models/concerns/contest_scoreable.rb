@@ -83,14 +83,16 @@ module ContestScoreable
           unless score.blank? || score == 0
             if gross_skins_require_birdies == true #check if gross birdie                            
               gross_birdie_skins << user if score <= (hole.par - 1) #gross birdies or better count
+              
+              Rails.logger.info { "User #{user.complete_name} scored a gross birdie skin for hole #{hole.hole_number}" }
             else #regular counting              
               user_scores << {user: user, score: score}
             end
           else
-            Rails.logger.debug { "Score Blank - Not Scoring Contest. This is weird. #{user.complete_name}" }
+            Rails.logger.info { "Score Blank - Not Scoring Contest. This is weird. #{user.complete_name}" }
           end
         else
-          Rails.logger.debug { "Tournament Day Does Not Include Contest Player - This is Weird. #{user.complete_name}" }
+          Rails.logger.info { "Tournament Day Does Not Include Contest Player - This is Weird. #{user.complete_name}" }
         end
       end
 
@@ -102,9 +104,13 @@ module ContestScoreable
         user_scores.sort! { |x,y| x[:score] <=> y[:score] }
         
         unless user_scores.blank?
-          if user_scores.count == 1            
+          if user_scores.count == 1
+            Rails.logger.info { "User #{user.complete_name} scored a regular skin for hole #{hole.hole_number}" }
+                    
             users_getting_skins << user_scores[0][:user]
-          elsif user_scores.count > 1            
+          elsif user_scores.count > 1
+            Rails.logger.info { "User #{user.complete_name} scored a regular skin for hole #{hole.hole_number}" }
+                    
             users_getting_skins << user_scores[0][:user] if  user_scores[0] != user_scores[1] #if there is a tie, they do not count
           end
         end
