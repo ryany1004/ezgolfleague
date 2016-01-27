@@ -11,8 +11,7 @@ class Play::TournamentsController < BaseController
     else
       @tournament_day = @tournament.tournament_days.find(params[:tournament_day])
     end
-    
-    #TODO: cache this
+  
     @flights_with_rankings = self.fetch_flights_with_rankings(@tournament_day)
     @flights_with_rankings = self.fetch_combined_flights_with_rankings(@tournament_day, @flights_with_rankings)
 
@@ -24,7 +23,6 @@ class Play::TournamentsController < BaseController
     @tournament_day = @tournament.tournament_days.find(params[:day])
     @user_scorecard = @tournament_day.primary_scorecard_for_user(current_user)
     
-    #TODO: cache this
     @day_flights_with_rankings = self.fetch_flights_with_rankings(@tournament_day)
     @combined_flights_with_rankings = self.fetch_combined_flights_with_rankings(@tournament_day, @day_flights_with_rankings)
     
@@ -104,8 +102,15 @@ class Play::TournamentsController < BaseController
     redirect_to play_dashboard_index_path, :flash => { :success => "Your registration has been canceled." }
   end
   
-  def fetch_flights_with_rankings(tournament_day)  
-    return tournament_day.flights_with_rankings
+  def fetch_flights_with_rankings(tournament_day)
+    flights_with_rankings = Rails.cache.fetch(@tournament_day.flights_with_rankings_cache_key, expires_in: 8.minutes, race_condition_ttl: 10)
+    if flights_with_rankings.blank?
+      flights_with_rankings = tournament_day.flights_with_rankings
+      
+      Rails.cache.write(@tournament_day.flights_with_rankings_cache_key, flights_with_rankings)
+    end
+    
+    return flights_with_rankings
   end
   
   def fetch_combined_flights_with_rankings(tournament_day, day_flights_with_rankings)

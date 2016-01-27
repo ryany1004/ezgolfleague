@@ -11,7 +11,7 @@
     		</tr>
     	</thead>
     	<tbody>
-        <% tournament_day.golfer_teams do |golfer_team| %>
+        <% tournament_day.golfer_teams.each do |golfer_team| %>
           <tr>
             <td><%= team_member_names(golfer_team, false) %></td>
             

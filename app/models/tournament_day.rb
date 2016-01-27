@@ -87,6 +87,10 @@ class TournamentDay < ActiveRecord::Base
     return "leaderboard-json#{self.id}"
   end
   
+  def flights_with_rankings_cache_key
+    return "flightswithrankings-json#{self.id}"
+  end
+  
   def has_payouts?
     self.flights.each do |flight|
       return true if flight.payouts.count > 0
