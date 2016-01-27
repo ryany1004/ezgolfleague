@@ -18,16 +18,18 @@
           <h4 class="modal-title">Finalize Tournament</h4>
         </div>
         <div class="modal-body">
-          <p>Finalizing a tournament will analyze scores and determine payouts by flight as well as for contests. This process takes a few moments. When complete, the page will reload automatically. <strong>Please do not refresh your browser manually.</strong></p>
-          <%= link_to "Start Finalization", league_tournament_run_finalization_path(current_user.selected_league, @tournament), :class => 'btn btn-primary', :role => 'button', remote: true %>
+          <p>Finalizing a tournament will analyze scores and determine payouts by flight as well as for contests.</p>
+          <p>This process takes a few minutes. When complete, the page will reload automatically.</p>
+          <p><strong>Please do not refresh your browser manually.</strong></p>
+          <%= link_to "Start Finalization", league_tournament_run_finalization_path(current_user.selected_league, @tournament), :id => 'finalize-button', :class => 'btn btn-primary', :role => 'button', remote: true %>
           <br/><br/>
           <div class='progress-status text-primary'>
-            
+            0
           </div>
           <div class='progress progress-striped active'>
             <div class='progress-bar'>
               <div class='text-primary'>
-                
+                0%
               </div>
             </div>
           </div>

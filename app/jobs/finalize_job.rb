@@ -17,5 +17,7 @@ class FinalizeJob < ProgressJob::Base
       
       update_progress
     end
+    
+    Rails.logger.info { "FinalizeJob Completed" }
   end
 end

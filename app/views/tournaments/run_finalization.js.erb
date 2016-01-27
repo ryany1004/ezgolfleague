@@ -1,3 +1,5 @@
+$('#finalize-button').hide();
+
 var interval = setInterval(function(){
   $.ajax({
     url: '/progress-job/' + <%= @job.id %>,
@@ -9,6 +11,7 @@ var interval = setInterval(function(){
         $('.progress-status').addClass('text-danger').text(job.progress_stage);
         $('.progress-bar').addClass('progress-bar-danger');
         $('.progress').removeClass('active');
+        
         clearInterval(interval);
       }
 
@@ -24,7 +27,7 @@ var interval = setInterval(function(){
       $('.progress').removeClass('active');
       $('.progress-bar').css('width', '100%').text('100%');
       $('.progress-status').text('Successfully exported!');
-      $('.export-link').show();
+      
       clearInterval(interval);
       
       window.location.replace('<%= h(@display_path) %>');
