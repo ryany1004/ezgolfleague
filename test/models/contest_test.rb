@@ -16,8 +16,8 @@ class ContestTest < ActiveSupport::TestCase
     contest = Contest.where(name: "Net + Gross Skins").first
     contest.add_user(@user)
 
-    @tournament.finalize
-    
+    Delayed::Job.enqueue FinalizeJob.new(@tournament)
+
     results = contest.contest_results
     results_users = results.map(&:winner)
 
@@ -32,7 +32,7 @@ class ContestTest < ActiveSupport::TestCase
     contest = Contest.where(name: "Manual Net Low w/ Override").first
     contest.add_user(@user)
 
-    @tournament.finalize
+    Delayed::Job.enqueue FinalizeJob.new(@tournament)
     
     contest.reload
     result = contest.contest_results.first

@@ -1,0 +1,1 @@
+Delayed::Worker.delay_jobs = !%w[ test ].include?(Rails.env)

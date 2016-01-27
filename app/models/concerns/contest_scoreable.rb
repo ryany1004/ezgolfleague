@@ -65,7 +65,9 @@ module ContestScoreable
       hole = winner_info[:hole]
       contest_hole = self.contest_holes.where(course_hole: hole).first
       
-      winner_info[:winners].each do |winner|
+      winners = winner_info[:winners].uniq #you cannot win twice on the same hole
+      
+      winners.each do |winner|
         ContestResult.create(contest: self, winner: winner, payout_amount: value_per_skin, contest_hole: contest_hole, result_value: "Hole #{hole.hole_number}")
       end
     end

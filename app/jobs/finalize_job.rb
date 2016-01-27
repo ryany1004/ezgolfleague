@@ -1,6 +1,6 @@
 class FinalizeJob < ProgressJob::Base
   def initialize(tournament)
-    super progress_max: 2
+    super progress_max: tournament.tournament_days.count + 1
     
     @tournament = tournament
   end

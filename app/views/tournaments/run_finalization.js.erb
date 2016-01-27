@@ -26,11 +26,11 @@ var interval = setInterval(function(){
       // Job is no loger in database which means it finished successfuly
       $('.progress').removeClass('active');
       $('.progress-bar').css('width', '100%').text('100%');
-      $('.progress-status').text('Successfully exported!');
+      $('.progress-status').text('Finalization Complete!');
       
       clearInterval(interval);
       
       window.location.replace('<%= h(@display_path) %>');
     }
   })
-}, 3000);
+}, 5000);
