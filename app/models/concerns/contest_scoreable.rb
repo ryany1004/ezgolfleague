@@ -34,8 +34,13 @@ module ContestScoreable
       all_winners << w
     end
     
-    net_winners.each do |w|
-      all_winners << w
+    #merge the two sets of winners
+    net_winners.each do |w|      
+      all_winners.each do |all_winner|
+        w[:winners].each do |w2|
+          all_winner[:winners] << w2 if w[:hole] == all_winner[:hole]
+        end
+      end
     end
     
     self.calculate_skins_winners(all_winners)
@@ -53,21 +58,32 @@ module ContestScoreable
   def calculate_skins_winners(all_winners)
     winners_sum = 0
     all_winners.each do |w|
-      winners_sum += w[:winners].count
+      unique_winners = w[:winners].uniq #you cannot win twice on the same hole
+           
+      w[:winners] = unique_winners
+      winners_sum += unique_winners.count
     end
         
     total_pot = (self.users.count * self.dues_amount)
-    value_per_skin = (total_pot / winners_sum).floor
     
-    Rails.logger.info { "Value Per Skin: #{value_per_skin}. Total pot: #{total_pot}. Number of winners: #{winners_sum}" }
+    if total_pot > 0
+      value_per_skin = (total_pot / winners_sum).floor
+    else
+      value_per_skin = 0
+    end
+    
+    Rails.logger.info { "Value Per Skin: #{value_per_skin}. Total pot: #{total_pot}. Number of skins won: #{winners_sum}. Number of total users: #{self.users.count}" }
     
     all_winners.each do |winner_info|
       hole = winner_info[:hole]
       contest_hole = self.contest_holes.where(course_hole: hole).first
+      hole_winners = winner_info[:winners]
       
-      winners = winner_info[:winners].uniq #you cannot win twice on the same hole
+      hole_winners.each do |winner|
+        ##DEBUGGING
+        Rails.logger.info { "Winner for Hole #{hole.hole_number} - #{winner.complete_name}" }
+        ##END DEBUGGING
       
-      winners.each do |winner|
         ContestResult.create(contest: self, winner: winner, payout_amount: value_per_skin, contest_hole: contest_hole, result_value: "Hole #{hole.hole_number}")
       end
     end
@@ -122,12 +138,14 @@ module ContestScoreable
           if user_scores.count == 1                    
             users_getting_skins << user_scores[0][:user]
             
-            Rails.logger.info { "User #{user_scores[0][:user].complete_name} scored a regular skin for hole #{hole.hole_number}" }
+            Rails.logger.info { "User #{user_scores[0][:user].complete_name} eligible for a regular skin for hole #{hole.hole_number}" }
           elsif user_scores.count > 1        
             if user_scores[0] != user_scores[1] #if there is a tie, they do not count
               users_getting_skins << user_scores[0][:user] 
             
-              Rails.logger.info { "User #{user_scores[0][:user].complete_name} scored a regular skin for hole #{hole.hole_number}" }
+              Rails.logger.info { "User #{user_scores[0][:user].complete_name} eligible for a regular skin for hole #{hole.hole_number}" }
+            else
+              Rails.logger.info { "There was a tie - no skin awarded. #{user_scores[0][:user].complete_name} and #{user_scores[1][:user].complete_name} for hole #{hole.hole_number}" }
             end
           end
         end
