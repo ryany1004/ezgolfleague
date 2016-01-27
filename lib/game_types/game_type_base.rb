@@ -423,7 +423,7 @@ module GameTypes
         
         ranked_flights = self.tournament.combine_rankings(rankings)
       else
-        eligible_player_list = self.tournament.players
+        eligible_player_list = self.tournament.players.map(&:id)
         
         ranked_flights = self.flights_with_rankings
       end
