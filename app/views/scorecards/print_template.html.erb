@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>EZ Golf League</title>
+  <%= stylesheet_link_tag 'application', media: 'all' %>
+  <%= javascript_include_tag 'application' %>
+  <%= csrf_meta_tags %>
+</head>
+  <body "data-no-turbolink">
+    <div class="container master-container">
+      <script>
+          javascript:window.print()
+      </script>
+      
+      <% print_cards.each_with_index do |print_card, index| -%>
+        <% if index % 2 == 0 -%>
+          <h2/>
+        <% end -%>
+        
+        <% cache(cache_key_for_scorecard(print_card[:p].primary_scorecard.id)) do %>
+          <%= render partial: '/shared/scorecards/standard', locals: {p: print_card[:p], print_mode: true} %>
+        <% end -%>
+      
+      <% end -%>
+
+    </div>
+  </body>
+</html>

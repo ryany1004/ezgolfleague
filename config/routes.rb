@@ -194,6 +194,8 @@ Rails.application.routes.draw do
   
   resources :scorecards, :except => [:delete] do
     get 'print', on: :collection
+    get 'run_print', on: :collection
+    get 'print_display', on: :collection
   end
 
   resources :courses do
