@@ -56,7 +56,7 @@ module ContestScoreable
       winners_sum += w[:winners].count
     end
         
-    value_per_skin = (self.users.count * self.dues_amount) / winners_sum
+    value_per_skin = ((self.users.count * self.dues_amount) / winners_sum).floor
     
     all_winners.each do |winner_info|
       hole = winner_info[:hole]
@@ -189,11 +189,11 @@ module ContestScoreable
     #set winner
     unless results.blank? || results.count == 0
       if self.overall_winner_payout_amount.blank?
-        total_value = self.users.count * self.dues_amount #automatic distribution
+        total_value = (self.users.count * self.dues_amount).floor #automatic distribution
       else
         total_value = self.overall_winner_payout_amount
       end
-                  
+            
       winner = results[0][:user]
       result_value = results[0][:score]
 
