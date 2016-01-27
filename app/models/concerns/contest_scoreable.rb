@@ -58,6 +58,8 @@ module ContestScoreable
         
     value_per_skin = ((self.users.count * self.dues_amount) / winners_sum).floor
     
+    Rails.logger.info { "Value Per Skin: #{value_per_skin}" }
+    
     all_winners.each do |winner_info|
       hole = winner_info[:hole]
       contest_hole = self.contest_holes.where(course_hole: hole).first
