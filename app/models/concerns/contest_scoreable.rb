@@ -78,7 +78,7 @@ module ContestScoreable
 
       self.users.each do |user|
         if self.tournament_day.tournament.includes_player?(user)
-          score = self.tournament_day.compute_player_score(user, use_gross, holes = [hole.hole_number])
+          score = self.tournament_day.compute_player_score(user, !use_gross, holes = [hole.hole_number])
 
           unless score.blank? || score == 0
             if gross_skins_require_birdies == true #check if gross birdie                            
