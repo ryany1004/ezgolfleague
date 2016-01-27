@@ -18,7 +18,7 @@
           <h4 class="modal-title">Finalize Tournament</h4>
         </div>
         <div class="modal-body">
-          <p>Finalizing a tournament will analyze scores and determine payouts by flight as well as for contests. This process takes a few moments.</p>
+          <p>Finalizing a tournament will analyze scores and determine payouts by flight as well as for contests. This process takes a few moments. When complete, the page will reload automatically. <strong>Please do not refresh your browser manually.</strong></p>
           <%= link_to "Start Finalization", league_tournament_run_finalization_path(current_user.selected_league, @tournament), :class => 'btn btn-primary', :role => 'button', remote: true %>
           <br/><br/>
           <div class='progress-status text-primary'>
