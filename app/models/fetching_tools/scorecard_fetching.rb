@@ -2,7 +2,7 @@ module FetchingTools
   class ScorecardFetching
     
     def self.fetch_scorecards_and_related(scorecard_id)
-      scorecard = Scorecard.includes(:scores).find(scorecard_id)
+      scorecard = Scorecard.includes(scores: [:course_hole], golf_outing: [:user]).find(scorecard_id)
       tournament_day = scorecard.golf_outing.tournament_group.tournament_day
       tournament = tournament_day.tournament
     
