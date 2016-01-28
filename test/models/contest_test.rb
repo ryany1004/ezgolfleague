@@ -41,7 +41,9 @@ class ContestTest < ActiveSupport::TestCase
     
     contest.reload
     result = contest.contest_results.first
-        
+    
+    assert false, "No contest winner" if result.blank?
+    
     if result.payout_amount == contest.overall_winner_payout_amount && result.points == contest.overall_winner_points
       assert true
     else

@@ -33,12 +33,11 @@ class PrintScorecardsJob < ProgressJob::Base
       update_progress
     end
 
-    # av = ActionView::Base.new()
-    # av.view_paths = ActionController::Base.view_paths
-    # av.extend ApplicationHelper
-    # body = av.render(:template => "scorecards/print_template", :locals => {:print_cards => @print_cards}, :layout => false)
-    
-    ScorecardsController.render :print_template, locals: { ... }, assigns: { ... }
+    #NOTE: in Rails 5, move to standard solution
+    #ScorecardsController.render :print_template, locals: { :print_cards => @print_cards }, :layout => false
+    renderer = ApplicationController.renderer.new(method: 'get', https: true, warden: Warden.new)
+    renderer.render 'scorecards/print_template', locals: { :print_cards => @print_cards }, :layout => false
+    #ApplicationController.render 'scorecards/print_template', locals: { :print_cards => @print_cards }, :layout => false
     
     Rails.cache.write("print-scorecards#{@tournament_day.id}", body)
     

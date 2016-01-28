@@ -50,6 +50,7 @@ gem 'attr_encrypted'
 gem 'stripe', :git => 'https://github.com/stripe/stripe-ruby'
 gem 'delayed_job_active_record'
 gem 'progress_job'
+gem 'backport_new_renderer', :github => 'brainopia/backport_new_renderer'
 
 group :development, :test do
   gem 'sqlite3', :require => "sqlite3"

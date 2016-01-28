@@ -58,10 +58,9 @@ module ContestScoreable
   def calculate_skins_winners(all_winners)
     winners_sum = 0
     all_winners.each do |w|
-      unique_winners = w[:winners].uniq #you cannot win twice on the same hole
-           
-      w[:winners] = unique_winners
-      winners_sum += unique_winners.count
+      winners = w[:winners]
+
+      winners_sum += winners.count
     end
         
     total_pot = (self.users.count * self.dues_amount)
