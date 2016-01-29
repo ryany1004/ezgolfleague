@@ -30,7 +30,7 @@ var interval = setInterval(function(){
       
       clearInterval(interval);
       
-      window.location.replace('<%= h(@display_path) %>');
+      window.location.replace('<%= raw(@display_path) %>');
     }
   })
 }, 5000);
