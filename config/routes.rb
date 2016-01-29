@@ -192,11 +192,13 @@ Rails.application.routes.draw do
   
   resources :payments
   
-  resources :scorecards, :except => [:delete] do
-    get 'print', on: :collection
-    get 'run_print', on: :collection
-    get 'print_display', on: :collection
+  resources :prints do
+    get 'print_scorecards', on: :collection
+    get 'run_print_scorecards', on: :collection
+    get 'print_display_scorecards', on: :collection
   end
+  
+  resources :scorecards, :except => [:delete]
 
   resources :courses do
     resources :course_tee_boxes

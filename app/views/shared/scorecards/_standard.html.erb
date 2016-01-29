@@ -40,7 +40,7 @@
         <% scorecard.scores.each_slice(p.number_of_holes / 2).to_a.each_with_index do |split, j| %>
           <% split.each do |score| -%>
             <td>
-              <%= link_to_unless !p.user_can_edit_scorecard?(current_user, scorecard), "#{scorecard_score_helper(score, print_mode)}", "#", {"data-toggle" => "modal", "data-target" => "#Group#{score.course_hole.id}"} %>
+              <%= link_to_unless !p.user_can_edit_scorecard?(scorecard), "#{scorecard_score_helper(score, print_mode)}", "#", {"data-toggle" => "modal", "data-target" => "#Group#{score.course_hole.id}"} %>
               
               <% if handicap_allowance_strokes_for_hole(handicap_allowance_for_scorecard(scorecard), score.course_hole) > 0 -%>
                 </br><span class="label label-success">-<%= handicap_allowance_strokes_for_hole(handicap_allowance_for_scorecard(scorecard), score.course_hole) %></span>
@@ -154,12 +154,12 @@
 <% end -%>
 
 <!-- Finalize Buttons -->
-<% if p.show_finalization?(current_user) -%>
+<% if p.show_finalization? -%>
   <p><%= link_to 'Finalize Scorecard', play_scorecard_finalize_scorecard_path(p.primary_scorecard), :class => 'btn btn-danger', :method => :patch, :data => { :confirm => 'Are you sure you want to finalize your scorecard? This indicates to the league administrator that you are ready to be ranked for this tournament.' } %></p>
 <% end -%>
 
 <!-- Modals -->
-<% if p.user_can_edit_any_scorecard?(current_user)-%>
+<% if p.user_can_edit_any_scorecard?-%>
   <% cache(cache_key_for_scorecard(p.primary_scorecard.id)) do %>
     <% p.course_holes.each do |course_hole| %>
       <%= render partial: '/shared/scorecards/standard_edit_modal', locals: {primary_scorecard: p.primary_scorecard, course_hole: course_hole, scores: scores_for_scorecards_for_course_hole(other_scorecards, course_hole), edit_url: play_scorecard_path(p.primary_scorecard, original_scorecard_id: p.primary_scorecard.id) } %>

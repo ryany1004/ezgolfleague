@@ -3,6 +3,7 @@ module Presenters
     attr_accessor :primary_scorecard
     attr_accessor :secondary_scorecards
     attr_accessor :shared_data_provider
+    attr_accessor :current_user
     
     attr_accessor :all_scorecards
     attr_accessor :user
@@ -39,18 +40,18 @@ module Presenters
       return self.primary_scorecard.golf_outing.course_tee_box.name
     end
 
-    def user_can_edit_any_scorecard?(user)
+    def user_can_edit_any_scorecard?
       can_edit_any = false
       
       self.all_scorecards.each do |scorecard|
-        return true if self.primary_scorecard.tournament_day.user_can_edit_scorecard(user, scorecard) == true
+        return true if self.primary_scorecard.tournament_day.user_can_edit_scorecard(self.current_user, scorecard) == true
       end
       
       return can_edit_any
     end
     
-    def user_can_edit_scorecard?(user, scorecard)
-      return self.primary_scorecard.tournament_day.user_can_edit_scorecard(user, scorecard)
+    def user_can_edit_scorecard?(scorecard)
+      return self.primary_scorecard.tournament_day.user_can_edit_scorecard(self.current_user, scorecard)
     end
     
     def user_can_become_designated_scorer?(user)      
@@ -81,8 +82,8 @@ module Presenters
       return self.primary_scorecard.tournament_day.game_type.scorecard_post_embed_partial
     end
     
-    def show_finalization?(user)
-      return self.primary_scorecard.has_empty_scores? == false && self.primary_scorecard.tournament_day.user_can_edit_scorecard(user, self.primary_scorecard) == true && self.primary_scorecard.tournament_day.tournament.is_finalized == false
+    def show_finalization?
+      return self.primary_scorecard.has_empty_scores? == false && self.primary_scorecard.tournament_day.user_can_edit_scorecard(self.current_user, self.primary_scorecard) == true && self.primary_scorecard.tournament_day.tournament.is_finalized == false
     end
     
   end

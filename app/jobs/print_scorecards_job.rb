@@ -26,7 +26,7 @@ class PrintScorecardsJob < ProgressJob::Base
         end
       end
       
-      scorecard_presenter = Presenters::ScorecardPresenter.new({primary_scorecard: primary_scorecard, secondary_scorecards: other_scorecards})
+      scorecard_presenter = Presenters::ScorecardPresenter.new({primary_scorecard: primary_scorecard, secondary_scorecards: other_scorecards, current_user: User.first}) #TODO: Update
       
       @print_cards << {p: scorecard_presenter} if !self.printable_cards_includes_player?(@print_cards, player)
       
@@ -34,9 +34,9 @@ class PrintScorecardsJob < ProgressJob::Base
     end
 
     #NOTE: in Rails 5, move to standard solution
-    renderer = ApplicationController.renderer.new(method: 'get', https: true, warden: Warden.new)
-    renderer.render 'scorecards/print_template', locals: { :print_cards => @print_cards }, :layout => false
-    #ApplicationController.render 'scorecards/print_template', locals: { :print_cards => @print_cards }, :layout => false
+    #renderer = ApplicationController.renderer.new(method: 'get', https: true)
+    #renderer.render 'scorecards/print_template', locals: { :print_cards => @print_cards }, :layout => false
+    body = ApplicationController.render 'prints/print_template_scorecards', locals: { :print_cards => @print_cards }, :layout => false
     
     Rails.cache.write("print-scorecards#{@tournament_day.id}", body)
     

@@ -17,7 +17,7 @@
       <div class="modal-body">
         <p>This process takes a few minutes up to about 10 minutes for large, active tournaments. When complete, the page will reload automatically and display the scorecards.</p>
         <p><strong>Please do not close this tab or refresh your browser manually.</strong></p>
-        <%= link_to "Generate Scorecards", run_print_scorecards_path(:tournament_id => @tournament, tournament_day: @tournament_day), :id => 'finalize-button', :class => 'btn btn-primary', :role => 'button', remote: true %>
+        <%= link_to "Generate Scorecards", run_print_scorecards_prints_path(:tournament_id => @tournament, tournament_day: @tournament_day), :id => 'finalize-button', :class => 'btn btn-primary', id: "print-button", :role => 'button', remote: true %>
         <br/><br/>
         <div class='progress-status text-primary'>
           0
