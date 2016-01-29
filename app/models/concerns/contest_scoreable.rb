@@ -79,9 +79,9 @@ module ContestScoreable
       hole_winners = winner_info[:winners]
       
       hole_winners.each do |winner|
-        # ##DEBUGGING
-        # Rails.logger.info { "Winner for Hole #{hole.hole_number} - #{winner.complete_name}" }
-        # ##END DEBUGGING
+        ##DEBUGGING
+        Rails.logger.info { "Winner for Hole #{hole.hole_number} - #{winner.complete_name}" }
+        ##END DEBUGGING
       
         ContestResult.create(contest: self, winner: winner, payout_amount: value_per_skin, contest_hole: contest_hole, result_value: "Hole #{hole.hole_number}")
       end

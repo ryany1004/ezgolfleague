@@ -34,7 +34,6 @@ class PrintScorecardsJob < ProgressJob::Base
     end
 
     #NOTE: in Rails 5, move to standard solution
-    #ScorecardsController.render :print_template, locals: { :print_cards => @print_cards }, :layout => false
     renderer = ApplicationController.renderer.new(method: 'get', https: true, warden: Warden.new)
     renderer.render 'scorecards/print_template', locals: { :print_cards => @print_cards }, :layout => false
     #ApplicationController.render 'scorecards/print_template', locals: { :print_cards => @print_cards }, :layout => false
