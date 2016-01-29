@@ -134,15 +134,21 @@ module ContestScoreable
         user_scores.sort! { |x,y| x[:score] <=> y[:score] }
         
         unless user_scores.blank?
+          ##DEBUGGING
+          user_scores.each do |us|
+            logger.info { "#{us[:user].complete_name} w/ score #{us[:score]}" }
+          end
+          ##END DEBUGGING
+          
           if user_scores.count == 1                    
             users_getting_skins << user_scores[0][:user]
             
-            Rails.logger.info { "User #{user_scores[0][:user].complete_name} eligible for a regular skin for hole #{hole.hole_number}" }
+            Rails.logger.info { "User #{user_scores[0][:user].complete_name} got a regular skin for hole #{hole.hole_number}" }
           elsif user_scores.count > 1        
-            if user_scores[0] != user_scores[1] #if there is a tie, they do not count
+            if user_scores[0][:score] != user_scores[1][:score] #if there is a tie, they do not count
               users_getting_skins << user_scores[0][:user] 
             
-              Rails.logger.info { "User #{user_scores[0][:user].complete_name} eligible for a regular skin for hole #{hole.hole_number}" }
+              Rails.logger.info { "User #{user_scores[0][:user].complete_name} got a regular skin for hole #{hole.hole_number}" }
             else
               Rails.logger.info { "There was a tie - no skin awarded. #{user_scores[0][:user].complete_name} and #{user_scores[1][:user].complete_name} for hole #{hole.hole_number}" }
             end
