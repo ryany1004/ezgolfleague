@@ -78,7 +78,7 @@
               <td><%= result.user.complete_name %></td>
               <td><%= result.gross_score %></td>
               <td><%= result.net_score %></td>
-              <td><%= link_to "Edit Scorecard", edit_scorecard_path(day.primary_scorecard_for_user(result.user)) %></td>
+              <td><%= link_to "Edit Scorecard", edit_scorecard_path(day.primary_scorecard_for_user(result.user)) unless day.primary_scorecard_for_user(result.user).blank? %></td>
             </tr>
           <% end -%>
       	</tbody>
