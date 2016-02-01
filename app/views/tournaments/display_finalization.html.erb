@@ -34,7 +34,7 @@
               <% flight.payouts.each do |payout| -%>
             		<tr>
                   <td><%= day.tournament_at.to_s(:short) %></td>
-                  <td><%= payout.flight.flight_number %></td>
+                  <td><%= flight.flight_number %></td>
                   <td><%= payout.user.complete_name unless payout.user.blank? %></td>
                   <td><%= day.player_score(payout.user) unless payout.user.blank? %></td>
                   <td><%= day.golf_outing_for_player(payout.user).course_handicap.to_i unless payout.user.blank? || day.golf_outing_for_player(payout.user).blank? %></td>
@@ -75,7 +75,7 @@
       	<tbody>
           <% day.tournament_day_results.each do |result| %>
             <tr>
-              <td><%= result.user.complete_name %></td>
+              <td><%= result.user.complete_name %><% if !day.primary_scorecard_for_user(result.user).is_confirmed? -%> (Unconfirmed by Player)<% end -%></td>
               <td><%= result.gross_score %></td>
               <td><%= result.net_score %></td>
               <td><%= link_to "Edit Scorecard", edit_scorecard_path(day.primary_scorecard_for_user(result.user)) unless day.primary_scorecard_for_user(result.user).blank? %></td>

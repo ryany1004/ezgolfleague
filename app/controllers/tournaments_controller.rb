@@ -178,8 +178,6 @@ class TournamentsController < BaseController
     
     if @tournament.can_be_finalized?
       @stage_name = "finalize"
-
-      # @tournament.finalize
     else
       redirect_to league_tournament_flights_path(current_user.selected_league, @tournament), :flash => { :error => "This tournament requires flights and payouts before it can be finalized." }
     end
@@ -196,9 +194,7 @@ class TournamentsController < BaseController
     
     @stage_name = "finalize"
   
-    @players = @tournament.players
-
-    @tournament_days = @tournament.tournament_days.includes(flights: [payouts: :user], tournament_day_results: :user, tournament_groups: [golf_outings: [:user, :course_tee_box, :scorecard]])
+    @tournament_days = @tournament.tournament_days.includes(flights: [payouts: :user], tournament_day_results: :user, tournament_groups: [golf_outings: [:user, :scorecard]])
   end
   
   def confirm_finalization

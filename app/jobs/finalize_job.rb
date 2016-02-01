@@ -9,6 +9,8 @@ class FinalizeJob < ProgressJob::Base
     update_stage('Finalizing Tournament')
 
     @tournament.tournament_days.each do |day|
+      day.score_users
+      
       day.assign_payouts_from_scores
       
       update_progress
