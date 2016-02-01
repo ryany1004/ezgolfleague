@@ -3,13 +3,13 @@ module UpdatingTools
     
     def self.update_scorecards_for_scores(scores, primary_scorecard, other_scorecards)
       scores.each do |score_param|
-        Rails.logger.info { "#{score_param}" }
+        Rails.logger.debug { "#{score_param}" }
       
         score_id = score_param[0].to_i
         strokes = score_param[1][:strokes]
         date_scored = score_param[1][:date_scored]
       
-        Rails.logger.info { "#{score_id} #{strokes}" }
+        Rails.logger.debug { "#{score_id} #{strokes}" }
         
         unless strokes.blank? or score_id.blank?
           score = Score.find(score_id)
@@ -24,15 +24,21 @@ module UpdatingTools
           if should_update == true
             score.strokes = strokes
             score.save
+            
+            Rails.logger.info { "Updating Score: #{score}" }
           else
-            logger.info { "Not Updating Scores - Too Old #{date_scored}" }
+            Rails.logger.info { "Not Updating Scores - Too Old #{date_scored}" }
           end
         end
       end
     
+      Rails.logger.info { "Scores Updated, Re-Scoring User" }
       primary_scorecard.tournament_day.score_user(primary_scorecard.golf_outing.user)
+      
+      Rails.logger.info { "User Re-Scored, Updating After-Action" }
       primary_scorecard.tournament_day.game_type.after_updating_scores_for_scorecard(primary_scorecard)
     
+      Rails.logger.info { "Updating Other Scorecards" }
       other_scorecards.each do |other_scorecard|
         primary_scorecard.tournament_day.score_user(other_scorecard.golf_outing.user) unless other_scorecard.golf_outing.blank?
         primary_scorecard.tournament_day.game_type.after_updating_scores_for_scorecard(other_scorecard)

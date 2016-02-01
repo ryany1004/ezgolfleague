@@ -8,8 +8,6 @@ class PrintsController < ApplicationController
     @job = Delayed::Job.enqueue PrintScorecardsJob.new(@tournament_day, current_user)
     
     @display_path = print_display_scorecards_prints_path(tournament_day: @tournament_day, tournament_id: @tournament)
-    
-    logger.info { "#{@display_path}" }
   end
  
   def print_display_scorecards
