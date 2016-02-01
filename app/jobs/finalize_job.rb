@@ -1,6 +1,6 @@
 class FinalizeJob < ProgressJob::Base
   def initialize(tournament)
-    super progress_max: tournament.tournament_days.count * 3
+    super progress_max: (tournament.tournament_days.count * 3) + (tournament.players.count * tournament.tournament_days.count)
     
     @tournament = tournament
   end
@@ -11,14 +11,23 @@ class FinalizeJob < ProgressJob::Base
     @tournament_days = @tournament.tournament_days.includes(tournament_groups: [golf_outings: [:user, scorecard: :scores]])
 
     @tournament_days.each do |day|
-      day.score_users
+      players = @tournament.players
+            
+      Rails.logger.info { "Finalize: Updating Scores" }
+      players.each do |player|
+        day.score_user(player)
+        
+        update_progress
+      end
       
       update_progress
       
+      Rails.logger.info { "Finalize: Assigning Payouts" }
       day.assign_payouts_from_scores
       
       update_progress
       
+      Rails.logger.info { "Finalize: Scoring Contests" }
       day.contests.each do |contest|
         contest.score_contest
       end
