@@ -198,7 +198,7 @@ class TournamentsController < BaseController
   
     @players = @tournament.players
 
-    @tournament_days = @tournament.tournament_days.includes(tournament_groups: [golf_outings: [:user, :course_tee_box, scorecard: [{scores: :course_hole}]]])
+    @tournament_days = @tournament.tournament_days.includes(flights: [payouts: :user], tournament_day_results: :user, tournament_groups: [golf_outings: [:user, :course_tee_box, :scorecard]])
   end
   
   def confirm_finalization
