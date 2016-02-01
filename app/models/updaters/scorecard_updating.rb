@@ -1,4 +1,4 @@
-module UpdatingTools
+module Updaters
   class ScorecardUpdating
     
     def self.update_scorecards_for_scores(scores, primary_scorecard, other_scorecards)

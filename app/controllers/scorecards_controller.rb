@@ -34,7 +34,7 @@ class ScorecardsController < BaseController
 
     logger.debug { "Sending: #{scores_to_update}" }
 
-    UpdatingTools::ScorecardUpdating.update_scorecards_for_scores(scores_to_update, @scorecard, @other_scorecards)
+    Updaters::ScorecardUpdating.update_scorecards_for_scores(scores_to_update, @scorecard, @other_scorecards)
 
     redirect_to scorecards_path(tournament_id: @tournament), :flash => { :success => "The scorecard was successfully updated." }
   end

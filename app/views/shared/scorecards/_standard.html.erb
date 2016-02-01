@@ -162,7 +162,7 @@
 <% if p.user_can_edit_any_scorecard?-%>
   <% cache(cache_key_for_scorecard(p.primary_scorecard.id)) do %>
     <% p.course_holes.each do |course_hole| %>
-      <%= render partial: '/shared/scorecards/standard_edit_modal', locals: {primary_scorecard: p.primary_scorecard, course_hole: course_hole, scores: scores_for_scorecards_for_course_hole(other_scorecards, course_hole), edit_url: play_scorecard_path(p.primary_scorecard, original_scorecard_id: p.primary_scorecard.id) } %>
+      <%= render partial: '/shared/scorecards/standard_edit_modal', locals: {primary_scorecard: p.primary_scorecard, course_hole: course_hole, scores: scores_for_scorecards_for_course_hole(p.all_scorecards, course_hole), edit_url: play_scorecard_path(p.primary_scorecard, original_scorecard_id: p.primary_scorecard.id) } %>
     <% end -%>
   <% end %>
 <% end -%>

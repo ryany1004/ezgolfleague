@@ -18,7 +18,7 @@ class Api::V1::ScoresController < Api::V1::ApiBaseController
       
       logger.debug { "Sending: #{scores_to_update}" }
       
-      UpdatingTools::ScorecardUpdating.update_scorecards_for_scores(scores_to_update, @scorecard, @other_scorecards)
+      Updaters::ScorecardUpdating.update_scorecards_for_scores(scores_to_update, @scorecard, @other_scorecards)
 
       render json: {:text => "Success"}
     else

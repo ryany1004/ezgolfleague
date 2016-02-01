@@ -24,7 +24,7 @@ module Play::ScorecardsHelper
   
   def scores_for_scorecards_for_course_hole(scorecards, course_hole)
     scores = []
-    
+        
     scorecards.each do |scorecard|
       scorecard.scores.each do |score|
         scores << score if score.course_hole == course_hole

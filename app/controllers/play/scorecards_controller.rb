@@ -8,7 +8,7 @@ class Play::ScorecardsController < BaseController
   end
   
   def update    
-    UpdatingTools::ScorecardUpdating.update_scorecards_for_scores(params[:scorecard][:scores], @scorecard, @other_scorecards)
+    Updaters::ScorecardUpdating.update_scorecards_for_scores(params[:scorecard][:scores], @scorecard, @other_scorecards)
     
     logger.info { "SCORE: Re-Scored For Scorecard: #{@scorecard.id}. User: #{@scorecard.golf_outing.user.complete_name}. Net Score: #{@scorecard.tournament_day.tournament_day_results.where(:user_primary_scorecard_id => @scorecard.id).first.net_score}" }
 
