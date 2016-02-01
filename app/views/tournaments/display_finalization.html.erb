@@ -75,7 +75,7 @@
       	<tbody>
           <% day.tournament_day_results.each do |result| %>
             <tr>
-              <td><%= result.user.complete_name %><% if !day.primary_scorecard_for_user(result.user).is_confirmed? -%> (Unconfirmed by Player)<% end -%></td>
+              <td><%= result.user.complete_name %><% if day.primary_scorecard_for_user(result.user) != nil && !day.primary_scorecard_for_user(result.user).is_confirmed? -%> (Unconfirmed by Player)<% end -%></td>
               <td><%= result.gross_score %></td>
               <td><%= result.net_score %></td>
               <td><%= link_to "Edit Scorecard", edit_scorecard_path(day.primary_scorecard_for_user(result.user)) unless day.primary_scorecard_for_user(result.user).blank? %></td>
