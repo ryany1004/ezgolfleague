@@ -62,33 +62,27 @@
   
   <% @tournament_days.each do |day| -%>
     <div class="col-md-12">
-        <h2><%= day.pretty_day(true) %>Scorecards</h2>
-    
-        <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
-          <% @players.each_with_index do |player, i| %>
-            <% unless day.primary_scorecard_for_user(player).blank? -%>
-            <div class="panel panel-default">
-              <div class="panel-heading" role="tab" id="heading<%= i %>">
-                <h4 class="panel-title">
-                  <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapse<%= i %>" aria-expanded="false" aria-controls="collapse<%= i %>">
-                    <%= player.complete_name %><% if !day.primary_scorecard_for_user(player).is_confirmed? -%> (Unconfirmed by Player)<% end -%>
-                  </a>
-                </h4>
-              </div>
-              <div id="collapse<%= i %>" class="panel-collapse collapse <% if i == 0 -%>in<% end -%>" role="tabpanel" aria-labelledby="heading<%= i %>">
-                <div class="panel-body">
-                  <% cache(cache_key_for_scorecard(day.primary_scorecard_for_user(player).id)) do %>
-                    <%= render partial: '/shared/scorecards/show', locals: {scorecard: day.primary_scorecard_for_user(player), split_holes: split_holes_for_course_tournament(day), split_scores: split_scores_for_scorecard(day.primary_scorecard_for_user(player), day.course_holes.count), tournament_day: day, handicap_allowance: day.handicap_allowance(player)} %>
-                  <% end -%>
-                  <p>
-                    <%= link_to "Edit This Scorecard", edit_scorecard_path(day.primary_scorecard_for_user(player)), class: "btn btn-warning", role: "button" %>
-                  </p>
-                </div>
-              </div>
-            </div>
-            <% end -%>
+      <h3><%= day.pretty_day(true) %>Results</h3>
+      <table class="table table-striped">
+      	<thead>
+      		<tr>
+            <th>Player</th>
+            <th>Gross</th>
+            <th>Net</th>
+      			<th>&nbsp;</th>
+      		</tr>
+      	</thead>
+      	<tbody>
+          <% day.tournament_day_results.each do |result| %>
+            <tr>
+              <td><%= result.user.complete_name %></td>
+              <td><%= result.gross_score %></td>
+              <td><%= result.net_score %></td>
+              <td><%= link_to "Edit Scorecard", edit_scorecard_path(day.primary_scorecard_for_user(result.user)) %></td>
+            </tr>
           <% end -%>
-        </div>
+      	</tbody>
+      </table>
     </div>
   <% end -%>
 </div>

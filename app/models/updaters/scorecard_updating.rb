@@ -25,7 +25,7 @@ module Updaters
             score.strokes = strokes
             score.save
             
-            Rails.logger.info { "Updating Score: #{score}" }
+            Rails.logger.info { "Updating Score: #{score.id}" }
           else
             Rails.logger.info { "Not Updating Scores - Too Old #{date_scored}" }
           end
