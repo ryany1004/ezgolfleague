@@ -2,12 +2,25 @@ module Scoreable
   extend ActiveSupport::Concern
   
   def primary_scorecard_for_user(user)
-    eager_groups = TournamentGroup.includes(golf_outings: [{scorecard: :scores}, :user]).where(tournament_day: self)
+    scorecard_id_cache_key = "#{self.id}-#{user.id}"
+    scorecard_id = Rails.cache.fetch(scorecard_id_cache_key)
     
-    eager_groups.each do |group|
-      group.golf_outings.each do |golf_outing|
-        return golf_outing.scorecard if golf_outing.user == user
+    if scorecard_id.blank?
+      eager_groups = TournamentGroup.includes(golf_outings: [{scorecard: :scores}, :user]).where(tournament_day: self)
+    
+      eager_groups.each do |group|
+        golf_outing = group.golf_outings.where(user: user).first
+        
+        unless golf_outing.blank?
+          scorecard = golf_outing.scorecard
+        
+          Rails.cache.write(scorecard_id_cache_key, scorecard.id)
+        
+          return scorecard
+        end
       end
+    else      
+      return Scorecard.where(id: scorecard_id).first
     end
     
     return nil
@@ -42,7 +55,6 @@ module Scoreable
   end
   
   def has_scores?
-    #TODO: short-cut - check for tournament day results objects? is that dangerous? 
     eager_groups = TournamentGroup.includes(golf_outings: [{scorecard: :scores}, :user]).where(tournament_day: self)
     
     eager_groups.each do |group|
