@@ -176,12 +176,10 @@ module GameTypes
     
       points = 0
 
-      self.tournament_day.flights.each do |f|
-        f.payouts.each do |p|
-          points = points + p.points if p.user == user
-        end
+      self.tournament_day.payout_results.each do |p|
+        points = points + p.points if p.user == user
       end
-      
+
       #contests
       self.tournament_day.contests.each do |c|
         c.contest_results.each do |r|
@@ -354,8 +352,8 @@ module GameTypes
           end
 
           points = 0
-          f.payouts.each do |payout|
-            points = payout.points if payout.user == player
+          f.payout_results.each do |payout_result|            
+            points = payout_result.points if payout_result.user == player
           end
           
           if !net_score.blank? && net_score > 0
@@ -399,14 +397,11 @@ module GameTypes
     end
   
     def assign_payouts_from_scores
+      self.tournament_day.payout_results.destroy_all
+            
       payout_count = 0
       self.tournament_day.flights.each do |flight|
         payout_count += flight.payouts.count
-        
-        flight.payouts.each do |p|
-          p.user = nil
-          p.save
-        end
       end
       
       Rails.logger.info { "Payouts: #{payout_count}" }
@@ -427,19 +422,22 @@ module GameTypes
         
         ranked_flights = self.flights_with_rankings
       end
-      
-      ranked_flights.each do |flight_ranking|
+
+      ranked_flights.each do |flight_ranking|        
         flight_ranking[:players].each do |p|
           if eligible_player_list.include? p[:id]
             flight = Flight.find(flight_ranking[:flight_id])
             flight.payouts.each_with_index do |payout, i|              
               if flight_ranking[:players].count > i
-                player = User.find(flight_ranking[:players][i][:id])
+                if payout.payout_result.blank?
+                  player = User.find(flight_ranking[:players][i][:id])
                 
-                Rails.logger.info { "Assigning #{player.complete_name} to Payout #{payout.id}" }
-                
-                payout.user = player
-                payout.save!
+                  Rails.logger.info { "Assigning #{player.complete_name} to Payout #{payout.id}" }
+
+                  PayoutResult.create(payout: payout, user: player, flight: flight, tournament_day: flight.tournament_day, amount: payout.amount, points: payout.points)
+                else
+                  Rails.logger.info { "Already Assigned Payout" }
+                end
               end
             end
           else

@@ -13,6 +13,7 @@ class TournamentDay < ActiveRecord::Base
   has_many :contests, inverse_of: :tournament_day, :dependent => :destroy
   has_many :golfer_teams, inverse_of: :tournament_day, :dependent => :destroy
   has_many :tournament_day_results, -> { order(:net_score) }, inverse_of: :tournament_day, :dependent => :destroy
+  has_many :payout_results, inverse_of: :tournament_day, :dependent => :destroy
   has_and_belongs_to_many :course_holes, -> { order(:hole_number) }
   
   attr_accessor :skip_date_validation

@@ -6,6 +6,8 @@ module Moveable
     
     golf_outing.tournament_group = new_tournament_group
     golf_outing.save
+    
+    self.automatically_build_teams
   end
   
 end

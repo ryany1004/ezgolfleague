@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160126221857) do
+ActiveRecord::Schema.define(version: 20160202012837) do
 
   create_table "contest_holes", force: :cascade do |t|
     t.integer  "contest_id"
@@ -270,9 +270,24 @@ ActiveRecord::Schema.define(version: 20160126221857) do
   add_index "payments", ["tournament_id"], name: "index_payments_on_tournament_id"
   add_index "payments", ["user_id"], name: "index_payments_on_user_id"
 
+  create_table "payout_results", force: :cascade do |t|
+    t.integer  "user_id"
+    t.integer  "payout_id"
+    t.integer  "flight_id"
+    t.integer  "tournament_day_id"
+    t.decimal  "amount"
+    t.float    "points"
+    t.datetime "created_at",        null: false
+    t.datetime "updated_at",        null: false
+  end
+
+  add_index "payout_results", ["flight_id"], name: "index_payout_results_on_flight_id"
+  add_index "payout_results", ["payout_id"], name: "index_payout_results_on_payout_id"
+  add_index "payout_results", ["tournament_day_id"], name: "index_payout_results_on_tournament_day_id"
+  add_index "payout_results", ["user_id"], name: "index_payout_results_on_user_id"
+
   create_table "payouts", force: :cascade do |t|
     t.integer  "flight_id"
-    t.integer  "user_id"
     t.decimal  "amount"
     t.float    "points"
     t.datetime "created_at",             null: false
@@ -282,7 +297,6 @@ ActiveRecord::Schema.define(version: 20160126221857) do
 
   add_index "payouts", ["flight_id"], name: "index_payouts_on_flight_id"
   add_index "payouts", ["sort_order"], name: "index_payouts_on_sort_order"
-  add_index "payouts", ["user_id"], name: "index_payouts_on_user_id"
 
   create_table "scorecards", force: :cascade do |t|
     t.integer  "golf_outing_id"

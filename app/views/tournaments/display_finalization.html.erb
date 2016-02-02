@@ -30,18 +30,16 @@
       	</thead>
       	<tbody>
           <% @tournament_days.each do |day| -%>
-            <% day.flights.each do |flight| -%>
-              <% flight.payouts.each do |payout| -%>
-            		<tr>
-                  <td><%= day.tournament_at.to_s(:short) %></td>
-                  <td><%= flight.flight_number %></td>
-                  <td><%= payout.user.complete_name unless payout.user.blank? %></td>
-                  <td><%= day.player_score(payout.user) unless payout.user.blank? %></td>
-                  <td><%= day.golf_outing_for_player(payout.user).course_handicap.to_i unless payout.user.blank? || day.golf_outing_for_player(payout.user).blank? %></td>
-            			<td><%= number_to_currency(payout.amount) %></td>
-            			<td><%= payout.points.to_i %></td>
-            		</tr>
-              <% end -%>
+            <% day.payout_results.order("flight_id").each do |payout_result| -%>
+          		<tr>
+                <td><%= day.tournament_at.to_s(:short) %></td>
+                <td><%= payout_result.flight.flight_number %></td>
+                <td><%= payout_result.user.complete_name unless payout_result.user.blank? %></td>
+                <td><%= day.player_score(payout_result.user) unless payout_result.user.blank? %></td>
+                <td><%= day.golf_outing_for_player(payout_result.user).course_handicap.to_i unless payout_result.user.blank? || day.golf_outing_for_player(payout_result.user).blank? %></td>
+          			<td><%= number_to_currency(payout_result.amount) %></td>
+          			<td><%= payout_result.points.to_i %></td>
+          		</tr>
             <% end -%>
           <% end -%>
       	</tbody>

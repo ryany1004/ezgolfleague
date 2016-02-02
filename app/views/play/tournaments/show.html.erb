@@ -109,7 +109,7 @@
         <tbody>
           <% cache(cache_key_for_tournament_day_with_prefix(@tournament_day, "tournament-payouts")) do %>
             <% @tournament_day.flights.each_with_index do |f, x| %>
-              <% f.payouts.each do |p| %>
+              <% f.payout_results.each do |p| %>
               <tr>
                 <td><strong><%= f.flight_number %></strong></td>
                 <td><%= p.user.complete_name unless p.user.blank? %></td>

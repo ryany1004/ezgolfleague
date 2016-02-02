@@ -27,8 +27,12 @@ module Importers
             unless handicap_index.blank?
               puts "Handicap Index: #{handicap_index}"
             
-              user.handicap_index = handicap_index
-              user.save
+              unless handicap_index == 0.0
+                user.handicap_index = handicap_index
+                user.save
+              else
+                puts "Not Updating - Zero Value"
+              end
             end
           else
             puts "Root node was blank"
