@@ -46,12 +46,11 @@ class LeaguesController < BaseController
   
   def update_from_ghin
     @league = League.find(params[:league_id])
+
+    users = @league.users.where("ghin_number IS NOT NULL").order("updated_at")
+    Delayed::Job.enqueue GhinUpdateJob.new(users)
     
-    @league.users.where("ghin_number IS NOT NULL").order("update_at").each do |u|
-      Importers::GHINImporter.import_ghin_for_user(u)
-    end
-    
-    redirect_to leagues_path, :flash => { :success => "League members were updated from GHIN." }
+    redirect_to leagues_path, :flash => { :success => "League members will be updated by GHIN." }
   end
   
   def write_member_email

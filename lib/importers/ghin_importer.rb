@@ -5,7 +5,7 @@ module Importers
     
     def self.import_for_all_users
       User.where("ghin_number IS NOT NULL").order("updated_at").each do |u|
-        Importers::GHINImporter.import_ghin_for_user(user)
+        Importers::GHINImporter.import_ghin_for_user(u)
       end
     end
     
