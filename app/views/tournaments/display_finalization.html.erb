@@ -59,7 +59,7 @@
       </table>
     </div>
   </div>
-  
+    
   <% @tournament_days.each do |day| -%>
     <div class="col-md-12">
       <h3><%= day.pretty_day(true) %>Results</h3>
@@ -75,10 +75,10 @@
       	<tbody>
           <% day.tournament_day_results.each do |result| %>
             <tr>
-              <td><%= result.user.complete_name %><% if day.primary_scorecard_for_user(result.user) != nil && !day.primary_scorecard_for_user(result.user).is_confirmed? -%> (Unconfirmed by Player)<% end -%></td>
+              <td><%= result.user.complete_name %><% if result.primary_scorecard != nil && !result.primary_scorecard.is_confirmed? -%> (Unconfirmed by Player)<% end -%></td>
               <td><%= result.gross_score %></td>
               <td><%= result.net_score %></td>
-              <td><%= link_to "Edit Scorecard", edit_scorecard_path(day.primary_scorecard_for_user(result.user)) unless day.primary_scorecard_for_user(result.user).blank? %></td>
+              <td><%= link_to "Edit Scorecard", edit_scorecard_path(result.primary_scorecard) unless result.primary_scorecard.blank? %></td>
             </tr>
           <% end -%>
       	</tbody>

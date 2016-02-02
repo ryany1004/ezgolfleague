@@ -194,7 +194,7 @@ class TournamentsController < BaseController
     
     @stage_name = "finalize"
   
-    @tournament_days = @tournament.tournament_days.includes(flights: [payouts: :user], tournament_day_results: :user, tournament_groups: [golf_outings: [:user, :scorecard]])
+    @tournament_days = @tournament.tournament_days.includes(flights: [payouts: :user], tournament_day_results: [:user, :primary_scorecard], tournament_groups: [golf_outings: [:user, :scorecard]])
   end
   
   def confirm_finalization
