@@ -78,11 +78,7 @@ module ContestScoreable
       contest_hole = self.contest_holes.where(course_hole: hole).first
       hole_winners = winner_info[:winners]
       
-      hole_winners.each do |winner|
-        ##DEBUGGING
-        Rails.logger.info { "Winner for Hole #{hole.hole_number} - #{winner.complete_name}" }
-        ##END DEBUGGING
-      
+      hole_winners.each do |winner|      
         ContestResult.create(contest: self, winner: winner, payout_amount: value_per_skin, contest_hole: contest_hole, result_value: "Hole #{hole.hole_number}")
       end
     end
@@ -133,13 +129,7 @@ module ContestScoreable
       else
         user_scores.sort! { |x,y| x[:score] <=> y[:score] }
         
-        unless user_scores.blank?
-          ##DEBUGGING
-          user_scores.each do |us|
-            logger.info { "#{us[:user].complete_name} w/ score #{us[:score]}" }
-          end
-          ##END DEBUGGING
-          
+        unless user_scores.blank?          
           if user_scores.count == 1                    
             users_getting_skins << user_scores[0][:user]
             
