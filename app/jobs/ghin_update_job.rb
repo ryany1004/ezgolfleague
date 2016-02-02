@@ -8,7 +8,7 @@ class GhinUpdateJob < ProgressJob::Base
   def perform
     update_stage('Updating Users')
     
-    @users.where("ghin_number IS NOT NULL").order("updated_at").each do |u|
+    @users.each do |u|
       Importers::GHINImporter.import_ghin_for_user(u)
       
       update_progress
