@@ -63,8 +63,6 @@ module Addable
     
         if outing.user == user
           outing.destroy
-          team.destroy if team.golf_outings.count == 0
-      
           break
         end
       end
