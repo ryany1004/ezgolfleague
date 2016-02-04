@@ -97,6 +97,8 @@ module GameTypes
     
       Rails.logger.info { "Assigning Team Scores" }
     
+      self.tournament_day.reload
+      
       self.tournament_day.payout_results.each do |result|
         team = self.tournament_day.golfer_team_for_player(result.user)
 
