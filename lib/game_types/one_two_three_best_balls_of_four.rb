@@ -90,5 +90,25 @@ module GameTypes
       return scorecard
     end
 
+    ##Scoring
+    
+    def assign_payouts_from_scores
+      super
+    
+      Rails.logger.info { "Assigning Team Scores" }
+    
+      self.tournament_day.payout_results.each do |result|
+        team = self.tournament_day.golfer_team_for_player(result.user)
+
+        unless team.blank?
+          team.users.where("id != ?", result.user.id).each do |teammate|
+            Rails.logger.info { "123BB4 Teams: Assigning #{player.complete_name} to Payout #{payout.id}" }
+
+            PayoutResult.create(payout: result.payout, user: teammate, flight: result.flight, tournament_day: self.tournament_day, amount: result.amount, points: result.points)
+          end
+        end
+      end
+    end
+
   end
 end
