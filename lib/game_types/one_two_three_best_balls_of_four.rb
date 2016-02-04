@@ -102,7 +102,7 @@ module GameTypes
 
         unless team.blank?
           team.users.where("id != ?", result.user.id).each do |teammate|
-            Rails.logger.info { "123BB4 Teams: Assigning #{player.complete_name} to Payout #{payout.id}" }
+            Rails.logger.info { "123BB4 Teams: Assigning #{teammate.complete_name} to Payout #{result.id}" }
 
             PayoutResult.create(payout: result.payout, user: teammate, flight: result.flight, tournament_day: self.tournament_day, amount: result.amount, points: result.points)
           end
