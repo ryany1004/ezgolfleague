@@ -110,9 +110,7 @@ module Addable
   
   def add_player_to_free_contests(user)
     self.contests.each do |c|
-      if c.dues_for_user(user).blank? or c.dues_for_user(user) == 0
-        c.add_user(user)
-      end
+      c.add_user(user) if c.is_opt_in == false
     end
   end
 

@@ -12,6 +12,8 @@
   <div class="well">  
 	  <%= f.input :name, :label => 'Name', hint: 'i.e. Closest to the Pin', required: true %>
     
+    <%= f.input :is_opt_in, :label => 'Contest is Opt-In' %>
+    
     <% if @contest.new_record? -%>
       <%= f.input :contest_type, :label => 'Contest Type', collection: @contest_types, as: :radio_buttons, label_method: :name, value_method: :value %>
     <% end -%>

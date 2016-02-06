@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160206011425) do
+ActiveRecord::Schema.define(version: 20160206211918) do
 
   create_table "contest_holes", force: :cascade do |t|
     t.integer  "contest_id"
@@ -49,6 +49,7 @@ ActiveRecord::Schema.define(version: 20160206011425) do
     t.decimal  "dues_amount",                             default: 0.0
     t.boolean  "overall_winner_payment_amount_automatic", default: true
     t.integer  "overall_winner_points",                   default: 0
+    t.boolean  "is_opt_in",                               default: true
   end
 
   add_index "contests", ["overall_winner_contest_result_id"], name: "index_contests_on_overall_winner_contest_result_id"
