@@ -56,9 +56,11 @@ module Addable
   def remove_player_from_group(tournament_group, user, remove_from_teams = false)
     Tournament.transaction do    
       tournament_group.golf_outings.each do |outing|
+        Rails.cache.write(tournament_group.tournament_day.scorecard_id_cache_key(outing.user), nil)
+        
         if user.id == outing.scorecard.designated_editor_id
-          scorecard.designated_editor_id = nil
-          scorecard.save
+          outing.scorecard.designated_editor_id = nil
+          outing.scorecard.save
         end
     
         if outing.user == user

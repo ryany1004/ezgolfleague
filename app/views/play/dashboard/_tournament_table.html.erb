@@ -54,6 +54,9 @@
               </button>
               <ul class="dropdown-menu" role="menu">
                 <li><%= link_to "View Registration", play_tournament_signup_path(t) %></li>
+                <% if !t.user_has_paid?(current_user) -%>
+                <li><%= link_to "Pay for Registration", new_play_payment_path(:payment_type => "tournament_dues", :tournament_id => t.id) %></li>
+                <% end -%>
                 <li><%= link_to "Cancel Registration", play_tournament_remove_signup_path(t), :data => { :confirm => 'Are you sure you want to cancel this registration?' }, :method => :delete %></li>
                 <li class="divider"></li>
                 <li>

@@ -1,9 +1,13 @@
 module Scoreable
   extend ActiveSupport::Concern
   
+  def scorecard_id_cache_key(user)
+    return "#{self.id}-#{user.id}"
+  end
+  
   def primary_scorecard_for_user(user)
-    scorecard_id_cache_key = "#{self.id}-#{user.id}"
-    scorecard_id = Rails.cache.fetch(scorecard_id_cache_key)
+    cache_key = self.scorecard_id_cache_key(user)
+    scorecard_id = Rails.cache.fetch(cache_key)
     
     if scorecard_id.blank?
       eager_groups = TournamentGroup.includes(golf_outings: [{scorecard: :scores}, :user]).where(tournament_day: self)
@@ -14,7 +18,7 @@ module Scoreable
         unless golf_outing.blank?
           scorecard = golf_outing.scorecard
         
-          Rails.cache.write(scorecard_id_cache_key, scorecard.id)
+          Rails.cache.write(cache_key, scorecard.id)
         
           return scorecard
         end

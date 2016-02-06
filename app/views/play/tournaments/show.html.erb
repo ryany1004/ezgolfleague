@@ -55,13 +55,16 @@
         <li class="list-group-item">
           <%= link_to "View Leaderboard", play_tournament_leaderboard_path(@tournament, day: @tournament_day) %> | 
           <% if @tournament.includes_player?(current_user, @tournament_day) && @tournament_day.can_be_played? -%>
-            <span class="badge"><%= @tournament_day.player_score(current_user) %></span><%= link_to "Your #{@tournament_day.pretty_day(false)} Scorecard", play_scorecard_path(@tournament_day.primary_scorecard_for_user(current_user)) %>
+            <span class="badge"><%= @tournament_day.player_score(current_user) %></span><%= link_to "Your #{@tournament_day.pretty_day(false)} Scorecard", play_scorecard_path(@tournament_day.primary_scorecard_for_user(current_user)) unless @tournament_day.primary_scorecard_for_user(current_user).blank? %>
           <% else -%>
             <% if @tournament.includes_player?(current_user, @tournament_day) %>
             Your scorecard will be available once the league admin has completed entering the required information.
             <% else -%>
             DNP
             <% end -%>
+          <% end -%>
+          <% if !@tournament.user_has_paid?(current_user) -%>
+           | <%= link_to "Pay for Registration", new_play_payment_path(:payment_type => "tournament_dues", :tournament_id => @tournament.id) %>
           <% end -%>
         </li>
       </ul>

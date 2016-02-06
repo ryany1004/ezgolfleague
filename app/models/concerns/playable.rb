@@ -64,6 +64,19 @@ module Playable
     return player_included
   end
   
+  def confirm_player(user)
+    self.tournament_days.each do |day|
+      day.tournament_groups.each do |group|
+        group.golf_outings.each do |outing|
+          if outing.user == user
+            outing.is_confirmed = true
+            outing.save
+          end
+        end
+      end
+    end
+  end
+  
   def total_score(user)
     total_score = 0
     

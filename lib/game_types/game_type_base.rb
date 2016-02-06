@@ -440,6 +440,8 @@ module GameTypes
     ##Payouts
     
     def eligible_players_for_payouts
+      Rails.logger.debug { "eligible_players_for_payouts" }
+      
       eligible_player_list = []
       if self.tournament.tournament_days.count == 1
         eligible_player_list = self.tournament.players.map(&:id)
@@ -454,6 +456,8 @@ module GameTypes
           eligible_player_list << player.id if player_played_all_days == true
         end
       end
+      
+      Rails.logger.debug { "Completed eligible_players_for_payouts" }
       
       return eligible_player_list
     end

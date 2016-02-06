@@ -87,6 +87,10 @@ class Play::PaymentsController < BaseController
       p.contest = contest unless contest.blank?
       p.save
       
+      unless tournament.blank?
+        tournament.confirm_player(current_user)
+      end
+      
       unless contest.blank?
         contest.users << current_user unless contest.users.include? current_user
       end

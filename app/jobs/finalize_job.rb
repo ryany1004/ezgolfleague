@@ -24,6 +24,8 @@ class FinalizeJob < ProgressJob::Base
         contest.score_contest
       end
       
+      Rails.logger.info { "Finalize: All Done!" }
+      
       day.touch
       
       update_progress

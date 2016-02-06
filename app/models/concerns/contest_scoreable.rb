@@ -47,6 +47,8 @@ module ContestScoreable
   end
   
   def score_skins_contest(use_gross)
+    Rails.logger.debug { "Scoring Skins Contest. Gross: #{use_gross}" }
+    
     self.remove_results
     self.save
     
@@ -153,6 +155,8 @@ module ContestScoreable
   end
   
   def score_net_contest(use_gross, across_all_days = false)
+    Rails.logger.debug { "Scoring Net Contest. Gross: #{use_gross}" }
+    
     self.overall_winner = nil
     self.save
 
@@ -160,33 +164,32 @@ module ContestScoreable
 
     results = []
     if across_all_days == true
-      self.tournament_day.tournament.tournament_days.each do |td|
-        td.tournament_day_results.each do |result|
-          if eligible_player_ids.include? result.user.id and self.users.include? result.user
-            Rails.logger.debug { "Player Eligible for Contest: #{result.user.id}" }
-            
-            existing_user = nil
-        
-            results.each do |r|
-              existing_user = r if r[:user] == result.user
-            end
+      tournament_day_results = TournamentDayResult.where(:id => self.tournament_day.tournament.tournament_days.map(&:id))      
+      tournament_day_results.each do |result|
+        if eligible_player_ids.include? result.user.id and self.users.include? result.user
+          Rails.logger.debug { "Player Eligible for Contest: #{result.user.id}" }
           
-            if existing_user.blank?
-              if use_gross == true
-                results << {user: result.user, score: result.gross_score} unless result.gross_score.blank?
-              else
-                results << {user: result.user, score: result.net_score} unless result.net_score.blank?
-              end
+          existing_user = nil
+      
+          results.each do |r|
+            existing_user = r if r[:user] == result.user
+          end
+        
+          if existing_user.blank?
+            if use_gross == true
+              results << {user: result.user, score: result.gross_score} unless result.gross_score.blank?
             else
-              if use_gross == true
-                existing_user[:score] += result.gross_score
-              else
-                existing_user[:score] += result.net_score
-              end
+              results << {user: result.user, score: result.net_score} unless result.net_score.blank?
             end
           else
-            Rails.logger.debug { "Player Not Eligible for Contest: #{result.user}" }
+            if use_gross == true
+              existing_user[:score] += result.gross_score
+            else
+              existing_user[:score] += result.net_score
+            end
           end
+        else
+          Rails.logger.debug { "Player Not Eligible for Contest: #{result.user}" }
         end
       end
     else
@@ -199,7 +202,7 @@ module ContestScoreable
       end
     end
     
-    Rails.logger.debug { "#{results}" }
+    Rails.logger.debug { "Results: #{results}" }
     
     #sort
     results.sort! { |x,y| x[:score] <=> y[:score] }
