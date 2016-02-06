@@ -175,6 +175,7 @@ Rails.application.routes.draw do
       get 'signups'
       post 'add_signup'
       delete 'delete_signup'
+      patch 'move_signup'
       patch 'update_auto_schedule'
       
       get 'confirmed_players'

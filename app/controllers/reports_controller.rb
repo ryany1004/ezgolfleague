@@ -5,7 +5,7 @@ class ReportsController < ApplicationController
     leagues = nil
     leagues = current_user.leagues unless current_user.is_super_user?
     
-    @past_tournaments = Tournament.all_past(leagues).page params[:page]
+    @past_tournaments = Tournament.tournaments_happening_at_some_point(nil, nil, leagues).page params[:page]
 
     @page_title = "Tournament Reports"
   end

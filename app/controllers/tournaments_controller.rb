@@ -1,5 +1,5 @@
 class TournamentsController < BaseController
-  before_filter :fetch_tournament, :only => [:edit, :update, :destroy, :signups, :manage_holes, :update_holes, :add_signup, :delete_signup, :finalize, :run_finalization, :display_finalization, :confirm_finalization, :update_course_handicaps, :touch_tournament, :update_auto_schedule, :auto_schedule, :confirmed_players]
+  before_filter :fetch_tournament, :only => [:edit, :update, :destroy, :signups, :manage_holes, :update_holes, :add_signup, :move_signup, :delete_signup, :finalize, :run_finalization, :display_finalization, :confirm_finalization, :update_course_handicaps, :touch_tournament, :update_auto_schedule, :auto_schedule, :confirmed_players]
   before_filter :initialize_form, :only => [:new, :edit]
   before_filter :set_stage
   
@@ -126,6 +126,21 @@ class TournamentsController < BaseController
     @tournament_day.add_player_to_group(group, user)
     
     redirect_to league_tournament_signups_path(@tournament.league, @tournament, tournament_day: @tournament_day), :flash => { :success => "The registration was successfully added." }
+  end
+  
+  def move_signup
+    if params[:tournament_day].blank?
+      @tournament_day = @tournament.first_day
+    else
+      @tournament_day = @tournament.tournament_days.find(params[:tournament_day])
+    end
+    
+    group = @tournament_day.tournament_groups.where("id = ?", params[:tournament_group_move][:tee_group]).first
+    user = User.find(params[:user])
+    
+    @tournament_day.move_player_to_tournament_group(user, group)
+    
+    redirect_to league_tournament_signups_path(@tournament.league, @tournament, tournament_day: @tournament_day), :flash => { :success => "The registration was successfully moved." }
   end
   
   def delete_signup
