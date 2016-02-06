@@ -1,5 +1,5 @@
 class ReportsController < ApplicationController
-  before_filter :fetch_tournament_day, unless: [:index]
+  before_filter :fetch_tournament_day, except: [:index]
 
   def index
     leagues = nil
@@ -11,7 +11,7 @@ class ReportsController < ApplicationController
   end
   
   def adjusted_scores
-    @adjusted_score_report = Reports::AdjustedScores.new(@tournament_day)
+    @report = Reports::AdjustedScores.new(@tournament_day)
     
     @page_title = "Adjusted Score Report"
   end

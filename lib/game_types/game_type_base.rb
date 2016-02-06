@@ -172,11 +172,9 @@ module GameTypes
     end  
     
     def compute_adjusted_player_score(user)
+      Rails.logger.debug { "compute_adjusted_player_score: #{user.complete_name}" }
+      
       return nil if !self.tournament.includes_player?(user)
-
-      total_score = 0
-    
-      handicap_allowance = self.tournament_day.handicap_allowance(user)
 
       scorecard = self.tournament_day.primary_scorecard_for_user(user)
       if scorecard.blank?
@@ -184,6 +182,8 @@ module GameTypes
         
         return 0 
       end
+      
+      total_score = 0
       
       scorecard.scores.each do |score|
         adjusted_score = self.score_or_maximum_for_hole(score.strokes, scorecard.golf_outing.course_handicap, score.course_hole)
@@ -197,25 +197,40 @@ module GameTypes
     end
     
     def score_or_maximum_for_hole(strokes, course_handicap, hole)
-      return strokes if course_handicap == 0
+      if course_handicap == 0
+        Rails.logger.debug { "No Course Handicap" }
+      
+        return strokes
+      end
       
       double_bogey = hole.par + 2
       
-      return strokes if strokes <= double_bogey
+      Rails.logger.debug { "Double Bogey for #{hole.hole_number} - #{double_bogey}" }
       
-      case strokes
-      when 0..9
-        return double_bogey
-      when 10..19
-        return 7
-      when 20..29
-        return 8
-      when 30..39
-        return 9
+      if strokes <= double_bogey
+        Rails.logger.debug { "Strokes <= double_bogey: #{double_bogey}. #{strokes}" }
+        
+        return strokes 
       else
-        return 10
+        adjusted_score = strokes
+        
+        case strokes
+        when 0..9
+          adjusted_score = double_bogey
+        when 10..19
+          adjusted_score = 7
+        when 20..29
+          adjusted_score = 8
+        when 30..39
+          adjusted_score = 9
+        else
+          adjusted_score = 10
+        end
+        
+        Rails.logger.debug { "Adjusted Score for #{hole.hole_number} (Par #{hole.par}) w/ strokes: #{strokes} = #{adjusted_score}" }
+        
+        return adjusted_score
       end
-      
     end
     
     def player_points(user)
