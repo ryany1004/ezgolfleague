@@ -24,6 +24,8 @@ class FinalizeJob < ProgressJob::Base
         contest.score_contest
       end
       
+      day.touch
+      
       update_progress
     end
     

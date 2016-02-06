@@ -1,0 +1,7 @@
+<div class="row">
+
+<% if @past_tournaments.count > 0 -%>
+  <%= render partial: 'tournament_table', locals: {tournaments: @past_tournaments} %>
+<% end -%>
+
+</div>

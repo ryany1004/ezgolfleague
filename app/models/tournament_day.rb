@@ -18,7 +18,7 @@ class TournamentDay < ActiveRecord::Base
   
   attr_accessor :skip_date_validation
   
-  delegate :player_score, :compute_player_score, :player_points, :flights_with_rankings, :related_scorecards_for_user, :assign_payouts_from_scores, to: :game_type
+  delegate :player_score, :compute_player_score, :compute_adjusted_player_score, :player_points, :flights_with_rankings, :related_scorecards_for_user, :assign_payouts_from_scores, to: :game_type
   delegate :allow_teams, :show_teams?, :players_create_teams?, :show_team_scores_for_all_teammates?, to: :game_type
   delegate :other_group_members, :user_is_in_group?, to: :game_type
   delegate :handicap_allowance, to: :game_type

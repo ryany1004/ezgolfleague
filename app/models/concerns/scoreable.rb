@@ -82,6 +82,7 @@ module Scoreable
     
     net_score = self.compute_player_score(user, true)
     gross_score = self.compute_player_score(user, false)
+    adjusted_score = self.compute_adjusted_player_score(user)
     
     front_nine_gross_score = self.compute_player_score(user, false, [1, 2, 3, 4, 5, 6, 7, 8, 9])
     front_nine_net_score = self.compute_player_score(user, true, [1, 2, 3, 4, 5, 6, 7, 8, 9])
@@ -91,7 +92,7 @@ module Scoreable
     par_related_net_score = net_score - user_par
     par_related_gross_score = gross_score - user_par
 
-    result = TournamentDayResult.create(tournament_day: self, user: user, primary_scorecard: primary_scorecard, flight: flight, gross_score: gross_score, net_score: net_score, front_nine_gross_score: front_nine_gross_score, front_nine_net_score: front_nine_net_score, back_nine_net_score: back_nine_net_score, par_related_net_score: par_related_net_score, par_related_gross_score: par_related_gross_score)
+    result = TournamentDayResult.create(tournament_day: self, user: user, primary_scorecard: primary_scorecard, flight: flight, gross_score: gross_score, net_score: net_score, adjusted_score: adjusted_score, front_nine_gross_score: front_nine_gross_score, front_nine_net_score: front_nine_net_score, back_nine_net_score: back_nine_net_score, par_related_net_score: par_related_net_score, par_related_gross_score: par_related_gross_score)
     
     return result
   end

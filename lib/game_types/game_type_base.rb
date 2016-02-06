@@ -171,6 +171,53 @@ module GameTypes
       return total_score
     end  
     
+    def compute_adjusted_player_score(user)
+      return nil if !self.tournament.includes_player?(user)
+
+      total_score = 0
+    
+      handicap_allowance = self.tournament_day.handicap_allowance(user)
+
+      scorecard = self.tournament_day.primary_scorecard_for_user(user)
+      if scorecard.blank?
+        Rails.logger.debug { "Returning 0 - No Scorecard" }
+        
+        return 0 
+      end
+      
+      scorecard.scores.each do |score|
+        adjusted_score = self.score_or_maximum_for_hole(score.strokes, scorecard.golf_outing.course_handicap, score.course_hole)
+        
+        total_score = total_score + adjusted_score
+      end
+    
+      total_score = 0 if total_score < 0
+
+      return total_score
+    end
+    
+    def score_or_maximum_for_hole(strokes, course_handicap, hole)
+      return strokes if course_handicap == 0
+      
+      double_bogey = hole.par + 2
+      
+      return strokes if strokes <= double_bogey
+      
+      case strokes
+      when 0..9
+        return double_bogey
+      when 10..19
+        return 7
+      when 20..29
+        return 8
+      when 30..39
+        return 9
+      else
+        return 10
+      end
+      
+    end
+    
     def player_points(user)
       return nil if !self.tournament.includes_player?(user)
     

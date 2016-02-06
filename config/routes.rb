@@ -127,6 +127,10 @@ Rails.application.routes.draw do
       get 'print', on: :collection
     end
     
+    resources :reports do
+      get 'adjusted_scores', on: :collection
+    end
+    
     resources :tournaments do #this is for setting them up
       resources :tournament_days do
         resources :flights, only: [:create, :update] do
