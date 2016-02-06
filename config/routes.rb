@@ -214,7 +214,6 @@ Rails.application.routes.draw do
   end
 
   resources :user_accounts do
-    get 'search', on: :collection
     get 'edit_current', on: :collection
     
     get 'setup_league_admin_invite', on: :collection
