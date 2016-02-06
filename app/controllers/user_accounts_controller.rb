@@ -12,6 +12,7 @@ class UserAccountsController < BaseController
     
     unless params[:search].blank?
       search_string = "%#{params[:search].downcase}%"
+      
       @user_accounts = @user_accounts.where("last_name LIKE ? OR first_name LIKE ?", search_string, search_string)
     end
     
