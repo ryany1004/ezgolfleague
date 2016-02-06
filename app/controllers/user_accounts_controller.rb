@@ -13,6 +13,20 @@ class UserAccountsController < BaseController
     @page_title = "User Accounts"
   end
   
+  def search
+    if current_user.is_super_user?
+      @user_accounts = User.order("last_name").page params[:page]
+    else
+      membership_ids = current_user.leagues.map { |n| n.id }
+      @user_accounts = User.joins(:league_memberships).where("league_memberships.league_id IN (?)", membership_ids).order("last_name").page params[:page]
+    end
+    
+    search_string = "%#{params[:search]}%"
+    @user_accounts = @user_accounts.where("last_name LIKE ? OR first_name LIKE ?", search_string, search_string)
+    
+    render :index
+  end
+  
   def new
     @user_account = User.new
   end
