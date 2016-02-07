@@ -157,6 +157,8 @@ class Tournament < ActiveRecord::Base
   ##
 
   def is_past?
+    return false if self.first_day.blank?
+    
     if self.last_day.tournament_at > DateTime.yesterday
       return false
     else
