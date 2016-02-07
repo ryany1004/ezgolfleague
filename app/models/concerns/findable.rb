@@ -24,11 +24,11 @@ module Findable
       end
 
       unless start_date.blank?
-        relation = relation.where("tournament_days.tournament_at >= ? OR tournament_days_count == 0", start_date)
+        relation = relation.where("tournament_days.tournament_at >= ? OR tournament_days_count = 0", start_date)
       end
     
       unless end_date.blank?
-        relation = relation.where("tournament_days.tournament_at <= ? OR tournament_days_count == 0", end_date)
+        relation = relation.where("tournament_days.tournament_at <= ? OR tournament_days_count = 0", end_date)
       end
 
       relation = relation.order("tournament_at")
