@@ -169,21 +169,23 @@
   </table>
 <% end -%>
 
-<!-- Game Type Support -->
-<% unless p.scorecard_post_embed_partial.blank? -%>
-  <%= render partial: p.scorecard_post_embed_partial, locals: {scorecards: other_scorecards, course_holes: p.course_holes} %>
-<% end -%>
+<% if print_mode == false -%>
+  <!-- Game Type Support -->
+  <% unless p.scorecard_post_embed_partial.blank? -%>
+    <%= render partial: p.scorecard_post_embed_partial, locals: {scorecards: other_scorecards, course_holes: p.course_holes} %>
+  <% end -%>
 
-<!-- Finalize Buttons -->
-<% if p.show_finalization? -%>
-  <p><%= link_to 'Finalize Scorecard', play_scorecard_finalize_scorecard_path(p.primary_scorecard), :class => 'btn btn-danger', :method => :patch, :data => { :confirm => 'Are you sure you want to finalize your scorecard? This indicates to the league administrator that you are ready to be ranked for this tournament.' } %></p>
-<% end -%>
+  <!-- Finalize Buttons -->
+  <% if p.show_finalization? -%>
+    <p><%= link_to 'Finalize Scorecard', play_scorecard_finalize_scorecard_path(p.primary_scorecard), :class => 'btn btn-danger', :method => :patch, :data => { :confirm => 'Are you sure you want to finalize your scorecard? This indicates to the league administrator that you are ready to be ranked for this tournament.' } %></p>
+  <% end -%>
 
-<!-- Modals -->
-<% if p.user_can_edit_any_scorecard?-%>
-  <% cache(cache_key_for_scorecard(p.primary_scorecard.id)) do %>
-    <% p.course_holes.each do |course_hole| %>
-      <%= render partial: '/shared/scorecards/standard_edit_modal', locals: {primary_scorecard: p.primary_scorecard, course_hole: course_hole, scores: scores_for_scorecards_for_course_hole(p.all_scorecards, course_hole), edit_url: play_scorecard_path(p.primary_scorecard, original_scorecard_id: p.primary_scorecard.id) } %>
-    <% end -%>
-  <% end %>
+  <!-- Modals -->
+  <% if p.user_can_edit_any_scorecard?-%>
+    <% cache(cache_key_for_scorecard(p.primary_scorecard.id)) do %>
+      <% p.course_holes.each do |course_hole| %>
+        <%= render partial: '/shared/scorecards/standard_edit_modal', locals: {primary_scorecard: p.primary_scorecard, course_hole: course_hole, scores: scores_for_scorecards_for_course_hole(p.all_scorecards, course_hole), edit_url: play_scorecard_path(p.primary_scorecard, original_scorecard_id: p.primary_scorecard.id) } %>
+      <% end -%>
+    <% end %>
+  <% end -%>
 <% end -%>
