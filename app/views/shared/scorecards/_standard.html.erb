@@ -61,7 +61,7 @@
                 <% if j == 0 -%>
                   <%= score_print_helper(scorecard.front_nine_score, print_mode) %> <%= front_nine_handicap_for_scorecard(scorecard, print_mode) %>
                 <% else -%>
-                  <%= score_print_helper(scorecard.front_nine_score, print_mode) %> <%= front_nine_handicap_for_scorecard(scorecard, print_mode) %><br/><%= scorecard.back_nine_score %> <%= back_nine_handicap_for_scorecard(scorecard, print_mode) %>
+                  <%= score_print_helper(scorecard.front_nine_score, print_mode) %> <%= front_nine_handicap_for_scorecard(scorecard, print_mode) %><br/><%= score_print_helper(scorecard.back_nine_score, print_mode) %> <%= back_nine_handicap_for_scorecard(scorecard, print_mode) %>
                 <% end -%>
               </strong>
             <% else -%>
@@ -81,7 +81,7 @@
             <strong><%= score_print_helper(scorecard.scores.map {|score| score.strokes }.sum, print_mode) %></strong>
             <% if scorecard.net_score > 0-%>
             <span class="label label-success">
-              <%= scorecard.net_score %>
+              <%= score_print_helper(scorecard.net_score, print_mode) %>
             </span>
             <% end -%>
           <% else -%>

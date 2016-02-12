@@ -10,6 +10,8 @@ class PrintScorecardsJob < ProgressJob::Base
   def perform
     update_stage('Printing Scorecards')
 
+    Rails.cache.write(@tournament_day.scorecard_print_cache_key, nil)
+
     @print_cards = []
     
     @tournament.players_for_day(@tournament_day).each do |player|
