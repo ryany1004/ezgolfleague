@@ -42,11 +42,7 @@ class PrintScorecardsJob < ProgressJob::Base
     body = ApplicationController.render 'prints/print_template_scorecards', locals: { :print_cards => @print_cards }, :layout => false
     
     Rails.cache.write(@tournament_day.scorecard_print_cache_key, body) unless body.blank?
-    
-    Rails.logger.debug { "---" }
-    Rails.logger.debug { body }
-    Rails.logger.debug { "---" }
-    
+
     Rails.logger.info { "PrintScorecardsJob Completed" }
   end
   

@@ -34,12 +34,10 @@
     letter-spacing: 0.2px;
   }
   
-  table {
-    page-break-inside: avoid;
-  }
-  
   table.print-friendly tr td, table.print-friendly tr th {
     page-break-inside: avoid;
+    margin: 4px;
+    padding: 4px;
   }
   
   @page {
