@@ -30,7 +30,7 @@ class User < ActiveRecord::Base
   def complete_name(shorten_for_print = false)    
     if shorten_for_print == true
       combined_name = "#{self.last_name}, #{self.first_name}"
-      shortened_name = ActionController::Base.helpers.truncate(combined_name, length: 20)
+      shortened_name = ActionController::Base.helpers.truncate(combined_name, length: 25)
       
       return shortened_name
     else
