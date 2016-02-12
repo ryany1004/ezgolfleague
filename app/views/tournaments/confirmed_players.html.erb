@@ -1,27 +1,38 @@
 <h4>Tournament Players</h4>
 
-<table class="table table-striped">
-	<thead>
-		<tr>
-			<th>Name</th>
-      <th>Confirmed?</th>
-      <th>Has Paid?</th>
-		</tr>
-	</thead>
-	<tbody>
-    <% @confirmed_players.each do |player| %>
-      <tr>
-        <td><%= player.complete_name %></td>
-        <td><%= human_boolean(@tournament_day.player_is_confirmed?(player)) %></td>
-        <td><%= human_boolean(@tournament.user_has_paid?(player)) %></td>
-      </tr>
-    <% end -%>
-	</tbody>
-  <tfoot>
-		<tr>
-      <th>&nbsp;</th>
-      <th>&nbsp;</th>
-			<th>&nbsp;</th>
-		</tr>
-  </tfoot>
-</table>
+<div class="col-md-12">
+  <table class="table table-striped">
+  	<thead>
+  		<tr>
+  			<th>Tee-Group</th>
+        <th>Players</th>
+        <th>Confirmed</th>
+        <th>Paid</th>
+  		</tr>
+  	</thead>
+  	<tbody>
+      <% @eager_groups.each_with_index do |group, index| -%>
+        <% if group.players_signed_up.count > 0 -%>
+      		<tr>
+            <td><%= index + 1 %></td>
+      			<td>
+      			  <% group.players_signed_up.each do |player| -%>
+                <%= player.complete_name %></br>
+              <% end -%>
+      			</td>
+      			<td>
+      			  <% group.players_signed_up.each do |player| -%>
+                <%= human_boolean(@tournament_day.player_is_confirmed?(player)) %></br>
+              <% end -%>
+      			</td>
+      			<td>
+      			  <% group.players_signed_up.each do |player| -%>
+                <%= human_boolean(@tournament.user_has_paid?(player)) %></br>
+              <% end -%>
+      			</td>
+      		</tr>
+        <% end -%>
+      <% end -%>
+  	</tbody>
+  </table>
+</div>

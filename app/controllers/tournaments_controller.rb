@@ -161,8 +161,8 @@ class TournamentsController < BaseController
   ##
   
   def confirmed_players
-    @tournament_day = @tournament.first_day
-    @confirmed_players = @tournament.players_for_day(@tournament_day)
+    @tournament_day = @tournament.first_day  
+    @eager_groups = TournamentGroup.includes(golf_outings: [{scorecard: :scores}, :user]).where(tournament_day: @tournament_day)
   end
   
   ##
