@@ -15,6 +15,12 @@ class ReportsController < ApplicationController
     
     @page_title = "Adjusted Score Report"
   end
+  
+  def confirmed_players
+    @page_title = "Payment and Confirmation Report"
+        
+    @eager_groups = TournamentGroup.includes(golf_outings: [{scorecard: :scores}, :user]).where(tournament_day: @tournament_day)
+  end
 
   def fetch_tournament_day
     @tournament = Tournament.find(params[:tournament])

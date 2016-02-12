@@ -129,6 +129,7 @@ Rails.application.routes.draw do
     
     resources :reports do
       get 'adjusted_scores', on: :collection
+      get 'confirmed_players', on: :collection
     end
     
     resources :tournaments do #this is for setting them up
@@ -177,9 +178,7 @@ Rails.application.routes.draw do
       delete 'delete_signup'
       patch 'move_signup'
       patch 'update_auto_schedule'
-      
-      get 'confirmed_players'
-      
+ 
       get 'finalize'
       get 'run_finalization'
       get 'display_finalization'

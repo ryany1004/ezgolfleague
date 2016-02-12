@@ -160,13 +160,6 @@ class TournamentsController < BaseController
   
   ##
   
-  def confirmed_players
-    @tournament_day = @tournament.first_day  
-    @eager_groups = TournamentGroup.includes(golf_outings: [{scorecard: :scores}, :user]).where(tournament_day: @tournament_day)
-  end
-  
-  ##
-  
   def auto_schedule
     groups_error = false
     @tournament.tournament_days.each do |day|
