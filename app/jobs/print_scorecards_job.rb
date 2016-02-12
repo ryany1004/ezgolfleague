@@ -1,9 +1,7 @@
 class PrintScorecardsJob < ProgressJob::Base
   def initialize(tournament_day, current_user)
     max_count = tournament_day.tournament.players_for_day(tournament_day).count
-    
-    Rails.logger.debug { "Max Count: #{max_count}" }
-    
+
     super progress_max: max_count
     
     @tournament = tournament_day.tournament

@@ -7,7 +7,11 @@ module Play::ScorecardsHelper
     return "" if print_mode == true and handicap_score == 0
     
     if scorecard.can_display_handicap? && handicap_score != non_handicap_score
-      return "<span class='label label-success'>#{handicap_score}</span>".html_safe
+      if print_mode == false
+        return "<span class='label label-success'>#{handicap_score}</span>".html_safe
+      else
+        return handicap_score
+      end
     else
       return nil
     end
@@ -20,7 +24,11 @@ module Play::ScorecardsHelper
     return "" if print_mode == true and handicap_score == 0
     
     if scorecard.can_display_handicap? && handicap_score != non_handicap_score
-      return "<span class='label label-success'>#{handicap_score}</span>".html_safe
+      if print_mode == false
+        return "<span class='label label-success'>#{handicap_score}</span>".html_safe
+      else
+        return handicap_score
+      end
     else
       return nil
     end

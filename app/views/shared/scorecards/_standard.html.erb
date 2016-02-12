@@ -42,7 +42,7 @@
             <td>
               <%= link_to_unless !p.user_can_edit_scorecard?(scorecard), "#{scorecard_score_helper(score, print_mode)}", "#", {"data-toggle" => "modal", "data-target" => "#Group#{score.course_hole.id}"} %>
               
-              <% if handicap_allowance_strokes_for_hole(handicap_allowance_for_scorecard(scorecard), score.course_hole) > 0 -%>
+              <% if handicap_allowance_strokes_for_hole(handicap_allowance_for_scorecard(scorecard), score.course_hole) > 0 && print_mode == false -%>
                 </br><span class="label label-success">-<%= handicap_allowance_strokes_for_hole(handicap_allowance_for_scorecard(scorecard), score.course_hole) %></span>
               <% end -%>
               
