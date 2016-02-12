@@ -1,6 +1,10 @@
 class PrintScorecardsJob < ProgressJob::Base
   def initialize(tournament_day, current_user)
-    super progress_max: tournament_day.tournament.players_for_day(tournament_day)
+    max_count = tournament_day.tournament.players_for_day(tournament_day).count
+    
+    Rails.logger.debug { "Max Count: #{max_count}" }
+    
+    super progress_max: max_count
     
     @tournament = tournament_day.tournament
     @tournament_day = tournament_day
@@ -39,7 +43,11 @@ class PrintScorecardsJob < ProgressJob::Base
     #NOTE: in Rails 5, move to standard solution
     body = ApplicationController.render 'prints/print_template_scorecards', locals: { :print_cards => @print_cards }, :layout => false
     
-    Rails.cache.write(@tournament_day.scorecard_print_cache_key, body)
+    Rails.cache.write(@tournament_day.scorecard_print_cache_key, body) unless body.blank?
+    
+    Rails.logger.debug { "---" }
+    Rails.logger.debug { body }
+    Rails.logger.debug { "---" }
     
     Rails.logger.info { "PrintScorecardsJob Completed" }
   end

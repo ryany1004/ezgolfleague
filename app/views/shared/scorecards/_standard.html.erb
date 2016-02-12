@@ -1,4 +1,4 @@
-<h4>Tee-Time: <%= p.tee_time.to_s(:date_and_time) %> | Tees: <%= p.tee_names %></h4>
+<p><strong>Tee-Time: <%= p.tee_time.to_s(:date_and_time) %> | Tees: <%= p.tee_names %></strong></p>
 
 <table class="table table-striped table-bordered print-friendly">
 	<thead>
@@ -149,7 +149,7 @@
 </table>
 
 <% if print_mode == true -%>
-  <table class="table table-striped">
+  <table class="table table-striped table-condensed print-friendly">
     <tbody>
       <tr>
         <td>Scorer</td>

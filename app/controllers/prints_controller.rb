@@ -11,6 +11,10 @@ class PrintsController < ApplicationController
   end
  
   def print_display_scorecards
+    @content = Rails.cache.read(@tournament_day.scorecard_print_cache_key)
+    
+    @content = "There was an error rendering scorecards. Please go back and try again." if @content.blank?
+    
     render layout: false
   end
   

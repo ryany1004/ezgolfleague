@@ -13,8 +13,8 @@
       </script>
       
       <% print_cards.each_with_index do |print_card, index| -%>
-        <% if index % 2 == 0 -%>
-          <h2/>
+        <% if index > 0 && index % 2 == 0 -%>
+          <h2>&nbsp;</h2>
         <% end -%>
         
         <% cache(cache_key_for_scorecard(print_card[:p].primary_scorecard.id)) do %>
