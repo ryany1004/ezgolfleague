@@ -11,7 +11,7 @@ module GameTypes
       end
     end
     
-    def name
+    def name(shorten_for_print = false)
       return ""
     end
     

@@ -11,7 +11,7 @@ module GameTypes
       self.course_hole_number_suppression_list = []
     end
     
-    def name
+    def name(shorten_for_print = false)
       if self.should_use_handicap == true
         return "Best Ball Net"
       else

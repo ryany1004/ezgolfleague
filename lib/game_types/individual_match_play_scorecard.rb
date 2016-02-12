@@ -5,7 +5,7 @@ module GameTypes
     attr_accessor :opponent_running_score
     attr_accessor :unplayed_holes
     
-    def name
+    def name(shorten_for_print = false)
       return "Match Play"
     end
     

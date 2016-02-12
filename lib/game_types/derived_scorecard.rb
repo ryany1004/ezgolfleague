@@ -45,7 +45,7 @@ module GameTypes
       return false
     end
     
-    def name
+    def name(shorten_for_print = false)
       return "Derived Score"
     end
     

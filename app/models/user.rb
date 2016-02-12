@@ -27,8 +27,17 @@ class User < ActiveRecord::Base
   #this is to work around a Devise bug
   def after_password_reset; end
   
-  def complete_name
-    return "#{self.last_name}, #{self.first_name}"
+  def complete_name(shorten_for_print = false)
+    logger.info { "Shorten For Print: #{shorten_for_print}" }
+    
+    if shorten_for_print == true
+      s_last_name = ActionController::Base.helpers.truncate(self.last_name, length: 8)
+      s_first_name = ActionController::Base.helpers.truncate(self.first_name, length: 5)
+      
+      return "#{s_last_name}, #{s_first_name}"
+    else
+      return "#{self.last_name}, #{self.first_name}"
+    end
   end
   
   def short_name

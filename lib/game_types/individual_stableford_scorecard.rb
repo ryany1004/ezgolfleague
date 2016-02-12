@@ -1,7 +1,7 @@
 module GameTypes
   class IndividualStablefordScorecard < GameTypes::DerivedScorecard
     
-    def name
+    def name(shorten_for_print = false)
       return "Stableford"
     end
     
