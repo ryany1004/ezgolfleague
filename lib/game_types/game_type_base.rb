@@ -214,7 +214,7 @@ module GameTypes
       else
         adjusted_score = strokes
         
-        case strokes
+        case course_handicap
         when 0..9
           adjusted_score = double_bogey
         when 10..19
@@ -227,7 +227,7 @@ module GameTypes
           adjusted_score = 10
         end
         
-        Rails.logger.debug { "Adjusted Score for #{hole.hole_number} (Par #{hole.par}) w/ strokes: #{strokes} = #{adjusted_score}" }
+        Rails.logger.debug { "Adjusted Score for #{hole.hole_number} (Par #{hole.par}) w/ strokes: #{strokes} = #{adjusted_score}. Course handicap: #{course_handicap}" }
         
         return adjusted_score
       end
