@@ -190,6 +190,8 @@ module GameTypes
         
         total_score = total_score + adjusted_score
       end
+
+      Rails.logger.debug { "User Adjusted Score: #{user.complete_name} - #{total_score}" }
     
       total_score = 0 if total_score < 0
 

@@ -86,11 +86,7 @@ module Scoreable
     
     net_score = self.compute_player_score(user, true)
     gross_score = self.compute_player_score(user, false)
-    
     adjusted_score = self.compute_adjusted_player_score(user)
-    if adjusted_score > net_score
-      adjusted_score = net_score
-    end
     
     front_nine_gross_score = self.compute_player_score(user, false, [1, 2, 3, 4, 5, 6, 7, 8, 9])
     front_nine_net_score = self.compute_player_score(user, true, [1, 2, 3, 4, 5, 6, 7, 8, 9])
