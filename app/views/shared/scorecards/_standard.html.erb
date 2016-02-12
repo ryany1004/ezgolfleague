@@ -59,9 +59,9 @@
             <% if scorecard.should_subtotal? -%>
               <strong>
                 <% if j == 0 -%>
-                  <%= scorecard.front_nine_score %> <%= front_nine_handicap_for_scorecard(scorecard) %>
+                  <%= score_print_helper(scorecard.front_nine_score, print_mode) %> <%= front_nine_handicap_for_scorecard(scorecard, print_mode) %>
                 <% else -%>
-                  <%= scorecard.front_nine_score %> <%= front_nine_handicap_for_scorecard(scorecard) %><br/><%= scorecard.back_nine_score %> <%= back_nine_handicap_for_scorecard(scorecard) %>
+                  <%= score_print_helper(scorecard.front_nine_score, print_mode) %> <%= front_nine_handicap_for_scorecard(scorecard, print_mode) %><br/><%= scorecard.back_nine_score %> <%= back_nine_handicap_for_scorecard(scorecard, print_mode) %>
                 <% end -%>
               </strong>
             <% else -%>
@@ -147,6 +147,23 @@
 		</tr>
   </tfoot>
 </table>
+
+<% if print_mode == true -%>
+  <table class="table table-striped">
+    <tbody>
+      <tr>
+        <td>Scorer</td>
+        <td>Attested</td>
+        <td>Date</td>
+      </tr>
+      <tr>
+        <td>&nbsp;</td>
+        <td>&nbsp;</td>
+        <td>&nbsp;</td>
+      </tr>
+    </tbody>
+  </table>
+<% end -%>
 
 <!-- Game Type Support -->
 <% unless p.scorecard_post_embed_partial.blank? -%>

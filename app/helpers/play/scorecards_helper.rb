@@ -1,6 +1,6 @@
 module Play::ScorecardsHelper
-
-  def front_nine_handicap_for_scorecard(scorecard)
+  
+  def front_nine_handicap_for_scorecard(scorecard, print_mode)
     handicap_score = scorecard.front_nine_score(true)
     non_handicap_score = scorecard.front_nine_score(false)
     
@@ -11,7 +11,7 @@ module Play::ScorecardsHelper
     end
   end
   
-  def back_nine_handicap_for_scorecard(scorecard)
+  def back_nine_handicap_for_scorecard(scorecard, print_mode)
     handicap_score = scorecard.back_nine_score(true)
     non_handicap_score = scorecard.back_nine_score(false)
     

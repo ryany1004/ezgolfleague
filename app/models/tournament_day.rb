@@ -93,6 +93,10 @@ class TournamentDay < ActiveRecord::Base
     return "flightswithrankings-json#{self.id}"
   end
   
+  def scorecard_print_cache_key
+    return "print-scorecards#{self.id}-#{self.updated_at.to_s}"
+  end
+  
   def has_payouts?
     self.flights.each do |flight|
       return true if flight.payouts.count > 0

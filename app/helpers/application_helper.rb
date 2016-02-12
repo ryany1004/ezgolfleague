@@ -172,5 +172,13 @@ module ApplicationHelper
       return net_score
     end
   end
+  
+  def score_print_helper(score, print_mode)
+    if print_mode == true and score == 0
+      return ""
+    else
+      return score
+    end
+  end
 
 end
