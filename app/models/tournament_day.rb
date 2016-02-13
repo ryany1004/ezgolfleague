@@ -86,11 +86,11 @@ class TournamentDay < ActiveRecord::Base
   end
   
   def leaderboard_api_cache_key
-    return "leaderboard-json#{self.id}"
+    return "leaderboard-json#{self.id}-#{self.updated_at.to_s}"
   end
   
   def flights_with_rankings_cache_key
-    return "flightswithrankings-json#{self.id}"
+    return "flightswithrankings-json#{self.id}-#{self.updated_at.to_s}"
   end
   
   def scorecard_print_cache_key
