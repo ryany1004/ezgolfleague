@@ -9,7 +9,7 @@ class UpdateUserScorecardJob < ProgressJob::Base
   def perform
     update_stage('Re-Scoring User')
 
-    Rails.logger.info { "Re-Scoring User" }
+    Rails.logger.info { "Re-Scoring User #{@primary_scorecard.golf_outing.user.complete_name}" }
     @primary_scorecard.tournament_day.score_user(@primary_scorecard.golf_outing.user)
     
     update_progress

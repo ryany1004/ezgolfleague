@@ -63,7 +63,7 @@
             DNP
             <% end -%>
           <% end -%>
-          <% if !@tournament.user_has_paid?(current_user) -%>
+          <% if @tournament.includes_player?(current_user, @tournament_day) && !@tournament.user_has_paid?(current_user) -%>
            | <%= link_to "Pay for Registration", new_play_payment_path(:payment_type => "tournament_dues", :tournament_id => @tournament.id) %>
           <% end -%>
         </li>

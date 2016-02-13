@@ -26,6 +26,9 @@ module Updaters
             score.save
             
             Rails.logger.info { "Updating Score: #{score.id}" }
+            
+            scorecard_to_rescore = score.scorecard
+            Delayed::Job.enqueue UpdateUserScorecardJob.new(scorecard_to_rescore, []) unless scorecard_to_rescore.blank?
           else
             Rails.logger.info { "Not Updating Scores - Too Old #{date_scored}" }
           end
