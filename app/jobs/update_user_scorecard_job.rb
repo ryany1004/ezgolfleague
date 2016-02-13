@@ -17,10 +17,15 @@ class UpdateUserScorecardJob < ProgressJob::Base
     Rails.logger.info { "User Re-Scored, Updating After-Action" }
     @primary_scorecard.tournament_day.game_type.after_updating_scores_for_scorecard(@primary_scorecard)
   
-    Rails.logger.info { "Updating Other Scorecards" }
     @other_scorecards.each do |other_scorecard|
-      @primary_scorecard.tournament_day.score_user(other_scorecard.golf_outing.user) unless other_scorecard.golf_outing.blank?
-      @primary_scorecard.tournament_day.game_type.after_updating_scores_for_scorecard(other_scorecard)
+      Rails.logger.info { "Updating Other Scorecard: #{other_scorecard.id}" }
+      
+      unless other_scorecard.golf_outing.blank?
+        @primary_scorecard.tournament_day.score_user(other_scorecard.golf_outing.user) 
+        @primary_scorecard.tournament_day.game_type.after_updating_scores_for_scorecard(other_scorecard)
+      else
+        Rails.logger.info { "Err, Failed: Updating Other Scorecard: #{other_scorecard.id}" }
+      end
       
       update_progress
     end
