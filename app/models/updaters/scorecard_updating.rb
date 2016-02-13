@@ -3,13 +3,13 @@ module Updaters
     
     def self.update_scorecards_for_scores(scores, primary_scorecard, other_scorecards)
       scores.each do |score_param|
-        Rails.logger.debug { "#{score_param}" }
+        Rails.logger.info { "score_param #{score_param}" }
       
         score_id = score_param[0].to_i
         strokes = score_param[1][:strokes]
         date_scored = score_param[1][:date_scored]
       
-        Rails.logger.debug { "#{score_id} #{strokes}" }
+        Rails.logger.info { "#{score_id} #{strokes}" }
         
         unless strokes.blank? or score_id.blank?
           score = Score.find(score_id)
