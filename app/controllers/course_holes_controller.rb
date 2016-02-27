@@ -30,7 +30,7 @@ class CourseHolesController < BaseController
   
   def update
     if @course_hole.update(course_hole_params)
-      redirect_to edit_course_path(@course), :flash => { :success => "The hole was successfully updated." }
+      redirect_to course_course_holes_path(@course), :flash => { :success => "The hole was successfully updated." }
     else      
       render :edit
     end
@@ -39,7 +39,7 @@ class CourseHolesController < BaseController
   def destroy
     @course_hole.destroy
     
-    redirect_to edit_course_path(@course), :flash => { :success => "The course hole was successfully deleted." }
+    redirect_to course_course_holes_path(@course), :flash => { :success => "The course hole was successfully deleted." }
   end
 
   private
@@ -53,6 +53,6 @@ class CourseHolesController < BaseController
   end
   
   def course_hole_params
-    params.require(:course_hole).permit(:hole_number, :par, :mens_handicap, :womens_handicap, course_hole_tee_boxes_attributes: [:course_tee_box_id, :description, :yardage])
+    params.require(:course_hole).permit(:hole_number, :par, :mens_handicap, :womens_handicap, course_hole_tee_boxes_attributes: [:id, :course_tee_box_id, :description, :yardage])
   end
 end

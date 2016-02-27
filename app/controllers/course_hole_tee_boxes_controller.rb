@@ -27,7 +27,7 @@ class CourseHoleTeeBoxesController < BaseController
   private
   
   def course_hole_tee_box_params
-    params.require(:course_hole_tee_box).permit(:name, :yardage, :description)
+    params.require(:course_hole_tee_box).permit(:name, :yardage, :description, :course_tee_box_id)
   end
   
   def fetch_course

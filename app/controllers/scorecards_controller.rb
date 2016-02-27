@@ -20,6 +20,22 @@ class ScorecardsController < BaseController
   end
   
   def edit
+    eager_groups = TournamentGroup.includes(golf_outings: [{scorecard: :scores}, :user]).where(tournament_day: @tournament_day)
+    
+    sorted_players = []
+    eager_groups.each do |group|
+      group.players_signed_up.each do |player|
+        sorted_players << player
+      end
+    end
+    
+    sorted_players.each_with_index do |player, i|
+      if player == @scorecard.golf_outing.user
+        next_golfer = sorted_players[i + 1]
+        
+        @next_scorecard = @tournament_day.primary_scorecard_for_user(next_golfer) unless next_golfer.blank?
+      end
+    end
   end
   
   def update
@@ -36,7 +52,7 @@ class ScorecardsController < BaseController
 
     Updaters::ScorecardUpdating.update_scorecards_for_scores(scores_to_update, @scorecard, @other_scorecards)
 
-    redirect_to scorecards_path(tournament_id: @tournament), :flash => { :success => "The scorecard was successfully updated." }
+    redirect_to edit_scorecard_path(@scorecard), :flash => { :alert => "The scorecard was successfully updated. NOTE: Net scores are calculated in the background and may not be immediately up to date." }
   end
  
   private
