@@ -26,6 +26,12 @@
     <%= f.input :stripe_test_mode, :label => 'Use Test Mode?' %>
   </div>
   
+  <h3>Apple Pay</h3>
+  <div class="well">  
+    <%= f.input :apple_pay_merchant_id, :label => 'Apple Pay Merchant ID' %>
+    <%= f.input :supports_apple_pay, :label => 'Supports Apple Pay?' %>
+  </div>
+  
   <% if !@league.new_record? -%>
   <h3>Message League Members</h3>
   <div class="well">  

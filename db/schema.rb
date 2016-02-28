@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160207182536) do
+ActiveRecord::Schema.define(version: 20160228211042) do
 
   create_table "contest_holes", force: :cascade do |t|
     t.integer  "contest_id"
@@ -241,8 +241,8 @@ ActiveRecord::Schema.define(version: 20160207182536) do
 
   create_table "leagues", force: :cascade do |t|
     t.string   "name"
-    t.datetime "created_at",                                                 null: false
-    t.datetime "updated_at",                                                 null: false
+    t.datetime "created_at",                                                  null: false
+    t.datetime "updated_at",                                                  null: false
     t.decimal  "dues_amount",                                 default: 0.0
     t.string   "encrypted_stripe_test_secret_key"
     t.string   "encrypted_stripe_production_secret_key"
@@ -250,6 +250,8 @@ ActiveRecord::Schema.define(version: 20160207182536) do
     t.string   "encrypted_stripe_production_publishable_key"
     t.boolean  "stripe_test_mode",                            default: true
     t.string   "dues_payment_receipt_email_addresses"
+    t.string   "apple_pay_merchant_id"
+    t.boolean  "supports_apple_pay",                          default: false
   end
 
   create_table "payments", force: :cascade do |t|

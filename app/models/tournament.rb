@@ -235,8 +235,8 @@ class Tournament < ActiveRecord::Base
       :methods => [:server_id, :number_of_players, :is_open_for_registration?, :show_players_tee_times],
       :include => {
         :league => {
-          :only => [:name],
-          :methods => [:server_id]
+          :only => [:name, :apple_pay_merchant_id, :supports_apple_pay],
+          :methods => [:server_id, :stripe_publishable_key]
         },
         :tournament_days => {
           :only => [:tournament_at],
