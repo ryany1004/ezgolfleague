@@ -29,6 +29,21 @@ class Api::V1::TournamentDaysController < Api::V1::ApiBaseController
     end
   end
   
+  def register
+    registration_information = ActiveSupport::JSON.decode(request.body.read)
+    
+    user = User.find(registration_information["user_id"])
+    tournament_group = @tournament_day.tournament_groups.find(registration_information["tournament_group_id"])
+    
+    @tournament_day.add_player_to_group(tournament_group, user, false, false)
+
+    eager_groups = TournamentGroup.includes(golf_outings: [:user, :course_tee_box, scorecard: [{scores: :course_hole}]]).where(tournament_day: @tournament_day)
+
+    respond_with(eager_groups) do |format|
+      format.json { render :json => eager_groups }
+    end
+  end
+  
   def fetch_details
     @tournament = Tournament.find(params[:tournament_id])
     @tournament_day = @tournament.tournament_days.find(params[:tournament_day_id])

@@ -55,8 +55,8 @@ class TournamentGroup < ActiveRecord::Base
   
   def as_json(options={})
     super(
-      :only => [:tee_time_at],
-      :methods => [:server_id],
+      :only => [:tee_time_at, :max_number_of_players],
+      :methods => [:server_id, :time_description],
       :include => {
         :golf_outings => {
           :only => [:course_handicap],

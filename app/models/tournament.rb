@@ -232,7 +232,7 @@ class Tournament < ActiveRecord::Base
   def as_json(options={})
     super(
       :only => :name,
-      :methods => [:server_id, :number_of_players],
+      :methods => [:server_id, :number_of_players, :is_open_for_registration?, :show_players_tee_times],
       :include => {
         :league => {
           :only => [:name],
