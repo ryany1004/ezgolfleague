@@ -56,13 +56,16 @@ class Contest < ActiveRecord::Base
     end
   end
   
-  def cost_breakdown_for_user(user)
+  def cost_breakdown_for_user(user, include_credit_card_fees = true)
     membership = user.league_memberships.where("league_id = ?", self.tournament_day.tournament.league.id).first
     
     cost_lines = [
-      {:name => "#{self.name} Fees", :price => self.dues_amount},
-      {:name => "Credit Card Fees", :price => Stripe::StripeFees.fees_for_transaction_amount(self.dues_amount)}
+      {:name => "#{self.name} Fees", :price => self.dues_amount, :server_id => self.id.to_s}
     ]
+    
+    if include_credit_card_fees == true
+      cost_lines << {:name => "Credit Card Fees", :price => Stripe::StripeFees.fees_for_transaction_amount(self.dues_amount)}
+    end
 
     return cost_lines
   end

@@ -114,7 +114,7 @@ class Tournament < ActiveRecord::Base
     membership = user.league_memberships.where("league_id = ?", self.league.id).first
     
     cost_lines = [
-      {:name => "#{self.name} Fees", :price => self.dues_amount}
+      {:name => "#{self.name} Fees", :price => self.dues_amount, :server_id => self.id.to_s}
     ]
     
     if include_credit_card_fees == true
@@ -232,7 +232,7 @@ class Tournament < ActiveRecord::Base
   def as_json(options={})
     super(
       :only => :name,
-      :methods => [:server_id, :number_of_players, :is_open_for_registration?, :show_players_tee_times],
+      :methods => [:server_id, :number_of_players, :is_open_for_registration?, :dues_amount],
       :include => {
         :league => {
           :only => [:name, :apple_pay_merchant_id, :supports_apple_pay],

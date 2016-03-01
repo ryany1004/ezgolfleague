@@ -41,6 +41,14 @@ class TournamentGroup < ActiveRecord::Base
     end
   end
   
+  def api_time_description
+    if self.tournament_day.tournament.show_players_tee_times == true
+      return self.tee_time_at.to_s(:time_only)
+    else
+      return self.time_description
+    end
+  end
+  
   #date parsing
   def tee_time_at=(date)
     begin
@@ -56,7 +64,7 @@ class TournamentGroup < ActiveRecord::Base
   def as_json(options={})
     super(
       :only => [:tee_time_at, :max_number_of_players],
-      :methods => [:server_id, :time_description],
+      :methods => [:server_id, :api_time_description],
       :include => {
         :golf_outings => {
           :only => [:course_handicap],
