@@ -34,8 +34,9 @@ class Api::V1::TournamentDaysController < Api::V1::ApiBaseController
     
     user = User.find(registration_information["user_id"])
     tournament_group = @tournament_day.tournament_groups.find(registration_information["tournament_group_id"])
+    confirm_user = registration_information["confirm_user"]
     
-    @tournament_day.add_player_to_group(tournament_group, user, false, false)
+    @tournament_day.add_player_to_group(tournament_group, user, false, confirm_user)
 
     eager_groups = TournamentGroup.includes(golf_outings: [:user, :course_tee_box, scorecard: [{scores: :course_hole}]]).where(tournament_day: @tournament_day)
 

@@ -110,6 +110,8 @@ Rails.application.routes.draw do
         put 'batch_update', on: :collection
       end
       
+      resources :payments, only: [:create]
+      
       resources :tournaments do
         resources :tournament_days, only: [:show] do
           post 'register'
