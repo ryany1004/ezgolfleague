@@ -2,9 +2,9 @@ Rails.application.routes.draw do
   if Rails.env.production? #TODO: split this for staging / production
     default_url_options :host => "app.ezgolfleague.com"
   end
-  
+
   devise_for :users
-  
+
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
@@ -59,84 +59,86 @@ Rails.application.routes.draw do
   #     # (app/controllers/admin/products_controller.rb)
   #     resources :products
   #   end
-    
+
   root to: 'tournaments#index', constraints: -> (r) { r.env["warden"].authenticate? && r.env['warden'].user.is_any_league_admin? }, as: :league_admin_root
   root to: 'play/dashboard#index'
-  
+
   #this is for playing tournaments
   namespace :play do
     resources :payments, only: [:index, :new, :create] do
       get 'thank_you', on: :collection
       get 'error', on: :collection
     end
-    
+
     resources :tournaments, only: [:show] do
       get 'leaderboard'
       get 'signup'
-      
+
       put 'complete_signup'
       delete 'remove_signup'
-      
+
       put 'confirm'
-      
+
       resources :tournament_days, only: [:index] do
         resources :contests, only: [:index]
       end
     end
-    
+
     resource :user_account, only: [:edit, :update], controller: "user_account" do
       get 'password'
       patch 'change_password'
     end
-    
+
     resources :scorecards, only: [:show, :update] do
       patch 'finalize_scorecard'
       patch 'become_designated_scorer'
       patch 'update_game_type_metadata'
     end
-    
+
     resources :dashboard, only: [:index] do
       put 'switch_leagues'
       put 'switch_seasons'
     end
   end
-  
+
   #API
   namespace "api" do
     namespace "v1" do
       resources :sessions, only: [:create]
-      
+
       resources :scores do
         put 'batch_update', on: :collection
       end
-      
+
       resources :payments, only: [:create]
-      
+
       resources :tournaments do
         resources :tournament_days, only: [:show] do
           post 'register'
           get 'payment_details'
-          
+
           get 'tournament_groups'
           get 'leaderboard'
+
+          resources :scorecards, only: [:show]
         end
       end
     end
   end
-  
+
   #this is for admin
-  resources :leagues do    
+  resources :leagues do
     resources :league_seasons
-    
+
     resources :league_memberships do
       get 'print', on: :collection
     end
-    
+
     resources :reports do
       get 'adjusted_scores', on: :collection
       get 'confirmed_players', on: :collection
     end
-    
+
     resources :tournaments do #this is for setting them up
       resources :tournament_days do
         resources :flights, only: [:create, :update] do
@@ -148,70 +150,70 @@ Rails.application.routes.draw do
           resources :contest_results, only: [:new, :create, :update]
         end
       end
-      
+
       resource :game_types do
         get 'options', on: :collection
       end
-    
+
       resources :golfer_teams
-      
+
       resources :flights do
         patch 'reflight_players', on: :collection
-        
+
         resources :payouts
       end
-    
+
       resources :contests do
         resources :contest_results
-        
+
         get 'registrations'
         delete 'remove_registration'
         post 'add_registration'
       end
-    
+
       resources :tournament_groups do
         post 'batch_create', on: :collection
       end
-   
+
       get 'manage_holes'
       patch 'update_holes'
-      
+
       patch 'auto_schedule'
-   
+
       get 'signups'
       post 'add_signup'
       delete 'delete_signup'
       patch 'move_signup'
       patch 'update_auto_schedule'
- 
+
       get 'finalize'
       get 'run_finalization'
       get 'display_finalization'
       patch 'confirm_finalization'
-      
+
       patch 'update_course_handicaps'
       patch 'touch_tournament'
     end
-    
+
     patch 'update_from_ghin'
-    
+
     get 'write_member_email'
     post 'send_member_email'
   end
-  
+
   resources :payments
-  
+
   resources :prints do
     get 'print_scorecards', on: :collection
     get 'run_print_scorecards', on: :collection
     get 'print_display_scorecards', on: :collection
   end
-  
+
   resources :scorecards, :except => [:delete]
 
   resources :courses do
     resources :course_tee_boxes
-    
+
     resources :course_holes do
       resources :course_hole_tee_boxes
     end
@@ -219,20 +221,20 @@ Rails.application.routes.draw do
 
   resources :user_accounts do
     get 'edit_current', on: :collection
-    
+
     get 'setup_league_admin_invite', on: :collection
     post 'send_league_admin_invite', on: :collection
-    
+
     patch 'resend_league_invite'
-    
+
     get 'setup_golfer_invite', on: :collection
     post 'send_golfer_invite', on: :collection
   end
-  
+
   resources :crontab do
     get 'send_tournament_registration_emails', on: :collection
     get 'send_tournament_registration_reminder_emails', on: :collection
     get 'update_all_players_from_ghin', on: :collection
   end
-  
+
 end

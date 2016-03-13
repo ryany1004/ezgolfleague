@@ -1,0 +1,21 @@
+class Api::V1::ScorecardsController < Api::V1::ApiBaseController
+  before_filter :protect_with_token
+  before_filter :fetch_details
+
+  respond_to :json
+
+  def show
+    payload = @tournament_day.scorecard_payload_for_scorecard(@scorecard)
+
+    respond_with(payload) do |format|
+      format.json { render :json => payload }
+    end
+  end
+
+  def fetch_details
+    @tournament = Tournament.find(params[:tournament_id])
+    @tournament_day = @tournament.tournament_days.find(params[:tournament_day_id])
+    @scorecard = Scorecard.find(params[:id])
+  end
+
+end
