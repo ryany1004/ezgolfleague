@@ -8,11 +8,20 @@ class Scorecard < ActiveRecord::Base
   belongs_to :designated_editor, :class_name => "User", :foreign_key => "designated_editor_id"
 
   after_save :set_course_handicap
+  before_destroy :clear_primary_scorecard_cache
 
   accepts_nested_attributes_for :scores
 
   def tournament_day
     return self.golf_outing.tournament_group.tournament_day
+  end
+
+  def clear_primary_scorecard_cache
+    cache_key = self.golf_outing.tournament_group.tournament_day.scorecard_id_cache_key(self.golf_outing.user)
+
+    did_remove = Rails.cache.delete(cache_key)
+
+    Rails.logger.debug { "Removed Cache Key: #{did_remove}" }
   end
 
   def set_course_handicap(force_recalculation = false)
