@@ -5,13 +5,13 @@ class Api::V1::TournamentDaysController < Api::V1::ApiBaseController
   respond_to :json
 
   def tournament_groups
-    eager_groups = Rails.cache.fetch(self.user_tournament_day_cache_key(@tournament_day), expires_in: 8.minutes, race_condition_ttl: 10)
+    eager_groups = Rails.cache.fetch(@tournament_day.groups_api_cache_key, expires_in: 5.minutes, race_condition_ttl: 10)
     if eager_groups.blank?
       logger.info { "Fetching Tournament Day - Not Cached" }
 
       eager_groups = TournamentGroup.includes(golf_outings: [:user, :course_tee_box, scorecard: [{scores: :course_hole}]]).where(tournament_day: @tournament_day)
 
-      Rails.cache.write(self.user_tournament_day_cache_key(@tournament_day), eager_groups)
+      Rails.cache.write(@tournament_day.groups_api_cache_key, eager_groups)
     else
       logger.info { "Returning Cached Tournament Day Info" }
     end
@@ -21,14 +21,10 @@ class Api::V1::TournamentDaysController < Api::V1::ApiBaseController
     end
   end
 
-  def user_tournament_day_cache_key(tournament_day)
-    return "APITournamentDay-#{tournament_day.id}-#{@current_user.id}"
-  end
-
   ##
 
   def leaderboard
-    leaderboard = Rails.cache.fetch(@tournament_day.leaderboard_api_cache_key, expires_in: 8.minutes, race_condition_ttl: 10)
+    leaderboard = Rails.cache.fetch(@tournament_day.leaderboard_api_cache_key, expires_in: 5.minutes, race_condition_ttl: 10)
     if leaderboard.blank?
       logger.info { "Fetching Leaderboard - Not Cached" }
 
@@ -52,6 +48,8 @@ class Api::V1::TournamentDaysController < Api::V1::ApiBaseController
     confirm_user = registration_information["confirm_user"]
 
     @tournament_day.add_player_to_group(tournament_group, user, false, confirm_user)
+
+    Rails.cache.delete(@tournament_day.groups_api_cache_key)
 
     eager_groups = TournamentGroup.includes(golf_outings: [:user, :course_tee_box, scorecard: [{scores: :course_hole}]]).where(tournament_day: @tournament_day)
 

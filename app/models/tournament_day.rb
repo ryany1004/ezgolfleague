@@ -86,6 +86,10 @@ class TournamentDay < ActiveRecord::Base
     return cache_key
   end
 
+  def groups_api_cache_key
+    return "groups-json#{self.id}-#{self.updated_at.to_s}"
+  end
+
   def leaderboard_api_cache_key
     return "leaderboard-json#{self.id}-#{self.updated_at.to_s}"
   end
