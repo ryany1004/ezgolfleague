@@ -1,41 +1,56 @@
 class Api::V1::TournamentDaysController < Api::V1::ApiBaseController
   before_filter :protect_with_token
   before_filter :fetch_details
-  
+
   respond_to :json
-  
+
   def tournament_groups
-    eager_groups = TournamentGroup.includes(golf_outings: [:user, :course_tee_box, scorecard: [{scores: :course_hole}]]).where(tournament_day: @tournament_day)
-    
+    eager_groups = Rails.cache.fetch(self.user_tournament_day_cache_key(@tournament_day), expires_in: 8.minutes, race_condition_ttl: 10)
+    if eager_groups.blank?
+      logger.info { "Fetching Tournament Day - Not Cached" }
+
+      eager_groups = TournamentGroup.includes(golf_outings: [:user, :course_tee_box, scorecard: [{scores: :course_hole}]]).where(tournament_day: @tournament_day)
+
+      Rails.cache.write(self.user_tournament_day_cache_key(@tournament_day), eager_groups)
+    else
+      logger.info { "Returning Cached Tournament Day Info" }
+    end
+
     respond_with(eager_groups) do |format|
       format.json { render :json => eager_groups }
     end
   end
-   
-  def leaderboard 
+
+  def user_tournament_day_cache_key(tournament_day)
+    return "APITournamentDay-#{tournament_day.id}-#{@current_user.id}"
+  end
+
+  ##
+
+  def leaderboard
     leaderboard = Rails.cache.fetch(@tournament_day.leaderboard_api_cache_key, expires_in: 8.minutes, race_condition_ttl: 10)
     if leaderboard.blank?
       logger.info { "Fetching Leaderboard - Not Cached" }
-      
+
       leaderboard = self.fetch_leaderboard
-      
+
       Rails.cache.write(@tournament_day.leaderboard_api_cache_key, leaderboard)
     else
       logger.info { "Returning Cached Leaderboard" }
     end
-        
+
     respond_with(leaderboard) do |format|
       format.json { render :json => leaderboard }
     end
   end
-  
+
   def register
     registration_information = ActiveSupport::JSON.decode(request.body.read)
-    
+
     user = User.find(registration_information["user_id"])
     tournament_group = @tournament_day.tournament_groups.find(registration_information["tournament_group_id"])
     confirm_user = registration_information["confirm_user"]
-    
+
     @tournament_day.add_player_to_group(tournament_group, user, false, confirm_user)
 
     eager_groups = TournamentGroup.includes(golf_outings: [:user, :course_tee_box, scorecard: [{scores: :course_hole}]]).where(tournament_day: @tournament_day)
@@ -44,32 +59,32 @@ class Api::V1::TournamentDaysController < Api::V1::ApiBaseController
       format.json { render :json => eager_groups }
     end
   end
-  
+
   def payment_details
     tournament_cost_details = [@tournament.cost_breakdown_for_user(@current_user, false)]
-    
+
     contest_cost_details = []
     @tournament_day.contests.each do |c|
       contest_cost_details << c.cost_breakdown_for_user(@current_user, false) if c.dues_amount > 0
     end
-    
+
     cost_details = {:tournament => tournament_cost_details, :contests => contest_cost_details}
-    
+
     respond_with(cost_details) do |format|
       format.json { render :json => cost_details }
     end
   end
-  
+
   def fetch_details
     @tournament = Tournament.find(params[:tournament_id])
     @tournament_day = @tournament.tournament_days.find(params[:tournament_day_id])
   end
-  
+
   def fetch_leaderboard
     day_flights_with_rankings = @tournament_day.flights_with_rankings
     combined_flights_with_rankings = FetchingTools::LeaderboardFetching.flights_with_rankings_could_be_combined(@tournament_day, day_flights_with_rankings)
-    
+
     leaderboard = {:day_flights => day_flights_with_rankings, :combined_flights => combined_flights_with_rankings}
   end
-  
+
 end

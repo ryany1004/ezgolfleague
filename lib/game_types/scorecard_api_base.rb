@@ -46,7 +46,7 @@ module GameTypes
       score_info << self.scorecard.course_handicap.to_s
       score_info << "#{self.scorecard.gross_score}/#{self.scorecard.net_score}"
 
-      return {title: "Strokes", contents: score_info, should_bold: false, should_ornament: false}
+      return {title: "Score", contents: score_info, should_bold: false, should_ornament: false}
     end
 
     def par_row
