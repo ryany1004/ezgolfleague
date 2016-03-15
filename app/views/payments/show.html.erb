@@ -4,7 +4,7 @@
 </ol>
 
 <h3>Transaction <%= @payment.id %></h3>
-<div class="well">  
+<div class="well">
   <h4><%= @payment.user.complete_name %></h4>
   <h4><%= @payment.created_at.to_s %></h4>
   <h4><%= number_to_currency(@payment.payment_amount) %></h4>
@@ -39,6 +39,9 @@
       <td><%= payment.payment_source %></td>
       <td><%= payment.payment_details %></td>
       <td><%= payment.generated_description %></td>
+      <% if payment.modifiable? -%>
+        <td><%= link_to "Edit", edit_payment_path(payment) %> | <%= link_to 'Delete', payment_path(payment), :data => { :confirm => 'Are you sure you want to delete this payment?' }, :method => :delete %></td>
+      <% end %>
 		</tr>
 	<% end %>
 	</tbody>
