@@ -4,7 +4,7 @@ class Api::V1::TournamentsController < Api::V1::ApiBaseController
   respond_to :json
 
   def index
-    all_tournaments = Rails.cache.fetch(self.user_tournaments_cache_key, expires_in: 8.minutes, race_condition_ttl: 10)
+    all_tournaments = Rails.cache.fetch(self.user_tournaments_cache_key, expires_in: 2.minutes, race_condition_ttl: 10)
     if all_tournaments.blank?
       logger.info { "Fetching Tournaments - Not Cached" }
 
