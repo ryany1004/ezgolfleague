@@ -1,15 +1,15 @@
 module TournamentsHelper
 
   def is_editable?(tournament)
-    # return false if tournament.blank?
-    #
-    # if is_today?(tournament)
-    #   return false
-    # else
-    #   return true
-    # end
+    return true if params[:debug_mode] == true
+    
+    return false if tournament.blank?
 
-    return true
+    if is_today?(tournament)
+      return false
+    else
+      return true
+    end
   end
 
   def is_today?(tournament)
