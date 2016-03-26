@@ -21,26 +21,26 @@
 @import "chosen";
 
 @media print {
-  h2 { 
+  h2 {
     page-break-after: always;
   }
-  
+
   body {
-    font: 11px Arial, Helvetica, "Lucida Grande", serif;
+    font: 14px Arial, Helvetica, "Lucida Grande", serif;
     margin: 0;
     padding: 0;
     line-height: 1em;
     word-spacing: 1px;
     letter-spacing: 0.2px;
   }
-  
+
   table.print-friendly tr td, table.print-friendly tr th {
     page-break-inside: avoid;
     margin: 4px;
     padding: 4px;
   }
-  
-  @page {
-    size: landscape
-  }
+
+  // @page {
+  //   size: landscape
+  // }
 }
