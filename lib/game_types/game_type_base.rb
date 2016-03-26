@@ -172,13 +172,13 @@ module GameTypes
     end
 
     def compute_adjusted_player_score(user)
-      Rails.logger.debug { "compute_adjusted_player_score: #{user.complete_name}" }
+      Rails.logger.info { "compute_adjusted_player_score: #{user.complete_name}" }
 
       return nil if !self.tournament.includes_player?(user)
 
       scorecard = self.tournament_day.primary_scorecard_for_user(user)
       if scorecard.blank?
-        Rails.logger.debug { "Returning 0 - No Scorecard" }
+        Rails.logger.info { "Returning 0 - No Scorecard" }
 
         return 0
       end
@@ -191,7 +191,7 @@ module GameTypes
         total_score = total_score + adjusted_score
       end
 
-      Rails.logger.debug { "User Adjusted Score: #{user.complete_name} - #{total_score}" }
+      Rails.logger.info { "User Adjusted Score: #{user.complete_name} - #{total_score}" }
 
       total_score = 0 if total_score < 0
 
@@ -207,10 +207,10 @@ module GameTypes
 
       double_bogey = hole.par + 2
 
-      Rails.logger.debug { "Double Bogey for #{hole.hole_number} - #{double_bogey}" }
+      Rails.logger.info { "Double Bogey for #{hole.hole_number} - #{double_bogey}" }
 
       if strokes <= double_bogey
-        Rails.logger.debug { "Strokes <= double_bogey: #{double_bogey}. #{strokes}" }
+        Rails.logger.info { "Strokes <= double_bogey: #{double_bogey}. #{strokes}" }
 
         return strokes
       else
@@ -229,7 +229,7 @@ module GameTypes
           adjusted_score = 10
         end
 
-        Rails.logger.debug { "Adjusted Score for #{hole.hole_number} (Par #{hole.par}) w/ strokes: #{strokes} = #{adjusted_score}. Course handicap: #{course_handicap}" }
+        Rails.logger.info { "Adjusted Score for #{hole.hole_number} (Par #{hole.par}) w/ strokes: #{strokes} = #{adjusted_score}. Course handicap: #{course_handicap}" }
 
         return adjusted_score
       end

@@ -5,7 +5,7 @@
   <% @tournament.tournament_days.each do |day| -%>
     <%= link_to_unless day == @tournament_day, day.pretty_day, adjusted_scores_league_reports_path(tournament: @tournament, tournament_day: day) %>
     <% if day != @tournament.tournament_days.last -%>
-      | 
+      |
     <% end -%>
   <% end -%>
   </p>
@@ -27,7 +27,7 @@
           <% @report.results.each do |result| %>
             <tr>
               <td><%= result.flight.flight_number %></td>
-              <td><%= result.user.complete_name %></td>
+              <td><%= link_to result.user.complete_name, scorecard_path(result.primary_scorecard) %></td>
               <td><%= result.adjusted_score %></td>
               <td><%= result.gross_score %></td>
             </tr>
