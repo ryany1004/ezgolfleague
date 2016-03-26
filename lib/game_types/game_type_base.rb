@@ -229,9 +229,15 @@ module GameTypes
           adjusted_score = 10
         end
 
-        Rails.logger.info { "Adjusted Score for #{hole.hole_number} (Par #{hole.par}) w/ strokes: #{strokes} = #{adjusted_score}. Course handicap: #{course_handicap}" }
+        if adjusted_score <= strokes
+          Rails.logger.info { "Adjusted Score for #{hole.hole_number} (Par #{hole.par}) w/ strokes: #{strokes} = #{adjusted_score}. Course handicap: #{course_handicap}" }
 
-        return adjusted_score
+          return adjusted_score
+        else
+          Rails.logger.info { "Adjusted Score Was Too High... Bailing" }
+
+          return strokes
+        end
       end
     end
 
