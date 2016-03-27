@@ -53,7 +53,7 @@
       </ul>
       <ul class="list-group">
         <li class="list-group-item">
-          <%= link_to "View Leaderboard", play_tournament_leaderboard_path(@tournament, day: @tournament_day) %> | 
+          <%= link_to "View Leaderboard", play_tournament_leaderboard_path(@tournament, day: @tournament_day) %> |
           <% if @tournament.includes_player?(current_user, @tournament_day) && @tournament_day.can_be_played? -%>
             <span class="badge"><%= @tournament_day.player_score(current_user) %></span><%= link_to "Your #{@tournament_day.pretty_day(false)} Scorecard", play_scorecard_path(@tournament_day.primary_scorecard_for_user(current_user)) unless @tournament_day.primary_scorecard_for_user(current_user).blank? %>
           <% else -%>
@@ -107,6 +107,7 @@
             <th>Flight</th>
             <th>Name</th>
             <th>Amount</th>
+            <th>Points</th>
           </tr>
         </thead>
         <tbody>
@@ -117,10 +118,12 @@
                 <td><strong><%= f.flight_number %></strong></td>
                 <td><%= p.user.complete_name unless p.user.blank? %></td>
                 <td><%= number_to_currency(p.amount) %></td>
+                <td><%= p.points %></td>
               </tr>
               <% end %>
               <% if x < @tournament_day.flights_with_rankings.count - 1 -%>
               <tr>
+                <td>&nbsp;</td>
                 <td>&nbsp;</td>
                 <td>&nbsp;</td>
                 <td>&nbsp;</td>
@@ -138,7 +141,7 @@
     </div>
   </div>
   <% end -%>
-  
+
   <div class="col-md-6">
     <div class="panel panel-default panel-success">
       <div class="panel-heading">
@@ -191,7 +194,7 @@
       <%= render partial: 'tournament_players_teams', locals: {tournament_day: @tournament_day} %>
     <% end -%>
   <% end -%>
-  
+
   <div class="col-md-6">
     <div class="panel panel-default panel-success">
       <div class="panel-heading">
