@@ -118,7 +118,7 @@
                 <td><strong><%= f.flight_number %></strong></td>
                 <td><%= p.user.complete_name unless p.user.blank? %></td>
                 <td><%= number_to_currency(p.amount) %></td>
-                <td><%= p.points %></td>
+                <td><%= p.points.to_i %></td>
               </tr>
               <% end %>
               <% if x < @tournament_day.flights_with_rankings.count - 1 -%>
