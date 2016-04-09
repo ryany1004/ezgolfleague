@@ -125,6 +125,12 @@
                 <%= f.input :tee_group, label: "Available Tee Groups", collection: @available_tournament_groups, label_method: :formatted_tee_time, value_method: :id %>
                 <%= f.input :another_member_id, label: "Unregistered League Members", collection: @unregistered_users, label_method: :complete_name, value_method: :id %>
               </div>
+              <% if @tournament.paid_contests.count > 0 -%>
+              <div class="well">
+                <p><em>Would you like to add the user to any optional (paid) contests?</em></p>
+                <%= f.input :contests_to_enter, collection: @tournament.paid_contests, label_method: :name, value_method: :id, as: :check_boxes %>
+              </div>
+              <% end -%>
             </div>
           </div>
         </div>
