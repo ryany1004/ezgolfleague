@@ -161,7 +161,7 @@ module Addable
     return player_course_handicap
   end
 
-  def assign_players_to_flights(confirm_all_flighted = true)
+  def assign_players_to_flights
     self.reload
 
     self.flights.each do |f|
@@ -186,18 +186,13 @@ module Addable
 
     self.touch #bust the cache, yo.
 
-    #TODO: convert this to a validation error or something? just blowing up seems bad.
-    if confirm_all_flighted == true && self.flights.count > 0
+    if self.flights.count > 0
       self.tournament.players_for_day(self).each do |p|
         if self.flight_for_player(p) == nil
-          player_course_handicap = self.golf_outing_for_player(p).course_handicap unless self.golf_outing_for_player(p).blank?
-          error_massage_is_comfy = "Player Not Flighted: #{p.id} in Tournament #{self.id} | Index: #{player_course_handicap}"
+          Rails.logger.debug { "Adding Player to Last Flight - Not Normally Flighted" }
 
-          self.flights.each do |f|
-            error_massage_is_comfy += "| #{f.lower_bound} / #{f.upper_bound} |"
-          end
-
-          raise error_massage_is_comfy
+          last_flight = self.flights.last #add the player to the 'last' flight
+          last_flight.users << p
         end
       end
     end
