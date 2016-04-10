@@ -5,40 +5,33 @@
       <%= notification %>
     </div>
   <% end %>
-  
+
   <legend>League Details</legend>
-  
+
   <h3>Basic Details</h3>
-  <div class="well">  
+  <div class="well">
 	  <%= f.input :name, :label => 'Name', required: true %>
-    
+
     <%= f.input :dues_amount, :label => 'Dues Amount ($)' %>
-  
+
     <%= f.input :dues_payment_receipt_email_addresses, :label => 'Address(es) For Dues Email Confirmations (separate with commas)' %>
   </div>
-  
+
   <h3>Credit Card Info</h3>
-  <div class="well">  
+  <div class="well">
     <%= f.input :stripe_production_secret_key, :label => 'Stripe Secret Key (Production)' %>
     <%= f.input :stripe_production_publishable_key, :label => 'Stripe Publishable Key (Production)' %>
     <%= f.input :stripe_test_secret_key, :label => 'Stripe Secret Key (Test)' %>
     <%= f.input :stripe_test_publishable_key, :label => 'Stripe Publishable Key (Test)' %>
     <%= f.input :stripe_test_mode, :label => 'Use Test Mode?' %>
   </div>
-  
+
   <h3>Apple Pay</h3>
-  <div class="well">  
+  <div class="well">
     <%= f.input :apple_pay_merchant_id, :label => 'Apple Pay Merchant ID' %>
     <%= f.input :supports_apple_pay, :label => 'Supports Apple Pay?' %>
   </div>
-  
-  <% if !@league.new_record? -%>
-  <h3>Message League Members</h3>
-  <div class="well">  
-    <%= link_to 'Email All Members', league_write_member_email_path(@league), :class => 'btn btn-primary' %>
-  </div>
-  <% end -%>
-  
+
   <div class="form-actions">
     <%= f.button :submit, :class => 'btn btn-default' %>
   </div>

@@ -196,9 +196,6 @@ Rails.application.routes.draw do
     end
 
     patch 'update_from_ghin'
-
-    get 'write_member_email'
-    post 'send_member_email'
   end
 
   resources :payments
