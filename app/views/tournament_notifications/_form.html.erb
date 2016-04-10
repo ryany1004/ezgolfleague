@@ -20,6 +20,7 @@
     <%= f.input :tournament_notification_action, collection: @tournament_actions, :label => 'Notification Trigger', required: true, include_blank: false %>
   </div>
 
+  <%= f.hidden_field :deliver_at %>
   <%= f.hidden_field :league_id %>
   <%= f.hidden_field :tournament_id %>
 

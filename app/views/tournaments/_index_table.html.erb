@@ -55,6 +55,7 @@
               <% end -%>
               <li><%= link_to "Flights & Payouts", league_tournament_flights_path(tournament.league, tournament) %></li>
               <li><%= link_to "Contests", league_tournament_contests_path(tournament.league, tournament) %></li>
+              <li><%= link_to 'Notifications', league_tournament_tournament_notifications_path(tournament.league, tournament) %></li>
               <% if tournament.auto_schedule_for_multi_day != 0 -%>
               <li class="divider"></li>
               <li><%= link_to "Auto-Schedule For Secondary Days", league_tournament_auto_schedule_path(tournament.league, tournament), :data => { :confirm => 'Are you sure you want to schedule secondary days? This will remove any existing scores for those days.' }, method: :patch %></li>

@@ -44,7 +44,7 @@ class TournamentNotificationsController < BaseController
   private
 
   def notification_template_params
-    params.require(:notification_template).permit(:title, :body, :deliver_at, :tournament_id, :league_id)
+    params.require(:notification_template).permit(:title, :body, :deliver_at, :tournament_notification_action, :tournament_id, :league_id)
   end
 
   def fetch_notification_template
