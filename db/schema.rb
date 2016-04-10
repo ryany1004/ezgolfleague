@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160410203052) do
+ActiveRecord::Schema.define(version: 20160410222350) do
 
   create_table "contest_holes", force: :cascade do |t|
     t.integer  "contest_id"
@@ -259,10 +259,13 @@ ActiveRecord::Schema.define(version: 20160410203052) do
     t.integer  "league_id"
     t.string   "title"
     t.text     "body"
-    t.datetime "created_at",                         null: false
-    t.datetime "updated_at",                         null: false
+    t.datetime "created_at",                                                            null: false
+    t.datetime "updated_at",                                                            null: false
     t.datetime "deliver_at"
-    t.boolean  "has_been_delivered", default: false
+    t.boolean  "has_been_delivered",                                    default: false
+    t.boolean  "notify_on_tournament_finalization",                     default: true
+    t.boolean  "notify_tournament_unregistered_players_before_closing", default: true
+    t.string   "tournament_notification_action"
   end
 
   add_index "notification_templates", ["league_id"], name: "index_league_id_on_notification_templates"

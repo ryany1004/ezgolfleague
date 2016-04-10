@@ -221,6 +221,11 @@ class TournamentsController < BaseController
       @tournament.is_finalized = true
       @tournament.save
 
+      @tournament.finalization_notifications.each do |n|
+        n.has_been_delivered = false
+        n.save
+      end
+
       @tournament.tournament_days.each do |day|
         day.touch #bust the cache
       end

@@ -20,7 +20,7 @@
     			<td><%= notification_template.deliver_at.to_s(:date_and_time) %></td>
           <td><%= notification_template.recipient_text %></td>
           <td><%= notification_template.notifications.count %></td>
-          <td><%= link_to "Copy", notification_template_duplicate_template_path(notification_template), method: :put %> | <%= link_to "Edit", edit_notification_template_path(notification_template) %> | <%= link_to 'Delete', notification_template_path(notification_template), :data => { :confirm => 'Are you sure you want to delete this notification? Note that it will not remove any delivered notifications.' }, :method => :delete %></td>
+          <td><%= link_to "Duplicate", notification_template_duplicate_template_path(notification_template), method: :put %> | <%= link_to "Edit", edit_notification_template_path(notification_template) %> | <%= link_to 'Delete', notification_template_path(notification_template), :data => { :confirm => 'Are you sure you want to delete this notification? Note that it will not remove any delivered notifications.' }, :method => :delete %></td>
     		</tr>
     	<% end %>
     	</tbody>

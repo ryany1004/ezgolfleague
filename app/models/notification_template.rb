@@ -11,6 +11,21 @@ class NotificationTemplate < ActiveRecord::Base
 
   paginates_per 50
 
+  before_save :set_deliver_date_for_action
+  before_save :block_future_notifications
+
+  def set_deliver_date_for_action
+    if self.tournament_notification_action == "To Unregistered Members Before Registration Closes"
+      self.deliver_at = self.tournament.signup_closes_at - 1.day
+    end
+  end
+
+  def block_future_notifications
+    if self.tournament_notification_action == "On Finalization"
+      self.has_been_delivered = true
+    end
+  end
+
   def recipients_are_valid
     if league.blank? && tournament.blank?
       errors.add(:league_id, "can't both be blank")
@@ -19,10 +34,24 @@ class NotificationTemplate < ActiveRecord::Base
   end
 
   def recipients
-    if self.tournament.blank?
-      return self.league.users
+    if self.tournament_notification_action.blank?
+      if self.tournament.blank?
+        return self.league.users
+      else
+        return self.tournament.players
+      end
     else
-      return self.tournament.players
+      if self.tournament_notification_action == "On Finalization"
+        return self.tournament.players
+      elsif self.tournament_notification_action == "To Unregistered Members Before Registration Closes"
+        unregistered = []
+
+        self.league.users.each do |u|
+          unregistered << u if self.tournament.includes_player?(u) == false
+        end
+
+        return unregistered
+      end
     end
   end
 
@@ -43,5 +72,4 @@ class NotificationTemplate < ActiveRecord::Base
       write_attribute(:deliver_at, date)
     end
   end
-
 end

@@ -94,6 +94,10 @@ class Tournament < ActiveRecord::Base
     end
   end
 
+  def finalization_notifications
+    self.notification_templates.where("tournament_notification_action = ?", "On Finalization")
+  end
+
   ##
 
   def dues_for_user(user, include_credit_card_fees = false)

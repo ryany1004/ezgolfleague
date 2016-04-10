@@ -1,0 +1,34 @@
+<%= simple_form_for @notification_template, url: @notification_template.new_record? ? league_tournament_tournament_notifications_path(@tournament.league, @tournament) : league_tournament_tournament_notification_path(@tournament.league, @tournament, @notification_template) do |f| %>
+  <% if notification = f.error_notification %>
+    <div class="alert alert-error fade in">
+      <a class="close" data-dismiss="alert" href="#">&times;</a>
+      <%= notification %>
+    </div>
+  <% end %>
+
+  <legend>Notification Details</legend>
+
+  <h3>Basic Details</h3>
+  <div class="well">
+	  <%= f.input :title, :label => 'Title', required: true %>
+
+    <%= f.input :body, :label => 'Body Text' %>
+  </div>
+
+  <h3>What Should Trigger This Notification?</h3>
+  <div class="well">
+    <%= f.input :tournament_notification_action, collection: @tournament_actions, :label => 'Notification Trigger', required: true, include_blank: false %>
+  </div>
+
+  <%= f.hidden_field :league_id %>
+  <%= f.hidden_field :tournament_id %>
+
+  <% if @notification_template.has_been_delivered == true -%>
+    <h4>This notification has already been sent - changes will not be re-delivered.</h4>
+  <% end -%>
+
+  <div class="form-actions">
+    <%= f.button :submit, "Save Notification", :class => 'btn btn-default' %>
+  </div>
+
+<% end %>

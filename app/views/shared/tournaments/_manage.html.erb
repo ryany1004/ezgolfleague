@@ -10,6 +10,7 @@
         <li class='disabled'><%= link_to 'Tee Times', "#" %></li>
         <li class='disabled'><%= link_to 'Flights & Payouts', "#" %></li>
         <li class='disabled'><%= link_to 'Contests', "#" %></li>
+        <li class='disabled'><%= link_to 'Notifications', "#" %></li>
         <li class='disabled'><%= link_to 'Finalize', "#" %></li>
       <% else -%>
         <% if @tournament.tournament_days.count == 1 -%>
@@ -23,7 +24,7 @@
             <li <%= tournament_class_for_stage(stage, "teams") %>><%= link_to 'Teams', league_tournament_golfer_teams_path(tournament.league, tournament) %></li>
           <% end -%>
           <li <%= tournament_class_for_stage(stage, "contests") %>><%= link_to 'Contests', league_tournament_contests_path(tournament.league, tournament) %></li>
-          
+          <li <%= tournament_class_for_stage(stage, "notifications") %>><%= link_to 'Notifications', league_tournament_tournament_notifications_path(tournament.league, tournament) %></li>
           <% if !@tournament.new_record? -%>
             <li <%= tournament_class_for_stage(stage, "finalize") %>><%= link_to 'Finalize', league_tournament_finalize_path(tournament.league, tournament) %></li>
           <% end -%>
@@ -36,7 +37,7 @@
       <% end -%>
     </ul>
   </nav>
-  
+
   <% if @tournament.tournament_days.count > 1 -%>
     <% @tournament.tournament_days.each do |day| -%>
       <nav>
@@ -51,12 +52,12 @@
         </ul>
       </nav>
     <% end -%>
-    
+
     <nav>
       <ul class="pagination">
         <li <%= tournament_class_for_stage(stage, "finalize") %>><%= link_to 'Finalize Tournament', league_tournament_finalize_path(tournament.league, tournament) %></li>
       </ul>
     </nav>
-    
+
   <% end -%>
 </div>

@@ -175,6 +175,8 @@ Rails.application.routes.draw do
         post 'batch_create', on: :collection
       end
 
+      resources :tournament_notifications
+
       get 'manage_holes'
       patch 'update_holes'
 
