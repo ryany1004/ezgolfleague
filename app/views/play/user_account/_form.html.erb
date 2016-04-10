@@ -5,38 +5,46 @@
       <%= notification %>
     </div>
   <% end %>
-  
+
   <legend>User Account Details</legend>
-  
+
   <h3>Basic Details</h3>
   <div class="well">
     <%= f.input :email, :label => 'Email Address', placeholder: 'i.e. user@domain.com', required: true %>
-  
+
 	  <%= f.input :first_name, :label => 'First Name', required: true %>
 
 	  <%= f.input :last_name, :label => 'Last Name', required: true %>
   </div>
-  
+
   <h3>Password</h3>
-  <div class="well">  
+  <div class="well">
     <%= link_to "Update My Password", password_play_user_account_path %>
   </div>
+
+  <% if !@user_account.new_record? -%>
+  <h3>Notifications</h3>
+  <div class="well">
+    <%= f.input :wants_email_notifications, :label => 'Send Notifications via Email', as: :boolean %>
+    <%= f.input :wants_push_notifications, :label => 'Send Notifications via Mobile App', as: :boolean %>
+  </div>
+  <% end -%>
 
   <h3>Contact Information</h3>
   <div class="well">
     <%= f.input :street_address_1, :label => 'Street Address 1', placeholder: 'i.e. 123 Main Street' %>
-  
+
     <%= f.input :street_address_2, :label => 'Street Address 2', placeholder: 'i.e. Suite 200' %>
-  
+
     <%= f.input :city, :label => 'City' %>
-    
+
 	  <%= f.input :us_state, :label => 'State', collection: @us_states %>
 
 	  <%= f.input :postal_code, :label => 'Zip Code' %>
-    
+
     <%= f.input :phone_number, :label => 'Phone Number' %>
   </div>
-  
+
   <div class="form-actions">
     <%= f.button :submit, :class => 'btn btn-default' %>
   </div>

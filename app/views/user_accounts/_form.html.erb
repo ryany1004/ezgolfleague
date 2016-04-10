@@ -5,58 +5,66 @@
       <%= notification %>
     </div>
   <% end %>
-  
+
   <legend>User Account Details</legend>
-  
+
   <h3>Basic Details</h3>
   <div class="well">
     <%= f.input :email, :label => 'Email Address', placeholder: 'i.e. user@domain.com', required: true %>
-  
+
 	  <%= f.input :first_name, :label => 'First Name', required: true %>
 
 	  <%= f.input :last_name, :label => 'Last Name', required: true %>
-    
+
     <% if @user_account.new_record? -%>
       <%= f.input :should_invite, :label => 'Send Invitation via Email', as: :boolean %>
     <% end -%>
   </div>
-  
+
   <h3>GHIN Number</h3>
   <div class="well">
     <%= f.input :ghin_number, :label => 'GHIN System Number' %>
   </div>
-  
+
   <% if current_user_is_admin_for_user(@user_account) -%>
   <h3>Handicap</h3>
   <div class="well">
     <%= f.input :handicap_index, :label => 'Handicap Index' %>
   </div>
   <% end -%>
-  
+
   <% if @user_account.new_record? -%>
   <h3>Password</h3>
-  <div class="well">  
+  <div class="well">
 	  <%= f.input :password, :label => 'Password' %>
 
 	  <%= f.input :password_confirmation, :label => 'Password Confirmation' %>
   </div>
   <% end -%>
 
+  <% if !@user_account.new_record? -%>
+  <h3>Notifications</h3>
+  <div class="well">
+    <%= f.input :wants_email_notifications, :label => 'Send Notifications via Email', as: :boolean %>
+    <%= f.input :wants_push_notifications, :label => 'Send Notifications via Mobile App', as: :boolean %>
+  </div>
+  <% end -%>
+
   <h3>Contact Information</h3>
   <div class="well">
     <%= f.input :street_address_1, :label => 'Street Address 1', placeholder: 'i.e. 123 Main Street' %>
-  
+
     <%= f.input :street_address_2, :label => 'Street Address 2', placeholder: 'i.e. Suite 200' %>
-  
+
     <%= f.input :city, :label => 'City' %>
-    
+
 	  <%= f.input :us_state, :label => 'State', collection: @us_states %>
 
 	  <%= f.input :postal_code, :label => 'Zip Code' %>
-    
+
     <%= f.input :phone_number, :label => 'Phone Number' %>
   </div>
-  
+
   <% if @user_account.new_record? == false && @editing_current_user != true -%>
   <h3>Leagues</h3>
 
@@ -87,10 +95,10 @@
     </tfoot>
   </table>
   <% end -%>
-  
+
   <div class="form-actions">
     <%= f.button :submit, :class => 'btn btn-default' %>
-    
+
     <% if @user_account.new_record? == false -%>
       <%= link_to "Re-Send Invite", user_account_resend_league_invite_path(@user_account), :method => :patch, :role => "button", :class => "btn btn-info" %>
     <% end -%>
