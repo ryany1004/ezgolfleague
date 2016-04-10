@@ -203,7 +203,9 @@ Rails.application.routes.draw do
 
   resources :payments
 
-  resources :notification_templates
+  resources :notification_templates do
+    put 'duplicate_template'
+  end
 
   resources :prints do
     get 'print_scorecards', on: :collection

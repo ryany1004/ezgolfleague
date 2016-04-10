@@ -47,6 +47,14 @@ class NotificationTemplatesController < BaseController
     end
   end
 
+  def duplicate_template
+    template_to_copy = NotificationTemplate.find(params[:notification_template_id])
+
+    new_copy = NotificationTemplate.create(title: template_to_copy.title, body: template_to_copy.body, deliver_at: DateTime.now + 1.day, league: template_to_copy.league, tournament: template_to_copy.tournament)
+
+    redirect_to edit_notification_template_path(new_copy)
+  end
+
   def destroy
     @notification_template.destroy
 
