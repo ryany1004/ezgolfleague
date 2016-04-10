@@ -120,20 +120,6 @@ module Addable
     end
   end
 
-  def player_can_be_flighted(user)
-    any_flight_possible = false
-
-    self.flights.each do |f|
-      player_course_handicap = user.course_handicap(self.course, f.course_tee_box)
-
-      if player_course_handicap >= f.lower_bound && player_course_handicap <= f.upper_bound
-        any_flight_possible = true
-      end
-    end
-
-    return any_flight_possible
-  end
-
   def player_course_handicap_for_player(p, f = nil)
     golf_outing = self.golf_outing_for_player(p) #in multi-day with manual registration, might not match
     unless golf_outing.blank?

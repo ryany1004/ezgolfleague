@@ -25,7 +25,9 @@ class Api::V1::TournamentsController < Api::V1::ApiBaseController
   end
 
   def user_tournaments_cache_key
-    return "APITournaments-#{@current_user.id}"
+    max_updated_at = Tournament.all_upcoming(@current_user.leagues, nil).maximum(:updated_at).try(:utc).try(:to_s, :number)
+
+    return "APITournaments-#{@current_user.id}-#{max_updated_at}"
   end
 
 end
