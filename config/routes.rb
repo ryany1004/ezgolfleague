@@ -203,6 +203,8 @@ Rails.application.routes.draw do
 
   resources :payments
 
+  resources :notification_templates
+
   resources :prints do
     get 'print_scorecards', on: :collection
     get 'run_print_scorecards', on: :collection

@@ -1,0 +1,30 @@
+<%= simple_form_for @notification_template do |f| %>
+  <% if notification = f.error_notification %>
+    <div class="alert alert-error fade in">
+      <a class="close" data-dismiss="alert" href="#">&times;</a>
+      <%= notification %>
+    </div>
+  <% end %>
+
+  <legend>Notification Details</legend>
+
+  <h3>Basic Details</h3>
+  <div class="well">
+	  <%= f.input :title, :label => 'Title', required: true %>
+
+    <%= f.input :body, :label => 'Body Text' %>
+
+    <%= f.input :deliver_at, :label => 'Delivery Date', required: true, :as => :datetime_picker %>
+  </div>
+
+  <h3>Who Should This Go To?</h3>
+  <div class="well">
+    <%= f.input :league_id, collection: @leagues, :label => 'All League Members', :label_method => :name %>
+
+    <%= f.input :tournament_id, collection: @tournaments, :label => 'Just These Tournament Players', :label_method => :name %>
+  </div>
+
+  <div class="form-actions">
+    <%= f.button :submit, "Create Notification", :class => 'btn btn-default' %>
+  </div>
+<% end %>

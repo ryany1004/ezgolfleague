@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160228211042) do
+ActiveRecord::Schema.define(version: 20160410203052) do
 
   create_table "contest_holes", force: :cascade do |t|
     t.integer  "contest_id"
@@ -254,6 +254,34 @@ ActiveRecord::Schema.define(version: 20160228211042) do
     t.boolean  "supports_apple_pay",                          default: false
   end
 
+  create_table "notification_templates", force: :cascade do |t|
+    t.integer  "tournament_id"
+    t.integer  "league_id"
+    t.string   "title"
+    t.text     "body"
+    t.datetime "created_at",                         null: false
+    t.datetime "updated_at",                         null: false
+    t.datetime "deliver_at"
+    t.boolean  "has_been_delivered", default: false
+  end
+
+  add_index "notification_templates", ["league_id"], name: "index_league_id_on_notification_templates"
+  add_index "notification_templates", ["tournament_id"], name: "index_tournament_id_on_notification_templates"
+
+  create_table "notifications", force: :cascade do |t|
+    t.integer  "notification_template_id"
+    t.integer  "user_id"
+    t.string   "title"
+    t.text     "body"
+    t.boolean  "is_read",                  default: false
+    t.datetime "created_at",                               null: false
+    t.datetime "updated_at",                               null: false
+    t.boolean  "has_been_delivered",       default: false
+  end
+
+  add_index "notifications", ["notification_template_id"], name: "index_notification_template_id_on_notifications"
+  add_index "notifications", ["user_id"], name: "index_user_id_on_notifications"
+
   create_table "payments", force: :cascade do |t|
     t.integer  "user_id"
     t.integer  "tournament_id"
@@ -390,19 +418,19 @@ ActiveRecord::Schema.define(version: 20160228211042) do
   add_index "tournaments", ["league_id"], name: "index_tournaments_on_league_id"
 
   create_table "users", force: :cascade do |t|
-    t.datetime "created_at",                             null: false
-    t.datetime "updated_at",                             null: false
-    t.string   "email",                  default: "",    null: false
-    t.string   "encrypted_password",     default: ""
+    t.datetime "created_at",                                null: false
+    t.datetime "updated_at",                                null: false
+    t.string   "email",                     default: "",    null: false
+    t.string   "encrypted_password",        default: ""
     t.string   "reset_password_token"
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
-    t.integer  "sign_in_count",          default: 0,     null: false
+    t.integer  "sign_in_count",             default: 0,     null: false
     t.datetime "current_sign_in_at"
     t.datetime "last_sign_in_at"
     t.string   "current_sign_in_ip"
     t.string   "last_sign_in_ip"
-    t.boolean  "is_super_user",          default: false
+    t.boolean  "is_super_user",             default: false
     t.string   "avatar_file_name"
     t.string   "avatar_content_type"
     t.integer  "avatar_file_size"
@@ -422,11 +450,13 @@ ActiveRecord::Schema.define(version: 20160228211042) do
     t.integer  "invitation_limit"
     t.integer  "invited_by_id"
     t.string   "invited_by_type"
-    t.integer  "invitations_count",      default: 0
+    t.integer  "invitations_count",         default: 0
     t.integer  "current_league_id"
-    t.float    "handicap_index",         default: 0.0
+    t.float    "handicap_index",            default: 0.0
     t.string   "ghin_number"
     t.string   "session_token"
+    t.boolean  "wants_email_notifications", default: true
+    t.boolean  "wants_push_notifications",  default: true
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true
