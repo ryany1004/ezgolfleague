@@ -47,7 +47,7 @@
     <tr>
       <td><%= golf_outing.user.complete_name %></td>
       <td>#<%= i + 1 %> - <%= tournament_group.tee_time_at.to_s(:date_and_time) %></td>
-      <td><%= @tournament_day.flight_for_player(golf_outing.user).flight_number %></td>
+      <td><%= flight_number_for_player_in_tournament_day(@tournament_day, golf_outing.user)  %></td>
       <% if user_is_league_admin(current_user, @tournament.league) && is_editable?(@tournament) -%>
       <td>
         <div class="btn-group">

@@ -2,7 +2,7 @@ module TournamentsHelper
 
   def is_editable?(tournament)
     return true if params[:debug_mode] == true
-    
+
     return false if tournament.blank?
 
     if is_today?(tournament)
@@ -28,6 +28,16 @@ module TournamentsHelper
 
   def split_holes_for_course_tournament(tournament)
     return tournament.course_holes.each_slice(tournament.course_holes.count / 2).to_a
+  end
+
+  def flight_number_for_player_in_tournament_day(tournament_day, player)
+    flight = @tournament_day.flight_for_player(player)
+
+    unless flight.blank?
+      return flight.flight_number
+    else
+      return "Needs Re-Flighting"
+    end
   end
 
 end

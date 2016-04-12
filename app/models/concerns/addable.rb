@@ -175,7 +175,7 @@ module Addable
     if self.flights.count > 0
       self.tournament.players_for_day(self).each do |p|
         if self.flight_for_player(p) == nil
-          Rails.logger.debug { "Adding Player to Last Flight - Not Normally Flighted" }
+          Rails.logger.info { "Adding Player to Last Flight - Not Normally Flighted" }
 
           last_flight = self.flights.last #add the player to the 'last' flight
           last_flight.users << p
