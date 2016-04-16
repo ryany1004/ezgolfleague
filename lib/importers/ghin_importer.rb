@@ -6,23 +6,25 @@ module Importers
     def self.import_for_all_users
       User.where("ghin_number IS NOT NULL").order("updated_at").each do |u|
         Importers::GHINImporter.import_ghin_for_user(u)
+      end
+    end
 
-        upcoming_tournaments = Tournament.all_upcoming(u.leagues, nil)
-        upcoming_tournaments.each do |t|
-          puts "Updating Tournament Course Handicap for #{u.complete_name}"
+    def self.recalc_course_handicap_for_user(user)
+      upcoming_tournaments = Tournament.all_upcoming(user.leagues, nil)
+      upcoming_tournaments.each do |t|
+        puts "Updating Tournament Course Handicap for #{user.complete_name}"
 
-          t.tournament_days.each do |td|
-            puts "Updating Tournament Day Course Handicap for #{u.complete_name}"
+        t.tournament_days.each do |td|
+          puts "Updating Tournament Day Course Handicap for #{user.complete_name}"
 
-            scorecard = td.primary_scorecard_for_user(u)
+          scorecard = td.primary_scorecard_for_user(user)
 
-            unless scorecard.blank?
-              puts "Updating Scorecard Course Handicap for #{u.complete_name}"
+          unless scorecard.blank?
+            puts "Updating Scorecard Course Handicap for #{user.complete_name}"
 
-              scorecard.set_course_handicap(true) #re-calc the course handicap
+            scorecard.set_course_handicap(true) #re-calc the course handicap
 
-              td.touch
-            end
+            td.touch
           end
         end
       end
@@ -49,6 +51,8 @@ module Importers
               unless handicap_index == 0.0
                 user.handicap_index = handicap_index
                 user.save
+
+                Importers::GHINImporter.recalc_course_handicap_for_user(user)
               else
                 puts "Not Updating - Zero Value"
               end
