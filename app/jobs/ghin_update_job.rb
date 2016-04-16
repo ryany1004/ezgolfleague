@@ -2,9 +2,8 @@ class GhinUpdateJob < ProgressJob::Base
   def initialize(users)
     all_users = []
 
-    all_users << users.shuffle
-    all_users << users.shuffle
-    all_users << users.shuffle
+    #this is a HUGE hack
+    all_users = users.shuffle + users.shuffle + users.shuffle
 
     super progress_max: all_users.count
 
