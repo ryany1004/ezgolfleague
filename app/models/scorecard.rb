@@ -35,12 +35,12 @@ class Scorecard < ActiveRecord::Base
       calculated_course_handicap = self.golf_outing.user.course_handicap(self.tournament_day.course, self.golf_outing.course_tee_box)
       calculated_course_handicap = 0 if calculated_course_handicap.blank?
 
-      Rails.logger.debug { "Recalculated Course Handicap For #{self.golf_outing.user.complete_name}: #{calculated_course_handicap}" }
+      Rails.logger.info { "Recalculated Course Handicap For #{self.golf_outing.user.complete_name}: #{calculated_course_handicap}" }
 
       self.golf_outing.course_handicap = calculated_course_handicap
       self.golf_outing.save
     else
-      Rails.logger.debug { "Did Not Re-Calculate For User #{self.golf_outing.user.complete_name}" }
+      Rails.logger.info { "Did Not Re-Calculate For User #{self.golf_outing.user.complete_name}" }
     end
   end
 

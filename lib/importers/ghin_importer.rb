@@ -9,10 +9,16 @@ module Importers
 
         upcoming_tournaments = Tournament.all_upcoming(u.leagues, nil)
         upcoming_tournaments.each do |t|
+          puts "Updating Tournament Course Handicap for #{u.complete_name}"
+
           t.tournament_days.each do |td|
+            puts "Updating Tournament Day Course Handicap for #{u.complete_name}"
+
             scorecard = td.primary_scorecard_for_user(u)
 
             unless scorecard.blank?
+              puts "Updating Scorecard Course Handicap for #{u.complete_name}"
+
               scorecard.set_course_handicap(true) #re-calc the course handicap
 
               td.touch
@@ -38,7 +44,7 @@ module Importers
             handicap_index = root_node.children.last.children.to_s.to_f
 
             unless handicap_index.blank?
-              puts "Handicap Index: #{handicap_index}"
+              puts "Handicap Index: #{handicap_index} for #{user.complete_name}"
 
               unless handicap_index == 0.0
                 user.handicap_index = handicap_index
