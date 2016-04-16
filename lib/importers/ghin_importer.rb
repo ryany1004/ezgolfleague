@@ -12,15 +12,11 @@ module Importers
     def self.recalc_course_handicap_for_user(user)
       upcoming_tournaments = Tournament.all_upcoming(user.leagues, nil)
       upcoming_tournaments.each do |t|
-        puts "Updating Tournament Course Handicap for #{user.complete_name}"
-
         t.tournament_days.each do |td|
-          puts "Updating Tournament Day Course Handicap for #{user.complete_name}"
-
           scorecard = td.primary_scorecard_for_user(user)
 
           unless scorecard.blank?
-            puts "Updating Scorecard Course Handicap for #{user.complete_name}"
+            puts "Updating Scorecard #{scorecard.id} Course Handicap for #{user.complete_name}"
 
             scorecard.set_course_handicap(true) #re-calc the course handicap
 
