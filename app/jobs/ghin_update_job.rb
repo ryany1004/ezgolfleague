@@ -11,7 +11,7 @@ class GhinUpdateJob < ProgressJob::Base
     @users.each_with_index do |u, i|
       Importers::GHINImporter.import_ghin_for_user(u)
 
-      sleep 30 if i % 8 == 0 #their system seems to get mad if we are too aggressive
+      sleep 60 if i % 8 == 0 #their system seems to get mad if we are too aggressive
 
       update_progress
     end
