@@ -1,15 +1,25 @@
 class GhinUpdateJob < ProgressJob::Base
   def initialize(users)
-    super progress_max: users.count
+    all_users = []
 
-    @users = users
+    all_users << users.shuffle
+    all_users << users.shuffle
+    all_users << users.shuffle
+
+    super progress_max: all_users.count
+
+    @users = all_users
   end
 
   def perform
     update_stage('Updating Users')
 
-    @users.each do |u|
+    @users.each_with_index do |u, i|
       Importers::GHINImporter.import_ghin_for_user(u)
+
+      if i % 10 == 0
+        sleep 20
+      end
 
       update_progress
     end
