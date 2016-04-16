@@ -20,10 +20,10 @@ module Addable
       flight = self.flight_for_player(user)
       raise "No Flight for Player #{user.id} (#{user.complete_name})" if flight.blank?
 
-      outing.course_tee_box = flight.course_tee_box
-      outing.save
-
-      Rails.logger.debug { "Outing Saved" }
+      # outing.course_tee_box = flight.course_tee_box
+      # outing.save
+      #
+      # Rails.logger.debug { "Outing Saved" }
 
       self.course_holes.each_with_index do |hole, i|
         score = Score.create!(scorecard: scorecard, course_hole: hole, sort_order: i)
@@ -172,6 +172,7 @@ module Addable
 
     self.touch #bust the cache, yo.
 
+    #flight any players not flighted
     if self.flights.count > 0
       self.tournament.players_for_day(self).each do |p|
         if self.flight_for_player(p) == nil
@@ -180,6 +181,19 @@ module Addable
           last_flight = self.flights.last #add the player to the 'last' flight
           last_flight.users << p
         end
+      end
+    end
+
+    #assign the course tee box
+    self.tournament.players_for_day(self).each do |p|
+      flight = self.flight_for_player(p)
+      golf_outing = self.golf_outing_for_player(p)
+
+      if flight.blank? == false && golf_outing.blank? == false
+        golf_outing.course_tee_box = flight.course_tee_box
+        golf_outing.save
+
+        Rails.logger.debug { "Golf Outing Saved" }
       end
     end
   end
