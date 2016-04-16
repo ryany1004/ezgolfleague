@@ -11,8 +11,6 @@ class GhinUpdateJob < ProgressJob::Base
     @users.each do |u|
       Importers::GHINImporter.import_ghin_for_user(u)
 
-      sleep 4
-
       update_progress
     end
   end
