@@ -1,13 +1,8 @@
 class GhinUpdateJob < ProgressJob::Base
   def initialize(users)
-    all_users = []
+    super progress_max: users.count
 
-    #this is a HUGE hack
-    all_users = users.shuffle + users.shuffle + users.shuffle
-
-    super progress_max: all_users.count
-
-    @users = all_users
+    @users = users
   end
 
   def perform
@@ -16,9 +11,7 @@ class GhinUpdateJob < ProgressJob::Base
     @users.each_with_index do |u, i|
       Importers::GHINImporter.import_ghin_for_user(u)
 
-      if i % 10 == 0
-        sleep 20
-      end
+      sleep 30 if i % 8 == 0 #their system seems to get mad if we are too aggressive
 
       update_progress
     end
