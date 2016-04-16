@@ -19,12 +19,7 @@ module Addable
       self.assign_players_to_flights
       flight = self.flight_for_player(user)
       raise "No Flight for Player #{user.id} (#{user.complete_name})" if flight.blank?
-
-      # outing.course_tee_box = flight.course_tee_box
-      # outing.save
-      #
-      # Rails.logger.debug { "Outing Saved" }
-
+      
       self.course_holes.each_with_index do |hole, i|
         score = Score.create!(scorecard: scorecard, course_hole: hole, sort_order: i)
       end
