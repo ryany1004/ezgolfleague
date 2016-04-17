@@ -19,6 +19,8 @@
     <% if @user_account.new_record? -%>
       <%= f.input :should_invite, :label => 'Send Invitation via Email', as: :boolean %>
     <% end -%>
+
+    <%= f.association :leagues, collection: @leagues, :label => 'Leagues', :label_method => :name, as: :check_boxes, required: true %>
   </div>
 
   <h3>GHIN Number</h3>

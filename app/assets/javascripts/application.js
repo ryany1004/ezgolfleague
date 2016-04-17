@@ -13,13 +13,13 @@
 //= require jquery
 //= require jquery_ujs
 //= require_tree .
-  
+
 //= require bootstrap-sprockets
-  
+
 //= require moment
 //= require bootstrap-datetimepicker
 //= require pickers
-  
+
 //= require chosen-jquery
 //= require chosen_scaffold
 
@@ -32,14 +32,22 @@ $(function(){
     return str;
   }
 
-  var url = window.location.pathname;  
+  var url = window.location.pathname;
   var activePage = stripTrailingSlash(url);
 
-  $('.nav li a').each(function(){  
+  $('.nav li a').each(function(){
     var currentPage = stripTrailingSlash($(this).attr('href'));
 
     if (activePage == currentPage) {
-      $(this).parent().addClass('active'); 
-    } 
+      $(this).parent().addClass('active');
+    }
   });
+});
+
+jQuery.fn.extend({
+    disable: function(state) {
+        return this.each(function() {
+            this.disabled = state;
+        });
+    }
 });

@@ -100,12 +100,18 @@
               </div>
             </div>
             <div class="modal-footer">
-              <%= f.button :button, "Move Player", :class => "btn btn-default", :value => true %>
+              <%= f.button :button, "Move Player", :class => "btn btn-default", :id => "submit#{golf_outing.id}", :value => true %>
             </div>
           </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
     <% end %>
+    <script>
+      $('#submit<%= golf_outing.id %>').on('click', function(event) {
+        $('#submit<%= golf_outing.id %>').disable(true);
+        $(this).parents('form').submit();
+      });
+    </script>
   <% end -%>
 <% end -%>
 
@@ -135,8 +141,14 @@
           </div>
         </div>
         <div class="modal-footer">
-          <%= f.button :button, "Register", :class => "btn btn-default", :value => true %>
+          <%= f.button :button, "Register", :class => "btn btn-default", :id => "submit#{@tournament_day.id}", :value => true %>
         </div>
+        <script>
+          $('#submit<%= @tournament_day.id %>').on('click', function(event) {
+            $('#submit<%= @tournament_day.id %>').disable(true);
+            $(this).parents('form').submit();
+          });
+        </script>
       </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
