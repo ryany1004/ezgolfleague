@@ -24,6 +24,14 @@ class Api::V1::TournamentsController < Api::V1::ApiBaseController
     end
   end
 
+  def app_association
+    render json: {
+      webcredentials: {
+        apps: ["9F3JLFC8C4.com.ezgolfleague.GolfApp"]
+      }
+    }
+  end
+
   def user_tournaments_cache_key
     max_updated_at = Tournament.all_upcoming(@current_user.leagues, nil).maximum(:updated_at).try(:utc).try(:to_s, :number)
 

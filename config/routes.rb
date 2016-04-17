@@ -63,6 +63,8 @@ Rails.application.routes.draw do
   root to: 'tournaments#index', constraints: -> (r) { r.env["warden"].authenticate? && r.env['warden'].user.is_any_league_admin? }, as: :league_admin_root
   root to: 'play/dashboard#index'
 
+  get 'apple-app-site-association', to: 'api/v1/tournaments#app_association'
+
   #this is for playing tournaments
   namespace :play do
     resources :payments, only: [:index, :new, :create] do
