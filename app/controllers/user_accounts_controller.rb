@@ -32,6 +32,8 @@ class UserAccountsController < BaseController
       redirect_to user_accounts_path, :flash => { :success => "The user was successfully invited." }
     else
       if @user_account.save
+        Delayed::Job.enqueue GhinUpdateJob.new([@user_account]) unless @user_account.ghin_number.blank?
+
         redirect_to user_accounts_path, :flash => { :success => "The user was successfully created." }
       else
         initialize_form
@@ -46,6 +48,8 @@ class UserAccountsController < BaseController
 
   def update
     if @user_account.update(user_params)
+      Delayed::Job.enqueue GhinUpdateJob.new([@user_account]) unless @user_account.ghin_number.blank?
+
       if @user_account == current_user
         redirect_to root_path
       else

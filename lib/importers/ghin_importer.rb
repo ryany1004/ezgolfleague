@@ -10,8 +10,8 @@ module Importers
     end
 
     def self.recalc_course_handicap_for_user(user)
-      upcoming_tournaments = Tournament.all_upcoming(user.leagues, nil)
-      upcoming_tournaments.each do |t|
+      tournaments = Tournament.tournaments_happening_at_some_point(nil, nil, user.leagues).where(is_finalized: false)
+      tournaments.each do |t|
         t.tournament_days.each do |td|
           scorecard = td.primary_scorecard_for_user(user)
 
