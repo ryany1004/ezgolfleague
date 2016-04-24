@@ -25,7 +25,7 @@
       		</tr>
       	</thead>
         <tbody>
-          <% cache(cache_key_for_tournament_day_leaderboard_with_prefix(@tournament_day, "tournament-leaderboard")) do %>          
+          <% cache(cache_key_for_tournament_day_leaderboard_with_prefix(@tournament_day, "tournament-leaderboard")) do %>
             <% @combined_flights_with_rankings.each_with_index do |flight, x| %>
               <% @current_day_flight = @day_flights_with_rankings[x] -%>
               <% flight[:players].each_with_index do |player, i| -%>
@@ -69,7 +69,9 @@
 <% unless @user_scorecard.blank? -%>
 <div class="row">
   <div class="col-md-12">
-    <p><%= link_to "<< Go back to scorecard", play_scorecard_path(@user_scorecard) %></p>
+    <p>
+      <a onclick="window.history.back()"><< Go back</a>
+    </p>
   </div>
 </div>
 <% end -%>

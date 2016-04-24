@@ -62,8 +62,10 @@ class Api::V1::TournamentDaysController < Api::V1::ApiBaseController
     tournament_cost_details = [@tournament.cost_breakdown_for_user(@current_user, false)]
 
     contest_cost_details = []
-    @tournament_day.contests.each do |c|
-      contest_cost_details << c.cost_breakdown_for_user(@current_user, false) if c.dues_amount > 0
+    @tournament_day.tournament.tournament_days.each do |td|
+      td.contests.each do |c|
+        contest_cost_details << c.cost_breakdown_for_user(@current_user, false) if c.dues_amount > 0
+      end
     end
 
     cost_details = {:tournament => tournament_cost_details, :contests => contest_cost_details}

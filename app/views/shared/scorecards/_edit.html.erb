@@ -50,8 +50,4 @@
 
 <%= link_to 'Next Golfer >>', edit_scorecard_path(@next_scorecard), :class => 'btn btn-success' unless @next_scorecard.blank? %>
 
-<% if tournament_day.tournament.is_finalized == false -%>
-  <%= link_to 'Finalize Scorecard', play_scorecard_finalize_scorecard_path(scorecard), :class => 'btn btn-danger', :method => :patch, :data => { :confirm => 'Are you sure you want to finalize your scorecard? This indicates to the league administrator that you are ready to be ranked for this tournament.' } %>
-<% end -%>
-
 <% end %>
