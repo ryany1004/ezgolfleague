@@ -1,0 +1,16 @@
+Tournament Payment Receipt
+
+Your tournament registration payment was successful:
+
+<%= @tournament.name %>: <%= number_to_currency(@tournament.dues_for_user(@user, true)) %>
+<% contest_sum = 0 %>
+<% @contests.each do |c| -%>
+<%= c.name %>:  <%= number_to_currency(c.dues_for_user(@user, true)) %>
+<% contest_sum += c.dues_for_user(@user, true) -%>
+<% end -%>
+
+Total: <%= number_to_currency(@tournament.dues_for_user(@user, true) + contest_sum) %>
+
+--
+
+Sent by EZGolfLeague

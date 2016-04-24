@@ -1,29 +1,29 @@
 class Play::PaymentsController < BaseController
   layout "golfer"
-  
+
   def index
   end
-  
+
   def new
     if params[:payment_type] == 'league_dues'
       @league = League.find(params[:league_id])
-      
+
       @payment_instructions = "Thanks for paying your league dues via EZ Golf League. Please enter your information below."
       @payment_amount = @league.dues_for_user(current_user)
       @cost_breakdown_lines = @league.cost_breakdown_for_user(current_user)
     elsif params[:payment_type] == 'contest_dues'
       @contest = Contest.find(params[:contest_id])
-      
+
       @payment_instructions = "Thanks for paying your contest dues via EZ Golf League. Please enter your information below."
       @payment_amount = @contest.dues_for_user(current_user, true)
       @cost_breakdown_lines = @contest.cost_breakdown_for_user(current_user)
     elsif params[:payment_type] == 'tournament_dues'
       @tournament = Tournament.find(params[:tournament_id])
-      
+
       @payment_instructions = "Thanks for paying your tournament dues via EZ Golf League. Please enter your information below."
       @payment_amount = @tournament.dues_for_user(current_user, true)
-      @cost_breakdown_lines = @tournament.cost_breakdown_for_user(current_user, true)      
-      
+      @cost_breakdown_lines = @tournament.cost_breakdown_for_user(current_user, true)
+
       #add in any contest dues required
       @tournament.paid_contests.each do |c|
         if c.users.include? current_user
@@ -34,35 +34,33 @@ class Play::PaymentsController < BaseController
       @payment_instructions = "Thanks for paying via EZ Golf League. Please enter your information below."
     end
   end
-    
+
   def create
     if params[:tournament_id] != nil
       tournament = Tournament.find(params[:tournament_id])
-      
+
       amount = tournament.dues_for_user(current_user, true)
       api_key = tournament.league.stripe_secret_key
       charge_description = "#{current_user.complete_name} Tournament: #{tournament.name}"
-      
-      TournamentMailer.tournament_dues_payment_confirmation(current_user, tournament).deliver_later unless tournament.league.dues_payment_receipt_email_addresses.blank?
     elsif params[:contest_id] != nil
       contest = Contest.find(params[:contest_id])
-      
+
       amount = contest.dues_for_user(current_user, true)
       api_key = contest.tournament_day.tournament.league.stripe_secret_key
       charge_description = "#{current_user.complete_name} Contest Dues"
     elsif params[:league_id] != nil
       league = League.find(params[:league_id])
       league_season = league.league_seasons.last
-      
+
       amount = league.dues_for_user(current_user)
       api_key = league.stripe_secret_key
       charge_description = "#{current_user.complete_name} League Dues"
-      
+
       Payment.create(payment_amount: (amount * -1.0), user: current_user, payment_type: charge_description, league_season: league_season)
-      
+
       LeagueMailer.league_dues_payment_confirmation(current_user, league_season).deliver_later unless league.dues_payment_receipt_email_addresses.blank?
     end
-    
+
     Stripe.api_key = api_key
 
     # Get the credit card details submitted by the form
@@ -78,7 +76,7 @@ class Play::PaymentsController < BaseController
         :source => token,
         :description => charge_description
       )
-      
+
       #create payment record
       p = Payment.new(payment_amount: amount, user: current_user, payment_type: charge_description, payment_source: PAYMENT_METHOD_CREDIT_CARD)
       p.transaction_id = charge.id
@@ -86,23 +84,25 @@ class Play::PaymentsController < BaseController
       p.league_season = league_season unless league_season.blank?
       p.contest = contest unless contest.blank?
       p.save
-      
+
       tournament.confirm_player(current_user) unless tournament.blank?
-      
+
       unless contest.blank?
         contest.users << current_user unless contest.users.include? current_user
       end
-      
+
+      TournamentMailer.tournament_payment_receipt(current_user, tournament).deliver_later unless tournament.blank?
+
       redirect_to thank_you_play_payments_path
     rescue Stripe::CardError => e
       redirect_to error_play_payments_path
     end
   end
-  
+
   def thank_you
   end
-  
+
   def error
   end
-  
+
 end

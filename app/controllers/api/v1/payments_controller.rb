@@ -38,7 +38,7 @@ class Api::V1::PaymentsController < Api::V1::ApiBaseController
 
         logger.debug { "Payment Success!" }
 
-        TournamentMailer.tournament_dues_payment_confirmation(@current_user, tournament).deliver_later unless tournament.league.dues_payment_receipt_email_addresses.blank?
+        TournamentMailer.tournament_payment_receipt(@current_user, tournament).deliver_later
 
         render json: {"success" => true}
       rescue Stripe::CardError => e
