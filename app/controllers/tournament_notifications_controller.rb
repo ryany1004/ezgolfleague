@@ -52,7 +52,15 @@ class TournamentNotificationsController < BaseController
   end
 
   def set_stage
-    @stage_name = "notifications"
+    if params[:tournament_day].blank?
+      if @tournament.tournament_days.count > 1
+        @stage_name = "notifications#{@tournament.first_day.id}"
+      else
+        @stage_name = "notifications"
+      end
+    else
+      @stage_name = "notifications#{@tournament_day.id}"
+    end
   end
 
   def fetch_other_details

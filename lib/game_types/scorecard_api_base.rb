@@ -19,10 +19,17 @@ module GameTypes
       #handicap
       rows << self.handicap_row
 
+      #additional rows
+      rows = rows + self.additional_rows unless self.additional_rows.blank?
+
       #header info
       header_info = {golfer_name: self.scorecard.golf_outing.user.short_name, net_score: self.scorecard.net_score.to_s, gross_score: self.scorecard.gross_score.to_s, front_nine_score: self.scorecard.front_nine_score(true).to_s, back_nine_score: self.scorecard.back_nine_score(true).to_s}
 
       return {rows: rows, header: header_info}
+    end
+
+    def additional_rows
+      return nil
     end
 
     def hole_row
@@ -38,15 +45,19 @@ module GameTypes
     end
 
     def score_row
+      return self.score_row_for_scorecard(self.scorecard, "Score")
+    end
+
+    def score_row_for_scorecard(card, title)
       score_info = []
-      self.scorecard.scores.each do |score|
+      card.scores.each do |score|
         score_info << score.strokes.to_s
       end
-      score_info << ["#{self.scorecard.front_nine_score(false)}/#{self.scorecard.front_nine_score(true)}", "#{self.scorecard.back_nine_score(false)}/#{self.scorecard.back_nine_score(true)}"]
-      score_info << self.scorecard.course_handicap.to_s
-      score_info << "#{self.scorecard.gross_score}/#{self.scorecard.net_score}"
+      score_info << ["#{card.front_nine_score(false)}/#{card.front_nine_score(true)}", "#{card.back_nine_score(false)}/#{card.back_nine_score(true)}"]
+      score_info << card.course_handicap.to_s
+      score_info << "#{card.gross_score}/#{card.net_score}"
 
-      return {title: "Score", contents: score_info, should_bold: false, should_ornament: false}
+      return {title: title, contents: score_info, should_bold: false, should_ornament: false}
     end
 
     def par_row

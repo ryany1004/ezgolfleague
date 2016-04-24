@@ -3,51 +3,59 @@ module GameTypes
     attr_accessor :should_use_handicap
     attr_accessor :handicap_indices
     attr_accessor :course_hole_number_suppression_list
-    
+
     def initialize
       super
-      
+
       self.handicap_indices = Hash.new
       self.course_hole_number_suppression_list = []
     end
-    
+
     def name(shorten_for_print = false)
       if self.should_use_handicap == true
-        return "Best Ball Net"
+        if shorten_for_print == true
+          return "Net"
+        else
+          return "Best Ball Net"
+        end
       else
-        return "Best Ball Gross"
+        if shorten_for_print == true
+          return "Gross"
+        else
+          return "Best Ball Gross"
+        end
       end
     end
-    
+
     def should_subtotal?
       return true
     end
-  
+
     def should_total?
       return true
     end
-    
+
     def handicap_allowance_for_user(user)
       if self.should_use_handicap == false
         return nil
       end
-      
+
       if self.handicap_indices["#{user.id}"]
         return self.handicap_indices["#{user.id}"]
       else
         handicap_allowance = self.tournament_day.handicap_allowance(user)
         self.handicap_indices["#{user.id}"] = handicap_allowance
-        
+
         return handicap_allowance
       end
     end
-    
-    def calculate_scores    
+
+    def calculate_scores
       new_scores = []
 
       if golfer_team.blank?
         Rails.logger.debug { "Calculate Scores - No Team" }
-        
+
         return
       end
 
@@ -57,16 +65,16 @@ module GameTypes
           score.strokes = 0
           score.scorecard = self
           score.course_hole = hole
-          
+
           new_scores << score
         else
           score = DerivedScorecardScore.new
           score.scorecard = self
-        
+
           comparable_scores = []
           self.golfer_team.users.each do |user|
             scorecard = self.golfer_team.tournament_day.primary_scorecard_for_user(user)
-                
+
             raw_score = scorecard.scores.where(course_hole: hole).first.strokes
             if self.should_use_handicap == true
               if raw_score == 0
@@ -80,24 +88,24 @@ module GameTypes
 
             comparable_scores << hole_score
           end
-        
+
           score.strokes = self.score_for_scores(comparable_scores, hole)
-        
+
           score.course_hole = hole
           new_scores << score
         end
       end
-            
+
       self.scores = new_scores
     end
-    
-    def score_for_scores(comparable_scores, hole)      
+
+    def score_for_scores(comparable_scores, hole)
       return 0 if comparable_scores.blank?
 
       sorted_scores = comparable_scores.sort
-            
+
       return sorted_scores[0]
     end
-    
+
   end
 end

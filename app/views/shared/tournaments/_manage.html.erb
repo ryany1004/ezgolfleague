@@ -33,6 +33,7 @@
           <li <%= tournament_class_for_stage(stage, "days") %> ><%= link_to 'Days', league_tournament_tournament_days_path(tournament.league, tournament) %></li>
           <li <%= tournament_class_for_stage(stage, "hole_information") %> ><%= link_to 'Holes', league_tournament_manage_holes_path(tournament.league, tournament) %></li>
           <li <%= tournament_class_for_stage(stage, "game_types") %>><%= link_to 'Game Type', edit_league_tournament_game_types_path(tournament.league, tournament) %></li>
+          <li <%= tournament_class_for_stage(stage, "notifications") %>><%= link_to 'Notifications', league_tournament_tournament_notifications_path(tournament.league, tournament) %></li>
         <% end -%>
       <% end -%>
     </ul>
