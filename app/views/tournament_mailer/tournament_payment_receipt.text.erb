@@ -2,14 +2,11 @@ Tournament Payment Receipt
 
 Your tournament registration payment was successful:
 
-<%= @tournament.name %>: <%= number_to_currency(@tournament.dues_for_user(@user, true)) %>
-<% contest_sum = 0 %>
-<% @contests.each do |c| -%>
-<%= c.name %>:  <%= number_to_currency(c.dues_for_user(@user, true)) %>
-<% contest_sum += c.dues_for_user(@user, true) -%>
+<% @cost_lines.each do |line| -%>
+  <%= line[:name] %>: <%= number_to_currency(line[:price]) %>
 <% end -%>
 
-Total: <%= number_to_currency(@tournament.dues_for_user(@user, true) + contest_sum) %>
+Thanks for signing up and good luck!
 
 --
 

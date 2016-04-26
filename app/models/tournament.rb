@@ -116,8 +116,6 @@ class Tournament < ActiveRecord::Base
   end
 
   def cost_breakdown_for_user(user, include_credit_card_fees = true)
-    membership = user.league_memberships.where("league_id = ?", self.league.id).first
-
     cost_lines = [
       {:name => "#{self.name} Fees", :price => self.dues_amount, :server_id => self.id.to_s}
     ]
