@@ -68,6 +68,8 @@ class Play::PaymentsController < BaseController
 
     Rails.logger.info { "Sending Stripe Charge: #{amount} for #{charge_description}" }
 
+    #at this point the charges are already included in the above
+
     # Create the charge on Stripe's servers - this will charge the user's card
     begin
       charge = Stripe::Charge.create(

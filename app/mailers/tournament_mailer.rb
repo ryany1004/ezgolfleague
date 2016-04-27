@@ -36,7 +36,7 @@ class TournamentMailer < ApplicationMailer
 
     @tournament.tournament_days.each do |td|
       td.contests.each do |c|
-        if c.dues_amount == 0 or c.users.include? @user
+        if c.dues_amount == 0 or c.users.include? user
           total_cost += c.dues_amount
 
           @cost_lines << {:name => c.name, :price => c.dues_amount}

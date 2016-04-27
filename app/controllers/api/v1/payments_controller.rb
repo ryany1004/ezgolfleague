@@ -42,8 +42,6 @@ class Api::V1::PaymentsController < Api::V1::ApiBaseController
           end
         end
 
-        logger.debug { "Payment Success!" }
-
         TournamentMailer.tournament_payment_receipt(@current_user, tournament).deliver_later
 
         render json: {"success" => true}
