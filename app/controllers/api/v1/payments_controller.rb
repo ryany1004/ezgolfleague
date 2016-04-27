@@ -17,12 +17,18 @@ class Api::V1::PaymentsController < Api::V1::ApiBaseController
       begin
         Stripe.api_key = tournament.league.stripe_secret_key
 
+        #add in the Stripe fees
+        credit_card_fees = Stripe::StripeFees.fees_for_transaction_amount(payment_amount)
+        payment_amount += credit_card_fees
+
         charge = Stripe::Charge.create(
           :amount => (payment_amount * 100).to_i, # amount in cents
           :currency => "usd",
           :source => stripe_token,
-          :description => tournament.name
+          :description => "#{@current_user.complete_name} Tournament: #{tournament.name}"
         )
+
+        logger.info { "Charged #{@current_user.complete_name} Card w/ Stripe for #{payment_amount}" }
 
         self.create_payment(tournament.dues_for_user(@current_user, true), tournament.name, charge.id, tournament, nil)
 
