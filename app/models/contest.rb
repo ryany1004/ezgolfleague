@@ -50,7 +50,7 @@ class Contest < ActiveRecord::Base
       credit_card_fees = 0
       credit_card_fees = Stripe::StripeFees.fees_for_transaction_amount(dues_amount) if include_credit_card_fees == true
 
-      return (dues_amount + credit_card_fees).round(2)
+      return dues_amount + credit_card_fees
     else
       return 0
     end

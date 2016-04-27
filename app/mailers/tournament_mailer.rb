@@ -56,7 +56,7 @@ class TournamentMailer < ApplicationMailer
   def tournament_coming_up(tournament, user)
     @tournament = tournament
     @user = user
-    @registration_url = "http://ezgolfleague.herokuapp.com/leagues/#{@tournament.league.id}/tournaments" #TODO: UPDATE
+    @registration_url = "https://app.ezgolfleague.com/leagues/#{@tournament.league.id}/tournaments"
 
     mail(to: @user.email, subject: 'EZGolfLeague - Your Tournament is Coming Up')
   end

@@ -48,7 +48,7 @@ class League < ActiveRecord::Base
 
       credit_card_fees = Stripe::StripeFees.fees_for_transaction_amount(discount_amount) if include_credit_card_fees == true
 
-      return (discount_amount + credit_card_fees).round(2)
+      return discount_amount + credit_card_fees
     else
       return 0
     end
