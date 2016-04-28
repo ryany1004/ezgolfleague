@@ -19,7 +19,7 @@ module Addable
       self.assign_players_to_flights
       flight = self.flight_for_player(user)
       raise "No Flight for Player #{user.id} (#{user.complete_name})" if flight.blank?
-      
+
       self.course_holes.each_with_index do |hole, i|
         score = Score.create!(scorecard: scorecard, course_hole: hole, sort_order: i)
       end
@@ -88,7 +88,7 @@ module Addable
         c.remove_user(user)
       end
 
-      #credit
+      #tournament credit
       if self == self.tournament.first_day
         previous_payments = Payment.where(user: user, tournament: self.tournament).where("payment_amount < 0")
         previous_unrefunded_payments = previous_payments.select{|item| item.credits.count == 0}

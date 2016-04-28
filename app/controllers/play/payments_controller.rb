@@ -90,7 +90,7 @@ class Play::PaymentsController < BaseController
       tournament.confirm_player(current_user) unless tournament.blank?
 
       unless contest.blank?
-        contest.users << current_user unless contest.users.include? current_user
+        contest.add_user(current_user)
       end
 
       TournamentMailer.tournament_payment_receipt(current_user, tournament).deliver_later unless tournament.blank?

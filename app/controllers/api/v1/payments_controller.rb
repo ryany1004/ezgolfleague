@@ -33,12 +33,12 @@ class Api::V1::PaymentsController < Api::V1::ApiBaseController
         self.create_payment(tournament.dues_for_user(@current_user, true), tournament.name, charge.id, tournament, nil)
 
         contest_ids.each do |contest_id|
-          contest = Contest.where(id: contest_id).first
+          contest = Contest.where(id: contest_id.to_i).first
 
           unless contest.blank?
             self.create_payment(contest.dues_for_user(@current_user, true), contest.name, charge.id, nil, contest)
 
-            contest.users << @current_user unless contest.users.include? @current_user
+            contest.add_user(@current_user)
           end
         end
 
