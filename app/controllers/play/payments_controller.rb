@@ -93,7 +93,7 @@ class Play::PaymentsController < BaseController
         contest.add_user(current_user)
       end
 
-      TournamentMailer.tournament_payment_receipt(current_user, tournament).deliver_later unless tournament.blank?
+      TournamentMailer.tournament_payment_receipt(current_user, tournament, amount).deliver_later unless tournament.blank?
 
       redirect_to thank_you_play_payments_path
     rescue Stripe::CardError => e

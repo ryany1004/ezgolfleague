@@ -24,7 +24,7 @@ class TournamentMailer < ApplicationMailer
     mail(to: @league_season.league.dues_payment_receipt_email_addresses, subject: "Tournament Dues Payment: #{@user.complete_name}")
   end
 
-  def tournament_payment_receipt(user, tournament)
+  def tournament_payment_receipt(user, tournament, total_charged)
     @tournament = tournament
     league_season = @tournament.league_season
 
@@ -45,10 +45,9 @@ class TournamentMailer < ApplicationMailer
     end
 
     credit_card_fees = Stripe::StripeFees.fees_for_transaction_amount(total_cost)
-    total_cost += credit_card_fees
 
     @cost_lines << {:name => "Credit Card Fees", :price => credit_card_fees}
-    @cost_lines << {:name => "Total", :price => total_cost}
+    @cost_lines << {:name => "Total", :price => total_charged}
 
     mail(to: user.email, subject: "Tournament Payment Receipt: #{user.complete_name}", bcc: league_season.league.dues_payment_receipt_email_addresses)
   end

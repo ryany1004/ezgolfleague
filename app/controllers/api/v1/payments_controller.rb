@@ -42,7 +42,7 @@ class Api::V1::PaymentsController < Api::V1::ApiBaseController
           end
         end
 
-        TournamentMailer.tournament_payment_receipt(@current_user, tournament).deliver_later
+        TournamentMailer.tournament_payment_receipt(@current_user, tournament, payment_amount).deliver_later
 
         render json: {"success" => true}
       rescue Stripe::CardError => e
