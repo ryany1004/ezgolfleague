@@ -84,8 +84,10 @@ module Addable
       end
 
       #contests
-      self.contests.each do |c|
-        c.remove_user(user)
+      self.tournament.tournament_days.each do |d|
+        d.contests.each do |c|
+          c.remove_user(user)
+        end
       end
 
       #tournament credit
@@ -110,8 +112,10 @@ module Addable
   end
 
   def add_player_to_free_contests(user)
-    self.contests.each do |c|
-      c.add_user(user) if c.is_opt_in == false
+    self.tournament.tournament_days.each do |d|
+      d.contests.each do |c|
+        c.add_user(user) if c.is_opt_in == false
+      end
     end
   end
 
