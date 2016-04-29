@@ -32,7 +32,7 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 
-gem 'devise'
+gem 'devise', '~> 3.5.6'
 gem 'devise_invitable', '~> 1.5.2'
 
 gem 'bootstrap-sass', '~> 3.3.4'
@@ -74,5 +74,5 @@ group :production do
   gem 'rails_12factor'
   gem 'dalli'
   gem 'puma'
-  gem 'newrelic_rpm'
+  #gem 'newrelic_rpm'
 end
