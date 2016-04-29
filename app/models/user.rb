@@ -12,6 +12,7 @@ class User < ActiveRecord::Base
   has_many :payments, ->{ order 'created_at DESC' }, inverse_of: :user
   has_many :tournament_day_results, inverse_of: :tournament_day, :dependent => :destroy
   has_many :notifications, :dependent => :destroy
+  has_many :mobile_devices, :dependent => :destroy
   belongs_to :current_league, :class_name => "League"
   has_and_belongs_to_many :flights, inverse_of: :users
   has_and_belongs_to_many :golfer_teams, inverse_of: :users
@@ -118,6 +119,27 @@ class User < ActiveRecord::Base
     end
   end
 
+  def send_mobile_notification(body)
+    return if self.wants_push_notifications == false
+
+    pusher = Grocer.pusher(
+      certificate: "#{Rails.root}/config/apns_cert.pem",      # required
+      passphrase:  "golf",                       # optional
+      gateway:     "gateway.push.apple.com", # optional; See note below.
+      port:        2195,                     # optional
+      retries:     3                         # optional
+    )
+
+    self.mobile_devices.each do |device|
+      notification = Grocer::Notification.new(
+        device_token: device.device_identifier,
+        alert: body
+      )
+
+      pusher.push(notification)
+    end
+  end
+
   ##Custom Devise
 
   def league_names_string
@@ -133,15 +155,5 @@ class User < ActiveRecord::Base
       return "EZ Golf League - You Have Been Invited!"
     end
   end
-
-  # # This method is called internally during the Devise invitation process. We are
-  # # using it to allow for a custom email subject. These options get merged into the
-  # # internal devise_invitable options. Tread Carefully.
-  # def headers_for(action)
-  #   logger.info { "Headers For Called: #{action}" }
-  #
-  #   return {} unless action == :invitation_instructions
-  #   { subject: self.invite_email_subject }
-  # end
 
 end

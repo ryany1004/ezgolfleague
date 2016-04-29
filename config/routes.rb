@@ -106,7 +106,9 @@ Rails.application.routes.draw do
   #API
   namespace "api" do
     namespace "v1" do
-      resources :sessions, only: [:create]
+      resources :sessions, only: [:create] do
+        post 'register_device', on: :collection
+      end
 
       resources :scores do
         put 'batch_update', on: :collection

@@ -150,6 +150,7 @@ GEM
     ffi (1.9.10)
     globalid (0.3.6)
       activesupport (>= 4.1.0)
+    grocer (0.6.1)
     http-cookie (1.0.2)
       domain_name (~> 0.5)
     i18n (0.7.0)
@@ -294,6 +295,7 @@ DEPENDENCIES
   delayed_job_active_record
   devise
   devise_invitable (~> 1.5.2)
+  grocer
   jbuilder (~> 2.0)
   jquery-rails
   kaminari (~> 0.16.1)

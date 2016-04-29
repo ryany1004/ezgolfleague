@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160410222350) do
+ActiveRecord::Schema.define(version: 20160429213828) do
 
   create_table "contest_holes", force: :cascade do |t|
     t.integer  "contest_id"
@@ -253,6 +253,16 @@ ActiveRecord::Schema.define(version: 20160410222350) do
     t.string   "apple_pay_merchant_id"
     t.boolean  "supports_apple_pay",                          default: false
   end
+
+  create_table "mobile_devices", force: :cascade do |t|
+    t.integer  "user_id"
+    t.string   "device_identifier"
+    t.datetime "created_at",        null: false
+    t.datetime "updated_at",        null: false
+  end
+
+  add_index "mobile_devices", ["device_identifier"], name: "index_mobile_devices_on_device_identifier"
+  add_index "mobile_devices", ["user_id"], name: "index_mobile_devices_on_user_id"
 
   create_table "notification_templates", force: :cascade do |t|
     t.integer  "tournament_id"

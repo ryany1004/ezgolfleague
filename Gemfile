@@ -51,6 +51,7 @@ gem 'stripe', :git => 'https://github.com/stripe/stripe-ruby'
 gem 'delayed_job_active_record'
 gem 'progress_job'
 gem 'backport_new_renderer', :github => 'brainopia/backport_new_renderer'
+gem 'grocer'
 
 group :development, :test do
   gem 'sqlite3', :require => "sqlite3"
