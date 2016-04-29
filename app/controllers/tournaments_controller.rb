@@ -186,7 +186,7 @@ class TournamentsController < BaseController
         end
       end
 
-      redirect_to league_tournaments_path(current_user.selected_league), :flash => { :success => "The days were re-scheduled." }
+      redirect_to league_tournament_signups_path(current_user.selected_league, @tournament, tournament_day: @tournament.tournament_days[1]), :flash => { :success => "The days were re-scheduled." }
     end
   end
 
