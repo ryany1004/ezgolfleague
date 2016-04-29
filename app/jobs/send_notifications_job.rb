@@ -13,7 +13,8 @@ class SendNotificationsJob < ProgressJob::Base
         Notification.create(notification_template: t, user: r, title: t.title, body: t.body)
 
         NotificationMailer.notification_message(r, t.title, t.body).deliver_later if r.wants_email_notifications == true
-        # self.send_push_notification(r.device_identifier, t.title, t.body) if r.wants_push_notifications == true
+
+        r.send_mobile_notification(t.title) if r.wants_push_notifications == true
       end
 
       t.has_been_delivered = true

@@ -123,11 +123,9 @@ class User < ActiveRecord::Base
     return if self.wants_push_notifications == false
 
     pusher = Grocer.pusher(
-      certificate: "#{Rails.root}/config/apns_cert.pem",      # required
-      passphrase:  "golf",                       # optional
-      gateway:     "gateway.push.apple.com", # optional; See note below.
-      port:        2195,                     # optional
-      retries:     3                         # optional
+      certificate: "#{Rails.root}/config/apns_cert.pem",
+      passphrase:  "golf",
+      gateway:     "gateway.push.apple.com"
     )
 
     self.mobile_devices.each do |device|
