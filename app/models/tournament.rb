@@ -115,13 +115,39 @@ class Tournament < ActiveRecord::Base
     end
   end
 
-  def cost_breakdown_for_user(user, include_credit_card_fees = true)
+  def total_for_user_with_contest_fees(user, include_credit_card_fees = true)
+    dues_amount = self.dues_amount
+
+    self.paid_contests.each do |c|
+      if c.users.include? user
+        dues_amount += c.dues_amount
+      end
+    end
+
+    credit_card_fees = Stripe::StripeFees.fees_for_transaction_amount(dues_amount)
+
+    return dues_amount + credit_card_fees
+  end
+
+  def cost_breakdown_for_user(user, include_unpaid_contests = true, include_credit_card_fees = true)
+    dues_total = self.dues_amount
+
     cost_lines = [
       {:name => "#{self.name} Fees", :price => self.dues_amount, :server_id => self.id.to_s}
     ]
 
+    if include_unpaid_contests == true
+      self.paid_contests.each do |c|
+        if c.users.include? user
+          cost_lines += c.cost_breakdown_for_user(user, false)
+
+          dues_total += c.dues_amount
+        end
+      end
+    end
+
     if include_credit_card_fees == true
-      cost_lines << {:name => "Credit Card Fees", :price => Stripe::StripeFees.fees_for_transaction_amount(self.dues_amount)}
+      cost_lines << {:name => "Credit Card Fees", :price => Stripe::StripeFees.fees_for_transaction_amount(dues_total)}
     end
 
     return cost_lines

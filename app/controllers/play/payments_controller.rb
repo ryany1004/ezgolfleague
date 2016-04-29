@@ -21,15 +21,17 @@ class Play::PaymentsController < BaseController
       @tournament = Tournament.find(params[:tournament_id])
 
       @payment_instructions = "Thanks for paying your tournament dues via EZ Golf League. Please enter your information below."
-      @payment_amount = @tournament.dues_for_user(current_user, true)
-      @cost_breakdown_lines = @tournament.cost_breakdown_for_user(current_user, true)
+      @payment_amount = @tournament.dues_for_user(current_user, false)
+      @cost_breakdown_lines = @tournament.cost_breakdown_for_user(current_user, true, true)
 
       #add in any contest dues required
       @tournament.paid_contests.each do |c|
         if c.users.include? current_user
-          @payment_amount += c.dues_amount
+          @payment_amount += c.dues_for_user(current_user, false)
         end
       end
+
+      @payment_amount += Stripe::StripeFees.fees_for_transaction_amount(@payment_amount)
     else
       @payment_instructions = "Thanks for paying via EZ Golf League. Please enter your information below."
     end
@@ -39,7 +41,7 @@ class Play::PaymentsController < BaseController
     if params[:tournament_id] != nil
       tournament = Tournament.find(params[:tournament_id])
 
-      amount = tournament.dues_for_user(current_user, true)
+      amount = tournament.total_for_user_with_contest_fees(current_user, true)
       api_key = tournament.league.stripe_secret_key
       charge_description = "#{current_user.complete_name} Tournament: #{tournament.name}"
     elsif params[:contest_id] != nil
@@ -79,13 +81,26 @@ class Play::PaymentsController < BaseController
         :description => charge_description
       )
 
-      #create payment record
-      p = Payment.new(payment_amount: amount, user: current_user, payment_type: charge_description, payment_source: PAYMENT_METHOD_CREDIT_CARD)
-      p.transaction_id = charge.id
-      p.tournament = tournament unless tournament.blank?
-      p.league_season = league_season unless league_season.blank?
-      p.contest = contest unless contest.blank?
-      p.save
+      #create payment records
+      unless league_season.blank?
+        self.create_payment(amount, charge_description, charge.id, nil, nil, league_season)
+      else
+        unless tournament.blank?
+          self.create_payment(tournament.dues_for_user(current_user, false), charge_description, charge.id, tournament, nil, nil)
+
+          tournament.paid_contests.each do |c|
+            if c.users.include? current_user
+              self.create_payment(c.dues_for_user(current_user, false), charge_description, charge.id, nil, c, nil)
+            end
+          end
+        end
+
+        unless contest.blank?
+          self.create_payment(contest.dues_for_user(current_user, false), charge_description, charge.id, nil, contest, nil)
+        end
+
+        self.create_payment(amount, charge_description, charge.id, nil, nil, nil)
+      end
 
       tournament.confirm_player(current_user) unless tournament.blank?
 
@@ -93,12 +108,21 @@ class Play::PaymentsController < BaseController
         contest.add_user(current_user)
       end
 
-      TournamentMailer.tournament_payment_receipt(current_user, tournament, amount).deliver_later unless tournament.blank?
+      TournamentMailer.tournament_payment_receipt(current_user, tournament, amount.to_f).deliver_later unless tournament.blank?
 
       redirect_to thank_you_play_payments_path
     rescue Stripe::CardError => e
       redirect_to error_play_payments_path
     end
+  end
+
+  def create_payment(amount, charge_description, charge_identifier, tournament, contest, league_season)
+    p = Payment.new(payment_amount: amount, user: current_user, payment_type: charge_description, payment_source: PAYMENT_METHOD_CREDIT_CARD)
+    p.transaction_id = charge_identifier
+    p.tournament = tournament unless tournament.blank?
+    p.league_season = league_season unless league_season.blank?
+    p.contest = contest unless contest.blank?
+    p.save
   end
 
   def thank_you

@@ -8,7 +8,7 @@ class SendNotificationsJob < ProgressJob::Base
   def perform
     update_stage('Sending Notifications')
 
-    pusher = User.pusher
+    pusher = User.pusher #this starts to break if we have mixed dev/prod notifications
 
     @templates.each do |t|
       t.recipients.each do |r|

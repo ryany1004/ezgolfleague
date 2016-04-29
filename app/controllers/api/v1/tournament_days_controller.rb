@@ -59,7 +59,7 @@ class Api::V1::TournamentDaysController < Api::V1::ApiBaseController
   end
 
   def payment_details
-    tournament_cost_details = [@tournament.cost_breakdown_for_user(@current_user, false)]
+    tournament_cost_details = [@tournament.cost_breakdown_for_user(@current_user, false, false)]
 
     contest_cost_details = []
     @tournament_day.tournament.tournament_days.each do |td|
