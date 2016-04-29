@@ -119,14 +119,10 @@ class User < ActiveRecord::Base
     end
   end
 
-  def send_mobile_notification(body)
+  def send_mobile_notification(body, pusher = nil)
     return if self.wants_push_notifications == false
 
-    pusher = Grocer.pusher(
-      certificate: "#{Rails.root}/config/apns_cert.pem",
-      passphrase:  "golf",
-      gateway:     "gateway.push.apple.com"
-    )
+    pusher = User.pusher if pusher.blank?
 
     self.mobile_devices.each do |device|
       notification = Grocer::Notification.new(
@@ -136,6 +132,14 @@ class User < ActiveRecord::Base
 
       pusher.push(notification)
     end
+  end
+
+  def self.pusher
+    pusher = Grocer.pusher(
+      certificate: "#{Rails.root}/config/apns_cert.pem",
+      passphrase:  "golf",
+      gateway:     "gateway.push.apple.com"
+    )
   end
 
   ##Custom Devise

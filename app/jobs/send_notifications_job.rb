@@ -8,13 +8,15 @@ class SendNotificationsJob < ProgressJob::Base
   def perform
     update_stage('Sending Notifications')
 
+    pusher = User.pusher
+
     @templates.each do |t|
       t.recipients.each do |r|
         Notification.create(notification_template: t, user: r, title: t.title, body: t.body)
 
         NotificationMailer.notification_message(r, t.title, t.body).deliver_later if r.wants_email_notifications == true
 
-        r.send_mobile_notification(t.title) if r.wants_push_notifications == true
+        r.send_mobile_notification(t.title, pusher) if r.wants_push_notifications == true
       end
 
       t.has_been_delivered = true
@@ -23,9 +25,4 @@ class SendNotificationsJob < ProgressJob::Base
       update_progress
     end
   end
-
-  def send_push_notification(device_identifier, title, body)
-    #TODO
-  end
-
 end
