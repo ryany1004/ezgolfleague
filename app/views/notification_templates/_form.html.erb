@@ -10,9 +10,9 @@
 
   <h3>Basic Details</h3>
   <div class="well">
-	  <%= f.input :title, :label => 'Title', required: true %>
+    <%= f.input :title, :label => 'Title (Mobile + Email)', required: true %>
 
-    <%= f.input :body, :label => 'Body Text' %>
+    <%= f.input :body, :label => 'Body Text (Email Only)' %>
 
     <%= f.input :deliver_at, :label => 'Delivery Date', required: true, :as => :datetime_picker %>
   </div>
