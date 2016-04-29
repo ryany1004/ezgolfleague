@@ -83,10 +83,10 @@ class Play::PaymentsController < BaseController
 
       #create payment records
       unless league_season.blank?
-        self.create_payment(amount, charge_description, charge.id, nil, nil, league_season)
+        self.create_payment(amount, charge_description, charge.id, nil, nil, league_season) #league dues
       else
         unless tournament.blank?
-          self.create_payment(tournament.dues_for_user(current_user, false), charge_description, charge.id, tournament, nil, nil)
+          self.create_payment(tournament.dues_for_user(current_user, false), charge_description, charge.id, tournament, nil, nil) #tournaments and any contests
 
           tournament.paid_contests.each do |c|
             if c.users.include? current_user
@@ -96,14 +96,14 @@ class Play::PaymentsController < BaseController
         end
 
         unless contest.blank?
-          self.create_payment(contest.dues_for_user(current_user, false), charge_description, charge.id, nil, contest, nil)
+          self.create_payment(contest.dues_for_user(current_user, false), charge_description, charge.id, nil, contest, nil) #just a contest
         end
-
-        self.create_payment(amount, charge_description, charge.id, nil, nil, nil)
       end
 
+      #confirm player
       tournament.confirm_player(current_user) unless tournament.blank?
 
+      #actually add to the contests
       unless contest.blank?
         contest.add_user(current_user)
       end
