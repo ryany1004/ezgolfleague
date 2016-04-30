@@ -156,11 +156,15 @@ module Addable
         player_course_handicap = self.player_course_handicap_for_player(p)
 
         if player_course_handicap.blank?
-          Rails.logger.debug { "Player Course Handicap Was Blank: #{player.id}" }
+          Rails.logger.info { "team_course_handicap_for_player: Player Course Handicap Was Blank: #{player.id}" }
+
+          return 0
         else
           highest_handicap = player_course_handicap if player_course_handicap > highest_handicap #the highest one is returned
         end
       end
+
+      return highest_handicap
     else
       return 0
     end
