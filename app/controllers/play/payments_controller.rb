@@ -37,6 +37,8 @@ class Play::PaymentsController < BaseController
     end
   end
 
+  #TODO: This is a mess and should be re-factored. One single call w/ the API as well.
+
   def create
     if params[:tournament_id] != nil
       tournament = Tournament.find(params[:tournament_id])

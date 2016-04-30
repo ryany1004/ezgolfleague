@@ -146,6 +146,22 @@ module Addable
     return player_course_handicap
   end
 
+  def team_course_handicap_for_player(player)
+    team = self.golfer_team_for_player(player)
+
+    unless team.blank?
+      highest_handicap = 0
+
+      team.users.each do |u|
+        player_course_handicap = self.player_course_handicap_for_player(p)
+
+        highest_handicap = player_course_handicap if player_course_handicap > highest_handicap #the highest one is returned
+      end
+    else
+      return 0
+    end
+  end
+
   def assign_players_to_flights
     self.reload
 
@@ -154,6 +170,8 @@ module Addable
 
       self.tournament.players_for_day(self).each do |p|
         player_course_handicap = self.player_course_handicap_for_player(p, f)
+        team_course_handicap = self.team_course_handicap_for_player(p)
+        player_course_handicap = team_course_handicap if team_course_handicap > player_course_handicap #the highest handicap is the one used if this is a team
 
         unless player_course_handicap.blank?
           if player_course_handicap >= f.lower_bound && player_course_handicap <= f.upper_bound
