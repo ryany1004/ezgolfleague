@@ -153,10 +153,10 @@ module Addable
       highest_handicap = 0
 
       team.users.each do |u|
-        player_course_handicap = self.player_course_handicap_for_player(p)
+        player_course_handicap = self.player_course_handicap_for_player(u)
 
         if player_course_handicap.blank?
-          Rails.logger.info { "team_course_handicap_for_player: Player Course Handicap Was Blank: #{player.id}" }
+          Rails.logger.info { "team_course_handicap_for_player: Player Course Handicap Was Blank: #{u.id}" }
 
           return 0
         else
