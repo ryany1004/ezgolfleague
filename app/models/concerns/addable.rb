@@ -155,7 +155,11 @@ module Addable
       team.users.each do |u|
         player_course_handicap = self.player_course_handicap_for_player(p)
 
-        highest_handicap = player_course_handicap if player_course_handicap > highest_handicap #the highest one is returned
+        if player_course_handicap.blank?
+          Rails.logger.debug { "Player Course Handicap Was Blank: #{player.id}" }
+        else
+          highest_handicap = player_course_handicap if player_course_handicap > highest_handicap #the highest one is returned
+        end
       end
     else
       return 0
