@@ -50,7 +50,7 @@
 			<th>&nbsp;</th>
       <th>&nbsp;</th>
       <% if user_is_league_admin(current_user, @tournament.league) -%>
-      <th><%= link_to 'Create a New Team', new_league_tournament_contest_path(@tournament.league, @tournament), :class => 'btn btn-primary' %></th>
+      <th><%= link_to 'Create a New Team', new_league_tournament_golfer_team_path(@tournament.league, @tournament, tournament_day: @tournament_day), :class => 'btn btn-primary' %></th>
       <% else -%>
       <th>&nbsp;</th>
       <% end -%>
