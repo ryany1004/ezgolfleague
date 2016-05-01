@@ -36,8 +36,8 @@ gem 'devise', '~> 3.5.6'
 gem 'devise_invitable', '~> 1.5.2'
 
 gem 'bootstrap-sass', '~> 3.3.4'
-gem "paperclip", '~> 4.2.0'
-gem 'aws-sdk'
+#gem "paperclip", '~> 4.2.0'
+#gem 'aws-sdk'
 gem 'kaminari', '~> 0.16.1'
 gem 'simple_form'
 gem 'momentjs-rails', '~> 2.9',  :github => 'derekprior/momentjs-rails'
@@ -64,6 +64,8 @@ group :development, :test do
 
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'
+
+  gem 'derailed'
 
   gem "bullet"
   gem 'rack-mini-profiler', require: false

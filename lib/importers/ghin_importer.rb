@@ -29,6 +29,8 @@ module Importers
     def self.import_ghin_for_user(user)
       return nil if user.blank? || user.ghin_number.blank?
 
+      user_failure_string = "NOT Updating for #{user.complete_name} / #{user.id}: "
+
       begin
         url = "http://widgets.ghin.com/HandicapLookupResults.aspx?entry=1&ghinno=#{user.ghin_number}&css=default&dynamic=&small=0&mode=&tab=0"
 
@@ -50,17 +52,17 @@ module Importers
 
                 Importers::GHINImporter.recalc_course_handicap_for_user(user)
               else
-                puts "Not Updating - Zero Value"
+                puts user_failure_string + "Not Updating - Zero Value"
               end
             end
           else
-            puts "Root node was blank"
+            puts user_failure_string + "Root node was blank"
           end
         else
-          puts "Doc was blank"
+          puts user_failure_string + "Doc was blank"
         end
       rescue => e
-        puts "GHIN Exception: #{e}"
+        puts user_failure_string + "GHIN Exception: #{e}"
       end
     end
 
