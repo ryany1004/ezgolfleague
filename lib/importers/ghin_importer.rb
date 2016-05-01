@@ -60,7 +60,7 @@ module Importers
           puts "Doc was blank"
         end
       rescue => e
-        puts "Exception: #{e}"
+        puts "GHIN Exception: #{e}"
       end
     end
 
