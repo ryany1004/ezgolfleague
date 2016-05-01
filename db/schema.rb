@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160429213828) do
+ActiveRecord::Schema.define(version: 20160501172545) do
 
   create_table "contest_holes", force: :cascade do |t|
     t.integer  "contest_id"
@@ -470,6 +470,7 @@ ActiveRecord::Schema.define(version: 20160429213828) do
     t.string   "session_token"
     t.boolean  "wants_email_notifications", default: true
     t.boolean  "wants_push_notifications",  default: true
+    t.datetime "ghin_updated_at"
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true

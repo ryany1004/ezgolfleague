@@ -4,7 +4,7 @@ module Importers
   class GHINImporter
 
     def self.import_for_all_users
-      User.where("ghin_number IS NOT NULL").order("updated_at").each do |u|
+      User.where("ghin_number IS NOT NULL").order("ghin_updated_at").each do |u|
         Importers::GHINImporter.import_ghin_for_user(u)
       end
     end
@@ -48,6 +48,7 @@ module Importers
 
               unless handicap_index == 0.0
                 user.handicap_index = handicap_index
+                user.ghin_updated_at = DateTime.now
                 user.save
 
                 Importers::GHINImporter.recalc_course_handicap_for_user(user)
