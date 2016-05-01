@@ -400,15 +400,11 @@ module GameTypes
 
       eager_flights = self.tournament_day.flights.includes(:users, :tournament_day_results)
 
-      #NOTE: what about loading all of the different things up front and them picking them out?
-
       eager_flights.each do |f|
         ranked_flight = { flight_id: f.id, flight_number: f.flight_number, players: [] }
 
         rankable_players = self.players_for_flight(f)
         rankable_players.each do |player|
-          #NOTE: What about a single score method that returns all of the score metrics, avoiding multiple fetches
-
           Rails.logger.debug { "Fetching Net Score" }
           net_score = self.player_score(player, true)
 

@@ -85,7 +85,11 @@ class Scorecard < ActiveRecord::Base
 
   def last_hole_played
     self.scores.each_with_index do |score, i|
-      return "#{i}" if score.strokes == 0
+      if score == self.scores.last and score.strokes > 0
+        return "F" #finished
+      else
+        return "#{i}" if score.strokes == 0
+      end
     end
 
     return nil
