@@ -4,7 +4,7 @@ module Importers
   class GHINImporter
 
     def self.import_for_all_users
-      User.where("ghin_number IS NOT NULL").order("ghin_updated_at").each do |u|
+      User.where("ghin_number IS NOT NULL").where("ghin_number != ''").order("ghin_updated_at").each do |u|
         Importers::GHINImporter.import_ghin_for_user(u)
       end
     end
