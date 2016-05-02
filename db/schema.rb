@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160501172545) do
+ActiveRecord::Schema.define(version: 20160502163616) do
 
   create_table "contest_holes", force: :cascade do |t|
     t.integer  "contest_id"
@@ -43,13 +43,13 @@ ActiveRecord::Schema.define(version: 20160501172545) do
     t.integer  "contest_type"
     t.integer  "overall_winner_contest_result_id"
     t.decimal  "overall_winner_payout_amount"
-    t.datetime "created_at",                                             null: false
-    t.datetime "updated_at",                                             null: false
+    t.datetime "created_at",                                              null: false
+    t.datetime "updated_at",                                              null: false
     t.integer  "tournament_day_id"
     t.decimal  "dues_amount",                             default: 0.0
     t.boolean  "overall_winner_payment_amount_automatic", default: true
     t.integer  "overall_winner_points",                   default: 0
-    t.boolean  "is_opt_in",                               default: true
+    t.boolean  "is_opt_in",                               default: false
   end
 
   add_index "contests", ["overall_winner_contest_result_id"], name: "index_contests_on_overall_winner_contest_result_id"
