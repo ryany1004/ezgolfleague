@@ -37,7 +37,7 @@ class PrintScorecardsJob < ProgressJob::Base
         end
       end
 
-      Rails.logger.info { "PrintScorecardsJob: Adding to Print Cards" }
+      Rails.logger.info { "PrintScorecardsJob: Adding to Print Cards. Primary Scorecard: #{primary_scorecard}" }
 
       scorecard_presenter = Presenters::ScorecardPresenter.new({primary_scorecard: primary_scorecard, secondary_scorecards: other_scorecards, current_user: @current_user})
 
