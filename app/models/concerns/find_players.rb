@@ -18,8 +18,6 @@ module FindPlayers
   end
 
   def tournament_group_for_player(user)
-    Rails.logger.info { "tournament_group_for_player: #{user.id}" }
-
     self.tournament_groups.each do |group|
       group.golf_outings.each do |outing|
         return group if outing.user == user

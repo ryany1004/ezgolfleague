@@ -6,14 +6,14 @@ module GameTypes
         score = DerivedScorecardScore.new
         score.scorecard = self
         score.course_hole = hole
-        
+
         self.scores << score
       end
     end
-    
+
     def name(shorten_for_print = false)
-      return ""
+      return "<br/><br/>"
     end
-    
+
   end
 end
