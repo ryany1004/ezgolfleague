@@ -41,7 +41,11 @@ class PrintScorecardsJob < ProgressJob::Base
 
       scorecard_presenter = Presenters::ScorecardPresenter.new({primary_scorecard: primary_scorecard, secondary_scorecards: other_scorecards, current_user: @current_user})
 
+      Rails.logger.info { "PrintScorecardsJob: Checking Inclusion" }
+
       @print_cards << {p: scorecard_presenter} if !self.printable_cards_includes_player?(@print_cards, player)
+
+      Rails.logger.info { "PrintScorecardsJob: Checked Inclusion" }
 
       update_progress
     end
@@ -57,11 +61,17 @@ class PrintScorecardsJob < ProgressJob::Base
   end
 
   def printable_cards_includes_player?(printable_cards, player)
+    Rails.logger.info { "PrintScorecardsJob: printable_cards_includes_player entered" }
+
     printable_cards.each do |card|
       return true if card[:p].primary_scorecard.golf_outing.user == player
 
+      Rails.logger.info { "PrintScorecardsJob: printable_cards_includes_player did not return initial true" }
+
       card[:p].secondary_scorecards.each do |other|
         unless other.golf_outing.blank?
+          Rails.logger.info { "PrintScorecardsJob: printable_cards_includes_player yay" }
+
           return true if other.golf_outing.user == player
         end
       end
