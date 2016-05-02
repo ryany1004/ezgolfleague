@@ -34,7 +34,23 @@ module GameTypes
     end
 
     def can_be_finalized?
-      return false
+      flight_payouts = 0
+      self.tournament_day.flights.each do |f|
+        flight_payouts += f.payouts.count
+      end
+
+      broken_contests = 0
+      self.tournament_day.tournament.tournament_days.each do |day|
+        day.contests.each do |c|
+          c += 1 if c.contest_can_be_scored? == false
+        end
+      end
+
+      if flight_payouts == 0 or broken_contests > 0
+        return false
+      else
+        return true
+      end
     end
 
     def setup_partial

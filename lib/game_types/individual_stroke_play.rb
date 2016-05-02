@@ -69,22 +69,8 @@ module GameTypes
       return false if self.tournament_day.tournament_groups.count == 0
       return false if self.tournament_day.flights.count == 0
       return false if self.tournament_day.course_holes.count == 0
-    
+
       return true
-    end
-
-    def can_be_finalized?
-      flight_payouts = 0
-
-      self.tournament_day.flights.each do |f|
-        flight_payouts += f.payouts.count
-      end
-
-      if flight_payouts == 0
-        return false
-      else
-        return true
-      end
     end
 
     ##Ranking

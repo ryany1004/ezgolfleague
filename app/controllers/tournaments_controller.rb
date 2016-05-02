@@ -198,7 +198,7 @@ class TournamentsController < BaseController
     if @tournament.can_be_finalized?
       @stage_name = "finalize"
     else
-      redirect_to league_tournament_flights_path(current_user.selected_league, @tournament), :flash => { :error => "This tournament requires flights and payouts before it can be finalized." }
+      redirect_to league_tournament_flights_path(current_user.selected_league, @tournament), :flash => { :error => "This tournament cannot be finalized. Verify all flights and payouts exist and if this is a team tournament that all team-members are correctly registered in all contests." }
     end
   end
 
