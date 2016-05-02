@@ -12,7 +12,7 @@ module GameTypes
     end
 
     def name(shorten_for_print = false)
-      return "<br/><br/>"
+      return "<br/><br/><br/>".html_safe
     end
 
   end
