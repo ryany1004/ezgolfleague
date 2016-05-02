@@ -117,8 +117,12 @@ module ApplicationHelper
 
     handicap_allowance.each do |h|
       if h[:course_hole] == course_hole
-        h[:strokes].to_i do
-          pops += "•"
+        if h[:strokes] == 1
+          pops = "•"
+        elsif h[:strokes] == 2
+          pops = "••"
+        else
+          pops = "!"
         end
       end
     end
