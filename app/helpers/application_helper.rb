@@ -113,17 +113,17 @@ module ApplicationHelper
   def print_handicap_allowance_strokes_for_hole(handicap_allowance, course_hole)
     return "" if handicap_allowance.blank?
 
+    pops = ""
+
     handicap_allowance.each do |h|
       if h[:course_hole] == course_hole
-        pops = ""
-
         h[:strokes].to_i do
           pops += "•"
         end
       end
     end
 
-    return 0
+    return pops
   end
 
   def tournament_class_for_stage(stage, stage_option)
