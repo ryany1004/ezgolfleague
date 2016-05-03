@@ -2,7 +2,7 @@ module ContestScoreable
   extend ActiveSupport::Concern
 
   def contest_can_be_scored?
-    if self.tournament_day.allow_teams != GameTypes::TEAMS_DISALLOWED #this contest may be team based
+    if self.is_team_scored? and self.tournament_day.allow_teams != GameTypes::TEAMS_DISALLOWED
       if self.all_team_members_are_contestants? == true
         return true
       else

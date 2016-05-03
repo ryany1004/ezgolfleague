@@ -39,6 +39,14 @@ class Contest < ActiveRecord::Base
     return "#{self.name} ($#{self.dues_amount.to_i})"
   end
 
+  def is_team_scored?
+    if self.contest_type == 2 or self.contest_type == 3 or self.contest_type == 8
+      return true
+    else
+      return false
+    end
+  end
+
   ##
 
   def dues_for_user(user, include_credit_card_fees = false)

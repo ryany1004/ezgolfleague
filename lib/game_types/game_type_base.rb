@@ -1,5 +1,4 @@
 module GameTypes
-
   TEAMS_ALLOWED = "Allowed"
   TEAMS_REQUIRED = "Required"
   TEAMS_DISALLOWED = "Disallowed"
