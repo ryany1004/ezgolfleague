@@ -525,7 +525,7 @@ module GameTypes
             flight = Flight.find(flight_ranking[:flight_id])
             flight.payouts.each_with_index do |payout, i|
               if flight_ranking[:players].count > i
-                if payout.payout_result.blank?
+                if payout.payout_results.blank?
                   player = User.find(flight_ranking[:players][i][:id])
 
                   Rails.logger.info { "Assigning #{player.complete_name} to Payout #{payout.id}" }
