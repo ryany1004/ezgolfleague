@@ -18,7 +18,7 @@ module GameTypes
     def assign_payouts_from_scores
       super
 
-      payout_results = self.tournament_day.payout_results
+      payout_results = self.tournament_day.reload.payout_results
 
       Rails.logger.info {"Copying #{payout_results.count} Payouts to Teammates"}
 
