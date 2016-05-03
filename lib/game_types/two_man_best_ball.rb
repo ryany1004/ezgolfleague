@@ -28,7 +28,11 @@ module GameTypes
         unless golfer_team.blank?
           golfer_team.users.each do |u|
             if u != result.user
+              Rails.logger.info {"Creating Duplicate Payout for Teammate: #{u.id}"}
+
               PayoutResult.create(payout: result.payout, user: u, flight: result.flight, tournament_day: result.tournament_day, amount: result.amount, points: result.points)
+            else
+              Rails.logger.info {"User Already Had Payout - This May Be Normal"}
             end
           end
         else
