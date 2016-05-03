@@ -18,11 +18,11 @@ module GameTypes
     def assign_payouts_from_scores
       super
 
-      Rails.logger.info {"Copying Payouts to Teammates"}
+      payout_results = self.tournament_day.payout_results
 
-      #copy payouts to teammates
-      last_day = self.tournament_day.tournament.tournament_days.last
-      last_day.payout_results.each do |result|
+      Rails.logger.info {"Copying #{payout_results.count} Payouts to Teammates"}
+
+      payout_results.each do |result|
         golfer_team = last_day.golfer_team_for_player(result.user)
 
         unless golfer_team.blank?
