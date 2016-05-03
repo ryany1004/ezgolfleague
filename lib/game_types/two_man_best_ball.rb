@@ -23,7 +23,11 @@ module GameTypes
       Rails.logger.info {"Copying #{payout_results.count} Payouts to Teammates"}
 
       payout_results.each do |result|
+        Rails.logger.info {"Result #{result}"}
+
         golfer_team = self.tournament_day.golfer_team_for_player(result.user)
+
+        Rails.logger.info {"GT #{golfer_team}"}
 
         unless golfer_team.blank?
           Rails.logger.info {"Team #{golfer_team.id} has #{golfer_team.users.count}"}
