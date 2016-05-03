@@ -30,7 +30,7 @@
       	</thead>
       	<tbody>
           <% @tournament_days.each do |day| -%>
-            <% day.payout_results.order("flight_id").each do |payout_result| -%>
+            <% day.payout_results.order("flight_id").order("amount DESC").each do |payout_result| -%>
           		<tr>
                 <td><%= day.tournament_at.to_s(:short) %></td>
                 <td><%= payout_result.flight.flight_number %></td>
@@ -57,7 +57,7 @@
       </table>
     </div>
   </div>
-    
+
   <% @tournament_days.each do |day| -%>
     <div class="col-md-12">
       <h3><%= day.pretty_day(true) %>Results</h3>
