@@ -23,7 +23,7 @@ module GameTypes
       Rails.logger.info {"Copying #{payout_results.count} Payouts to Teammates"}
 
       payout_results.each do |result|
-        golfer_team = last_day.golfer_team_for_player(result.user)
+        golfer_team = self.tournament_day.golfer_team_for_player(result.user)
 
         unless golfer_team.blank?
           golfer_team.users.each do |u|
@@ -31,6 +31,8 @@ module GameTypes
               PayoutResult.create(payout: result.payout, user: u, flight: result.flight, tournament_day: result.tournament_day, amount: result.amount, points: result.points)
             end
           end
+        else
+          Rails.logger.info {"Golfer Team Blank For User ID #{result.user.id}"}
         end
       end
     end
