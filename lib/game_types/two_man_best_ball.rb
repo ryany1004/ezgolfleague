@@ -26,6 +26,8 @@ module GameTypes
         golfer_team = self.tournament_day.golfer_team_for_player(result.user)
 
         unless golfer_team.blank?
+          Rails.logger.info {"Team #{golfer_team.id} has #{golfer_team.users.count}"}
+
           golfer_team.users.each do |u|
             if u != result.user
               Rails.logger.info {"Creating Duplicate Payout for Teammate: #{u.id}"}
