@@ -149,12 +149,14 @@ module ContestScoreable
     self.tournament_day.golfer_teams.each do |team|
       team_contest_results = ContestResult.where(contest: self).where(winner: team.users)
 
-      team_contest_results.in_groups(team.users.count, false).each_with_index do |result_group, i|
-        user = team.users[i]
+      if team_contest_results.count > 1
+        team_contest_results.in_groups(team.users.count, false).each_with_index do |result_group, i|
+          user = team.users[i]
 
-        result_group.each do |result|
-          result.winner = user
-          result.save
+          result_group.each do |result|
+            result.winner = user
+            result.save
+          end
         end
       end
     end

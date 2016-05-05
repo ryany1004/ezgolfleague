@@ -17,7 +17,7 @@ module GameTypes
       rows << self.par_row
 
       #handicap
-      rows << self.handicap_row
+      rows << self.handicap_row(self.handicap_allowance)
 
       #additional rows
       rows = rows + self.additional_rows unless self.additional_rows.blank?
@@ -72,10 +72,10 @@ module GameTypes
       return {title: "Par", contents: par_info, should_bold: false, should_ornament: false}
     end
 
-    def handicap_row
+    def handicap_row(allowance)
       handicap_info = []
       self.tournament_day.course_holes.each do |course_hole|
-        self.handicap_allowance.each do |h|
+        allowance.each do |h|
           if h[:course_hole] == course_hole
             if h[:strokes] != 0
               handicap_info << "-#{h[:strokes]}"
