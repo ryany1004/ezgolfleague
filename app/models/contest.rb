@@ -155,29 +155,40 @@ class Contest < ActiveRecord::Base
       if self.overall_winner.blank?
         return nil
       else
-        return [{user: self.overall_winner.winner, result_value: self.overall_winner.result_value, amount: self.overall_winner.payout_amount, points: self.overall_winner.points}]
+        return [{user: self.overall_winner.winner, name: self.overall_winner.winner.complete_name, result_value: self.overall_winner.result_value, amount: self.overall_winner.payout_amount, points: self.overall_winner.points}]
       end
     else
       winners = []
 
-      self.contest_results.each do |result|
-        if self.should_sum_winners?
-          existing_winner = nil
-          winners.each do |w|
-            existing_winner = w if w[:user] == result.winner
-          end
+      if self.should_sum_winners? && self.is_team_contest?
+        self.tournament_day.golfer_teams.each do |team|
+          team_contest_results = ContestResult.where(contest: self).where(winner: team.users)
 
-          if existing_winner.blank?
-            winners << {user: result.winner, result_value: "1", amount: result.payout_amount, points: result.points, number_of_wins: 1}
+          amount = team_contest_results.to_a.sum(&:payout_amount)
+          points = team_contest_results.to_a.sum(&:points)
+
+          winners << {user: team.users.first, name: team.name, result_value: "#{team_contest_results.count}", amount: amount, points: points, number_of_wins: team_contest_results.count}
+        end
+      else
+        self.contest_results.each do |result|
+          if self.should_sum_winners?
+            existing_winner = nil
+            winners.each do |w|
+              existing_winner = w if w[:user] == result.winner
+            end
+
+            if existing_winner.blank?
+              winners << {user: result.winner, name: result.winner.complete_name, result_value: "1", amount: result.payout_amount, points: result.points, number_of_wins: 1}
+            else
+              existing_winner[:number_of_wins] += 1
+              existing_winner[:amount] += result.payout_amount
+              existing_winner[:points] += result.points
+
+              existing_winner[:result_value] = "#{existing_winner[:number_of_wins]}"
+            end
           else
-            existing_winner[:number_of_wins] += 1
-            existing_winner[:amount] += result.payout_amount
-            existing_winner[:points] += result.points
-
-            existing_winner[:result_value] = "#{existing_winner[:number_of_wins]}"
+            winners << {user: result.winner, name: result.winner.complete_name, result_value: result.result_value, amount: result.payout_amount, points: result.points}
           end
-        else
-          winners << {user: result.winner, result_value: result.result_value, amount: result.payout_amount, points: result.points}
         end
       end
 

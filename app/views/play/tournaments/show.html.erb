@@ -177,7 +177,7 @@
         </div>
         <% end -%>
       <% end -%>
-      <% if @tournament_day.contests.count > 0 && @tournament.includes_player?(current_user, @tournament_day) && @tournament_day.can_be_played? -%>
+      <% if @tournament.is_past? == false && @tournament_day.contests.count > 0 && @tournament.includes_player?(current_user, @tournament_day) && @tournament_day.can_be_played? -%>
       <div class="panel-footer">
         <%= link_to "Sign Up For Contests", play_tournament_tournament_day_contests_path(@tournament_day.tournament, @tournament_day) %>
       </div>

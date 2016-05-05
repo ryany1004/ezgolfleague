@@ -135,7 +135,7 @@ module GameTypes
       end
     end
 
-    def compute_player_score(user, use_handicap = true, holes = [])
+    def compute_stroke_play_player_score(user, use_handicap = true, holes = [])
       return nil if !self.tournament.includes_player?(user)
 
       total_score = 0
@@ -184,6 +184,10 @@ module GameTypes
       Rails.logger.debug { "Base Score Computed: #{total_score}. User: #{user.complete_name} handicap: #{use_handicap} holes: #{holes}" }
 
       return total_score
+    end
+
+    def compute_player_score(user, use_handicap = true, holes = [])
+      return self.compute_stroke_play_player_score(user, use_handicap, holes)
     end
 
     def compute_adjusted_player_score(user)

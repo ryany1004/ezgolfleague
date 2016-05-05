@@ -2,7 +2,7 @@ module ContestScoreable
   extend ActiveSupport::Concern
 
   def contest_can_be_scored?
-    if self.is_team_scored? and self.tournament_day.allow_teams != GameTypes::TEAMS_DISALLOWED
+    if self.is_team_contest?
       if self.all_team_members_are_contestants? == true
         return true
       else
@@ -10,6 +10,14 @@ module ContestScoreable
       end
     else
       return true
+    end
+  end
+
+  def is_team_contest?
+    if self.is_team_scored? and self.tournament_day.allow_teams != GameTypes::TEAMS_DISALLOWED
+      return true
+    else
+      return false
     end
   end
 
@@ -50,12 +58,15 @@ module ContestScoreable
   end
 
   def score_total_skins_contest
-    Rails.logger.debug { "Scoring Total Skins Contest" }
+    Rails.logger.debug { "CONTEST: Scoring Total Skins Contest" }
 
     self.remove_results
     self.save
 
+    Rails.logger.debug { "CONTEST: Scoring Gross Skins Winners" }
     gross_winners = self.users_with_skins(true, true)
+
+    Rails.logger.debug { "CONTEST: Scoring Net Skins Winners" }
     net_winners = self.users_with_skins(false, false)
 
     all_winners = []
@@ -64,7 +75,7 @@ module ContestScoreable
       all_winners << w
     end
 
-    #merge the two sets of winners
+    Rails.logger.debug { "CONTEST: Merge Winner Sets" }
     net_winners.each do |w|
       all_winners.each do |all_winner|
         w[:winners].each do |w2|
@@ -73,18 +84,24 @@ module ContestScoreable
       end
     end
 
+    Rails.logger.debug { "CONTEST: Determining Value Per Skin and Assigning Payouts" }
     self.calculate_skins_winners(all_winners)
+
+    Rails.logger.debug { "CONTEST: score_total_skins_contest: complete" }
   end
 
   def score_skins_contest(use_gross)
-    Rails.logger.debug { "Scoring Skins Contest. Gross: #{use_gross}" }
+    Rails.logger.debug { "CONTEST: Scoring Skins Contest. Gross: #{use_gross}" }
 
     self.remove_results
     self.save
 
     all_winners = self.users_with_skins(use_gross)
 
+    Rails.logger.debug { "CONTEST: Determining Value Per Skin and Assigning Payouts" }
     self.calculate_skins_winners(all_winners)
+
+    Rails.logger.debug { "CONTEST: score_skins_contest: complete" }
   end
 
   def calculate_skins_winners(all_winners)
@@ -95,6 +112,12 @@ module ContestScoreable
       winners_sum += winners.count
     end
 
+    if winners_sum == 0
+      Rails.logger.info { "CONTEST: No Winners for Contest #{self.id}. Bailing on scoring..." }
+
+      return
+    end
+
     total_pot = (self.users.count * self.dues_amount)
 
     if total_pot > 0
@@ -103,7 +126,7 @@ module ContestScoreable
       value_per_skin = 0
     end
 
-    Rails.logger.info { "Value Per Skin: #{value_per_skin}. Total pot: #{total_pot}. Number of skins won: #{winners_sum}. Number of total users: #{self.users.count}" }
+    Rails.logger.info { "CONTEST: Value Per Skin: #{value_per_skin}. Total pot: #{total_pot}. Number of skins won: #{winners_sum}. Number of total users: #{self.users.count}" }
 
     all_winners.each do |winner_info|
       hole = winner_info[:hole]
@@ -112,6 +135,27 @@ module ContestScoreable
 
       hole_winners.each do |winner|
         ContestResult.create(contest: self, winner: winner, payout_amount: value_per_skin, contest_hole: contest_hole, result_value: "Hole #{hole.hole_number}")
+      end
+    end
+
+    if self.is_team_contest?
+      self.recalculate_contest_results_for_team_split
+    end
+  end
+
+  def recalculate_contest_results_for_team_split
+    Rails.logger.debug { "CONTEST: recalculate_contest_results_for_team_split" }
+
+    self.tournament_day.golfer_teams.each do |team|
+      team_contest_results = ContestResult.where(contest: self).where(winner: team.users)
+
+      team_contest_results.in_groups(team.users.count, false).each_with_index do |result_group, i|
+        user = team.users[i]
+
+        result_group.each do |result|
+          result.winner = user
+          result.save
+        end
       end
     end
   end
@@ -132,25 +176,44 @@ module ContestScoreable
             use_handicap = true
           end
 
-          score = self.tournament_day.compute_player_score(user, use_handicap, holes = [hole.hole_number])
+          score = self.tournament_day.compute_stroke_play_player_score(user, use_handicap, holes = [hole.hole_number]) #force stroke play calculation for other game types
 
           unless score.blank? || score == 0
             if gross_skins_require_birdies == true #check if gross birdie
               gross_birdie_score = (hole.par - 1)
 
               if score <= gross_birdie_score #gross birdies or better count
-                gross_birdie_skins << user
+                if self.is_team_contest? #teams can only have ONE GROSS BIRDIE SKIN PER HOLE
+                  teammates_have_birdie_skin_for_hole = false
 
-                Rails.logger.info { "User #{user.complete_name} scored a gross birdie skin for hole #{hole.hole_number} w/ score #{score}. Required score: #{gross_birdie_score}" }
+                  team = self.tournament_day.golfer_team_for_player(user)
+                  unless team.blank?
+                    team.users.each do |teammate|
+                      teammates_have_birdie_skin_for_hole = true if gross_birdie_skins.include? teammate
+                    end
+                  end
+
+                  if teammates_have_birdie_skin_for_hole == false
+                    Rails.logger.info { "CONTEST: Team DOES NOT Have Pre-Existing Birdies - Ok to Add" }
+
+                    gross_birdie_skins << user
+
+                    Rails.logger.info { "CONTEST: User #{user.complete_name} scored a gross birdie skin for hole #{hole.hole_number} w/ score #{score}. Required score: #{gross_birdie_score}" }
+                  end
+                else
+                  gross_birdie_skins << user
+
+                  Rails.logger.info { "CONTEST: User #{user.complete_name} scored a gross birdie skin for hole #{hole.hole_number} w/ score #{score}. Required score: #{gross_birdie_score}" }
+                end
               end
             else #regular counting
               user_scores << {user: user, score: score}
             end
           else
-            Rails.logger.info { "Score Blank - Not Scoring Contest. This is weird. #{user.complete_name}" }
+            Rails.logger.info { "CONTEST: Score Blank - Not Scoring Contest. This is weird. #{user.complete_name}" }
           end
         else
-          Rails.logger.info { "Tournament Day Does Not Include Contest Player - This is Weird. #{user.complete_name}" }
+          Rails.logger.info { "CONTEST: Tournament Day Does Not Include Contest Player - This is Weird. #{user.complete_name}" }
         end
       end
 
@@ -165,14 +228,14 @@ module ContestScoreable
           if user_scores.count == 1
             users_getting_skins << user_scores[0][:user]
 
-            Rails.logger.info { "User #{user_scores[0][:user].complete_name} got a regular skin for hole #{hole.hole_number}" }
+            Rails.logger.info { "CONTEST: User #{user_scores[0][:user].complete_name} got a regular skin for hole #{hole.hole_number}" }
           elsif user_scores.count > 1
             if user_scores[0][:score] != user_scores[1][:score] #if there is a tie, they do not count
               users_getting_skins << user_scores[0][:user]
 
-              Rails.logger.info { "User #{user_scores[0][:user].complete_name} got a regular skin for hole #{hole.hole_number}" }
+              Rails.logger.info { "CONTEST: User #{user_scores[0][:user].complete_name} got a regular skin for hole #{hole.hole_number}" }
             else
-              Rails.logger.info { "There was a tie - no skin awarded. #{user_scores[0][:user].complete_name} and #{user_scores[1][:user].complete_name} for hole #{hole.hole_number}" }
+              Rails.logger.info { "CONTEST: There was a tie - no skin awarded. #{user_scores[0][:user].complete_name} and #{user_scores[1][:user].complete_name} for hole #{hole.hole_number}" }
             end
           end
         end
@@ -185,7 +248,7 @@ module ContestScoreable
   end
 
   def score_net_contest(use_gross, across_all_days = false)
-    Rails.logger.debug { "Scoring Net Contest. Gross: #{use_gross}" }
+    Rails.logger.debug { "CONTEST: Scoring Net Contest. Gross: #{use_gross}" }
 
     self.overall_winner = nil
     self.save
@@ -197,7 +260,7 @@ module ContestScoreable
       tournament_day_results = TournamentDayResult.where(:id => self.tournament_day.tournament.tournament_days.map(&:id))
       tournament_day_results.each do |result|
         if eligible_player_ids.include? result.user.id and self.users.include? result.user
-          Rails.logger.debug { "Player Eligible for Contest: #{result.user.id}" }
+          Rails.logger.debug { "CONTEST: Player Eligible for Contest: #{result.user.id}" }
 
           existing_user = nil
 
@@ -219,7 +282,7 @@ module ContestScoreable
             end
           end
         else
-          Rails.logger.debug { "Player Not Eligible for Contest: #{result.user}" }
+          Rails.logger.debug { "CONTEST: Player Not Eligible for Contest: #{result.user}" }
         end
       end
     else
@@ -232,7 +295,7 @@ module ContestScoreable
       end
     end
 
-    Rails.logger.debug { "Results: #{results}" }
+    Rails.logger.debug { "CONTEST: Results: #{results}" }
 
     #sort
     results.sort! { |x,y| x[:score] <=> y[:score] }

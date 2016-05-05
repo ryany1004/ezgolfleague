@@ -22,7 +22,7 @@
     		<tr>
     			<td><%= user.complete_name %></td>
           <td><%= number_to_currency(@contest.dues_for_user(user)) %></td>
-          <td><%= link_to 'Remove Contestant', league_tournament_contest_remove_registration_path(@tournament.league, @tournament, @contest, user: user), :data => { :confirm => 'Are you sure you want to remove this user from this contest?' }, :method => :delete %></td>
+          <td><%= link_to 'Remove Contestant', league_tournament_contest_remove_registration_path(@tournament.league, @tournament, @contest, user: user, tournament_day: @tournament_day), :data => { :confirm => 'Are you sure you want to remove this user from this contest?' }, :method => :delete %></td>
     		</tr>
     	<% end %>
     	</tbody>
@@ -30,7 +30,7 @@
   </div>
 </div>
 
-<%= simple_form_for :contest_registration, url: league_tournament_contest_add_registration_path(@tournament.league, @tournament, @contest), method: :post do |f| %>
+<%= simple_form_for :contest_registration, url: league_tournament_contest_add_registration_path(@tournament.league, @tournament, @contest, tournament_day: @tournament_day), method: :post do |f| %>
 <div class="modal fade" id="ContestSignup" role="dialog" aria-labelledby="gridSystemModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
