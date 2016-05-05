@@ -10,7 +10,7 @@ module GameTypes
         rows << self.score_row_for_scorecard(card, card.name(true))
 
         unless card.golf_outing.blank?
-          user_handicap_info = self.handicap_allowance(card.golf_outing.user)
+          user_handicap_info = self.tournament_day.handicap_allowance(card.golf_outing.user)
 
           rows << self.handicap_row(user_handicap_info)
         end
