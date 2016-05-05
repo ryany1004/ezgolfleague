@@ -167,7 +167,9 @@ class Contest < ActiveRecord::Base
           amount = team_contest_results.to_a.sum(&:payout_amount)
           points = team_contest_results.to_a.sum(&:points)
 
-          winners << {user: team.users.first, name: team.name, result_value: "#{team_contest_results.count}", amount: amount, points: points, number_of_wins: team_contest_results.count}
+          if amount > 0 or points > 0
+            winners << {user: team.users.first, name: team.name, result_value: "#{team_contest_results.count}", amount: amount, points: points, number_of_wins: team_contest_results.count}
+          end
         end
       else
         self.contest_results.each do |result|

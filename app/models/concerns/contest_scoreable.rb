@@ -58,15 +58,15 @@ module ContestScoreable
   end
 
   def score_total_skins_contest
-    Rails.logger.debug { "CONTEST: #{self.id} Scoring Total Skins Contest" }
+    Rails.logger.info { "CONTEST: #{self.id} Scoring Total Skins Contest" }
 
     self.remove_results
     self.save
 
-    Rails.logger.debug { "CONTEST: #{self.id} Scoring Gross Skins Winners" }
+    Rails.logger.info { "CONTEST: #{self.id} Scoring Gross Skins Winners" }
     gross_winners = self.users_with_skins(true, true)
 
-    Rails.logger.debug { "CONTEST: #{self.id} Scoring Net Skins Winners" }
+    Rails.logger.info { "CONTEST: #{self.id} Scoring Net Skins Winners" }
     net_winners = self.users_with_skins(false, false)
 
     all_winners = []
@@ -75,7 +75,7 @@ module ContestScoreable
       all_winners << w
     end
 
-    Rails.logger.debug { "CONTEST: #{self.id} Merge Winner Sets" }
+    Rails.logger.info { "CONTEST: #{self.id} Merge Winner Sets" }
     net_winners.each do |w|
       all_winners.each do |all_winner|
         w[:winners].each do |w2|
@@ -84,24 +84,24 @@ module ContestScoreable
       end
     end
 
-    Rails.logger.debug { "CONTEST: #{self.id} Determining Value Per Skin and Assigning Payouts" }
+    Rails.logger.info { "CONTEST: #{self.id} Determining Value Per Skin and Assigning Payouts" }
     self.calculate_skins_winners(all_winners)
 
-    Rails.logger.debug { "CONTEST: #{self.id} score_total_skins_contest: complete" }
+    Rails.logger.info { "CONTEST: #{self.id} score_total_skins_contest: complete" }
   end
 
   def score_skins_contest(use_gross)
-    Rails.logger.debug { "CONTEST: #{self.id} Scoring Skins Contest. Gross: #{use_gross}" }
+    Rails.logger.info { "CONTEST: #{self.id} Scoring Skins Contest. Gross: #{use_gross}" }
 
     self.remove_results
     self.save
 
     all_winners = self.users_with_skins(use_gross)
 
-    Rails.logger.debug { "CONTEST: #{self.id} Determining Value Per Skin and Assigning Payouts" }
+    Rails.logger.info { "CONTEST: #{self.id} Determining Value Per Skin and Assigning Payouts" }
     self.calculate_skins_winners(all_winners)
 
-    Rails.logger.debug { "CONTEST: #{self.id} score_skins_contest: complete" }
+    Rails.logger.info { "CONTEST: #{self.id} score_skins_contest: complete" }
   end
 
   def calculate_skins_winners(all_winners)
@@ -144,7 +144,7 @@ module ContestScoreable
   end
 
   def recalculate_contest_results_for_team_split
-    Rails.logger.debug { "CONTEST: #{self.id} recalculate_contest_results_for_team_split" }
+    Rails.logger.info { "CONTEST: #{self.id} recalculate_contest_results_for_team_split" }
 
     self.tournament_day.golfer_teams.each do |team|
       team_contest_results = ContestResult.where(contest: self).where(winner: team.users)
@@ -196,7 +196,7 @@ module ContestScoreable
                   end
 
                   if teammates_have_birdie_skin_for_hole == false
-                    Rails.logger.info { "CONTEST: #{self.id} Team DOES NOT Have Pre-Existing Birdies - Ok to Add" }
+                    Rails.logger.info { "CONTEST: #{self.id} Team #{team.id} for User #{user.id} DOES NOT Have Pre-Existing Birdies - Ok to Add" }
 
                     gross_birdie_skins << user
 
@@ -250,7 +250,7 @@ module ContestScoreable
   end
 
   def score_net_contest(use_gross, across_all_days = false)
-    Rails.logger.debug { "CONTEST: #{self.id} Scoring Net Contest. Gross: #{use_gross}" }
+    Rails.logger.info { "CONTEST: #{self.id} Scoring Net Contest. Gross: #{use_gross}" }
 
     self.overall_winner = nil
     self.save
@@ -262,7 +262,7 @@ module ContestScoreable
       tournament_day_results = TournamentDayResult.where(:id => self.tournament_day.tournament.tournament_days.map(&:id))
       tournament_day_results.each do |result|
         if eligible_player_ids.include? result.user.id and self.users.include? result.user
-          Rails.logger.debug { "CONTEST: #{self.id} Player Eligible for Contest: #{result.user.id}" }
+          Rails.logger.info { "CONTEST: #{self.id} Player Eligible for Contest: #{result.user.id}" }
 
           existing_user = nil
 
@@ -284,7 +284,7 @@ module ContestScoreable
             end
           end
         else
-          Rails.logger.debug { "CONTEST: #{self.id} Player Not Eligible for Contest: #{result.user}" }
+          Rails.logger.info { "CONTEST: #{self.id} Player Not Eligible for Contest: #{result.user}" }
         end
       end
     else
@@ -297,7 +297,7 @@ module ContestScoreable
       end
     end
 
-    Rails.logger.debug { "CONTEST: #{self.id} Results: #{results}" }
+    Rails.logger.info { "CONTEST: #{self.id} Results: #{results}" }
 
     #sort
     results.sort! { |x,y| x[:score] <=> y[:score] }
