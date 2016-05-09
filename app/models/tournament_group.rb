@@ -10,7 +10,7 @@ class TournamentGroup < ActiveRecord::Base
     players = []
 
     self.golf_outings.includes(:user).each do |g|
-      players << g.user
+      players << g.user unless g.user.blank?
     end
 
     return players

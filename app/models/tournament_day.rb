@@ -114,7 +114,7 @@ class TournamentDay < ActiveRecord::Base
     user_ids = []
 
     self.tournament.players_for_day(self).each do |player|
-      user_ids << player.id.to_s
+      user_ids << player.id.to_s unless player.blank?
     end
 
     return user_ids
