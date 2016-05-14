@@ -106,6 +106,8 @@ Rails.application.routes.draw do
   #API
   namespace "api" do
     namespace "v1" do
+      get 'current_complication_score' => 'scorecards#current_complication_score'
+
       resources :sessions, only: [:create] do
         post 'register_device', on: :collection
       end

@@ -24,7 +24,7 @@ class Api::V1::SessionsController < Api::V1::ApiBaseController
     existing_device = @current_user.mobile_devices.where(device_identifier: params[:device_identifier]).first
 
     if existing_device.blank?
-      MobileDevice.create(user: @current_user, device_identifier: params[:device_identifier])
+      MobileDevice.create(user: @current_user, device_identifier: params[:device_identifier], device_type: params[:device_type], environment_name: params[:environment_name])
     end
 
     render text: "Success"

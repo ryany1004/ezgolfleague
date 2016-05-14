@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160502163616) do
+ActiveRecord::Schema.define(version: 20160514224115) do
 
   create_table "contest_holes", force: :cascade do |t|
     t.integer  "contest_id"
@@ -259,6 +259,8 @@ ActiveRecord::Schema.define(version: 20160502163616) do
     t.string   "device_identifier"
     t.datetime "created_at",        null: false
     t.datetime "updated_at",        null: false
+    t.string   "device_type"
+    t.string   "environment_name"
   end
 
   add_index "mobile_devices", ["device_identifier"], name: "index_mobile_devices_on_device_identifier"

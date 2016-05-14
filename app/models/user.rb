@@ -44,6 +44,8 @@ class User < ActiveRecord::Base
     return "#{self.last_name}, #{self.first_name[0]}"
   end
 
+  ##
+
   def requires_additional_profile_data?
     if self.phone_number.blank? and self.street_address_1.blank?
       return true
