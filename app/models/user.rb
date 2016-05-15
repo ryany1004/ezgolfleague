@@ -51,7 +51,7 @@ class User < ActiveRecord::Base
 
     Tournament.all_today(self.leagues).each do |t|
       t.tournament_days.each do |td|
-        if Time.at(td.tournament_at).to_date === Date.today
+        if td.tournament_day_results.count > 0
           your_results = td.tournament_day_results.where(user: self).first
           winner_result = td.tournament_day_results.first
 
