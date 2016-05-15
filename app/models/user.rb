@@ -168,7 +168,7 @@ class User < ActiveRecord::Base
       notification = Grocer::Notification.new(
         device_token: device.device_identifier,
         content_available: true,
-        custom: "content" : content
+        custom: {"content" : content}
       )
 
       pusher.push(notification)
