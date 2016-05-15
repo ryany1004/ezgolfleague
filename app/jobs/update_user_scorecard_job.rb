@@ -11,7 +11,7 @@ class UpdateUserScorecardJob < ProgressJob::Base
 
     unless @primary_scorecard.tournament_day.tournament_day_results.count == 0
       best_net_score = @primary_scorecard.tournament_day.tournament_day_results.first.net_score
-      best_score_id = @primary_scorecard.tournament_day.tournament_day_results.user.id
+      best_score_id = @primary_scorecard.tournament_day.tournament_day_results.first.user.id
     else
       best_net_score = 0
       best_score_id = nil
@@ -39,7 +39,7 @@ class UpdateUserScorecardJob < ProgressJob::Base
     end
 
     new_net_score = @primary_scorecard.tournament_day.tournament_day_results.first.net_score
-    new_score_id = @primary_scorecard.tournament_day.tournament_day_results.user.id
+    new_score_id = @primary_scorecard.tournament_day.tournament_day_results.first.user.id
 
     if best_net_score != new_net_score or best_score_id != new_score_id
       Rails.logger.info { "Sending Notifications for Complications" }
