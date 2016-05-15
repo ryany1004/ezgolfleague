@@ -157,6 +157,24 @@ class User < ActiveRecord::Base
     end
   end
 
+  def send_content_notification(content)
+    return if self.wants_push_notifications == false
+
+    pusher = User.pusher if pusher.blank?
+
+    self.mobile_devices.each do |device|
+      pusher = User.pusher(true) if device.environment_name == "debug"
+
+      notification = Grocer::Notification.new(
+        device_token: device.device_identifier,
+        content_available: true,
+        custom: "content" : content
+      )
+
+      pusher.push(notification)
+    end
+  end
+
   def self.pusher(use_debug = false)
     if use_debug == true
       pusher = Grocer.pusher(

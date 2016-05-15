@@ -9,6 +9,14 @@ class UpdateUserScorecardJob < ProgressJob::Base
   def perform
     update_stage('Re-Scoring User')
 
+    unless @primary_scorecard.tournament_day.tournament_day_results.count == 0
+      best_net_score = @primary_scorecard.tournament_day.tournament_day_results.first.net_score
+      best_score_id = @primary_scorecard.tournament_day.tournament_day_results.user.id
+    else
+      best_net_score = 0
+      best_score_id = nil
+    end
+
     Rails.logger.info { "Re-Scoring User #{@primary_scorecard.golf_outing.user.complete_name}" }
     @primary_scorecard.tournament_day.score_user(@primary_scorecard.golf_outing.user)
 
@@ -30,9 +38,20 @@ class UpdateUserScorecardJob < ProgressJob::Base
       update_progress
     end
 
+    new_net_score = @primary_scorecard.tournament_day.tournament_day_results.first.net_score
+    new_score_id = @primary_scorecard.tournament_day.tournament_day_results.user.id
+
+    if best_net_score != new_net_score or best_score_id != new_score_id
+      Rails.logger.info { "Sending Notifications for Complications" }
+
+      @primary_scorecard.tournament_day.tournament.players.each do |p|
+        p.send_content_notification(p.current_watch_complication_score)
+      end
+    end
+
     Rails.cache.delete(@primary_scorecard.tournament_day.leaderboard_api_cache_key)
     Rails.cache.delete(@primary_scorecard.tournament_day.groups_api_cache_key)
-    
+
     unless @primary_scorecard.tournament_day.tournament_day_results.where(:user_primary_scorecard_id => @primary_scorecard.id).blank?
       Rails.logger.info { "SCORE: Re-Scoring For Scorecard: #{@primary_scorecard.id}. User: #{@primary_scorecard.golf_outing.user.complete_name}. Net Score: #{@primary_scorecard.tournament_day.tournament_day_results.where(:user_primary_scorecard_id => @primary_scorecard.id).first.net_score}" }
     end
