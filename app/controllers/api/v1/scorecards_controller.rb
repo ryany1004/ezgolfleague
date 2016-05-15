@@ -13,18 +13,7 @@ class Api::V1::ScorecardsController < Api::V1::ApiBaseController
   end
 
   def current_complication_score
-    payload = {}
-
-    Tournament.all_today(@current_user.leagues).each do |t|
-      t.tournament_days.each do |td|
-        if Time.at(td.tournament_at).to_date === Date.today
-          your_results = td.tournament_day_results.where(user: @current_user).first
-          winner_result = td.tournament_day_results.first
-
-          payload = {:tournament_id => t.server_id, :tournament_day_id => td.server_id, :your_score => {:score => your_results.net_score, :name => ""}, :top_score => {:score => winner_result.net_score, :name => winner_result.user.short_name}}
-        end
-      end
-    end
+    payload = @current_user.current_watch_complication_score
 
     respond_with(payload) do |format|
       format.json { render :json => payload }

@@ -46,6 +46,25 @@ class User < ActiveRecord::Base
 
   ##
 
+  def current_watch_complication_score
+    payload = {}
+
+    Tournament.all_today(self.leagues).each do |t|
+      t.tournament_days.each do |td|
+        if Time.at(td.tournament_at).to_date === Date.today
+          your_results = td.tournament_day_results.where(user: self).first
+          winner_result = td.tournament_day_results.first
+
+          payload = {:tournament_id => t.server_id, :tournament_day_id => td.server_id, :your_score => {:score => your_results.net_score, :name => ""}, :top_score => {:score => winner_result.net_score, :name => winner_result.user.short_name}}
+        end
+      end
+    end
+
+    return payload
+  end
+
+  ##
+
   def requires_additional_profile_data?
     if self.phone_number.blank? and self.street_address_1.blank?
       return true
