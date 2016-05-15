@@ -30,6 +30,18 @@ module TournamentsHelper
     return tournament.course_holes.each_slice(tournament.course_holes.count / 2).to_a
   end
 
+  def team_name_for_player(player, tournament_day)
+    return "N/A" if tournament_day.tournament.display_teams? == false
+
+    team = tournament_day.golfer_team_for_player(player)
+
+    if team.blank?
+      return "-"
+    else
+      return team.name
+    end
+  end
+
   def flight_number_for_player_in_tournament_day(tournament_day, player)
     flight = @tournament_day.flight_for_player(player)
 

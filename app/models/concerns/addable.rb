@@ -29,28 +29,6 @@ module Addable
       if self == self.tournament.first_day
         Payment.create(tournament: self.tournament, payment_amount: self.tournament.dues_for_user(user, paying_with_credit_card) * -1.0, user: user, payment_source: "Tournament Dues")
       end
-
-      self.automatically_build_teams
-    end
-  end
-
-  def automatically_build_teams
-    if self.game_type.show_teams? && self.admin_has_customized_teams == false && self.has_scores? == false
-      logger.info { "Updating Custom Teams for Tournament Group Save" }
-
-      self.golfer_teams.destroy_all
-
-      self.tournament_groups.each do |group|
-        if group.players_signed_up.count > 0
-          golfer_team = GolferTeam.create(tournament_day: self, max_players: self.game_type.number_of_players_per_team)
-
-          group.players_signed_up.each do |player|
-            golfer_team.users << player
-          end
-        end
-      end
-    else
-      logger.info { "Tournament is Not Eligible for Automatic Teams" }
     end
   end
 
@@ -107,7 +85,11 @@ module Addable
       end
 
       #remove from golfer team
-      self.automatically_build_teams
+      self.tournament.tournament_days.each do |d|
+        d.golfer_teams.each do |t|
+          t.users.delete(user)
+        end
+      end
     end
   end
 

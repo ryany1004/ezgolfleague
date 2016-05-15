@@ -35,6 +35,8 @@ class TournamentsController < BaseController
     end
   end
 
+  ##
+
   def touch_tournament
     @tournament.touch
 
@@ -68,6 +70,14 @@ class TournamentsController < BaseController
     @tournament.destroy
 
     redirect_to league_tournaments_path(current_user.selected_league), :flash => { :success => "The tournament was successfully deleted." }
+  end
+
+  ## team stuff
+
+  def options
+    tournament_group = TournamentGroup.find(params[:tournament_group_id])
+
+    @golfer_teams = tournament_group.golfer_teams
   end
 
   #Course Holes
@@ -122,8 +132,14 @@ class TournamentsController < BaseController
 
     group = @tournament_day.tournament_groups.where("id = ?", params[:tournament_group_signup][:tee_group]).first
     user = User.find(params[:tournament_group_signup][:another_member_id])
-
     @tournament_day.add_player_to_group(group, user)
+
+    #teams
+    unless params[:golfer_team_id].blank?
+      team = GolferTeam.find(params[:golfer_team_id])
+
+      team.users << user
+    end
 
     #contests
     if !params[:tournament_group_signup][:contests_to_enter].blank?
@@ -150,6 +166,15 @@ class TournamentsController < BaseController
     user = User.find(params[:user])
 
     @tournament_day.move_player_to_tournament_group(user, group)
+
+    #teams
+    unless params[:golfer_team_id].blank?
+      old_team = @tournament_day.golfer_team_for_player(user)
+      new_team = GolferTeam.find(params[:golfer_team_id])
+
+      old_team.users.delete(user)
+      new_team.users << user
+    end
 
     redirect_to league_tournament_signups_path(@tournament.league, @tournament, tournament_day: @tournament_day), :flash => { :success => "The registration was successfully moved." }
   end

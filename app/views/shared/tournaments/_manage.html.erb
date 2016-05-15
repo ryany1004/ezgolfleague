@@ -20,9 +20,6 @@
           <li <%= tournament_class_for_stage(stage, "game_types") %>><%= link_to 'Game Type', edit_league_tournament_game_types_path(tournament.league, tournament) %></li>
           <li <%= tournament_class_for_stage(stage, "tee_times") %>><%= link_to 'Tee Times', league_tournament_tournament_groups_path(tournament.league, tournament) %></li>
           <li <%= tournament_class_for_stage(stage, "flights") %>><%= link_to 'Flights & Payouts', league_tournament_flights_path(tournament.league, tournament) %></li>
-          <% if tournament.display_teams? -%>
-            <li <%= tournament_class_for_stage(stage, "teams") %>><%= link_to 'Teams', league_tournament_golfer_teams_path(tournament.league, tournament) %></li>
-          <% end -%>
           <li <%= tournament_class_for_stage(stage, "contests") %>><%= link_to 'Contests', league_tournament_contests_path(tournament.league, tournament) %></li>
           <li <%= tournament_class_for_stage(stage, "notifications") %>><%= link_to 'Notifications', league_tournament_tournament_notifications_path(tournament.league, tournament) %></li>
           <% if !@tournament.new_record? -%>
@@ -46,9 +43,6 @@
         <ul class="pagination">
           <li <%= tournament_class_for_stage(stage, "tee_times#{day.id}") %>><%= link_to 'Tee Times', league_tournament_tournament_groups_path(tournament.league, tournament, tournament_day: day) %></li>
           <li <%= tournament_class_for_stage(stage, "flights#{day.id}") %>><%= link_to 'Flights & Payouts', league_tournament_flights_path(tournament.league, tournament, tournament_day: day) %></li>
-          <% if day.show_teams? -%>
-            <li <%= tournament_class_for_stage(stage, "teams#{day.id}") %>><%= link_to 'Teams', league_tournament_golfer_teams_path(tournament.league, tournament, tournament_day: day) %></li>
-          <% end -%>
           <li <%= tournament_class_for_stage(stage, "contests#{day.id}") %>><%= link_to 'Contests', league_tournament_contests_path(tournament.league, tournament, tournament_day: day) %></li>
         </ul>
       </nav>

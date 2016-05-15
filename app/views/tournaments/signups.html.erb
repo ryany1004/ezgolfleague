@@ -11,35 +11,14 @@
   </p>
 <% end -%>
 
-<% if @tournament.tournament_days.count > 1 -%>
-<div class="panel panel-default">
-  <div class="panel-body">
-    <h3>Configure Post-Day 1 Scheduling</h3>
-
-    <% if @tournament_day == @tournament.tournament_days.first -%>
-      <%= simple_form_for :tournament, url: league_tournament_update_auto_schedule_path(@tournament.league, @tournament, tournament_day: @tournament_day), method: :patch do |f| %>
-        <div class="well">
-          <%= f.input :auto_schedule_for_multi_day, collection: @schedule_options.sort.map {|k,v| [v,k]}, :label => 'How Should Later Days Be Scheduled?' %>
-        </div>
-
-        <div class="form-actions">
-          <%= f.button :submit, "Save", :class => 'btn btn-default' %>
-        </div>
-      <% end %>
-    <% else -%>
-      <% if @tournament.auto_schedule_for_multi_day != 0 and @tournament.is_finalized == false -%>
-        <%= button_to "Auto-Schedule For Secondary Days", league_tournament_auto_schedule_path(@tournament.league, @tournament), :class => 'btn btn-default', :data => { :confirm => 'Are you SURE you want to schedule secondary days? This will REMOVE any existing scores for those days.' }, method: :patch %>
-      <% end -%>
-    <% end -%>
-  </div>
-</div>
-<% end -%>
+<%= render partial: 'multi_day_scheduling', locals: {tournament: @tournament, tournament_day: @tournament_day, schedule_options: @schedule_options} %>
 
 <table class="table table-striped">
 	<thead>
 		<tr>
 			<th>Name</th>
       <th>Group / Tee Time</th>
+      <th>Team</th>
       <th>Flight</th>
       <% if is_editable?(@tournament) -%>
       <th><button type="button" class="btn btn-primary btn" data-toggle="modal" data-target="#GroupSignup">Signup for Tournament</button></th>
@@ -54,6 +33,7 @@
     <tr>
       <td><%= golf_outing.user.complete_name %></td>
       <td>#<%= i + 1 %> - <%= tournament_group.tee_time_at.to_s(:date_and_time) %></td>
+      <td><%= team_name_for_player(golf_outing.user, @tournament_day) %></td>
       <td><%= flight_number_for_player_in_tournament_day(@tournament_day, golf_outing.user)  %></td>
       <% if user_is_league_admin(current_user, @tournament.league) && is_editable?(@tournament) -%>
       <td>
@@ -101,7 +81,8 @@
                 <div class="row">
                   <div class="well">
                     <p>Move this user to a new tee group:</p>
-                    <%= f.input :tee_group, label: "Tee Groups", collection: @tournament_day.tournament_groups, label_method: :formatted_tee_time, value_method: :id %>
+                    <%= f.input :tee_group, label: "Tee Groups", collection: @tournament_day.tournament_groups, label_method: :formatted_tee_time, value_method: :id, :input_html => {:onchange => "loadTeamOptions('Move', #{current_user.selected_league.id}, #{@tournament.id}, #{@tournament_day.id}, this)"} %>
+                    <div id="teamTypeOptionsMove<%= @tournament_day.id %>"></div>
                   </div>
                 </div>
               </div>
@@ -135,8 +116,9 @@
             <div class="row">
               <div class="well">
                 <p>Add a user to this tournament:</p>
-                <%= f.input :tee_group, label: "Available Tee Groups", collection: @available_tournament_groups, label_method: :formatted_tee_time, value_method: :id %>
+                <%= f.input :tee_group, label: "Available Tee Groups", collection: @available_tournament_groups, label_method: :formatted_tee_time, value_method: :id, :input_html => {:onchange => "loadTeamOptions('Add', #{current_user.selected_league.id}, #{@tournament.id}, #{@tournament_day.id}, this)"} %>
                 <%= f.input :another_member_id, label: "Unregistered League Members", collection: @unregistered_users, label_method: :complete_name, value_method: :id %>
+                <div id="teamTypeOptionsAdd<%= @tournament_day.id %>"></div>
               </div>
               <% if @tournament.paid_contests.count > 0 -%>
               <div class="well">

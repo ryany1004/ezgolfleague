@@ -151,7 +151,6 @@ Rails.application.routes.draw do
           resources :payouts, only: [:new, :edit, :create, :update]
         end
         resources :tournament_groups, only: [:create, :update]
-        resources :golfer_teams, only: [:create, :update]
         resources :contests, only: [:create, :update] do
           resources :contest_results, only: [:new, :create, :update]
         end
@@ -160,8 +159,6 @@ Rails.application.routes.draw do
       resource :game_types do
         get 'options', on: :collection
       end
-
-      resources :golfer_teams
 
       resources :flights do
         patch 'reflight_players', on: :collection
@@ -190,6 +187,7 @@ Rails.application.routes.draw do
 
       get 'signups'
       post 'add_signup'
+      get 'options'
       delete 'delete_signup'
       patch 'move_signup'
       patch 'update_auto_schedule'

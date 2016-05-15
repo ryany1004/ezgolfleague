@@ -1,0 +1,23 @@
+<% if tournament.tournament_days.count > 1 -%>
+<div class="panel panel-default">
+  <div class="panel-body">
+    <h3>Configure Post-Day 1 Scheduling</h3>
+
+    <% if tournament_day == tournament.tournament_days.first -%>
+      <%= simple_form_for :tournament, url: league_tournament_update_auto_schedule_path(tournament.league, tournament, tournament_day: tournament_day), method: :patch do |f| %>
+        <div class="well">
+          <%= f.input :auto_schedule_for_multi_day, collection: schedule_options.sort.map {|k,v| [v,k]}, :label => 'How Should Later Days Be Scheduled?' %>
+        </div>
+
+        <div class="form-actions">
+          <%= f.button :submit, "Save", :class => 'btn btn-default' %>
+        </div>
+      <% end %>
+    <% else -%>
+      <% if tournament.auto_schedule_for_multi_day != 0 and tournament.is_finalized == false -%>
+        <%= button_to "Auto-Schedule For Secondary Days", league_tournament_auto_schedule_path(tournament.league, tournament), :class => 'btn btn-default', :data => { :confirm => 'Are you SURE you want to schedule secondary days? This will REMOVE any existing scores for those days.' }, method: :patch %>
+      <% end -%>
+    <% end -%>
+  </div>
+</div>
+<% end -%>

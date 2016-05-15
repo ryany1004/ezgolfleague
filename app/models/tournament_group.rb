@@ -3,8 +3,25 @@ class TournamentGroup < ActiveRecord::Base
 
   belongs_to :tournament_day, inverse_of: :tournament_groups, :touch => true
   has_many :golf_outings, inverse_of: :tournament_group, :dependent => :destroy
+  has_many :golfer_teams, -> { order(:created_at) }, inverse_of: :tournament_group, :dependent => :destroy
 
   paginates_per 50
+
+  after_create :create_golfer_teams
+
+  def create_golfer_teams
+    if self.tournament_day.tournament.display_teams?
+      number_of_teams_to_create = self.max_number_of_players / self.tournament_day.game_type.number_of_players_per_team
+
+      team_number = 1
+
+      number_of_teams_to_create.times do
+        GolferTeam.create(tournament_day: self.tournament_day, tournament_group: self, team_number: team_number)
+
+        team_number += 1
+      end
+    end
+  end
 
   def players_signed_up
     players = []

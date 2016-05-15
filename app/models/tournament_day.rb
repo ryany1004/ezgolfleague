@@ -26,6 +26,7 @@ class TournamentDay < ActiveRecord::Base
   delegate :can_be_played?, :can_be_finalized?, to: :game_type
 
   validates :tournament_at, presence: true
+  validates :tournament_at, uniqueness: { scope: :tournament }
 
   validate :dates_are_valid, on: :create, unless: "self.skip_date_validation == true"
   def dates_are_valid

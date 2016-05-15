@@ -50,9 +50,6 @@
               <li class="divider"></li>
               <li><%= link_to "Game Type", edit_league_tournament_game_types_path(tournament.league, tournament) %></li>
               <li><%= link_to "Tee Times", league_tournament_tournament_groups_path(tournament.league, tournament) %></li>
-              <% if tournament.display_teams? -%>
-              <li><%= link_to "Teams", league_tournament_golfer_teams_path(tournament.league, tournament) %></li>
-              <% end -%>
               <li><%= link_to "Flights & Payouts", league_tournament_flights_path(tournament.league, tournament) %></li>
               <li><%= link_to "Contests", league_tournament_contests_path(tournament.league, tournament) %></li>
               <li><%= link_to 'Notifications', league_tournament_tournament_notifications_path(tournament.league, tournament) %></li>
