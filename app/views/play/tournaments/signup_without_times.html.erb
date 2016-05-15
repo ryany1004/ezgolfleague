@@ -10,7 +10,7 @@
 
 <% @tournament.first_day.tournament_groups.each do |group| %>
   <h4><%= display_tee_time_or_position(group) %></h4>
-  
+
   <table class="table table-striped table-bordered">
   	<thead>
   		<tr>
@@ -19,9 +19,9 @@
   		</tr>
   	</thead>
     <tbody>
-      <% group.players_signed_up.each do |player| -%>
+      <% group.players_signed_up.each_with_index do |player, i| -%>
       <tr>
-        <td><%= player.complete_name %></td>
+        <td><%= player.complete_name %> <%= team_name(group, i) %></td>
         <% if player == current_user -%>
         <td><%= link_to "Cancel Registration", play_tournament_remove_signup_path(@tournament), :data => { :confirm => 'Are you sure you want to cancel this registration?' }, :method => :delete %></td>
         <% else -%>
@@ -31,7 +31,7 @@
       <% end %>
       <% (group.max_number_of_players - group.players_signed_up.count).abs.times.each_with_index do |item, i| -%>
       <tr>
-        <td>Time Available</td>
+        <td>Time Available <%= team_name(group, i + group.players_signed_up.count) %></td>
         <% if @tournament.includes_player?(current_user) == false -%>
         <td><button type="button" class="btn btn-primary btn" data-toggle="modal" data-target="#Group<%= group.id %>">Register Tee Time</button></td>
         </td>
@@ -41,9 +41,9 @@
       </tr>
       <% end -%>
     </tbody>
-  </table>  
+  </table>
 <% end %>
 
-<% @tournament.first_day.tournament_groups.each do |group| %>  
+<% @tournament.first_day.tournament_groups.each do |group| %>
   <%= render partial: 'signup_modal', locals: {tournament: @tournament, group: group} %>
 <% end -%>

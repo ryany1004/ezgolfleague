@@ -17,6 +17,26 @@ module Play::TournamentsHelper
     return cache_key
   end
 
+  def team_name(tournament_group, index)
+    return "" if tournament_group.tournament_day.tournament.display_teams? == false
+
+    slots = []
+
+    tournament_group.golfer_teams.each_with_index do |t, i|
+      slot = []
+
+      t.max_players.times do
+        slot << i
+      end
+
+      slots << slot
+    end
+
+    flattened_array = slots.flatten
+
+    return "(Team #{flattened_array[index] + 1})"
+  end
+
   def format_winners(winners)
     return "" if winners.blank?
 
