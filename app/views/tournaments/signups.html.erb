@@ -81,8 +81,8 @@
                 <div class="row">
                   <div class="well">
                     <p>Move this user to a new tee group:</p>
-                    <%= f.input :tee_group, label: "Tee Groups", collection: @tournament_day.tournament_groups, label_method: :formatted_tee_time, value_method: :id, :input_html => {:onchange => "loadTeamOptions('Move', #{current_user.selected_league.id}, #{@tournament.id}, #{@tournament_day.id}, this)"} %>
-                    <div id="teamTypeOptionsMove<%= @tournament_day.id %>"></div>
+                    <%= f.input :tee_group, label: "Tee Groups", collection: @tournament_day.tournament_groups, label_method: :formatted_tee_time, value_method: :id, :input_html => {:onchange => "loadTeamOptions('Move#{golf_outing.user.id}', #{current_user.selected_league.id}, #{@tournament.id}, #{@tournament_day.id}, this)"} %>
+                    <div id="teamTypeOptionsMove<%= golf_outing.user.id %>"></div>
                   </div>
                 </div>
               </div>
@@ -116,7 +116,7 @@
             <div class="row">
               <div class="well">
                 <p>Add a user to this tournament:</p>
-                <%= f.input :tee_group, label: "Available Tee Groups", collection: @available_tournament_groups, label_method: :formatted_tee_time, value_method: :id, :input_html => {:onchange => "loadTeamOptions('Add', #{current_user.selected_league.id}, #{@tournament.id}, #{@tournament_day.id}, this)"} %>
+                <%= f.input :tee_group, label: "Available Tee Groups", collection: @available_tournament_groups, label_method: :formatted_tee_time, value_method: :id, :input_html => {:onchange => "loadTeamOptions('Add#{@tournament_day.id}', #{current_user.selected_league.id}, #{@tournament.id}, #{@tournament_day.id}, this)"} %>
                 <%= f.input :another_member_id, label: "Unregistered League Members", collection: @unregistered_users, label_method: :complete_name, value_method: :id %>
                 <div id="teamTypeOptionsAdd<%= @tournament_day.id %>"></div>
               </div>

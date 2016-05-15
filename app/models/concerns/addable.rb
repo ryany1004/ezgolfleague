@@ -54,7 +54,9 @@ module Addable
 
       #remove from teams
       if remove_from_teams == true
-        self.golfer_teams.each do |team|
+        Rails.logger.debug { "Removing Player from Teams" }
+
+        tournament_group.golfer_teams.each do |team|
           if team.users.include? user
             team.users.destroy(user)
           end
@@ -81,13 +83,6 @@ module Addable
         previous_unrefunded_payments.each do |p|
           p.credits << refund
           p.save
-        end
-      end
-
-      #remove from golfer team
-      self.tournament.tournament_days.each do |d|
-        d.golfer_teams.each do |t|
-          t.users.delete(user)
         end
       end
     end
