@@ -1,7 +1,7 @@
 <ol class="breadcrumb">
   <li><%= link_to "Tournaments", league_tournaments_path(current_user.selected_league) %></li>
   <li><%= link_to @tournament.name, edit_league_tournament_path(current_user.selected_league, @tournament) %></li>
-  <li class="active">Flights</li>
+  <li class="active"><%= @tournament_day.pretty_day(true) %>Flights</li>
 </ol>
 
 <%= render partial: '/shared/tournaments/manage', locals: {tournament: @tournament, stage: @stage_name} %>
@@ -9,7 +9,7 @@
 <div class="col-md-12">
   <div class="panel panel-default">
     <div class="panel-heading">
-      <h3 class="panel-title">Flights</h3>
+      <h3 class="panel-title"><%= @tournament_day.pretty_day(true) %>Flights</h3>
     </div>
     <div class="panel-body">
       <p>By specifying handicap ranges when creating flights, players can automatically be placed based on their current course handicap.</p>

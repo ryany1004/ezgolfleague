@@ -5,46 +5,46 @@
       <%= notification %>
     </div>
   <% end %>
-  
-  <legend>Contest Details</legend>
-  
+
+  <legend><%= @tournament_day.pretty_day(true) %>Contest Details</legend>
+
   <h3>Basic Details</h3>
-  <div class="well">  
+  <div class="well">
 	  <%= f.input :name, :label => 'Name', hint: 'i.e. Closest to the Pin', required: true %>
-    
+
     <%= f.input :is_opt_in, :label => 'Contest is Opt-In' %>
-    
+
     <% if @contest.new_record? -%>
       <%= f.input :contest_type, :label => 'Contest Type', collection: @contest_types, as: :radio_buttons, label_method: :name, value_method: :value %>
     <% end -%>
   </div>
-  
+
   <% if @contest.new_record? == false && @contest.contest_type == 1 -%>
     <% if @contest.course_holes.count == 0 -%>
     <h3>Please Select Course Holes</h3>
-    <div class="well">  
+    <div class="well">
         <%= f.association :course_holes, collection: @tournament_day.course.course_holes, :label => 'Which holes are included?', :label_method => :name, as: :check_boxes %>
     </div>
     <% end -%>
   <% end -%>
-  
+
   <% if @contest.new_record? == false && @contest.contest_type >= 2 -%>
     <h3>Please Specify Entry Dues</h3>
-    <div class="well">  
+    <div class="well">
         <%= f.input :dues_amount, :label => 'Dues Amount ($)' %>
     </div>
-    
-    <% if @contest.allows_overall_winner_points_and_payouts? -%>    
+
+    <% if @contest.allows_overall_winner_points_and_payouts? -%>
       <h3>Overall Winner Payout & Points</h3>
       <p>Specifying a payout amount will override the automatic distribution of entry dues to the winner.</p>
-      <div class="well">  
+      <div class="well">
           <%= f.input :overall_winner_payout_amount, :label => 'Payout Amount ($)' %>
-          
+
           <%= f.input :overall_winner_points, :label => 'Points' %>
       </div>
     <% end -%>
   <% end -%>
-  
+
   <div class="form-actions">
     <% if @contest.new_record? || !params[:skip_to_complete].blank? -%>
       <%= f.button :submit, "Save & Create Another Contest", :class => 'btn btn-default' %>

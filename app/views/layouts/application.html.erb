@@ -2,7 +2,11 @@
 <html>
 <head>
   <% if @page_title.blank? -%>
-  <title>EZ Golf League</title>
+    <% if @tournament.blank? -%>
+      <title>EZ Golf League</title>
+    <% else -%>
+      <title>Tournament: <%= @tournament.name %> || EZ Golf League</title>
+    <% end -%>
   <% else -%>
   <title><%= @page_title %> || EZ Golf League</title>
   <% end -%>
@@ -38,7 +42,7 @@
         <% if current_user.is_super_user %>
         <li><%= link_to "Courses", courses_path %></li>
         <% end -%>
-        <li><%= link_to "Notifications", notification_templates_path %></li> 
+        <li><%= link_to "Notifications", notification_templates_path %></li>
         <li><%= link_to "Payments", payments_path %></li>
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">User Accounts <span class="caret"></span></a>

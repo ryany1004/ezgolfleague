@@ -1,12 +1,12 @@
 <ol class="breadcrumb">
   <li><%= link_to "Tournaments", league_tournaments_path(current_user.selected_league) %></li>
   <li><%= link_to @tournament.name, edit_league_tournament_path(current_user.selected_league, @tournament) %></li>
-  <li class="active">Manage Contests</li>
+  <li class="active">Manage <%= @tournament_day.pretty_day(true) %>Contests</li>
 </ol>
 
 <%= render partial: '/shared/tournaments/manage', locals: {tournament: @tournament, stage: @stage_name} %>
 
-<h4><%= @page_title %></h4>
+<h4><%= @tournament_day.pretty_day(true) %><%= @page_title %></h4>
 
 <table class="table table-striped">
 	<thead>

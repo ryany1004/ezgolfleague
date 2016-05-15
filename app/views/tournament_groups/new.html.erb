@@ -1,6 +1,7 @@
 <ol class="breadcrumb">
+  <li><%= link_to "Tournaments", league_tournaments_path(current_user.selected_league) %></li>
   <li><%= link_to @tournament.name, edit_league_tournament_path(@tournament.league, @tournament) %></li>
-  <li class="active">Create Tee Time</li>
+  <li class="active">Create <%= @tournament_day.pretty_day(true) %>Tee Time</li>
 </ol>
 
 <%= render 'form' %>

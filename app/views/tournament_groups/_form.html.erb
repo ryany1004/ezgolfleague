@@ -5,16 +5,16 @@
       <%= notification %>
     </div>
   <% end %>
-  
-  <legend>Tee Time Details</legend>
-  
+
+  <legend><%= @tournament_day.pretty_day(true) %>Tee Time Details</legend>
+
   <h3>Basic Details</h3>
-  <div class="well">  
+  <div class="well">
 	  <%= f.input :tee_time_at, :label => 'Date & Time', :as => :datetime_picker, required: true %>
-    
+
     <%= f.input :max_number_of_players, :label => "Max Players for Tee Time" %>
   </div>
-  
+
   <div class="form-actions">
     <% if @tournament_group.new_record? -%>
       <%= f.button :submit, "Save & Create Another Tee Time", :class => 'btn btn-default' %>
