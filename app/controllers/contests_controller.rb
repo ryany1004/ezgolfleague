@@ -45,6 +45,8 @@ class ContestsController < BaseController
       else
         if params[:commit] == "Save & Complete Tournament Setup"
           redirect_to league_tournaments_path(current_user.selected_league), :flash => { :success => "The contest was successfully created." }
+        elsif params[:commit] == "Save & Continue to Next Day"
+          redirect_to league_tournament_tournament_groups_path(@tournament.league, @tournament, tournament_day: @tournament.tournament_days.last), :flash => { :success => "The contest was successfully created." }
         else
           redirect_to new_league_tournament_contest_path(@tournament.league, @tournament, tournament_day: @tournament_day), :flash => { :success => "The contest was successfully created." }
         end
@@ -61,6 +63,8 @@ class ContestsController < BaseController
     if @contest.update(contest_params)
       if params[:commit] == "Save & Complete Tournament Setup"
         redirect_to league_tournaments_path(current_user.selected_league), :flash => { :success => "The contest was successfully updated." }
+      elsif params[:commit] == "Save & Continue to Next Day"
+        redirect_to league_tournament_tournament_groups_path(@tournament.league, @tournament, tournament_day: @tournament.tournament_days.last), :flash => { :success => "The contest was successfully updated." }
       else
         redirect_to league_tournament_contests_path(@tournament.league, @tournament, tournament_day: @tournament_day), :flash => { :success => "The contest was successfully updated." }
       end

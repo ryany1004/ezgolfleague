@@ -48,7 +48,11 @@
   <div class="form-actions">
     <% if @contest.new_record? || !params[:skip_to_complete].blank? -%>
       <%= f.button :submit, "Save & Create Another Contest", :class => 'btn btn-default' %>
-      <%= f.button :submit, "Save & Complete Tournament Setup", :class => 'btn btn-primary' %>
+      <% if @tournament.tournament_days.count == 1 -%>
+        <%= f.button :submit, "Save & Complete Tournament Setup", :class => 'btn btn-primary' %>
+      <% else -%>
+        <%= f.button :submit, "Save & Continue to Next Day", :class => 'btn btn-primary' %>
+      <% end -%>
     <% else -%>
       <%= f.button :submit, "Save", :class => 'btn btn-default' %>
     <% end -%>
