@@ -24,9 +24,14 @@ module GameTypes
         golfer_team = self.tournament_day.golfer_team_for_player(result.user)
 
         unless golfer_team.blank?
+          payout_amount = result.payout / 2.0
+
           golfer_team.users.each do |u|
             if u != result.user
-              PayoutResult.create(payout: result.payout, user: u, flight: result.flight, tournament_day: result.tournament_day, amount: result.amount, points: result.points)
+              PayoutResult.create(payout: payout_amount, user: u, flight: result.flight, tournament_day: result.tournament_day, amount: result.amount, points: result.points)
+            else
+              result.payout = payout_amount
+              result.save
             end
           end
         else
