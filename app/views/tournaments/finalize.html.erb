@@ -20,7 +20,8 @@
         <div class="modal-body">
           <p>Finalizing a tournament will analyze scores and determine payouts by flight as well as for contests.</p>
           <p>This process takes a few minutes (or more for large or multi-day tournaments). When complete, the page will reload automatically and display the results.</p>
-          <p><strong>Please don't refresh your browser manually. You will receive an email when finalization is complete.</strong></p>
+          <p><strong>Please don't refresh your browser manually.</strong></p>
+          <p>If you leave this page, you will receive an email when finalization is complete.</p>
           <%= link_to "Start Finalization", league_tournament_run_finalization_path(current_user.selected_league, @tournament), :id => 'finalize-button', :class => 'btn btn-primary', :role => 'button', remote: true %>
           <br/><br/>
           <div class='progress-status text-primary'>

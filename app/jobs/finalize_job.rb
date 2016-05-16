@@ -32,7 +32,7 @@ class FinalizeJob < ProgressJob::Base
     end
 
     #email completion
-    LeagueMailer.tournmant_finalized(tournament).deliver_later
+    LeagueMailer.tournmant_finalized(@tournament).deliver_later
 
     Rails.logger.info { "FinalizeJob Completed" }
   end
