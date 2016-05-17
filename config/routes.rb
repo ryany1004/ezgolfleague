@@ -64,6 +64,7 @@ Rails.application.routes.draw do
   root to: 'play/dashboard#index'
 
   get 'apple-app-site-association', to: 'api/v1/tournaments#app_association'
+  get '.well-known/apple-app-site-association', to: 'api/v1/tournaments#app_association'
 
   #this is for playing tournaments
   namespace :play do

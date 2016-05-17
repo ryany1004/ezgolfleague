@@ -1,6 +1,6 @@
 class LeagueMailer < ApplicationMailer
 
-  def tournmant_finalized(tournament)
+  def tournament_finalized(tournament)
     @tournament = tournament
 
     mail(to: @tournament.league.dues_payment_receipt_email_addresses, subject: "Tournament Finalized")
