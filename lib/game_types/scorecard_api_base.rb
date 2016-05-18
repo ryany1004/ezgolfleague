@@ -10,11 +10,11 @@ module GameTypes
       #hole row
       rows << self.hole_row
 
-      #scores
-      rows << self.score_row
-
       #par
       rows << self.par_row
+
+      #scores
+      rows << self.score_row
 
       #handicap
       rows << self.handicap_row(self.handicap_allowance)
