@@ -41,7 +41,7 @@ class User < ActiveRecord::Base
   end
 
   def short_name
-    return "#{self.last_name}, #{self.first_name[0]}"
+    return "#{self.first_name}, #{self.last_name[0]}"
   end
 
   ##

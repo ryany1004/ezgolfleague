@@ -41,7 +41,7 @@ module GameTypes
       broken_contests = 0
       self.tournament_day.tournament.tournament_days.each do |day|
         day.contests.each do |c|
-          c += 1 if c.contest_can_be_scored? == false
+          broken_contests += 1 if c.contest_can_be_scored? == false
         end
       end
 

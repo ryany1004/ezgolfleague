@@ -25,15 +25,19 @@ module ContestScoreable
     self.tournament_day.golfer_teams.each do |team|
       team_participation = []
 
-      team.users.each do |teammate|
-        if self.users.include? teammate
-          team_participation << true
-        else
-          team_participation << false
+      if team.users.count > 0 #empty teams do not count
+        team.users.each do |teammate|
+          if self.users.include? teammate
+            team_participation << true
+          else
+            team_participation << false
+          end
         end
       end
 
-      return false if team_participation.uniq.length != 1 #all yes or all no is fine ; mix is not fine
+      if team_participation.length > 0 and team_participation.uniq.length != 1 #all yes or all no is fine ; mix is not fine
+        return false
+      end
     end
 
     return true
@@ -138,29 +142,29 @@ module ContestScoreable
       end
     end
 
-    if self.is_team_contest?
-      self.recalculate_contest_results_for_team_split
-    end
+    #self.recalculate_contest_results_for_team_split if self.is_team_contest?
   end
 
-  def recalculate_contest_results_for_team_split
-    Rails.logger.info { "CONTEST: #{self.id} recalculate_contest_results_for_team_split" }
+  #TODO: cturn contest results into payments
 
-    self.tournament_day.golfer_teams.each do |team|
-      team_contest_results = ContestResult.where(contest: self).where(winner: team.users)
-
-      if team_contest_results.count > 1
-        team_contest_results.in_groups(team.users.count, false).each_with_index do |result_group, i|
-          user = team.users[i]
-
-          result_group.each do |result|
-            result.winner = user
-            result.save
-          end
-        end
-      end
-    end
-  end
+  # def recalculate_contest_results_for_team_split
+  #   Rails.logger.info { "CONTEST: #{self.id} recalculate_contest_results_for_team_split" }
+  #
+  #   self.tournament_day.golfer_teams.each do |team|
+  #     team_contest_results = ContestResult.where(contest: self).where(winner: team.users)
+  #
+  #     if team_contest_results.count > 1
+  #       team_contest_results.in_groups(team.users.count, false).each_with_index do |result_group, i|
+  #         user = team.users[i]
+  #
+  #         result_group.each do |result|
+  #           result.winner = user
+  #           result.save
+  #         end
+  #       end
+  #     end
+  #   end
+  # end
 
   def users_with_skins(use_gross, gross_skins_require_birdies = false)
     all_winners = []
