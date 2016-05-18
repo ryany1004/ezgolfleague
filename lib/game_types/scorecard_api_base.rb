@@ -45,7 +45,7 @@ module GameTypes
     end
 
     def score_row
-      return self.score_row_for_scorecard(self.scorecard, self.scorecard.short_name)
+      return self.score_row_for_scorecard(self.scorecard, self.scorecard.name(true))
     end
 
     def score_row_for_scorecard(card, title)
