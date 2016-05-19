@@ -145,7 +145,7 @@ class User < ActiveRecord::Base
 
     pusher = User.pusher if pusher.blank?
 
-    self.mobile_devices.each do |device|
+    self.mobile_devices.where(device_type: "iphone").each do |device|
       pusher = User.pusher(true) if device.environment_name == "debug"
 
       notification = Grocer::Notification.new(
@@ -157,12 +157,12 @@ class User < ActiveRecord::Base
     end
   end
 
-  def send_content_notification(content)
+  def send_complication_notification(content)
     return if self.wants_push_notifications == false
 
     pusher = User.pusher if pusher.blank?
 
-    self.mobile_devices.each do |device|
+    self.mobile_devices.where(device_type: "apple-watch-complication").each do |device|
       pusher = User.pusher(true) if device.environment_name == "debug"
 
       notification = Grocer::Notification.new(
