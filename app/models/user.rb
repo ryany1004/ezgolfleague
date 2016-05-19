@@ -221,7 +221,14 @@ class User < ActiveRecord::Base
     return if self.wants_push_notifications == false
 
     self.mobile_devices.where(device_type: "apple-watch-complication").each do |device|
-      pusher = User.pusher(true) if device.environment_name == "debug"
+      certificate_file = "#{Rails.root}/config/apns_complication_cert.pem"
+      passphrase = "golf"
+
+      if device.environment_name == "debug"
+        pusher = Apnotic::Connection.development(cert_path: certificate_file, cert_pass: passphrase)
+      else
+        pusher = Apnotic::Connection.new(cert_path: certificate_file, cert_pass: passphrase)
+      end
 
       notification = Apnotic::Notification.new(device.device_identifier)
       notification.priority = 5
