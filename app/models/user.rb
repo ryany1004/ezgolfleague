@@ -231,7 +231,6 @@ class User < ActiveRecord::Base
       end
 
       notification = Apnotic::Notification.new(device.device_identifier)
-      notification.priority = 5
       notification.content_available = 1
       notification.custom_payload = content
 
