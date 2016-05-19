@@ -205,16 +205,28 @@ class User < ActiveRecord::Base
 
       notification = Apnotic::Notification.new(device.device_identifier)
       notification.alert = body
-      notification.priority = 10
 
       Rails.logger.info { "Pushing Standard Notification to #{device.device_identifier} #{device.environment_name}" }
 
       response = pusher.push(notification)
 
-      Rails.logger.info { "Notification Response: #{response}" }
+      Rails.logger.info { "Notification Response: #{response.headers} #{response.body}" }
     end
 
     pusher.close
+  end
+
+  def self.pusher(use_debug = false)
+    certificate_file = "#{Rails.root}/config/apns_cert.pem"
+    passphrase = "golf"
+
+    if use_debug == true
+      connection = Apnotic::Connection.development(cert_path: certificate_file, cert_pass: passphrase)
+    else
+      connection = Apnotic::Connection.new(cert_path: certificate_file, cert_pass: passphrase)
+    end
+
+    return connection
   end
 
   def send_complication_notification(content)
@@ -231,6 +243,7 @@ class User < ActiveRecord::Base
       end
 
       notification = Apnotic::Notification.new(device.device_identifier)
+      notification.topic = "com.ezgolfleague.GolfApp.complication"
       notification.content_available = 1
       notification.custom_payload = content
 
@@ -238,23 +251,10 @@ class User < ActiveRecord::Base
 
       response = pusher.push(notification)
 
-      Rails.logger.info { "Notification Response: #{response}" }
+      Rails.logger.info { "Notification Response: #{response.headers} #{response.body}" }
 
       pusher.close
     end
-  end
-
-  def self.pusher(use_debug = false)
-    certificate_file = "#{Rails.root}/config/apns_cert.pem"
-    passphrase = "golf"
-
-    if use_debug == true
-      connection = Apnotic::Connection.development(cert_path: certificate_file, cert_pass: passphrase)
-    else
-      connection = Apnotic::Connection.new(cert_path: certificate_file, cert_pass: passphrase)
-    end
-
-    return connection
   end
 
   ##Custom Devise
