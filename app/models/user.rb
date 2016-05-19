@@ -153,6 +153,8 @@ class User < ActiveRecord::Base
         alert: body
       )
 
+      Rails.logger.info { "Pushing Standard Notification to #{device.device_identifier}" }
+
       pusher.push(notification)
     end
   end
@@ -170,6 +172,8 @@ class User < ActiveRecord::Base
         content_available: true,
         custom: content
       )
+
+      Rails.logger.info { "Pushing Complication Notification to #{device.device_identifier}" }
 
       pusher.push(notification)
     end
