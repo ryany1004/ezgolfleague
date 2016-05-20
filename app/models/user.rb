@@ -41,7 +41,7 @@ class User < ActiveRecord::Base
   end
 
   def short_name
-    return "#{self.first_name}, #{self.last_name[0]}"
+    return "#{self.first_name} #{self.last_name[0]}."
   end
 
   ##
@@ -140,61 +140,6 @@ class User < ActiveRecord::Base
     end
   end
 
-  # def send_mobile_notification(body, pusher = nil)
-  #   return if self.wants_push_notifications == false
-  #
-  #   pusher = User.pusher if pusher.blank?
-  #
-  #   self.mobile_devices.where(device_type: "iphone").each do |device|
-  #     pusher = User.pusher(true) if device.environment_name == "debug"
-  #
-  #     notification = Grocer::Notification.new(
-  #       device_token: device.device_identifier,
-  #       alert: body
-  #     )
-  #
-  #     Rails.logger.info { "Pushing Standard Notification to #{device.device_identifier} #{device.environment_name}" }
-  #
-  #     pusher.push(notification)
-  #   end
-  # end
-  #
-  # def send_complication_notification(content)
-  #   return if self.wants_push_notifications == false
-  #
-  #   pusher = User.pusher if pusher.blank?
-  #
-  #   self.mobile_devices.where(device_type: "apple-watch-complication").each do |device|
-  #     pusher = User.pusher(true) if device.environment_name == "debug"
-  #
-  #     notification = Grocer::Notification.new(
-  #       device_token: device.device_identifier,
-  #       content_available: true,
-  #       custom: content
-  #     )
-  #
-  #     Rails.logger.info { "Pushing Complication Notification to #{device.device_identifier} #{device.environment_name}" }
-  #
-  #     pusher.push(notification)
-  #   end
-  # end
-  #
-  # def self.pusher(use_debug = false)
-  #   if use_debug == true
-  #     pusher = Grocer.pusher(
-  #       certificate: "#{Rails.root}/config/apns_cert.pem",
-  #       passphrase:  "golf",
-  #       gateway:     "gateway.sandbox.push.apple.com"
-  #     )
-  #   else
-  #     pusher = Grocer.pusher(
-  #       certificate: "#{Rails.root}/config/apns_cert.pem",
-  #       passphrase:  "golf",
-  #       gateway:     "gateway.push.apple.com"
-  #     )
-  #   end
-  # end
-
   def send_mobile_notification(body, pusher = nil)
     return if self.wants_push_notifications == false
 
@@ -204,6 +149,7 @@ class User < ActiveRecord::Base
       pusher = User.pusher(true) if device.environment_name == "debug"
 
       notification = Apnotic::Notification.new(device.device_identifier)
+      notification.topic = "com.ezgolfleague.GolfApp"
       notification.alert = body
 
       Rails.logger.info { "Pushing Standard Notification to #{device.device_identifier} #{device.environment_name}" }
