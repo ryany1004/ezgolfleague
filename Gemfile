@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-ruby '2.2.4'
+ruby '2.3.1'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.2.6'
@@ -51,7 +51,6 @@ gem 'stripe', :git => 'https://github.com/stripe/stripe-ruby'
 gem 'delayed_job_active_record'
 gem 'progress_job'
 gem 'backport_new_renderer', :github => 'brainopia/backport_new_renderer'
-#gem 'grocer'
 gem 'apnotic'
 
 group :development, :test do
