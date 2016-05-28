@@ -1,6 +1,6 @@
 <p><strong>Tee-Time: <%= p.tee_time.to_s(:date_and_time) %> | Tees: <%= p.tee_names %></strong></p>
 
-<table class="table table-striped table-bordered print-friendly">
+<table class="table table-striped table-bordered print-friendly" id="printable-scorecard-table">
 	<thead>
 		<tr>
       <th width="2%">flt</th>
@@ -29,7 +29,6 @@
 	</thead>
 	<tbody>
     <% p.all_scorecards.each do |scorecard| -%>
-      <!-- Scorecard ID: <%= scorecard.id %> -->
       <tr>
         <td><%= scorecard.flight_number %></td>
         <% if scorecard.should_highlight? -%>
