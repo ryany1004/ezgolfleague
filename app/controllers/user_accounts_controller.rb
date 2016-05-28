@@ -63,6 +63,17 @@ class UserAccountsController < BaseController
   end
 
   def destroy
+    #remove from future tournaments
+    tournaments = Tournament.all_upcoming(@user_account.leagues).each do |t|
+      if t.includes_player?(@user_account)
+        t.tournament_days.each do |d|
+          group = d.tournament_group_for_player(@user_account)
+
+          d.remove_player_from_group(group, @user_account, true) unless group.blank?
+        end
+      end
+    end
+
     @user_account.destroy
 
     redirect_to user_accounts_path, :flash => { :success => "The user was successfully deleted." }

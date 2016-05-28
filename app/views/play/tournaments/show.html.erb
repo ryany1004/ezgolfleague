@@ -116,7 +116,7 @@
               <% f.payout_results.each do |p| %>
               <tr>
                 <td><strong><%= f.flight_number %></strong></td>
-                <td><%= p.user.complete_name unless p.user.blank? %></td>
+                <td><%= p.user.short_name unless p.user.blank? %></td>
                 <td><%= number_to_currency(p.amount) %></td>
                 <td><%= p.points.to_i %></td>
               </tr>

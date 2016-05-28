@@ -163,9 +163,9 @@ Rails.application.routes.draw do
 
       resources :flights do
         patch 'reflight_players', on: :collection
-
-        resources :payouts
       end
+
+      resources :payouts
 
       resources :contests do
         resources :contest_results

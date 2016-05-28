@@ -8,7 +8,8 @@
         <li class='disabled'><%= link_to 'Holes', "#" %></li>
         <li class='disabled'><%= link_to 'Game Type', "#" %></li>
         <li class='disabled'><%= link_to 'Tee Times', "#" %></li>
-        <li class='disabled'><%= link_to 'Flights & Payouts', "#" %></li>
+        <li class='disabled'><%= link_to 'Flights', "#" %></li>
+        <li class='disabled'><%= link_to 'Payouts', "#" %></li>
         <li class='disabled'><%= link_to 'Contests', "#" %></li>
         <li class='disabled'><%= link_to 'Notifications', "#" %></li>
         <li class='disabled'><%= link_to 'Finalize', "#" %></li>
@@ -19,7 +20,8 @@
           <li <%= tournament_class_for_stage(stage, "hole_information") %> ><%= link_to 'Holes', league_tournament_manage_holes_path(tournament.league, tournament) %></li>
           <li <%= tournament_class_for_stage(stage, "game_types") %>><%= link_to 'Game Type', edit_league_tournament_game_types_path(tournament.league, tournament) %></li>
           <li <%= tournament_class_for_stage(stage, "tee_times") %>><%= link_to 'Tee Times', league_tournament_tournament_groups_path(tournament.league, tournament) %></li>
-          <li <%= tournament_class_for_stage(stage, "flights") %>><%= link_to 'Flights & Payouts', league_tournament_flights_path(tournament.league, tournament) %></li>
+          <li <%= tournament_class_for_stage(stage, "flights") %>><%= link_to 'Flights', league_tournament_flights_path(tournament.league, tournament) %></li>
+          <li <%= tournament_class_for_stage(stage, "payouts") %>><%= link_to 'Payouts', league_tournament_payouts_path(tournament.league, tournament) %></li>
           <li <%= tournament_class_for_stage(stage, "contests") %>><%= link_to 'Contests', league_tournament_contests_path(tournament.league, tournament) %></li>
           <li <%= tournament_class_for_stage(stage, "notifications") %>><%= link_to 'Notifications', league_tournament_tournament_notifications_path(tournament.league, tournament) %></li>
           <% if !@tournament.new_record? -%>
@@ -42,7 +44,8 @@
         <h4><%= day.pretty_day %></h4>
         <ul class="pagination">
           <li <%= tournament_class_for_stage(stage, "tee_times#{day.id}") %>><%= link_to 'Tee Times', league_tournament_tournament_groups_path(tournament.league, tournament, tournament_day: day) %></li>
-          <li <%= tournament_class_for_stage(stage, "flights#{day.id}") %>><%= link_to 'Flights & Payouts', league_tournament_flights_path(tournament.league, tournament, tournament_day: day) %></li>
+          <li <%= tournament_class_for_stage(stage, "flights#{day.id}") %>><%= link_to 'Flights', league_tournament_flights_path(tournament.league, tournament, tournament_day: day) %></li>
+          <li <%= tournament_class_for_stage(stage, "payouts#{day.id}") %>><%= link_to 'Payouts', league_tournament_payouts_path(tournament.league, tournament, tournament_day: day) %></li>
           <li <%= tournament_class_for_stage(stage, "contests#{day.id}") %>><%= link_to 'Contests', league_tournament_contests_path(tournament.league, tournament, tournament_day: day) %></li>
         </ul>
       </nav>

@@ -29,7 +29,7 @@ class FlightsController < BaseController
       self.update_player_flight_membership
 
       if params[:commit] == "Save & Continue"
-        redirect_to league_tournament_contests_path(@tournament.league, @tournament, tournament_day: @tournament_day), :flash => { :success => "The flight was successfully created." }
+        redirect_to league_tournament_payouts_path(@tournament.league, @tournament, tournament_day: @tournament_day), :flash => { :success => "The flight was successfully created." }
       else
         redirect_to new_league_tournament_flight_path(@tournament.league, @tournament, tournament_day: @tournament_day), :flash => { :success => "The flight was successfully created." }
       end

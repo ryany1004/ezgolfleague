@@ -1,21 +1,28 @@
-<%= simple_form_for [@tournament.league, @tournament, @tournament_day, @flight, @payout] do |f| %>
+<%= simple_form_for [@tournament.league, @tournament, @payout] do |f| %>
   <% if notification = f.error_notification %>
     <div class="alert alert-error fade in">
       <a class="close" data-dismiss="alert" href="#">&times;</a>
       <%= notification %>
     </div>
   <% end %>
-  
-  <legend>Payout Details</legend>
-  
+
+  <legend><%= @tournament_day.pretty_day(true) %>Payout Details</legend>
+
   <h3>Basic Details</h3>
-  <div class="well">  
+  <div class="well">
+    <%= f.input :flight_id, collection: @tournament_day.flights, :label => "Flight", :label_method => :flight_number, required: true %>
+
 	  <%= f.input :amount, :label => 'Amount ($)', required: true %>
-    
+
     <%= f.input :points, :label => 'Points', required: true %>
   </div>
-  
+
   <div class="form-actions">
-    <%= f.button :submit, :class => 'btn btn-default' %>
+    <% if @payout.new_record? -%>
+      <%= f.button :submit, "Save & Create Another Payout", :class => 'btn btn-default' %>
+      <%= f.button :submit, "Save & Continue", :class => 'btn btn-primary' %>
+    <% else -%>
+      <%= f.button :submit, "Save", :class => 'btn btn-default' %>
+    <% end -%>
   </div>
 <% end %>

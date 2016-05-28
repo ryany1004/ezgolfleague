@@ -1,8 +1,7 @@
 <ol class="breadcrumb">
   <li><%= link_to "Tournaments", league_tournaments_path(current_user.selected_league) %></li>
   <li><%= link_to @tournament.name, edit_league_tournament_path(current_user.selected_league, @tournament) %></li>
-  <li><%= link_to "Flight #{@flight.flight_number}", league_tournament_flights_path(current_user.selected_league, @tournament, @flight) %></li>
-  <li class="active">Edit Payout</li>
+  <li class="active"><%= @tournament_day.pretty_day(true) %>Edit Payout</li>
 </ol>
 
 <%= render 'form' %>
