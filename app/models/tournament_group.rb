@@ -109,7 +109,7 @@ class TournamentGroup < ActiveRecord::Base
               :include => {
                 :scores => {
                   :only => [:id, :strokes],
-                  :methods => [:server_id, :course_hole_number, :course_hole_par]
+                  :methods => [:server_id, :course_hole_number, :course_hole_par, :course_hole_yards, :tee_group_name]
                 }
               }
             }
