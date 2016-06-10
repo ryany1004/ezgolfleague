@@ -189,19 +189,19 @@ class TournamentsController < BaseController
     user = User.find(params[:user_id])
     golf_outing = @tournament_day.golf_outing_for_player(user)
 
-    golf_outing.disqualified = true
+    golf_outing.disqualified = !golf_outing.disqualified
     golf_outing.save
 
     golfer_team = @tournament_day.golfer_team_for_player(user)
     unless golfer_team.blank?
       golfer_team.users.each do |u|
         team_outing = @tournament_day.golf_outing_for_player(u)
-        team_outing.disqualified = true
+        team_outing.disqualified = !team_outing.disqualified unless u == user
         team_outing.save
       end
     end
 
-    redirect_to league_tournament_signups_path(@tournament.league, @tournament, tournament_day: @tournament_day), :flash => { :success => "The player qualification status changed." }
+    redirect_to league_tournament_signups_path(@tournament.league, @tournament, tournament_day: @tournament_day), :flash => { :success => "The player qualification status changed. You may need to re-finalize the tournament." }
   end
 
   def delete_signup
