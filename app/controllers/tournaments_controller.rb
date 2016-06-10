@@ -1,5 +1,5 @@
 class TournamentsController < BaseController
-  before_filter :fetch_tournament, :only => [:edit, :update, :destroy, :signups, :manage_holes, :update_holes, :add_signup, :move_signup, :delete_signup, :finalize, :run_finalization, :display_finalization, :confirm_finalization, :update_course_handicaps, :touch_tournament, :update_auto_schedule, :auto_schedule, :confirmed_players]
+  before_filter :fetch_tournament, :only => [:edit, :update, :destroy, :signups, :manage_holes, :update_holes, :add_signup, :move_signup, :delete_signup, :finalize, :run_finalization, :display_finalization, :confirm_finalization, :update_course_handicaps, :touch_tournament, :update_auto_schedule, :auto_schedule, :confirmed_players, :disqualify_signup]
   before_filter :initialize_form, :only => [:new, :edit]
   before_filter :set_stage
 
@@ -177,6 +177,31 @@ class TournamentsController < BaseController
     end
 
     redirect_to league_tournament_signups_path(@tournament.league, @tournament, tournament_day: @tournament_day), :flash => { :success => "The registration was successfully moved." }
+  end
+
+  def disqualify_signup
+    if params[:tournament_day].blank?
+      @tournament_day = @tournament.first_day
+    else
+      @tournament_day = @tournament.tournament_days.find(params[:tournament_day])
+    end
+
+    user = User.find(params[:user_id])
+    golf_outing = @tournament_day.golf_outing_for_player(user)
+
+    golf_outing.disqualified = true
+    golf_outing.save
+
+    golfer_team = @tournament_day.golfer_team_for_player(user)
+    unless golfer_team.blank?
+      golfer_team.users.each do |u|
+        team_outing = @tournament_day.golf_outing_for_player(u)
+        team_outing.disqualified = true
+        team_outing.save
+      end
+    end
+
+    redirect_to league_tournament_signups_path(@tournament.league, @tournament, tournament_day: @tournament_day), :flash => { :success => "The player qualification status changed." }
   end
 
   def delete_signup

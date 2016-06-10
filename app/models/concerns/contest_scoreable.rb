@@ -145,7 +145,7 @@ module ContestScoreable
     #self.recalculate_contest_results_for_team_split if self.is_team_contest?
   end
 
-  #TODO: cturn contest results into payments
+  #TODO: turn contest results into payments
 
   # def recalculate_contest_results_for_team_split
   #   Rails.logger.info { "CONTEST: #{self.id} recalculate_contest_results_for_team_split" }
@@ -175,7 +175,7 @@ module ContestScoreable
       user_scores = []
 
       self.users.each do |user|
-        if self.tournament_day.tournament.includes_player?(user)
+        if self.tournament_day.tournament.includes_player?(user) && !self.tournament_day.golf_outing_for_player(user).disqualified
           if use_gross == true
             use_handicap = false
           else

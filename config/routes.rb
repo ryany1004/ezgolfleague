@@ -191,6 +191,7 @@ Rails.application.routes.draw do
       get 'options'
       delete 'delete_signup'
       patch 'move_signup'
+      patch 'disqualify_signup'
       patch 'update_auto_schedule'
 
       get 'finalize'

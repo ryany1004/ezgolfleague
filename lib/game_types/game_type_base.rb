@@ -452,7 +452,7 @@ module GameTypes
             points = payout_result.points if payout_result.user == player
           end
 
-          if !net_score.blank? && net_score > 0
+          if !scorecard.golf_outing.disqualified && !net_score.blank? && net_score > 0
             ranked_flight[:players] << { id: player.id, name: self.player_team_name_for_player(player), net_score: net_score, back_nine_net_score: back_nine_net_score, gross_score: gross_score, scorecard_url: scorecard_url, points: points, par_related_net_score: par_related_net_score, par_related_gross_score: par_related_gross_score, thru: scorecard.last_hole_played }
           else
             Rails.logger.info { "Not Including Player in Ranking. Net Score: #{net_score}" }
@@ -478,9 +478,9 @@ module GameTypes
 
       eligible_player_list = []
       if self.tournament.tournament_days.count == 1
-        eligible_player_list = self.tournament.players.map(&:id)
+        eligible_player_list = self.tournament.qualified_players.map(&:id)
       else #only players that play all days can win
-        self.tournament.players.each do |player|
+        self.tournament.qualified_players.each do |player|
           player_played_all_days = true
 
           self.tournament.tournament_days.each do |day|

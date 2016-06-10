@@ -9,7 +9,6 @@ class FinalizeJob < ProgressJob::Base
     update_stage('Finalizing Tournament')
 
     tournament_days = @tournament.tournament_days.includes(tournament_groups: [golf_outings: [:user, scorecard: :scores]])
-    players = @tournament.players
 
     Rails.logger.info { "Finalize: Starting Job" }
 
