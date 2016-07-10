@@ -94,7 +94,7 @@ class League < ActiveRecord::Base
       t.players.each do |p|
         points = 0
         t.tournament_days.each do |day|
-          points = day.player_points(p)
+          points += day.player_points(p)
         end
 
         found_existing_player = false
