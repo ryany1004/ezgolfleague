@@ -111,6 +111,7 @@ Rails.application.routes.draw do
 
       resources :sessions, only: [:create] do
         post 'register_device', on: :collection
+        post 'upload_avatar_image', on: :collection
       end
 
       resources :scores do
