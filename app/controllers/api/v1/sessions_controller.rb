@@ -44,9 +44,7 @@ class Api::V1::SessionsController < Api::V1::ApiBaseController
       @current_user.avatar = File.open(temp_file_path)
       @current_user.save
 
-      respond_with(@current_user) do |format|
-        format.json { render :json => @current_user.to_json }
-      end
+      render text: "Success"
     end
   end
 
