@@ -23,6 +23,14 @@
     <%= f.association :leagues, collection: @leagues, :label => 'Leagues', :label_method => :name, as: :check_boxes, required: true %>
   </div>
 
+  <h3>Avatar</h3>
+  <div class="well">
+    <% unless @user_account.avatar.blank? -%>
+    <p><%= image_tag @user_account.avatar.url(:medium) %></p>
+    <% end -%>
+    <%= f.input :avatar, :label => 'Avatar Photo' %>
+  </div>
+
   <h3>GHIN Number</h3>
   <div class="well">
     <%= f.input :ghin_number, :label => 'GHIN System Number' %>

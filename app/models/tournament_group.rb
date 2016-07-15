@@ -97,7 +97,7 @@ class TournamentGroup < ActiveRecord::Base
           :include => {
             :user => {
               :only => [:first_name, :last_name],
-              :methods => [:server_id]
+              :methods => [:server_id, :avatar_image_url]
             },
             :course_tee_box => {
               :only => [:name],
