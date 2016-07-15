@@ -27,7 +27,7 @@ gem 'devise', '~> 3.5.6'
 gem 'devise_invitable', '~> 1.5.2'
 
 gem 'bootstrap-sass', '~> 3.3.4'
-gem "paperclip", '~> 4.2.0'
+gem "paperclip", "~> 5.0.0"
 gem 'aws-sdk', '~> 2.3'
 gem 'kaminari', '~> 0.16.1'
 gem 'simple_form'
