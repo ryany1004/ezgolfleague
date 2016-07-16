@@ -58,6 +58,24 @@ class Api::V1::TournamentDaysController < Api::V1::ApiBaseController
     end
   end
 
+  def cancel_registration
+    @tournament.tournament_days.each do |day|
+      day.tournament_groups.each do |tg|
+        tg.golf_outings.each do |outing|
+          day.remove_player_from_group(tg, @current_user) if outing.user == @current_user
+        end
+      end
+    end
+
+    Rails.cache.delete(@tournament_day.groups_api_cache_key)
+
+    eager_groups = TournamentGroup.includes(golf_outings: [:user, :course_tee_box, scorecard: [{scores: :course_hole}]]).where(tournament_day: @tournament_day)
+
+    respond_with(eager_groups) do |format|
+      format.json { render :json => eager_groups }
+    end
+  end
+
   def payment_details
     tournament_cost_details = [@tournament.cost_breakdown_for_user(@current_user, false, false)]
 

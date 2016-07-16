@@ -123,6 +123,7 @@ Rails.application.routes.draw do
       resources :tournaments do
         resources :tournament_days, only: [:show] do
           post 'register'
+          put 'cancel_registration'
           get 'payment_details'
 
           get 'tournament_groups'
