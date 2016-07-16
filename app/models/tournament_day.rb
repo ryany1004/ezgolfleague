@@ -135,7 +135,7 @@ class TournamentDay < ActiveRecord::Base
     user_ids = []
 
     self.tournament.players_for_day(self).each do |player|
-      user_ids << player.id.to_s if if player.is_super_user
+      user_ids << player.id.to_s if player.is_super_user
     end
 
     return user_ids
