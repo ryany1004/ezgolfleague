@@ -131,6 +131,16 @@ class TournamentDay < ActiveRecord::Base
     return user_ids
   end
 
+  def superuser_user_ids
+    user_ids = []
+
+    self.tournament.players_for_day(self).each do |player|
+      user_ids << player.id.to_s if if player.is_super_user
+    end
+
+    return user_ids
+  end
+
   #are you sure you really want to do this?!?
   def clear_scores
     self.tournament_groups.each do |group|
