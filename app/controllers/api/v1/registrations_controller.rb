@@ -20,7 +20,7 @@ class Api::V1::RegistrationsController < Api::V1::ApiBaseController
         format.json { render :json => user }
       end
     else
-      create_errors = user.errors
+      create_errors = { errors: user.errors }
 
       respond_with(create_errors) do |format|
         format.json { render :json => create_errors }
