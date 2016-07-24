@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160610221941) do
+ActiveRecord::Schema.define(version: 20160724191127) do
 
   create_table "contest_holes", force: :cascade do |t|
     t.integer  "contest_id"
@@ -256,6 +256,12 @@ ActiveRecord::Schema.define(version: 20160610221941) do
     t.string   "dues_payment_receipt_email_addresses"
     t.string   "apple_pay_merchant_id"
     t.boolean  "supports_apple_pay",                          default: false
+    t.boolean  "show_in_search",                              default: true
+    t.string   "league_description"
+    t.string   "contact_name"
+    t.string   "contact_phone"
+    t.string   "contact_email"
+    t.string   "location"
   end
 
   create_table "mobile_devices", force: :cascade do |t|

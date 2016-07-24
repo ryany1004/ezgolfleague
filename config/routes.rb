@@ -114,6 +114,13 @@ Rails.application.routes.draw do
         post 'upload_avatar_image', on: :collection
       end
 
+      resources :registrations, only: [:create] do
+        get 'search_leagues'
+        get 'league_info'
+        post 'notify_interest'
+        post 'pay_dues'
+      end
+
       resources :scores do
         put 'batch_update', on: :collection
       end
