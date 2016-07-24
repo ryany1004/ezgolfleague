@@ -11,6 +11,7 @@
           <h4 class="panel-title">
             <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapse1" aria-expanded="false" aria-controls="collapse1">
               <%= @player.complete_name %><% if !@tournament_day.primary_scorecard_for_user(@player).is_confirmed? -%> (Unconfirmed By Player)<% end -%>
+              <%- if @tournament_day.primary_scorecard_for_user(@player).golf_outing.disqualified %>DISQUALIFIED<%- end %>
             </a>
           </h4>
         </div>

@@ -220,7 +220,9 @@ Rails.application.routes.draw do
     get 'print_display_scorecards', on: :collection
   end
 
-  resources :scorecards, :except => [:delete]
+  resources :scorecards, :except => [:delete] do
+    patch 'disqualify'
+  end
 
   resources :courses do
     resources :course_tee_boxes
