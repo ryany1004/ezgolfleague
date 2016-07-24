@@ -15,10 +15,16 @@ class Api::V1::RegistrationsController < Api::V1::ApiBaseController
 
     if user.save
       Delayed::Job.enqueue GhinUpdateJob.new([user]) unless user.ghin_number.blank?
-    end
 
-    respond_with(user) do |format|
-      format.json { render :json => user }
+      respond_with(user) do |format|
+        format.json { render :json => user }
+      end
+    else
+      create_errors = user.errors
+
+      respond_with(create_errors) do |format|
+        format.json { render :json => create_errors }
+      end
     end
   end
 
