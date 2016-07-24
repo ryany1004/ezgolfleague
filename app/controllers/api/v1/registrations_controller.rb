@@ -29,10 +29,16 @@ class Api::V1::RegistrationsController < Api::V1::ApiBaseController
   end
 
   def search_leagues
-    #search for leagues
+    search_term = "%#{params[:q].downcase}%"
+
+    @leagues = League.where(show_in_search: true).where("lower(name) LIKE ? OR lower(location) LIKE ?", search_term, search_term)
+
+    respond_with(@leagues) do |format|
+      format.json { render :json => @leagues }
+    end
   end
 
-  def league_info
+  def league_tournament_info
 
   end
 

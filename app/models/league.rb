@@ -170,7 +170,8 @@ class League < ActiveRecord::Base
 
   def as_json(options={})
     super(
-      :only => [:name, :league_description, :contact_name, :contact_phone, :contact_email, :location, :show_in_search]
+      :only => [:name, :dues_amount, :league_description, :contact_name, :contact_phone, :contact_email, :location],
+      :methods => [:server_id]
     )
   end
 

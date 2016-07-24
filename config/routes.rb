@@ -115,10 +115,10 @@ Rails.application.routes.draw do
       end
 
       resources :registrations, only: [:create] do
-        get 'search_leagues'
-        get 'league_info'
-        post 'notify_interest'
-        post 'pay_dues'
+        get 'search_leagues', on: :collection
+        get 'league_tournament_info', on: :collection
+        post 'notify_interest', on: :collection
+        post 'pay_dues', on: :collection
       end
 
       resources :scores do
