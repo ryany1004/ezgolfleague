@@ -1,6 +1,6 @@
 class UserAccountsController < BaseController
   before_action :fetch_user_account, :only => [:edit, :update, :destroy]
-  before_action :initialize_form, :only => [:new, :edit]
+  before_action :initialize_form, :only => [:new, :edit, :edit_current]
 
   def index
     if current_user.is_super_user?
