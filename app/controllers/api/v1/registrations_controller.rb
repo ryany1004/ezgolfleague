@@ -87,6 +87,8 @@ class Api::V1::RegistrationsController < Api::V1::ApiBaseController
 
         self.create_payment(payment_amount, league.name, charge.id, league_season)
 
+        LeagueMembership.create(league: league, user: @current_user)
+
         LeagueMailer.league_dues_payment_confirmation(@current_user, league_season).deliver_later
 
         render json: {"success" => true}
