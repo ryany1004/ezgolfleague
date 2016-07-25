@@ -16,7 +16,7 @@ class LeagueMailer < ApplicationMailer
   def league_interest(from_user, league)
     @user = from_user
 
-    mail(to: league.dues_payment_receipt_email_addresses, subject: "A User Has Expressed Interest in the League")
+    mail(to: league.dues_payment_receipt_email_addresses, subject: "#{league.name}: A User Has Expressed Interest in the League")
   end
 
   def league_dues_payment_confirmation(user, league_season)
