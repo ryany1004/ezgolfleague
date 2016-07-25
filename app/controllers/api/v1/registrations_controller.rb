@@ -39,7 +39,13 @@ class Api::V1::RegistrationsController < Api::V1::ApiBaseController
   end
 
   def league_tournament_info
+      @league = League.find(params[:league_id])
 
+      upcoming_tournaments = Tournament.all_upcoming([@league], nil)
+
+      respond_with(upcoming_tournaments) do |format|
+        format.json { render :json => upcoming_tournaments }
+      end
   end
 
   def notify_interest
