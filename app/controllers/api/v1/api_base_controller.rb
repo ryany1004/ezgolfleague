@@ -26,6 +26,11 @@ class Api::V1::ApiBaseController < ApplicationController
     end
   end
 
+  def assign_user_session_token(user)
+    user.session_token = (0...50).map { ('a'..'z').to_a[rand(26)] }.join
+    user.save
+  end
+
   def ssl_configured?
     !Rails.env.development?
   end

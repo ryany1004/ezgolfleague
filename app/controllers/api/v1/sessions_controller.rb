@@ -48,9 +48,4 @@ class Api::V1::SessionsController < Api::V1::ApiBaseController
     end
   end
 
-  def assign_user_session_token(user)
-    user.session_token = (0...50).map { ('a'..'z').to_a[rand(26)] }.join
-    user.save
-  end
-
 end

@@ -16,6 +16,8 @@ class Api::V1::RegistrationsController < Api::V1::ApiBaseController
     if user.save
       Delayed::Job.enqueue GhinUpdateJob.new([user]) unless user.ghin_number.blank?
 
+      self.assign_user_session_token(user) if user.session_token.blank?
+
       render json: {:user_token => user.session_token, :user_id => user.id.to_s}
     else
       create_errors = { errors: user.errors }
