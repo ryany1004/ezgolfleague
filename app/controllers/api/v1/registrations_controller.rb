@@ -1,4 +1,6 @@
 class Api::V1::RegistrationsController < Api::V1::ApiBaseController
+  before_filter :protect_with_token, only: [:notify_interest, :pay_dues]
+
   respond_to :json
 
   def create
@@ -49,12 +51,18 @@ class Api::V1::RegistrationsController < Api::V1::ApiBaseController
   end
 
   def notify_interest
-    #send email to league admin with info on wanting to be registered
+    league = League.find(params[:league_id])
+
+    LeagueMailer.league_interest(@current_user, league).deliver_later unless league.blank?
+
+    render json: {"success" => true}
   end
 
   def pay_dues
     #actually pay the dues
     #send email receipt
+
+    #league_dues_payment_confirmation
   end
 
 end

@@ -2,7 +2,11 @@ LEAGUE DUES PAYMENT CONFIRMATION
 
 A payment was made by <%= @user.complete_name %>:
 
+Email: <%= @user.email %>
+Phone: <%= @user.phone_number %>
+
 <%= @league_season.complete_name %>
+
 <%= number_to_currency(@league.dues_for_user(@user, false)) %>
 
 --
