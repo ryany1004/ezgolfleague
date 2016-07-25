@@ -68,6 +68,12 @@ class League < ActiveRecord::Base
 
   ##
 
+  def active_season
+    this_year_season = self.league_seasons.where("starts_at < ? AND ends_at > ?", Date.today, Date.today).first
+
+    return this_year_season
+  end
+
   def active_season_for_user(user)
     this_year_season = user.selected_league.league_seasons.where("starts_at < ? AND ends_at > ?", Date.today, Date.today).first
 
