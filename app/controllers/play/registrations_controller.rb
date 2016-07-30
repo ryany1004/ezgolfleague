@@ -71,8 +71,6 @@ class Play::RegistrationsController < BaseController
 
       Payment.create(payment_amount: (amount * -1.0), user: @current_user, payment_type: charge_description, league_season: league_season)
 
-      LeagueMailer.league_dues_payment_confirmation(@current_user, league_season).deliver_later unless league.dues_payment_receipt_email_addresses.blank?
-
       Stripe.api_key = api_key
 
       # Get the credit card details submitted by the form
@@ -96,6 +94,8 @@ class Play::RegistrationsController < BaseController
         @current_user.leagues << league
 
         sign_in(@current_user)
+
+        LeagueMailer.league_dues_payment_confirmation(@current_user, league_season).deliver_later unless league.dues_payment_receipt_email_addresses.blank?
 
         redirect_to play_dashboard_index_path, :flash => { :success => "You have joined the league." }
       rescue Stripe::CardError => e
