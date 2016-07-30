@@ -1,0 +1,115 @@
+<script type="text/javascript">
+  Stripe.setPublishableKey('<%= @league.stripe_publishable_key %>');
+</script>
+
+<script>
+jQuery(function($) {
+  $('#payment-form').submit(function(event) {
+    var $form = $(this);
+
+    // Disable the submit button to prevent repeated clicks
+    $form.find('submit_button').prop('disabled', true);
+
+    Stripe.card.createToken($form, stripeResponseHandler);
+
+    // Prevent the form from submitting with the default action
+    return false;
+  });
+});
+
+function stripeResponseHandler(status, response) {
+  var $form = $('#payment-form');
+
+  if (response.error) {
+    // Show the errors on the form
+    $form.find('.payment-errors').text(response.error.message);
+    $form.find('submit_button').prop('disabled', false);
+  } else {
+    // response contains id and card, which contains additional card details
+    var token = response.id;
+    // Insert the token into the form so it gets submitted to the server
+    $form.append($('<input type="hidden" name="stripeToken" />').val(token));
+    // and submit
+    $form.get(0).submit();
+  }
+};
+</script>
+
+<div class="row">
+  <div class="col-md-12">
+    <div class="panel panel-default panel-success">
+      <div class="panel-heading">
+        <h3 class="panel-title">Payment Details</h3>
+      </div>
+      <div class="panel-body">
+        <p><em><%= @payment_instructions %></em></p>
+        <p><em>EZ Golf League accepts Visa, MasterCard, American Express and Discover</em></p>
+        <br/>
+
+        <table class="table">
+          <% @cost_breakdown_lines.each do |line| -%>
+            <tr>
+              <td><%= line[:name] %></td>
+              <td align="right"><%= number_to_currency(line[:price]) %></td>
+            </tr>
+          <% end -%>
+          <tr>
+            <td><strong>Total</strong></td>
+            <td align="right"><strong><%= number_to_currency(@payment_amount) %></strong></td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-12">
+    <div class="panel panel-default">
+      <%= simple_form_for :payment, url: submit_payment_play_registrations_path, method: :post, :html => {id: "payment-form"} do |f| %>
+      <div class="panel-body">
+        <span class="payment-errors"></span>
+      </div>
+      <table class="table table-striped">
+        <tbody>
+          <tr>
+            <td>Card Number</td>
+            <td><input type="text" size="20" data-stripe="number"/></td>
+          </tr>
+          <tr>
+            <td>Expiration (MM/YYYY)</td>
+            <td><input type="text" size="2" data-stripe="exp-month"/> <input type="text" size="4" data-stripe="exp-year"/></td>
+          </tr>
+          <tr>
+            <td>CVC</td>
+            <td><input type="text" size="4" data-stripe="cvc"/></td>
+          </tr>
+        </tbody>
+      	<tfoot>
+      		<tr>
+            <th>&nbsp;</th>
+            <th><%= f.button :button, "Submit Payment", :class => "btn btn-primary", :id => "submit_button" %></th>
+      		</tr>
+      	</tfoot>
+      </table>
+        <% unless @league.blank? -%>
+          <input type="hidden" name="league_id" value="<%= @league.id %>" />
+        <% end -%>
+
+        <% unless @tournament.blank? -%>
+          <input type="hidden" name="tournament_id" value="<%= @tournament.id %>" />
+        <% end -%>
+
+        <% unless @contest.blank? -%>
+          <input type="hidden" name="contest_id" value="<%= @contest.id %>" />
+        <% end -%>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-12">
+    <span id="siteseal"><script type="text/javascript" src="https://seal.godaddy.com/getSeal?sealID=harKf0XUqFGg22HrfecoXRz2baJkXjcPkRvFQ0zBMFSMERPq8jyizy8R1fOi"></script></span>
+  </div>
+</div>

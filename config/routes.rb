@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  if Rails.env.production? #TODO: split this for staging / production
+  if Rails.env.production?
     default_url_options :host => "app.ezgolfleague.com"
   end
 
@@ -85,6 +85,15 @@ Rails.application.routes.draw do
       resources :tournament_days, only: [:index] do
         resources :contests, only: [:index]
       end
+    end
+
+    resources :registrations, only: [:new, :create] do
+      get :leagues, on: :collection
+      post :search_leagues, on: :collection
+      get :league_info, on: :collection
+      get :join_league, on: :collection
+      post :submit_payment, on: :collection
+      put :request_information, on: :collection
     end
 
     resource :user_account, only: [:edit, :update], controller: "user_account" do

@@ -1,0 +1,24 @@
+<div class="row">
+  <div class="col-md-12">
+    <div class="panel panel-default panel-success">
+      <div class="panel-heading">
+        <h3 class="panel-title">Find a League</h3>
+      </div>
+      <div class="panel-body">
+        <ul class="nav nav-pills">
+          In order to use the system you need to join a league. Search for leagues that may be nearby to see more information.
+        </ul>
+
+        <div>&nbsp;</div>
+        <div class="input-group">
+        <%= simple_form_for :league_search, url: search_leagues_play_registrations_path do |f| %>
+          <%= text_field_tag :search, params[:search], class: "form-control", placeholder: "Enter name or location." %>
+          </br></br>
+          <%= f.submit 'Search' %>
+        <% end %>
+        </div>
+        <div>&nbsp;</div>
+      </div>
+    </div>
+  </div>
+</div>

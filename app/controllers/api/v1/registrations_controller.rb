@@ -85,7 +85,8 @@ class Api::V1::RegistrationsController < Api::V1::ApiBaseController
 
         logger.info { "Charged #{@current_user.complete_name} Card w/ Stripe for #{payment_amount}" }
 
-        self.create_payment(payment_amount, league.name, charge.id, league_season)
+        self.create_payment(payment_amount * - 1.0, league.name, charge.id, league_season) #debit
+        self.create_payment(payment_amount, league.name, charge.id, league_season) #credit
 
         LeagueMembership.create(league: league, user: @current_user)
 

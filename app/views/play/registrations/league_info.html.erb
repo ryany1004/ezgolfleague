@@ -1,0 +1,57 @@
+<div class="row">
+  <div class="col-md-12">
+    <div class="panel panel-default panel-success">
+      <div class="panel-heading">
+        <h3 class="panel-title"><%= @league.name %> (<%= @league.location %>)</h3>
+      </div>
+      <div class="panel-body">
+        <p><%= @league.league_description %></p>
+
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>League Administrator</th>
+              <th>Phone</th>
+              <th>Email Address</th>
+              <th>League Dues</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><%= @league.contact_name %></td>
+              <td><%= @league.contact_phone %></td>
+              <td><%= @league.contact_email %></td>
+              <td><%= number_to_currency(@league.dues_amount) %></td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h4>Upcoming Tournaments</h4>
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Golf Course</th>
+              <th>Date</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @upcoming_tournaments.each do |tournament| %>
+            <tr>
+              <td><%= tournament.name %></td>
+              <td><%= tournament.course.name %></td>
+              <td><%= tournament.tournament_at.to_s(:date) %></td>
+            </tr>
+            <% end -%>
+          </tbody>
+        </table>
+
+        <% unless @league.encrypted_stripe_production_publishable_key.blank? -%>
+          <%= link_to "Join Now via Credit Card", join_league_play_registrations_path(league_id: @league.id), type: "button", class: "btn btn-success" %>
+        <% end -%>
+
+        <%= link_to "Request Additional Information", request_information_play_registrations_path(league_id: @league.id), type: "button", class: "btn btn-default", method: :put %>
+      </div>
+    </div>
+  </div>
+</div>
