@@ -31,16 +31,18 @@
           <thead>
             <tr>
               <th>Name</th>
-              <th>Golf Course</th>
-              <th>Date</th>
+              <th>Golf Course and Date</th>
             </tr>
           </thead>
           <tbody>
             <% @upcoming_tournaments.each do |tournament| %>
             <tr>
               <td><%= tournament.name %></td>
-              <td><%= tournament.course.name %></td>
-              <td><%= tournament.tournament_at.to_s(:date) %></td>
+              <td>
+                <% tournament.tournament_days.each do |d| -%>
+                  <%= d.tournament_at.to_s(:date_and_time) %> @ <%= d.course.name %><br/>
+                <% end -%>
+              </td>
             </tr>
             <% end -%>
           </tbody>

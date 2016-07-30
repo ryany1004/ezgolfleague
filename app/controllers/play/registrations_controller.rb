@@ -45,6 +45,8 @@ class Play::RegistrationsController < BaseController
         {:name => "#{@league.name} League Fees", :price => @league.dues_amount},
         {:name => "Credit Card Fees", :price => Stripe::StripeFees.fees_for_transaction_amount(@league.dues_amount)}
       ]
+
+      @payment_amount = payment_amount(@league)
     end
 
     def request_information
@@ -63,7 +65,7 @@ class Play::RegistrationsController < BaseController
       league = League.find(params[:league_id])
       league_season = league.league_seasons.last
 
-      amount = league.dues_amount + Stripe::StripeFees.fees_for_transaction_amount(league.dues_amount)
+      amount = payment_amount(league)
       api_key = league.stripe_secret_key
       charge_description = "#{@current_user.complete_name} League Dues"
 
@@ -112,6 +114,10 @@ class Play::RegistrationsController < BaseController
 
     def user_params
       params.require(:user).permit!
+    end
+
+    def payment_amount(league)
+      league.dues_amount + Stripe::StripeFees.fees_for_transaction_amount(league.dues_amount)
     end
 
     def temporary_user
