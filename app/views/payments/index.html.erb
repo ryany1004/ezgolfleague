@@ -18,7 +18,7 @@
     	<tbody>
     	<% @payments.each do |payment| %>
     		<tr>
-    			<td><%= link_to payment.user.complete_name, payment_path(payment) %></td>
+    			<td><%= link_to payment.user.complete_name, payment_path(payment) unless payment.user.blank? %></td>
           <td><%= payment.created_at.to_s(:short) %></td>
           <td><%= number_to_currency(payment.payment_amount) %></td>
           <td><%= payment.payment_source %></td>
