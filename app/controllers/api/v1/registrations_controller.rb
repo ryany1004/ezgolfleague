@@ -62,50 +62,15 @@ class Api::V1::RegistrationsController < Api::V1::ApiBaseController
     payment_details = ActiveSupport::JSON.decode(request.body.read)
 
     stripe_token = payment_details["stripeToken"]
-    payment_amount = payment_details["totalPaymentAmount"].to_f
     league_id = payment_details["leagueID"]
-
     league = League.where(id: league_id).first
-    league_season = league.active_season
 
-    unless stripe_token.blank? or payment_amount.blank? or league.blank? or league_season.blank? or @current_user.blank?
-      begin
-        Stripe.api_key = league.stripe_secret_key
+    begin
+      Payments::LeagueJoinService.charge_and_join(@current_user, league, stripe_token)
 
-        #add in the Stripe fees
-        credit_card_fees = Stripe::StripeFees.fees_for_transaction_amount(payment_amount)
-        payment_amount += credit_card_fees
-
-        charge = Stripe::Charge.create(
-          :amount => (payment_amount * 100).to_i, # amount in cents
-          :currency => "usd",
-          :source => stripe_token,
-          :description => "#{@current_user.complete_name} League Dues: #{league.name}"
-        )
-
-        logger.info { "Charged #{@current_user.complete_name} Card w/ Stripe for #{payment_amount}" }
-
-        self.create_payment(payment_amount * - 1.0, league.name, charge.id, league_season) #debit
-        self.create_payment(payment_amount, league.name, charge.id, league_season) #credit
-
-        LeagueMembership.create(league: league, user: @current_user)
-
-        LeagueMailer.league_dues_payment_confirmation(@current_user, league_season).deliver_later
-
-        render json: {"success" => true}
-      rescue Stripe::CardError => e
-        render json: {"success" => false}, :status => :bad_request
-      end
-    else
+      render json: {"success" => true}
+    rescue Stripe::CardError => e
       render json: {"success" => false}, :status => :bad_request
     end
   end
-
-  def create_payment(amount, charge_description, charge_identifier, league_season)
-    p = Payment.new(payment_amount: amount, user: @current_user, payment_type: charge_description, payment_source: PAYMENT_METHOD_CREDIT_CARD)
-    p.transaction_id = charge_identifier
-    p.league_season = league_season unless league_season.blank?
-    p.save
-  end
-
 end
