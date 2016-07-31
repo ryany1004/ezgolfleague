@@ -19,7 +19,7 @@
       <td><%= payment.created_at.to_s(:short) %></td>
       <td><%= number_to_currency(payment.payment_amount) %></td>
       <td><%= payment.payment_source %></td>
-      <td><%= payment.payment_details %></td>
+      <td><%= payment.generated_description %></td>
 		</tr>
 	<% end %>
 	</tbody>
