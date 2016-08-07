@@ -21,7 +21,7 @@
     		<tr>
     			<td><%= link_to league.name, edit_league_path(league) %></td>
     			<td><%= league.created_at.to_s(:date_and_time) %></td>
-          <% if user_is_league_admin(current_user, league) -%>          
+          <% if user_is_league_admin(current_user, league) -%>
           <td>
           <div class="btn-group">
             <button class="btn btn-default btn-xs dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false">
@@ -51,7 +51,7 @@
           <th>&nbsp;</th>
     			<th>&nbsp;</th>
           <% if current_user.is_super_user? -%>
-          <th><%= link_to 'Create League', new_user_account_path, :class => 'btn btn-primary' %></th>
+          <th><%= link_to 'Create League', new_league_path, :class => 'btn btn-primary' %></th>
           <% else -%>
           <th>&nbsp;</th>
           <% end -%>
