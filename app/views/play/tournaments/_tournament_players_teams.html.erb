@@ -1,7 +1,7 @@
 <div class="col-md-6">
   <div class="panel panel-default panel-success">
     <div class="panel-heading">
-      <h3 class="panel-title"><%= tournament_day.pretty_day(true) %>Tournament Teams <span class="badge"><%= tournament_day.golfer_teams.count %></span></h3>
+      <h3 class="panel-title"><%= name %> Tournament Teams <span class="badge"><%= teams.count %></span></h3>
     </div>
     <table class="table table-striped">
     	<thead>
@@ -11,13 +11,12 @@
     		</tr>
     	</thead>
     	<tbody>
-        <% tournament_day.golfer_teams.each do |golfer_team| %>
-          <tr>
-            <td><%= team_member_names(golfer_team, false) %></td>
-            
-            <td><%= display_tee_time_or_position(tournament_day.tournament_group_for_player(golfer_team.users.first)) unless golfer_team.users.blank? %></td>
-          </tr>
-        <% end -%>
+        <% teams.each do |team| %>
+        <tr>
+          <td><%= team_member_names(team[:name_data], false) %></td>
+          <td><%= display_tee_time_or_position(team[:group]) unless team[:group].blank? %></td>
+        </tr>
+        <% end %>
     	</tbody>
     </table>
   </div>

@@ -4,18 +4,31 @@ class Play::TournamentsController < BaseController
   before_action :fetch_tournament, :except => [:show]
 
   def show
-    @tournament = Tournament.find(params[:id])
+    # @tournament = Tournament.find(params[:id])
+    #
+    # if params[:tournament_day].blank?
+    #   @tournament_day = @tournament.first_day
+    # else
+    #   @tournament_day = @tournament.tournament_days.find(params[:tournament_day])
+    # end
+    #
+    # @flights_with_rankings = self.fetch_flights_with_rankings(@tournament_day)
+    # @flights_with_rankings = self.fetch_combined_flights_with_rankings(@tournament_day, @flights_with_rankings)
 
-    if params[:tournament_day].blank?
-      @tournament_day = @tournament.first_day
+    tournament = Tournament.find(params[:id])
+    tournament_day = tournament.tournament_days.where(id: params[:tournament_day]).first
+
+    unless tournament_day.blank?
+      day_flights = self.fetch_flights_with_rankings(tournament_day)
+      combined_flights = self.fetch_combined_flights_with_rankings(tournament_day, day_flights)
     else
-      @tournament_day = @tournament.tournament_days.find(params[:tournament_day])
+      day_flights = nil
+      combined_flights = self.fetch_combined_flights_with_rankings(tournament.tournament_days.last, self.fetch_flights_with_rankings(tournament.tournament_days.last))
     end
 
-    @flights_with_rankings = self.fetch_flights_with_rankings(@tournament_day)
-    @flights_with_rankings = self.fetch_combined_flights_with_rankings(@tournament_day, @flights_with_rankings)
+    @tournament_presenter = TournamentPresenter.new({tournament: tournament, tournament_day: tournament_day, user: current_user, day_flights: day_flights, combined_flights: combined_flights})
 
-    @page_title = "#{@tournament.name}"
+    @page_title = "#{tournament.name}"
   end
 
   def leaderboard
@@ -104,11 +117,11 @@ class Play::TournamentsController < BaseController
   end
 
   def fetch_flights_with_rankings(tournament_day)
-    flights_with_rankings = Rails.cache.fetch(@tournament_day.flights_with_rankings_cache_key, expires_in: 8.minutes, race_condition_ttl: 10)
+    flights_with_rankings = Rails.cache.fetch(tournament_day.flights_with_rankings_cache_key, expires_in: 8.minutes, race_condition_ttl: 10)
     if flights_with_rankings.blank?
       flights_with_rankings = tournament_day.flights_with_rankings
 
-      Rails.cache.write(@tournament_day.flights_with_rankings_cache_key, flights_with_rankings)
+      Rails.cache.write(tournament_day.flights_with_rankings_cache_key, flights_with_rankings)
     end
 
     return flights_with_rankings

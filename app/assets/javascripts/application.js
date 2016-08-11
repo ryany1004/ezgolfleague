@@ -32,13 +32,14 @@ $(function(){
     return str;
   }
 
+  //highlight stuff
   var url = window.location.pathname;
   var activePage = stripTrailingSlash(url);
 
   $('.nav li a').each(function(){
     var currentPage = stripTrailingSlash($(this).attr('href'));
 
-    if (activePage == currentPage) {
+    if (activePage == currentPage && !activePage.contains("play")) {
       $(this).parent().addClass('active');
     }
   });
