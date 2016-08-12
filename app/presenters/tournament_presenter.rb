@@ -26,7 +26,7 @@ class TournamentPresenter
   end
 
   def day_cache_key
-    self.tournament_day.blank? ? self.tournament.tournament_days.last : self.tournament_day
+    self.tournament_day.blank? ? nil : self.tournament_day
   end
 
   def player_count

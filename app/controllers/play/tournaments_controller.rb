@@ -4,19 +4,13 @@ class Play::TournamentsController < BaseController
   before_action :fetch_tournament, :except => [:show]
 
   def show
-    # @tournament = Tournament.find(params[:id])
-    #
-    # if params[:tournament_day].blank?
-    #   @tournament_day = @tournament.first_day
-    # else
-    #   @tournament_day = @tournament.tournament_days.find(params[:tournament_day])
-    # end
-    #
-    # @flights_with_rankings = self.fetch_flights_with_rankings(@tournament_day)
-    # @flights_with_rankings = self.fetch_combined_flights_with_rankings(@tournament_day, @flights_with_rankings)
-
     tournament = Tournament.find(params[:id])
-    tournament_day = tournament.tournament_days.where(id: params[:tournament_day]).first
+
+    if tournament.tournament_days.count == 1
+      tournament_day = tournament.tournament_days.first
+    else
+      tournament_day = tournament.tournament_days.where(id: params[:tournament_day]).first
+    end
 
     unless tournament_day.blank?
       day_flights = self.fetch_flights_with_rankings(tournament_day)
