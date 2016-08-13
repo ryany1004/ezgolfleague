@@ -5,7 +5,7 @@ namespace :payment_data_cleanup do
     Payment.where("payment_source != 'Credit Card'").destroy_all
 
     #for each credit card payment, create a tournament deduction
-    Payment.where("payment_source == 'Credit Card'").each do |p|
+    Payment.where("payment_source = 'Credit Card'").each do |p|
       new_payment = Payment.create(user: p.user, payment_source: "Data Cleanup", payment_amount: (p.payment_amount * -1.0), tournament: p.tournament, league_season: p.league_season, contest: p.contest, created_at: p.created_at, updated_at: p.updated_at)
 
       p.original_payment = new_payment
