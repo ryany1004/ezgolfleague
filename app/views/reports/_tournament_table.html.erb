@@ -39,6 +39,8 @@
                 <li><%= link_to "Adjusted Scores", adjusted_scores_league_reports_path(tournament: tournament) %></li>
               </ul>
             </div>
+          <% else %>
+            Not playable.
           <% end %>
           </td>
     		</tr>
