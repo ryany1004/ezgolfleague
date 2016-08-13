@@ -254,4 +254,15 @@ class TournamentPresenter
 
     items
   end
+
+  def day_cache_key(prefix)
+    if self.tournament_day.blank?
+      max_updated_at = DateTime.now.try(:utc).try(:to_s, :number)
+      cache_key = "tournament_days/#{prefix}-#{max_updated_at}"
+    else
+      max_updated_at = tournament_day.updated_at.try(:utc).try(:to_s, :number)
+      cache_key = "tournament_days/#{prefix}-#{tournament_day.id}-#{max_updated_at}"
+    end
+  end
+
 end

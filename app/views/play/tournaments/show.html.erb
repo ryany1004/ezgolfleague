@@ -100,7 +100,7 @@
           </tr>
         </thead>
         <tbody>
-          <% cache(cache_key_for_tournament_day_with_prefix(@tournament_presenter.day_cache_key, "tournament-payouts")) do %>
+          <% cache(@tournament_presenter.day_cache_key("tournament-payouts")) do %>
             <% @tournament_presenter.payouts.each_with_index do |f, x| %>
               <% f[:payouts].each do |p| %>
                 <tr>
@@ -136,7 +136,7 @@
       <div class="panel-heading">
         <h3 class="panel-title"><%= @tournament_presenter.day_name %> Tournament Contests</h3>
       </div>
-      <% cache(cache_key_for_tournament_day_with_prefix(@tournament_presenter.day_cache_key, "tournament-contests")) do %>
+      <% cache(@tournament_presenter.day_cache_key("tournament-contests")) do %>
         <% if @tournament_presenter.contests.count > 0 -%>
         <table class="table table-striped">
           <thead>
@@ -177,7 +177,7 @@
 
 <div class="row">
   <% unless @tournament_presenter.tournament_players.blank? %>
-    <% cache(cache_key_for_tournament_day_with_prefix(@tournament_presenter.day_cache_key, "tournament-players")) do %>
+    <% cache(@tournament_presenter.day_cache_key("tournament-players")) do %>
       <% if @tournament_presenter.day_has_golfer_teams? %>
         <%= render partial: 'tournament_players_teams', locals: {name: @tournament_presenter.day_name, teams: @tournament_presenter.tournament_players} %>
       <% else %>
@@ -205,7 +205,7 @@
         		</tr>
         	</thead>
           <tbody>
-            <% cache(cache_key_for_tournament_day_with_prefix(@tournament_presenter.day_cache_key, "tournament-rankings")) do %>
+            <% cache(@tournament_presenter.day_cache_key("tournament-rankings")) do %>
               <% @tournament_presenter.flights_with_rankings.each_with_index do |flight, x| %>
                 <% flight[:players].each_with_index do |player, i| -%>
                 <tr>
