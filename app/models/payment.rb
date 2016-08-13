@@ -38,9 +38,9 @@ class Payment < ActiveRecord::Base
       end
     elsif !self.contest.blank?
       if self.payment_amount < 0.0
-        return "Dues for #{self.contest.name} (#{self.contest.tournament_day.pretty_day(false)})"
+        return "Dues for #{self.contest.name} (#{self.contest.tournament_day.tournament.name})"
       else
-        return "Payment for #{self.contest.name} (#{self.contest.tournament_day.pretty_day(false)})"
+        return "Payment for #{self.contest.name} (#{self.contest.tournament_day.tournament.name})"
       end
     else
       return self.payment_type
