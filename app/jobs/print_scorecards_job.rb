@@ -31,7 +31,7 @@ class PrintScorecardsJob < ProgressJob::Base
         end
       end
 
-      scorecard_presenter = Presenters::ScorecardPresenter.new({primary_scorecard: primary_scorecard, secondary_scorecards: other_scorecards, current_user: @current_user})
+      scorecard_presenter = ScorecardPresenter.new({primary_scorecard: primary_scorecard, secondary_scorecards: other_scorecards, current_user: @current_user})
 
       @print_cards << {p: scorecard_presenter} if !self.printable_cards_includes_player?(@print_cards, player)
 

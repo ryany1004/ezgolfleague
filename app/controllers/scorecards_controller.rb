@@ -89,7 +89,7 @@ class ScorecardsController < BaseController
     @scorecard = scorecard_info[:scorecard]
     @other_scorecards = scorecard_info[:other_scorecards]
 
-    @scorecard_presenter = Presenters::ScorecardPresenter.new({primary_scorecard: @scorecard, secondary_scorecards: @other_scorecards, current_user: self.current_user})
+    @scorecard_presenter = ScorecardPresenter.new({primary_scorecard: @scorecard, secondary_scorecards: @other_scorecards, current_user: self.current_user})
   end
 
 end
