@@ -3,10 +3,11 @@ namespace :payment_data_cleanup do
   task change: :environment do
     #find payments that are not from credit cards, delete them
     Payment.where("payment_source != 'Credit Card'").destroy_all
+    Payment.where("payment_source IS NULL").destroy_all
 
     #for each credit card payment, create a deduction
     Payment.where("payment_source = 'Credit Card'").each do |p|
-      new_payment = Payment.create(user: p.user, payment_source: "Data Cleanup", payment_amount: (p.payment_amount * -1.0), tournament: p.tournament, league_season: p.league_season, contest: p.contest, created_at: p.created_at, updated_at: p.updated_at)
+      new_payment = Payment.create(user: p.user, payment_source: "Data Cleanup Debit", payment_amount: (p.payment_amount * -1.0), tournament: p.tournament, league_season: p.league_season, contest: p.contest, created_at: p.created_at, updated_at: p.updated_at)
 
       p.original_payment = new_payment
       p.save
