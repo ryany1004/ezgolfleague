@@ -19,9 +19,9 @@ namespace :payment_data_cleanup do
       t.players.each do |player|
         existing_tournament_payments = t.payments.where(user: player)
 
-        if existing_tournament_payments.blank?          
-          debit = Payment.create(user: player, payment_amount: t.dues_for_user(player, false) * -1.0, tournament: t, payment_source: "Data Cleanup")
-          credit = Payment.create(user: player, payment_amount: t.dues_for_user(player, false), tournament: t, payment_source: "Data Cleanup", original_payment: debit)
+        if existing_tournament_payments.blank?
+          debit = Payment.create(user: player, payment_amount: t.dues_for_user(player, false) * -1.0, tournament: t, payment_source: "Data Cleanup Debit")
+          credit = Payment.create(user: player, payment_amount: t.dues_for_user(player, false), tournament: t, payment_source: "Data Cleanup Credit", original_payment: debit)
         end
       end
 
@@ -32,10 +32,21 @@ namespace :payment_data_cleanup do
             existing_contest_payments = c.payments.where(user: player)
 
             if existing_contest_payments.blank?
-              debit = Payment.create(user: player, payment_amount: c.dues_for_user(player, false) * -1.0, contest: c, payment_source: "Data Cleanup")
-              credit = Payment.create(user: player, payment_amount: c.dues_for_user(player, false), contest: c, payment_source: "Data Cleanup", original_payment: debit)
+              debit = Payment.create(user: player, payment_amount: c.dues_for_user(player, false) * -1.0, contest: c, payment_source: "Data Cleanup Debit")
+              credit = Payment.create(user: player, payment_amount: c.dues_for_user(player, false), contest: c, payment_source: "Data Cleanup Credit", original_payment: debit)
             end
           end
+        end
+      end
+    end
+
+    #future tournaments - players without any payments should have a debit
+    Tournament.all_future(nil).each do |t|
+      t.players.each do |player|
+        existing_tournament_payments = t.payments.where(user: player)
+
+        if existing_tournament_payments.blank?
+          debit = Payment.create(user: player, payment_amount: t.dues_for_user(player, false) * -1.0, tournament: t, payment_source: "Data Cleanup Debit")
         end
       end
     end
@@ -48,8 +59,8 @@ namespace :payment_data_cleanup do
           existing_season_payments = season.payments.where(user: player)
 
           if existing_season_payments.blank?
-            debit = Payment.create(user: player, payment_amount: l.dues_for_user(player, false) * -1.0, league_season: season, payment_source: "Data Cleanup")
-            credit = Payment.create(user: player, payment_amount: l.dues_for_user(player, false), league_season: season, payment_source: "Data Cleanup", original_payment: debit)
+            debit = Payment.create(user: player, payment_amount: l.dues_for_user(player, false) * -1.0, league_season: season, payment_source: "Data Cleanup Debit")
+            credit = Payment.create(user: player, payment_amount: l.dues_for_user(player, false), league_season: season, payment_source: "Data Cleanup Credit", original_payment: debit)
           end
         end
       end
