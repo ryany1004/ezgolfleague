@@ -179,6 +179,16 @@ class Tournament < ActiveRecord::Base
 
   ##
 
+  def any_days_are_playable?
+    playable = false
+
+    self.tournament_days.each do |d|
+      return true if d.can_be_played?
+    end
+
+    playable
+  end
+
   def can_be_finalized?
     return self.last_day.can_be_finalized?
   end
