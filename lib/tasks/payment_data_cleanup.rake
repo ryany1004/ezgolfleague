@@ -41,7 +41,7 @@ namespace :payment_data_cleanup do
     end
 
     #future tournaments - players without any payments should have a debit
-    Tournament.all_future(nil).each do |t|
+    Tournament.all_upcoming(nil).each do |t|
       t.players.each do |player|
         existing_tournament_payments = t.payments.where(user: player)
 
