@@ -144,6 +144,8 @@ class TournamentPresenter
   end
 
   def user_can_register_for_contests?
+    return false if self.tournament_day.blank?
+
     self.tournament.is_past? == false && self.tournament_day.contests.count > 0 && self.tournament.includes_player?(self.user, self.tournament_day) && self.tournament_day.can_be_played?
   end
 
@@ -155,7 +157,6 @@ class TournamentPresenter
 
   def selected_day_has_payouts?
     if self.tournament_day == nil
-      #TODO: combine payouts for final day?
       true
     else
       self.tournament_day.has_payouts?
@@ -179,15 +180,15 @@ class TournamentPresenter
       groups = []
 
       self.tournament_day.tournament_groups.each_with_index do |tournament_group, i|
-        outing = []
+        outings = []
 
         tournament_group.golf_outings.each do |golf_outing|
           flight = tournament_day.flight_for_player(golf_outing.user).blank? ? nil : tournament_day.flight_for_player(golf_outing.user)
 
-          outing = {name: golf_outing.user.complete_name, handicap: golf_outing.course_handicap.to_i, flight: flight, group: tournament_group}
+          outings << {name: golf_outing.user.complete_name, handicap: golf_outing.course_handicap.to_i, flight: flight, group: tournament_group}
         end
 
-        groups << outing
+        groups << outings
       end
 
       groups
