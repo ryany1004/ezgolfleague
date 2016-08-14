@@ -9,7 +9,7 @@ module FetchingTools
         rank = 1
 
         flight[:players].each do |player|
-          slimmed_rankings << {name: player[:name], net_score: player[:net_score], par_score: player[:par_related_net_score], place: rank}
+          slimmed_rankings << {id: player[:id], name: player[:name], net_score: player[:net_score], par_score: player[:par_related_net_score], place: rank}
 
           rank += 1
         end
