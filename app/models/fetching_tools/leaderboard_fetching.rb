@@ -14,7 +14,7 @@ module FetchingTools
           user = User.find(player[:id])
           group = tournament_day.tournament_group_for_player(user)
 
-          slimmed_rankings << {id: player[:id], group: group.id, name: player[:name], net_score: player[:net_score], par_score: player[:par_related_net_score], place: rank}
+          slimmed_rankings << {id: player[:id].to_s, group: group.id.to_s, name: player[:name], net_score: player[:net_score].to_s, par_score: player[:par_related_net_score].to_s, place: rank.to_s}
 
           rank += 1
         end
