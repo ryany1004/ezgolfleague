@@ -15,10 +15,10 @@
       <% end -%>
 		</tr>
 	</thead>
-  <tbody>    
+  <tbody>
     <% tournaments.each do |t| %>
       <tr>
-        <td><%= link_to "#{t.name} #{tournament_paid(t, current_user)}", play_tournament_path(t) %></td>
+        <td><%= link_to "#{t.name} #{tournament_paid(t, current_user)}", play_tournament_path(t, tournament_day: t.tournament_days.first) %></td>
         <td>
           <% t.tournament_days.each do |d| -%>
             <%= d.tournament_at.to_s(:date_and_time) %> @ <%= d.course.name %><br/>
