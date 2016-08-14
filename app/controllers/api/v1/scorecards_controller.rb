@@ -23,9 +23,7 @@ class Api::V1::ScorecardsController < Api::V1::ApiBaseController
     end
 
     unless tournament_day.blank?
-      flights_with_rankings = tournament_day.flights_with_rankings
-
-      leaderboard = FetchingTools::LeaderboardFetching.create_slimmed_down_leaderboard(flights_with_rankings)
+      leaderboard = FetchingTools::LeaderboardFetching.create_slimmed_down_leaderboard(tournament_day)
     end
 
     respond_with(leaderboard) do |format|

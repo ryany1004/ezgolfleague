@@ -2,14 +2,19 @@ module FetchingTools
 
   class LeaderboardFetching
 
-    def self.create_slimmed_down_leaderboard(day_rankings)
+    def self.create_slimmed_down_leaderboard(tournament_day)
+      complete_rankings = tournament_day.flights_with_rankings
+
       slimmed_rankings = []
 
-      day_rankings.each do |flight|
+      complete_rankings.each do |flight|
         rank = 1
 
         flight[:players].each do |player|
-          slimmed_rankings << {id: player[:id], name: player[:name], net_score: player[:net_score], par_score: player[:par_related_net_score], place: rank}
+          user = User.find(player[:id])
+          group = tournament_day.tournament_group_for_player(user)
+
+          slimmed_rankings << {id: player[:id], group: group.id, name: player[:name], net_score: player[:net_score], par_score: player[:par_related_net_score], place: rank}
 
           rank += 1
         end
