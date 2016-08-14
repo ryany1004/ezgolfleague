@@ -164,31 +164,31 @@ class User < ActiveRecord::Base
     return connection
   end
 
-  def send_complication_notification
+  def send_complication_notification(content)
     return if self.wants_push_notifications == false
 
     self.mobile_devices.where(device_type: "apple-watch-complication").each do |device|
-      # certificate_file = "#{Rails.root}/config/apns_complication_cert.pem"
-      # passphrase = "golf"
-      #
-      # if device.environment_name == "debug"
-      #   pusher = Apnotic::Connection.development(cert_path: certificate_file, cert_pass: passphrase)
-      # else
-      #   pusher = Apnotic::Connection.new(cert_path: certificate_file, cert_pass: passphrase)
-      # end
-      #
-      # notification = Apnotic::Notification.new(device.device_identifier)
-      # notification.topic = "com.ezgolfleague.GolfApp.complication"
-      # notification.content_available = 1
-      # notification.custom_payload = content
-      #
-      # Rails.logger.info { "Pushing Complication Notification to #{device.device_identifier} #{device.environment_name}" }
-      #
-      # response = pusher.push(notification)
-      #
-      # Rails.logger.info { "Notification Response: #{response.headers} #{response.body}" }
-      #
-      # pusher.close
+      certificate_file = "#{Rails.root}/config/apns_complication_cert.pem"
+      passphrase = "golf"
+
+      if device.environment_name == "debug"
+        pusher = Apnotic::Connection.development(cert_path: certificate_file, cert_pass: passphrase)
+      else
+        pusher = Apnotic::Connection.new(cert_path: certificate_file, cert_pass: passphrase)
+      end
+      
+      notification = Apnotic::Notification.new(device.device_identifier)
+      notification.topic = "com.ezgolfleague.GolfApp.complication"
+      notification.content_available = 1
+      notification.custom_payload = content
+
+      Rails.logger.info { "Pushing Complication Notification to #{device.device_identifier} #{device.environment_name}" }
+
+      response = pusher.push(notification)
+
+      Rails.logger.info { "Notification Response: #{response.headers} #{response.body}" }
+
+      pusher.close
     end
   end
 

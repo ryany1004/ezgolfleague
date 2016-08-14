@@ -39,7 +39,9 @@ class UpdateUserScorecardJob < ProgressJob::Base
       Rails.logger.info { "Sending Notifications for Complications" }
 
       @primary_scorecard.tournament_day.tournament.players.each do |p|
-        p.send_complication_notification
+        slim_leaderboard = FetchingTools::LeaderboardFetching.create_slimmed_down_leaderboard(@primary_scorecard.tournament_day)
+
+        p.send_complication_notification(slim_leaderboard)
       end
     end
 
