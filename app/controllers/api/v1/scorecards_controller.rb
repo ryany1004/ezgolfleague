@@ -22,6 +22,8 @@ class Api::V1::ScorecardsController < Api::V1::ApiBaseController
 
   #fetches a condensed version of stats for today used by wearables, widgets, etc... optimized for small payload
   def current_day_leaderboard
+    tournament_day = nil
+
     Tournament.all_today(@current_user.leagues).each do |t|
       t.tournament_days.each do |d|
         tournament_day = d if d.tournament_at.day == Date.today.day
