@@ -176,11 +176,11 @@ class User < ActiveRecord::Base
       else
         pusher = Apnotic::Connection.new(cert_path: certificate_file, cert_pass: passphrase)
       end
-      
+
       notification = Apnotic::Notification.new(device.device_identifier)
       notification.topic = "com.ezgolfleague.GolfApp.complication"
       notification.content_available = 1
-      notification.custom_payload = content
+      notification.custom_payload = {data: content}
 
       Rails.logger.info { "Pushing Complication Notification to #{device.device_identifier} #{device.environment_name}" }
 
