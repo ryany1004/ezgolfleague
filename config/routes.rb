@@ -61,7 +61,6 @@ Rails.application.routes.draw do
   #API
   namespace "api" do
     namespace "v1" do
-      get 'current_complication_score' => 'scorecards#current_complication_score'
       get 'current_day_leaderboard' => 'scorecards#current_day_leaderboard'
 
       resources :sessions, only: [:create] do

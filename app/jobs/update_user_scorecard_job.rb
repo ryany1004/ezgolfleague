@@ -39,7 +39,7 @@ class UpdateUserScorecardJob < ProgressJob::Base
       Rails.logger.info { "Sending Notifications for Complications" }
 
       @primary_scorecard.tournament_day.tournament.players.each do |p|
-        p.send_complication_notification(p.current_watch_complication_score)
+        p.send_complication_notification
       end
     end
 

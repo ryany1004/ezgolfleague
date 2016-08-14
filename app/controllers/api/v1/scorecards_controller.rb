@@ -12,14 +12,6 @@ class Api::V1::ScorecardsController < Api::V1::ApiBaseController
     end
   end
 
-  def current_complication_score
-    payload = @current_user.current_watch_complication_score
-
-    respond_with(payload) do |format|
-      format.json { render :json => payload }
-    end
-  end
-
   #fetches a condensed version of stats for today used by wearables, widgets, etc... optimized for small payload
   def current_day_leaderboard
     tournament_day = nil
