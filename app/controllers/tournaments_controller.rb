@@ -220,10 +220,10 @@ class TournamentsController < BaseController
       redirect_to league_tournaments_path(current_user.selected_league), :flash => { :error => "One or more days had no tee-times. Re-scheduling was aborted." }
     else
       @tournament.tournament_days.each do |day|
-        day.schedule_golfers if day != @tournament.first_day
+        day.schedule_golfers if day.has_scores? == false
       end
 
-      redirect_to league_tournament_signups_path(current_user.selected_league, @tournament, tournament_day: @tournament.tournament_days[1]), :flash => { :success => "The days were re-scheduled." }
+      redirect_to league_tournament_signups_path(current_user.selected_league, @tournament, tournament_day: @tournament.tournament_days[1]), :flash => { :success => "Days without scores were re-scheduled." }
     end
   end
 

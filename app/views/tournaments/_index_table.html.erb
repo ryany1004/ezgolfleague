@@ -20,7 +20,7 @@
     	<tbody>
     	<% tournaments.each do |tournament| %>
     		<tr>
-          <td><%= link_to tournament.name, edit_league_tournament_path(tournament.league, tournament) %></td>
+          <td><%= link_to_unless !is_editable?(tournament), tournament.name, edit_league_tournament_path(tournament.league, tournament) %></td>
           <td><%= tournament.league.name %><br/><%= tournament.season_name %></td>
           <td>
             <% tournament.tournament_days.each do |day| -%>

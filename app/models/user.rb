@@ -33,6 +33,13 @@ class User < ActiveRecord::Base
   #this is to work around a Devise bug
   def after_password_reset; end
 
+  def reset_password(new_password, new_password_confirmation)
+    super.reset_password(new_password, new_password_confirmation)
+
+    self.session_token = nil
+    self.save
+  end
+
   def complete_name(shorten_for_print = false)
     if shorten_for_print == true
       combined_name = "#{self.last_name}, #{self.first_name}"
