@@ -31,7 +31,7 @@ class FinalizeJob < ProgressJob::Base
     end
 
     #email completion
-    LeagueMailer.tournament_finalized(@tournament).deliver_later
+    LeagueMailer.tournament_finalized(@tournament).deliver_later unless @tournament.league.dues_payment_receipt_email_addresses.blank?
 
     Rails.logger.info { "FinalizeJob Completed" }
   end

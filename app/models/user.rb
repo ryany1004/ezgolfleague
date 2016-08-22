@@ -25,6 +25,8 @@ class User < ActiveRecord::Base
 
   attr_accessor :should_invite
 
+  before_update :reset_session, if: :encrypted_password_changed?
+
   paginates_per 50
 
   has_attached_file :avatar, :styles => { :medium => "300x300#", :thumb => "100x100#" }, :default_url => "/images/:style/missing.png"
@@ -33,9 +35,7 @@ class User < ActiveRecord::Base
   #this is to work around a Devise bug
   def after_password_reset; end
 
-  def reset_password(new_password, new_password_confirmation)
-    super.reset_password(new_password, new_password_confirmation)
-
+  def reset_session
     self.session_token = nil
     self.save
   end
