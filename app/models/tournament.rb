@@ -282,7 +282,7 @@ class Tournament < ActiveRecord::Base
           :methods => [:server_id, :can_be_played?, :registered_user_ids, :paid_user_ids, :superuser_user_ids],
           :include => {
             :course => {
-              :only => [:name, :city, :us_state],
+              :only => [:name, :street_address_1, :city, :us_state, :postal_code, :latitude, :longitude],
               :methods => [:server_id]
             }
           }

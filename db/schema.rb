@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160724191127) do
+ActiveRecord::Schema.define(version: 20160823003212) do
 
   create_table "contest_holes", force: :cascade do |t|
     t.integer  "contest_id"
@@ -117,6 +117,8 @@ ActiveRecord::Schema.define(version: 20160724191127) do
     t.string   "postal_code"
     t.datetime "created_at",       null: false
     t.datetime "updated_at",       null: false
+    t.float    "latitude"
+    t.float    "longitude"
   end
 
   create_table "delayed_jobs", force: :cascade do |t|
