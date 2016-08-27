@@ -37,7 +37,6 @@ class User < ActiveRecord::Base
 
   def reset_session
     self.session_token = nil
-    self.save
   end
 
   def complete_name(shorten_for_print = false)

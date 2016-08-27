@@ -14,7 +14,6 @@ class CoursesController < BaseController
 
   def create
     @course = Course.new(course_params)
-
     @course.geocode
 
     if @course.save
