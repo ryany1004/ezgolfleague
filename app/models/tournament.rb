@@ -49,7 +49,7 @@ class Tournament < ActiveRecord::Base
     end
   end
 
-  paginates_per 50
+  paginates_per 20
 
   def league_season
     return nil if self.first_day.blank?
