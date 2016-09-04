@@ -1,18 +1,18 @@
 <div class="row">
-
-<% if @upcoming_tournaments.count > 0 -%>
-  <%= render partial: 'index_table', locals: {tournaments: @upcoming_tournaments, title: "Upcoming Tournaments", show_create: true} %>
-<% end -%>
-
-<% if @past_tournaments.count > 0 -%>
-  <%= render partial: 'index_table', locals: {tournaments: @past_tournaments, title: "Past Tournaments", show_create: false} %>
-<% end -%>
-
-<% if @upcoming_tournaments.count == 0 -%>
-  <% if @past_tournaments.count == 0 -%>
-    <h4>You don't have any tournaments yet.</h4>
+  <% if @upcoming_tournaments.count > 0 -%>
+    <%= render partial: 'index_table', locals: {tournaments: @upcoming_tournaments, title: "Upcoming Tournaments", show_create: true} %>
   <% end -%>
-  <%= link_to 'Create Tournament', new_league_tournament_path(current_user.selected_league), :class => 'btn btn-primary' %>
-<% end -%>
 
+  <% if @past_tournaments.count > 0 -%>
+    <%= render partial: 'index_table', locals: {tournaments: @past_tournaments, title: "Past Tournaments", show_create: false} %>
+  <% end -%>
+
+  <% if @upcoming_tournaments.count == 0 -%>
+    <% if @past_tournaments.count == 0 -%>
+      <h4>You don't have any tournaments yet.</h4>
+    <% end -%>
+    <%= link_to 'Create Tournament', new_league_tournament_path(current_user.selected_league), :class => 'btn btn-primary' %>
+  <% end -%>
+
+  <%= paginate @past_tournaments %>
 </div>
