@@ -85,6 +85,12 @@
 <footer class="container">
   <br/>
   Copyright © EZ Golf League, 2016
+
+  <% if current_user != true_user %>
+    <br/><br/>
+    <strong>You (<%= true_user.complete_name %>) are signed in as <%= current_user.complete_name %>
+    <%= link_to "Stop Impersonating", stop_impersonating_user_accounts_path %></strong>
+<% end %>
 </footer>
 
 </body>

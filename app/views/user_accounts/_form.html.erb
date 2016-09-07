@@ -111,6 +111,10 @@
 
     <% if @user_account.new_record? == false -%>
       <%= link_to "Re-Send Invite", user_account_resend_league_invite_path(@user_account), :method => :patch, :role => "button", :class => "btn btn-info" %>
+
+      <% if current_user.is_super_user? %>
+        <%= link_to "Impersonate User", user_account_impersonate_path(@user_account), :role => "button", :class => "btn btn-info" %>
+      <% end -%>
     <% end -%>
   </div>
 <% end %>

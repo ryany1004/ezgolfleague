@@ -79,6 +79,19 @@ class UserAccountsController < BaseController
     redirect_to user_accounts_path, :flash => { :success => "The user was successfully deleted." }
   end
 
+  def impersonate
+    user = User.find(params[:user_account_id])
+    
+    impersonate_user(user)
+
+    redirect_to root_path
+  end
+
+  def stop_impersonating
+    stop_impersonating_user
+    redirect_to root_path
+  end
+
   # User
 
   def edit_current

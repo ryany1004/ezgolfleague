@@ -25,6 +25,7 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 
 gem 'devise', '~> 3.5.6'
 gem 'devise_invitable', '~> 1.5.2'
+gem 'pretender'
 
 gem 'bootstrap-sass', '~> 3.3.4'
 gem "paperclip", "~> 5.0.0"
