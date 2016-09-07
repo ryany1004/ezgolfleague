@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160823003212) do
+ActiveRecord::Schema.define(version: 20160907175213) do
 
   create_table "contest_holes", force: :cascade do |t|
     t.integer  "contest_id"
@@ -440,6 +440,7 @@ ActiveRecord::Schema.define(version: 20160823003212) do
     t.integer  "auto_schedule_for_multi_day", default: 0
     t.boolean  "allow_credit_card_payment",   default: true
     t.integer  "tournament_days_count",       default: 0
+    t.datetime "tournament_starts_at"
   end
 
   add_index "tournaments", ["league_id"], name: "index_tournaments_on_league_id"

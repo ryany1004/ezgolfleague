@@ -15,25 +15,27 @@ module Findable
     end
 
     def tournaments_happening_at_some_point(start_date, end_date, leagues)
-      relation = Tournament.includes(:league, :tournament_days)
+      relation = Tournament.includes(:league)
 
       unless leagues.blank?
         league_ids = leagues.map { |n| n.id }
 
-        relation = relation.joins(:league).where("leagues.id IN (?)", league_ids)
+        relation = relation.includes(:league).where("leagues.id IN (?)", league_ids).references(:league)
       end
 
       unless start_date.blank?
-        relation = relation.where("tournament_days.tournament_at >= ? OR tournament_days_count = 0", start_date)
+        relation = relation.where("tournament_starts_at >= ? OR tournament_days_count = 0", start_date)
       end
 
       unless end_date.blank?
-        relation = relation.where("tournament_days.tournament_at <= ? OR tournament_days_count = 0", end_date)
+        relation = relation.where("tournament_starts_at <= ? OR tournament_days_count = 0", end_date)
       end
 
-      relation = relation.order("tournament_at")
+      relation = relation.order("tournament_starts_at")
 
-      return relation.references(:tournament_days)
+      relation = relation.references(:tournament_days)
+
+      return relation
     end
 
   end
