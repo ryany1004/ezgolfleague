@@ -27,6 +27,21 @@ class Api::V1::TournamentsController < Api::V1::ApiBaseController
     end
   end
 
+  def validate_tournaments_exist
+    tournament_ids = params[:tournament_ids]
+    split_ids = tournament_ids.split(",")
+
+    invalid_ids = []
+
+    split_ids.each do |split_id|
+      invalid_ids << split_id if !Tournament.exists?(split_id)
+    end
+
+    respond_with(invalid_ids) do |format|
+      format.json { render :json => invalid_ids }
+    end
+  end
+
   def app_association
     render json: {
       webcredentials: {
