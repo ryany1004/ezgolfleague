@@ -40,7 +40,7 @@ class User < ActiveRecord::Base
   end
 
   def complete_name
-    return "#{self.last_name}, #{self.first_name}"
+    return "#{self.first_name} #{self.last_name}"
   end
 
   def short_name
