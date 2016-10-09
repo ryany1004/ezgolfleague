@@ -10,7 +10,7 @@ class Api::V1::TournamentsController < Api::V1::ApiBaseController
 
       todays_tournaments = Tournament.all_today(@current_user.leagues)
       upcoming_tournaments = Tournament.all_upcoming(@current_user.leagues, nil)
-      past_tournaments = Tournament.all_past(@current_user.leagues, nil)
+      past_tournaments = Tournament.all_past(@current_user.leagues, nil).limit(10)
 
       all_tournaments = todays_tournaments + upcoming_tournaments + past_tournaments
 
