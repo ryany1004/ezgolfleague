@@ -10,9 +10,9 @@ class Api::V1::TournamentsController < Api::V1::ApiBaseController
 
       todays_tournaments = Tournament.all_today(@current_user.leagues)
       upcoming_tournaments = Tournament.all_upcoming(@current_user.leagues, nil)
-      past_tournaments = Tournament.all_past(@current_user.leagues, nil).limit(10)
+      past_tournaments = Tournament.all_past(@current_user.leagues, nil).limit(5)
 
-      all_tournaments = todays_tournaments + upcoming_tournaments + past_tournaments
+      all_tournaments = todays_tournaments + upcoming_tournaments + past_tournaments.to_a
 
       Rails.cache.write(self.user_tournaments_cache_key, all_tournaments)
     else
