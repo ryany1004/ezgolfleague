@@ -206,7 +206,7 @@ module ContestScoreable
 
                     Rails.logger.info { "CONTEST: #{self.id} User #{user.complete_name} scored a gross birdie skin for hole #{hole.hole_number} w/ score #{score}. Required score: #{gross_birdie_score}" }
                   end
-                else
+                else #not a team contest
                   gross_birdie_skins << user
 
                   Rails.logger.info { "CONTEST: #{self.id} User #{user.complete_name} scored a gross birdie skin for hole #{hole.hole_number} w/ score #{score}. Required score: #{gross_birdie_score}" }

@@ -157,7 +157,7 @@ class Contest < ActiveRecord::Base
       if self.overall_winner.blank?
         return nil
       else
-        return [{user: self.overall_winner.winner, name: self.overall_winner.winner.short_name, result_value: self.overall_winner.result_value, amount: self.overall_winner.payout_amount, points: self.overall_winner.points}]
+        return [{user: self.overall_winner.winner, name: self.overall_winner.winner.complete_name, result_value: self.overall_winner.result_value, amount: self.overall_winner.payout_amount, points: self.overall_winner.points}]
       end
     else
       winners = []
@@ -182,7 +182,7 @@ class Contest < ActiveRecord::Base
             end
 
             if existing_winner.blank?
-              winners << {user: result.winner, name: result.winner.short_name, result_value: "1", amount: result.payout_amount, points: result.points, number_of_wins: 1}
+              winners << {user: result.winner, name: result.winner.complete_name, result_value: "1", amount: result.payout_amount, points: result.points, number_of_wins: 1}
             else
               existing_winner[:number_of_wins] += 1
               existing_winner[:amount] += result.payout_amount
@@ -191,7 +191,7 @@ class Contest < ActiveRecord::Base
               existing_winner[:result_value] = "#{existing_winner[:number_of_wins]}"
             end
           else
-            winners << {user: result.winner, name: result.winner.short_name, result_value: result.result_value, amount: result.payout_amount, points: result.points}
+            winners << {user: result.winner, name: result.winner.complete_name, result_value: result.result_value, amount: result.payout_amount, points: result.points}
           end
         end
       end

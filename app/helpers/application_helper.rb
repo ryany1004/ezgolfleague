@@ -92,7 +92,7 @@ module ApplicationHelper
     names = ""
 
     members.each do |m|
-      names = "#{names}#{m.short_name}<br/>"
+      names = "#{names}#{m.complete_name}<br/>"
     end
 
     return names.html_safe
@@ -159,7 +159,7 @@ module ApplicationHelper
     names = ""
 
     members.each do |m|
-      names = "#{names}#{m.short_name}<br/>"
+      names = "#{names}#{m.complete_name}<br/>"
     end
 
     if show_available_text == true

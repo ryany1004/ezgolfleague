@@ -28,7 +28,7 @@ class GolferTeam < ActiveRecord::Base
     complete_name = ""
 
     self.users.each do |u|
-      complete_name += u.short_name
+      complete_name += u.complete_name
 
       complete_name += " / " unless self.users.last == u
     end

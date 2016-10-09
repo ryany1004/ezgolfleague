@@ -388,13 +388,13 @@ module GameTypes
 
     def player_team_name_for_player(player)
       if self.tournament_day.golfer_teams.count == 0
-        return player.short_name
+        return player.complete_name
       else
         team_name = ""
 
         team = self.tournament_day.golfer_team_for_player(player)
         team.users.each do |team_user|
-          team_name = team_name + "#{team_user.short_name}"
+          team_name = team_name + "#{team_user.complete_name}"
 
           team_name = team_name + " / " unless team_user == team.users.last
         end

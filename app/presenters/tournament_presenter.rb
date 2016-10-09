@@ -212,7 +212,7 @@ class TournamentPresenter
           payouts = []
 
           f.payout_results.each do |p|
-            username = p.user.blank? ? "" : p.user.short_name
+            username = p.user.blank? ? "" : p.user.complete_name
 
             payouts << {flight_number: f.flight_number.to_i, name: username, amount: p.amount, points: p.points.to_i}
           end
@@ -225,7 +225,7 @@ class TournamentPresenter
         payouts = []
 
         f.payout_results.each do |p|
-          username = p.user.blank? ? "" : p.user.short_name
+          username = p.user.blank? ? "" : p.user.complete_name
 
           payouts << {flight_number: f.flight_number.to_i, name: username, amount: p.amount, points: p.points.to_i}
         end
