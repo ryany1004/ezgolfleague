@@ -4,20 +4,22 @@ class Api::V1::TournamentsController < Api::V1::ApiBaseController
   respond_to :json
 
   def index
-    all_tournaments = Rails.cache.fetch(self.user_tournaments_cache_key, expires_in: 2.minutes, race_condition_ttl: 10)
+    cache_key = self.user_tournaments_cache_key
+
+    all_tournaments = Rails.cache.fetch(cache_key, expires_in: 2.minutes, race_condition_ttl: 10)
     if all_tournaments.blank?
-      logger.info { "Fetching Tournaments - Not Cached for #{self.user_tournaments_cache_key}" }
+      logger.info { "Fetching Tournaments - Not Cached for #{cache_key}" }
 
       todays_tournaments = Tournament.all_today(@current_user.leagues)
       upcoming_tournaments = Tournament.all_upcoming(@current_user.leagues, nil)
-      past_tournaments = Tournament.all_past(@current_user.leagues, nil).limit(5)
+      past_tournaments = Tournament.all_past(@current_user.leagues, nil).limit(8)
 
       all_tournaments = todays_tournaments + upcoming_tournaments + past_tournaments
       all_tournaments = all_tournaments.to_a
 
-      Rails.cache.write(self.user_tournaments_cache_key, all_tournaments)
+      Rails.cache.write(cache_key, all_tournaments)
     else
-      logger.info { "Returning Cached Tournaments #{self.user_tournaments_cache_key}" }
+      logger.info { "Returning Cached Tournaments #{cache_key}" }
     end
 
     respond_with(all_tournaments) do |format|
