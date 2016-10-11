@@ -97,6 +97,8 @@ module Addable
   end
 
   def player_course_handicap_for_player(p, f = nil)
+    player_course_handicap = 0
+
     golf_outing = self.golf_outing_for_player(p) #in multi-day with manual registration, might not match
     unless golf_outing.blank?
       golf_outing.scorecard.set_course_handicap(true) if self.golf_outing_for_player(p).course_handicap == 0 #re-calc handicap if we do not have one
