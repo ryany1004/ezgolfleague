@@ -73,17 +73,17 @@ class User < ActiveRecord::Base
     return true if self.is_super_user
     return false if self.blank?
 
+    any_admin = false
+
     self.leagues.each do |league|
       membership = league.membership_for_user(self)
 
       unless membership.blank?
-        return membership.is_admin
-      else
-        return false
+        any_admin = true if membership.is_admin
       end
     end
 
-    return false
+    return any_admin
   end
 
   def is_member_of_league?(league)
