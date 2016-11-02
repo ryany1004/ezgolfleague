@@ -19,7 +19,7 @@
     	</thead>
     	<tbody>
     	<% tournaments.each do |tournament| %>
-        <% if tournament.league.membership_for_user(current_user).is_admin %>
+        <% if current_user.is_super_user || tournament.league.membership_for_user(current_user).is_admin %>
       		<tr>
             <td><%= link_to_unless !is_editable?(tournament), tournament.name, edit_league_tournament_path(tournament.league, tournament) %></td>
             <td><%= tournament.league.name %><br/><%= tournament.season_name %></td>
