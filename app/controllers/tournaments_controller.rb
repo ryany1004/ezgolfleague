@@ -303,7 +303,7 @@ class TournamentsController < BaseController
     if current_user.is_super_user?
       @leagues = League.all.order("name")
     else
-      @leagues = current_user.leagues
+      @leagues = current_user.leagues.map {|league| league.membership_for_user(current_user).is_admin}
     end
   end
 
