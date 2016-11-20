@@ -10,7 +10,7 @@ module GameTypes
 
       handicap_allowance = self.tournament_day.handicap_allowance(user)
 
-      self.golfer_team.tournament_day.course.course_holes.each do |hole|
+      self.tournament_day.course.course_holes.each do |hole|
         score = DerivedScorecardScore.new
         score.strokes = self.score_for_hole(user, handicap_allowance, hole)
         score.course_hole = hole
@@ -21,7 +21,7 @@ module GameTypes
     end
 
     def score_for_hole(user, handicap_allowance, hole)
-      scorecard = self.golfer_team.tournament_day.primary_scorecard_for_user(user)
+      scorecard = self.tournament_day.primary_scorecard_for_user(user)
 
       strokes = 0
       strokes = scorecard.scores.where(course_hole: hole).first.strokes
