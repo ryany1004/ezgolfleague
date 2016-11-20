@@ -68,7 +68,7 @@ module GameTypes
     ##Ranking
 
     def sort_rank_players_in_flight!(flight_players)
-      flight_players.sort! { |x,y| y[:par_related_net_score] <=> x[:par_related_net_score] }
+      flight_players.sort! { |x,y| y[:net_score] <=> x[:net_score] }
     end
 
   end
