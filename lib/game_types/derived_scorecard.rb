@@ -3,6 +3,7 @@ module GameTypes
 
     attr_accessor :user
     attr_accessor :golfer_team
+    attr_accessor :underlying_tournament_day
     attr_accessor :scores
 
     def initialize
@@ -16,7 +17,11 @@ module GameTypes
     end
 
     def tournament_day
-      return self.golfer_team.tournament_day
+      unless self.golfer_team.blank?
+        return self.golfer_team.tournament_day
+      else
+        return self.underlying_tournament_day
+      end
     end
 
     def golf_outing

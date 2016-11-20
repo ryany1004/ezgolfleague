@@ -20,8 +20,7 @@ module GameTypes
 
       total_score = 0
 
-      team = self.tournament_day.golfer_team_for_player(user)
-      scorecard = self.stableford_scorecard_for_user(user, team)
+      scorecard = self.stableford_scorecard_for_user(user)
       return 0 if scorecard.blank? || scorecard.scores.blank?
 
       scorecard.scores.each do |score|
@@ -57,10 +56,10 @@ module GameTypes
       return other_scorecards
     end
 
-    def stableford_scorecard_for_user(user, golfer_team)
+    def stableford_scorecard_for_user(user)
       scorecard = IndividualStablefordScorecard.new
       scorecard.user = user
-      scorecard.golfer_team = golfer_team
+      scorecard.underlying_tournament_day = self.tournament_day
       scorecard.calculate_scores
 
       return scorecard
