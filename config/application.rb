@@ -26,6 +26,10 @@ module EzgolfRails
 
     config.active_job.queue_adapter = :delayed_job
 
+    config.generators do |g|
+      g.test_framework :rspec
+    end
+
     ActiveRecord::Base.include_root_in_json = false
   end
 end

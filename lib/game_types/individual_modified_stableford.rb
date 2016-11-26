@@ -23,6 +23,8 @@ module GameTypes
       scorecard = self.stableford_scorecard_for_user(user)
       return 0 if scorecard.blank? || scorecard.scores.blank?
 
+      Rails.logger.debug { "Stableford Computing for User: #{user.complete_name} holes: #{holes}" }
+
       scorecard.scores.each do |score|
         should_include_score = true #allows us to calculate partial scores, i.e. back 9
         if holes.blank? == false
@@ -67,6 +69,7 @@ module GameTypes
 
     ##Ranking
 
+    #this game type, highest is best so we sort differently
     def sort_rank_players_in_flight!(flight_players)
       flight_players.sort! { |x,y| y[:net_score] <=> x[:net_score] }
     end

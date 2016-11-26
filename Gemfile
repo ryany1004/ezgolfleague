@@ -46,14 +46,19 @@ gem 'backport_new_renderer', :github => 'brainopia/backport_new_renderer'
 gem 'apnotic'
 gem "geocoder"
 
+group :development do
+  # Access an IRB console on exception pages or by using <%= console %> in views
+  gem 'web-console', '~> 2.0'
+end
+
 group :development, :test do
   gem 'sqlite3', :require => "sqlite3"
 
+  gem "rspec-rails", "3.5.0.beta3"
+  gem 'factory_girl_rails'
+
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug'
-
-  # Access an IRB console on exception pages or by using <%= console %> in views
-  gem 'web-console', '~> 2.0'
 
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'
@@ -62,6 +67,11 @@ group :development, :test do
 
   gem "bullet"
   gem 'rack-mini-profiler', require: false
+end
+
+group :test do
+  gem "capybara", "2.7.1"
+  gem 'factory_girl_rails'
 end
 
 group :production do
