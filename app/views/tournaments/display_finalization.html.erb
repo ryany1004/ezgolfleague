@@ -7,7 +7,7 @@
 <%= render partial: '/shared/tournaments/manage', locals: {tournament: @tournament, stage: @stage_name} %>
 
 <% if @tournament.players.count == 0 -%>
-<p><strong>This tournament does not yet have any players and cannot be finalized.</strong></p>
+  <p><strong>This tournament does not yet have any players and cannot be finalized.</strong></p>
 <% else -%>
 
 <div class="row">
@@ -54,6 +54,40 @@
             <th><%= link_to 'Confirm Finalization', league_tournament_confirm_finalization_path(@tournament.league, @tournament), :method => :patch, :class => 'btn btn-danger' %></th>
       		</tr>
         </tfoot>
+      </table>
+    </div>
+  </div>
+
+  <div class="col-md-12">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">Contest Results</h3>
+      </div>
+      <table class="table table-striped">
+      	<thead>
+      		<tr>
+            <th>Day</th>
+            <th>Contest</th>
+            <th>Winner(s)</th>
+            <th>Amount</th>
+            <th>Points</th>
+            <th>Details</th>
+      		</tr>
+      	</thead>
+      	<tbody>
+          <% @tournament_days.each do |day| %>
+            <% day.contests.each do |c| %>
+            <tr>
+              <td><%= day.tournament_at.to_s(:short) %></td>
+              <td><%= c.name %></td>
+              <td><%= format_winners(c.winners) %></td>
+              <td><%= format_payout(c.winners) %></td>
+              <td><%= format_points(c.winners) %></td>
+              <td><%= format_results(c.winners) %></td>
+            </tr>
+            <% end %>
+          <% end =%>
+      	</tbody>
       </table>
     </div>
   </div>

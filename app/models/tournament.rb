@@ -179,6 +179,16 @@ class Tournament < ActiveRecord::Base
 
   ##
 
+  def all_days_are_playable?
+    playable = true
+
+    self.tournament_days.each do |d|
+      playable = false if !d.can_be_played?
+    end
+
+    playable
+  end
+
   def any_days_are_playable?
     playable = false
 

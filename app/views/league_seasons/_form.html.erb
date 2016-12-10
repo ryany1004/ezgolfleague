@@ -5,20 +5,22 @@
       <%= notification %>
     </div>
   <% end %>
-  
+
   <legend>Season Details</legend>
-    
+
   <h3>Basic Details</h3>
   <div class="well">
     <%= f.input :name, required: true %>
-    
+
     <%= f.input :starts_at, :label => 'Start Date', required: true, :as => :date_picker %>
-    
+
     <%= f.input :ends_at, :label => 'End Date', required: true, :as => :date_picker %>
-    
+
+    <%= f.input :dues_amount, :label => 'Dues Amount ($)' %>
+
     <%= f.hidden_field :league_id, :value => @league.id %>
   </div>
-  
+
   <div class="form-actions">
     <%= f.button :submit, "Update Season", :class => 'btn btn-default' %>
   </div>

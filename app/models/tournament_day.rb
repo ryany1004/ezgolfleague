@@ -10,7 +10,7 @@ class TournamentDay < ActiveRecord::Base
   belongs_to :course, inverse_of: :tournament_days
   has_many :tournament_groups, -> { order(:tee_time_at) }, inverse_of: :tournament_day, :dependent => :destroy
   has_many :flights, -> { order(:flight_number) }, inverse_of: :tournament_day, :dependent => :destroy
-  has_many :contests, inverse_of: :tournament_day, :dependent => :destroy
+  has_many :contests, -> { order(:name) }, inverse_of: :tournament_day, :dependent => :destroy
   has_many :golfer_teams, inverse_of: :tournament_day, :dependent => :destroy
   has_many :tournament_day_results, -> { order(:flight_id, :net_score) }, inverse_of: :tournament_day, :dependent => :destroy
   has_many :payout_results, inverse_of: :tournament_day, :dependent => :destroy

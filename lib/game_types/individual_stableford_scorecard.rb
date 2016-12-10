@@ -36,17 +36,17 @@ module GameTypes
 
       score = 0
       if self.is_double_eagle?(hole, strokes)
-        score = 16
+        score = self.game_type.double_eagle_score
       elsif self.is_eagle?(hole, strokes)
-        score = 8
+        score = self.game_type.eagle_score
       elsif self.is_birdie?(hole, strokes)
-        score = 4
+        score = self.game_type.birdie_score
       elsif self.is_par?(hole, strokes)
-        score = 2
+        score = self.game_type.par_score
       elsif self.is_bogey?(hole, strokes)
-        score = 1
+        score = self.game_type.bogey_score
       elsif self.is_double_bogey_or_worse?(hole, strokes)
-        score = 0
+        score = self.game_type.double_bogey_score
       end
 
       return score

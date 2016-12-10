@@ -20,6 +20,7 @@
           <thead>
             <tr>
               <th>Name</th>
+              <th>Balance</th>
               <th>Phone</th>
               <th>Address</th>
               <th>GHIN</th>
@@ -30,6 +31,7 @@
              <% @league_memberships.each do |lm| -%>
             <tr>
               <td><%= lm.user.complete_name %></td>
+              <td><%= number_to_currency(lm.user.payments_for_league(lm.league).map(&:payment_amount).inject(0, &:+)) %></td>
               <td><%= lm.user.phone_number %></td>
               <td><%= lm.user.street_address_1 %></td>
               <td><%= lm.user.ghin_number %></td>

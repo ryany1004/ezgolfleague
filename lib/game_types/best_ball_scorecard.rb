@@ -75,7 +75,12 @@ module GameTypes
           self.golfer_team.users.each do |user|
             scorecard = self.golfer_team.tournament_day.primary_scorecard_for_user(user)
 
-            raw_score = scorecard.scores.where(course_hole: hole).first.strokes
+            unless scorecard.blank?
+              raw_score = scorecard.scores.where(course_hole: hole).first.strokes
+            else
+              raw_score = 0
+            end
+
             if self.should_use_handicap == true
               if raw_score == 0
                 hole_score = 0

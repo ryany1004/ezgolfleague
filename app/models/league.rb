@@ -66,6 +66,16 @@ class League < ActiveRecord::Base
     return cost_lines
   end
 
+  def dues_amount
+    season = self.active_season
+
+    unless season.blank?
+      return season.dues_amount
+    else
+      return 0.0
+    end
+  end
+
   ##
 
   def active_season

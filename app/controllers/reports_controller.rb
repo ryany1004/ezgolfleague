@@ -4,27 +4,27 @@ class ReportsController < ApplicationController
   def index
     leagues = nil
     leagues = current_user.leagues unless current_user.is_super_user?
-    
+
     @past_tournaments = Tournament.tournaments_happening_at_some_point(nil, nil, leagues).page params[:page]
 
     @page_title = "Tournament Reports"
   end
-  
+
   def adjusted_scores
     @report = Reports::AdjustedScores.new(@tournament_day)
-    
+
     @page_title = "Adjusted Score Report"
   end
-  
+
   def confirmed_players
     @page_title = "Payment and Confirmation Report"
-        
+
     @eager_groups = TournamentGroup.includes(golf_outings: [{scorecard: :scores}, :user]).where(tournament_day: @tournament_day)
   end
 
   def fetch_tournament_day
     @tournament = Tournament.find(params[:tournament])
-    
+
     if params[:tournament_day].blank?
       @tournament_day = @tournament.first_day
     else

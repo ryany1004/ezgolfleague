@@ -7,7 +7,7 @@ Phone: <%= @user.phone_number %>
 
 <%= @league_season.complete_name %>
 
-<%= number_to_currency(@league.dues_for_user(@user, false)) %>
+<%= number_to_currency(@league.dues_for_user(@user, true)) %>
 
 --
 

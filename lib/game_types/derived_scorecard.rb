@@ -24,6 +24,10 @@ module GameTypes
       end
     end
 
+    def game_type
+      self.tournament_day.game_type
+    end
+
     def golf_outing
       return nil
     end

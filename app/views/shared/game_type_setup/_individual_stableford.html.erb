@@ -1,0 +1,17 @@
+<%= text_field_tag("game_type_options[#{tournament_day.id}][double_eagle_score]", tournament_day.game_type.double_eagle_score) %>
+<%= label_tag("game_type_options[#{tournament_day.id}][double_eagle_score]", "Double Eagle Score") %>
+<br/>
+<%= text_field_tag("game_type_options[#{tournament_day.id}][eagle_score]", tournament_day.game_type.eagle_score) %>
+<%= label_tag("game_type_options[#{tournament_day.id}][eagle_score]", "Eagle Score") %>
+<br/>
+<%= text_field_tag("game_type_options[#{tournament_day.id}][birdie_score]", tournament_day.game_type.birdie_score) %>
+<%= label_tag("game_type_options[#{tournament_day.id}][birdie_score]", "Birdie Score") %>
+<br/>
+<%= text_field_tag("game_type_options[#{tournament_day.id}][par_score]", tournament_day.game_type.par_score) %>
+<%= label_tag("game_type_options[#{tournament_day.id}][par_score]", "Par Score") %>
+<br/>
+<%= text_field_tag("game_type_options[#{tournament_day.id}][bogey_score]", tournament_day.game_type.bogey_score) %>
+<%= label_tag("game_type_options[#{tournament_day.id}][bogey_score]", "Bogey Score") %>
+<br/>
+<%= text_field_tag("game_type_options[#{tournament_day.id}][double_bogey_score]", tournament_day.game_type.double_bogey_score) %>
+<%= label_tag("game_type_options[#{tournament_day.id}][double_bogey_score]", "Double Bogey (or Worse) Score") %>
