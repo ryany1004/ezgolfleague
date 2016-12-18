@@ -116,4 +116,21 @@
 </footer>
 
 </body>
+
+<% unless current_user.selected_league.required_container_frame_url.blank? %>
+<script>
+  function inIframe() {
+    try {
+        return window.self !== window.top;
+    } catch (e) {
+        return true;
+    }
+  }
+
+  if (inIframe() == false) {
+    window.location = "/invalid_container.html?container=<%= current_user.selected_league.required_container_frame_url %>";
+  }
+</script>
+<% end %>
+
 </html>

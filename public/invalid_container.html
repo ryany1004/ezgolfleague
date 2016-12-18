@@ -1,0 +1,35 @@
+<html>
+  <head>
+    <title>EZ Golf League - You Are Not Authorized to Access Directly</title>
+    <script>
+      function getSearchParameters() {
+        var prmstr = window.location.search.substr(1);
+        return prmstr != null && prmstr != "" ? transformToAssocArray(prmstr) : {};
+      }
+
+      function transformToAssocArray( prmstr ) {
+        var params = {};
+        var prmarr = prmstr.split("&");
+        for ( var i = 0; i < prmarr.length; i++) {
+        var tmparr = prmarr[i].split("=");
+        params[tmparr[0]] = tmparr[1];
+      }
+      return params;
+      }
+
+      var params = getSearchParameters();
+
+      var siteURLTag = "<a href='"+ params.container +"'>your league administrator site</a>";
+    </script>
+    <style>
+    body {
+      font-family: "Lucida Grande", Lucida, Verdana, sans-serif;
+      text-align: center;
+    }
+    </style>
+  </head>
+  <body>
+    <h1>Thank you for using EZ Golf League.</h1>
+    <h2>Your league can only be accessed via <script>document.write(siteURLTag);</script>.</h2>
+  </body>
+</html>
