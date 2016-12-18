@@ -8,10 +8,10 @@ class TournamentsController < BaseController
   def index
     if current_user.is_super_user?
       @upcoming_tournaments = Tournament.all_upcoming(nil).page params[:page]
-      @past_tournaments = Tournament.all_past(nil).page params[:page]
+      @past_tournaments = Tournament.all_past(nil).reorder("tournament_starts_at DESC").page params[:page]
     else
       @upcoming_tournaments = Tournament.all_upcoming(current_user.leagues).page params[:page]
-      @past_tournaments = Tournament.all_past(current_user.leagues).page params[:page]
+      @past_tournaments = Tournament.all_past(current_user.leagues).reorder("tournament_starts_at DESC").page params[:page]
     end
 
     @page_title = "Tournaments"
