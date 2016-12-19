@@ -30,6 +30,10 @@ module EzgolfRails
       g.test_framework :rspec
     end
 
+    config.action_dispatch.default_headers = {
+        'X-Frame-Options' => 'ALLOWALL'
+    }
+
     ActiveRecord::Base.include_root_in_json = false
   end
 end
