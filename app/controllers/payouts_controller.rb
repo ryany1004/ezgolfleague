@@ -55,7 +55,11 @@ class PayoutsController < BaseController
         @stage_name = "payouts"
       end
     else
-      @stage_name = "payouts#{@tournament_day.id}"
+      if @tournament.tournament_days.count > 1
+        @stage_name = "payouts#{@tournament_day.id}"
+      else
+        @stage_name = "payouts"
+      end
     end
   end
 

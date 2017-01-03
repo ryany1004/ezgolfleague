@@ -110,7 +110,11 @@ class TournamentGroupsController < BaseController
         @stage_name = "tee_times"
       end
     else
-      @stage_name = "tee_times#{@tournament_day.id}"
+      if @tournament.tournament_days.count > 1
+        @stage_name = "tee_times#{@tournament_day.id}"
+      else
+        @stage_name = "tee_times"
+      end
     end
   end
 

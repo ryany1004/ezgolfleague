@@ -105,7 +105,11 @@ class FlightsController < BaseController
         @stage_name = "flights"
       end
     else
-      @stage_name = "flights#{@tournament_day.id}"
+      if @tournament.tournament_days.count > 1
+        @stage_name = "flights#{@tournament_day.id}"
+      else
+        @stage_name = "flights"
+      end
     end
   end
 

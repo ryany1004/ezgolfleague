@@ -29,7 +29,12 @@
   <% end -%>
 
   <div class="form-actions">
-    <%= f.button :submit, "Save Notification", :class => 'btn btn-default' %>
+    <% if @notification_template.new_record? -%>
+      <%= f.button :submit, "Save & Create Another Notification", :class => 'btn btn-default' %>
+      <%= f.button :submit, "Save & Complete Tournament Setup", :class => 'btn btn-primary' %>
+    <% else -%>
+      <%= f.button :submit, "Save", :class => 'btn btn-default' %>
+    <% end -%>
   </div>
 
 <% end %>

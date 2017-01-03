@@ -14,6 +14,16 @@ module Findable
       return Tournament.tournaments_happening_at_some_point(start_date, Time.zone.now.at_beginning_of_day, leagues)
     end
 
+    def past_for_league_season(league_season)
+      if league_season.ends_at > Date.today
+        end_time = Time.zone.now.at_beginning_of_day
+      else
+        end_time = league_season.ends_at
+      end
+
+      return Tournament.tournaments_happening_at_some_point(league_season.starts_at, end_time, [league_season.league])
+    end
+
     def tournaments_happening_at_some_point(start_date, end_date, leagues)
       relation = Tournament.includes(:league)
 

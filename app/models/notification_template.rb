@@ -15,7 +15,7 @@ class NotificationTemplate < ActiveRecord::Base
   before_save :block_future_notifications
 
   def set_deliver_date_for_action
-    if self.tournament_notification_action == "To Unregistered Members Before Registration Closes"
+    if self.tournament_notification_action == "To Unregistered Members 1 Day Before Registration Closes"
       self.deliver_at = self.tournament.signup_closes_at - 1.day
     end
   end
@@ -43,7 +43,7 @@ class NotificationTemplate < ActiveRecord::Base
     else
       if self.tournament_notification_action == "On Finalization"
         return self.tournament.players
-      elsif self.tournament_notification_action == "To Unregistered Members Before Registration Closes"
+      elsif self.tournament_notification_action == "To Unregistered Members 1 Day Before Registration Closes"
         unregistered = []
 
         self.league.users.each do |u|

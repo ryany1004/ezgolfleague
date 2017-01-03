@@ -43,8 +43,8 @@ class ContestsController < BaseController
 
         redirect_to edit_league_tournament_contest_path(@tournament.league, @tournament, @contest, :skip_to_complete => skip_to_completion, tournament_day: @tournament_day), :flash => { :success => success_message }
       else
-        if params[:commit] == "Save & Complete Tournament Setup"
-          redirect_to league_tournaments_path(current_user.selected_league), :flash => { :success => "The contest was successfully created." }
+        if params[:commit] == "Save & Continue"
+          redirect_to league_tournament_tournament_notifications_path(@tournament.league, @tournament), :flash => { :success => "The contest was successfully created." }
         elsif params[:commit] == "Save & Continue to Next Day"
           redirect_to league_tournament_tournament_groups_path(@tournament.league, @tournament, tournament_day: @tournament.tournament_days.last), :flash => { :success => "The contest was successfully created." }
         else
@@ -61,7 +61,7 @@ class ContestsController < BaseController
 
   def update
     if @contest.update(contest_params)
-      if params[:commit] == "Save & Complete Tournament Setup"
+      if params[:commit] == "Save & Continue"
         redirect_to league_tournaments_path(current_user.selected_league), :flash => { :success => "The contest was successfully updated." }
       elsif params[:commit] == "Save & Continue to Next Day"
         redirect_to league_tournament_tournament_groups_path(@tournament.league, @tournament, tournament_day: @tournament.tournament_days.last), :flash => { :success => "The contest was successfully updated." }
@@ -153,7 +153,11 @@ class ContestsController < BaseController
         @stage_name = "contests"
       end
     else
-      @stage_name = "contests#{@tournament_day.id}"
+      if @tournament.tournament_days.count > 1
+        @stage_name = "contests#{@tournament_day.id}"
+      else
+        @stage_name = "contests"
+      end
     end
   end
 
