@@ -97,9 +97,7 @@ module Scoreable
     par_related_gross_score = gross_score - user_par
 
     result = TournamentDayResult.create(tournament_day: self, user: user, primary_scorecard: primary_scorecard, flight: flight, gross_score: gross_score, net_score: net_score, adjusted_score: adjusted_score, front_nine_gross_score: front_nine_gross_score, front_nine_net_score: front_nine_net_score, back_nine_net_score: back_nine_net_score, par_related_net_score: par_related_net_score, par_related_gross_score: par_related_gross_score)
-
-    self.tournament.league.active_season.touch #cache bust
-
+    
     Rails.logger.info { "Wrote TournamentDayResult for Scorecard: #{primary_scorecard.id} for User #{user.complete_name}" }
 
     return result

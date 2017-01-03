@@ -30,6 +30,9 @@ class FinalizeJob < ProgressJob::Base
       update_progress
     end
 
+    #cache bust
+    @tournament.league.active_season.touch
+
     #email completion
     LeagueMailer.tournament_finalized(@tournament).deliver_later unless @tournament.league.dues_payment_receipt_email_addresses.blank?
 

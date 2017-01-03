@@ -25,7 +25,7 @@ class Play::DashboardController < Play::BaseController
       @upcoming_tournaments = Tournament.all_upcoming([current_user.selected_league], @league_season.ends_at)
       @past_tournaments = Tournament.past_for_league_season(@league_season)
 
-      @rankings = Rails.cache.fetch(@league_season.rankings_cache_key, expires_in: 8.minutes, race_condition_ttl: 10)
+      @rankings = Rails.cache.fetch(@league_season.rankings_cache_key, expires_in: 24.hours, race_condition_ttl: 10)
       if @rankings.blank?
         @rankings = current_user.selected_league.ranked_users_for_year(@league_season.starts_at, @league_season.ends_at)
 
