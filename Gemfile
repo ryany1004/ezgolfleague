@@ -44,7 +44,8 @@ gem 'delayed_job_active_record'
 gem 'progress_job'
 gem 'backport_new_renderer', :github => 'brainopia/backport_new_renderer'
 gem 'apnotic'
-gem "geocoder"
+gem 'geocoder'
+gem 'scout_apm'
 
 group :development do
   # Access an IRB console on exception pages or by using <%= console %> in views
