@@ -9,7 +9,7 @@ class Api::V1::TournamentDaysController < Api::V1::ApiBaseController
     if eager_groups.blank?
       logger.info { "Fetching Tournament Day - Not Cached" }
 
-      eager_groups = TournamentGroup.includes(golf_outings: [:user, :course_tee_box, scorecard: [{scores: :course_hole}]]).where(tournament_day: @tournament_day)
+      eager_groups = TournamentGroup.includes(golf_outings: [:user, course_tee_box: :course_hole_tee_boxes, scorecard: [{scores: :course_hole}]]).where(tournament_day: @tournament_day)
 
       Rails.cache.write(@tournament_day.groups_api_cache_key, eager_groups)
     else
@@ -49,7 +49,7 @@ class Api::V1::TournamentDaysController < Api::V1::ApiBaseController
 
     Rails.cache.delete(@tournament_day.groups_api_cache_key)
 
-    eager_groups = TournamentGroup.includes(golf_outings: [:user, :course_tee_box, scorecard: [{scores: :course_hole}]]).where(tournament_day: @tournament_day)
+    eager_groups = TournamentGroup.includes(golf_outings: [:user, course_tee_box: :course_hole_tee_boxes, scorecard: [{scores: :course_hole}]]).where(tournament_day: @tournament_day)
 
     respond_with(eager_groups) do |format|
       format.json { render :json => eager_groups }
@@ -67,7 +67,7 @@ class Api::V1::TournamentDaysController < Api::V1::ApiBaseController
 
     Rails.cache.delete(@tournament_day.groups_api_cache_key)
 
-    eager_groups = TournamentGroup.includes(golf_outings: [:user, :course_tee_box, scorecard: [{scores: :course_hole}]]).where(tournament_day: @tournament_day)
+    eager_groups = TournamentGroup.includes(golf_outings: [:user, course_tee_box: :course_hole_tee_boxes, scorecard: [{scores: :course_hole}]]).where(tournament_day: @tournament_day)
 
     respond_with(eager_groups) do |format|
       format.json { render :json => eager_groups }
