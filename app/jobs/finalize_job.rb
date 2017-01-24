@@ -1,6 +1,6 @@
 class FinalizeJob < ProgressJob::Base
   def initialize(tournament)
-    super progress_max: (tournament.tournament_days.count * 2)
+    super progress_max: (tournament.tournament_days.count * 4)
 
     @tournament = tournament
   end
@@ -13,8 +13,12 @@ class FinalizeJob < ProgressJob::Base
     Rails.logger.info { "Finalize: Starting Job" }
 
     tournament_days.each do |day|
+      update_progress
+
       Rails.logger.info { "Finalize #{day.id}: Re-Scoring Users" }
       day.score_users
+
+      update_progress
 
       Rails.logger.info { "Finalize #{day.id}: Assigning Payouts" }
       day.assign_payouts_from_scores
