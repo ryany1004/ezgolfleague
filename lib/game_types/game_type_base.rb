@@ -164,12 +164,12 @@ module GameTypes
             handicap_allowance.each do |h|
               if h[:course_hole] == score.course_hole
                 if h[:strokes] != 0
-                  Rails.logger.debug { "Adjusting Hole Score From #{hole_score} w/ #{h[:strokes]}" }
+                  Rails.logger.debug { "Handicap Adjusting Hole Score From #{hole_score} w/ #{h[:strokes]}" }
 
                   adjusted_hole_score = hole_score - h[:strokes]
                   hole_score = adjusted_hole_score if adjusted_hole_score > 0
 
-                  Rails.logger.debug { "Adjusted: #{hole_score}" }
+                  Rails.logger.debug { "Handicap Adjusted: #{hole_score}" }
                 end
               end
             end
