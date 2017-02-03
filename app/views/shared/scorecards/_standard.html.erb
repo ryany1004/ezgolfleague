@@ -17,13 +17,13 @@
           <% end -%>
         </th>
       <% end -%>
-      
+
       <th width="3%">HDCP</th>
-      
+
       <% if p.includes_extra_scoring_column? -%>
         <th width="5%">&nbsp;</th>
       <% end -%>
-      
+
       <th width="7%">Gross</th>
 		</tr>
 	</thead>
@@ -41,15 +41,15 @@
           <% split.each do |score| -%>
             <td>
               <%= link_to_unless !p.user_can_edit_scorecard?(scorecard), "#{scorecard_score_helper(score, print_mode)}", "#", {"data-toggle" => "modal", "data-target" => "#Group#{score.course_hole.id}"} %>
-              
+
               <% if handicap_allowance_strokes_for_hole(handicap_allowance_for_scorecard(scorecard), score.course_hole) > 0 -%>
                   </br><span class="label label-success">-<%= handicap_allowance_strokes_for_hole(handicap_allowance_for_scorecard(scorecard), score.course_hole) %></span>
               <% end -%>
-              
+
               <% unless score.associated_text.blank? -%>
                 </br><em><%= score.associated_text %></em>
               <% end -%>
-              
+
               <% unless p.scorecard_score_cell_partial.blank? -%>
                 </br><%= render partial: p.scorecard_score_cell_partial, locals: {score: score, scorecards: other_scorecards} %>
               <% end -%>
@@ -71,7 +71,7 @@
         <% end -%>
 
         <td><%= scorecard.course_handicap %></td>
-        
+
         <% if p.includes_extra_scoring_column? -%>
           <td><strong><%= scorecard.extra_scoring_column_data %></strong></td>
         <% end -%>
@@ -87,7 +87,7 @@
           <% else -%>
             &nbsp;
           <% end -%>
-        </td> 
+        </td>
       </tr>
     <% end -%>
 	</tbody>
@@ -101,27 +101,27 @@
         <% end -%>
         <th>&nbsp;</th>
       <% end -%>
-      
+
       <th>&nbsp;</th>
-      
+
       <% if p.includes_extra_scoring_column? -%>
         <th>&nbsp;</th>
       <% end -%>
-      
+
       <th><%= p.scorecard_total_par %></th>
 		</tr>
 		<tr>
       <th>HDCP</th>
 			<th>Men</th>
       <% p.sliced_scores.each_with_index do |split, j| %>
-        <% split.each do |score| -%>      
+        <% split.each do |score| -%>
           <th><%= score.course_hole.mens_handicap %></th>
         <% end -%>
         <th>&nbsp;</th>
       <% end -%>
-      
+
       <th>&nbsp;</th>
-      
+
       <% if p.includes_extra_scoring_column? -%>
         <th>&nbsp;</th>
       <% end -%>
@@ -131,18 +131,18 @@
       <th>&nbsp;</th>
 			<th>Women</th>
       <% p.sliced_scores.each_with_index do |split, j| %>
-        <% split.each do |score| -%>      
-          <th><%= score.course_hole.mens_handicap %></th>
+        <% split.each do |score| -%>
+          <th><%= score.course_hole.womens_handicap %></th>
         <% end -%>
         <th>&nbsp;</th>
       <% end -%>
-      
+
       <th>&nbsp;</th>
-      
+
       <% if p.includes_extra_scoring_column? -%>
         <th>&nbsp;</th>
       <% end -%>
-      
+
       <th>&nbsp;</th>
 		</tr>
   </tfoot>

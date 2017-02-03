@@ -40,7 +40,7 @@
             <td><%= index + 1 %></td>
       			<td>
       			  <% group.players_signed_up.each do |player| -%>
-                <%= player.complete_name %> <%- if @tournament_day.primary_scorecard_for_user(player).golf_outing.disqualified %>DISQUALIFIED<%- end %> <% if @tournament_day.primary_scorecard_for_user(player).is_confirmed == true -%>(Confirmed)<% else -%>(Unconfirmed)<% end -%></br>
+                <%= player.complete_name %> <%- if @tournament_day.primary_scorecard_for_user(player).golf_outing.disqualified %>(Disqualified)<%- end %> <% if @tournament_day.primary_scorecard_for_user(player).is_confirmed == true -%>(Confirmed)<% else -%>(Unconfirmed)<% end -%></br>
               <% end -%>
       			</td>
             <td>
