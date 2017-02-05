@@ -1,5 +1,0 @@
-<!-- Golfer Teams: <%= @golfer_teams.count %> -->
-<% if @golfer_teams.count > 0 %>
-  <label class="select required control-label" for="golfer_team_id"><abbr title="required">*</abbr> Tee-Group Team</label>
-  <%= select_tag "golfer_team_id", options_from_collection_for_select(@golfer_teams, "id", "team_number_label"), :class => "select required form-control" %>
-<% end %>

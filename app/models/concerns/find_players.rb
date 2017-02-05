@@ -47,4 +47,14 @@ module FindPlayers
     end
   end
 
+  def paid_contests_for_player(user)
+    player_contests = []
+
+    self.tournament.paid_contests.each do |c|
+      player_contests << c if c.users.include?(user)
+    end
+
+    return player_contests
+  end
+
 end

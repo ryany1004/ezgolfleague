@@ -96,121 +96,13 @@ class TournamentsController < BaseController
     end
   end
 
-  # Signups
-
-  def signups
-    if params[:tournament_day].blank?
-      @tournament_day = @tournament.first_day
-    else
-      @tournament_day = @tournament.tournament_days.find(params[:tournament_day])
-    end
-
-    @tournament_groups = @tournament_day.tournament_groups.page params[:page]
-
-    @available_tournament_groups = []
-    @tournament_day.tournament_groups.each do |group|
-      @available_tournament_groups << group if group.players_signed_up.count < group.max_number_of_players
-    end
-
-    @unregistered_users = @tournament.league.users_not_signed_up_for_tournament(@tournament, @tournament_day, [])
-
-    @schedule_options = { 0 => "Manual", 1 => "Automatic: Worst Score First", 2 => "Automatic: Best Score First" }
-
-    @page_title = "Signups for #{@tournament.name}"
-  end
+  ##
 
   def update_auto_schedule
     if @tournament.update(tournament_params)
-      redirect_to league_tournament_signups_path(@tournament.league, @tournament, tournament_day: @tournament_day), :flash => { :success => "The registration was successfully added." }
+      redirect_to league_tournament_day_players_path(@tournament.league, @tournament, @tournament.tournament_days.first), :flash => { :success => "The scoring mechanism was updated." }
     end
   end
-
-  def add_signup
-    if params[:tournament_day].blank?
-      @tournament_day = @tournament.first_day
-    else
-      @tournament_day = @tournament.tournament_days.find(params[:tournament_day])
-    end
-
-    group = @tournament_day.tournament_groups.where("id = ?", params[:tournament_group_signup][:tee_group]).first
-    user = User.find(params[:tournament_group_signup][:another_member_id])
-    @tournament_day.add_player_to_group(group, user)
-
-    #teams
-    unless params[:golfer_team_id].blank?
-      team = GolferTeam.find(params[:golfer_team_id])
-
-      team.users << user
-    end
-
-    #contests
-    if !params[:tournament_group_signup][:contests_to_enter].blank?
-      params[:tournament_group_signup][:contests_to_enter].each do |contest_id|
-        unless contest_id.blank?
-          contest = Contest.find(contest_id)
-
-          contest.add_user(user)
-        end
-      end
-    end
-
-    redirect_to league_tournament_signups_path(@tournament.league, @tournament, tournament_day: @tournament_day), :flash => { :success => "The registration was successfully added." }
-  end
-
-  def move_signup
-    if params[:tournament_day].blank?
-      @tournament_day = @tournament.first_day
-    else
-      @tournament_day = @tournament.tournament_days.find(params[:tournament_day])
-    end
-
-    group = @tournament_day.tournament_groups.where("id = ?", params[:tournament_group_move][:tee_group]).first
-    user = User.find(params[:user])
-
-    @tournament_day.move_player_to_tournament_group(user, group)
-
-    #teams
-    unless params[:golfer_team_id].blank?
-      old_team = @tournament_day.golfer_team_for_player(user)
-      new_team = GolferTeam.find(params[:golfer_team_id])
-
-      old_team.users.delete(user) unless old_team.blank?
-      new_team.users << user
-    end
-
-    redirect_to league_tournament_signups_path(@tournament.league, @tournament, tournament_day: @tournament_day), :flash => { :success => "The registration was successfully moved." }
-  end
-
-  def disqualify_signup
-    if params[:tournament_day].blank?
-      @tournament_day = @tournament.first_day
-    else
-      @tournament_day = @tournament.tournament_days.find(params[:tournament_day])
-    end
-
-    user = User.find(params[:user_id])
-    golf_outing = @tournament_day.golf_outing_for_player(user)
-    golf_outing.disqualify
-
-    redirect_to league_tournament_signups_path(@tournament.league, @tournament, tournament_day: @tournament_day), :flash => { :success => "The player qualification status changed. You may need to re-finalize the tournament." }
-  end
-
-  def delete_signup
-    tournament_group = TournamentGroup.find(params[:group_id])
-    user = User.find(params[:user_id])
-
-    if params[:tournament_day].blank?
-      @tournament_day = @tournament.first_day
-    else
-      @tournament_day = @tournament.tournament_days.find(params[:tournament_day])
-    end
-
-    @tournament_day.remove_player_from_group(tournament_group, user)
-
-    redirect_to league_tournament_signups_path(@tournament.league, @tournament, tournament_day: @tournament_day), :flash => { :success => "The registration was successfully deleted." }
-  end
-
-  ##
 
   def auto_schedule
     groups_error = false

@@ -1,0 +1,69 @@
+<ol class="breadcrumb">
+  <li><%= link_to "Tournaments", league_tournaments_path(current_user.selected_league) %></li>
+  <li><%= link_to @tournament.name, edit_league_tournament_path(current_user.selected_league, @tournament) %></li>
+  <li class="active"><%= @tournament_day.pretty_day(true) %>Signups</li>
+</ol>
+
+<%= render partial: '/shared/tournaments/manage', locals: {tournament: @tournament, stage: @stage_name} %>
+
+<%= render partial: 'multi_day_scheduling', locals: {tournament: @tournament, tournament_day: @tournament_day, schedule_options: @schedule_options} %>
+
+<%= simple_form_for :player_signups, url: league_tournament_update_day_players_path(@tournament.league, @tournament, @tournament_day), method: :post do |f| %>
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h3 class="panel-title"><%= @tournament_day.pretty_day(true) %> Register Players</h3>
+  </div>
+  <div class="panel-body">
+    <p>Choose players for each slot per tee-group to register them for this tournament. Players may already appear if they registered themselves.</p>
+  </div>
+  <table class="table table-striped">
+  	<thead>
+  		<tr>
+  			<th>Tee-Group</th>
+        <th>&nbsp;</th>
+        <th>&nbsp;</th>
+  		</tr>
+  	</thead>
+  	<tbody>
+      <% @tournament_groups.each do |tournament_group| %>
+        <tr>
+          <td><h3><%= tournament_group.formatted_tee_time %></h3></td>
+          <td>
+            <% tournament_group.max_number_of_players.abs.times.each_with_index do |item, i| %>
+              <div class="panel panel-default">
+                <div class="panel-body">
+                  <%= f.input "member_id[#{tournament_group.id}][#{i}]", label: "Player ##{i+1}", collection: @league_members, label_method: :complete_name, value_method: :id, tournament_group: tournament_group, selected: tournament_group.user_for_index(i).try(:id), include_blank: true %>
+                  <% unless tournament_group.golfer_teams.blank? %>
+                    <%= f.input "golfer_team_ids[#{tournament_group.id}][#{i}]", label: "Tee-Group Team", collection: tournament_group.golfer_teams, label_method: :team_number_label, value_method: :id, tournament_group: tournament_group, selected: tournament_group.golfer_team_for_user_or_index(tournament_group.user_for_index(i), i).try(:id), include_blank: true %>
+                  <% end %>
+                  <% if @tournament.paid_contests.count > 0 -%>
+                    <div class="well">
+                      <p><em>Select the paid contests this player should be registered in.</em></p>
+                      <%= f.input "contest_signups[#{tournament_group.id}][#{i}]", label: "Paid Contests", collection: @tournament.paid_contests, label_method: :name, value_method: :id, as: :check_boxes, checked: @tournament_day.paid_contests_for_player(tournament_group.user_for_index(i)).collect { |obj| obj.id } %>
+                    </div>
+                  <% end -%>
+                  <% unless tournament_group.golfer_outing_for_index(i).blank? %>
+                    <%= link_to "#{tournament_group.golfer_outing_for_index(i).disqualification_description} Golfer", league_tournament_disqualify_day_players_path(@tournament.league, @tournament, @tournament_day, user_id: tournament_group.user_for_index(i)), :method => :patch, :role => "button", :class => "btn btn-info" %>
+                    <%= link_to "Delete Registration", league_tournament_delete_day_players_path(@tournament.league, @tournament, @tournament_day, group_id: tournament_group.id, user_id: tournament_group.user_for_index(i)), :data => { :confirm => 'Are you sure you want to delete this registration? This will delete all scorecard information for this golfer for this tournament.' }, :method => :delete, :role => "button", :class => "btn btn-danger" %>
+                  <% end %>
+                </div>
+              </div>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+  	</tbody>
+    <tfoot>
+  		<tr>
+        <% if is_editable?(@tournament) -%>
+        <th><%= f.button :button, "Save & Register Players", :class => 'btn btn-default' %></th>
+        <% else %>
+        <th>This tournament cannot be edited.</th>
+        <% end %>
+  			<th>&nbsp;</th>
+        <th>&nbsp;</th>
+  		</tr>
+    </tfoot>
+  </table>
+</div>
+<% end %>

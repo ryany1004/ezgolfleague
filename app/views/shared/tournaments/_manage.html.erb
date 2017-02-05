@@ -12,6 +12,7 @@
         <li class='disabled'><%= link_to 'Payouts', "#" %></li>
         <li class='disabled'><%= link_to 'Contests', "#" %></li>
         <li class='disabled'><%= link_to 'Notifications', "#" %></li>
+        <li class='disabled'><%= link_to 'Players', "#" %></li>
         <li class='disabled'><%= link_to 'Finalize', "#" %></li>
       <% else -%>
         <% if @tournament.tournament_days.count == 1 -%>
@@ -24,6 +25,7 @@
           <li <%= tournament_class_for_stage(stage, "payouts") %>><%= link_to 'Payouts', league_tournament_payouts_path(tournament.league, tournament) %></li>
           <li <%= tournament_class_for_stage(stage, "contests") %>><%= link_to 'Contests', league_tournament_contests_path(tournament.league, tournament) %></li>
           <li <%= tournament_class_for_stage(stage, "notifications") %>><%= link_to 'Notifications', league_tournament_tournament_notifications_path(tournament.league, tournament) %></li>
+          <li <%= tournament_class_for_stage(stage, "players#{tournament.tournament_days.first.id}") %>><%= link_to 'Players', league_tournament_day_players_path(tournament.league, tournament, tournament.tournament_days.first) %></li>
           <% if !@tournament.new_record? -%>
             <li <%= tournament_class_for_stage(stage, "finalize") %>><%= link_to 'Finalize', league_tournament_finalize_path(tournament.league, tournament) %></li>
           <% end -%>
@@ -47,6 +49,7 @@
           <li <%= tournament_class_for_stage(stage, "flights#{day.id}") %>><%= link_to 'Flights', league_tournament_flights_path(tournament.league, tournament, tournament_day: day) %></li>
           <li <%= tournament_class_for_stage(stage, "payouts#{day.id}") %>><%= link_to 'Payouts', league_tournament_payouts_path(tournament.league, tournament, tournament_day: day) %></li>
           <li <%= tournament_class_for_stage(stage, "contests#{day.id}") %>><%= link_to 'Contests', league_tournament_contests_path(tournament.league, tournament, tournament_day: day) %></li>
+          <li <%= tournament_class_for_stage(stage, "players#{day.id}") %>><%= link_to 'Players', league_tournament_day_players_path(tournament.league, tournament, day) %></li>
         </ul>
       </nav>
     <% end -%>

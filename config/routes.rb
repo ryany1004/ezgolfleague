@@ -122,6 +122,11 @@ Rails.application.routes.draw do
         end
       end
 
+      get 'tournament_days/:tournament_day_id/players' => 'golf_outings#players', as: :day_players
+      post 'tournament_days/:tournament_day_id/update_players' => 'golf_outings#update_players', as: :update_day_players
+      patch 'tournament_days/:tournament_day_id/disqualify_signup' => 'golf_outings#disqualify_signup', as: :disqualify_day_players
+      delete 'tournament_days/:tournament_day_id/delete_signup' => 'golf_outings#delete_signup', as: :delete_day_players
+
       resource :game_types do
         get 'options', on: :collection
       end
@@ -150,13 +155,6 @@ Rails.application.routes.draw do
       patch 'update_holes'
 
       patch 'auto_schedule'
-
-      get 'signups'
-      post 'add_signup'
-      get 'options'
-      delete 'delete_signup'
-      patch 'move_signup'
-      patch 'disqualify_signup'
       patch 'update_auto_schedule'
 
       get 'finalize'

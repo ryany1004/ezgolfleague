@@ -21,7 +21,11 @@ class GolferTeam < ActiveRecord::Base
   end
 
   def team_number_label
-    return "Team ##{self.team_number} (#{self.name})"
+    number_label = "Tee-Group Team ##{self.team_number} "
+
+    number_label += self.name unless self.name.blank?
+
+    return number_label
   end
 
   def name
