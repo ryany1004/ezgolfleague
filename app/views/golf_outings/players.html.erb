@@ -27,7 +27,10 @@
   	<tbody>
       <% @tournament_groups.each do |tournament_group| %>
         <tr>
-          <td><h3><%= tournament_group.formatted_tee_time %></h3></td>
+          <td>
+            <h3><%= tournament_group.formatted_tee_time %></h3>
+            <p><a href='#save-button'><< zoom down to save >></a></p>
+          </td>
           <td>
             <% tournament_group.max_number_of_players.abs.times.each_with_index do |item, i| %>
               <div class="panel panel-default">
@@ -56,9 +59,9 @@
     <tfoot>
   		<tr>
         <% if is_editable?(@tournament) -%>
-        <th><%= f.button :button, "Save & Register Players", :class => 'btn btn-default' %></th>
+          <th><%= f.button :button, "Save & Register Players", :class => 'btn btn-info', :id => "save-button" %></th>
         <% else %>
-        <th>This tournament cannot be edited.</th>
+          <th>This tournament cannot be edited.</th>
         <% end %>
   			<th>&nbsp;</th>
         <th>&nbsp;</th>
