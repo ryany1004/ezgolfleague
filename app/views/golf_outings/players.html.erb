@@ -47,7 +47,6 @@
   		<tr>
   			<th>Tee-Group</th>
         <th>&nbsp;</th>
-        <th>&nbsp;</th>
   		</tr>
   	</thead>
   	<tbody>
@@ -83,13 +82,12 @@
   	</tbody>
     <tfoot>
   		<tr>
+        <th>&nbsp;</th>
         <% if is_editable?(@tournament) -%>
           <th><%= f.button :button, "Save Your Changes & Register Players", :class => 'btn btn-primary btn-lg', :id => "save-button" %></th>
         <% else %>
           <th>This tournament cannot be edited.</th>
         <% end %>
-  			<th>&nbsp;</th>
-        <th>&nbsp;</th>
   		</tr>
     </tfoot>
   </table>
