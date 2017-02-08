@@ -8,6 +8,32 @@
 
 <%= render partial: 'multi_day_scheduling', locals: {tournament: @tournament, tournament_day: @tournament_day, schedule_options: @schedule_options} %>
 
+<script>
+//http://stackoverflow.com/questions/1119289/how-to-show-the-are-you-sure-you-want-to-navigate-away-from-this-page-when-ch
+// var confirmOnPageExit = function (e)
+// {
+//     // If we haven't been passed the event get the window.event
+//     e = e || window.event;
+//
+//     var message = 'Be sure to save before continuing on.';
+//
+//     // For IE6-8 and Firefox prior to version 4
+//     if (e)
+//     {
+//         e.returnValue = message;
+//     }
+//
+//     // For Chrome, Safari, IE8+ and Opera 12+
+//     return message;
+// };
+//
+// // Turn it on - assign the function that returns the string
+// window.onbeforeunload = confirmOnPageExit;
+
+// // Turn it off - remove the function entirely
+// window.onbeforeunload = null;
+</script>
+
 <%= simple_form_for :player_signups, url: league_tournament_update_day_players_path(@tournament.league, @tournament, @tournament_day), method: :post do |f| %>
 <div class="panel panel-default">
   <div class="panel-heading">
@@ -29,7 +55,7 @@
         <tr>
           <td>
             <h3><%= tournament_group.formatted_tee_time %></h3>
-            <p><a href='#save-button'><< zoom down to save >></a></p>
+            <p><a href='#save-button'><< don't forget to save! >></a></p>
           </td>
           <td>
             <% tournament_group.max_number_of_players.abs.times.each_with_index do |item, i| %>
@@ -41,8 +67,7 @@
                   <% end %>
                   <% if @tournament.paid_contests.count > 0 -%>
                     <div class="well">
-                      <p><em>Select the paid contests this player should be registered in.</em></p>
-                      <%= f.input "contest_signups[#{tournament_group.id}][#{i}]", label: "Paid Contests", collection: @tournament.paid_contests, label_method: :name, value_method: :id, as: :check_boxes, checked: @tournament_day.paid_contests_for_player(tournament_group.user_for_index(i)).collect { |obj| obj.id } %>
+                      <%= f.input "contest_signups[#{tournament_group.id}][#{i}]", label: "Paid Contests for Player", collection: @tournament.paid_contests, label_method: :name, value_method: :id, as: :check_boxes, checked: @tournament_day.paid_contests_for_player(tournament_group.user_for_index(i)).collect { |obj| obj.id } %>
                     </div>
                   <% end -%>
                   <% unless tournament_group.golfer_outing_for_index(i).blank? %>
