@@ -80,16 +80,15 @@
         </tr>
       <% end %>
   	</tbody>
-    <tfoot>
-  		<tr>
-        <th>&nbsp;</th>
-        <% if is_editable?(@tournament) -%>
-          <th><%= f.button :button, "Save Your Changes & Register Players", :class => 'btn btn-primary btn-lg', :id => "save-button" %></th>
-        <% else %>
-          <th>This tournament cannot be edited.</th>
-        <% end %>
-  		</tr>
-    </tfoot>
   </table>
+</div>
+<div style="position: fixed; bottom: 0px;	right: 0; left: 0; background-color: rgba(146,146,146,0.50); padding: 15px;">
+  <div style="margin: auto; width: 20%;">
+    <% if is_editable?(@tournament) -%>
+      <%= f.button :button, "Save Your Changes & Register Players", :class => 'btn btn-success btn-lg', :id => "save-button" %>
+    <% else %>
+      This tournament cannot be edited.
+    <% end %>
+  </div>
 </div>
 <% end %>
