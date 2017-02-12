@@ -126,7 +126,7 @@
 
 </body>
 
-<% unless current_user.selected_league.required_container_frame_url.blank? %>
+<% unless current_user.selected_league.blank? || current_user.selected_league.required_container_frame_url.blank? %>
 <script>
   function inIframe() {
     try {
