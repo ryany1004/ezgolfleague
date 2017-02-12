@@ -48,6 +48,8 @@ module Playable
   end
 
   def number_of_players
+    return 0 if self.first_day.blank?
+
     number_of_players = 0
 
     self.first_day.tournament_groups.each do |group|

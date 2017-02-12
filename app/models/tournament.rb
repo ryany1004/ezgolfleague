@@ -180,6 +180,8 @@ class Tournament < ActiveRecord::Base
   ##
 
   def all_days_are_playable?
+    return false if self.tournament_days.count == 0
+
     playable = true
 
     self.tournament_days.each do |d|
