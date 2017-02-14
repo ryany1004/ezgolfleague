@@ -294,9 +294,9 @@ module ContestScoreable
     else
       self.tournament_day.tournament_day_results.each do |result|
         if use_gross == true
-          results << {user: result.user, score: result.gross_score} unless result.gross_score.blank?
+          results << {user: result.user, score: result.gross_score} if eligible_player_ids.include? result.user.id && !result.gross_score.blank?
         else
-          results << {user: result.user, score: result.net_score} unless result.net_score.blank?
+          results << {user: result.user, score: result.net_score} if eligible_player_ids.include? result.user.id && !result.net_score.blank?
         end
       end
     end
