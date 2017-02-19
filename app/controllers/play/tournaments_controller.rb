@@ -93,6 +93,8 @@ class Play::TournamentsController < BaseController
       if paying_now == true
         redirect_to new_play_payment_path(:payment_type => "tournament_dues", :tournament_id => @tournament.id)
       else
+        TournamentMailer.tournament_player_paying_later(current_user, @tournament).deliver_later
+
         redirect_to play_dashboard_index_path, :flash => { :success => "You are registered for the tournament." }
       end
     end

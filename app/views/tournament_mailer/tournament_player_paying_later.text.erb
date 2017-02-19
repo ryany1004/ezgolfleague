@@ -1,0 +1,10 @@
+TOURNAMENT DUES PLAYER PAYING LATER
+
+A player signed up to pay later: <%= @user.complete_name %>:
+
+<%= @tournament.name %>
+<%= number_to_currency(@tournament.dues_for_user(@user, false)) %>
+
+--
+
+Sent by EZGolfLeague
