@@ -7,3 +7,5 @@
 <% cache(cache_key_for_scorecard(@scorecard.id)) do %>
   <%= render partial: '/shared/scorecards/standard', locals: {p: @scorecard_presenter, print_mode: false} %>
 <% end -%>
+
+<%= link_to 'Next Golfer >>', scorecard_path(@next_scorecard), :class => 'btn btn-success' unless @next_scorecard.blank? %>

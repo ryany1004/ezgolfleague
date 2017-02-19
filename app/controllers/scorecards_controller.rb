@@ -17,25 +17,15 @@ class ScorecardsController < BaseController
   end
 
   def show
+    eager_groups = TournamentGroup.includes(golf_outings: [{scorecard: :scores}, :user]).where(tournament_day: @tournament_day)
+
+    @next_scorecard = find_next_scorecard(@tournament_day, eager_groups, @scorecard)
   end
 
   def edit
     eager_groups = TournamentGroup.includes(golf_outings: [{scorecard: :scores}, :user]).where(tournament_day: @tournament_day)
 
-    sorted_players = []
-    eager_groups.each do |group|
-      group.players_signed_up.each do |player|
-        sorted_players << player
-      end
-    end
-
-    sorted_players.each_with_index do |player, i|
-      if player == @scorecard.golf_outing.user
-        next_golfer = sorted_players[i + 1]
-
-        @next_scorecard = @tournament_day.primary_scorecard_for_user(next_golfer) unless next_golfer.blank?
-      end
-    end
+    @next_scorecard = find_next_scorecard(@tournament_day, eager_groups, @scorecard)
   end
 
   def update
@@ -64,6 +54,27 @@ class ScorecardsController < BaseController
     golf_outing.disqualify
 
     redirect_to edit_scorecard_path(@scorecard), :flash => { :alert => "The scorecard disqualification was toggled." }
+  end
+
+  def find_next_scorecard(tournament_day, groups, current_scorecard)
+    next_scorecard = nil
+
+    sorted_players = []
+    groups.each do |group|
+      group.players_signed_up.each do |player|
+        sorted_players << player
+      end
+    end
+
+    sorted_players.each_with_index do |player, i|
+      if player == current_scorecard.golf_outing.user
+        next_golfer = sorted_players[i + 1]
+
+        next_scorecard = tournament_day.primary_scorecard_for_user(next_golfer) unless next_golfer.blank?
+      end
+    end
+
+    next_scorecard
   end
 
   private
