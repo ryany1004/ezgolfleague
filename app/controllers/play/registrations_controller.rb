@@ -69,9 +69,25 @@ class Play::RegistrationsController < BaseController
 
         sign_in(@current_user)
 
-        redirect_to play_dashboard_index_path, :flash => { :success => "You have joined the league." }
+        render :setup_completed
       rescue Stripe::CardError => e
         redirect_to error_play_payments_path
+      end
+    end
+
+    def new_league
+      @league = League.new(contact_email: temporary_user.email)
+    end
+
+    def create_league
+      @league = League.new(league_params)
+
+      if @league.save
+        LeagueMembership.create(league: @league, user: temporary_user, is_admin: true)
+
+        render :setup_completed
+      else
+        render :new
       end
     end
 
@@ -79,6 +95,10 @@ class Play::RegistrationsController < BaseController
 
     def user_params
       params.require(:user).permit!
+    end
+
+    def league_params
+      params.require(:league).permit!
     end
 
     def temporary_user

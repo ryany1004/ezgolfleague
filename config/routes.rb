@@ -37,6 +37,8 @@ Rails.application.routes.draw do
       post :search_leagues, on: :collection
       get :league_info, on: :collection
       get :join_league, on: :collection
+      get :new_league, on: :collection
+      post :create_league, on: :collection
       post :submit_payment, on: :collection
       put :request_information, on: :collection
     end

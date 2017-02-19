@@ -1,0 +1,30 @@
+<ol class="breadcrumb">
+  <li class="active">Create a New League</li>
+</ol>
+
+<%= simple_form_for @league, url: create_league_play_registrations_path do |f| %>
+  <% if notification = f.error_notification %>
+    <div class="alert alert-error fade in">
+      <a class="close" data-dismiss="alert" href="#">&times;</a>
+      <%= notification %>
+    </div>
+  <% end %>
+
+  <h3>Basic Details</h3>
+  <div class="well">
+	  <%= f.input :name, :label => 'League Name', required: true %>
+  </div>
+
+  <div class="well">
+	  <%= f.input :league_description, :label => 'Description' %>
+    <%= f.input :location, :label => 'Play Location' %>
+    <%= f.input :contact_name, :label => 'Contact Name' %>
+    <%= f.input :contact_phone, :label => 'Contact Phone' %>
+    <%= f.input :contact_email, :label => 'Contact Email' %>
+    <%= f.input :show_in_search, :label => 'Appears in League Search (Other Players Can Join Your League)?' %>
+  </div>
+
+  <div class="form-actions">
+    <%= f.button :submit, :class => 'btn btn-default' %>
+  </div>
+<% end %>

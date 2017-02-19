@@ -7,9 +7,11 @@ class League < ActiveRecord::Base
   has_many :tournaments, :dependent => :destroy, inverse_of: :league
   has_many :notification_templates, :dependent => :destroy
 
-  validates :name, presence: true
+  validates :name, presence: true, uniqueness: true
 
   paginates_per 50
+
+  after_create :create_default_league_season
 
   attr_encrypted :stripe_test_secret_key, :key => ENCRYPYTED_ATTRIBUTES_KEY
   attr_encrypted :stripe_production_secret_key, :key => ENCRYPYTED_ATTRIBUTES_KEY
@@ -33,6 +35,15 @@ class League < ActiveRecord::Base
   end
 
   ##
+
+  def create_default_league_season
+    if self.active_season.blank?
+      start_date = Date.civil(Time.now.year, 1, 1)
+      end_date = Date.civil(Time.now.year, -1, -1)
+
+      LeagueSeason.create(name: "#{ Time.now.year } League Season", starts_at: start_date, ends_at: end_date, league: self)
+    end
+  end
 
   def membership_for_user(user)
     return self.league_memberships.where(user: user).first
