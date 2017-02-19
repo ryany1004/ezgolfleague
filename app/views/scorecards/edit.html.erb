@@ -1,7 +1,8 @@
 <ol class="breadcrumb">
   <li><%= link_to "Tournaments", league_tournaments_path(current_user.selected_league) %></li>
   <li><%= link_to @tournament.name, edit_league_tournament_path(current_user.selected_league, @tournament) %></li>
-  <li class="active">Scorecard: <%= @player.complete_name %></li>
+  <li><%= link_to "Scorecards", scorecards_path(tournament_id: @tournament) %></li>
+  <li class="active"><%= @player.complete_name %></li>
 </ol>
 
 <div class="col-md-12">

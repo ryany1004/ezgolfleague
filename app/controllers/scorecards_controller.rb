@@ -13,17 +13,17 @@ class ScorecardsController < BaseController
 
     @page_title = "Scorecards"
 
-    @eager_groups = TournamentGroup.includes(golf_outings: [{scorecard: :scores}, :user]).where(tournament_day: @tournament_day)
+    @eager_groups = fetch_eager_groups
   end
 
   def show
-    eager_groups = TournamentGroup.includes(golf_outings: [{scorecard: :scores}, :user]).where(tournament_day: @tournament_day)
+    eager_groups = fetch_eager_groups
 
     @next_scorecard = find_next_scorecard(@tournament_day, eager_groups, @scorecard)
   end
 
   def edit
-    eager_groups = TournamentGroup.includes(golf_outings: [{scorecard: :scores}, :user]).where(tournament_day: @tournament_day)
+    eager_groups = fetch_eager_groups
 
     @next_scorecard = find_next_scorecard(@tournament_day, eager_groups, @scorecard)
   end
@@ -54,6 +54,10 @@ class ScorecardsController < BaseController
     golf_outing.disqualify
 
     redirect_to edit_scorecard_path(@scorecard), :flash => { :alert => "The scorecard disqualification was toggled." }
+  end
+
+  def fetch_eager_groups
+    TournamentGroup.includes(golf_outings: [{scorecard: :scores}, :user]).where(tournament_day: @tournament_day)
   end
 
   def find_next_scorecard(tournament_day, groups, current_scorecard)
