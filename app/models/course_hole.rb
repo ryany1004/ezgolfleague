@@ -17,7 +17,7 @@ class CourseHole < ActiveRecord::Base
     else
       yardage_strings = []
 
-      self.course_hole_tee_boxes.each do |b|
+      self.course_hole_tee_boxes.includes(:course_tee_box).each do |b|
         yardage_strings << "#{b.course_tee_box.name} - #{b.yardage}" unless b.course_tee_box.blank?
       end
 
@@ -26,8 +26,10 @@ class CourseHole < ActiveRecord::Base
   end
 
   def yards_for_flight(flight)
-    self.course_hole_tee_boxes.each do |b|
-      return b.yardage if b.course_tee_box.name == flight.course_tee_box.name
+    tee_box_name = flight.course_tee_box.name
+
+    self.course_hole_tee_boxes.includes(:course_tee_box).each do |b|
+      return b.yardage if b.course_tee_box.name == tee_box_name
     end
 
     return nil
