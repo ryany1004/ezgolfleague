@@ -8,7 +8,7 @@ class Score < ActiveRecord::Base
 
   validates :strokes, :inclusion => 0..30
 
-  def touch_tournament #NOTE: Do we want to move this?
+  def touch_tournament
     self.scorecard.tournament_day.touch
     self.scorecard.tournament_day.tournament.touch
   end
