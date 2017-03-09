@@ -25,6 +25,7 @@ class TournamentDay < ActiveRecord::Base
   delegate :handicap_allowance, to: :game_type
   delegate :can_be_played?, :can_be_finalized?, to: :game_type
 
+  validates :course, presence: true
   validates :tournament_at, presence: true
   validates :tournament_at, uniqueness: { scope: :tournament }
 

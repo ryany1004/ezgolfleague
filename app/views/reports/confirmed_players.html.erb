@@ -14,7 +14,7 @@
       <% @eager_groups.each_with_index do |group, index| -%>
         <% if group.players_signed_up.count > 0 -%>
       		<tr>
-            <td><%= index + 1 %></td>
+            <td><%= index + 1 %> - <%= group.formatted_tee_time %></td>
       			<td>
       			  <% group.players_signed_up.each do |player| -%>
                 <%= player.complete_name %></br>

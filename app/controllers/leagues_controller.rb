@@ -38,12 +38,6 @@ class LeaguesController < BaseController
     end
   end
 
-  def destroy
-    @league.destroy
-
-    redirect_to leagues_path, :flash => { :success => "The league was successfully deleted." }
-  end
-
   def update_from_ghin
     @league = League.find(params[:league_id])
 
