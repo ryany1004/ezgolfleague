@@ -45,7 +45,6 @@ gem 'progress_job'
 gem 'backport_new_renderer', :github => 'brainopia/backport_new_renderer'
 gem 'apnotic'
 gem 'geocoder'
-gem 'scout_apm'
 
 group :development do
   # Access an IRB console on exception pages or by using <%= console %> in views
@@ -80,5 +79,6 @@ group :production do
   gem 'dalli'
   gem 'puma'
   gem 'puma_worker_killer'
-  gem 'newrelic_rpm'
+  # gem 'newrelic_rpm'
+  gem 'scout_apm'
 end
