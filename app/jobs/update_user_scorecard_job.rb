@@ -9,8 +9,8 @@ class UpdateUserScorecardJob < ProgressJob::Base
   def perform
     update_stage('Re-Scoring User')
 
-    #check for changes in leaderboard
-    leaderboard_before = @primary_scorecard.tournament_day.game_type.flights_with_rankings
+    # #check for changes in leaderboard
+    # leaderboard_before = @primary_scorecard.tournament_day.game_type.flights_with_rankings
 
     Rails.logger.info { "Re-Scoring User #{@primary_scorecard.golf_outing.user.complete_name}" }
     @primary_scorecard.tournament_day.score_user(@primary_scorecard.golf_outing.user)
@@ -33,17 +33,17 @@ class UpdateUserScorecardJob < ProgressJob::Base
       update_progress
     end
 
-    #check for changes in leaderboard
-    leaderboard_after = @primary_scorecard.tournament_day.game_type.flights_with_rankings
-    if leaderboard_before != leaderboard_after
-      Rails.logger.info { "Sending Notifications for Complications" }
-
-      @primary_scorecard.tournament_day.tournament.players.each do |p|
-        slim_leaderboard = FetchingTools::LeaderboardFetching.create_slimmed_down_leaderboard(@primary_scorecard.tournament_day)
-
-        p.send_complication_notification(slim_leaderboard)
-      end
-    end
+    # #check for changes in leaderboard
+    # leaderboard_after = @primary_scorecard.tournament_day.game_type.flights_with_rankings
+    # if leaderboard_before != leaderboard_after
+    #   Rails.logger.info { "Sending Notifications for Complications" }
+    #
+    #   @primary_scorecard.tournament_day.tournament.players.each do |p|
+    #     slim_leaderboard = FetchingTools::LeaderboardFetching.create_slimmed_down_leaderboard(@primary_scorecard.tournament_day)
+    #
+    #     p.send_complication_notification(slim_leaderboard)
+    #   end
+    # end
 
     Rails.cache.delete(@primary_scorecard.tournament_day.leaderboard_api_cache_key)
     Rails.cache.delete(@primary_scorecard.tournament_day.groups_api_cache_key)
