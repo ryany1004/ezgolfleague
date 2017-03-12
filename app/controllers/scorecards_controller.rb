@@ -57,7 +57,7 @@ class ScorecardsController < BaseController
   end
 
   def fetch_eager_groups
-    TournamentGroup.includes(golf_outings: [{scorecard: :scores}, :user]).where(tournament_day: @tournament_day)
+    TournamentGroup.includes(golf_outings: [{scorecard: :scores}, :user]).where(tournament_day: @tournament_day).order(:tee_time_at)
   end
 
   def find_next_scorecard(tournament_day, groups, current_scorecard)
