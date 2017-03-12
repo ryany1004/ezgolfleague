@@ -168,6 +168,8 @@ class TournamentGroup < ActiveRecord::Base
     end
   end
 
+  #TODO CHECK
+
   # def as_json(options={})
   #   super(
   #     :only => [:tee_time_at, :max_number_of_players],

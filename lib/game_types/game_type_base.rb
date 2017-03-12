@@ -149,7 +149,7 @@ module GameTypes
         return 0
       end
 
-      scorecard.scores.each do |score|
+      scorecard.scores.includes(:course_hole).each do |score|
         should_include_score = true #allows us to calculate partial scores, i.e. back 9
         if holes.blank? == false
           should_include_score = false if !holes.include? score.course_hole.hole_number
@@ -436,7 +436,7 @@ module GameTypes
           par_related_net_score = self.player_par_relation_for_tournament_day(player, self.tournament_day, true)
           par_related_gross_score = self.player_par_relation_for_tournament_day(player, self.tournament_day, false)
 
-          Rails.logger.info { "Ranking Player: #{player.complete_name} in Flight #{f.flight_number}. Net: #{net_score} Gross: #{gross_score} Par Relaed Net Score: #{par_related_net_score}" }
+          Rails.logger.info { "Ranking Player: #{player.complete_name} in Flight #{f.flight_number}. Net: #{net_score} Gross: #{gross_score} Par Related Net Score: #{par_related_net_score}" }
 
           scorecard = self.tournament_day.primary_scorecard_for_user(player)
           unless scorecard.blank?
