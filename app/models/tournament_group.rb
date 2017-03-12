@@ -134,7 +134,7 @@ class TournamentGroup < ActiveRecord::Base
   #JSON
 
   def as_json(options={})
-    Rails.cache.fetch(self.groups_api_cache_key) do
+    Rails.cache.fetch(self.tournament_day.groups_api_cache_key) do
       super(
         :only => [:tee_time_at, :max_number_of_players],
         :methods => [:server_id, :api_time_description],
