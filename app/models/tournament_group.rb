@@ -134,36 +134,71 @@ class TournamentGroup < ActiveRecord::Base
   #JSON
 
   def as_json(options={})
-    super(
-      :only => [:tee_time_at, :max_number_of_players],
-      :methods => [:server_id, :api_time_description],
-      :include => {
-        :golf_outings => {
-          :only => [:course_handicap],
-          :methods => [:server_id],
-          :include => {
-            :user => {
-              :only => [:first_name, :last_name],
-              :methods => [:server_id, :avatar_image_url]
-            },
-            :course_tee_box => {
-              :only => [:name],
-              :methods => [:server_id]
-            },
-            :scorecard => {
-              :only => [:id],
-              :methods => [:server_id],
-              :include => {
-                :scores => {
-                  :only => [:id, :strokes],
-                  :methods => [:server_id, :course_hole_number, :course_hole_par, :course_hole_yards, :tee_group_name]
+    Rails.cache.fetch(self.groups_api_cache_key) do
+      super(
+        :only => [:tee_time_at, :max_number_of_players],
+        :methods => [:server_id, :api_time_description],
+        :include => {
+          :golf_outings => {
+            :only => [:course_handicap],
+            :methods => [:server_id],
+            :include => {
+              :user => {
+                :only => [:first_name, :last_name],
+                :methods => [:server_id, :avatar_image_url]
+              },
+              :course_tee_box => {
+                :only => [:name],
+                :methods => [:server_id]
+              },
+              :scorecard => {
+                :only => [:id],
+                :methods => [:server_id],
+                :include => {
+                  :scores => {
+                    :only => [:id, :strokes],
+                    :methods => [:server_id, :course_hole_number, :course_hole_par, :course_hole_yards, :tee_group_name]
+                  }
                 }
               }
             }
           }
         }
-      }
-    )
+      )
+    end
   end
+
+  # def as_json(options={})
+  #   super(
+  #     :only => [:tee_time_at, :max_number_of_players],
+  #     :methods => [:server_id, :api_time_description],
+  #     :include => {
+  #       :golf_outings => {
+  #         :only => [:course_handicap],
+  #         :methods => [:server_id],
+  #         :include => {
+  #           :user => {
+  #             :only => [:first_name, :last_name],
+  #             :methods => [:server_id, :avatar_image_url]
+  #           },
+  #           :course_tee_box => {
+  #             :only => [:name],
+  #             :methods => [:server_id]
+  #           },
+  #           :scorecard => {
+  #             :only => [:id],
+  #             :methods => [:server_id],
+  #             :include => {
+  #               :scores => {
+  #                 :only => [:id, :strokes],
+  #                 :methods => [:server_id, :course_hole_number, :course_hole_par, :course_hole_yards, :tee_group_name]
+  #               }
+  #             }
+  #           }
+  #         }
+  #       }
+  #     }
+  #   )
+  # end
 
 end
