@@ -9,6 +9,7 @@ class UpdateUserScorecardJob < ProgressJob::Base
   def perform
     update_stage('Re-Scoring User')
 
+    #TODO: audit and re-enable
     # #check for changes in leaderboard
     # leaderboard_before = @primary_scorecard.tournament_day.game_type.flights_with_rankings
 
@@ -33,6 +34,7 @@ class UpdateUserScorecardJob < ProgressJob::Base
       update_progress
     end
 
+    #TODO: audit and re-enable
     # #check for changes in leaderboard
     # leaderboard_after = @primary_scorecard.tournament_day.game_type.flights_with_rankings
     # if leaderboard_before != leaderboard_after
