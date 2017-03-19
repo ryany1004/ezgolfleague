@@ -53,9 +53,17 @@ class Api::V1::RegistrationsController < Api::V1::ApiBaseController
   end
 
   def search_leagues
-    search_term = "%#{params[:q].downcase}%"
+    @leagues = []
 
-    @leagues = League.where(show_in_search: true).where("lower(name) LIKE ? OR lower(location) LIKE ?", search_term, search_term)
+    search_term = "%#{params[:q].strip}%"
+
+    search_term.split(" ").each do |s|
+      s = s.downcase
+
+      @leagues += League.where(show_in_search: true).where("lower(name) LIKE ? OR lower(location) LIKE ?", s, s)
+    end
+
+    @leagues = @leagues.uniq
 
     respond_with(@leagues) do |format|
       format.json { render :json => @leagues }
