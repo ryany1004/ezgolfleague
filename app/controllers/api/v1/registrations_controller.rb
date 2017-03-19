@@ -30,6 +30,28 @@ class Api::V1::RegistrationsController < Api::V1::ApiBaseController
     end
   end
 
+  def create_league
+    details = ActiveSupport::JSON.decode(request.body.read)
+
+    name = details["name"]
+    location = details["location"]
+    appear_in_search = details["appearInSearch"]
+
+    league = League.create(name: name, location: location, show_in_search: appear_in_search, contact_name: @current_user.complete_name, contact_email: @current_user.email, contact_phone: @current_user.phone_number)
+
+    if league.save
+      LeagueMembership.create(user: @current_user, league: league, is_admin: true)
+
+      render json: league
+    else
+      create_errors = { errors: league.errors }
+
+      respond_with(create_errors) do |format|
+        format.json { render :json => create_errors }
+      end
+    end
+  end
+
   def search_leagues
     search_term = "%#{params[:q].downcase}%"
 

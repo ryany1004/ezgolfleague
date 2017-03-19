@@ -75,6 +75,7 @@ Rails.application.routes.draw do
         get 'league_tournament_info', on: :collection
         get 'notify_interest', on: :collection
         post 'pay_dues', on: :collection
+        post 'create_league', on: :collection
       end
 
       resources :scores do
