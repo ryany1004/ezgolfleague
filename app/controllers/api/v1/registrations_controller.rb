@@ -37,7 +37,7 @@ class Api::V1::RegistrationsController < Api::V1::ApiBaseController
     location = details["location"]
     appear_in_search = details["appearInSearch"]
 
-    league = League.create(name: name, location: location, show_in_search: appear_in_search, contact_name: @current_user.complete_name, contact_email: @current_user.email, contact_phone: @current_user.phone_number)
+    league = League.create(name: name, location: location, show_in_search: appear_in_search, dues_amount: 0.0, contact_name: @current_user.complete_name, contact_email: @current_user.email, contact_phone: @current_user.phone_number)
 
     if league.save
       LeagueMembership.create(user: @current_user, league: league, is_admin: true)
