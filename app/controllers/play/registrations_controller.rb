@@ -41,12 +41,18 @@ class Play::RegistrationsController < BaseController
       @user_account = temporary_user
       @league = League.find(params[:league_id])
 
-      @cost_breakdown_lines = [
-        {:name => "#{@league.name} League Fees", :price => @league.dues_amount},
-        {:name => "Credit Card Fees", :price => Stripe::StripeFees.fees_for_transaction_amount(@league.dues_amount)}
-      ]
+      if @league.dues_amount == 0.0
+        @user_account.leagues << @league
 
-      @payment_amount = Payments::LeagueJoinService.payment_amount(@league)
+        render :setup_completed
+      else
+        @cost_breakdown_lines = [
+          {:name => "#{@league.name} League Fees", :price => @league.dues_amount},
+          {:name => "Credit Card Fees", :price => Stripe::StripeFees.fees_for_transaction_amount(@league.dues_amount)}
+        ]
+
+        @payment_amount = Payments::LeagueJoinService.payment_amount(@league)
+      end
     end
 
     def request_information

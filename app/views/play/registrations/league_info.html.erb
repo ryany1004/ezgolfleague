@@ -48,9 +48,13 @@
           </tbody>
         </table>
 
-        <% unless @league.encrypted_stripe_production_publishable_key.blank? -%>
-          <%= link_to "Join Now via Credit Card", join_league_play_registrations_path(league_id: @league.id), type: "button", class: "btn btn-success" %>
-        <% end -%>
+        <% if @league.dues_amount == 0 %>
+          <%= link_to "Join Now", join_league_play_registrations_path(league_id: @league.id), type: "button", class: "btn btn-success" %>
+        <% else %>
+          <% unless @league.encrypted_stripe_production_publishable_key.blank? -%>
+            <%= link_to "Join Now via Credit Card", join_league_play_registrations_path(league_id: @league.id), type: "button", class: "btn btn-success" %>
+          <% end -%>
+        <% end %>
 
         <%= link_to "Request Additional Information", request_information_play_registrations_path(league_id: @league.id), type: "button", class: "btn btn-default", method: :put %>
       </div>
