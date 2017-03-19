@@ -2,40 +2,44 @@ class Play::DashboardController < Play::BaseController
   layout "golfer"
 
   def index
-    @page_title = "My Dashboard"
-
-    active_season = current_user.selected_league.active_season_for_user(current_user)
-    if session[:selected_season_id].blank?
-      @league_season = active_season
+    if current_user.selected_league.blank?
+      redirect_to leagues_play_registrations_path, :flash => { :success => "Please create or join a league to continue." }
     else
-      @league_season = current_user.selected_league.league_seasons.where(id: session[:selected_season_id]).first
-    end
+      @page_title = "My Dashboard"
 
-    @has_unpaid_upcoming_tournaments = false
-
-    if @league_season == active_season
-      @todays_tournaments = Tournament.all_today([current_user.selected_league])
-
-      @todays_tournaments.each do |t|
-        @has_unpaid_upcoming_tournaments = false if !t.user_has_paid?(current_user)
+      active_season = current_user.selected_league.active_season_for_user(current_user)
+      if session[:selected_season_id].blank?
+        @league_season = active_season
+      else
+        @league_season = current_user.selected_league.league_seasons.where(id: session[:selected_season_id]).first
       end
-    end
 
-    unless @league_season.blank?
-      @upcoming_tournaments = Tournament.all_upcoming([current_user.selected_league], @league_season.ends_at).select {|t| t.all_days_are_playable? }.to_a
-      @past_tournaments = Tournament.past_for_league_season(@league_season).select {|t| t.all_days_are_playable? }.to_a
+      @has_unpaid_upcoming_tournaments = false
 
-      @rankings = Rails.cache.fetch(@league_season.rankings_cache_key, expires_in: 24.hours, race_condition_ttl: 10)
-      if @rankings.blank?
-        @rankings = current_user.selected_league.ranked_users_for_year(@league_season.starts_at, @league_season.ends_at)
+      if @league_season == active_season
+        @todays_tournaments = Tournament.all_today([current_user.selected_league])
 
-        Rails.cache.write(@league_season.rankings_cache_key, @rankings)
+        @todays_tournaments.each do |t|
+          @has_unpaid_upcoming_tournaments = false if !t.user_has_paid?(current_user)
+        end
       end
-    else
-      @upcoming_tournaments = Tournament.all_upcoming([current_user.selected_league], nil).select {|t| t.all_days_are_playable? }.to_a
-      @past_tournaments = Tournament.all_past([current_user.selected_league], nil).select {|t| t.all_days_are_playable? }.to_a
 
-      @rankings = current_user.selected_league.ranked_users_for_year(nil, nil)
+      unless @league_season.blank?
+        @upcoming_tournaments = Tournament.all_upcoming([current_user.selected_league], @league_season.ends_at).select {|t| t.all_days_are_playable? }.to_a
+        @past_tournaments = Tournament.past_for_league_season(@league_season).select {|t| t.all_days_are_playable? }.to_a
+
+        @rankings = Rails.cache.fetch(@league_season.rankings_cache_key, expires_in: 24.hours, race_condition_ttl: 10)
+        if @rankings.blank?
+          @rankings = current_user.selected_league.ranked_users_for_year(@league_season.starts_at, @league_season.ends_at)
+
+          Rails.cache.write(@league_season.rankings_cache_key, @rankings)
+        end
+      else
+        @upcoming_tournaments = Tournament.all_upcoming([current_user.selected_league], nil).select {|t| t.all_days_are_playable? }.to_a
+        @past_tournaments = Tournament.all_past([current_user.selected_league], nil).select {|t| t.all_days_are_playable? }.to_a
+
+        @rankings = current_user.selected_league.ranked_users_for_year(nil, nil)
+      end
     end
   end
 
