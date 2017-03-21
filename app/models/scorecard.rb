@@ -17,6 +17,8 @@ class Scorecard < ActiveRecord::Base
   end
 
   def clear_primary_scorecard_cache
+    return if self.golf_outing.user.blank?
+
     cache_key = self.golf_outing.tournament_group.tournament_day.scorecard_id_cache_key(self.golf_outing.user)
 
     did_remove = Rails.cache.delete(cache_key)
