@@ -17,6 +17,8 @@ class Api::V1::TournamentsController < Api::V1::ApiBaseController
       all_tournaments = todays_tournaments + upcoming_tournaments + past_tournaments
       all_tournaments = all_tournaments.select {|t| t.all_days_are_playable? }.to_a #only include tournaments with all playable days
 
+      all_tournaments = all_tournaments.uniq
+
       Rails.cache.write(cache_key, all_tournaments)
     else
       logger.info { "Returning Cached Tournaments #{cache_key}" }

@@ -5,10 +5,14 @@ class Api::V1::ScorecardsController < Api::V1::ApiBaseController
   respond_to :json
 
   def show
-    payload = @tournament_day.scorecard_payload_for_scorecard(@scorecard)
+    if @scorecard.blank?
+      render :status => 404
+    else
+      payload = @tournament_day.scorecard_payload_for_scorecard(@scorecard)
 
-    respond_with(payload) do |format|
-      format.json { render :json => payload }
+      respond_with(payload) do |format|
+        format.json { render :json => payload }
+      end
     end
   end
 
@@ -36,7 +40,7 @@ class Api::V1::ScorecardsController < Api::V1::ApiBaseController
   def fetch_details
     @tournament = Tournament.find(params[:tournament_id])
     @tournament_day = @tournament.tournament_days.find(params[:tournament_day_id])
-    @scorecard = Scorecard.find(params[:id])
+    @scorecard = Scorecard.where(id: params[:id]).first
   end
 
 end
