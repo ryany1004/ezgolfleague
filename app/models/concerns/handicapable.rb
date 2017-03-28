@@ -1,6 +1,7 @@
 module Handicapable
   extend ActiveSupport::Concern
 
+  #TODO: REMOVE
   # def course_handicap(selected_course, course_tee_box)
   #   return nil if self.handicap_index.blank? or course_tee_box.blank? #this will fail if the user is not flighted
   #

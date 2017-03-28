@@ -159,6 +159,9 @@ module Addable
       self.tournament.players_for_day(self).each do |p|
         player_course_handicap = self.player_course_handicap_for_player(p, f)
         team_course_handicap = self.team_course_handicap_for_player(p)
+
+        Rails.logger.debug { "Player HCP: #{player_course_handicap} Team HCP: #{team_course_handicap} - p #{p} f #{f}" }
+
         player_course_handicap = team_course_handicap if team_course_handicap > player_course_handicap #the highest handicap is the one used if this is a team
 
         unless player_course_handicap.blank?
