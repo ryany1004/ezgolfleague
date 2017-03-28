@@ -105,12 +105,13 @@ module Addable
       player_course_handicap = self.golf_outing_for_player(p).course_handicap
 
       unless f.blank?
-        if self.golf_outing_for_player(p).course_handicap == 0 #re-calc handicap if we do not have one
+        if golf_outing.course_handicap == 0 #re-calc handicap if we do not have one
           Rails.logger.debug { "Re-Calculating Course Handicap AGAIN for #{p.complete_name}" }
 
           golf_outing.scorecard.set_course_handicap(true) unless golf_outing.scorecard.blank?
 
-          player_course_handicap = p.course_handicap(self.course, f.course_tee_box)
+          #player_course_handicap = p.course_handicap(self.course, f.course_tee_box) #TODO: remove
+          player_course_handicap = p.course_handicap_for_golf_outing(golf_outing)
 
           golf_outing.course_handicap = player_course_handicap
           golf_outing.save
