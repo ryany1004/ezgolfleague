@@ -111,7 +111,7 @@ module Addable
           golf_outing.scorecard.set_course_handicap(true) unless golf_outing.scorecard.blank?
 
           #player_course_handicap = p.course_handicap(self.course, f.course_tee_box) #TODO: remove
-          player_course_handicap = p.course_handicap_for_golf_outing(golf_outing)
+          player_course_handicap = p.course_handicap_for_golf_outing(golf_outing, f)
 
           golf_outing.course_handicap = player_course_handicap
           golf_outing.save
