@@ -130,7 +130,13 @@ class User < ActiveRecord::Base
 
   def send_mobile_notification(body, pusher = nil)
     return if self.wants_push_notifications == false
+    
+    self.send_ios_notification(body, pusher) if self.mobile_devices.where(device_type: "iphone").count >= 1
 
+    self.send_android_notification(body) if self.mobile_devices.where(device_type: "android").count >= 1
+  end
+
+  def send_ios_notification(body, pusher = nil)
     pusher = User.pusher if pusher.blank?
 
     self.mobile_devices.where(device_type: "iphone").each do |device|
@@ -188,6 +194,23 @@ class User < ActiveRecord::Base
       Rails.logger.info { "Notification Response: #{response.headers} #{response.body}" }
 
       pusher.close
+    end
+  end
+
+  def send_android_notification(body)
+    firebase = FCM.new(FIREBASE_API_KEY)
+
+    self.mobile_devices.where(device_type: "android").each do |device|
+      registration_ids = [device.device_identifier]
+
+      options = {notification: {
+        body: body,
+        title: "EZ Golf League Update"
+        }}
+
+      response = firebase.send(registration_ids, options)
+
+      Rails.logger.info { "Android Notification Response: #{response}" }
     end
   end
 
