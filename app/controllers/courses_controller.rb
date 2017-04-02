@@ -3,7 +3,7 @@ class CoursesController < BaseController
   before_action :initialize_form, :only => [:new, :edit]
 
   def index
-    @courses = Course.page params[:page]
+    @courses = Course.order(:name).page params[:page]
 
     @page_title = "Courses"
   end
