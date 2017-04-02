@@ -13,7 +13,8 @@
 
     <h3>Basic Details</h3>
     <div class="well">
-      <%= f.input :league_id, collection: @leagues, :label => 'League', :label_method => :name %>
+      <p><strong>League</strong></p>
+      <%= f.input :league_id, collection: @leagues, label: false, :label_method => :name, include_blank: true, input_html: { class: 'chosen-select' } %>
 
   	  <%= f.input :name, :label => 'Name', required: true %>
 

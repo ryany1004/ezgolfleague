@@ -13,7 +13,11 @@ class Course < ActiveRecord::Base
   paginates_per 50
 
   def complete_name
-    "#{self.name} - #{self.city}, #{self.us_state}"
+    if self.city.blank? || self.us_state.blank?
+      self.name
+    else
+      "#{self.name} - #{self.city}, #{self.us_state}"
+    end
   end
 
   def geocode
