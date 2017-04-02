@@ -461,7 +461,7 @@ module GameTypes
 
         self.sort_rank_players_in_flight!(ranked_flight[:players])
 
-        self.calculate_rank_position_for_players_in_flight(ranked_flight[:players])
+        self.calculate_rank_position_for_players_in_flight!(ranked_flight[:players])
 
         ranked_flights << ranked_flight
       end
