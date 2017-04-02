@@ -32,7 +32,7 @@
               <% current_day_player = @current_day_flight[:players][i] %>
               <tr>
                 <td><strong><%= flight[:flight_number] %></strong></td>
-                <td><strong><%= i + 1 %></strong></td>
+                <td><strong><%= player[:ranking] %></strong></td>
                 <td><%= player[:name] %></td>
                 <td><%= current_day_player[:net_score] %></td>
                 <td><%= current_day_player[:gross_score] %></td>

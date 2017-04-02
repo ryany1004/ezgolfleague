@@ -461,6 +461,8 @@ module GameTypes
 
         self.sort_rank_players_in_flight!(ranked_flight[:players])
 
+        self.calculate_rank_position_for_players_in_flight(ranked_flight[:players])
+
         ranked_flights << ranked_flight
       end
 
@@ -469,6 +471,37 @@ module GameTypes
 
     def sort_rank_players_in_flight!(flight_players)
       flight_players.sort! { |x,y| x[:par_related_net_score] <=> y[:par_related_net_score] }
+    end
+
+    def calculate_rank_position_for_players_in_flight!(flight_players)
+      last_rank = 0
+      last_score = 0
+      quantity_at_rank = 0
+
+      flight_players.each_with_index do |player, i|
+        #rank = last rank + 1
+        #unless last_score are the same, then rank does not change
+        #when last_score then does differ, need to move the rank up the number of slots
+
+        if player[:par_related_net_score] != last_score
+          rank = last_rank + 1
+
+          if quantity_at_rank != 0
+            quantity_at_rank = 0
+
+            rank = i + 1
+          end
+
+          last_rank = rank
+          last_score = player[:par_related_net_score]
+        else
+          rank = last_rank
+
+          quantity_at_rank = quantity_at_rank + 1
+        end
+
+        player[:ranking] = rank
+      end
     end
 
     ##Payouts
