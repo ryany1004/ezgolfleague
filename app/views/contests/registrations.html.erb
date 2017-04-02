@@ -43,7 +43,7 @@
             <div class="row">
               <div class="well">
                 <p>Add a user to this contest:</p>
-                <%= f.input :another_member_id, label: "Unregistered League Members", collection: @unregistered_users, label_method: :complete_name, value_method: :id %>
+                <%= f.input :another_member_id, label: false, collection: @unregistered_users, label_method: :complete_name, value_method: :id, include_blank: true, input_html: { class: 'chosen-select' } %>
               </div>
             </div>
           </div>

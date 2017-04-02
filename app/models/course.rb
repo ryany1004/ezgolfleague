@@ -12,6 +12,10 @@ class Course < ActiveRecord::Base
 
   paginates_per 50
 
+  def complete_name
+    "#{self.name} - #{self.city}, #{self.us_state}"
+  end
+
   def geocode
     unless self.street_address_1.blank?
       coordinates = Geocoder.coordinates("#{self.street_address_1}, #{self.city}, #{self.us_state}")

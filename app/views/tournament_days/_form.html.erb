@@ -6,13 +6,14 @@
         <%= notification %>
       </div>
     <% end %>
-  
+
     <legend>Tournament Day Details</legend>
-    
+
     <h3>Basic Details</h3>
-    <div class="well">  
-      <%= f.input :course_id, collection: @courses, :label => 'Course', :label_method => :name %>
-      
+    <div class="well">
+      <p><strong>Select a course:</strong></p>
+      <%= f.input :course_id, collection: @courses, label: false, :label_method => :complete_name, input_html: { class: 'chosen-select' } %>
+
       <%= f.input :tournament_at, :label => 'Tournament Date', required: true, :as => :datetime_picker %>
     </div>
 
