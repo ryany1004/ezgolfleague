@@ -108,6 +108,12 @@ class Play::RegistrationsController < BaseController
     end
 
     def temporary_user
-      User.where(id: session[:temporary_user_id]).first
+      unless session[:temporary_user_id].blank?
+        User.where(id: session[:temporary_user_id]).first
+      else
+        if session["warden.user.user.key"] && session["warden.user.user.key"].first && session["warden.user.user.key"].first.first
+          User.where(id: session["warden.user.user.key"].first.first).first
+        end
+      end
     end
 end
