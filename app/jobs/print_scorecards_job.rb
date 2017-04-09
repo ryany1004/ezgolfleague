@@ -1,6 +1,7 @@
 class PrintScorecardsJob < ProgressJob::Base
   def initialize(tournament_day, current_user)
     max_count = tournament_day.tournament.players_for_day(tournament_day).count
+    max_count = max_count * 2
     max_count += 1
 
     super progress_max: max_count
@@ -18,6 +19,8 @@ class PrintScorecardsJob < ProgressJob::Base
     @print_cards = []
 
     @tournament.players_for_day(@tournament_day).each do |player|
+      update_progress
+
       primary_scorecard = @tournament_day.primary_scorecard_for_user(player)
       other_scorecards = @tournament_day.related_scorecards_for_user(player, true)
 
