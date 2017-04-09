@@ -29,6 +29,8 @@ module Addable
       if self == self.tournament.first_day
         Payment.create(tournament: self.tournament, payment_amount: self.tournament.dues_for_user(user, paying_with_credit_card) * -1.0, user: user, payment_source: "Tournament Dues")
       end
+
+      user.send_silent_notification #ask device to update
     end
   end
 

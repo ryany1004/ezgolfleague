@@ -128,12 +128,41 @@ class User < ActiveRecord::Base
     end
   end
 
+  ## Notifications - this stuff should be re-factored out to another class and de-duped
+
+  def has_ios_devices?
+    self.mobile_devices.where(device_type: "iphone").count >= 1
+  end
+
+  def has_android_devices?
+    self.mobile_devices.where(device_type: "android").count >= 1
+  end
+
   def send_mobile_notification(body, pusher = nil)
     return if self.wants_push_notifications == false
-    
-    self.send_ios_notification(body, pusher) if self.mobile_devices.where(device_type: "iphone").count >= 1
 
-    self.send_android_notification(body) if self.mobile_devices.where(device_type: "android").count >= 1
+    self.send_ios_notification(body, pusher) if self.has_ios_devices?
+    self.send_android_notification(body) if self.has_android_devices?
+  end
+
+  def send_silent_notification
+    return if !self.has_ios_devices?
+
+    pusher = User.pusher
+
+    self.mobile_devices.where(device_type: "iphone").each do |device|
+      pusher = User.pusher(true) if device.environment_name == "debug"
+
+      notification = Apnotic::Notification.new(device.device_identifier)
+      notification.topic = "com.ezgolfleague.GolfApp"
+      notification.content_available = 1
+
+      response = pusher.push(notification)
+
+      Rails.logger.info { "Notification Response: #{response.headers} #{response.body}" }
+    end
+
+    pusher.close
   end
 
   def send_ios_notification(body, pusher = nil)
@@ -170,8 +199,6 @@ class User < ActiveRecord::Base
   end
 
   def send_complication_notification(content)
-    return if self.wants_push_notifications == false
-
     self.mobile_devices.where(device_type: "apple-watch-complication").each do |device|
       certificate_file = "#{Rails.root}/config/apns_complication_cert.pem"
       passphrase = "golf"
