@@ -40,7 +40,7 @@ class LeagueMembershipsController < BaseController
   end
 
   def update
-    if @league_membership.toggle_active == "1"
+    if membership_params[:toggle_active] == "1"
       @league_membership.state = MembershipStates::ACTIVE_FOR_BILLING
     else
       @league_membership.state = MembershipStates::ADDED
