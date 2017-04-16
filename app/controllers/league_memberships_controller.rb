@@ -23,7 +23,7 @@ class LeagueMembershipsController < BaseController
     @league_membership = LeagueMembership.new(membership_params)
     @league_membership.league = @league
 
-    if @league_membership.toggle_active == true == "1"
+    if @league_membership.toggle_active == "1"
       @league_membership.state = MembershipStates::ACTIVE_FOR_BILLING
     else
       @league_membership.state = MembershipStates::ADDED
@@ -40,7 +40,7 @@ class LeagueMembershipsController < BaseController
   end
 
   def update
-    if @league_membership.toggle_active == true == "1"
+    if @league_membership.toggle_active == "1"
       @league_membership.state = MembershipStates::ACTIVE_FOR_BILLING
     else
       @league_membership.state = MembershipStates::ADDED
