@@ -179,6 +179,14 @@ class Tournament < ActiveRecord::Base
 
   ##
 
+  def is_paid?
+    if self.league.exempt_from_subscription
+      true
+    else
+      false #TODO: update
+    end
+  end
+
   def all_days_are_playable?
     return false if self.tournament_days.count == 0
 
@@ -202,7 +210,7 @@ class Tournament < ActiveRecord::Base
   end
 
   def can_be_finalized?
-    return self.last_day.can_be_finalized?
+    self.last_day.can_be_finalized?
   end
 
   ##

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161218223512) do
+ActiveRecord::Schema.define(version: 20170416003447) do
 
   create_table "contest_holes", force: :cascade do |t|
     t.integer  "contest_id"
@@ -265,6 +265,7 @@ ActiveRecord::Schema.define(version: 20161218223512) do
     t.string   "contact_email"
     t.string   "location"
     t.string   "required_container_frame_url"
+    t.boolean  "exempt_from_subscription",                    default: false
   end
 
   create_table "mobile_devices", force: :cascade do |t|

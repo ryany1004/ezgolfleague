@@ -1,5 +1,5 @@
 module MembershipStates
-  ADDED = "Added"
   INVITED = "Invited"
-  EXPIRED = "Expired"
+  ADDED = "Added"
+  ACTIVE_FOR_BILLING = "Active"
 end

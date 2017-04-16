@@ -10,6 +10,8 @@ class LeagueMembership < ActiveRecord::Base
 
   before_create :setup_initial_state
 
+  attr_accessor :toggle_active
+
   def setup_initial_state
     self.state = MembershipStates::ADDED
   end

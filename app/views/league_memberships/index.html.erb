@@ -17,6 +17,7 @@
 		<tr>
 			<th>User Name</th>
       <th>Balance</th>
+      <th>Active</th>
       <th>Admin</th>
       <th>Added</th>
       <th>GHIN Updated</th>
@@ -28,6 +29,7 @@
 		<tr>
 			<td><%= link_to membership.user.complete_name, edit_league_league_membership_path(@league, membership) %></td>
       <td><%= number_to_currency(membership.user.payments_for_league(membership.league).map(&:payment_amount).inject(0, &:+)) %></td>
+      <td><% if membership.state == ACTIVE_FOR_BILLING %>Yes<% end %></td>
       <td><%= human_boolean(membership.is_admin?) %></td>
 			<td><%= membership.created_at.to_s(:date_and_time) %></td>
       <td><%= membership.user.ghin_updated_at.to_s(:date_and_time) unless membership.user.ghin_updated_at.blank? %></td>
@@ -38,6 +40,7 @@
   <tfoot>
 		<tr>
 			<th>&nbsp;</th>
+      <th>&nbsp;</th>
       <th>&nbsp;</th>
       <th>&nbsp;</th>
 			<th>&nbsp;</th>

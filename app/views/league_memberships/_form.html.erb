@@ -22,6 +22,15 @@
 	  <%= f.input :is_admin, :label => "Is this user an admin for #{@league.name}?" %>
   </div>
 
+  <% if !@league.exempt_from_subscription %>
+  <h3>Billing</h3>
+  <div class="well">
+    <%= f.input :toggle_active, :label => "Is this golfer active for billing?" %>
+
+    <p>Golfers that are active are counted when billing your league for tournament play. Inactive golfers will not be able to sign up for a tournament or score.</p>
+  </div>
+  <% end %>
+
   <div class="form-actions">
     <%= f.button :submit, "Update Membership", :class => 'btn btn-default' %>
   </div>
