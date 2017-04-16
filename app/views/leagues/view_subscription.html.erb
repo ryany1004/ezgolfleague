@@ -1,0 +1,317 @@
+<style>
+  .table > tbody > tr:first-child > td {
+    border: none;
+  }
+</style>
+
+<div class="col-md-12">
+  <div class="row">
+    <h1>Your Subscription for <%= @league.name %></h1>
+
+    <div class="btn-group">
+      <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        Switch Leagues <span class="caret"></span>
+      </button>
+      <ul class="dropdown-menu">
+        <li><a href="#">League 1</a></li>
+        <li><a href="#">League 2</a></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="col-md-12">&nbsp;</div>
+
+<div class="col-md-12">
+  <!-- <div class="row">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">Your Current Plan</h3>
+      </div>
+      <div class="panel-body">
+        <table class="table">
+          <tbody>
+            <tr>
+              <td>Your league currently has 22 active golfers at $5 / golfer for a monthly cost of <mark>$110</mark>.</td>
+              <td class="text-right"><p><a href="#" class="btn btn-default" role="button">Update Active Golfers</a></p></td>
+            </tr>
+            <tr>
+              <td><a href='#'>Read more</a> about EZ Golf League pricing information.</td>
+              <td class="text-right">&nbsp;</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="panel-footer"><strong>What is an active golfer?</strong> You determine who is active in the league and counts toward billing. An active golfer is able to join tournaments and record scores.</div>
+    </div>
+  </div> -->
+
+  <!-- <div class="row">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">Your Current Plan</h3>
+      </div>
+      <div class="panel-body">
+        <table class="table">
+          <tbody>
+            <tr>
+              <td>Your league currently has 22 active golfers at $5 / golfer for a monthly cost of <mark>$110</mark>.</td>
+              <td class="text-right">&nbsp;</td>
+            </tr>
+            <tr>
+              <td>You determine who is active in the league and counts toward billing. An active golfer is able to join tournaments and record scores.</td>
+              <td class="text-right">
+                <a href="#" class="btn btn-default" role="button">Update Active Golfers</a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="panel-footer">Want more information on pricing? <a href=''>Click here to see our plans.</a></div>
+    </div>
+  </div> -->
+
+  <!-- <div class="row">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">Your Current Plan</h3>
+      </div>
+      <div class="panel-body">
+        <table class="table">
+          <tbody>
+            <tr>
+              <td>You have 3 tournaments for 22 active golfers each remaining on your current plan.</td>
+              <td class="text-right">&nbsp;</td>
+            </tr>
+            <tr>
+              <td>Your last payment was $110 on 5/1/17 for 22 active golfers for 10 tournaments.</td>
+              <td class="text-right">&nbsp;</td>
+            </tr>
+            <tr>
+              <td>Your league currently has 22 active golfers.</td>
+              <td class="text-right"><a href="#" class="btn btn-default" role="button">Update Active Golfers</a></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="panel-footer">Want more information on pricing? <a href=''>Click here to see our plans.</a></div>
+    </div>
+  </div> -->
+
+  <div class="row">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">Your Current Plan</h3>
+      </div>
+      <div class="panel-body">
+        <table class="table">
+          <tbody>
+            <tr>
+              <td><strong>Credits Remaining</strong></td>
+              <td class="text-right">
+                <p>3 tournaments with 22 golfers</p>
+              </td>
+            </tr>
+            <tr>
+              <td><strong>Last Payment</strong></td>
+              <td class="text-right">
+                <p>Your last payment was $110 on 5/1/17 for 10 tournaments with 22 active golfers</p>
+              </td>
+            </tr>
+            <tr>
+              <td><strong>Active Golfers</strong></td>
+              <td class="text-right">
+                <p>You have 22 active golfers in your league</p>
+                <p><a href="#" class="btn btn-default" role="button" data-toggle="modal" data-target="#myModal">Update Active Golfers</a></p>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="panel panel-default">
+      <div class="panel-body text-center">
+        <h3>You only have 3 tournaments left - add new credits today to avoid any interruption in service.</h3>
+        <p><a href="#" class="btn btn-default btn-primary" role="button">Add Tournament Credits Now</a></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- <div class="row">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">Payment Details</h3>
+      </div>
+      <div class="panel-body">
+        <table class="table">
+          <tbody>
+            <tr>
+              <td><strong>Credit Card</strong></td>
+              <td class="text-right">
+                <p>xxxx-xxxx-xxxx-1234</p>
+                <p>Exp 12/02</p>
+                <p><a href="#" class="btn btn-default" role="button">Change Credit Card</a></p>
+              </td>
+            </tr>
+            <tr>
+              <td><strong>Your Balance</strong></td>
+              <td class="text-right">
+                Your balance due is <mark>$110.00</mark>
+              </td>
+            </tr>
+            <tr>
+              <td><strong>Next Payment</strong></td>
+              <td class="text-right">
+                Your card will be charged for your balance on <mark>5/1/17</mark>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div> -->
+
+  <div class="row">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">Payment Details</h3>
+      </div>
+      <div class="panel-body">
+        <table class="table">
+          <tbody>
+            <tr>
+              <td><strong>Your Credit Card</strong></td>
+              <td class="text-right">
+                <p>xxxx-xxxx-xxxx-1234</p>
+                <p>Exp 12/02</p>
+                <p><a href="#" class="btn btn-default" role="button">Change Credit Card</a></p>
+              </td>
+            </tr>
+            <!-- <tr>
+              <td><strong>Tournament Credits</strong></td>
+              <td class="text-right">
+                <p><a href="#" class="btn btn-default" role="button">Add Tournament Credits</a></p>
+              </td>
+            </tr> -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">Past Payments</h3>
+      </div>
+      <div class="panel-body">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Payment Amount</th>
+              <th>Notes</th>
+              <th>&nbsp;</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>1/1/17</td>
+              <td>$110.00</td>
+              <td>15 Tournaments w/ 22 Active Golfers</td>
+              <td><a href="#">Print Receipt</a></td>
+            </tr>
+            <tr>
+              <td>6/1/17</td>
+              <td>$110.00</td>
+              <td>15 Tournaments w/ 22 Active Golfers</td>
+              <td><a href="#">Print Receipt</a></td>
+            </tr>
+            <tr>
+              <td>12/1/17</td>
+              <td>$110.00</td>
+              <td>15 Tournaments w/ 22 Active Golfers</td>
+              <td><a href="#">Print Receipt</a></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="panel-footer"><em>Thank you for using EZ Golf League</em></div>
+    </div>
+  </div>
+
+  <div class="row">
+    <h5>Need support or have a question? Contact us at <a href='mailto:support@ezgolfleague.com?subject=Subscription%20Question%20for%20<%= @league.name %>'>support@ezgolfleague.com</a> for help.</h5>
+  </div>
+</div>
+
+<!-- Active Golfers Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Update Active Golfers</h4>
+      </div>
+      <div class="modal-body">
+        <p>30 active golfers selected.</p>
+        <p>Your current plan includes 22 golfers.</p>
+        <p>Adding eight golfers will result in a charge of <mark>$40</mark>.</p>
+
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>Active</th>
+              <th>Name</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><input type="checkbox" name="vehicle" value="Bike"></td>
+              <td>Bob Jones</td>
+            </tr>
+            <tr>
+              <td><input type="checkbox" name="vehicle" value="Bike"></td>
+              <td>Bob Jones</td>
+            </tr>
+            <tr>
+              <td><input type="checkbox" name="vehicle" value="Bike"></td>
+              <td>Bob Jones</td>
+            </tr>
+            <tr>
+              <td><input type="checkbox" name="vehicle" value="Bike"></td>
+              <td>Bob Jones</td>
+            </tr>
+            <tr>
+              <td><input type="checkbox" name="vehicle" value="Bike"></td>
+              <td>Bob Jones</td>
+            </tr>
+            <tr>
+              <td><input type="checkbox" name="vehicle" value="Bike"></td>
+              <td>Bob Jones</td>
+            </tr>
+            <tr>
+              <td><input type="checkbox" name="vehicle" value="Bike"></td>
+              <td>Bob Jones</td>
+            </tr>
+            <tr>
+              <td><input type="checkbox" name="vehicle" value="Bike"></td>
+              <td>Bob Jones</td>
+            </tr>
+            <tr>
+              <td><input type="checkbox" name="vehicle" value="Bike"></td>
+              <td>Bob Jones</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-primary">Save &amp; Charge $40 to Credit Card</button>
+      </div>
+    </div>
+  </div>
+</div>

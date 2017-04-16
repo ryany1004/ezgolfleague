@@ -1,5 +1,5 @@
 class LeaguesController < BaseController
-  before_action :fetch_league, :only => [:edit, :update, :destroy]
+  before_action :fetch_league, :only => [:edit, :update, :destroy, :view_subscription, :update_subscription]
 
   def index
     if current_user.is_super_user?
@@ -61,6 +61,17 @@ class LeaguesController < BaseController
     redirect_to leagues_path, :flash => { :success => "The message was sent." }
   end
 
+  def new_subscription
+    @page_title = "Setup Your Subscription"
+  end
+
+  def view_subscription
+    @page_title = "Your Subscription"
+  end
+
+  def update_subscription
+  end
+
   private
 
   def league_params
@@ -68,7 +79,17 @@ class LeaguesController < BaseController
   end
 
   def fetch_league
-    @league = League.find(params[:id])
+    if params[:id].blank?
+      league_id = params[:league_id]
+    else
+      league_id = params[:id]
+    end
+
+    if current_user.is_super_user
+      @league = League.find(league_id)
+    else
+      @league = current_user.leagues.find(league_id)
+    end
   end
 
 end

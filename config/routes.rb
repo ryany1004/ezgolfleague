@@ -103,10 +103,15 @@ Rails.application.routes.draw do
 
   #this is for admin
   resources :leagues do
+    get 'new_subscription'
+    get 'view_subscription'
+    put 'update_subscription'
+
     resources :league_seasons
 
     resources :league_memberships do
       get 'print', on: :collection
+      put 'update_active', on: :collection
     end
 
     resources :reports do
