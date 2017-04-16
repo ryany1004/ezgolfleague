@@ -25,7 +25,7 @@
   <% if !@league.exempt_from_subscription %>
   <h3>Billing</h3>
   <div class="well">
-    <%= f.input :toggle_active, :label => "Is this golfer active for billing?" %>
+    <%= f.input :toggle_active, :label => "Is this golfer active for billing?", as: :boolean %>
 
     <p>Golfers that are active are counted when billing your league for tournament play. Inactive golfers will not be able to sign up for a tournament or score.</p>
   </div>
