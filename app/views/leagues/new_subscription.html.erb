@@ -1,42 +1,172 @@
+<style>
+  .panel-strongborder {
+    border-width: 3px;
+    background-color: #FCF7F2;
+  }
+
+  .panel-greenborder {
+    border-color: #4EAD49;
+  }
+
+  .panel-brownborder {
+    border-color: #FFA900;
+  }
+</style>
+
 <div class="container text-center">
   <div class="row">
     <h1>How much does EZ Golf League cost?</h1>
-    <p>Using EZ Golf League is the best way to make sure all of your league operations run smoothly.</p>
-    <p>Save hours per month that you previously spent with spreadsheets or inferior software. Plus, your golfers will love the quick access to scores and standings!</p>
+    <p class="lead">Using EZ Golf League is the best way to make sure all of your league operations run smoothly.</p>
+    <p class="lead">Save <mark>hours per month</mark> that you previously spent with spreadsheets or inferior software. Plus, your golfers will <mark>love</mark> the quick access to scores and standings!</p>
   </div>
 
   <div class="row">
-    <div class="panel panel-default">
+    <div class="panel panel-success panel-strongborder panel-greenborder">
       <div class="panel-body">
         <h2><strong>Just $5 per golfer for up to 15 tournaments</strong></h2>
-        <p>Includes unlimited use of our apps for iOS and Android and powerful tools to manage your league</p>
+        <h4>Includes unlimited use of our apps for iOS and Android and powerful tools to manage your league</h4>
       </div>
     </div>
   </div>
 
   <div class="row">
     <div class="col-md-6" style="padding-left:0;">
-      <div class="panel panel-default">
+      <div class="panel panel-warning panel-strongborder panel-brownborder">
         <div class="panel-body">
           <h3><strong>Free</strong></h3>
-          <p>For leagues of up to 12 golfers or if you just want to try it out</p>
+          <h4>For leagues of up to 12 golfers or if you just want to give it a try</h4>
         </div>
       </div>
     </div>
     <div class="col-md-6" style="padding-right:0;">
-      <div class="panel panel-default">
+      <div class="panel panel-warning panel-strongborder panel-brownborder">
         <div class="panel-body">
           <h3><strong>Play more than 15 tournaments per season?</strong></h3>
-          <p>We can accomodate leagues of any size.</p>
+          <h4>We can accomodate leagues of any size</h4>
         </div>
       </div>
     </div>
   </div>
 
+  <div class="row">&nbsp;</div>
+
   <div class="row">
     <div class="col-md-3">&nbsp;</div>
-    <div class="col-md-6"><button type="button" class="btn btn-primary btn-lg btn-block">Get Started Now</button></div>
+    <div class="col-md-6"><button type="button" class="btn btn-primary btn-lg btn-block" data-toggle="modal" data-target="#myModal"><strong>Get Started Now</strong></button></div>
     <div class="col-md-3">&nbsp;</div>
   </div>
 
+  <div class="row">&nbsp;</div>
+
+  <div class="row">
+    <div class="col-md-2">&nbsp;</div>
+    <div class="col-md-8">
+      <h2>Common Questions</h2>
+      <div class="text-left">
+        <p><strong>Do you have smartphone apps?</strong></p>
+        <p>Yes, we have apps for both iOS and Android available in the App Store and Google Play.</p>
+
+        <p><strong>What features can I use from my phone?</strong></p>
+        <p>Our apps allow you to score tournaments and view your standings. On iOS, you're also able to register for upcoming tournaments - coming soon on Android.</p>
+
+        <p><strong>I've got a lot of golfers in my league but many of them don't play each year. Will I have to pay for them?</strong></p>
+        <p>You are only billed for 'active' golfers, i.e. those that participate in tournaments. You can change which golfers are active at any time.</p>
+
+        <p><strong>I have 13 golfers in my league. Do I need to pay for all 13 golfers or are the first 12 free?</strong></p>
+        <p>You'd pay for 13 golfers. Our free trial is for leagues with 12 or fewer golfers. Paid plans need to cover all golfers active in the league.</p>
+
+        <p><strong>How am I billed?</strong></p>
+        <p>Via credit card. We accept Visa, Mastercard and American Express.</p>
+
+        <p><strong>Can I add active golfers later if I need to?</strong></p>
+        <p>Yes, absolutely. If you need to add more golfers, the system will provide you with an updated balance.</p>
+
+        <p><strong>What is your refund policy?</strong></p>
+        <p>We don't offer refunds. We encourage you to try our free trial before signing up to get a feel for how the system works.</p>
+
+        <p><strong>Which game types do you support?</strong></p>
+        <p>We currently support stroke play, match play, scramble, shamble, stableford, best ball and various team configurations. If you have a question about a specific game type used in your league, contact us at <a href='mailto:support@ezgolfleague.com?subject=Game%20Type%20Question'>support@ezgolfleague.com</a>. We are adding game types all the time and would love to hear from you!</p>
+      </div>
+    </div>
+    <div class="col-md-2">&nbsp;</div>
+  </div>
 </div>
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Billing Calculator</h4>
+      </div>
+      <div class="modal-body">
+        <p>An 'active golfer' is one that plays in tournaments.</p>
+        <p>A 'season' includes a certain number of tournaments. Typically a season is a year but it can be any length.</p>
+
+        <table class="table table-striped">
+          <tbody>
+            <tr>
+              <td>Number of Active Golfers</td>
+              <td><input type="number" name="active_golfers" value="15" id="active_golfers"></td>
+            </tr>
+            <tr>
+              <td>Number of Tournaments Per Season</td>
+              <td><input type="number" name="tournaments_per_season" value="10" id="tournaments_per_season"></td>
+            </tr>
+            <tr>
+              <td><strong>Total Cost</strong> <span id="cost_details"></span></td>
+              <td id="total_cost">XX</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary">Continue</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  $("#active_golfers").keyup(function() {
+    updateCalculatedCost();
+  });
+
+  $("#tournaments_per_season").keyup(function() {
+    updateCalculatedCost();
+  });
+
+  $("#active_golfers").change(function() {
+    updateCalculatedCost();
+  });
+
+  $("#tournaments_per_season").change(function() {
+    updateCalculatedCost();
+  });
+
+  function updateCalculatedCost() {
+    var golfers = $("#active_golfers").val();
+    var tournaments = $("#tournaments_per_season").val();
+
+    if (golfers < 13) {
+      $("#total_cost").html("FREE");
+      $("#cost_details").html("");
+    } else {
+      var cost = 0;
+      var costPerGolfer = 0;
+
+      if (tournaments > 15) {
+        costPerGolfer = 10;
+      } else {
+        costPerGolfer = 5;
+      }
+
+      cost = golfers * costPerGolfer;
+
+      $("#total_cost").html("$" + cost);
+      $("#cost_details").html("($"+ costPerGolfer +" per golfer)");
+    }
+  }
+
+  updateCalculatedCost();
+</script>
