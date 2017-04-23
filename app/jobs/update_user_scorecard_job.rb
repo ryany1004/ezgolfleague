@@ -47,6 +47,7 @@ class UpdateUserScorecardJob < ProgressJob::Base
     #   end
     # end
 
+    Rails.logger.info { "Expiring caches: #{@primary_scorecard.tournament_day.leaderboard_api_cache_key} | #{@primary_scorecard.tournament_day.groups_api_cache_key}" }
     Rails.cache.delete(@primary_scorecard.tournament_day.leaderboard_api_cache_key)
     Rails.cache.delete(@primary_scorecard.tournament_day.groups_api_cache_key)
 
