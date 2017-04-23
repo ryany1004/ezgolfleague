@@ -161,7 +161,7 @@ module Addable
         player_course_handicap = self.player_course_handicap_for_player(p, f)
         team_course_handicap = self.team_course_handicap_for_player(p)
 
-        Rails.logger.debug { "Player HCP: #{player_course_handicap} Team HCP: #{team_course_handicap} - p #{p} f #{f}" }
+        Rails.logger.info { "Flighting - Player HCP: #{player_course_handicap} Team HCP: #{team_course_handicap} - p #{p} f #{f}" }
 
         player_course_handicap = team_course_handicap if team_course_handicap > player_course_handicap #the highest handicap is the one used if this is a team
 
@@ -169,12 +169,12 @@ module Addable
           if player_course_handicap >= f.lower_bound && player_course_handicap <= f.upper_bound
             f.users << p
 
-            Rails.logger.debug { "Flighted: #{player_course_handicap} (#{f.lower_bound} to #{f.upper_bound}) for Player: #{p.id} #{p.complete_name} for Flight Num #{f.flight_number}" }
+            Rails.logger.info { "Flighted: #{player_course_handicap} (#{f.lower_bound} to #{f.upper_bound}) for Player: #{p.id} #{p.complete_name} for Flight Num #{f.flight_number}" }
           else
             Rails.logger.debug { "NOT Flighted: #{player_course_handicap} (#{f.lower_bound} to #{f.upper_bound}) for Player: #{p.id} #{p.complete_name} for Flight Num #{f.flight_number}" }
           end
         else
-          Rails.logger.debug { "Player Course Handicap Blank: #{p.id} #{p.complete_name}" }
+          Rails.logger.debug { "Flighting - Player Course Handicap Blank: #{p.id} #{p.complete_name}" }
         end
       end
     end
