@@ -116,8 +116,7 @@ class TournamentsController < BaseController
       @tournament.tournament_days.each do |day|
         day.schedule_golfers if day.has_scores? == false
       end
-
-      redirect_to league_tournament_signups_path(current_user.selected_league, @tournament, tournament_day: @tournament.tournament_days[1]), :flash => { :success => "Days without scores were re-scheduled." }
+      redirect_to league_tournament_day_players_path(current_user.selected_league, @tournament, @tournament.tournament_days[1]), :flash => { :success => "Days without scores were re-scheduled." }
     end
   end
 
