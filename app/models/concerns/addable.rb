@@ -152,6 +152,8 @@ module Addable
   end
 
   def assign_players_to_flights
+    self.tournament_day_results.destroy_all #clear calculated results
+
     self.reload
 
     self.flights.each do |f|
@@ -161,7 +163,7 @@ module Addable
         player_course_handicap = self.player_course_handicap_for_player(p, f)
         team_course_handicap = self.team_course_handicap_for_player(p)
 
-        Rails.logger.info { "Flighting - Player HCP: #{player_course_handicap} Team HCP: #{team_course_handicap} - p #{p} f #{f}" }
+        Rails.logger.info { "Flighting - Player HCP: #{player_course_handicap} Team HCP: #{team_course_handicap} - #{p.complete_name}. Checking against Flight #{f.flight_number}" }
 
         player_course_handicap = team_course_handicap if team_course_handicap > player_course_handicap #the highest handicap is the one used if this is a team
 
