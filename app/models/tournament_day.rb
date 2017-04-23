@@ -89,19 +89,19 @@ class TournamentDay < ActiveRecord::Base
   end
 
   def groups_api_cache_key
-    return "groups-json#{self.id}-#{self.updated_at.to_s}"
+    return "groups-json#{self.id}-#{self.updated_at.to_i}"
   end
 
   def leaderboard_api_cache_key
-    return "leaderboard-json#{self.id}-#{self.updated_at.to_s}"
+    return "leaderboard-json#{self.id}-#{self.updated_at.to_i}"
   end
 
   def flights_with_rankings_cache_key
-    return "flightswithrankings-json#{self.id}-#{self.updated_at.to_s}"
+    return "flightswithrankings-json#{self.id}-#{self.updated_at.to_i}"
   end
 
   def scorecard_print_cache_key
-    return "print-scorecards#{self.id}-#{self.updated_at.to_s}"
+    return "print-scorecards#{self.id}-#{self.updated_at.to_i}"
   end
 
   def has_payouts?
