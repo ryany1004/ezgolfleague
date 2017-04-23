@@ -87,6 +87,14 @@ class League < ActiveRecord::Base
     end
   end
 
+  def has_active_subscription?
+    return true if self.exempt_from_subscription
+
+    #TODO: need to wire up
+
+    return false
+  end
+
   ##
 
   def active_season
