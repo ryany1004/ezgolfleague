@@ -151,8 +151,8 @@ module Addable
     end
   end
 
-  def assign_players_to_flights
-    self.tournament_day_results.destroy_all #clear calculated results
+  def assign_players_to_flights(should_destroy_results = true)
+    self.tournament_day_results.destroy_all if should_destroy_results = true #clear calculated results
 
     self.reload
 

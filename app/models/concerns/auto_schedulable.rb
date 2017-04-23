@@ -7,7 +7,7 @@ module AutoSchedulable
 
     players_with_scores = []
     self.tournament.players.each do |p|
-      self.tournament.tournament_days.first.assign_players_to_flights
+      self.tournament.tournament_days.first.assign_players_to_flights(false)
 
       flight = previous_day.flight_for_player(p)
       group = previous_day.tournament_group_for_player(p)

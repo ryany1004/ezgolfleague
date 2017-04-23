@@ -142,43 +142,6 @@ class TournamentDay < ActiveRecord::Base
     return user_ids
   end
 
-  #are you sure you really want to do this?!?
-  def clear_scores
-    self.tournament_groups.each do |group|
-      group.golf_outings.each do |outing|
-        outing.scorecard.scores.each do |score|
-          score.strokes = 0
-          score.save
-        end
-      end
-    end
-
-    self.tournament_day_results.destroy_all
-  end
-
-  def recreate_scorecards
-    self.course_holes.destroy_all
-
-    self.course.course_holes.each do |ch|
-      self.course_holes << ch
-    end
-
-    self.tournament_groups.each do |g|
-      g.golf_outings.each do |out|
-        out.scorecard.destroy
-
-        scorecard = Scorecard.create!(golf_outing: out)
-
-        self.assign_players_to_flights
-        flight = self.flight_for_player(out.user)
-
-        self.course_holes.each_with_index do |hole, i|
-          score = Score.create!(scorecard: scorecard, course_hole: hole, sort_order: i)
-        end
-      end
-    end
-  end
-
   #date parsing
   def tournament_at=(date)
     begin
