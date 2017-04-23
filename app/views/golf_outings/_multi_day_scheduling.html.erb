@@ -15,7 +15,7 @@
       <% end %>
     <% else -%>
       <% if tournament.is_finalized == false -%>
-        <%= button_to "Auto-Schedule For Secondary Days", league_tournament_auto_schedule_path(tournament.league, tournament), :class => 'btn btn-default', :data => { :confirm => 'Are you SURE you want to schedule secondary days? This will REMOVE any existing scores for those days.' }, method: :patch %>
+        <%= button_to "Auto-Schedule For Secondary Days", league_tournament_auto_schedule_path(tournament.league, tournament), :class => 'btn btn-default', :data => { :confirm => 'Are you SURE you want to schedule secondary days? This will REMOVE any existing scores for those days. This process takes a few minutes.' }, method: :patch %>
       <% end -%>
     <% end -%>
   </div>

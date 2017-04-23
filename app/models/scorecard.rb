@@ -34,11 +34,9 @@ class Scorecard < ActiveRecord::Base
     end
 
     if force_recalculation == true or (self.golf_outing.course_handicap.blank? or self.golf_outing.course_handicap == 0)
-      #calculated_course_handicap = self.golf_outing.user.course_handicap(self.tournament_day.course, self.golf_outing.course_tee_box) #TODO: REMOVE
       calculated_course_handicap = self.golf_outing.user.course_handicap_for_golf_outing(self.golf_outing)
       calculated_course_handicap = 0 if calculated_course_handicap.blank?
 
-      puts "Recalculated Course Handicap For #{self.golf_outing.user.complete_name}: #{calculated_course_handicap} for Scorecard #{self.id}"
       Rails.logger.info { "Recalculated Course Handicap For #{self.golf_outing.user.complete_name}: #{calculated_course_handicap} for Scorecard #{self.id}" }
 
       outing = self.golf_outing
