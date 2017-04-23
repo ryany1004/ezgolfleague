@@ -81,9 +81,9 @@ class League < ActiveRecord::Base
     season = self.active_season
 
     unless season.blank?
-      return season.dues_amount
+      season.dues_amount
     else
-      return 0.0
+      0.0
     end
   end
 
@@ -92,7 +92,7 @@ class League < ActiveRecord::Base
 
     #TODO: need to wire up
 
-    return false
+    false
   end
 
   ##
