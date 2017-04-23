@@ -12,6 +12,7 @@ class League < ActiveRecord::Base
   paginates_per 50
 
   after_create :create_default_league_season
+  after_create :notify_super_users
 
   attr_encrypted :stripe_test_secret_key, :key => ENCRYPYTED_ATTRIBUTES_KEY
   attr_encrypted :stripe_production_secret_key, :key => ENCRYPYTED_ATTRIBUTES_KEY
@@ -31,6 +32,20 @@ class League < ActiveRecord::Base
       return self.stripe_test_secret_key
     else
       return self.stripe_production_secret_key
+    end
+  end
+
+  ##
+
+  def notify_super_users
+    title = "New League Created: #{self.name}"
+    
+    body = "A new league has been created.\n\n"
+    body += self.name + "\n\n"
+    body += "https://app.ezgolfleague.com/leagues/#{self.id}/edit"
+
+    User.where(is_super_user: true).each do |u|
+      NotificationMailer.notification_message(u, title, body).deliver_later
     end
   end
 
