@@ -1,7 +1,8 @@
 class PlayerSignupJob < ProgressJob::Base
-  def initialize(params)
+  def initialize(tournament_day, params)
     super progress_max: 3
 
+    @tournament_day = tournament_day
     @params = params
   end
 
