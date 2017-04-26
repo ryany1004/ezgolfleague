@@ -142,6 +142,8 @@ module GameTypes
 
       handicap_allowance = self.tournament_day.handicap_allowance(user)
 
+      Rails.logger.debug { "Handicap Allowance: #{handicap_allowance}" }
+
       scorecard = self.tournament_day.primary_scorecard_for_user(user)
       if scorecard.blank?
         Rails.logger.debug { "Returning 0 - No Scorecard" }
@@ -181,7 +183,7 @@ module GameTypes
 
       total_score = 0 if total_score < 0
 
-      Rails.logger.debug { "Base Score Computed: #{total_score}. User: #{user.complete_name} handicap: #{use_handicap} holes: #{holes}" }
+      Rails.logger.debug { "Base Score Computed: #{total_score}. User: #{user.complete_name} use handicap: #{use_handicap} holes: #{holes}" }
 
       return total_score
     end

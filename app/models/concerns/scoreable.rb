@@ -59,7 +59,7 @@ module Scoreable
   end
 
   def has_scores?
-    eager_groups = TournamentGroup.includes(golf_outings: [{scorecard: :scores}, :user]).where(tournament_day: self)
+    eager_groups = TournamentGroup.includes(golf_outings: [{scorecard: :scores}]).where(tournament_day: self)
 
     eager_groups.each do |group|
       group.golf_outings.each do |golf_outing|
@@ -70,6 +70,25 @@ module Scoreable
     end
 
     return false
+  end
+
+  def update_scores_for_course_holes
+    if self.has_scores? #update previously created scores to match any changed holes
+      eager_groups = TournamentGroup.includes(golf_outings: [{scorecard: :scores}]).where(tournament_day: self)
+
+      eager_groups.each do |group|
+        group.golf_outings.each do |golf_outing|
+          self.course_holes.each_with_index do |hole, i|
+            score = Score.where(scorecard: golf_outing.scorecard).where(sort_order: i)
+
+            Rails.logger.debug { "Updating Score #{score.id} on scorecard #{score.scorecard.id} from course hole #{score.course_hole.id} to course hole #{hole.id}." }
+            
+            score.course_hole = hole
+            score.save
+          end
+        end
+      end
+    end
   end
 
   def score_users
