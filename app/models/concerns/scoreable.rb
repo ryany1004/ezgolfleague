@@ -79,12 +79,16 @@ module Scoreable
       eager_groups.each do |group|
         group.golf_outings.each do |golf_outing|
           self.course_holes.each_with_index do |hole, i|
-            score = Score.where(scorecard: golf_outing.scorecard).where(sort_order: i)
+            score = Score.where(scorecard: golf_outing.scorecard).where(sort_order: i).first
 
-            Rails.logger.debug { "Updating Score #{score.id} on scorecard #{score.scorecard.id} from course hole #{score.course_hole.id} to course hole #{hole.id}." }
-            
-            score.course_hole = hole
-            score.save
+            unless score.blank?
+              Rails.logger.debug { "Updating Score #{score.id} on scorecard #{score.scorecard.id} from course hole #{score.course_hole.id} to course hole #{hole.id}." }
+
+              score.course_hole = hole
+              score.save
+            else
+              Rails.logger.debug { "Could not find a score with sort_order #{i} on scorecard #{score.scorecard.id}." }
+            end
           end
         end
       end
