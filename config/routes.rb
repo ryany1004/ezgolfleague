@@ -104,6 +104,7 @@ Rails.application.routes.draw do
   #this is for admin
   resources :leagues do
     get 'new_subscription'
+    get 'setup_subscription'
     get 'view_subscription'
     put 'update_subscription'
 
