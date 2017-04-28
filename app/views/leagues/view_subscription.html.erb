@@ -135,7 +135,7 @@
     <div class="panel panel-default">
       <div class="panel-body text-center">
         <h3>You have 3 tournaments left on your current subscription.</h3>
-        <p><a href="#" class="btn btn-default btn-primary" role="button">Add Tournament Credits Now</a></p>
+        <p><a href="#" class="btn btn-default btn-primary" role="button" data-toggle="modal" data-target="#addCreditsModal">Add Tournament Credits Now</a></p>
       </div>
     </div>
   </div>
@@ -333,3 +333,81 @@
     </div>
   </div>
 </div>
+
+<!-- Re-Up Modal -->
+<div class="modal fade" id="addCreditsModal" tabindex="-1" role="dialog" aria-labelledby="creditCardModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Purchase Tournament Credits</h4>
+      </div>
+      <div class="modal-body">
+        <table class="table">
+          <tbody>
+            <tr>
+              <td>How many active golfers do you have in your league?</td>
+              <td class="text-right"><input type="number" name="active_golfers" value="15" id="active_golfers"></td>
+            </tr>
+            <tr>
+              <td>How many tournaments do you want to play?</td>
+              <td class="text-right"><input type="number" name="tournaments_per_season" value="10" id="tournaments_per_season"></td>
+            </tr>
+            <tr>
+              <td><strong>Total Cost</strong> <span id="cost_details"></span></td>
+              <td class="text-right" id="total_cost">XX</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary">Purchase Credits</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  $("#active_golfers").keyup(function() {
+    updateCalculatedCost();
+  });
+
+  $("#tournaments_per_season").keyup(function() {
+    updateCalculatedCost();
+  });
+
+  $("#active_golfers").change(function() {
+    updateCalculatedCost();
+  });
+
+  $("#tournaments_per_season").change(function() {
+    updateCalculatedCost();
+  });
+
+  function updateCalculatedCost() {
+    var golfers = $("#active_golfers").val();
+    var tournaments = $("#tournaments_per_season").val();
+
+    if (golfers < 13) {
+      $("#total_cost").html("FREE");
+      $("#cost_details").html("");
+    } else {
+      var cost = 0;
+      var costPerGolfer = 0;
+
+      if (tournaments > 15) {
+        costPerGolfer = 10;
+      } else {
+        costPerGolfer = 5;
+      }
+
+      cost = golfers * costPerGolfer;
+
+      $("#total_cost").html("$" + cost);
+      $("#cost_details").html("($"+ costPerGolfer +" per golfer)");
+      $("#payment_button_text").html("Submit &amp; Pay $" + cost);
+    }
+  }
+
+  updateCalculatedCost();
+</script>
