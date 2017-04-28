@@ -39,7 +39,7 @@ class League < ActiveRecord::Base
 
   def notify_super_users
     title = "New League Created: #{self.name}"
-    
+
     body = "A new league has been created.\n\n"
     body += self.name + "\n\n"
     body += "https://app.ezgolfleague.com/leagues/#{self.id}/edit"
@@ -139,7 +139,7 @@ class League < ActiveRecord::Base
   def ranked_users_for_year(starts_at, ends_at)
     ranked_players = []
 
-    tournaments = Tournament.tournaments_happening_at_some_point(starts_at, ends_at, [self])
+    tournaments = Tournament.tournaments_happening_at_some_point(starts_at, ends_at, [self], true)
     tournaments.each do |t|
       t.players.each do |p|
         points = 0

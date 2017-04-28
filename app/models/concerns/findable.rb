@@ -3,15 +3,19 @@ module Findable
 
   module ClassMethods
     def all_today(leagues = nil)
-      return Tournament.tournaments_happening_at_some_point(Time.zone.now.at_beginning_of_day, Time.zone.now.at_end_of_day, leagues)
+      return Tournament.tournaments_happening_at_some_point(Time.zone.now.at_beginning_of_day, Time.zone.now.at_end_of_day, leagues, true)
     end
 
     def all_upcoming(leagues = nil, end_date = nil)
-      return Tournament.tournaments_happening_at_some_point(Time.zone.now.at_beginning_of_day, end_date, leagues)
+      return Tournament.tournaments_happening_at_some_point(Time.zone.now.at_beginning_of_day, end_date, leagues, true)
     end
 
     def all_past(leagues = nil, start_date = nil)
-      return Tournament.tournaments_happening_at_some_point(start_date, Time.zone.now.at_beginning_of_day, leagues)
+      return Tournament.tournaments_happening_at_some_point(start_date, Time.zone.now.at_beginning_of_day, leagues, true)
+    end
+
+    def all_unconfigured(leagues = nil)
+      return Tournament.tournaments_happening_at_some_point(nil, nil, leagues, false)
     end
 
     def past_for_league_season(league_season)
@@ -24,7 +28,7 @@ module Findable
       return Tournament.tournaments_happening_at_some_point(league_season.starts_at, end_time, [league_season.league])
     end
 
-    def tournaments_happening_at_some_point(start_date, end_date, leagues)
+    def tournaments_happening_at_some_point(start_date, end_date, leagues, restrict_to_configured = true)
       relation = Tournament.includes(:league)
 
       unless leagues.blank?
@@ -39,6 +43,10 @@ module Findable
 
       unless end_date.blank?
         relation = relation.where("tournament_starts_at <= ? OR tournament_days_count = 0", end_date)
+      end
+
+      if restrict_to_configured
+        relation = relation.where("tournament_starts_at != nil")
       end
 
       relation = relation.order("tournament_starts_at")

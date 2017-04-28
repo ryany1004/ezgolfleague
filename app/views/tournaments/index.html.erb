@@ -1,4 +1,8 @@
 <div class="row">
+  <% if @unconfigured_tournaments.count > 0 -%>
+    <%= render partial: 'index_table', locals: {tournaments: @unconfigured_tournaments, title: "Setup In Process", show_create: true} %>
+  <% end -%>
+
   <% if @upcoming_tournaments.count > 0 -%>
     <%= render partial: 'index_table', locals: {tournaments: @upcoming_tournaments, title: "Upcoming Tournaments", show_create: true} %>
   <% end -%>
