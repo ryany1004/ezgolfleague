@@ -45,9 +45,11 @@ module Findable
         relation = relation.where("tournament_starts_at <= ? OR tournament_days_count = 0", end_date)
       end
 
-      # if restrict_to_configured
-      #   relation = relation.where("tournament_starts_at IS NOT NULL")
-      # end
+      if restrict_to_configured
+        relation = relation.where("tournament_starts_at IS NOT NULL")
+      else
+        relation = relation.where("tournament_starts_at IS NULL")
+      end
 
       relation = relation.order("tournament_starts_at")
 
