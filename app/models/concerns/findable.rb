@@ -46,7 +46,7 @@ module Findable
       end
 
       if restrict_to_configured
-        relation = relation.where("tournament_starts_at != nil")
+        relation = relation.where("tournament_starts_at IS NOT NULL")
       end
 
       relation = relation.order("tournament_starts_at")
