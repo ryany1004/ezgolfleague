@@ -25,6 +25,8 @@ class Tournament < ActiveRecord::Base
   validates :signup_opens_at, presence: true
   validates :signup_closes_at, presence: true
   validates :max_players, presence: true
+  validates :max_players, :numericality => { :greater_than_or_equal_to => 0 }
+  validates :dues_amount, :numericality => { :greater_than_or_equal_to => 0 }
 
   validate :dates_are_valid, on: :create, unless: "self.skip_date_validation == true"
   def dates_are_valid
