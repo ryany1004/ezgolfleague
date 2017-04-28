@@ -10,10 +10,12 @@ class TournamentsController < BaseController
       @upcoming_tournaments = Tournament.all_upcoming(nil).page params[:page]
       @past_tournaments = Tournament.all_past(nil).reorder("tournament_starts_at DESC").page params[:page]
       #@unconfigured_tournaments = Tournament.all_unconfigured(nil).page params[:page]
+      @unconfigured_tournaments = []
     else
       @upcoming_tournaments = Tournament.all_upcoming(current_user.leagues).page params[:page]
       @past_tournaments = Tournament.all_past(current_user.leagues).reorder("tournament_starts_at DESC").page params[:page]
       #@unconfigured_tournaments = Tournament.all_unconfigured(current_user.leagues).page params[:page]
+      @unconfigured_tournaments = []
     end
 
     @page_title = "Tournaments"
