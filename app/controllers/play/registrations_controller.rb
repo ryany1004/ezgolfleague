@@ -87,6 +87,7 @@ class Play::RegistrationsController < BaseController
 
     def create_league
       @league = League.new(league_params)
+      @league.exempt_from_subscription = true #TODO: REMOVE
 
       if @league.save
         LeagueMembership.create(league: @league, user: temporary_user, is_admin: true)

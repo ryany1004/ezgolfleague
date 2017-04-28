@@ -38,6 +38,7 @@ class Api::V1::RegistrationsController < Api::V1::ApiBaseController
     appear_in_search = details["appearInSearch"]
 
     league = League.create(name: name, location: location, show_in_search: appear_in_search, contact_name: @current_user.complete_name, contact_email: @current_user.email, contact_phone: @current_user.phone_number, league_description: "")
+    league.exempt_from_subscription = true #TODO: REMOVE
 
     if league.save
       LeagueMembership.create(user: @current_user, league: league, is_admin: true)
