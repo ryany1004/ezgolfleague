@@ -1,7 +1,7 @@
 class TournamentsController < BaseController
   helper Play::TournamentsHelper
 
-  before_filter :fetch_tournament, :only => [:edit, :update, :destroy, :signups, :manage_holes, :update_holes, :add_signup, :move_signup, :delete_signup, :finalize, :run_finalization, :display_finalization, :confirm_finalization, :update_course_handicaps, :touch_tournament, :update_auto_schedule, :auto_schedule, :confirmed_players, :disqualify_signup]
+  before_filter :fetch_tournament, :only => [:edit, :update, :destroy, :signups, :manage_holes, :update_holes, :add_signup, :move_signup, :delete_signup, :finalize, :run_finalization, :display_finalization, :confirm_finalization, :update_course_handicaps, :touch_tournament, :rescore_players, :update_auto_schedule, :auto_schedule, :confirmed_players, :disqualify_signup]
   before_filter :initialize_form, :only => [:new, :edit]
   before_filter :set_stage
 
@@ -40,22 +40,6 @@ class TournamentsController < BaseController
   end
 
   ##
-
-  def touch_tournament
-    @tournament.touch
-
-    Rails.cache.clear
-
-    @tournament.tournament_days.each do |day|
-      day.touch
-
-      day.tournament_day_results.each do |result|
-        result.touch
-      end
-    end
-
-    redirect_to league_tournaments_path(current_user.selected_league), :flash => { :success => "Cached data for this tournament was discarded." }
-  end
 
   def edit
   end
@@ -172,12 +156,36 @@ class TournamentsController < BaseController
     end
   end
 
-  #Handicaps
+  #Misc
+
+  def touch_tournament
+    @tournament.touch
+
+    Rails.cache.clear
+
+    @tournament.tournament_days.each do |day|
+      day.touch
+
+      day.tournament_day_results.each do |result|
+        result.touch
+      end
+    end
+
+    redirect_to league_tournaments_path(current_user.selected_league), :flash => { :success => "Cached data for this tournament was discarded." }
+  end
 
   def update_course_handicaps
     @tournament.update_course_handicaps
 
     redirect_to league_tournaments_path(current_user.selected_league), :flash => { :success => "The tournament's course handicaps were re-calculated." }
+  end
+
+  def rescore_players
+    @tournament.tournament_days.each do |d|
+      d.score_users
+    end
+
+    redirect_to league_tournaments_path(current_user.selected_league), :flash => { :success => "The tournament's scores have been re-calculated." }
   end
 
   private

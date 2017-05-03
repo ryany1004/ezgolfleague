@@ -173,6 +173,7 @@ Rails.application.routes.draw do
 
       patch 'update_course_handicaps'
       patch 'touch_tournament'
+      patch 'rescore_players'
     end
 
     patch 'update_from_ghin'

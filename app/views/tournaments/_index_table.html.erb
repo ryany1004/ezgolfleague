@@ -67,6 +67,7 @@
                 <% if tournament.is_past? == false -%>
                 <li><%= link_to "Recalculate Course Handicaps", league_tournament_update_course_handicaps_path(tournament.league, tournament), method: :patch %></li>
                 <% end -%>
+                <li><%= link_to "Recalculate Tournament Scoring", league_tournament_rescore_players_path(tournament.league, tournament), method: :patch, :data => { :confirm => 'This will re-calculate all tournament scores. Can be useful if you have changed underlying data.' } %></li>
                 <li><%= link_to "Remove Cached Data", league_tournament_touch_tournament_path(tournament.league, tournament), method: :patch, :data => { :confirm => 'Are you sure you want to remove the cached data? Regenerating the data can take several minutes the next time it is accessed.' } %></li>
               </ul>
             </div>
