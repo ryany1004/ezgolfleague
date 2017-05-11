@@ -108,6 +108,9 @@ Rails.application.routes.draw do
       get 'current', on: :collection
 
       post 'update_credit_card', on: :collection
+      post 'charge_credits', on: :collection
+
+      put 'update_active', on: :collection
     end
 
     resources :league_seasons

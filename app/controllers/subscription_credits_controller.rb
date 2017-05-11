@@ -14,6 +14,27 @@ class SubscriptionCreditsController < BaseController
     @past_subscriptions = @league.subscription_credits
   end
 
+  #TODO: active golfer modal javascript calculator
+
+  def update_active
+    @league.league_memberships.each do |m|
+      m.state = MembershipStates::ADDED
+      m.save
+    end
+
+    active_status = params[:is_active]
+    active_status.keys.each do |membership_id|
+      membership = @league.league_memberships.where(id: membership_id).first
+
+      unless membership.blank?
+        membership.state = MembershipStates::ACTIVE_FOR_BILLING
+        membership.save
+      end
+    end
+
+    redirect_to current_league_subscription_credits_path(@league), :flash => { :success => "The memberships were successfully updated." }
+  end
+
   def update_credit_card
     Stripe.api_key = STRIPE_SECRET_KEY
 
@@ -40,6 +61,34 @@ class SubscriptionCreditsController < BaseController
     @league.save
 
     redirect_to current_league_subscription_credits_path(@league)
+  end
+
+  def charge_credits
+    number_of_tournaments = params[:tournaments_per_season].to_i
+    number_of_golfers = params[:active_golfers].to_i
+
+    if number_of_tournaments > 15
+      payment_amount = number_of_golfers * 10
+    else
+      payment_amount = number_of_golfers * 5
+    end
+
+    stripe_customer = Stripe::Customer.retrieve(@league.stripe_token)
+
+    begin
+      charge = Stripe::Charge.create(
+        :amount => payment_amount * 100,
+        :currency => "usd",
+        :customer => stripe_customer,
+        :description => "Charge for tournament credits for #{current_user.email} for league #{@league.name}."
+      )
+
+      SubscriptionCredit.create(league: @league, amount: payment_amount, golfer_count: number_of_golfers, tournament_count: number_of_tournaments, tournaments_remaining: number_of_tournaments, transaction_id: charge.id)
+
+      redirect_to current_league_subscription_credits_path(@league), :flash => { :success => "Your payment was recorded. Thanks!" }
+    rescue Stripe::CardError => e
+      redirect_to current_league_subscription_credits_path(@league), :flash => { :error => "There was an error processing your payment." }
+    end
   end
 
   private

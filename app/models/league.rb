@@ -2,11 +2,11 @@ class League < ActiveRecord::Base
   include Servable
 
   has_many :league_seasons, ->{ order 'starts_at' }, :dependent => :destroy
-  has_many :league_memberships, :dependent => :destroy
+  has_many :league_memberships, ->{includes(:user).order("users.last_name")}, :dependent => :destroy
   has_many :users, ->{ order 'last_name, first_name' }, through: :league_memberships
   has_many :tournaments, :dependent => :destroy, inverse_of: :league
   has_many :notification_templates, :dependent => :destroy
-  has_many :subscription_credits
+  has_many :subscription_credits, ->{ order 'created_at DESC' }
 
   validates :name, presence: true, uniqueness: true
 
