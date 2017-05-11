@@ -1,3 +1,36 @@
+<script>
+  jQuery(function($) {
+    $('#payment-form').submit(function(event) {
+      var $form = $(this);
+
+      // Disable the submit button to prevent repeated clicks
+      $form.find('submit_button').prop('disabled', true);
+
+      Stripe.card.createToken($form, stripeResponseHandler);
+
+      // Prevent the form from submitting with the default action
+      return false;
+    });
+  });
+
+  function stripeResponseHandler(status, response) {
+    var $form = $('#payment-form');
+
+    if (response.error) {
+      // Show the errors on the form
+      $form.find('.payment-errors').text(response.error.message);
+      $form.find('submit_button').prop('disabled', false);
+    } else {
+      // response contains id and card, which contains additional card details
+      var token = response.id;
+      // Insert the token into the form so it gets submitted to the server
+      $form.append($('<input type="hidden" name="stripeToken" />').val(token));
+      // and submit
+      $form.get(0).submit();
+    }
+  };
+</script>
+
 <style>
   .table > tbody > tr:first-child > td {
     border: none;
@@ -8,96 +41,24 @@
   <div class="row">
     <h1>Your Subscription for <%= @league.name %></h1>
 
+    <% if current_user.leagues_where_admin.select {|l| l != @league && !l.exempt_from_subscription}.count > 0 %>
     <div class="btn-group">
       <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         Switch Leagues <span class="caret"></span>
       </button>
       <ul class="dropdown-menu">
-        <li><a href="#">League 1</a></li>
-        <li><a href="#">League 2</a></li>
+        <% current_user.leagues_where_admin.select {|l| !l.exempt_from_subscription}.each do |l| %>
+          <li><%= link_to l.name, current_league_subscription_credits_path(l) %></li>
+        <% end %>
       </ul>
     </div>
+    <% end %>
   </div>
 </div>
 
 <div class="col-md-12">&nbsp;</div>
 
 <div class="col-md-12">
-  <!-- <div class="row">
-    <div class="panel panel-default">
-      <div class="panel-heading">
-        <h3 class="panel-title">Your Current Plan</h3>
-      </div>
-      <div class="panel-body">
-        <table class="table">
-          <tbody>
-            <tr>
-              <td>Your league currently has 22 active golfers at $5 / golfer for a monthly cost of <mark>$110</mark>.</td>
-              <td class="text-right"><p><a href="#" class="btn btn-default" role="button">Update Active Golfers</a></p></td>
-            </tr>
-            <tr>
-              <td><a href='#'>Read more</a> about EZ Golf League pricing information.</td>
-              <td class="text-right">&nbsp;</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <div class="panel-footer"><strong>What is an active golfer?</strong> You determine who is active in the league and counts toward billing. An active golfer is able to join tournaments and record scores.</div>
-    </div>
-  </div> -->
-
-  <!-- <div class="row">
-    <div class="panel panel-default">
-      <div class="panel-heading">
-        <h3 class="panel-title">Your Current Plan</h3>
-      </div>
-      <div class="panel-body">
-        <table class="table">
-          <tbody>
-            <tr>
-              <td>Your league currently has 22 active golfers at $5 / golfer for a monthly cost of <mark>$110</mark>.</td>
-              <td class="text-right">&nbsp;</td>
-            </tr>
-            <tr>
-              <td>You determine who is active in the league and counts toward billing. An active golfer is able to join tournaments and record scores.</td>
-              <td class="text-right">
-                <a href="#" class="btn btn-default" role="button">Update Active Golfers</a>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <div class="panel-footer">Want more information on pricing? <a href=''>Click here to see our plans.</a></div>
-    </div>
-  </div> -->
-
-  <!-- <div class="row">
-    <div class="panel panel-default">
-      <div class="panel-heading">
-        <h3 class="panel-title">Your Current Plan</h3>
-      </div>
-      <div class="panel-body">
-        <table class="table">
-          <tbody>
-            <tr>
-              <td>You have 3 tournaments for 22 active golfers each remaining on your current plan.</td>
-              <td class="text-right">&nbsp;</td>
-            </tr>
-            <tr>
-              <td>Your last payment was $110 on 5/1/17 for 22 active golfers for 10 tournaments.</td>
-              <td class="text-right">&nbsp;</td>
-            </tr>
-            <tr>
-              <td>Your league currently has 22 active golfers.</td>
-              <td class="text-right"><a href="#" class="btn btn-default" role="button">Update Active Golfers</a></td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <div class="panel-footer">Want more information on pricing? <a href=''>Click here to see our plans.</a></div>
-    </div>
-  </div> -->
-
   <div class="row">
     <div class="panel panel-default">
       <div class="panel-heading">
@@ -109,19 +70,27 @@
             <tr>
               <td><strong>Credits Remaining</strong></td>
               <td class="text-right">
-                <p>3 tournaments with 22 active golfers</p>
+                <% unless @active_subscription.blank? %>
+                  <p><%= @tournament_credits_remaining %> tournaments with <%= @league.league_memberships.active.count %> active golfers</p>
+                <% else %>
+                  <p>No active subscription</p>
+                <% end %>
               </td>
             </tr>
             <tr>
               <td><strong>Last Payment</strong></td>
               <td class="text-right">
-                <p>Your last payment was $110 on 5/1/17 for 10 tournaments with 22 active golfers</p>
+                <% unless @active_subscription.blank? %>
+                  <p>Your last payment was <%= number_to_currency(@active_subscription.amount) %> on <%= @active_subscription.created_at.to_s(:short) %> for <%= @active_subscription.tournament_count %> tournaments with <%= @active_subscription.golfer_count %> active golfers</p>
+                <% else %>
+                  <p>No active subscription</p>
+                <% end %>
               </td>
             </tr>
             <tr>
               <td><strong>Active Golfers</strong></td>
               <td class="text-right">
-                <p>You have 22 active golfers in your league</p>
+                <p>You have <%= @league.league_memberships.active.count %> active golfers in your league</p>
                 <p><a href="#" class="btn btn-default" role="button" data-toggle="modal" data-target="#myModal">Update Active Golfers</a></p>
               </td>
             </tr>
@@ -140,40 +109,6 @@
     </div>
   </div>
 
-  <!-- <div class="row">
-    <div class="panel panel-default">
-      <div class="panel-heading">
-        <h3 class="panel-title">Payment Details</h3>
-      </div>
-      <div class="panel-body">
-        <table class="table">
-          <tbody>
-            <tr>
-              <td><strong>Credit Card</strong></td>
-              <td class="text-right">
-                <p>xxxx-xxxx-xxxx-1234</p>
-                <p>Exp 12/02</p>
-                <p><a href="#" class="btn btn-default" role="button">Change Credit Card</a></p>
-              </td>
-            </tr>
-            <tr>
-              <td><strong>Your Balance</strong></td>
-              <td class="text-right">
-                Your balance due is <mark>$110.00</mark>
-              </td>
-            </tr>
-            <tr>
-              <td><strong>Next Payment</strong></td>
-              <td class="text-right">
-                Your card will be charged for your balance on <mark>5/1/17</mark>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </div> -->
-
   <div class="row">
     <div class="panel panel-default">
       <div class="panel-heading">
@@ -185,17 +120,11 @@
             <tr>
               <td><strong>Your Credit Card</strong></td>
               <td class="text-right">
-                <p>xxxx-xxxx-xxxx-1234</p>
-                <p>Exp 12/02</p>
+                <p>xxxx-xxxx-xxxx-<%= @league.cc_last_four %></p>
+                <p>Exp <%= @league.cc_expire_month %>/<%= @league.cc_expire_year %></p>
                 <p><a href="#" class="btn btn-default" role="button" data-toggle="modal" data-target="#creditCardModal">Change Credit Card</a></p>
               </td>
             </tr>
-            <!-- <tr>
-              <td><strong>Tournament Credits</strong></td>
-              <td class="text-right">
-                <p><a href="#" class="btn btn-default" role="button">Add Tournament Credits</a></p>
-              </td>
-            </tr> -->
           </tbody>
         </table>
       </div>
@@ -218,24 +147,15 @@
             </tr>
           </thead>
           <tbody>
+            <% @past_subscriptions.each do |p| %>
             <tr>
-              <td>1/1/17</td>
-              <td>$110.00</td>
-              <td>15 Tournaments w/ 22 Active Golfers</td>
-              <td><a href="#">Print Receipt</a></td>
+              <td><%= p.created_at.to_s(:short) %></td>
+              <td><%= number_to_currency(p.amount) %></td>
+              <td><%= p.tournament_count %> Tournaments w/ <%= p.golfer_count %> Active Golfers</td>
+              <!-- <td><a href="#">Print Receipt</a></td> -->
+              <td>&nbsp;</td>
             </tr>
-            <tr>
-              <td>6/1/17</td>
-              <td>$110.00</td>
-              <td>15 Tournaments w/ 22 Active Golfers</td>
-              <td><a href="#">Print Receipt</a></td>
-            </tr>
-            <tr>
-              <td>12/1/17</td>
-              <td>$110.00</td>
-              <td>15 Tournaments w/ 22 Active Golfers</td>
-              <td><a href="#">Print Receipt</a></td>
-            </tr>
+            <% end %>
           </tbody>
         </table>
       </div>
@@ -325,10 +245,33 @@
         <h4 class="modal-title" id="myModalLabel">Update Credit Card</h4>
       </div>
       <div class="modal-body">
-        <p>A form to update your credit card on file.</p>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-primary">Save</button>
+        <%= simple_form_for :payment, url: update_credit_card_league_subscription_credits_path(@league), method: :post, :html => {id: "payment-form"} do |f| %>
+        <div class="panel-body">
+          <span class="payment-errors"></span>
+        </div>
+        <table class="table table-striped">
+          <tbody>
+            <tr>
+              <td>Card Number</td>
+              <td><input type="text" size="20" data-stripe="number"/></td>
+            </tr>
+            <tr>
+              <td>Expiration (MM/YYYY)</td>
+              <td><input type="text" size="2" data-stripe="exp-month"/> <input type="text" size="4" data-stripe="exp-year"/></td>
+            </tr>
+            <tr>
+              <td>CVC</td>
+              <td><input type="text" size="4" data-stripe="cvc"/></td>
+            </tr>
+          </tbody>
+          <tfoot>
+            <tr>
+              <th>&nbsp;</th>
+              <th><%= f.button :button, "Update Credit Card", :class => "btn btn-primary", :id => "submit_button" %></th>
+            </tr>
+          </tfoot>
+        </table>
+        <% end %>
       </div>
     </div>
   </div>

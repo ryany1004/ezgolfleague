@@ -86,6 +86,20 @@ class User < ActiveRecord::Base
     return any_admin
   end
 
+  def leagues_where_admin
+    admin_leagues = []
+
+    self.leagues.each do |league|
+      membership = league.membership_for_user(self)
+
+      unless membership.blank?
+        admin_leagues << league if membership.is_admin
+      end
+    end
+
+    admin_leagues
+  end
+
   def has_all_exempt_leagues?
     all_exempt_leagues = true
 

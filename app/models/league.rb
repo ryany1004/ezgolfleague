@@ -6,6 +6,7 @@ class League < ActiveRecord::Base
   has_many :users, ->{ order 'last_name, first_name' }, through: :league_memberships
   has_many :tournaments, :dependent => :destroy, inverse_of: :league
   has_many :notification_templates, :dependent => :destroy
+  has_many :subscription_credits
 
   validates :name, presence: true, uniqueness: true
 

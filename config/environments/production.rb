@@ -107,6 +107,8 @@ Rails.application.configure do
   PumaWorkerKiller.start
 
   ENCRYPYTED_ATTRIBUTES_KEY = ENV["ATTRIBUTE_ENCRYPTION_KEY"]
+  STRIPE_PUBLISHABLE_KEY = ENV["STRIPE_PUBLISHABLE_KEY"]
+  STRIPE_SECRET_KEY = ENV["STRIPE_SECRET_KEY"]
 
   config.to_prepare { Devise::SessionsController.force_ssl }
   config.to_prepare { Devise::RegistrationsController.force_ssl }

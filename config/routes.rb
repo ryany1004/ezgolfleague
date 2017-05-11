@@ -103,10 +103,12 @@ Rails.application.routes.draw do
 
   #this is for admin
   resources :leagues do
-    get 'new_subscription'
-    get 'setup_subscription'
-    get 'view_subscription'
-    put 'update_subscription'
+    resources :subscription_credits, except: :show do
+      get 'information', on: :collection
+      get 'current', on: :collection
+
+      post 'update_credit_card', on: :collection
+    end
 
     resources :league_seasons
 

@@ -39,7 +39,7 @@ $(function(){
   $('.nav li a').each(function(){
     var currentPage = stripTrailingSlash($(this).attr('href'));
 
-    if (activePage == currentPage && !activePage.contains("play")) {
+    if (activePage == currentPage && !activePage.includes("play")) {
       $(this).parent().addClass('active');
     }
   });

@@ -26,7 +26,10 @@
   <link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="96x96" href="/icons/favicon-96x96.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/icons/favicon-16x16.png">
-
+  <script type="text/javascript" src="https://js.stripe.com/v2/"></script>
+  <script type="text/javascript">
+    Stripe.setPublishableKey('<%= STRIPE_PUBLISHABLE_KEY %>');
+  </script>
   <script>
     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
     (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -84,7 +87,7 @@
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><%= current_user.email %> <span class="caret"></span></a>
           <ul class="dropdown-menu" role="menu">
             <% if !current_user.has_all_exempt_leagues? %>
-            <li><%= link_to "Your Subscription", league_view_subscription_path(current_user.selected_league) %></li>
+            <li><%= link_to "Your Subscription", current_league_subscription_credits_path(current_user.selected_league) %></li>
             <% end %>
             <li><%= link_to "User Profile", edit_current_user_accounts_path %></li>
             <li><%= link_to "Sign Out", destroy_user_session_path, :method => :delete %></li>

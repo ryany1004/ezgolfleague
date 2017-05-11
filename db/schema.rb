@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170416003447) do
+ActiveRecord::Schema.define(version: 20170511214957) do
 
   create_table "contest_holes", force: :cascade do |t|
     t.integer  "contest_id"
@@ -266,6 +266,10 @@ ActiveRecord::Schema.define(version: 20170416003447) do
     t.string   "location"
     t.string   "required_container_frame_url"
     t.boolean  "exempt_from_subscription",                    default: false
+    t.string   "stripe_token"
+    t.string   "cc_last_four"
+    t.integer  "cc_expire_month"
+    t.integer  "cc_expire_year"
   end
 
   create_table "mobile_devices", force: :cascade do |t|
@@ -381,6 +385,19 @@ ActiveRecord::Schema.define(version: 20170416003447) do
   add_index "scores", ["scorecard_id"], name: "index_scores_on_scorecard_id"
   add_index "scores", ["sort_order"], name: "index_scores_on_sort_order"
 
+  create_table "subscription_credits", force: :cascade do |t|
+    t.integer  "league_id"
+    t.decimal  "amount"
+    t.integer  "golfer_count"
+    t.integer  "tournament_count"
+    t.integer  "tournaments_remaining"
+    t.string   "transaction_id"
+    t.datetime "created_at",            null: false
+    t.datetime "updated_at",            null: false
+  end
+
+  add_index "subscription_credits", ["league_id"], name: "index_subscription_credits_on_league_id"
+
   create_table "tournament_day_results", force: :cascade do |t|
     t.integer  "tournament_day_id"
     t.integer  "user_id"
@@ -443,9 +460,11 @@ ActiveRecord::Schema.define(version: 20170416003447) do
     t.boolean  "allow_credit_card_payment",   default: true
     t.integer  "tournament_days_count",       default: 0
     t.datetime "tournament_starts_at"
+    t.integer  "subscription_credit_id"
   end
 
   add_index "tournaments", ["league_id"], name: "index_tournaments_on_league_id"
+  add_index "tournaments", ["subscription_credit_id"], name: "index_tournaments_on_subscription_credit_id"
 
   create_table "users", force: :cascade do |t|
     t.datetime "created_at",                                null: false
