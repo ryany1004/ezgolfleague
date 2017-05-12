@@ -11,7 +11,46 @@
       // Prevent the form from submitting with the default action
       return false;
     });
+
+    $("#activation_text").hide();
+
+    $('#active-form :checkbox').change(function() {
+        var activeGolfers = $(":checkbox:checked").length;
+
+        var baselineGolfers = <%= @active_subscription.golfer_count %>;
+
+        var costPerGolfer = costPerGolferForTournamentCount(<%= @active_subscription.tournament_count %>);
+        var newGolfers = activeGolfers - baselineGolfers;
+        var proposedCost = costPerGolfer * newGolfers;
+
+        $("#active_golfer_number").html(newGolfers);
+
+        if (activeGolfers > baselineGolfers) {
+          $("#save_and_charge_button").val("Save and Charge Credit Card");
+
+          $("#golfer_change_cost").html("$" + proposedCost);
+
+          $("#activation_text").fadeIn();
+        } else {
+          $("#save_and_charge_button").val("Save");
+
+          $("#activation_text").fadeOut();
+        }
+    });
   });
+
+  function costPerGolferForTournamentCount(tournamentCount) {
+    var cost = 0;
+    var costPerGolfer = 0;
+
+    if (tournamentCount > 15) {
+      costPerGolfer = 10;
+    } else {
+      costPerGolfer = 5;
+    }
+
+    return costPerGolfer;
+  }
 
   function stripeResponseHandler(status, response) {
     var $form = $('#payment-form');
@@ -120,8 +159,11 @@
             <tr>
               <td><strong>Your Credit Card</strong></td>
               <td class="text-right">
-                <p>xxxx-xxxx-xxxx-<%= @league.cc_last_four %></p>
-                <p>Exp <%= @league.cc_expire_month %>/<%= @league.cc_expire_year %></p>
+                <% unless @league.cc_last_four.blank? %>
+                  <p>xxxx-xxxx-xxxx-<%= @league.cc_last_four %></p>
+                  <p>Exp <%= @league.cc_expire_month %>/<%= @league.cc_expire_year %></p>
+                <% end %>
+
                 <p><a href="#" class="btn btn-default" role="button" data-toggle="modal" data-target="#creditCardModal">Change Credit Card</a></p>
               </td>
             </tr>
@@ -169,7 +211,7 @@
 </div>
 
 <!-- Active Golfers Modal -->
-<%= simple_form_for :update_active_league_subscription_credits, url: update_active_league_subscription_credits_path(@league), method: :put do |f| %>
+<%= simple_form_for :update_active_league_subscription_credits, url: update_active_league_subscription_credits_path(@league), method: :put, :html => {id: "active-form"} do |f| %>
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
@@ -178,10 +220,8 @@
         <h4 class="modal-title" id="myModalLabel">Update Active Golfers</h4>
       </div>
       <div class="modal-body">
-        <p><%= @league.league_memberships.active.count %> active golfers selected.</p>
+        <p>You currently have <%= @league.league_memberships.active.count %> active golfers.</p>
         <p>Your most recent subscription plan includes <%= @active_subscription.golfer_count %> golfers.</p>
-        <p>Adding 8 golfers will result in a charge of <mark>$40</mark>.</p>
-
         <table class="table table-striped">
           <thead>
             <tr>
@@ -200,8 +240,10 @@
         </table>
       </div>
       <div class="modal-footer">
+        <p id="activation_text">Activating <span id="active_golfer_number">&nbsp;</span> golfer(s) will result in a charge of <mark id="golfer_change_cost">&nbsp;</mark>.</p>
+
         <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-        <%= f.button :submit, "Save & Charge $40 to Credit Card", :class => 'btn btn-primary' %>
+        <%= f.button :submit, "Save", :class => 'btn btn-primary', :id => "save_and_charge_button" %>
       </div>
     </div>
   </div>
@@ -277,7 +319,7 @@
         </table>
       </div>
       <div class="modal-footer">
-        <%= f.button :button, "Purchase Credits", :class => "btn btn-primary" %>
+        <%= f.button :button, "Purchase Credits", :class => "btn btn-primary", :id => "purchase_credits_button" %>
       </div>
     </div>
   </div>
@@ -308,7 +350,10 @@
     if (golfers < 13) {
       $("#total_cost").html("FREE");
       $("#cost_details").html("");
+      $("#purchase_credits_button").prop('disabled', true);
     } else {
+      $("#purchase_credits_button").prop('disabled', false);
+
       var cost = 0;
       var costPerGolfer = 0;
 

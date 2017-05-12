@@ -11,4 +11,12 @@ class SubscriptionCredit < ActiveRecord::Base
     #for each league, look at tournaments that are completed but do not have a subscription credit attached
     #attach and update counts
   end
+
+  def self.cost_for_tournament_count(tournament_count)
+    if tournament_count > 15
+      10
+    else
+      5
+    end
+  end
 end

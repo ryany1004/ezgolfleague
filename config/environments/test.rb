@@ -39,6 +39,8 @@ Rails.application.configure do
 
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true
-  
+
   ENCRYPYTED_ATTRIBUTES_KEY = "gobleskyasdfasdf"
+  STRIPE_PUBLISHABLE_KEY = "pk_test_vD1sXkxAPhH2SXnEksf8H03x"
+  STRIPE_SECRET_KEY = "sk_test_pl0464y2hBtGzSRdOCgmP484"
 end
