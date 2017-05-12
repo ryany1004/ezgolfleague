@@ -305,11 +305,11 @@
           <tbody>
             <tr>
               <td>How many active golfers do you have in your league?</td>
-              <td class="text-right"><input type="number" name="active_golfers" value="15" id="active_golfers"></td>
+              <td class="text-right"><input type="number" name="active_golfers" value="<%= @active_subscription.golfer_count %>" id="active_golfers"></td>
             </tr>
             <tr>
               <td>How many tournaments do you want to play?</td>
-              <td class="text-right"><input type="number" name="tournaments_per_season" value="10" id="tournaments_per_season"></td>
+              <td class="text-right"><input type="number" name="tournaments_per_season" value="<%= @active_subscription.tournament_count %>" id="tournaments_per_season"></td>
             </tr>
             <tr>
               <td><strong>Total Cost</strong> <span id="cost_details"></span></td>

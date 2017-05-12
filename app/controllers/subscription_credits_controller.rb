@@ -5,6 +5,30 @@ class SubscriptionCreditsController < BaseController
   def current
   end
 
+  def new
+    unless @league.stripe_token.blank?
+      redirect_to current_league_subscription_credits_path(@league)
+    end
+  end
+
+  def create
+    user = @league.league_memberships.first.user
+
+    number_of_golfers = params[:active_golfers].to_i
+    number_of_tournaments = params[:tournaments_per_season].to_i
+    payment_amount = calc_payment_amount(number_of_tournaments, number_of_golfers)
+
+    charge = charge_customer(@league, payment_amount, "Charge for tournament credits for #{user.email} for league #{@league.name}.")
+
+    unless charge.blank?
+      SubscriptionCredit.create(league: @league, amount: payment_amount, golfer_count: number_of_golfers, tournament_count: number_of_tournaments, tournaments_remaining: number_of_tournaments, transaction_id: charge.id)
+
+      render "play/registrations/setup_completed"
+    else
+      redirect_to information_league_subscription_credits_path(@league), :flash => { :error => "There was an error processing your payment." }
+    end
+  end
+
   def update_active
     active_before_update = @active_subscription.golfer_count
 
@@ -68,7 +92,7 @@ class SubscriptionCreditsController < BaseController
     if number_of_golfers == 0 || number_of_tournaments == 0
       redirect_to current_league_subscription_credits_path(@league), :flash => { :error => "We were unable to find your customer information. Please contact customer support." }
     else
-      charge = charge_customer(@league, paymount_amount, "Charge for tournament credits for #{current_user.email} for league #{@league.name}.")
+      charge = charge_customer(@league, payment_amount, "Charge for tournament credits for #{current_user.email} for league #{@league.name}.")
 
       unless charge.blank?
         SubscriptionCredit.create(league: @league, amount: payment_amount, golfer_count: number_of_golfers, tournament_count: number_of_tournaments, tournaments_remaining: number_of_tournaments, transaction_id: charge.id)
