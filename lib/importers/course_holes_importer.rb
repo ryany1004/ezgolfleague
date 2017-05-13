@@ -26,17 +26,21 @@ module Importers
         temp_course.address = club[:address]
         temp_course.city = club[:city]
 
-        US_STATES.each do |state|
-          temp_course.state = state.last if state.first == club[:state]
+        if Course.where("name = ? AND street_address_1 = ?", temp_course.club_name, temp_course.address).blank?
+          US_STATES.each do |state|
+            temp_course.state = state.last if state.first == club[:state]
+          end
+
+          temp_course.postal_code = club[:postal_code]
+          temp_course.phone_number = club[:phone]
+          temp_course.website_url = club[:website]
+          temp_course.latitude = club[:latitude]
+          temp_course.longitude = club[:longitude]
+
+          temporary_courses << temp_course
+        else
+          puts "Skipping #{temp_course.club_name}."
         end
-
-        temp_course.postal_code = club[:postal_code]
-        temp_course.phone_number = club[:phone]
-        temp_course.website_url = club[:website]
-        temp_course.latitude = club[:latitude]
-        temp_course.longitude = club[:longitude]
-
-        temporary_courses << temp_course
       end
 
       puts "Building Temp Clubs"
