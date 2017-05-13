@@ -9,6 +9,7 @@ class Course < ActiveRecord::Base
   has_many :tournament_days, :dependent => :destroy, inverse_of: :course
 
   validates :name, presence: true
+  validates :name, uniqueness: { scope: [:street_address_1, :city] }
 
   paginates_per 50
 

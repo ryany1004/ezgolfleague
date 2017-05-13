@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170512194855) do
+ActiveRecord::Schema.define(version: 20170513163643) do
 
   create_table "contest_holes", force: :cascade do |t|
     t.integer  "contest_id"
@@ -122,6 +122,8 @@ ActiveRecord::Schema.define(version: 20170512194855) do
     t.string   "import_tag"
     t.string   "website_url"
   end
+
+  add_index "courses", ["name"], name: "index_courses_on_name"
 
   create_table "delayed_jobs", force: :cascade do |t|
     t.integer  "priority",         default: 0, null: false
