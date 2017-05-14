@@ -61,10 +61,3 @@
     </nav>
   <% end -%>
 </div>
-
-<% if !@tournament.league.blank? && !@tournament.league.has_active_subscription? %>
-  <div class="alert alert-warning" role="alert">
-    <p>You don't currently have an active subscription. While you can setup your tournament, your golfers will not be able to register or score.</p>
-    <p>To activate your subscription, please <%= link_to "click here", "#", class: "alert-link" %>.</p>
-  </div>
-<% end %>

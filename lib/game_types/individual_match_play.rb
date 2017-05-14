@@ -14,7 +14,7 @@ module GameTypes
     def can_be_played?
       return false if self.tournament_day.tournament_groups.count == 0
       return false if self.tournament_day.flights.count == 0
-      return false if !self.tournament_day.tournament.league.has_active_subscription?
+      #return false if !self.tournament_day.tournament.league.has_active_subscription?
 
       self.tournament.players.each do |p|
         return false if self.tournament_day.golfer_team_for_player(p) == nil

@@ -109,6 +109,12 @@
     </div>
   <% end %>
 
+  <% if !current_user.selected_league.has_active_subscription? %>
+    <div class="alert alert-warning fade in">
+      You do not have an active subscription. Please <%= link_to "visit the subscription page", current_league_subscription_credits_path(current_user.selected_league) %> to setup billing and purchase tournament credits.
+    </div>
+  <% end %>
+
   <%= yield %>
 </div>
 

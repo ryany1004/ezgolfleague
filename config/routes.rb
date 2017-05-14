@@ -124,6 +124,7 @@ Rails.application.routes.draw do
     resources :reports do
       get 'adjusted_scores', on: :collection
       get 'confirmed_players', on: :collection
+      get 'finalization_report', on: :collection
     end
 
     resources :tournaments do #this is for setting them up

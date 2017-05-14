@@ -105,10 +105,14 @@ class League < ActiveRecord::Base
 
   def has_active_subscription?
     return true if self.exempt_from_subscription
+    return true if self.league_memberships.active.count <= 12
 
-    #TODO: need to wire up
-
-    false
+    active_subscriptions = self.subscription_credits.where("tournaments_remaining > 0").order("created_at DESC")
+    if active_subscriptions.count > 0
+      true
+    else
+      false
+    end
   end
 
   ##

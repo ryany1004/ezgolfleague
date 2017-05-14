@@ -37,6 +37,18 @@ class FinalizeJob < ProgressJob::Base
       update_progress
     end
 
+    if @tournament.subscription_credit.blank?
+      subscription_to_attach = @tournament.league.subscription_credits.where("tournaments_remaining > 0").order("created_at").limit(1).first
+
+      unless subscription_to_attach.blank?
+        @tournament.subscription_credit = subscription_to_attach
+        @tournament.save
+
+        subscription_to_attach.tournaments_remaining = subscription_to_attach.tournaments_remaining - 1
+        subscription_to_attach.save
+      end
+    end
+
     #cache bust
     @tournament.league.active_season.touch unless @tournament.league.active_season.blank?
 

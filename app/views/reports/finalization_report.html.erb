@@ -1,0 +1,38 @@
+<div class="col-md-12">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h3 class="panel-title">Finalized Tournaments</h3>
+    </div>
+    <table class="table table-striped">
+    	<thead>
+    		<tr>
+          <th>Name</th>
+    			<th>League</th>
+          <th>Active Golfers</th>
+          <th>Played</th>
+          <th>Subscribed</th>
+    		</tr>
+    	</thead>
+    	<tbody>
+    	<% @past_tournaments.each do |tournament| %>
+    		<tr>
+          <td><%= tournament.name %></td>
+          <td><%= tournament.league.name %><br/><%= tournament.season_name %></td>
+          <td><%= tournament.league.league_memberships.active.count %></td>
+          <td><%= tournament.players.count %></td>
+          <td>
+          <% if tournament.subscription_credit.blank? %>
+            0
+          <% else %>
+            <%= tournament.subscription_credit.golfer_count %>
+          <% end %>
+          </td>
+    		</tr>
+    	<% end %>
+    	</tbody>
+    </table>
+  </div>
+</div>
+
+
+<%= paginate @past_tournaments %>

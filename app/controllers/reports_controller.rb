@@ -1,5 +1,5 @@
 class ReportsController < ApplicationController
-  before_filter :fetch_tournament_day, except: [:index]
+  before_filter :fetch_tournament_day, except: [:index, :finalization_report]
 
   def index
     leagues = nil
@@ -8,6 +8,10 @@ class ReportsController < ApplicationController
     @past_tournaments = Tournament.tournaments_happening_at_some_point(nil, nil, leagues, true).page params[:page]
 
     @page_title = "Tournament Reports"
+  end
+
+  def finalization_report
+    @past_tournaments = Tournament.tournaments_happening_at_some_point(nil, nil, nil, true).where(is_finalized: true).page params[:page]
   end
 
   def adjusted_scores
