@@ -1,3 +1,21 @@
+<% unless params[:details_amount].blank? %>
+<script>
+  ga('ec:addProduct', {               // Provide product details in an productFieldObject.
+  'id': 'EZGL001',                   // Product ID (string).
+  'name': 'Tournament Credits', // Product name (string).
+  'category': 'Subscriptions',            // Product category (string).
+  'quantity': <%= params[:details_golfers] %>                     // Product quantity (number).
+  });
+
+  ga('ec:setAction', 'purchase', {          // Transaction details are provided in an actionFieldObject.
+  'id': '<%= params[:details_id] %>',                         // (Required) Transaction id (string).
+  'revenue': '<%= params[:details_amount] %>',                     // Revenue (currency).
+  'tax': '0.0',                          // Tax (currency).
+  'shipping': '0.0'                     // Shipping (currency).
+  });
+</script>
+<% end %>
+
 <div class="row">
   <div class="col-md-12">
     <div class="panel panel-default panel-success">
@@ -5,9 +23,13 @@
         <h3 class="panel-title">Thanks!</h3>
       </div>
       <div class="panel-body">
-        <p>Setup has been completed. Click below to login to your new account.</p>
+        <p>Setup has been completed.</p>
 
-        <p><%= link_to "Login Now", play_dashboard_index_path %></p>
+        <% if current_user.is_any_league_admin? %>
+          <p><%= link_to "Manage My League", league_admin_root_path %></p>
+        <% else %>
+          <p><%= link_to "View My Dashboard", root_path %></p>
+        <% end %>
       </div>
     </div>
   </div>

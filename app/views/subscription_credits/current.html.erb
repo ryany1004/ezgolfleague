@@ -76,6 +76,24 @@
   }
 </style>
 
+<% unless params[:details_amount].blank? %>
+<script>
+  ga('ec:addProduct', {               // Provide product details in an productFieldObject.
+  'id': 'EZGL001',                   // Product ID (string).
+  'name': 'Tournament Credits', // Product name (string).
+  'category': 'Subscriptions',            // Product category (string).
+  'quantity': <%= params[:details_golfers] %>                     // Product quantity (number).
+  });
+
+  ga('ec:setAction', 'purchase', {          // Transaction details are provided in an actionFieldObject.
+  'id': '<%= params[:details_id] %>',                         // (Required) Transaction id (string).
+  'revenue': '<%= params[:details_amount] %>',                     // Revenue (currency).
+  'tax': '0.0',                          // Tax (currency).
+  'shipping': '0.0'                     // Shipping (currency).
+  });
+</script>
+<% end %>
+
 <div class="col-md-12">
   <div class="row">
     <h1>Your Subscription for <%= @league.name %></h1>
@@ -163,7 +181,6 @@
                   <p>xxxx-xxxx-xxxx-<%= @league.cc_last_four %></p>
                   <p>Exp <%= @league.cc_expire_month %>/<%= @league.cc_expire_year %></p>
                 <% end %>
-
                 <p><a href="#" class="btn btn-default" role="button" data-toggle="modal" data-target="#creditCardModal">Change Credit Card</a></p>
               </td>
             </tr>

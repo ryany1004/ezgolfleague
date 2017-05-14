@@ -5,13 +5,23 @@ class SubscriptionCreditsController < BaseController
   def current
   end
 
+  def information
+    render :layout => 'golfer'
+  end
+
   def new
     unless @league.stripe_token.blank?
       redirect_to current_league_subscription_credits_path(@league)
+    else
+      render :layout => 'golfer'
     end
   end
 
   def create
+    token = params[:stripeToken]
+
+    create_or_update_stripe_customer(@league, token)
+
     user = @league.league_memberships.first.user
 
     number_of_golfers = params[:active_golfers].to_i
@@ -23,7 +33,7 @@ class SubscriptionCreditsController < BaseController
     unless charge.blank?
       SubscriptionCredit.create(league: @league, amount: payment_amount, golfer_count: number_of_golfers, tournament_count: number_of_tournaments, tournaments_remaining: number_of_tournaments, transaction_id: charge.id)
 
-      render "play/registrations/setup_completed"
+      redirect_to setup_completed_play_registrations_path(details_amount: payment_amount, details_golfers: number_of_golfers, details_id: charge.id)
     else
       redirect_to information_league_subscription_credits_path(@league), :flash => { :error => "There was an error processing your payment." }
     end
@@ -67,7 +77,7 @@ class SubscriptionCreditsController < BaseController
           s.save
         end
 
-        redirect_to current_league_subscription_credits_path(@league), :flash => { :success => "Your payment was recorded. Thanks!" }
+        redirect_to current_league_subscription_credits_path(@league, details_amount: payment_amount, details_golfers: updated_golfers, details_id: charge.id), :flash => { :success => "Your payment was recorded. Thanks!" }
       else
         redirect_to current_league_subscription_credits_path(@league), :flash => { :error => "There was an error processing your payment." }
       end
@@ -97,7 +107,7 @@ class SubscriptionCreditsController < BaseController
       unless charge.blank?
         SubscriptionCredit.create(league: @league, amount: payment_amount, golfer_count: number_of_golfers, tournament_count: number_of_tournaments, tournaments_remaining: number_of_tournaments, transaction_id: charge.id)
 
-        redirect_to current_league_subscription_credits_path(@league), :flash => { :success => "Your payment was recorded. Thanks!" }
+        redirect_to current_league_subscription_credits_path(@league, details_amount: payment_amount, details_golfers: number_of_golfers, details_id: charge.id), :flash => { :success => "Your payment was recorded. Thanks!" }
       else
         redirect_to current_league_subscription_credits_path(@league), :flash => { :error => "There was an error processing your payment." }
       end

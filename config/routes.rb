@@ -41,6 +41,7 @@ Rails.application.routes.draw do
       post :create_league, on: :collection
       post :submit_payment, on: :collection
       put :request_information, on: :collection
+      get :setup_completed, on: :collection
     end
 
     resource :user_account, only: [:edit, :update], controller: "user_account" do

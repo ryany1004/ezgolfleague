@@ -15,7 +15,7 @@ class Play::RegistrationsController < BaseController
     if @user_account.save
       Delayed::Job.enqueue GhinUpdateJob.new([@user_account]) unless @user_account.ghin_number.blank?
 
-      session[:temporary_user_id] = @user_account.id
+      sign_in(@user_account, scope: :user)
 
       redirect_to leagues_play_registrations_path, :flash => { :success => "Your account was created." }
     else
@@ -38,13 +38,12 @@ class Play::RegistrationsController < BaseController
   end
 
   def join_league
-    @user_account = temporary_user
     @league = League.find(params[:league_id])
 
     if @league.dues_amount == 0.0
-      @user_account.leagues << @league
+      current_user.leagues << @league
 
-      render :setup_completed
+      redirect_to setup_completed_play_registrations_path
     else
       @cost_breakdown_lines = [
         {:name => "#{@league.name} League Fees", :price => @league.dues_amount},
@@ -56,33 +55,28 @@ class Play::RegistrationsController < BaseController
   end
 
   def request_information
-    @user_account = temporary_user
-
     league = League.find(params[:league_id])
 
-    LeagueMailer.league_interest(@user_account, league).deliver_later unless league.blank?
+    LeagueMailer.league_interest(current_user, league).deliver_later unless league.blank?
 
     render :thanks
   end
 
   def submit_payment
-    @current_user = temporary_user
     league = League.find(params[:league_id])
     stripe_token = params[:stripeToken]
 
     begin
-      Payments::LeagueJoinService.charge_and_join(@current_user, league, stripe_token)
+      Payments::LeagueJoinService.charge_and_join(current_user, league, stripe_token)
 
-      sign_in(@current_user)
-
-      render :setup_completed
+      redirect_to setup_completed_play_registrations_path
     rescue Stripe::CardError => e
       redirect_to error_play_payments_path
     end
   end
 
   def new_league
-    @league = League.new(contact_email: temporary_user.email)
+    @league = League.new(contact_email: current_user.email)
   end
 
   def create_league
@@ -90,15 +84,15 @@ class Play::RegistrationsController < BaseController
     @league.exempt_from_subscription = true unless @league.name.include? "subscription-test" #TODO: REMOVE
 
     if @league.save
-      LeagueMembership.create(league: @league, user: temporary_user, is_admin: true)
+      LeagueMembership.create(league: @league, user: current_user, is_admin: true)
 
       if @league.exempt_from_subscription
-        render :setup_completed
+        redirect_to setup_completed_play_registrations_path
       else
         redirect_to information_league_subscription_credits_path(@league)
       end
     else
-      render :new
+      render :new_league
     end
   end
 
@@ -110,15 +104,5 @@ class Play::RegistrationsController < BaseController
 
   def league_params
     params.require(:league).permit!
-  end
-
-  def temporary_user
-    unless session[:temporary_user_id].blank?
-      User.where(id: session[:temporary_user_id]).first
-    else
-      if session["warden.user.user.key"] && session["warden.user.user.key"].first && session["warden.user.user.key"].first.first
-        User.where(id: session["warden.user.user.key"].first.first).first
-      end
-    end
   end
 end
