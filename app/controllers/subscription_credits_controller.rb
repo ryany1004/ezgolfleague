@@ -114,6 +114,14 @@ class SubscriptionCreditsController < BaseController
     @active_subscriptions = @league.subscription_credits.where("tournaments_remaining > 0").order("created_at DESC")
     @active_subscription = @active_subscriptions.try(:first)
 
+    unless @active_subscription.blank?
+      @tournament_count = @active_subscription.tournament_count
+      @golfer_count = @active_subscription.golfer_count
+    else
+      @tournament_count = 12
+      @golfer_count = 15
+    end
+
     @tournament_credits_remaining = 0
     @active_subscriptions.each do |s|
       @tournament_credits_remaining += s.tournaments_remaining
