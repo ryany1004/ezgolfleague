@@ -17,9 +17,14 @@
     $('#active-form :checkbox').change(function() {
         var activeGolfers = $(":checkbox:checked").length;
 
-        var baselineGolfers = <%= @active_subscription.golfer_count %>;
+        <% unless @active_subscription.blank? %>
+          var baselineGolfers = <%= @active_subscription.golfer_count %>;
+          var costPerGolfer = costPerGolferForTournamentCount(<%= @active_subscription.tournament_count %>);
+        <% else %>
+          var baselineGolfers = 15;
+          var costPerGolfer = costPerGolferForTournamentCount(15);
+        <% end %>
 
-        var costPerGolfer = costPerGolferForTournamentCount(<%= @active_subscription.tournament_count %>);
         var newGolfers = activeGolfers - baselineGolfers;
         var proposedCost = costPerGolfer * newGolfers;
 
