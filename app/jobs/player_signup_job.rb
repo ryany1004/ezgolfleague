@@ -94,7 +94,7 @@ class PlayerSignupJob < ProgressJob::Base
               end
 
               #remove from contests not selected
-              contests_to_remove = @tournament.paid_contests - contests_should_be_enrolled
+              contests_to_remove = @tournament_day.tournament.paid_contests - contests_should_be_enrolled
               contests_to_remove.each do |c|
                 Rails.logger.debug { "Removing #{c.id} from #{user.id}" }
 
