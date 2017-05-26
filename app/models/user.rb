@@ -23,7 +23,7 @@ class User < ActiveRecord::Base
   validates :last_name, presence: true
   validates :phone_number, presence: true, on: :create
 
-  attr_accessor :should_invite
+  attr_accessor :should_invite, :agreed_to_terms
 
   before_update :reset_session, if: :encrypted_password_changed?
 

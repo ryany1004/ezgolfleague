@@ -11,7 +11,7 @@ class GolfOutingsController < BaseController
   def update_players
     @job = Delayed::Job.enqueue PlayerSignupJob.new(@tournament_day, params)
 
-    redirect_to league_tournaments_path(current_user.selected_league), :flash => { :success => "Your player signup submissions are being processed. This process usually takes a few minutes to complete."}
+    redirect_to league_tournaments_path(current_user.selected_league), :flash => { :warning => "Your player signup submissions are being processed. This process usually takes a few minutes to complete."}
   end
 
   def delete_signup

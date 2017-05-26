@@ -31,6 +31,12 @@
   </div>
   <% end -%>
 
+  <h3>Terms and Conditions</h3>
+  <div class="well">
+    <p>By creating this account, you agree to our <a href='/terms_of_service.html' target="_new">terms of service.</a></p>
+    <%= f.input :agreed_to_terms, :label => 'I agree to the terms of service.', as: :boolean %>
+  </div>
+
   <div class="form-actions">
     <%= f.button :submit, :class => 'btn btn-default' %>
   </div>
