@@ -15,6 +15,7 @@
     	</thead>
     	<tbody>
     	<% @past_tournaments.each do |tournament| %>
+        <% !if tournament.league.exempt_from_subscription %>
     		<tr>
           <td><%= tournament.name %></td>
           <td><%= tournament.league.name %><br/><%= tournament.season_name %></td>
@@ -28,6 +29,7 @@
           <% end %>
           </td>
     		</tr>
+        <% end %>
     	<% end %>
     	</tbody>
     </table>
