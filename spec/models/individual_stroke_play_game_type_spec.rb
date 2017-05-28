@@ -4,6 +4,4 @@ require 'rails_helper'
 
 describe "Testing ISP Game Type" do
 
-  
-
 end

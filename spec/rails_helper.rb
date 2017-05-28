@@ -62,6 +62,10 @@ RSpec.configure do |config|
 
   Warden.test_mode!
 
+  config.before :each do
+    Rails.cache.clear
+  end
+
   config.after :each do
     Warden.test_reset!
   end

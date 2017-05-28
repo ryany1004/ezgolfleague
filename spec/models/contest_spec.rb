@@ -42,6 +42,14 @@ describe "Testing Contest" do
     expect(result.points).to eq(10)
   end
 
-  it "Add user to a contest"
+  it "Add user to a contest" do
+    add_to_group_and_create_scores(tournament_day, user, tournament_group)
+
+    contest = FactoryGirl.create(:contest, tournament_day: tournament_day, contest_type: 8)
+
+    contest.add_user(user)
+
+    expect(contest.users).to include(user)
+  end
 
 end
