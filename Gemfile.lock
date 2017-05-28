@@ -1,4 +1,11 @@
 GIT
+  remote: git://github.com/HunterHillegas/progress_job.git
+  revision: bd74c8967ac93803a306faff8aaec450998f83e0
+  specs:
+    progress_job (0.0.4)
+      delayed_job
+
+GIT
   remote: git://github.com/brainopia/backport_new_renderer.git
   revision: 8947c4238392d484d83861950dd12b50807c83c8
   specs:
@@ -214,8 +221,6 @@ GEM
     pg (0.17.1)
     pretender (0.2.1)
       actionpack
-    progress_job (0.0.4)
-      delayed_job
     public_suffix (2.0.5)
     puma (3.8.1)
     puma_worker_killer (0.0.7)
@@ -352,7 +357,7 @@ DEPENDENCIES
   paperclip (~> 5.0.0)
   pg (~> 0.17.1)
   pretender
-  progress_job
+  progress_job!
   puma
   puma_worker_killer
   rack-mini-profiler
@@ -371,7 +376,7 @@ DEPENDENCIES
   web-console (~> 2.0)
 
 RUBY VERSION
-   ruby 2.3.1p112
+   ruby 2.3.4p301
 
 BUNDLED WITH
-   1.13.6
+   1.15.0

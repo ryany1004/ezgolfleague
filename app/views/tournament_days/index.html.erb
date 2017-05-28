@@ -14,7 +14,7 @@
       <th>Date</th>
 			<th>Course</th>
       <% if user_is_league_admin(current_user, @tournament.league) -%>
-      <th><%= link_to 'Add Day', new_league_tournament_tournament_day_path(@tournament.league, @tournament), :class => 'btn btn-primary' %></th>
+      <th><%= link_to 'Add Day', new_league_tournament_tournament_day_path(@tournament.league, @tournament), :class => 'btn btn-primary', :id => "add_button_1" %></th>
       <% else -%>
       <th>&nbsp;</th>
       <% end -%>

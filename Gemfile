@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-ruby '2.3.1'
+ruby '2.3.4'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.2.8'
@@ -32,7 +32,7 @@ gem "paperclip", "~> 5.0.0"
 gem 'aws-sdk', '~> 2.3'
 gem 'kaminari', '~> 0.17'
 gem 'simple_form'
-gem 'momentjs-rails', '~> 2.9',  :github => 'derekprior/momentjs-rails'
+gem 'momentjs-rails', '~> 2.9', :github => 'derekprior/momentjs-rails'
 gem 'datetimepicker-rails', github: 'zpaulovics/datetimepicker-rails', branch: 'master', submodules: true
 gem 'chosen-rails'
 gem 'smarter_csv'
@@ -41,7 +41,7 @@ gem 'nokogiri'
 gem 'attr_encrypted', '1.3.5'
 gem 'stripe', :git => 'https://github.com/stripe/stripe-ruby'
 gem 'delayed_job_active_record'
-gem 'progress_job'
+gem 'progress_job', :github => 'HunterHillegas/progress_job'
 gem 'backport_new_renderer', :github => 'brainopia/backport_new_renderer'
 gem 'apnotic'
 gem 'geocoder'
@@ -81,6 +81,5 @@ group :production do
   gem 'dalli'
   gem 'puma'
   gem 'puma_worker_killer'
-  # gem 'newrelic_rpm'
   gem 'scout_apm'
 end
