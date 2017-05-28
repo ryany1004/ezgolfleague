@@ -10,4 +10,6 @@ FactoryGirl.define do
     dues_amount 50.0
     league
   end
+
+  factory :league_membership
 end
