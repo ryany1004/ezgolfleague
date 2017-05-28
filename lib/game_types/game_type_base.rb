@@ -140,9 +140,11 @@ module GameTypes
 
       total_score = 0
 
-      handicap_allowance = self.tournament_day.handicap_allowance(user)
+      if use_handicap == true
+        handicap_allowance = self.tournament_day.handicap_allowance(user)
 
-      Rails.logger.debug { "Handicap Allowance: #{handicap_allowance}" }
+        Rails.logger.debug { "Handicap Allowance: #{handicap_allowance}" }
+      end
 
       scorecard = self.tournament_day.primary_scorecard_for_user(user)
       if scorecard.blank?
@@ -150,6 +152,8 @@ module GameTypes
 
         return 0
       end
+
+      Rails.logger.debug { "Scorecard has #{scorecard.scores.count} scores." }
 
       scorecard.scores.includes(:course_hole).each do |score|
         should_include_score = true #allows us to calculate partial scores, i.e. back 9
@@ -160,13 +164,13 @@ module GameTypes
         if should_include_score == true
           hole_score = score.strokes
 
-          Rails.logger.debug { "Hole: #{score.course_hole.hole_number} - Strokes #{score.strokes}" }
+          Rails.logger.debug { "Hole: #{score.course_hole.hole_number} - Score Strokes #{score.strokes}" }
 
           if use_handicap == true && !handicap_allowance.blank?
             handicap_allowance.each do |h|
               if h[:course_hole] == score.course_hole
                 if h[:strokes] != 0
-                  Rails.logger.debug { "Handicap Adjusting Hole Score From #{hole_score} w/ #{h[:strokes]}" }
+                  Rails.logger.debug { "Handicap Adjusting Hole #{score.course_hole.hole_number} Score From #{hole_score} w/ Handicap Strokes #{h[:strokes]}" }
 
                   adjusted_hole_score = hole_score - h[:strokes]
                   hole_score = adjusted_hole_score if adjusted_hole_score > 0
@@ -328,6 +332,8 @@ module GameTypes
 
       course_handicap = golf_outing.course_handicap
 
+      Rails.logger.debug { "Course Handicap: #{course_handicap}" }
+
       if golf_outing.course_tee_box.tee_box_gender == "Men"
         sorted_course_holes_by_handicap = self.tournament_day.course_holes.reorder("mens_handicap")
       else
@@ -443,10 +449,13 @@ module GameTypes
           scorecard = self.tournament_day.primary_scorecard_for_user(player)
           unless scorecard.blank?
             scorecard_url = play_scorecard_path(scorecard)
+
+            raw_scores = scorecard.scores.map(&:strokes)
           else
             Rails.logger.info { "Error Finding Scorecard For #{player.id}" }
 
             scorecard_url = "#"
+            raw_scores = []
           end
 
           points = 0
@@ -455,7 +464,7 @@ module GameTypes
           end
 
           if !scorecard.golf_outing.disqualified && !net_score.blank? && net_score > 0
-            ranked_flight[:players] << { id: player.id, name: self.player_team_name_for_player(player), net_score: net_score, back_nine_net_score: back_nine_net_score, gross_score: gross_score, scorecard_url: scorecard_url, points: points, par_related_net_score: par_related_net_score, par_related_gross_score: par_related_gross_score, thru: scorecard.last_hole_played }
+            ranked_flight[:players] << { id: player.id, name: self.player_team_name_for_player(player), net_score: net_score, back_nine_net_score: back_nine_net_score, gross_score: gross_score, scorecard_url: scorecard_url, points: points, par_related_net_score: par_related_net_score, par_related_gross_score: par_related_gross_score, thru: scorecard.last_hole_played, raw_scores: raw_scores }
           else
             Rails.logger.info { "Not Including Player in Ranking. Net Score: #{net_score}" }
           end

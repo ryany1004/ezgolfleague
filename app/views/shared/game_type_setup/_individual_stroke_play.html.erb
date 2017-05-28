@@ -1,2 +1,2 @@
 <%= check_box_tag("game_type_options[#{tournament_day.id}][use_back_9_to_handle_ties]", 'true', tournament_day.game_type.use_back_9_to_break_ties?) %>
-<%= label_tag("game_type_options[#{tournament_day.id}][use_back_9_to_handle_ties]", "Use the back nine score to break ties") %>
+<%= label_tag("game_type_options[#{tournament_day.id}][use_back_9_to_handle_ties]", "Select to break ties. 18-hole tournaments use the back nine and 9-hole tournaments go hole by hole.") %>

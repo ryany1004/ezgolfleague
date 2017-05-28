@@ -4,7 +4,7 @@ FactoryGirl.define do
 
     factory :course_with_holes do
       after(:create) do |course|
-        course_tee_box = create(:course_tee_box, course: course, name: "Men", rating: 12, slope: 32)
+        course_tee_box = create(:course_tee_box, course: course, name: "Men", rating: 71.3, slope: 130)
 
         holes = []
 

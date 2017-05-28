@@ -3,7 +3,7 @@ require 'rails_helper'
 #ActiveRecord::Base.logger = Logger.new(STDOUT) if defined?(ActiveRecord::Base)
 
 describe "Creating a tournament" do
-  it "Create a stroke play tournament" do
+  before(:each) do
     course = FactoryGirl.create(:course_with_holes)
 
     user = login_user
@@ -70,8 +70,10 @@ describe "Creating a tournament" do
     select(user.complete_name, from: "player_signups[member_id[1][0]]")
     click_on("Save Your Changes & Register Players")
 
-    #Check if the tournament exists
     visit league_admin_root_path
+  end
+
+  it "Create a stroke play tournament" do
     page.has_content?('Test Tournament')
   end
 end

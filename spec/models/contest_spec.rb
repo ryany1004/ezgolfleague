@@ -41,4 +41,7 @@ describe "Testing Contest" do
     expect(result.payout_amount).to eq(100)
     expect(result.points).to eq(10)
   end
+
+  it "Add user to a contest"
+
 end
