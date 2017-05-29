@@ -77,22 +77,32 @@ module GameTypes
 
     def sort_rank_players_in_flight!(flight_players)
       if self.use_back_9_to_break_ties?
+        Rails.logger.info { "Tie-breaking is enabled" }
+
         if self.tournament_day.course_holes.count == 9 #if a 9-hole tournament, compare score by score
+          Rails.logger.info { "9-Hole Tie-Breaking" }
+
           par_related_net_scores = flight_players.map{|x| x[:par_related_net_score]}
 
           if par_related_net_scores.uniq.length != par_related_net_scores.length
-            Rails.logger.debug { "We have tied players." }
+            Rails.logger.info { "We have tied players, using raw_scores" }
 
-            flight_players.sort! { |x,y| x[:raw_scores] <=> y[:raw_scores] }
+            #flight_players.sort! { |x,y| x[:raw_scores] <=> y[:raw_scores] }
+
+            flight_players.sort_by! {|x| [x[:par_related_net_score], x[:raw_scores]]}
           else
-            Rails.logger.debug { "No tied players..." }
+            Rails.logger.info { "No tied players..." }
 
             flight_players.sort_by! {|x| [x[:par_related_net_score], x[:back_nine_net_score]]}
           end
         else
+          Rails.logger.info { "18-Hole Tie-Breaking" }
+
           flight_players.sort_by! {|x| [x[:par_related_net_score], x[:back_nine_net_score]]}
         end
       else
+        Rails.logger.info { "Tie-breaking is disabled" }
+
         flight_players.sort! { |x,y| x[:par_related_net_score] <=> y[:par_related_net_score] } #NOTE: Not DRY but there's some sort of binding error with just calling super. :-(
       end
     end
