@@ -1,5 +1,5 @@
 class CourseHole < ActiveRecord::Base
-  belongs_to :course, inverse_of: :course_holes
+  belongs_to :course, inverse_of: :course_holes, touch: true
   has_and_belongs_to_many :tournament_days
 
   has_many :course_hole_tee_boxes, -> { order("yardage desc") }, :dependent => :destroy, inverse_of: :course_hole

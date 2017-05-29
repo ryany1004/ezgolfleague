@@ -11,9 +11,21 @@ describe "Testing Tournament Day" do
   let(:tournament_day) { FactoryGirl.create(:tournament_day, tournament: tournament, course: course) }
   let(:tournament_group) { FactoryGirl.create(:tournament_group, tournament_day: tournament_day) }
 
-  it "add user to a group"
+  it "add user to a group" do
+    tournament_day.add_player_to_group(tournament_group, user)
 
-  it "remove user from a group"
+    tournament.reload
+
+    expect(tournament.players).to include(user)
+    expect(tournament_day.tournament_group_for_player(user)).to eq(tournament_group)
+  end
+
+  it "remove user from a group" do
+    tournament_day.remove_player_from_group(tournament_group, user)
+
+    expect(tournament.players).not_to include(user)
+    expect(tournament_day.tournament_group_for_player(user)).not_to eq(tournament_group)
+  end
 
   it "stroke play scoring" do
     scores = [1,1,6,4,6,3,5,6,5,7,6,5,3,6,6,5,3,10]

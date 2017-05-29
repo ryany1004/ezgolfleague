@@ -2,16 +2,9 @@ class Score < ActiveRecord::Base
   include Servable
 
   belongs_to :scorecard, inverse_of: :scores, touch: true
-  belongs_to :course_hole
-
-  after_save :touch_tournament
+  belongs_to :course_hole, touch: true
 
   validates :strokes, :inclusion => 0..30
-
-  def touch_tournament
-    self.scorecard.tournament_day.touch
-    self.scorecard.tournament_day.tournament.touch
-  end
 
   def associated_text
     return self.scorecard.tournament_day.game_type.associated_text_for_score(self)

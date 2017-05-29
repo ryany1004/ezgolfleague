@@ -1,5 +1,5 @@
 class LeagueSeason < ActiveRecord::Base
-  belongs_to :league
+  belongs_to :league, touch: true
   has_many :payments, inverse_of: :league_season
 
   validates :name, :starts_at, :ends_at, :league, presence: true

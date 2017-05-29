@@ -6,7 +6,7 @@ class TournamentDay < ActiveRecord::Base
   include AutoSchedulable
   include Servable
 
-  belongs_to :tournament, inverse_of: :tournament_days, :touch => true, counter_cache: true
+  belongs_to :tournament, inverse_of: :tournament_days, touch: true, counter_cache: true
   belongs_to :course, inverse_of: :tournament_days
   has_many :tournament_groups, -> { order(:tee_time_at) }, inverse_of: :tournament_day, :dependent => :destroy
   has_many :flights, -> { order(:flight_number) }, inverse_of: :tournament_day, :dependent => :destroy

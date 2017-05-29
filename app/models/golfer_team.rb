@@ -1,11 +1,11 @@
 class GolferTeam < ActiveRecord::Base
   include Servable
 
-  belongs_to :tournament_day
-  belongs_to :tournament_group
+  belongs_to :tournament_day, touch: true
+  belongs_to :tournament_group, touch: true
   has_and_belongs_to_many :users
   has_many :golfer_teams, class_name: "GolferTeam", foreign_key: "parent_team_id"
-  belongs_to :parent_team, class_name: "GolferTeam"
+  belongs_to :parent_team, class_name: "GolferTeam", touch: true
 
   validate :players_are_valid, on: :update
   def players_are_valid

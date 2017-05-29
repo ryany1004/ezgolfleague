@@ -1,10 +1,10 @@
 PAYMENT_METHOD_CREDIT_CARD = "Credit Card"
 
 class Payment < ActiveRecord::Base
-  belongs_to :user, inverse_of: :payments
-  belongs_to :tournament, inverse_of: :payments
-  belongs_to :league_season, inverse_of: :payments
-  belongs_to :contest, inverse_of: :payments
+  belongs_to :user, inverse_of: :payments, touch: true
+  belongs_to :tournament, inverse_of: :payments, touch: true
+  belongs_to :league_season, inverse_of: :payments, touch: true
+  belongs_to :contest, inverse_of: :payments, touch: true
 
   has_many :credits, class_name: "Payment", foreign_key: "payment_id", inverse_of: :original_payment
   belongs_to :original_payment, class_name: "Payment", foreign_key: "payment_id", inverse_of: :credits

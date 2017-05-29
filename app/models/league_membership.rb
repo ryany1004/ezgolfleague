@@ -1,8 +1,8 @@
 class LeagueMembership < ActiveRecord::Base
   scope :active, -> { where("state = ?", MembershipStates::ACTIVE_FOR_BILLING) }
 
-  belongs_to :league
-  belongs_to :user
+  belongs_to :league, touch: true
+  belongs_to :user, touch: true
 
   validates :league, presence: true
   validates :user, presence: true

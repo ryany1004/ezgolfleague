@@ -1,7 +1,7 @@
 class TournamentGroup < ActiveRecord::Base
   include Servable
 
-  belongs_to :tournament_day, inverse_of: :tournament_groups, :touch => true
+  belongs_to :tournament_day, inverse_of: :tournament_groups, touch: true
   has_many :golf_outings, -> { order(:created_at) }, inverse_of: :tournament_group, :dependent => :destroy
   has_many :golfer_teams, -> { order(:created_at) }, inverse_of: :tournament_group, :dependent => :destroy
 
@@ -167,5 +167,5 @@ class TournamentGroup < ActiveRecord::Base
       )
     end
   end
-  
+
 end

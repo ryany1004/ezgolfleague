@@ -12,6 +12,8 @@ describe "Testing a user" do
     membership.save
 
     user.is_any_league_admin?
+
+    expect(user.is_any_league_admin?).to eq(true)
   end
 
   it "Checking league membership" do
@@ -20,6 +22,6 @@ describe "Testing a user" do
 
     user.leagues << league
 
-    user.is_member_of_league?(league)
+    expect(user.is_member_of_league?(league)).to eq(true)
   end
 end

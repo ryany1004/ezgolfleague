@@ -87,8 +87,6 @@ module GameTypes
           if par_related_net_scores.uniq.length != par_related_net_scores.length
             Rails.logger.info { "We have tied players, using raw_scores" }
 
-            #flight_players.sort! { |x,y| x[:raw_scores] <=> y[:raw_scores] }
-
             flight_players.sort_by! {|x| [x[:par_related_net_score], x[:raw_scores]]}
           else
             Rails.logger.info { "No tied players..." }
