@@ -6,8 +6,7 @@ class Api::V1::TournamentsController < Api::V1::ApiBaseController
   def index
     cache_key = self.user_tournaments_cache_key
 
-    all_tournaments = Rails.cache.fetch(cache_key, expires_in: 2.minutes, race_condition_ttl: 10)
-    if all_tournaments.blank?
+    all_tournaments = Rails.cache.fetch(cache_key, expires_in: 2.minutes, race_condition_ttl: 10) do
       logger.info { "Fetching Tournaments - Not Cached for #{cache_key}" }
 
       todays_tournaments = Tournament.all_today(@current_user.leagues)
@@ -19,9 +18,7 @@ class Api::V1::TournamentsController < Api::V1::ApiBaseController
 
       all_tournaments = all_tournaments.uniq
 
-      Rails.cache.write(cache_key, all_tournaments)
-    else
-      logger.info { "Returning Cached Tournaments #{cache_key}" }
+      all_tournaments
     end
 
     respond_with(all_tournaments) do |format|

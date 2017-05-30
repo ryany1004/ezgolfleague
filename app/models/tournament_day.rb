@@ -81,6 +81,10 @@ class TournamentDay < ActiveRecord::Base
     return day_string
   end
 
+  def eager_groups
+    TournamentGroup.includes(golf_outings: [:user, course_tee_box: :course_hole_tee_boxes, scorecard: [{scores: :course_hole}]]).where(tournament_day: self)
+  end
+
   def tournament_day_results_cache_key(prefix)
     max_updated_at = self.tournament_day_results.maximum(:updated_at).try(:utc).try(:to_s, :number)
     cache_key = "tournament_days/#{prefix}-#{self.id}-#{max_updated_at}"

@@ -5,15 +5,10 @@ class Api::V1::TournamentDaysController < Api::V1::ApiBaseController
   respond_to :json
 
   def tournament_groups
-    eager_groups = Rails.cache.fetch(@tournament_day.groups_api_cache_key, expires_in: 2.minute, race_condition_ttl: 10)
-    if eager_groups.blank?
+    eager_groups = Rails.cache.fetch(@tournament_day.groups_api_cache_key, expires_in: 2.minute, race_condition_ttl: 10) do
       logger.info { "Fetching Tournament Day - Not Cached" }
 
-      eager_groups = TournamentGroup.includes(golf_outings: [:user, course_tee_box: :course_hole_tee_boxes, scorecard: [{scores: :course_hole}]]).where(tournament_day: @tournament_day)
-
-      Rails.cache.write(@tournament_day.groups_api_cache_key, eager_groups)
-    else
-      logger.info { "Returning Cached Tournament Day Info" }
+      @tournament_day.eager_groups.to_a
     end
 
     respond_with(eager_groups) do |format|
@@ -22,15 +17,10 @@ class Api::V1::TournamentDaysController < Api::V1::ApiBaseController
   end
 
   def leaderboard
-    leaderboard = Rails.cache.fetch(@tournament_day.leaderboard_api_cache_key, expires_in: 2.minute, race_condition_ttl: 10)
-    if leaderboard.blank?
+    leaderboard = Rails.cache.fetch(@tournament_day.leaderboard_api_cache_key, expires_in: 2.minute, race_condition_ttl: 10) do
       logger.info { "Fetching Leaderboard - Not Cached" }
 
-      leaderboard = self.fetch_leaderboard
-
-      Rails.cache.write(@tournament_day.leaderboard_api_cache_key, leaderboard)
-    else
-      logger.info { "Returning Cached Leaderboard" }
+      self.fetch_leaderboard
     end
 
     respond_with(leaderboard) do |format|
@@ -51,7 +41,7 @@ class Api::V1::TournamentDaysController < Api::V1::ApiBaseController
 
     TournamentMailer.tournament_player_paying_later(user, @tournament_day.tournament).deliver_later if confirm_user == false
 
-    eager_groups = TournamentGroup.includes(golf_outings: [:user, course_tee_box: :course_hole_tee_boxes, scorecard: [{scores: :course_hole}]]).where(tournament_day: @tournament_day)
+    eager_groups = @tournament_day.eager_groups
 
     respond_with(eager_groups) do |format|
       format.json { render :json => eager_groups }
@@ -69,7 +59,7 @@ class Api::V1::TournamentDaysController < Api::V1::ApiBaseController
 
     Rails.cache.delete(@tournament_day.groups_api_cache_key)
 
-    eager_groups = TournamentGroup.includes(golf_outings: [:user, course_tee_box: :course_hole_tee_boxes, scorecard: [{scores: :course_hole}]]).where(tournament_day: @tournament_day)
+    eager_groups = @tournament_day.eager_groups
 
     respond_with(eager_groups) do |format|
       format.json { render :json => eager_groups }
