@@ -66,7 +66,7 @@ class LeagueSeason < ActiveRecord::Base
   end
 
   def user_has_paid?(user)
-    payments = self.payments.where(user: user)
+    payments = self.payments.where(user: user).where("payment_amount > 0").where("payment_type = ?", "#{user.complete_name} League Dues")
 
     if payments.length > 0
       return true
