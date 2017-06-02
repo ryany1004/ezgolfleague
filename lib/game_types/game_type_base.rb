@@ -166,6 +166,7 @@ module GameTypes
 
           Rails.logger.debug { "Hole: #{score.course_hole.hole_number} - Score Strokes #{score.strokes}" }
 
+          #TODO: re-factor with below method
           if use_handicap == true && !handicap_allowance.blank?
             handicap_allowance.each do |h|
               if h[:course_hole] == score.course_hole
@@ -190,6 +191,35 @@ module GameTypes
       Rails.logger.debug { "Base Score Computed: #{total_score}. User: #{user.complete_name} use handicap: #{use_handicap} holes: #{holes}" }
 
       return total_score
+    end
+
+    def net_scores_for_scorecard(handicap_allowance, scorecard)
+      net_scores = []
+
+      scorecard.scores.includes(:course_hole).each do |score|
+        hole_score = score.strokes
+
+        Rails.logger.debug { "Hole: #{score.course_hole.hole_number} - Score Strokes #{score.strokes}" }
+
+        if !handicap_allowance.blank?
+          handicap_allowance.each do |h|
+            if h[:course_hole] == score.course_hole
+              if h[:strokes] != 0
+                Rails.logger.debug { "Handicap Adjusting Hole #{score.course_hole.hole_number} Score From #{hole_score} w/ Handicap Strokes #{h[:strokes]}" }
+
+                adjusted_hole_score = hole_score - h[:strokes]
+                hole_score = adjusted_hole_score if adjusted_hole_score > 0
+
+                Rails.logger.debug { "Handicap Adjusted: #{hole_score}" }
+
+                net_scores << hole_score
+              end
+            end
+          end
+        end
+      end
+
+      net_scores
     end
 
     def compute_player_score(user, use_handicap = true, holes = [])
@@ -451,11 +481,15 @@ module GameTypes
             scorecard_url = play_scorecard_path(scorecard)
 
             raw_scores = scorecard.scores.map(&:strokes)
+
+            handicaps = handicap_allowance(player)
+            net_scores = self.net_scores_for_scorecard(handicaps, scorecard)
           else
             Rails.logger.info { "Error Finding Scorecard For #{player.id}" }
 
             scorecard_url = "#"
             raw_scores = []
+            net_scores = []
           end
 
           points = 0
@@ -464,7 +498,7 @@ module GameTypes
           end
 
           if !scorecard.golf_outing.disqualified && !net_score.blank? && net_score > 0
-            ranked_flight[:players] << { id: player.id, name: self.player_team_name_for_player(player), net_score: net_score, back_nine_net_score: back_nine_net_score, gross_score: gross_score, scorecard_url: scorecard_url, points: points, par_related_net_score: par_related_net_score, par_related_gross_score: par_related_gross_score, thru: scorecard.last_hole_played, raw_scores: raw_scores }
+            ranked_flight[:players] << { id: player.id, name: self.player_team_name_for_player(player), net_score: net_score, back_nine_net_score: back_nine_net_score, gross_score: gross_score, scorecard_url: scorecard_url, points: points, par_related_net_score: par_related_net_score, par_related_gross_score: par_related_gross_score, thru: scorecard.last_hole_played, raw_scores: raw_scores, net_scores: net_scores }
           else
             Rails.logger.info { "Not Including Player in Ranking. Net Score: #{net_score}" }
           end

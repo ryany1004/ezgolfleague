@@ -85,9 +85,9 @@ module GameTypes
           par_related_net_scores = flight_players.map{|x| x[:par_related_net_score]}
 
           if par_related_net_scores.uniq.length != par_related_net_scores.length
-            Rails.logger.info { "We have tied players, using raw_scores" }
+            Rails.logger.info { "We have tied players, using net_scores" }
 
-            flight_players.sort_by! {|x| [x[:par_related_net_score], x[:raw_scores]]}
+            flight_players.sort_by! {|x| [x[:par_related_net_score], x[:net_scores]]}
           else
             Rails.logger.info { "No tied players..." }
 
