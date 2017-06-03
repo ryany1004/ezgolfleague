@@ -5,6 +5,14 @@ A player signed up to pay later: <%= @user.complete_name %>:
 <%= @tournament.name %>
 <%= number_to_currency(@tournament.dues_for_user(@user, false)) %>
 
+<% @tournament.tournament_days.each do |td| %>
+  <% td.contests.each do |c| %>
+    <% if c.users.include? @user %>
+      <%= c.name_with_cost %>
+    <% end %>
+  <% end %>
+<% end %>
+
 --
 
 Sent by EZGolfLeague
