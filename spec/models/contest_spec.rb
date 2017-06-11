@@ -26,7 +26,7 @@ describe "Testing Contest" do
     expect(results_users).to include(user)
   end
 
-  if "overall contest winner"
+  it "overall contest winner"
 
   it "manual contest override" do
     add_to_group_and_create_scores(tournament_day, user, tournament_group)

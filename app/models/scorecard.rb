@@ -1,4 +1,4 @@
-class Scorecard < ActiveRecord::Base
+class Scorecard < ApplicationRecord
   include Servable
 
   belongs_to :golf_outing, inverse_of: :scorecard, touch: true

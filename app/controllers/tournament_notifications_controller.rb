@@ -1,7 +1,7 @@
 class TournamentNotificationsController < BaseController
   before_action :fetch_notification_template, :only => [:edit, :update, :destroy]
   before_action :fetch_other_details
-  before_filter :set_stage
+  before_action :set_stage
 
   def index
     @notification_templates = @tournament.notification_templates.page

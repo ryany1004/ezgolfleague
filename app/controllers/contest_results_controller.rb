@@ -1,10 +1,10 @@
 class ContestResultsController < BaseController
-  before_filter :fetch_tournament
-  before_filter :fetch_tournament_day
-  before_filter :fetch_contest
-  before_filter :fetch_contest_results, :only => [:index]
-  before_filter :fetch_contest_result, :only => [:edit, :update, :destroy]
-  before_filter :set_stage
+  before_action :fetch_tournament
+  before_action :fetch_tournament_day
+  before_action :fetch_contest
+  before_action :fetch_contest_results, :only => [:index]
+  before_action :fetch_contest_result, :only => [:edit, :update, :destroy]
+  before_action :set_stage
   
   def index
     @page_title = "Contest Results"

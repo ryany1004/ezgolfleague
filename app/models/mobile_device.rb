@@ -1,4 +1,4 @@
-class MobileDevice < ActiveRecord::Base
+class MobileDevice < ApplicationRecord
   belongs_to :user, touch: true
 
   validates :device_identifier, presence: true, uniqueness: true

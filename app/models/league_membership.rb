@@ -1,4 +1,4 @@
-class LeagueMembership < ActiveRecord::Base
+class LeagueMembership < ApplicationRecord
   scope :active, -> { where("state = ?", MembershipStates::ACTIVE_FOR_BILLING) }
 
   belongs_to :league, touch: true

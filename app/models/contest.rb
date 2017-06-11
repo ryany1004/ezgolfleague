@@ -1,4 +1,4 @@
-class Contest < ActiveRecord::Base
+class Contest < ApplicationRecord
   include ContestScoreable
 
   belongs_to :tournament_day, inverse_of: :contests, touch: true

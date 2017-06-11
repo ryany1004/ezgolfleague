@@ -1,4 +1,4 @@
-class LeagueSeason < ActiveRecord::Base
+class LeagueSeason < ApplicationRecord
   belongs_to :league, touch: true
   has_many :payments, inverse_of: :league_season
 

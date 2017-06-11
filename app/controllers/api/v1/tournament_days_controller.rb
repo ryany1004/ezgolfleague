@@ -1,6 +1,6 @@
 class Api::V1::TournamentDaysController < Api::V1::ApiBaseController
-  before_filter :protect_with_token
-  before_filter :fetch_details
+  before_action :protect_with_token
+  before_action :fetch_details
 
   respond_to :json
 

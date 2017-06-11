@@ -1,4 +1,4 @@
-class TournamentGroup < ActiveRecord::Base
+class TournamentGroup < ApplicationRecord
   include Servable
 
   belongs_to :tournament_day, inverse_of: :tournament_groups, touch: true

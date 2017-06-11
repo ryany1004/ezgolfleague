@@ -1,6 +1,6 @@
 PAYMENT_METHOD_CREDIT_CARD = "Credit Card"
 
-class Payment < ActiveRecord::Base
+class Payment < ApplicationRecord
   belongs_to :user, inverse_of: :payments, touch: true
   belongs_to :tournament, inverse_of: :payments, touch: true
   belongs_to :league_season, inverse_of: :payments, touch: true

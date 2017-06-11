@@ -1,4 +1,4 @@
-class TournamentDay < ActiveRecord::Base
+class TournamentDay < ApplicationRecord
   include Addable
   include Moveable
   include Scoreable

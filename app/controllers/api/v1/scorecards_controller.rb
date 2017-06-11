@@ -1,6 +1,6 @@
 class Api::V1::ScorecardsController < Api::V1::ApiBaseController
-  before_filter :protect_with_token
-  before_filter :fetch_details, :only => [:show]
+  before_action :protect_with_token
+  before_action :fetch_details, :only => [:show]
 
   respond_to :json
 

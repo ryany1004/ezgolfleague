@@ -1,5 +1,5 @@
 class PrintsController < ApplicationController
-  before_filter :fetch_tournament_details
+  before_action :fetch_tournament_details
   
   def print_scorecards
   end

@@ -1,5 +1,5 @@
 class Api::V1::SessionsController < Api::V1::ApiBaseController
-  before_filter :protect_with_token, only: [:register_device, :upload_avatar_image]
+  before_action :protect_with_token, only: [:register_device, :upload_avatar_image]
 
   def create
     email = request.headers["ezgl-email"]

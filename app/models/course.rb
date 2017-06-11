@@ -1,4 +1,4 @@
-class Course < ActiveRecord::Base
+class Course < ApplicationRecord
   include Servable
 
   has_many :course_holes, -> { order(:hole_number) }, :dependent => :destroy, inverse_of: :course

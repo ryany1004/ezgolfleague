@@ -21,9 +21,6 @@ module EzgolfRails
     # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]
     # config.i18n.default_locale = :de
 
-    # Do not swallow errors in after_commit/after_rollback callbacks.
-    config.active_record.raise_in_transactional_callbacks = true
-
     config.active_job.queue_adapter = :delayed_job
 
     config.generators do |g|
@@ -35,5 +32,7 @@ module EzgolfRails
     }
 
     ActiveRecord::Base.include_root_in_json = false
+
+    ActiveSupport.halt_callback_chains_on_return_false = false
   end
 end

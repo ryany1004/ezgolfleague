@@ -1,4 +1,4 @@
-class GolferTeam < ActiveRecord::Base
+class GolferTeam < ApplicationRecord
   include Servable
 
   belongs_to :tournament_day, touch: true

@@ -1,4 +1,4 @@
-class League < ActiveRecord::Base
+class League < ApplicationRecord
   include Servable
 
   has_many :league_seasons, ->{ order 'starts_at' }, :dependent => :destroy

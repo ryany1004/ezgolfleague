@@ -1,4 +1,4 @@
-class GolfOuting < ActiveRecord::Base
+class GolfOuting < ApplicationRecord
   include Servable
 
   belongs_to :tournament_group, inverse_of: :golf_outings, touch: true
