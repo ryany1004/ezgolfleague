@@ -6,7 +6,7 @@
     </div>
   <% end %>
 
-  <h3>Basic Details</h3>
+  <h3>Your Basic Details</h3>
   <div class="well">
     <%= f.input :email, :label => 'Email Address', placeholder: 'i.e. user@domain.com', required: true %>
 
@@ -19,6 +19,8 @@
 
   <h3>GHIN Number</h3>
   <div class="well">
+    <p>Your GHIN number is used to automatically update your handicap. Leave this blank if you don't have a GHIN number.</p>
+
     <%= f.input :ghin_number, :label => 'GHIN System Number' %>
   </div>
 

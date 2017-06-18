@@ -33,6 +33,14 @@ function stripeResponseHandler(status, response) {
     $form.get(0).submit();
   }
 };
+
+<script>
+  fbq('track', 'CompleteRegistration', {
+  value: 0.00,
+  currency: 'USD'
+  });
+</script>
+
 </script>
 
 <div class="row">

@@ -91,6 +91,13 @@
   'tax': '0.0',                          // Tax (currency).
   'shipping': '0.0'                     // Shipping (currency).
   });
+
+  <script>
+    fbq('track', 'Purchase', {
+    value: <%= params[:details_amount] %>,
+    currency: 'USD'
+    });
+  </script>
 </script>
 <% end %>
 
