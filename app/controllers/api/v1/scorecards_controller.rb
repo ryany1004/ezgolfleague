@@ -22,7 +22,7 @@ class Api::V1::ScorecardsController < Api::V1::ApiBaseController
 
     Tournament.all_today(@current_user.leagues).each do |t|
       t.tournament_days.each do |d|
-        tournament_day = d if d.tournament_at.day == Date.today.day
+        tournament_day = d if d.tournament_at.day == Date.current.in_time_zone.day
       end
 
       tournament_day = t.tournament_days.first if tournament_day.blank?
