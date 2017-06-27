@@ -1,4 +1,4 @@
-class Play::ScorecardsController < BaseController
+class Play::ScorecardsController < Play::BaseController
   layout "golfer"
 
   before_action :fetch_scorecard, :except => [:finalize_scorecard, :become_designated_scorer, :update_game_type_metadata]

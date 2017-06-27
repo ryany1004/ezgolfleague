@@ -1,4 +1,4 @@
-class Play::TournamentsController < BaseController
+class Play::TournamentsController < Play::BaseController
   layout "golfer"
 
   before_action :fetch_tournament, :except => [:show]

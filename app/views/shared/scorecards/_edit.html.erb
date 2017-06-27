@@ -19,7 +19,7 @@
 	</tbody>
 </table>
 
-<%= simple_form_for scorecard, url: edit_url do |f| %>
+<%= simple_form_for scorecard, url: edit_url, html: { autocomplete: 'off' } do |f| %>
 
 <% split_holes.each_with_index do |split, j| %>
 <table class="table table-striped table-bordered">

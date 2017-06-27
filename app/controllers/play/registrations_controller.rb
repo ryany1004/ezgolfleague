@@ -1,4 +1,4 @@
-class Play::RegistrationsController < BaseController
+class Play::RegistrationsController < Play::BaseController
   include Devise::Controllers::Helpers
 
   layout "golfer"
