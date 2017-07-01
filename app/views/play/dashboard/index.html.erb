@@ -1,4 +1,4 @@
-<% unless current_user.selected_league.league_seasons.blank? -%>
+<% unless current_user.selected_league.league_seasons.blank? && current_user.selected_league.dues_amount != 0.0 -%>
   <%= render partial: 'league_info', locals: {has_paid_dues: current_user.selected_league.league_seasons.last.user_has_paid?(current_user)} %>
 <% end -%>
 

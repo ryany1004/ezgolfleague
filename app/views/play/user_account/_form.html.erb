@@ -15,6 +15,8 @@
 	  <%= f.input :first_name, :label => 'First Name', required: true %>
 
 	  <%= f.input :last_name, :label => 'Last Name', required: true %>
+
+    <%= f.input :time_zone, :label => 'Time Zone', required: true, collection: ActiveSupport::TimeZone.us_zones, value_method: :name %>
   </div>
 
   <h3>GHIN Number</h3>

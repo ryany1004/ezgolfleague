@@ -6,7 +6,7 @@
     </div>
   <% end %>
 
-  <h3>Basic Details</h3>
+  <h3>Your Basic Details</h3>
   <div class="well">
     <%= f.input :email, :label => 'Email Address', placeholder: 'i.e. user@domain.com', required: true %>
 
@@ -15,10 +15,14 @@
 	  <%= f.input :last_name, :label => 'Last Name', required: true %>
 
     <%= f.input :phone_number, :label => 'Phone Number', required: true %>
+
+    <%= f.input :time_zone, :label => 'Time Zone', required: true, collection: ActiveSupport::TimeZone.us_zones, value_method: :name %>
   </div>
 
   <h3>GHIN Number</h3>
   <div class="well">
+    <p>Your GHIN number is used to automatically update your handicap. Leave this blank if you don't have a GHIN number.</p>
+
     <%= f.input :ghin_number, :label => 'GHIN System Number' %>
   </div>
 

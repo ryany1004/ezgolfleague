@@ -1,4 +1,4 @@
-class Play::PaymentsController < BaseController
+class Play::PaymentsController < Play::BaseController
   layout "golfer"
 
   def index

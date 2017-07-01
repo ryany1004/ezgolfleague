@@ -19,7 +19,7 @@ module Findable
     end
 
     def past_for_league_season(league_season)
-      if league_season.ends_at > Date.today
+      if league_season.ends_at > Date.current.in_time_zone
         end_time = Time.zone.now.at_beginning_of_day
       else
         end_time = league_season.ends_at

@@ -1,5 +1,5 @@
-class ReportsController < ApplicationController
-  before_action :fetch_tournament_day, except: [:index, :finalization_report]
+class ReportsController < BaseController
+  before_filter :fetch_tournament_day, except: [:index, :finalization_report]
 
   def index
     leagues = nil

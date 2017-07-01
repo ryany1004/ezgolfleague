@@ -1,4 +1,4 @@
-class Play::RegistrationsController < BaseController
+class Play::RegistrationsController < Play::BaseController
   include Devise::Controllers::Helpers
 
   layout "golfer"
@@ -7,10 +7,13 @@ class Play::RegistrationsController < BaseController
 
   def new
     @user_account = User.new
+
+    @show_apps_in_footer = false
   end
 
   def create
     @user_account = User.new(user_params)
+    @show_apps_in_footer = false
 
     if @user_account.save
       Delayed::Job.enqueue GhinUpdateJob.new([@user_account]) unless @user_account.ghin_number.blank?
@@ -24,6 +27,7 @@ class Play::RegistrationsController < BaseController
   end
 
   def leagues
+    @show_apps_in_footer = false
   end
 
   def search_leagues
@@ -77,11 +81,11 @@ class Play::RegistrationsController < BaseController
 
   def new_league
     @league = League.new(contact_email: current_user.email)
+    @show_apps_in_footer = false
   end
 
   def create_league
     @league = League.new(league_params)
-    @league.exempt_from_subscription = true unless @league.name.include? "subscription-test" #TODO: REMOVE
 
     if @league.save
       LeagueMembership.create(league: @league, user: current_user, is_admin: true)
