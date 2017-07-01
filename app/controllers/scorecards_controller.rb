@@ -31,7 +31,7 @@ class ScorecardsController < BaseController
   def update
     scores_to_update = Hash.new
 
-    params[:scorecard][:scores_attributes].keys.each do |key|
+    params[:scorecard][:scores_attributes].to_unsafe_h.keys.each do |key|
       score_id = params[:scorecard][:scores_attributes][key]["id"]
       strokes = params[:scorecard][:scores_attributes][key]["strokes"]
 
