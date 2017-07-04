@@ -11,6 +11,8 @@ module Importers
         if child_users.count > 1
           puts "Child Users > 1 #{user[:golfer_first]} #{user[:golfer_last]}"
         else
+          child_user = child_users.first
+
           if child_user.blank?
             child_user = User.create(first_name: user[:golfer_first], last_name: user[:golfer_last], email: "#{SecureRandom.uuid}@nobody.com", password: SecureRandom.uuid, phone_number: user[:phone])
           end
