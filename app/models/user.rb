@@ -14,6 +14,8 @@ class User < ActiveRecord::Base
   has_many :notifications, :dependent => :destroy
   has_many :mobile_devices, :dependent => :destroy
   belongs_to :current_league, :class_name => "League"
+  has_many :child_users, class_name: "User", foreign_key: "parent_id", inverse_of: :parent_user
+  belongs_to :parent_user, class_name: "User", foreign_key: "parent_id", inverse_of: :child_users
   has_and_belongs_to_many :flights, inverse_of: :users
   has_and_belongs_to_many :golfer_teams, inverse_of: :users
   has_and_belongs_to_many :contests, inverse_of: :users
@@ -49,6 +51,19 @@ class User < ActiveRecord::Base
 
   ##
 
+  def impersonatable_users
+    if self.child_users.blank? && self.parent_user.blank?
+      return nil
+    else
+      users = []
+
+      users << self.parent_user unless self.parent_user.blank?
+      users = users + self.child_users
+
+      users
+    end
+  end
+
   def avatar_image_url
     return self.avatar.url(:thumb)
   end
@@ -67,6 +82,10 @@ class User < ActiveRecord::Base
     else
       return self.leagues.first
     end
+  end
+
+  def active_league_season
+    self.selected_league.active_season_for_user(self)
   end
 
   def is_any_league_admin?

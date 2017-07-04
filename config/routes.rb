@@ -58,6 +58,7 @@ Rails.application.routes.draw do
     resources :dashboard, only: [:index] do
       put 'switch_leagues'
       put 'switch_seasons'
+      put 'switch_users'
     end
   end
 

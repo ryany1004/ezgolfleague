@@ -100,7 +100,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li><%= link_to "My Dashboard", play_dashboard_index_path %></li>
         <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><%= current_user.email %> <span class="caret"></span></a>
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><%= current_user.complete_name %> <span class="caret"></span></a>
           <ul class="dropdown-menu" role="menu">
             <% if !current_user.has_all_exempt_leagues? %>
             <li><%= link_to "Your Subscription", current_league_subscription_credits_path(current_user.selected_league) %></li>
@@ -144,7 +144,7 @@
     <a href='https://play.google.com/store/apps/details?id=com.ezgolfleague.golfapp&hl=en'><%= image_tag 'google-play-badge.png', width: "200" %></a>
   </div>
 
-  <% if current_user != true_user %>
+  <% if current_user != true_user && true_user.is_super_user %>
     <br/><br/>
     <strong>You (<%= true_user.complete_name %>) are signed in as <%= current_user.complete_name %>
     <br/>

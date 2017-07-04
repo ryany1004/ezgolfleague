@@ -78,6 +78,13 @@
     <%= f.input :phone_number, :label => 'Phone Number' %>
   </div>
 
+  <% if current_user.is_super_user %>
+  <h3>Parent User</h3>
+  <div class="well">
+    <%= f.input :parent_id, collection: User.all.order("last_name"), label: false, :label_method => :complete_name, include_blank: true, input_html: { class: 'chosen-select' } %>
+  </div>
+  <% end %>
+
   <% if @user_account.new_record? == false && @editing_current_user != true -%>
   <h3>Leagues</h3>
 

@@ -1,0 +1,19 @@
+<div class="row">
+  <div class="col-md-12">
+    <div class="panel panel-default panel-success">
+      <div class="panel-heading">
+        <h3 class="panel-title">Select a User to View</h3>
+      </div>
+      <div class="panel-body">
+        <ul class="nav nav-pills">
+          <% current_user.impersonatable_users.each do |u| %>
+          <li><%= link_to "#{u.complete_name}", play_dashboard_switch_users_path(u), method: :put %></li>
+          <% end %>
+        </ul>
+      </div>
+      <div class="panel-footer">
+        <p>You can use the user menu in the upper right to switch at any time.</p>
+      </div>
+    </div>
+  </div>
+</div>

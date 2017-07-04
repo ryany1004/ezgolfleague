@@ -2,12 +2,14 @@ class Play::DashboardController < Play::BaseController
   layout "golfer"
 
   def index
-    if current_user.selected_league.blank?
+    if current_user.selected_league.blank? && current_user.impersonatable_users.blank?
       redirect_to leagues_play_registrations_path, :flash => { :success => "Please create or join a league to continue." }
+    elsif current_user.selected_league.blank? && !current_user.impersonatable_users.blank?
+      render 'select_user'
     else
       @page_title = "My Dashboard"
 
-      active_season = current_user.selected_league.active_season_for_user(current_user)
+      active_season = current_user.active_league_season
       if session[:selected_season_id].blank?
         @league_season = active_season
       else
@@ -42,6 +44,14 @@ class Play::DashboardController < Play::BaseController
 
   def switch_seasons
     session[:selected_season_id] = params[:season_id]
+
+    redirect_to play_dashboard_index_path
+  end
+
+  def switch_users
+    switch_to_user = User.find(params[:dashboard_id])
+
+    impersonate_user(switch_to_user) if current_user.impersonatable_users.include? switch_to_user
 
     redirect_to play_dashboard_index_path
   end
