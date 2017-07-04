@@ -19,7 +19,7 @@ module Importers
           child_user.parent_user = parent_user
 
           league = League.where(name: user[:league]).first
-          child_user.leagues << league
+          child_user.leagues << league unless league.blank?
         end
       end
     end
