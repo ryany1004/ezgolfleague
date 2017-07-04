@@ -2,12 +2,12 @@ module Importers
   class Sbjrgolf_Importer
     def import(filename)
       CSV.foreach(filename, {:headers => true, :header_converters => :symbol}) do |user|
-        parent_user = User.where(first_name: user[:parent_first], last_name: user[:parent_last], email: user[:parent_email]).first
+        parent_user = User.where(email: user[:parent_email]).first
         if parent_user.blank?
-          parent_user = User.create(first_name: user[:parent_first], last_name: user[:parent_last], email: user[:parent_email], password: SecureRandom.uuid, phone_number: user[:phone])
+          parent_user = User.create!(first_name: user[:parent_first], last_name: user[:parent_last], email: user[:parent_email], password: SecureRandom.uuid, phone_number: user[:phone])
         end
 
-        puts "Parent: #{parent_user.complete_name}"
+        puts "Parent: #{parent_user.complete_name} | #{parent_user.id}"
 
         child_users = User.where(first_name: user[:golfer_first], last_name: user[:golfer_last])
         if child_users.count > 1
@@ -16,11 +16,8 @@ module Importers
           child_user = child_users.first
 
           if child_user.blank?
-            child_user = User.create(first_name: user[:golfer_first], last_name: user[:golfer_last], email: "#{SecureRandom.uuid}@nobody.com", password: SecureRandom.uuid, phone_number: user[:phone])
+            child_user = User.create!(parent_user_id: parent_user.id, first_name: user[:golfer_first], last_name: user[:golfer_last], email: "#{SecureRandom.uuid}@nobody.com", password: SecureRandom.uuid, phone_number: user[:phone])
           end
-          
-          child_user.parent_user = parent_user
-          child_user.save
 
           puts "Set Parent #{parent_user.complete_name} for Child #{child_user.complete_name}"
 
