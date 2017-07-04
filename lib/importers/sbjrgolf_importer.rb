@@ -19,7 +19,11 @@ module Importers
           child_user.parent_user = parent_user
 
           league = League.where(name: user[:league]).first
-          child_user.leagues << league unless league.blank?
+          unless league.blank?
+            if !child_user.leagues.include? league
+              LeagueMembership.create(league: league, user: child_user)
+            end
+          end
         end
       end
     end
