@@ -1,7 +1,7 @@
 module Importers
   class Sbjrgolf_Importer
-    def import(filename, import_tag)
-      CSV.foreach(course_filename, {:headers => true, :header_converters => :symbol}) do |user|
+    def import(filename)
+      CSV.foreach(filename, {:headers => true, :header_converters => :symbol}) do |user|
         parent_user = User.where(first_name: user[:parent_first], last_name: user[:parent_last], email: user[:parent_email]).first
         if parent_user.blank?
           parent_user = User.create(first_name: user[:parent_first], last_name: user[:parent_last], email: user[:parent_email], password: SecureRandom.uuid, phone_number: user[:phone])
