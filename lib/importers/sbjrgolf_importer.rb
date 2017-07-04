@@ -17,6 +17,9 @@ module Importers
 
           if child_user.blank?
             child_user = User.create!(parent_user_id: parent_user.id, first_name: user[:golfer_first], last_name: user[:golfer_last], email: "#{SecureRandom.uuid}@nobody.com", password: SecureRandom.uuid, phone_number: user[:phone])
+          else
+            child_user.parent_user = parent_user
+            child_user.save
           end
 
           puts "Set Parent #{parent_user.complete_name} for Child #{child_user.complete_name}"
