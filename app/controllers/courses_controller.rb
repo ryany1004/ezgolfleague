@@ -3,9 +3,15 @@ class CoursesController < BaseController
   before_action :initialize_form, :only => [:new, :edit]
 
   def index
+    @page_title = "Courses"
+
     @courses = Course.order(:name).page params[:page]
 
-    @page_title = "Courses"
+    unless params[:search].blank?
+      search_string = "%#{params[:search].downcase}%"
+
+      @courses = @courses.where("lower(name) LIKE ? OR lower(city) LIKE ?", search_string, search_string)
+    end
   end
 
   def new
