@@ -34,4 +34,5 @@
   </div>
 </div>
 
-<%= paginate @past_tournaments %>
+<%= link_to_prev_page @past_tournaments, '← Previous Page', :class => 'btn btn-default' %>
+<%= link_to_next_page @past_tournaments, 'Next Page →', :class => 'btn btn-default' %>
