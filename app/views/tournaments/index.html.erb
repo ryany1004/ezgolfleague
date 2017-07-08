@@ -1,18 +1,18 @@
 <div class="row">
-  <% if @unconfigured_tournaments.count > 0 -%>
+  <% unless @unconfigured_tournaments.blank? -%>
     <%= render partial: 'index_table', locals: {tournaments: @unconfigured_tournaments, title: "Setup In Process", show_create: false} %>
   <% end -%>
 
-  <% if @upcoming_tournaments.count > 0 -%>
+  <% unless @upcoming_tournaments.blank? -%>
     <%= render partial: 'index_table', locals: {tournaments: @upcoming_tournaments, title: "Upcoming Tournaments", show_create: true} %>
   <% end -%>
 
-  <% if @past_tournaments.count > 0 -%>
+  <% unless @past_tournaments.blank? -%>
     <%= render partial: 'index_table', locals: {tournaments: @past_tournaments, title: "Past Tournaments", show_create: true} %>
   <% end -%>
 
-  <% if @upcoming_tournaments.count == 0 -%>
-    <% if @past_tournaments.count == 0 -%>
+  <% if @upcoming_tournaments.blank? -%>
+    <% if @past_tournaments.blank? -%>
       <h4>You don't have any tournaments yet.</h4>
       <%= link_to 'Create Tournament', new_league_tournament_path(current_user.selected_league), :class => 'btn btn-primary' %>
     <% end -%>
