@@ -1,4 +1,4 @@
-class Score < ActiveRecord::Base
+class Score < ApplicationRecord
   include Servable
 
   belongs_to :scorecard, inverse_of: :scores, touch: true

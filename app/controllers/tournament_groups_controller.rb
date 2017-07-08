@@ -1,8 +1,8 @@
 class TournamentGroupsController < BaseController
-  before_filter :fetch_tournament
-  before_filter :fetch_tournament_day
-  before_filter :fetch_tournament_group, :except => [:index, :new, :create, :batch_create]
-  before_filter :set_stage
+  before_action :fetch_tournament
+  before_action :fetch_tournament_day
+  before_action :fetch_tournament_group, :except => [:index, :new, :create, :batch_create]
+  before_action :set_stage
 
   def index
     @tournament_groups = @tournament_day.tournament_groups.page params[:page]

@@ -1,6 +1,6 @@
 class GolfOutingsController < BaseController
-  before_filter :fetch_tournament
-  before_filter :set_stage
+  before_action :fetch_tournament
+  before_action :set_stage
 
   def players
     @schedule_options = { 0 => "Manual", 1 => "Automatic: Worst Score First", 2 => "Automatic: Best Score First" }

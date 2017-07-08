@@ -1,5 +1,5 @@
 class Api::V1::RegistrationsController < Api::V1::ApiBaseController
-  before_filter :protect_with_token, only: [:notify_interest, :pay_dues, :create_league]
+  before_action :protect_with_token, only: [:notify_interest, :pay_dues, :create_league]
 
   respond_to :json
 

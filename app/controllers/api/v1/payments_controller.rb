@@ -1,5 +1,5 @@
 class Api::V1::PaymentsController < Api::V1::ApiBaseController
-  before_filter :protect_with_token
+  before_action :protect_with_token
 
   respond_to :json
 

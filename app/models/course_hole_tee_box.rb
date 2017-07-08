@@ -1,4 +1,4 @@
-class CourseHoleTeeBox < ActiveRecord::Base
+class CourseHoleTeeBox < ApplicationRecord
   belongs_to :course_hole, inverse_of: :course_hole_tee_boxes, touch: true
   belongs_to :course_tee_box, inverse_of: :course_hole_tee_boxes, touch: true
 

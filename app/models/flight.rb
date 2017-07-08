@@ -1,4 +1,4 @@
-class Flight < ActiveRecord::Base
+class Flight < ApplicationRecord
   belongs_to :tournament_day, inverse_of: :flights, touch: true
   belongs_to :course_tee_box, touch: true
   has_many :payouts, -> { order(:sort_order, "amount DESC, points DESC") }, inverse_of: :flight, :dependent => :destroy

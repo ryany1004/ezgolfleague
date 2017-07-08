@@ -1,5 +1,5 @@
 class Api::V1::TournamentsController < Api::V1::ApiBaseController
-  before_filter :protect_with_token, except: [:app_association]
+  before_action :protect_with_token, except: [:app_association]
 
   respond_to :json
 

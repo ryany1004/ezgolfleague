@@ -172,7 +172,7 @@ class UserAccountsController < BaseController
         return false
       end
     else
-      user_params[:league_ids].each do |league_id|
+      user_params[:league_ids].to_unsafe_h.each do |league_id|
         unless league_id.blank?
           league = League.find(league_id)
 

@@ -1,4 +1,4 @@
-class ContestHole < ActiveRecord::Base
+class ContestHole < ApplicationRecord
   belongs_to :contest, touch: true
   belongs_to :course_hole, touch: true
   has_many :contest_results, :dependent => :destroy

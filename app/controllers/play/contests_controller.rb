@@ -1,7 +1,7 @@
 class Play::ContestsController < Play::BaseController
   layout "golfer"
 
-  before_filter :fetch
+  before_action :fetch
 
   def index
   end

@@ -1,4 +1,4 @@
-class NotificationTemplate < ActiveRecord::Base
+class NotificationTemplate < ApplicationRecord
   belongs_to :league, touch: true
   belongs_to :tournament, touch: true
 

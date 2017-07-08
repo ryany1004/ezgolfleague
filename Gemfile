@@ -3,14 +3,14 @@ source 'https://rubygems.org'
 ruby '2.3.4'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '4.2.8'
+gem 'rails', '5.1'
 
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 5.0'
 # Use Uglifier as compressor for JavaScript assets
 gem 'uglifier', '>= 1.3.0'
 # Use CoffeeScript for .coffee assets and views
-gem 'coffee-rails', '~> 4.1.0'
+gem 'coffee-rails'
 # See https://github.com/rails/execjs#readme for more supported runtimes
 # gem 'therubyracer', platforms: :ruby
 
@@ -23,8 +23,8 @@ gem 'jbuilder', '~> 2.0'
 # bundle exec rake doc:rails generates the API under doc/api.
 gem 'sdoc', '~> 0.4.0', group: :doc
 
-gem 'devise', '~> 3.5.6'
-gem 'devise_invitable', '~> 1.5.2'
+gem 'devise',           '~> 4.2'
+gem 'devise_invitable', '~> 1.7.0'
 gem 'pretender'
 
 gem 'bootstrap-sass', '~> 3.3.4'
@@ -35,14 +35,12 @@ gem 'simple_form'
 gem 'momentjs-rails', '~> 2.9', :github => 'derekprior/momentjs-rails'
 gem 'datetimepicker-rails', github: 'zpaulovics/datetimepicker-rails', branch: 'master', submodules: true
 gem 'chosen-rails'
-gem 'smarter_csv'
 gem 'airbrake', '~> 5.0'
 gem 'nokogiri'
-gem 'attr_encrypted', '1.3.5'
+gem "attr_encrypted", "~> 3.0.0"
 gem 'stripe', :git => 'https://github.com/stripe/stripe-ruby'
 gem 'delayed_job_active_record'
 gem 'progress_job', :github => 'HunterHillegas/progress_job'
-gem 'backport_new_renderer', :github => 'brainopia/backport_new_renderer'
 gem 'apnotic'
 gem 'geocoder'
 gem 'fcm'
@@ -50,7 +48,7 @@ gem 'marginalia'
 
 group :development do
   # Access an IRB console on exception pages or by using <%= console %> in views
-  gem 'web-console', '~> 2.0'
+  gem 'web-console'
 end
 
 group :development, :test do
@@ -77,7 +75,6 @@ end
 
 group :production do
   gem 'pg', '~> 0.17.1'
-  gem 'rails_12factor'
   gem 'dalli'
   gem 'puma'
   gem 'puma_worker_killer'

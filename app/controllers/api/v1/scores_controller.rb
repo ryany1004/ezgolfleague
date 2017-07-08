@@ -1,5 +1,5 @@
 class Api::V1::ScoresController < Api::V1::ApiBaseController
-  before_filter :protect_with_token
+  before_action :protect_with_token
 
   def batch_update
     scores = ActiveSupport::JSON.decode(request.body.read)

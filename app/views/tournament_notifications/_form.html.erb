@@ -17,7 +17,7 @@
 
   <h3>What Should Trigger This Notification?</h3>
   <div class="well">
-    <%= f.input :tournament_notification_action, collection: @tournament_actions, :label => 'Notification Trigger', required: true, include_blank: false %>
+    <%= f.input :tournament_notification_action, collection: @tournament_actions, :label => 'Notification Trigger', include_blank: false %>
   </div>
 
   <%= f.hidden_field :deliver_at %>

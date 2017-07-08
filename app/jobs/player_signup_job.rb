@@ -19,7 +19,7 @@ class PlayerSignupJob < ProgressJob::Base
         group = TournamentGroup.find(tg_id)
 
         unless group.blank?
-          player_info[tg_id].each_with_index do |p, i|
+          player_info[tg_id].to_unsafe_h.each_with_index do |p, i|
             unless p.last.blank?
               user = User.where(id: p.last).first
 
@@ -35,7 +35,7 @@ class PlayerSignupJob < ProgressJob::Base
     update_progress
 
     unless params[:player_signups][:golfer_team_ids].blank?
-      params[:player_signups][:golfer_team_ids].keys.each do |k|
+      params[:player_signups][:golfer_team_ids].to_unsafe_h.keys.each do |k|
         group = TournamentGroup.find(k)
 
         contents = params[:player_signups][:golfer_team_ids][k]
@@ -65,7 +65,7 @@ class PlayerSignupJob < ProgressJob::Base
 
     #contests
     unless params[:player_signups][:contest_signups].blank?
-      params[:player_signups][:contest_signups].keys.each do |k|
+      params[:player_signups][:contest_signups].to_unsafe_h.keys.each do |k|
         group = TournamentGroup.find(k)
 
         contents = params[:player_signups][:contest_signups][k]

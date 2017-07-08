@@ -1,4 +1,4 @@
-class CourseHole < ActiveRecord::Base
+class CourseHole < ApplicationRecord
   belongs_to :course, inverse_of: :course_holes, touch: true
   has_and_belongs_to_many :tournament_days
 

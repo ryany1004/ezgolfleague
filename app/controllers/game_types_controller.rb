@@ -1,7 +1,7 @@
 class GameTypesController < BaseController
-  before_filter :fetch_tournament
-  before_filter :set_stage
-  before_filter :initialize_form
+  before_action :fetch_tournament
+  before_action :set_stage
+  before_action :initialize_form
   
   def index
   end

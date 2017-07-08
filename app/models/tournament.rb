@@ -4,7 +4,7 @@ module AutoScheduleType
   AUTOMATIC_BEST_FIRST = 2
 end
 
-class Tournament < ActiveRecord::Base
+class Tournament < ApplicationRecord
   include Findable
   include Playable
   include Rankable

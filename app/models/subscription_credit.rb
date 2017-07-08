@@ -1,4 +1,4 @@
-class SubscriptionCredit < ActiveRecord::Base
+class SubscriptionCredit < ApplicationRecord
   scope :used, -> { where("tournaments_remaining = 0") }
   scope :unused, -> { where("tournaments_remaining > 0") }
 
