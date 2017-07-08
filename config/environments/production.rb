@@ -86,6 +86,8 @@ Rails.application.configure do
 
   config.action_mailer.default_url_options = { protocol: 'https', :host => 'app.ezgolfleague.com' }
 
+  config.enable_dependency_loading = true
+
   ActionMailer::Base.smtp_settings = {
     :address        => "smtp.sendgrid.net",
     :port           => "25",
