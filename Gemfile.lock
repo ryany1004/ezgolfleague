@@ -213,7 +213,7 @@ GEM
       cocaine (~> 0.5.5)
       mime-types
       mimemagic (~> 0.3.0)
-    pg (0.17.1)
+    pg (0.21.0)
     pretender (0.2.1)
       actionpack
     public_suffix (2.0.5)
@@ -346,7 +346,7 @@ DEPENDENCIES
   momentjs-rails (~> 2.9)!
   nokogiri
   paperclip (~> 5.0.0)
-  pg (~> 0.17.1)
+  pg
   pretender
   progress_job!
   puma

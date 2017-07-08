@@ -74,7 +74,7 @@ group :test do
 end
 
 group :production do
-  gem 'pg', '~> 0.17.1'
+  gem 'pg'
   gem 'dalli'
   gem 'puma'
   gem 'puma_worker_killer'
