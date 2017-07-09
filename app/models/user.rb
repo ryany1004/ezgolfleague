@@ -53,7 +53,7 @@ class User < ApplicationRecord
 
   def impersonatable_users
     if self.child_users.blank? && self.parent_user.blank?
-      return nil
+      return []
     else
       users = []
 
