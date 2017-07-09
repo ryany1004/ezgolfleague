@@ -5,13 +5,13 @@ class ReportsController < BaseController
     leagues = nil
     leagues = current_user.leagues unless current_user.is_super_user?
 
-    @past_tournaments = Tournament.tournaments_happening_at_some_point(nil, nil, leagues, true).page(params[:page]).without_count
+    @past_tournaments = Tournament.tournaments_happening_at_some_point(nil, nil, leagues, true).reorder("tournament_starts_at DESC").page(params[:page]).without_count
 
     @page_title = "Tournament Reports"
   end
 
   def finalization_report
-    @past_tournaments = Tournament.tournaments_happening_at_some_point(nil, nil, nil, true).where(is_finalized: true).page(params[:page]).without_count
+    @past_tournaments = Tournament.tournaments_happening_at_some_point(nil, nil, nil, true).where(is_finalized: true).reorder("tournament_starts_at DESC").page(params[:page]).without_count
   end
 
   def adjusted_scores
