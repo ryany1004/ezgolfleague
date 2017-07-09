@@ -66,12 +66,16 @@ class LeagueSeason < ApplicationRecord
   end
 
   def user_has_paid?(user)
-    payments = self.payments.where(user: user).where("payment_amount > 0").where("payment_type = ?", "#{user.complete_name} League Dues")
-
-    if payments.length > 0
+    if self.dues_amount == 0
       return true
     else
-      return false
+      payments = self.payments.where(user: user).where("payment_amount > 0").where("payment_type = ?", "#{user.complete_name} League Dues")
+
+      if payments.length > 0
+        return true
+      else
+        return false
+      end
     end
   end
 
