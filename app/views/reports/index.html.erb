@@ -3,11 +3,11 @@
   <br/><br/>
 <% end %>
 
-<div class="row">
-  <% if @past_tournaments.count > 0 -%>
+<% unless @past_tournaments.blank? -%>
+  <div class="row">
     <%= render partial: 'tournament_table', locals: {tournaments: @past_tournaments} %>
-  <% end -%>
-</div>
+  </div>
+<% end -%>
 
 <%= link_to_prev_page @past_tournaments, '← Previous Page', :class => 'btn btn-default' %>
 <%= link_to_next_page @past_tournaments, 'Next Page →', :class => 'btn btn-default' %>
