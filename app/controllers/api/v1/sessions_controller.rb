@@ -6,12 +6,12 @@ class Api::V1::SessionsController < Api::V1::ApiBaseController
     password = request.headers["ezgl-password"]
 
     if email.blank? or password.blank?
-      render text: "Missing Data", :status => :bad_request
+      render json: {}, status: :precondition_failed
     else
       user = User.where(email: email).first
 
       if user.blank? || !user.valid_password?(password)
-        render text: "Incorrect Password", :status => :bad_request
+        render json: {}, status: :unauthorized
       else
         self.assign_user_session_token(user) if user.session_token.blank?
 
@@ -27,14 +27,14 @@ class Api::V1::SessionsController < Api::V1::ApiBaseController
       MobileDevice.create(user: @current_user, device_identifier: params[:device_identifier], device_type: params[:device_type], environment_name: params[:environment_name])
     end
 
-    render text: "Success"
+    render json: {}, status: :ok
   end
 
   def upload_avatar_image
     uploaded_image = request.body.read
 
     if uploaded_image.blank?
-      render text: "Bad Image", :status => :bad_request
+      render plain: "Bad Image", :status => :bad_request
     else
       temp_file_path = "#{Rails.root}/tmp/#{SecureRandom.uuid}_golfer_avatar.jpg"
 
@@ -44,7 +44,7 @@ class Api::V1::SessionsController < Api::V1::ApiBaseController
       @current_user.avatar = File.open(temp_file_path)
       @current_user.save
 
-      render text: "Success"
+      render plain: "Success", :status => :ok
     end
   end
 
