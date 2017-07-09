@@ -22,7 +22,9 @@
       <%= f.input :should_invite, :label => 'Send Invitation via Email', as: :boolean %>
     <% end -%>
 
-    <%= f.association :leagues, collection: @leagues, :label => 'Leagues', :label_method => :name, as: :check_boxes, required: true %>
+    <% if current_user.is_super_user %>
+      <%= f.association :leagues, collection: @leagues, :label => 'Leagues', :label_method => :name, as: :check_boxes, required: true %>
+    <% end %>
   </div>
 
   <h3>Avatar</h3>
