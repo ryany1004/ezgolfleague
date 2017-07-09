@@ -7,14 +7,14 @@ class User < ApplicationRecord
   devise :invitable, :database_authenticatable, :recoverable, :rememberable, :trackable, :validatable
 
   has_many :league_memberships, :dependent => :destroy
-  has_many :leagues, through: :league_memberships
+  has_many :leagues, ->{ order 'name' }, through: :league_memberships
   has_many :payout_results, inverse_of: :user, :dependent => :destroy
   has_many :payments, ->{ order 'created_at DESC' }, inverse_of: :user
   has_many :tournament_day_results, inverse_of: :tournament_day, :dependent => :destroy
   has_many :notifications, :dependent => :destroy
   has_many :mobile_devices, :dependent => :destroy
   belongs_to :current_league, :class_name => "League"
-  has_many :child_users, class_name: "User", foreign_key: "parent_id", inverse_of: :parent_user
+  has_many :child_users, ->{ order 'last_name' }, class_name: "User", foreign_key: "parent_id", inverse_of: :parent_user
   belongs_to :parent_user, class_name: "User", foreign_key: "parent_id", inverse_of: :child_users
   has_and_belongs_to_many :flights, inverse_of: :users
   has_and_belongs_to_many :golfer_teams, inverse_of: :users
