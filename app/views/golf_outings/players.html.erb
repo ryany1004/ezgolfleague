@@ -34,6 +34,7 @@
               <div class="panel panel-default">
                 <div class="panel-body">
                   <p><strong>Player #<%= i+1 %></strong></p>
+                  <!-- Selected: <%= tournament_group.user_for_index(i).try(:id) %> -->
                   <%= f.input "member_id[#{tournament_group.id}][#{i}]", label: false, collection: @league_members, label_method: :complete_name, value_method: :id, tournament_group: tournament_group, selected: tournament_group.user_for_index(i).try(:id), include_blank: true, input_html: { class: 'chosen-select' } %>
                   <% unless tournament_group.golfer_teams.blank? %>
                     <p><strong>Tee-Group Team</strong></p>
