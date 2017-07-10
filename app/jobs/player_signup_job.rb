@@ -38,7 +38,7 @@ class PlayerSignupJob < ProgressJob::Base
       params[:player_signups][:golfer_team_ids].to_unsafe_h.keys.each do |k|
         group = TournamentGroup.find(k)
 
-        contents = params[:player_signups][:golfer_team_ids][k]
+        contents = params[:player_signups][:golfer_team_ids][k].to_unsafe_h
         contents.each do |x|
           unless x.last.blank?
             index = x.first.to_i
@@ -68,7 +68,7 @@ class PlayerSignupJob < ProgressJob::Base
       params[:player_signups][:contest_signups].to_unsafe_h.keys.each do |k|
         group = TournamentGroup.find(k)
 
-        contents = params[:player_signups][:contest_signups][k]
+        contents = params[:player_signups][:contest_signups][k].to_unsafe_h
         contents.each do |x|
           unless x.last.blank?
             index = x.first.to_i
