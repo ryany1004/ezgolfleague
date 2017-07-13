@@ -6,12 +6,12 @@ class Api::V1::SessionsController < Api::V1::ApiBaseController
     password = request.headers["ezgl-password"]
 
     if email.blank? or password.blank?
-      render json: {}, status: :precondition_failed
+      render json: {:message => "Error"}, status: :precondition_failed
     else
       user = User.where(email: email).first
 
       if user.blank? || !user.valid_password?(password)
-        render json: {}, status: :unauthorized
+        render json: {:message => "#{email}"}, status: :unauthorized
       else
         self.assign_user_session_token(user) if user.session_token.blank?
 
@@ -27,7 +27,7 @@ class Api::V1::SessionsController < Api::V1::ApiBaseController
       MobileDevice.create(user: @current_user, device_identifier: params[:device_identifier], device_type: params[:device_type], environment_name: params[:environment_name])
     end
 
-    render json: {}, status: :ok
+    render json: {:message => "Success"}, status: :ok
   end
 
   def upload_avatar_image

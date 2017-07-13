@@ -30,7 +30,7 @@ class Api::V1::TournamentsController < Api::V1::ApiBaseController
     tournament_ids = params[:tournament_ids]
     split_ids = tournament_ids.split(",")
 
-    invalid_ids = []
+    invalid_ids = ["0"]
 
     split_ids.each do |split_id|
       invalid_ids << split_id if !Tournament.exists?(split_id) || Tournament.find(split_id).league.membership_for_user(@current_user).blank?

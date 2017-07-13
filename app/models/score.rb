@@ -27,7 +27,10 @@ class Score < ApplicationRecord
   def tee_group_name
     flight = self.scorecard.tournament_day.flight_for_player(self.scorecard.golf_outing.user)
 
-    return flight.course_tee_box.name
+    if flight.blank?
+      return nil
+    else
+      return flight.course_tee_box.name
+    end
   end
-
 end

@@ -51,7 +51,7 @@
               <% end -%>
 
               <% unless p.scorecard_score_cell_partial.blank? -%>
-                </br><%= render partial: p.scorecard_score_cell_partial, locals: {score: score, scorecards: other_scorecards} %>
+							</br><%= render partial: p.scorecard_score_cell_partial, locals: {score: score, scorecards: p.all_scorecards} %>
               <% end -%>
             </td>
           <% end -%>
@@ -150,7 +150,7 @@
 
 <!-- Game Type Support -->
 <% unless p.scorecard_post_embed_partial.blank? -%>
-  <%= render partial: p.scorecard_post_embed_partial, locals: {scorecards: other_scorecards, course_holes: p.course_holes} %>
+  <%= render partial: p.scorecard_post_embed_partial, locals: {scorecards: p.all_scorecards, course_holes: p.course_holes} %>
 <% end -%>
 
 <!-- Finalize Buttons -->
