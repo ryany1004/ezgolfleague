@@ -2,7 +2,7 @@ class SubscriptionCredit < ApplicationRecord
   scope :used, -> { where("tournaments_remaining = 0") }
   scope :unused, -> { where("tournaments_remaining > 0") }
 
-  belongs_to :league, touch: true
+  belongs_to :league
   has_many :tournaments
 
   validates :amount, presence: true

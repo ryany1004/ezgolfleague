@@ -10,7 +10,7 @@ class Tournament < ApplicationRecord
   include Rankable
   include Servable
 
-  belongs_to :league, inverse_of: :tournaments, touch: true
+  belongs_to :league, inverse_of: :tournaments
   belongs_to :subscription_credit, inverse_of: :tournaments
   has_many :tournament_days, -> { order(:tournament_at) }, inverse_of: :tournament, :dependent => :destroy
   has_many :payments, inverse_of: :tournament

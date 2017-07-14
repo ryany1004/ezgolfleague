@@ -1,5 +1,5 @@
 class NotificationTemplate < ApplicationRecord
-  belongs_to :league, touch: true
+  belongs_to :league
   belongs_to :tournament, touch: true
 
   has_many :notifications

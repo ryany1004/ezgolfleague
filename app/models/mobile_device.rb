@@ -1,5 +1,5 @@
 class MobileDevice < ApplicationRecord
-  belongs_to :user, touch: true
+  belongs_to :user
 
   validates :device_identifier, presence: true, uniqueness: true
 end

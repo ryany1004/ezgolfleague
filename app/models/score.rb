@@ -2,7 +2,7 @@ class Score < ApplicationRecord
   include Servable
 
   belongs_to :scorecard, inverse_of: :scores, touch: true
-  belongs_to :course_hole, touch: true
+  belongs_to :course_hole
 
   validates :strokes, :inclusion => 0..30
 
