@@ -1,6 +1,8 @@
 class Api::V1::SessionsController < Api::V1::ApiBaseController
   before_action :protect_with_token, only: [:register_device, :upload_avatar_image]
 
+  respond_to :json
+
   def create
     email = request.headers["ezgl-email"]
     password = request.headers["ezgl-password"]
@@ -27,7 +29,9 @@ class Api::V1::SessionsController < Api::V1::ApiBaseController
       MobileDevice.create(user: @current_user, device_identifier: params[:device_identifier], device_type: params[:device_type], environment_name: params[:environment_name])
     end
 
-    render json: {:message => "Success"}, status: :ok
+    respond_to do |format|
+      format.json { render json: {:message => "Success"}, status: :ok }
+    end
   end
 
   def upload_avatar_image
