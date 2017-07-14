@@ -184,8 +184,9 @@ class TournamentPresenter
 
         tournament_group.golf_outings.each do |golf_outing|
           flight = tournament_day.flight_for_player(golf_outing.user).blank? ? nil : tournament_day.flight_for_player(golf_outing.user)
+          name = golf_outing.user.blank? ? "Error" : golf_outing.user.complete_name
 
-          outings << {name: golf_outing.user.complete_name, handicap: golf_outing.course_handicap.to_i, flight: flight, group: tournament_group}
+          outings << {name: name, handicap: golf_outing.course_handicap.to_i, flight: flight, group: tournament_group}
         end
 
         groups << outings
