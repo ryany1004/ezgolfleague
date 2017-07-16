@@ -61,7 +61,7 @@ class LeaguesController < BaseController
     @league = League.find(params[:league_id])
 
     @league.users.each do |u|
-      LeagueMailer.league_message(u, params[:league_send_member_email][:subject], params[:league_send_member_email][:contents]).deliver_later
+      LeagueMailer.league_message(u, @league, params[:league_send_member_email][:subject], params[:league_send_member_email][:contents]).deliver_later
     end
 
     redirect_to leagues_path, :flash => { :success => "The message was sent." }
