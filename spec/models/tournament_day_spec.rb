@@ -26,22 +26,4 @@ describe "Testing Tournament Day" do
     expect(tournament.players).not_to include(user)
     expect(tournament_day.tournament_group_for_player(user)).not_to eq(tournament_group)
   end
-
-  it "stroke play scoring" do
-    scores = [1,1,6,4,6,3,5,6,5,7,6,5,3,6,6,5,3,10]
-
-    add_to_group_and_create_scores(tournament_day, user, tournament_group, scores)
-
-    expect(tournament_day.player_score(user, false)).to eq(scores.sum)
-    expect(tournament_day.player_score(user)).to eq(76)
-  end
-
-  it "match play scoring"
-
-  it "best ball scoring"
-
-  it "scramble scoring"
-
-  it "shamble scoring"
-
 end

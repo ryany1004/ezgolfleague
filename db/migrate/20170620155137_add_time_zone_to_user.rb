@@ -1,4 +1,4 @@
-class AddTimeZoneToUser < ActiveRecord::Migration
+class AddTimeZoneToUser < ActiveRecord::Migration[4.2]
   def change
     change_table :users do |t|
       t.string :time_zone, default: "Pacific Time (US & Canada)"

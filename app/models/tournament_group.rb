@@ -11,6 +11,8 @@ class TournamentGroup < ApplicationRecord
 
   def create_golfer_teams
     if self.tournament_day.tournament.display_teams?
+      Rails.logger.info { "create_golfer_teams" }
+
       number_of_teams_to_create = self.max_number_of_players / self.tournament_day.game_type.number_of_players_per_team
 
       team_number = 1
@@ -20,6 +22,8 @@ class TournamentGroup < ApplicationRecord
 
         team_number += 1
       end
+    else
+      Rails.logger.info { "NOT create_golfer_teams" }
     end
   end
 
