@@ -126,7 +126,7 @@ module GameTypes
         if u != scorecard.golf_outing.user
           player_names << u.last_name
 
-          player_names << "/" if u != other_members.last
+          player_names << "/" if u != team.users.last
         end
       end
 
