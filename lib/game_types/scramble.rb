@@ -123,7 +123,7 @@ module GameTypes
       other_members.each do |player|
         player_names << player.last_name
 
-        player_names << "/" if player != other_members.users.last
+        player_names << "/" if player != other_members.last
       end
 
       return "#{player_names} Scramble"
