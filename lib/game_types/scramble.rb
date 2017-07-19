@@ -101,33 +101,29 @@ module GameTypes
 
     ##Scoring
 
+    def other_group_members(user)
+      other_members = []
+
+      team = self.tournament_day.golfer_team_for_player(user)
+      team.users.each do |u|
+        other_members << u if u != user
+      end
+
+      return other_members
+    end
+
     def related_scorecards_for_user(user, only_human_scorecards = false)
       return []
     end
 
     def override_scorecard_name_for_scorecard(scorecard)
-      # player_names = scorecard.golf_outing.user.last_name + "/"
-      #
-      # other_members = self.tournament_day.other_group_members(scorecard.golf_outing.user)
-      # other_members.each do |player|
-      #   player_names << player.last_name
-      #
-      #   player_names << "/" if player != other_members.last
-      # end
-      #
-      # return "#{player_names} Scramble"
-      #
-      # ##
-
       player_names = scorecard.golf_outing.user.last_name + "/"
 
-      team = self.tournament_day.golfer_team_for_player(scorecard.golf_outing.user)
-      team.users.each do |u|
-        if u != scorecard.golf_outing.user
-          player_names << u.last_name
+      other_members = self.tournament_day.other_group_members(scorecard.golf_outing.user)
+      other_members.each do |player|
+        player_names << player.last_name
 
-          player_names << "/" if u != team.users.last
-        end
+        player_names << "/" if player != other_members.users.last
       end
 
       return "#{player_names} Scramble"
