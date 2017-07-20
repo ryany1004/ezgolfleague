@@ -48,6 +48,10 @@ module GameTypes
       return "HandicapPercentageKey-T-#{self.tournament_day.id}-GT-#{self.game_type_id}"
     end
 
+    def use_back_nine_key
+      return "ShouldUseBackNineForTies-T-#{self.tournament_day.id}-GT-#{self.game_type_id}"
+    end
+
     def save_setup_details(game_type_options)
       handicap_percentage = 0
       handicap_percentage = game_type_options["handicap_percentage"]
@@ -55,10 +59,20 @@ module GameTypes
       metadata = GameTypeMetadatum.find_or_create_by(search_key: handicap_percentage_key)
       metadata.float_value = handicap_percentage
       metadata.save
+
+      should_use_back_nine_for_ties = 0
+      should_use_back_nine_for_ties = 1 if game_type_options["use_back_9_to_handle_ties"] == 'true'
+
+      metadata = GameTypeMetadatum.find_or_create_by(search_key: use_back_nine_key)
+      metadata.integer_value = should_use_back_nine_for_ties
+      metadata.save
     end
 
     def remove_game_type_options
       metadata = GameTypeMetadatum.where(search_key: handicap_percentage_key).first
+      metadata.destroy unless metadata.blank?
+
+      metadata = GameTypeMetadatum.where(search_key: use_back_nine_key).first
       metadata.destroy unless metadata.blank?
     end
 
@@ -69,6 +83,16 @@ module GameTypes
         return "0.0"
       else
         return metadata.float_value
+      end
+    end
+
+    def use_back_9_to_break_ties?
+      metadata = GameTypeMetadatum.where(search_key: use_back_nine_key).first
+
+      if !metadata.blank? && metadata.integer_value == 1
+        return true
+      else
+        return false
       end
     end
 
@@ -100,6 +124,26 @@ module GameTypes
     end
 
     ##Scoring
+
+    def assign_payouts_from_scores
+      super
+
+      Rails.logger.info { "Assigning Team Scores" }
+
+      self.tournament_day.reload
+
+      self.tournament_day.payout_results.each do |result|
+        team = self.tournament_day.golfer_team_for_player(result.user)
+
+        unless team.blank?
+          team.users.where("id != ?", result.user.id).each do |teammate|
+            Rails.logger.info { "Scramble Teams: Assigning #{teammate.complete_name} to Payout #{result.id}" }
+
+            PayoutResult.create(payout: result.payout, user: teammate, flight: result.flight, tournament_day: self.tournament_day, amount: result.amount, points: result.points)
+          end
+        end
+      end
+    end
 
     def other_group_members(user)
       other_members = []
