@@ -12,6 +12,20 @@ module ScoreHelpers
     end
 
     tournament_day.score_users
+
+    scorecard.tournament_day.game_type.after_updating_scores_for_scorecard(scorecard)
+
+    other_scorecards = []
+    scorecard.tournament_day.other_group_members(user).each do |m|
+      other_scorecards << tournament_day.primary_scorecard_for_user(m)
+    end
+
+    other_scorecards.each do |other_scorecard|
+      unless other_scorecard.golf_outing.blank?
+        scorecard.tournament_day.score_user(other_scorecard.golf_outing.user)
+        scorecard.tournament_day.game_type.after_updating_scores_for_scorecard(other_scorecard)
+      end
+    end
   end
 end
 

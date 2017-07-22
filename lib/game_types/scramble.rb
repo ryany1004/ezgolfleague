@@ -128,7 +128,7 @@ module GameTypes
     def assign_payouts_from_scores
       super
 
-      Rails.logger.info { "Assigning Team Scores" }
+      Rails.logger.info { "Assigning Team Scores for Scramble" }
 
       self.tournament_day.reload
 
@@ -137,7 +137,7 @@ module GameTypes
 
         unless team.blank?
           team.users.where("id != ?", result.user.id).each do |teammate|
-            Rails.logger.info { "Scramble Teams: Assigning #{teammate.complete_name} to Payout #{result.id}" }
+            Rails.logger.info { "Scramble Teams: Assigning #{teammate.complete_name} to Payout #{result.id}. Amount: #{result.amount} Points: #{result.points}" }
 
             PayoutResult.create(payout: result.payout, user: teammate, flight: result.flight, tournament_day: self.tournament_day, amount: result.amount, points: result.points)
           end
