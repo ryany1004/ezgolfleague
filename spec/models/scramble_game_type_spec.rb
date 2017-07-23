@@ -15,7 +15,7 @@ describe "Testing Scramble Game Type" do
 
   it "scramble scoring" do
     user_1_scores = [1,1,6,4,6,3,5,6,5,7,6,5,3,6,6,5,3,10]
-    user_2_scores = [1,2,4,1,6,7,8,6,4,7,6,5,3,6,6,5,3,10]
+    user_2_scores = [1,1,6,4,6,3,5,6,5,7,6,5,3,6,6,5,3,10]
 
     team.users << user
     team.users << user_2
@@ -25,15 +25,6 @@ describe "Testing Scramble Game Type" do
 
     add_to_group_and_create_scores(tournament_day, user, tournament_group, user_1_scores)
     add_to_group_and_create_scores(tournament_day, user_2, tournament_group, user_2_scores)
-
-    scorecard = tournament_day.primary_scorecard_for_user(user)
-    user_1_scores.each_with_index do |s, i|
-      course_hole = course.course_holes[i]
-
-      metadata = GameTypeMetadatum.find_or_create_by(golfer_team: team, course_hole: course_hole, search_key: "scramble_scorecard_for_best_ball_hole")
-      metadata.scorecard = scorecard
-      metadata.save
-    end
 
     expect(tournament_group.golfer_teams.first.users).to include(user)
     expect(tournament_group.golfer_teams.first.users).to include(user_2)
