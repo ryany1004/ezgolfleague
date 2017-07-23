@@ -22,6 +22,10 @@
     <%= f.input :league_id, collection: @leagues, :label => 'All League Members', :label_method => :name %>
 
     <%= f.input :tournament_id, collection: @tournaments, :label => 'Just These Tournament Players', :label_method => :name %>
+
+    <p>
+      <em>Note that child users with parents will also be notified even if they are not members of the league.</em>
+    </p>
   </div>
 
   <% if @notification_template.has_been_delivered == true -%>

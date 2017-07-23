@@ -34,25 +34,30 @@ class NotificationTemplate < ApplicationRecord
   end
 
   def recipients
+    recipient_list = []
+
     if self.tournament_notification_action.blank?
       if self.tournament.blank?
-        return self.league.users
+        recipient_list += self.league.users
       else
-        return self.tournament.players
+        recipient_list += self.tournament.players
       end
     else
       if self.tournament_notification_action == "On Finalization"
-        return self.tournament.players
+        recipient_list += self.tournament.players
       elsif self.tournament_notification_action == "To Unregistered Members 1 Day Before Registration Closes"
-        unregistered = []
-
         self.league.users.each do |u|
-          unregistered << u if self.tournament.includes_player?(u) == false
+          recipient_list << u if self.tournament.includes_player?(u) == false
         end
-
-        return unregistered
       end
     end
+
+    #add parents
+    recipient_list.each do |u|
+      recipient_list << u.parent_user if !u.parent_user.blank? && !recipient_list.include?(u.parent_user)
+    end
+
+    return recipient_list
   end
 
   def recipient_text
