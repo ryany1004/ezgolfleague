@@ -8,7 +8,6 @@
 
 <%= render partial: 'multi_day_scheduling', locals: {tournament: @tournament, tournament_day: @tournament_day, schedule_options: @schedule_options} %>
 
-<%= simple_form_for :player_signups, url: league_tournament_update_day_players_path(@tournament.league, @tournament, @tournament_day), method: :post do |f| %>
 <div class="panel panel-default">
   <div class="panel-heading">
     <h3 class="panel-title"><%= @tournament_day.pretty_day(true) %> Register Players</h3>
@@ -16,7 +15,62 @@
   <div class="panel-body">
     <p>Choose players for each slot per tee-group to register them for this tournament. Players may already appear if they registered themselves.</p>
   </div>
+
   <table class="table table-striped">
+    <% @tournament_groups.each do |tournament_group| %>
+  	<thead>
+  		<tr>
+  			<th>Tee-Group: <%= tournament_group.formatted_tee_time %></th>
+        <th><% if @tournament_day.show_teams? %>Team<% else %>&nbsp;<% end %></th>
+        <th><% if @tournament_day.contests.count > 0 %>Contests<% else %>&nbsp;<% end %></th>
+        <th>Actions</th>
+  		</tr>
+  	</thead>
+  	<tbody>
+      <% tournament_group.max_number_of_players.abs.times.each_with_index do |item, i| %>
+        <%= form_with url: league_tournament_update_day_players_path(@tournament.league, @tournament, @tournament_day), html: { id: "form-#{tournament_group.id}-#{i}", class: '.form-inline' } do |f| %>
+          <tr id="user-select">
+            <td>
+              <%= f.select(:user_id, @league_members.collect {|p| [ p.complete_name, p.id ]}, {include_blank: true, label: false}, {class: 'chosen-select', onchange: "$('form-##{tournament_group.id}-#{i}').submit();"}) %>
+            </td>
+            <td id="team-select">
+              <% if @tournament_day.show_teams? %>
+                <%= f.select(:golfer_team_id, tournament_group.golfer_teams.collect {|p| [ p.team_number_label, p.id ]}, {include_blank: true, label: false}, {id: 'team-chosen', class: 'chosen-select', onchange: "$('form-##{tournament_group.id}-#{i}').submit();"}) %>
+              <% else %>
+                &nbsp;
+              <% end %>
+            </td>
+            <td>
+              <% if @tournament.paid_contests.count > 0 -%>
+                <%= f.collection_check_boxes(:contest_signups, @tournament.paid_contests, :id, :name) do |b|
+                    b.label(class: "checkbox-inline") { b.check_box(onchange: "$('form-##{tournament_group.id}-#{i}').submit();") + b.text}
+                  end
+                %>
+              <% end -%>
+            </td>
+            <td>
+              <% unless tournament_group.golfer_outing_for_index(i).blank? %>
+                <%= link_to "#{tournament_group.golfer_outing_for_index(i).disqualification_description}", league_tournament_disqualify_day_players_path(@tournament.league, @tournament, @tournament_day, user_id: tournament_group.user_for_index(i)), :method => :patch, :role => "button", :class => "btn btn-info btn-xs" %>
+                <%= link_to "Remove", league_tournament_delete_day_players_path(@tournament.league, @tournament, @tournament_day, group_id: tournament_group.id, user_id: tournament_group.user_for_index(i)), :data => { :confirm => 'Are you sure you want to remove this registration? This will delete all scorecard information for this golfer for this tournament.' }, :method => :delete, :role => "button", :class => "btn btn-danger btn-xs" %>
+              <% end %>
+            </td>
+          </tr>
+        <% end %>
+      <% end %>
+      </tbody>
+    <% end %>
+  </table>
+
+  <script>
+    $(document).ready(function() {
+      $("#user-select .chosen-container").css({"width": "200px"});
+      $("#team-select .chosen-container").css({"width": "150px"});
+    });
+  </script>
+
+  <%= simple_form_for :player_signups, url: league_tournament_update_day_players_path(@tournament.league, @tournament, @tournament_day), method: :post do |f| %>
+
+  <!-- <table class="table table-striped">
   	<thead>
   		<tr>
   			<th>Tee-Group</th>
@@ -55,16 +109,7 @@
         </tr>
       <% end %>
   	</tbody>
-  </table>
-</div>
+  </table> -->
 
-<div style="position: fixed; bottom: 0px;	right: 0; left: 0; background-color: rgba(146,146,146,0.50); padding: 15px;">
-  <div style="margin: auto; width: 20%;">
-    <% if is_editable?(@tournament) -%>
-      <%= f.button :button, "Save Your Changes & Register Players", :class => 'btn btn-success btn-lg', :id => "save-button" %>
-    <% else %>
-      This tournament cannot be edited.
-    <% end %>
-  </div>
 </div>
 <% end %>
