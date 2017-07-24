@@ -98,8 +98,6 @@ class User < ApplicationRecord
       self.child_users.clear
 
       user.parent_user = self.parent_user
-      user.save
-
       self.parent_user = nil
 
       self.flights.each do |f|
@@ -116,6 +114,8 @@ class User < ApplicationRecord
         user.contests << c
       end
       self.contests.clear
+
+      user.save
 
       self.save
       self.destroy if should_delete
