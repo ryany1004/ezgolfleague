@@ -50,6 +50,12 @@ class UserAccountsController < BaseController
     if @user_account.update(user_params)
       Delayed::Job.enqueue GhinUpdateJob.new([@user_account]) unless @user_account.ghin_number.blank?
 
+      unless @user_account.account_to_merge_to.blank?
+        destination_account = User.find(@user_account.account_to_merge_to)
+        
+        @user_account.merge_into_user(destination_account)
+      end
+
       if @user_account == current_user
         redirect_to root_path
       else

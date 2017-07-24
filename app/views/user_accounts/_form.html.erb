@@ -85,6 +85,13 @@
   <div class="well">
     <%= f.input :parent_id, collection: User.all.order("last_name"), label: false, :label_method => :complete_name, include_blank: true, input_html: { class: 'chosen-select' } %>
   </div>
+
+  <h3>Merge Into Account</h3>
+  <div class="well">
+    <p>This will take the currently selected user and move all of their data to the user selected. This cannot be undone. The current user will not be deleted, that needs to be done manually as a second step.</p>
+
+    <%= f.input :account_to_merge_to, collection: User.all.order("last_name").where("id != ?", @user_account.id), label: false, :label_method => :complete_name_with_email, include_blank: true, input_html: { class: 'chosen-select' } %>
+  </div>
   <% end %>
 
   <% if @user_account.new_record? == false && @editing_current_user != true -%>

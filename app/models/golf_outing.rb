@@ -2,7 +2,7 @@ class GolfOuting < ApplicationRecord
   include Servable
 
   belongs_to :tournament_group, inverse_of: :golf_outings, touch: true
-  belongs_to :user
+  belongs_to :user, inverse_of: :golf_outings
   belongs_to :course_tee_box
   has_one :scorecard, inverse_of: :golf_outing, :dependent => :destroy
 

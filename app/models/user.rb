@@ -9,6 +9,7 @@ class User < ApplicationRecord
   has_many :league_memberships, :dependent => :destroy
   has_many :leagues, ->{ order 'name' }, through: :league_memberships
   has_many :payout_results, inverse_of: :user, :dependent => :destroy
+  has_many :golf_outings, inverse_of: :user
   has_many :payments, ->{ order 'created_at DESC' }, inverse_of: :user
   has_many :tournament_day_results, inverse_of: :tournament_day, :dependent => :destroy
   has_many :notifications, :dependent => :destroy
@@ -25,7 +26,7 @@ class User < ApplicationRecord
   validates :last_name, presence: true
   validates :phone_number, presence: true, on: :create
 
-  attr_accessor :should_invite, :agreed_to_terms
+  attr_accessor :should_invite, :agreed_to_terms, :account_to_merge_to
 
   before_update :reset_session, if: :encrypted_password_changed?
 
@@ -45,6 +46,10 @@ class User < ApplicationRecord
     return "#{self.first_name} #{self.last_name}"
   end
 
+  def complete_name_with_email
+    return complete_name + " (#{self.email})"
+  end
+
   def short_name
     return "#{self.first_name} #{self.last_name[0]}."
   end
@@ -61,6 +66,55 @@ class User < ApplicationRecord
       users = users + self.child_users
 
       users
+    end
+  end
+
+  def merge_into_user(user, should_delete = false)
+    User.transaction do
+      self.league_memberships.each do |l|
+        user.league_memberships << l
+      end
+      self.league_memberships.clear
+
+      self.golf_outings.each do |g|
+        user.golf_outings << g
+      end
+
+      self.payout_results.each do |p|
+        user.payout_results << p
+      end
+
+      self.payments.each do |p|
+        user.payments << p
+      end
+
+      self.tournament_day_results.each do |t|
+        user.tournament_day_results << t
+      end
+
+      self.child_users.each do |u|
+        user.child_users << u
+      end
+      self.child_users.clear
+
+      self.parent_user = user.parent_user
+
+      self.flights.each do |f|
+        user.flights << f
+      end
+      self.flights.clear
+
+      self.golfer_teams.each do |g|
+        user.golfer_teams << g
+      end
+      self.golfer_teams.clear
+
+      self.contests.each do |c|
+        user.contests << c
+      end
+      self.contests.clear
+
+      self.destroy if should_delete
     end
   end
 
