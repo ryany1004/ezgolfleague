@@ -22,7 +22,7 @@ class Api::V1::TournamentsController < Api::V1::ApiBaseController
     end
 
     respond_with(all_tournaments) do |format|
-      format.json { render :json => all_tournaments }
+      format.json { render :json => all_tournaments, content_type: 'application/json' }
     end
   end
 
@@ -37,7 +37,7 @@ class Api::V1::TournamentsController < Api::V1::ApiBaseController
     end
 
     respond_with(invalid_ids) do |format|
-      format.json { render :json => invalid_ids }
+      format.json { render :json => invalid_ids, content_type: 'application/json' }
     end
   end
 
