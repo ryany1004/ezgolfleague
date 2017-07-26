@@ -42,8 +42,11 @@ class Play::TournamentsController < Play::BaseController
     @tournament = Tournament.find(params[:tournament_id])
     @tournament.tournament_days.each do |td|
       outing = td.golf_outing_for_player(current_user)
-      outing.is_confirmed = true
-      outing.save
+
+      unless outing.blank?
+        outing.is_confirmed = true
+        outing.save
+      end
     end
 
     redirect_to play_dashboard_index_path, :flash => { :success => "You are confirmed for the tournament." }
@@ -79,7 +82,7 @@ class Play::TournamentsController < Play::BaseController
 
       #contests
       contest_ids = []
-      if !params[:tournament].blank? && !params[:tournament][:contests_to_enter].blank?
+      if !params[:tournament].blank? && !params[:tournament][:contests_to_enter].blank? && params[:tournament][:contests_to_enter].method_defined? :to_unsafe_h
         params[:tournament][:contests_to_enter].to_unsafe_h.each do |contest_id|
           unless contest_id.blank?
             contest = Contest.find(contest_id)
