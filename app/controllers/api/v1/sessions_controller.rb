@@ -30,7 +30,7 @@ class Api::V1::SessionsController < Api::V1::ApiBaseController
     end
 
     respond_to do |format|
-      format.json { render json: {:message => "Success"}, status: :ok }, content_type: 'application/json'
+      format.json { render json: {:message => "Success"}, status: :ok, content_type: 'application/json' }
     end
   end
 
