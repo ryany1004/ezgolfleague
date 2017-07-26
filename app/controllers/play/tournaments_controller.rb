@@ -82,7 +82,7 @@ class Play::TournamentsController < Play::BaseController
 
       #contests
       contest_ids = []
-      if !params[:tournament].blank? && !params[:tournament][:contests_to_enter].blank?
+      if !params[:tournament].blank? && !params[:tournament][:contests_to_enter].blank? && params[:tournament][:contests_to_enter][0] != "" #TODO: Fix this total hack
         params[:tournament][:contests_to_enter].to_unsafe_h.each do |contest_id|
           unless contest_id.blank?
             contest = Contest.find(contest_id)
