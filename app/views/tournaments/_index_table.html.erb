@@ -64,7 +64,7 @@
                 <li class="divider"></li>
                 <li><%= link_to 'Finalize Tournament', league_tournament_finalize_path(tournament.league, tournament), :data => { :confirm => 'Are you sure you want to finalize the tournament? This will remove any existing payout calculations.' } %></li>
                 <li class="divider"></li>
-                <% if tournament.is_past? == false -%>
+                <% if current_user.is_super_user || tournament.is_past? == false -%>
                 <li><%= link_to "Recalculate Course Handicaps", league_tournament_update_course_handicaps_path(tournament.league, tournament), method: :patch %></li>
                 <% end -%>
                 <li><%= link_to "Recalculate Tournament Scoring", league_tournament_rescore_players_path(tournament.league, tournament), method: :patch, :data => { :confirm => 'This will re-calculate all tournament scores. Can be useful if you have changed underlying data.' } %></li>
