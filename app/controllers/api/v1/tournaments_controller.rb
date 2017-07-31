@@ -4,8 +4,11 @@ class Api::V1::TournamentsController < Api::V1::ApiBaseController
   respond_to :json
 
   def index
-    cache_key = self.user_tournaments_cache_key
+    if @current_user.leagues.blank?
+    else
+    end
 
+    cache_key = self.user_tournaments_cache_key
     all_tournaments = Rails.cache.fetch(cache_key, expires_in: 2.minutes, race_condition_ttl: 10) do
       logger.info { "Fetching Tournaments - Not Cached for #{cache_key}" }
 
