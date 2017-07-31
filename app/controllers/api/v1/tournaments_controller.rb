@@ -5,23 +5,23 @@ class Api::V1::TournamentsController < Api::V1::ApiBaseController
 
   def index
     if @current_user.leagues.blank?
+      all_tournaments = []
     else
-    end
+      cache_key = self.user_tournaments_cache_key
+      all_tournaments = Rails.cache.fetch(cache_key, expires_in: 2.minutes, race_condition_ttl: 10) do
+        logger.info { "Fetching Tournaments - Not Cached for #{cache_key}" }
 
-    cache_key = self.user_tournaments_cache_key
-    all_tournaments = Rails.cache.fetch(cache_key, expires_in: 2.minutes, race_condition_ttl: 10) do
-      logger.info { "Fetching Tournaments - Not Cached for #{cache_key}" }
+        todays_tournaments = Tournament.all_today(@current_user.leagues)
+        upcoming_tournaments = Tournament.all_upcoming(@current_user.leagues, nil)
+        past_tournaments = Tournament.all_past(@current_user.leagues, nil).limit(8).reorder("tournament_starts_at DESC")
 
-      todays_tournaments = Tournament.all_today(@current_user.leagues)
-      upcoming_tournaments = Tournament.all_upcoming(@current_user.leagues, nil)
-      past_tournaments = Tournament.all_past(@current_user.leagues, nil).limit(8).reorder("tournament_starts_at DESC")
+        all_tournaments = todays_tournaments + upcoming_tournaments + past_tournaments
+        all_tournaments = all_tournaments.select {|t| t.all_days_are_playable? }.to_a #only include tournaments with all playable days
 
-      all_tournaments = todays_tournaments + upcoming_tournaments + past_tournaments
-      all_tournaments = all_tournaments.select {|t| t.all_days_are_playable? }.to_a #only include tournaments with all playable days
+        all_tournaments = all_tournaments.uniq
 
-      all_tournaments = all_tournaments.uniq
-
-      all_tournaments
+        all_tournaments
+      end
     end
 
     respond_with(all_tournaments) do |format|
