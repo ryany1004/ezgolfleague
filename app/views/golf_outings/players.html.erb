@@ -16,34 +16,35 @@
     <p>Choose players for each slot per tee-group to register them for this tournament. Players may already appear if they registered themselves.</p>
   </div>
 
-  <table class="table table-striped">
-    <% @tournament_groups.each do |tournament_group| %>
-  	<thead>
-  		<tr>
-  			<th>Tee-Group: <%= tournament_group.formatted_tee_time %></th>
-        <th><% if @tournament_day.show_teams? %>Team<% else %>&nbsp;<% end %></th>
-        <th><% if @tournament_day.contests.count > 0 %>Contests<% else %>&nbsp;<% end %></th>
-        <th>Actions</th>
-  		</tr>
-  	</thead>
-  	<tbody>
-      <% tournament_group.max_number_of_players.abs.times.each_with_index do |item, i| %>
-        <%= form_with url: league_tournament_update_day_players_path(@tournament.league, @tournament, @tournament_day), html: { id: "form-#{tournament_group.id}-#{i}", class: '.form-inline' } do |f| %>
-          <tr id="user-select">
-            <td>
-              <%= f.select(:user_id, @league_members.collect {|p| [ p.complete_name, p.id ]}, {include_blank: true, label: false}, {class: 'chosen-select', onchange: "$('form-##{tournament_group.id}-#{i}').submit();"}) %>
+  <% @tournament_groups.each do |tournament_group| %>
+    <%= simple_form_for :player_submit, url: league_tournament_update_day_players_path(@tournament.league, @tournament, @tournament_day), remote: true, html: { id: "form-#{tournament_group.id}", class: '.form-inline' } do |f| %>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Tee-Group: <%= tournament_group.formatted_tee_time %></th>
+          <th><% if @tournament_day.show_teams? %>Team<% else %>&nbsp;<% end %></th>
+          <th><% if @tournament_day.contests.count > 0 %>Contests<% else %>&nbsp;<% end %></th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% tournament_group.max_number_of_players.abs.times.each_with_index do |item, i| %>
+          <tr>
+            <td id="user-select">
+              <%= f.input "member_id[#{tournament_group.id}][#{i}]", label: false, collection: @league_members, label_method: :complete_name, value_method: :id, tournament_group: tournament_group, selected: tournament_group.user_for_index(i).try(:id), include_blank: true, multiple: true, input_html: { class: 'chosen-select' } %>
+              <!-- <%= f.select(:user_id, @league_members.collect {|p| [ p.complete_name, p.id ]}, {include_blank: true, label: false}, {class: 'chosen-select'}) %> -->
             </td>
             <td id="team-select">
               <% if @tournament_day.show_teams? %>
-                <%= f.select(:golfer_team_id, tournament_group.golfer_teams.collect {|p| [ p.team_number_label, p.id ]}, {include_blank: true, label: false}, {id: 'team-chosen', class: 'chosen-select', onchange: "$('form-##{tournament_group.id}-#{i}').submit();"}) %>
+                <%= f.select(:golfer_team_id, tournament_group.golfer_teams.collect {|p| [ p.team_number_label, p.id ]}, {include_blank: true, label: false}, {id: 'team-chosen', class: 'chosen-select'}) %>
               <% else %>
                 &nbsp;
               <% end %>
             </td>
-            <td>
+            <td id="paid-contests">
               <% if @tournament.paid_contests.count > 0 -%>
                 <%= f.collection_check_boxes(:contest_signups, @tournament.paid_contests, :id, :name) do |b|
-                    b.label(class: "checkbox-inline") { b.check_box(onchange: "$('form-##{tournament_group.id}-#{i}').submit();") + b.text}
+                    b.label(class: "checkbox-inline") { b.check_box(class: "contest-checkbox") + b.text}
                   end
                 %>
               <% end -%>
@@ -56,20 +57,56 @@
             </td>
           </tr>
         <% end %>
-      <% end %>
       </tbody>
+    </table>
     <% end %>
-  </table>
+  <% end %>
 
   <script>
     $(document).ready(function() {
       $("#user-select .chosen-container").css({"width": "200px"});
       $("#team-select .chosen-container").css({"width": "150px"});
+
+      //Player
+      $("#user-select .chosen-select").chosen().change(function() {
+        // updateServer(this, null);
+
+        $(this.form).trigger('submit.rails');
+      });
+
+      //Team
+      $("#team-select .chosen-select").chosen().change(function() {
+        // var associatedUser = this.closest("#user-select .chosen-select");
+        //
+        // updateServer(this, associatedUser);
+
+        $(this.form).trigger('submit.rails');
+      });
+
+      //Contests
+      $("#paid-contests .contest-checkbox").change(function() {
+        // var associatedUser = this.closest("#user-select .chosen-select");
+        //
+        // updateServer(this, associatedUser);
+
+        $(this.form).trigger('submit.rails');
+      });
+
+      // function updateServer(caller, associatedUser) {
+      //   var form = caller.form;
+      //   var action = $(form).attr('action');
+      //   var method = $(form).attr('method');
+      //
+      //   $.ajax({
+      //     method: method,
+      //     url: action,
+      //     data: { name: "John", location: "Boston" }
+      //   });
+      // }
     });
   </script>
 
   <%= simple_form_for :player_signups, url: league_tournament_update_day_players_path(@tournament.league, @tournament, @tournament_day), method: :post do |f| %>
-
   <!-- <table class="table table-striped">
   	<thead>
   		<tr>
@@ -110,6 +147,5 @@
       <% end %>
   	</tbody>
   </table> -->
-
+  <% end %>
 </div>
-<% end %>
