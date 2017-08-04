@@ -1,0 +1,16 @@
+selectedGolfers = [];
+
+<% @players_signed_up.each do |player| %>
+  <% @outing_index.each do |o| %>
+    <% if o[:id] == player.id %>
+      disqualifyButton = "<a role='button' class='btn btn-info btn-xs' rel='nofollow' data-method='path' href='/leagues/<%= @league.id %>/tournaments/<%= @tournament.id %>/tournament_days/<%= @tournament_day.id %>/disqualify_signup?user_id=<%= player.id %>'><%= o[:dqText] %></a>"
+      removeButton = "<a data-confirm='Are you sure you want to remove this registration? This will delete all scorecard information for this golfer for this tournament.' role='button' class='btn btn-danger btn-xs' rel='nofollow' data-method='delete' href='/leagues/<%= @league.id %>/tournaments/<%= @tournament.id %>/tournament_days/<%= @tournament_day.id %>/delete_signup?group_id=385&user_id=<%= player.id %>'>Remove</a>"
+    <% end %>
+  <% end %>
+
+  selectedGolfers.push({name: "<%= player.complete_name %>", id: "<%= player.id %>", disqualifyButton: disqualifyButton, removeButton: removeButton, tournamentGroupID: <%= @tournament_group.id %>});
+<% end %>
+
+var elementsUpdated = removeSelectedGolfersFromDropdowns(selectedGolfers);
+
+placeButtonsForGolfers(selectedGolfers, elementsUpdated);
