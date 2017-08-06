@@ -33,13 +33,18 @@
             <td id="user-select" class="user-select">
               <% if tournament_group.user_for_index(i).try(:id) %>
                 <%= tournament_group.user_for_index(i).try(:complete_name) %>
+                <%= f.input "member_id[#{i}]", :as => :hidden, :input_html => { :value => tournament_group.user_for_index(i).try(:id) } %>
               <% else %>
-                <%= f.input "member_id[#{i}]", label: false, collection: @all_league_members, label_method: :complete_name, value_method: :id, tournament_group: tournament_group, selected: tournament_group.user_for_index(i).try(:id), include_blank: true, multiple: true, input_html: { class: 'chosen-select' } %>
+                <span id="user-select-container">
+                  <%= f.input "member_id[#{i}]", label: false, collection: @all_league_members, label_method: :complete_name, value_method: :id, tournament_group: tournament_group, selected: tournament_group.user_for_index(i).try(:id), include_blank: true, multiple: true, input_html: { class: 'chosen-select' } %>
+                </span>
+                <span id="user-hidden"></span>
               <% end %>
             </td>
             <td id="team-select">
               <% if @tournament_day.show_teams? %>
                 <%= f.input "golfer_team_ids[#{i}]", label: false, collection: tournament_group.golfer_teams, label_method: :team_number_label, value_method: :id, tournament_group: tournament_group, selected: tournament_group.golfer_team_for_user_or_index(tournament_group.user_for_index(i), i).try(:id), include_blank: true, multiple: true, input_html: { class: 'chosen-select' } %>
+                <!-- <span id="teamed-with" style="display: none;">Teamed With: </span> -->
               <% else %>
                 &nbsp;
               <% end %>
@@ -86,7 +91,7 @@
       removeSelectedGolfersFromDropdowns(selectedGolfers);
 
       $("#user-select .chosen-container").css({"width": "200px"});
-      $("#team-select .chosen-container").css({"width": "150px"});
+      $("#team-select .chosen-container").css({"width": "200px"});
       $(".search-choice-close").remove();
     });
   </script>

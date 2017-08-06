@@ -21,11 +21,7 @@ class GolferTeam < ApplicationRecord
   end
 
   def team_number_label
-    if self.name.blank?
-      "Tee Team ##{self.team_number}"
-    else
-      self.name
-    end
+    "Tee Team ##{self.team_number}"
   end
 
   def name

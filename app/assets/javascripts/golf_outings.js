@@ -20,7 +20,8 @@ function removeSelectedGolfersFromDropdowns(selectedGolfers) {
       } else {
         elementsUpdated.push(selectItem.parentElement.parentElement.parentElement);
 
-        selectItem.parentElement.parentElement.innerHTML = selectedGolfers[x].name;
+        selectItem.parentElement.parentElement.style.display = 'none';
+        selectItem.parentElement.parentElement.parentElement.querySelector("#user-hidden").innerHTML = selectedGolfers[x].name;
       }
     }
   }
