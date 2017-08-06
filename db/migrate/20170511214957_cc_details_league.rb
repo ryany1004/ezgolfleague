@@ -1,4 +1,4 @@
-class CcDetailsLeague < ActiveRecord::Migration
+class CcDetailsLeague < ActiveRecord::Migration[4.2]
   def change
     change_table :leagues do |t|
       t.string :cc_last_four

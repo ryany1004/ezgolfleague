@@ -1,4 +1,4 @@
-class AddNewTournamentStartAttribute < ActiveRecord::Migration
+class AddNewTournamentStartAttribute < ActiveRecord::Migration[4.2]
   def change
     add_column :tournaments, :tournament_starts_at, :datetime
 

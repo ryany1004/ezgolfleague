@@ -1,4 +1,4 @@
-class AddLeagueExtraInfo < ActiveRecord::Migration
+class AddLeagueExtraInfo < ActiveRecord::Migration[4.2]
   def change
     change_table :leagues do |t|
       t.boolean :show_in_search, default: true
