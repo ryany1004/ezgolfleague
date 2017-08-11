@@ -1,4 +1,4 @@
-class CreateSubscriptionCredits < ActiveRecord::Migration
+class CreateSubscriptionCredits < ActiveRecord::Migration[4.2]
   def change
     create_table :subscription_credits do |t|
       t.integer :league_id

@@ -1,4 +1,4 @@
-class MoveDuesToLeagueSeason < ActiveRecord::Migration
+class MoveDuesToLeagueSeason < ActiveRecord::Migration[4.2]
   def change
     change_table :league_seasons do |t|
       t.decimal  "dues_amount", default: 0.0

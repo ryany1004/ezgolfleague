@@ -4,14 +4,23 @@ class GolfOutingsController < BaseController
 
   def players
     @schedule_options = { 0 => "Manual", 1 => "Automatic: Worst Score First", 2 => "Automatic: Best Score First" }
-
     @page_title = "Signups for #{@tournament.name}"
+    @registered_players = @tournament.players_for_day(@tournament_day)
   end
 
   def update_players
-    @job = Delayed::Job.enqueue PlayerSignupJob.new(@tournament_day, params)
+    @tournament_group = @tournament_day.tournament_groups.find(params[:tournament_group_id])
 
-    redirect_to league_tournaments_path(current_user.selected_league), :flash => { :warning => "Your player signup submissions are being processed. This process usually takes a few minutes to complete."}
+    updater = Updaters::TournamentGroupUpdater.new
+    @players_signed_up = updater.update_for_params(@tournament_group, params)
+
+    @outing_index = []
+    @players_signed_up.each do |p|
+      golf_outing = @tournament_day.golf_outing_for_player(p)
+      disqualificationText = golf_outing.disqualification_description
+
+      @outing_index << {id: p.id, dqText: disqualificationText}
+    end
   end
 
   def delete_signup
@@ -50,11 +59,11 @@ class GolfOutingsController < BaseController
   end
 
   def fetch_tournament
+    @league = League.find(params[:league_id])
     @tournament = Tournament.find(params[:tournament_id])
     @tournament_day = TournamentDay.find(params[:tournament_day_id])
     @tournament_groups = @tournament_day.tournament_groups
-
-    @league_members = @tournament.league.users
+    @all_league_members = @tournament.league.users
   end
 
 end

@@ -1,4 +1,4 @@
-class AddSubscriptionFlagToLeague < ActiveRecord::Migration
+class AddSubscriptionFlagToLeague < ActiveRecord::Migration[4.2]
   def change
     change_table :leagues do |t|
       t.boolean :exempt_from_subscription, default: false

@@ -1,4 +1,4 @@
-class AddCoordinates < ActiveRecord::Migration
+class AddCoordinates < ActiveRecord::Migration[4.2]
   def change
     change_table :courses do |t|
       t.float :latitude
