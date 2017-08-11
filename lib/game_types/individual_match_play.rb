@@ -2,7 +2,7 @@ module GameTypes
   class IndividualMatchPlay < GameTypes::GameTypeBase
 
     def display_name
-      return "Individual Match Play"
+      return "Match Play"
     end
 
     def game_type_id
