@@ -79,6 +79,7 @@ module Updaters
 
               #remove from contests not selected
               contests_to_remove = tournament_group.tournament_day.tournament.paid_contests - contests_should_be_enrolled
+
               contests_to_remove.each do |c|
                 c.remove_user(user)
               end

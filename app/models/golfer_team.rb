@@ -21,7 +21,7 @@ class GolferTeam < ApplicationRecord
   end
 
   def team_number_label
-    "Tee Team ##{self.team_number}"
+    "Team ##{self.team_number} For Group"
   end
 
   def name

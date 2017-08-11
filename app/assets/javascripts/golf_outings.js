@@ -18,7 +18,7 @@ function removeSelectedGolfersFromDropdowns(selectedGolfers) {
           }
         }
       } else {
-        elementsUpdated.push(selectItem.parentElement.parentElement.parentElement);
+        elementsUpdated.push(selectItem.parentElement.parentElement.parentElement.parentElement);
 
         selectItem.parentElement.parentElement.style.display = 'none';
         selectItem.parentElement.parentElement.parentElement.querySelector("#user-hidden").innerHTML = selectedGolfers[x].name;
@@ -39,5 +39,14 @@ function placeButtonsForGolfers(selectedGolfers, elementsUpdated) {
     var element = $(elementsUpdated[i]);
 
     element.children("#action-buttons").html(golfer["disqualifyButton"] + "&nbsp;" + golfer["removeButton"]);
+  }
+}
+
+function updateTeamInfoForGolfers(selectedGolfers, elementsUpdated) {
+  for (i = 0; i < elementsUpdated.length; i++) {
+    var golfer = selectedGolfers[i];
+    var element = $(elementsUpdated[i]);
+
+    element.children("#team-select").children("#teamed-with").html("Team: ARGH");
   }
 }

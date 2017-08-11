@@ -43,8 +43,8 @@
             </td>
             <td id="team-select">
               <% if @tournament_day.show_teams? %>
-                <%= f.input "golfer_team_ids[#{i}]", label: false, collection: tournament_group.golfer_teams, label_method: :team_number_label, value_method: :id, tournament_group: tournament_group, selected: tournament_group.golfer_team_for_user_or_index(tournament_group.user_for_index(i), i).try(:id), include_blank: true, multiple: true, input_html: { class: 'chosen-select' } %>
-                <!-- <span id="teamed-with" style="display: none;">Teamed With: </span> -->
+                <%= f.input "golfer_team_ids[#{i}]", label: false, collection: tournament_group.golfer_teams, label_method: :team_number_label, value_method: :id, tournament_group: tournament_group, selected: tournament_group.golfer_team_for_user_or_index(tournament_group.user_for_index(i), i).try(:id), include_blank: false, multiple: true, input_html: { class: 'chosen-select' } %>
+                <!-- <span id="teamed-with">Team: <%= tournament_group.golfer_team_for_user_or_index(tournament_group.user_for_index(i), i).try(:name) %></span> -->
               <% else %>
                 &nbsp;
               <% end %>
@@ -58,6 +58,8 @@
               <% unless tournament_group.golfer_outing_for_index(i).blank? %>
                 <%= link_to "#{tournament_group.golfer_outing_for_index(i).disqualification_description}", league_tournament_disqualify_day_players_path(@tournament.league, @tournament, @tournament_day, user_id: tournament_group.user_for_index(i)), :method => :patch, :role => "button", :class => "btn btn-info btn-xs" %>
                 <%= link_to "Remove", league_tournament_delete_day_players_path(@tournament.league, @tournament, @tournament_day, group_id: tournament_group.id, user_id: tournament_group.user_for_index(i)), :data => { :confirm => 'Are you sure you want to remove this registration? This will delete all scorecard information for this golfer for this tournament.' }, :method => :delete, :role => "button", :class => "btn btn-danger btn-xs" %>
+              <% else %>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
               <% end %>
             </td>
           </tr>
@@ -67,21 +69,45 @@
     <% end %>
   <% end %>
 
+  <style>
+    .save-indicator {
+      position: fixed;
+      bottom: 10px;
+      right: 10px;
+      width: 100px;
+      height: 50px;
+      background-color: #00D400;
+      border-radius: 8px;
+    }
+  </style>
+
+  <div class="save-indicator" id="save-indicator">
+    <p style="text-align: center; line-height: 50px; color: white;"><strong>Saving...</strong></p>
+  </div>
+
   <script>
     $(document).ready(function() {
+      $("#save-indicator").fadeOut(0);
+
       //Player
       $("#user-select .chosen-select").chosen().change(function() {
         $(this.form).trigger('submit.rails');
+
+        $("#save-indicator").fadeIn(400).delay(800).fadeOut(400);
       });
 
       //Team
       $("#team-select .chosen-select").chosen().change(function() {
         $(this.form).trigger('submit.rails');
+
+        $("#save-indicator").fadeIn(400).delay(800).fadeOut(400);
       });
 
       //Contests
       $("#paid-contests .contest-checkbox").change(function() {
         $(this.form).trigger('submit.rails');
+
+        $("#save-indicator").fadeIn(400).delay(800).fadeOut(400);
       });
 
       var selectedGolfers = [];
