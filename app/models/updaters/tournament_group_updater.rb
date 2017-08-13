@@ -10,7 +10,7 @@ module Updaters
         self.team_signup(tournament_group, team_info) unless team_info.blank?
 
         contest_info = params[:player_submit][:contest_signups]
-        self.contest_signup(tournament_group, contest_info) unless player_info.blank?
+        self.contest_signup(tournament_group, contest_info) unless contest_info.blank?
       end
 
       players_signed_up
