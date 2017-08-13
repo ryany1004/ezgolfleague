@@ -52,7 +52,7 @@ class UserAccountsController < BaseController
 
       unless @user_account.account_to_merge_to.blank?
         destination_account = User.find(@user_account.account_to_merge_to)
-        
+
         @user_account.merge_into_user(destination_account)
       end
 
@@ -178,7 +178,7 @@ class UserAccountsController < BaseController
         return false
       end
     else
-      user_params[:league_ids].to_unsafe_h.each do |league_id|
+      user_params[:league_ids].each do |league_id|
         unless league_id.blank?
           league = League.find(league_id)
 
