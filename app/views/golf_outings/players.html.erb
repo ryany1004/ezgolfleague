@@ -18,22 +18,33 @@
 
   <% @tournament_groups.each do |tournament_group| %>
     <%= simple_form_for :player_submit, url: league_tournament_update_day_players_path(@tournament.league, @tournament, @tournament_day, tournament_group), remote: true, html: { class: '.form-inline' } do |f| %>
-    <table class="table table-striped">
+    <table class="table table-striped sortable-table" id="<%= tournament_group.id %>">
       <thead>
         <tr>
+          <th>&nbsp;</th>
           <th>Tee-Group: <%= tournament_group.formatted_tee_time %></th>
           <th><% if @tournament_day.show_teams? %>Team<% else %>&nbsp;<% end %></th>
           <th><% if @tournament_day.contests.count > 0 %>Contests<% else %>&nbsp;<% end %></th>
           <th>Actions</th>
         </tr>
       </thead>
-      <tbody>
-        <% tournament_group.max_number_of_players.abs.times.each_with_index do |item, i| %>
-          <tr class="group<%= tournament_group.id %>">
+      <tbody class="connectedSortable">
+        <%
+          if tournament_group.golf_outings.count > tournament_group.max_number_of_players.abs
+            @count = tournament_group.golf_outings.count
+          else
+            @count = tournament_group.max_number_of_players.abs
+          end
+        %>
+        <% @count.times.each_with_index do |item, i| %>
+          <tr>
+            <td width="5%">
+              <span class="glyphicon glyphicon-menu-hamburger"></span>
+            </td>
             <td id="user-select" class="user-select">
               <% if tournament_group.user_for_index(i).try(:id) %>
                 <%= tournament_group.user_for_index(i).try(:complete_name) %>
-                <%= f.input "member_id[#{i}]", :as => :hidden, :input_html => { :value => tournament_group.user_for_index(i).try(:id) } %>
+                <%= f.input "member_id[#{i}]", :as => :hidden, :input_html => { :value => tournament_group.user_for_index(i).try(:id), :class => "member-id" } %>
               <% else %>
                 <span id="user-select-container">
                   <%= f.input "member_id[#{i}]", label: false, collection: @all_league_members, label_method: :complete_name, value_method: :id, tournament_group: tournament_group, selected: tournament_group.user_for_index(i).try(:id), include_blank: true, multiple: true, input_html: { class: 'chosen-select' } %>
@@ -119,6 +130,40 @@
       $("#user-select .chosen-container").css({"width": "200px"});
       $("#team-select .chosen-container").css({"width": "200px"});
       $(".search-choice-close").remove();
+
+      //handle sorting
+      $("tbody.connectedSortable").sortable({
+        connectWith: ".connectedSortable",
+        appendTo: "parent",
+        helper: "clone",
+        cursor: "move",
+        zIndex: 999990,
+        receive: function (event, ui) {
+          var addedTo = $(this).closest("table.sortable-table");
+          var removedFrom = $("table.sortable-table").not(addedTo);
+
+          var players = [];
+          var members = $(this).find(".member-id");
+
+          for (var i = 0; i < members.length; i++) {
+            var member = members[i];
+
+            players.push(member.value);
+          }
+
+          var group = { groupID: addedTo.attr("id"), removedFrom: removedFrom.attr("id"), players: players };
+
+          move_group_output = $.ajax({
+            type:     "PATCH",
+            url:      "/leagues/<%= @league.id %>/tournaments/<%= @tournament.id %>/tournament_days/<%= @tournament_day.id %>/move_group.json",
+            data:     { group },
+            datatype: "json",
+            async: true
+          });
+
+          $("#save-indicator").fadeIn(400).delay(800).fadeOut(400);
+        }
+      });
     });
   </script>
 </div>
