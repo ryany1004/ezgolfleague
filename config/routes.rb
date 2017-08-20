@@ -141,6 +141,7 @@ Rails.application.routes.draw do
 
       get 'tournament_days/:tournament_day_id/players' => 'golf_outings#players', as: :day_players
       post 'tournament_days/:tournament_day_id/:tournament_group_id/update_players' => 'golf_outings#update_players', as: :update_day_players
+      patch 'tournament_days/:tournament_day_id/move_group' => 'golf_outings#move_group', as: :move_group_players
       patch 'tournament_days/:tournament_day_id/disqualify_signup' => 'golf_outings#disqualify_signup', as: :disqualify_day_players
       delete 'tournament_days/:tournament_day_id/delete_signup' => 'golf_outings#delete_signup', as: :delete_day_players
 

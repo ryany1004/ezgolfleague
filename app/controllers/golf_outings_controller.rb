@@ -23,6 +23,25 @@ class GolfOutingsController < BaseController
     end
   end
 
+  def move_group
+    group_id = params[:group][:groupID]
+    player_ids = params[:group][:players]
+
+    group = @tournament_groups.where(id: group_id).first
+    player_ids.each do |player_id|
+      if group.golf_outings.where(user_id: player_id).blank?
+        user = User.where(id: player_id).first
+        existing_outing = @tournament_day.golf_outing_for_player(user)
+
+        unless existing_outing.blank? || user.blank?
+          @tournament_day.move_player_to_tournament_group(user, group)
+        end
+      end
+    end
+
+    render json: {"success" => true}
+  end
+
   def delete_signup
     tournament_group = TournamentGroup.find(params[:group_id])
     user = User.find(params[:user_id])
