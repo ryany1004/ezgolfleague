@@ -9,18 +9,7 @@ class GolfOutingsController < BaseController
   end
 
   def update_players
-    @tournament_group = @tournament_day.tournament_groups.find(params[:tournament_group_id])
-
-    updater = Updaters::TournamentGroupUpdater.new
-    @players_signed_up = updater.update_for_params(@tournament_group, params)
-
-    @outing_index = []
-    @players_signed_up.each do |p|
-      golf_outing = @tournament_day.golf_outing_for_player(p)
-      disqualificationText = golf_outing.disqualification_description
-
-      @outing_index << {id: p.id, dqText: disqualificationText}
-    end
+    self.submit_updates(params)
   end
 
   def move_group
@@ -70,6 +59,22 @@ class GolfOutingsController < BaseController
 
     redirect_to league_tournament_day_players_path(@tournament.league, @tournament, @tournament_day), :flash => { :success => "The player qualification status changed. You may need to re-finalize the tournament." }
   end
+
+  def submit_updates(params)
+    @tournament_group = @tournament_day.tournament_groups.find(params[:tournament_group_id])
+
+    updater = Updaters::TournamentGroupUpdater.new
+    @players_signed_up = updater.update_for_params(@tournament_group, params)
+
+    @outing_index = []
+    @players_signed_up.each do |p|
+      golf_outing = @tournament_day.golf_outing_for_player(p)
+      disqualificationText = golf_outing.disqualification_description
+
+      @outing_index << {id: p.id, dqText: disqualificationText}
+    end
+  end
+  handle_asynchronously :submit_updates
 
   private
 
