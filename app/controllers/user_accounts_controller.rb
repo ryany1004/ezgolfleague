@@ -48,7 +48,11 @@ class UserAccountsController < BaseController
 
   def update
     if @user_account.update(user_params)
-      Delayed::Job.enqueue GhinUpdateJob.new([@user_account]) unless @user_account.ghin_number.blank?
+      unless @user_account.ghin_number.blank?
+        Rails.logger.info { "Updating GHIN for #{@user_account}" }
+
+        Delayed::Job.enqueue GhinUpdateJob.new([@user_account])
+      end
 
       unless @user_account.account_to_merge_to.blank?
         destination_account = User.find(@user_account.account_to_merge_to)

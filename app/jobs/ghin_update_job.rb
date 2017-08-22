@@ -19,6 +19,8 @@ class GhinUpdateJob < ProgressJob::Base
 
       update_progress
     end
+
+    Rails.logger.info { "GHIN Update Job Complete" }
   end
 
 end
