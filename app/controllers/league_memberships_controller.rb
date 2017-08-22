@@ -37,6 +37,12 @@ class LeagueMembershipsController < BaseController
 
   def update
     if @league_membership.update(membership_params)
+      unless @league_membership.user.ghin_number.blank?
+        Rails.logger.info { "Updating GHIN for #{@league_membership.user}" }
+
+        Delayed::Job.enqueue GhinUpdateJob.new([@league_membership.user])
+      end
+
       redirect_to league_league_memberships_path(@league), :flash => { :success => "The membership was successfully updated." }
     else
       render :edit

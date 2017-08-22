@@ -41,6 +41,7 @@ gem 'nokogiri'
 gem "attr_encrypted", "~> 3.0.0"
 gem 'stripe', :git => 'https://github.com/stripe/stripe-ruby'
 gem 'delayed_job_active_record'
+gem 'delayed_job_web'
 gem 'progress_job', :github => 'HunterHillegas/progress_job'
 gem 'apnotic'
 gem 'geocoder'

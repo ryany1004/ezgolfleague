@@ -11,6 +11,10 @@ Rails.application.routes.draw do
   get 'apple-app-site-association', to: 'api/v1/tournaments#app_association'
   get '.well-known/apple-app-site-association', to: 'api/v1/tournaments#app_association'
 
+  authenticated :user, -> user { user.is_super_user }  do
+    mount DelayedJobWeb, at: "/delayed_job", :anchor => false, :via => [:get, :post]
+  end
+
   #this is for playing tournaments
   namespace :play do
     resources :payments, only: [:index, :new, :create] do

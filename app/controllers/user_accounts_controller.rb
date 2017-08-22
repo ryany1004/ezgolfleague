@@ -52,6 +52,8 @@ class UserAccountsController < BaseController
         Rails.logger.info { "Updating GHIN for #{@user_account}" }
 
         Delayed::Job.enqueue GhinUpdateJob.new([@user_account])
+      else
+        Rails.logger.info { "Not Updating GHIN for #{@user_account}" }
       end
 
       unless @user_account.account_to_merge_to.blank?
