@@ -60,26 +60,25 @@ module Updaters
           user = golf_outing.user
 
           unless user.blank?
-            contests = contest_info[slot_id]
-            contests.each do |contest_id|
-              contests_should_be_enrolled = []
+            contests = contest_info[slot_id].reject(&:empty?)
 
-              unless contest_id.blank?
-                contest = Contest.where(id: contest_id).first
-                contests_should_be_enrolled << contest unless contest.blank?
+            if contests.blank? #remove all
+              contests_to_remove = tournament_group.tournament_day.tournament.paid_contests
+              contests_to_remove.each do |c|
+                c.remove_user(user)
               end
-
+            else
+              contests_should_be_enrolled = Contest.where(id: contests)
               contests_enrolled = tournament_group.tournament_day.paid_contests_for_player(user)
 
-              #add to contests selected not already enrolled
               contests_to_add = contests_should_be_enrolled - contests_enrolled
               contests_to_add.each do |c|
                 c.add_user(user)
               end
 
-              #remove from contests not selected
-              contests_to_remove = tournament_group.tournament_day.tournament.paid_contests - contests_should_be_enrolled
+              contests_enrolled = tournament_group.tournament_day.paid_contests_for_player(user)
 
+              contests_to_remove = tournament_group.tournament_day.tournament.paid_contests - contests_should_be_enrolled
               contests_to_remove.each do |c|
                 c.remove_user(user)
               end

@@ -34,13 +34,11 @@ function stripeResponseHandler(status, response) {
   }
 };
 
-<script>
-  fbq('track', 'CompleteRegistration', {
+fbq('track', 'CompleteRegistration', {
   value: 0.00,
-  currency: 'USD'
-  });
-</script>
-
+  currency: 'USD',
+  content_name: 'Create User'
+});
 </script>
 
 <div class="row">
