@@ -108,7 +108,12 @@ Rails.application.configure do
     }
   }
 
-  # PumaWorkerKiller.start
+  PumaWorkerKiller.config do |config|
+    config.ram           = 1024  # mb
+    config.frequency     = 5    # seconds
+    config.percent_usage = 1.20
+  end
+  PumaWorkerKiller.start
 
   ENCRYPYTED_ATTRIBUTES_KEY = ENV["ATTRIBUTE_ENCRYPTION_KEY"]
   STRIPE_PUBLISHABLE_KEY = ENV["STRIPE_PUBLISHABLE_KEY"]
