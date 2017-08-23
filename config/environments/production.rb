@@ -108,7 +108,7 @@ Rails.application.configure do
     }
   }
 
-  PumaWorkerKiller.start
+  # PumaWorkerKiller.start
 
   ENCRYPYTED_ATTRIBUTES_KEY = ENV["ATTRIBUTE_ENCRYPTION_KEY"]
   STRIPE_PUBLISHABLE_KEY = ENV["STRIPE_PUBLISHABLE_KEY"]
