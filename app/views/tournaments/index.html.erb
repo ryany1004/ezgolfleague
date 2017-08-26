@@ -1,3 +1,7 @@
+<script>
+  mixpanel.track("Admin: Display Tournament List");
+</script>
+
 <div class="row">
   <% unless @unconfigured_tournaments.blank? -%>
     <%= render partial: 'index_table', locals: {tournaments: @unconfigured_tournaments, title: "Setup In Process", show_create: false} %>
