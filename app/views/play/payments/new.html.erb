@@ -1,4 +1,8 @@
 <script>
+  mixpanel.track("Display Payment Form");
+</script>
+
+<script>
   jQuery(function($) {
     $('#payment-form').submit(function(event) {
       var $form = $(this);

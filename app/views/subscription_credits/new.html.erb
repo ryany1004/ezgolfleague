@@ -1,4 +1,8 @@
 <script>
+  mixpanel.track("Admin: Display New Subscription Form");
+</script>
+
+<script>
   jQuery(function($) {
     $('#payment-form').submit(function(event) {
       var $form = $(this);

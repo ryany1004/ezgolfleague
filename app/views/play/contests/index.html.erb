@@ -1,3 +1,7 @@
+<script>
+  mixpanel.track("Display Tournament Contests");
+</script>
+
 <ol class="breadcrumb">
   <li><%= link_to "My Dashboard", play_dashboard_index_path %></li>
   <li><%= link_to @tournament.name, play_tournament_path(@tournament) %></li>

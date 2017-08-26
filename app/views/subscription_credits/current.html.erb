@@ -1,4 +1,8 @@
 <script>
+  mixpanel.track("Admin: Display Current Subscription");
+</script>
+
+<script>
   jQuery(function($) {
     $('#payment-form').submit(function(event) {
       var $form = $(this);
@@ -92,12 +96,12 @@
   'shipping': '0.0'                     // Shipping (currency).
   });
 
-  <script>
-    fbq('track', 'Purchase', {
-    value: <%= params[:details_amount] %>,
-    currency: 'USD'
-    });
-  </script>
+  fbq('track', 'Purchase', {
+  value: <%= params[:details_amount] %>,
+  currency: 'USD'
+  });
+
+  mixpanel.track("Admin: Subscription Purchase Completed");
 </script>
 <% end %>
 
