@@ -34,7 +34,7 @@ module TournamentsHelper
     if team.blank?
       return "-"
     else
-      return "#{team.try(:name)}"
+      return team.try(:name)
     end
   end
 

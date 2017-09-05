@@ -1,5 +1,4 @@
 class LeagueMailer < ApplicationMailer
-
   def tournament_finalized(tournament)
     @tournament = tournament
 
@@ -35,5 +34,4 @@ class LeagueMailer < ApplicationMailer
 
     mail(to: @user.email, subject: "#{@league.name} - Renew Your League Membership")
   end
-
 end
