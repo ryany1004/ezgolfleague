@@ -32,6 +32,9 @@ gem 'apnotic'
 gem 'geocoder'
 gem 'fcm'
 gem 'marginalia'
+gem 'capistrano', '~> 3.3.3'
+gem 'capistrano-rails', '~> 1.1'
+gem 'capistrano-bundler', '~> 1.1.3'
 
 group :development do
   gem 'web-console'
