@@ -34,7 +34,7 @@ module Play::TournamentsHelper
     html = ""
 
     winners.each_with_index do |winner, i|
-      html << winner[:name]
+      html << winner[:name] unless winner[:name].blank?
 
       html << "<br/>" unless i == winners.count - 1
     end
