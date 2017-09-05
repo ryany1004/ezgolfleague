@@ -34,7 +34,7 @@ module TournamentsHelper
     if team.blank?
       return "-"
     else
-      return team.name
+      return "#{team.name}"
     end
   end
 
