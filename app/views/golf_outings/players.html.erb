@@ -21,6 +21,7 @@
   </div>
 
   <% @tournament_groups.each do |tournament_group| %>
+    <!-- TG: <%= tournament_group.id %> -->
     <%= simple_form_for :player_submit, url: league_tournament_update_day_players_path(@tournament.league, @tournament, @tournament_day, tournament_group), remote: true, html: { class: '.form-inline' } do |f| %>
     <table class="table table-striped sortable-table" id="<%= tournament_group.id %>">
       <thead>

@@ -116,6 +116,7 @@ class TournamentDay < ApplicationRecord
     return false
   end
 
+  # TODO: Cache
   def registered_user_ids
     user_ids = []
 
@@ -126,6 +127,7 @@ class TournamentDay < ApplicationRecord
     return user_ids
   end
 
+  # TODO: Cache
   def paid_user_ids
     user_ids = []
 

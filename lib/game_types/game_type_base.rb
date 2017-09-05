@@ -500,7 +500,7 @@ module GameTypes
           if !scorecard.golf_outing.disqualified && !net_score.blank? && net_score > 0
             ranked_flight[:players] << { id: player.id, name: self.player_team_name_for_player(player), net_score: net_score, back_nine_net_score: back_nine_net_score, gross_score: gross_score, scorecard_url: scorecard_url, points: points, par_related_net_score: par_related_net_score, par_related_gross_score: par_related_gross_score, thru: scorecard.last_hole_played, raw_scores: raw_scores, net_scores: net_scores }
           else
-            Rails.logger.info { "Not Including Player in Ranking. Net Score: #{net_score}" }
+            Rails.logger.info { "Not Including Player #{player.id} in Ranking. Net Score: #{net_score}" }
           end
         end
 
