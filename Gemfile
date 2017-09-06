@@ -60,6 +60,5 @@ end
 group :production do
   gem 'pg'
   gem 'dalli'
-  gem 'puma'
   gem 'scout_apm'
 end
