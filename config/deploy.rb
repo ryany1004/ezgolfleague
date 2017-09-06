@@ -37,6 +37,8 @@ set :default_stage, "production"
 # Default value for keep_releases is 5
 # set :keep_releases, 5
 
+set :delayed_job_workers, 2
+
 namespace :deploy do
 
   desc 'Restart application'
@@ -65,6 +67,7 @@ namespace :deploy do
   after :publishing, :restart
   after :publishing, :fix_permissions
   after :finished, 'airbrake:deploy'
+  after 'airbrake:deploy', 'delayed_job:restart'
 
   after :restart, :clear_cache do
     on roles(:web), in: :groups, limit: 3, wait: 10 do
