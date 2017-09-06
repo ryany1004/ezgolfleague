@@ -1,4 +1,4 @@
-server '45.33.23.165', roles: %w{web app db}, user: "root"
+server 'production.ezgolfleague.com', roles: %w{web app db}, user: "root"
 
 set :deploy_to, "/var/web/production/"
 set :stage, :production
