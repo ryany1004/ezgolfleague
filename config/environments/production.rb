@@ -60,9 +60,7 @@ Rails.application.configure do
 
   # Use a different cache store in production.
   #config.cache_store = :mem_cache_store
-  if ENV["MEMCACHEDCLOUD_SERVERS"]
-      config.cache_store = :dalli_store, ENV["MEMCACHEDCLOUD_SERVERS"].split(','), { :username => ENV["MEMCACHEDCLOUD_USERNAME"], :password => ENV["MEMCACHEDCLOUD_PASSWORD"] }
-  end
+  config.cache_store = :dalli_store, '127.0.0.1', { :username => 'memcached' }
 
   # Enable serving of images, stylesheets, and JavaScripts from an asset server.
   # config.action_controller.asset_host = 'http://assets.example.com'
@@ -93,9 +91,9 @@ Rails.application.configure do
     port: 587,
     authentication: :plain,
     enable_starttls_auto: true,
-    user_name: ENV['SENDGRID_USERNAME'],
-    password: ENV['SENDGRID_PASSWORD'],
-    domain: ENV['SENDGRID_DOMAIN']
+    user_name: 'apikey',
+    password: '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',
+    domain: 'ezgolfleague.com'
   }
 
   config.paperclip_defaults = {
