@@ -49,6 +49,7 @@ module GameTypes
     end
 
     def score_row_for_scorecard(card, title)
+      #Old Format
       score_info = []
       card.scores.each do |score|
         score_info << score.strokes.to_s
@@ -57,7 +58,17 @@ module GameTypes
       score_info << card.course_handicap.to_s
       score_info << "#{card.gross_score}/#{card.net_score}"
 
-      return {title: title, contents: score_info, should_bold: false, should_ornament: false}
+      #New format
+      strokes = []
+      card.scores.each do |score|
+        strokes << score.strokes.to_s
+      end
+
+      front_back_nine_info = ["#{card.front_nine_score(false)}/#{card.front_nine_score(true)}", "#{card.back_nine_score(false)}/#{card.back_nine_score(true)}"]
+      course_handicap = card.course_handicap.to_s
+      gross_net_score = "#{card.gross_score}/#{card.net_score}"
+
+      return {title: title, contents: score_info, strokes: strokes, front_back_nine_info: front_back_nine_info, course_handicap: course_handicap, gross_net_score: gross_net_score, should_bold: false, should_ornament: false}
     end
 
     def par_row
