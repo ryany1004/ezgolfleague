@@ -4,7 +4,7 @@ module Importers
   class GHINImporter
 
     def self.import_for_all_users
-      User.where("ghin_number IS NOT NULL").where("ghin_number != ''").order("ghin_updated_at").each do |u|
+      User.where("ghin_number IS NOT NULL").where("ghin_number != ''").where("ghin_updated_at <= ?", 5.minutes.ago).order("ghin_updated_at").each do |u|
         Importers::GHINImporter.import_ghin_for_user(u)
       end
     end
@@ -32,7 +32,7 @@ module Importers
       user_failure_string = "NOT Updating for #{user.complete_name} / #{user.id}: "
 
       begin
-        url = "http://widgets.ghin.com/HandicapLookupResults.aspx?entry=1&ghinno=#{user.ghin_number}&css=default&dynamic=&small=0&mode=&tab=0"
+        url = user.ghin_number
 
         puts "Reading: #{url}"
         doc = Nokogiri::HTML(open(url))
@@ -66,6 +66,6 @@ module Importers
         puts user_failure_string + "GHIN Exception: #{e}"
       end
     end
-
+    
   end
 end

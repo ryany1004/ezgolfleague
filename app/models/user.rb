@@ -54,6 +54,10 @@ class User < ApplicationRecord
     return "#{self.first_name} #{self.last_name[0]}."
   end
 
+  def ghin_url
+    "http://widgets.ghin.com/HandicapLookupResults.aspx?entry=1&ghinno=#{self.ghin_number}&css=default&dynamic=&small=0&mode=&tab=0"
+  end
+
   ##
 
   def impersonatable_users

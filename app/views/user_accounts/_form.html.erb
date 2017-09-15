@@ -40,6 +40,16 @@
     <%= f.input :ghin_number, :label => 'GHIN System Number' %>
   </div>
 
+  <% if current_user.is_super_user && @user_account.new_record? == false && @user_account.ghin_number.blank? == false %>
+  <div class="well">
+    <p>View their GHIN page, useful for debugging. Saving a user will submit a request to update from GHIN.</p>
+
+    <p>GHIN URL: <%= link_to @user_account.ghin_url, @user_account.ghin_url %></p>
+
+    <p>GHIN Last Updated: <%= @user_account.ghin_updated_at %></p>
+  </div>
+  <% end %>
+
   <% if current_user_is_admin_for_user(@user_account) -%>
   <h3>Handicap</h3>
   <div class="well">
