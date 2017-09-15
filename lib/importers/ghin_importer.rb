@@ -66,6 +66,6 @@ module Importers
         puts user_failure_string + "GHIN Exception: #{e}"
       end
     end
-    
+
   end
 end
