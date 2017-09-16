@@ -28,11 +28,13 @@ class CourseHole < ApplicationRecord
   def yards_for_flight(flight)
     tee_box_name = flight.course_tee_box.name
 
+    yardage = 0
+
     self.course_hole_tee_boxes.includes(:course_tee_box).each do |b|
-      return b.yardage if b.course_tee_box.name == tee_box_name
+      yardage = b.yardage if b.course_tee_box.name == tee_box_name
     end
 
-    return nil
+    yardage
   end
 
 end
