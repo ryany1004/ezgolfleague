@@ -137,6 +137,18 @@ mixpanel.init("567e75f3f6b245aac0a54f6481629537");</script><!-- end Mixpanel -->
   <%= yield %>
 </div>
 
+<script>
+  $(function() {
+    mixpanel.people.set({
+      "$user_id": "<%= current_user.id %>",
+      "$first_name": "<%= current_user.first_name %>",
+      "$last_name": "<%= current_user.last_name %>",
+      "$email": "<%= current_user.email %>",
+      "$selected_league": "<%= current_user.selected_league.name %>"
+    });
+  });
+</script>
+
 <footer class="container">
   <br/>
   Copyright © EZ Golf League | <%= link_to "Privacy Policy", "/privacy_policy.html" %> | <%= link_to "Terms of Service", "/terms_of_service.html" %>
