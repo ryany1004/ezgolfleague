@@ -92,16 +92,26 @@ class UserAccountsController < BaseController
   end
 
   def export_users
-    attributes = %w{id email first_name last_name}
+    # attributes = %w{id email first_name last_name created_at}
 
-    CSV.generate(headers: true) do |csv|
-      csv << attributes
+    # csv_output = nil
 
-      User.all.each do |user|
-        csv << attributes.map{ |attr| user.send(attr) }
-      end
+    # CSV.generate(headers: true) do |csv|
+    #   csv << attributes
 
-      send_data csv, :type => 'text/csv; charset=iso-8859-1; header=present', :disposition => "attachment; filename=users.csv" 
+    #   User.all.each do |user|
+    #     csv << attributes.map{ |attr| user.send(attr) }
+    #   end
+
+    #   csv_output = csv
+    # end
+
+    # send_data csv, :type => 'text/csv; charset=iso-8859-1; header=present', :disposition => "attachment; filename=users.csv" 
+
+    @users = User.all
+
+    respond_to do |format|
+      format.csv { send_data @users.to_csv, filename: "users-#{Date.today}.csv" }
     end
   end
 

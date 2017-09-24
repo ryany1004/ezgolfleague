@@ -10,7 +10,7 @@
     <div class="panel-heading">
       <h3 class="panel-title">User Accounts</h3>
       <% if current_user.is_super_user? %>
-        <%= link_to "Export to CSV", export_users_user_accounts_path, method: :patch %>
+        <%= link_to "Export to CSV", export_users_user_accounts_path(format: :csv), method: :patch %>
       <% end %>
     </div>
     <table class="table table-striped">

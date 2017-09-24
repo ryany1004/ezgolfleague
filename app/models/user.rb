@@ -233,6 +233,18 @@ class User < ApplicationRecord
     end
   end
 
+  def self.to_csv
+    attributes = %w{id email first_name last_name created_at}
+
+    CSV.generate(headers: true) do |csv|
+      csv << attributes
+
+      all.each do |user|
+        csv << attributes.map{ |attr| user.send(attr) }
+      end
+    end
+  end
+
   ## Notifications - this stuff should be re-factored out to another class and de-duped
 
   def has_ios_devices?
