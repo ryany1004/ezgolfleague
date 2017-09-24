@@ -2,39 +2,6 @@
   mixpanel.track("Admin: Display New Subscription Form");
 </script>
 
-<script>
-  jQuery(function($) {
-    $('#payment-form').submit(function(event) {
-      var $form = $(this);
-
-      // Disable the submit button to prevent repeated clicks
-      $form.find('submit_button').prop('disabled', true);
-
-      Stripe.card.createToken($form, stripeResponseHandler);
-
-      // Prevent the form from submitting with the default action
-      return false;
-    });
-  });
-
-  function stripeResponseHandler(status, response) {
-    var $form = $('#payment-form');
-
-    if (response.error) {
-      // Show the errors on the form
-      $form.find('.payment-errors').text(response.error.message);
-      $form.find('submit_button').prop('disabled', false);
-    } else {
-      // response contains id and card, which contains additional card details
-      var token = response.id;
-      // Insert the token into the form so it gets submitted to the server
-      $form.append($('<input type="hidden" name="stripeToken" />').val(token));
-      // and submit
-      $form.get(0).submit();
-    }
-  };
-</script>
-
 <style>
   .table > tbody > tr:first-child > td {
     border: none;
@@ -92,7 +59,7 @@
       </div>
       <div class="panel-body">
         <div class="panel-body">
-          <span class="payment-errors"></span>
+          <span class="payment-errors" style="color: red;"></span>
         </div>
         <table class="table">
           <tbody>
@@ -119,7 +86,11 @@
 
   <div class="row">
     <div class="col-md-3">&nbsp;</div>
-    <div class="col-md-6"><button type="submit" class="btn btn-success btn-lg btn-block" id="submit_button"><strong><span id="payment_button_text">Submit &amp; Pay $xx</span></strong></button></div>
+    <div class="col-md-6">
+      <button type="submit" class="btn btn-success btn-lg btn-block" id="submit_button">
+        <strong><span id="payment_button_text">Submit &amp; Pay $xx</span></strong>
+      </button>
+    </div>
     <div class="col-md-3">&nbsp;</div>
   </div>
 </div>
@@ -129,6 +100,45 @@
 <div class="col-md-12">&nbsp;</div>
 
 <script>
+  jQuery(function($) {
+    addStripeBinding();
+  });
+
+  function addStripeBinding() {
+    $('#payment-form').submit(function(event) {
+      var $form = $(this);
+
+      // Disable the submit button to prevent repeated clicks
+      $form.find('submit_button').prop('disabled', true);
+
+      Stripe.card.createToken($form, stripeResponseHandler);
+
+      // Prevent the form from submitting with the default action
+      return false;
+    });
+  };
+
+  function removeStripeBinding() {
+    $( "#payment-form").unbind("submit");
+  };
+
+  function stripeResponseHandler(status, response) {
+    var $form = $('#payment-form');
+
+    if (response.error) {
+      // Show the errors on the form
+      $form.find('.payment-errors').text(response.error.message);
+      $form.find('submit_button').prop('disabled', false);
+    } else {
+      // response contains id and card, which contains additional card details
+      var token = response.id;
+      // Insert the token into the form so it gets submitted to the server
+      $form.append($('<input type="hidden" name="stripeToken" />').val(token));
+      // and submit
+      $form.get(0).submit();
+    }
+  };
+
   $("#active_golfers").keyup(function() {
     updateCalculatedCost();
   });
@@ -150,12 +160,16 @@
     var tournaments = $("#tournaments_per_season").val();
 
     if (golfers < 13) {
+      removeStripeBinding();
+
       $("#total_cost").html("FREE");
       $("#cost_details").html("");
       $("#payment_button_text").html("Continue for Free");
 
       $("#payment_info_row").hide("fast");
     } else {
+      addStripeBinding();
+
       var cost = 0;
       var costPerGolfer = 0;
 
