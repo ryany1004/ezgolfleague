@@ -14,16 +14,9 @@
 
 	  <%= f.input :last_name, :label => 'Last Name', required: true %>
 
-    <%= f.input :phone_number, :label => 'Phone Number', required: true %>
+    <%= f.input :phone_number, :label => 'Phone Number' %>
 
     <%= f.input :time_zone, :label => 'Time Zone', required: true, collection: ActiveSupport::TimeZone.us_zones, value_method: :name %>
-  </div>
-
-  <h3>GHIN Number</h3>
-  <div class="well">
-    <p>Your GHIN number is used to automatically update your handicap. Leave this blank if you don't have a GHIN number.</p>
-
-    <%= f.input :ghin_number, :label => 'GHIN System Number' %>
   </div>
 
   <% if @user_account.new_record? -%>
