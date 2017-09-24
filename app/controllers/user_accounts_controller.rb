@@ -99,7 +99,7 @@ class UserAccountsController < BaseController
     CSV.generate(headers: true) do |csv|
       csv << attributes
 
-      User.all.each do |u|
+      User.all.each do |user|
         csv << attributes.map{ |attr| user.send(attr) }
       end
     end
