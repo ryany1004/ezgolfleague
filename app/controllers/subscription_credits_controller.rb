@@ -18,24 +18,28 @@ class SubscriptionCreditsController < BaseController
   end
 
   def create
-    token = params[:stripeToken]
-
-    create_or_update_stripe_customer(@league, token)
-
-    user = @league.league_memberships.first.user
-
     number_of_golfers = params[:active_golfers].to_i
     number_of_tournaments = params[:tournaments_per_season].to_i
     payment_amount = calc_payment_amount(number_of_tournaments, number_of_golfers)
 
-    charge = charge_customer(@league, payment_amount, "Charge for tournament credits for #{user.email} for league #{@league.name}.")
-
-    unless charge.blank?
-      SubscriptionCredit.create(league: @league, amount: payment_amount, golfer_count: number_of_golfers, tournament_count: number_of_tournaments, tournaments_remaining: number_of_tournaments, transaction_id: charge.id)
-
-      redirect_to setup_completed_play_registrations_path(details_amount: payment_amount, details_golfers: number_of_golfers, details_id: charge.id)
+    if payment_amount == 0
+      redirect_to setup_completed_play_registrations_path
     else
-      redirect_to information_league_subscription_credits_path(@league), :flash => { :error => "There was an error processing your payment." }
+      token = params[:stripeToken]
+
+      create_or_update_stripe_customer(@league, token)
+
+      user = @league.league_memberships.first.user
+
+      charge = charge_customer(@league, payment_amount, "Charge for tournament credits for #{user.email} for league #{@league.name}.")
+
+      unless charge.blank?
+        SubscriptionCredit.create(league: @league, amount: payment_amount, golfer_count: number_of_golfers, tournament_count: number_of_tournaments, tournaments_remaining: number_of_tournaments, transaction_id: charge.id)
+
+        redirect_to setup_completed_play_registrations_path(details_amount: payment_amount, details_golfers: number_of_golfers, details_id: charge.id)
+      else
+        redirect_to information_league_subscription_credits_path(@league), :flash => { :error => "There was an error processing your payment." }
+      end
     end
   end
 
