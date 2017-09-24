@@ -82,11 +82,11 @@ mixpanel.init("567e75f3f6b245aac0a54f6481629537");</script><!-- end Mixpanel -->
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav">
-        <li><%= link_to "My Dashboard", play_dashboard_index_path %></li>
+        <li><%= link_to "Player Dashboard", play_dashboard_index_path %></li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <% if current_user.is_any_league_admin? %>
-        <li><%= link_to "Admin Console", root_path %></li>
+        <li><%= link_to "Administer Your League", root_path %></li>
         <% end -%>
 
         <% if current_user.leagues.count > 1 -%>

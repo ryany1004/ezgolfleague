@@ -227,6 +227,8 @@ Rails.application.routes.draw do
     get 'setup_golfer_invite', on: :collection
     post 'send_golfer_invite', on: :collection
 
+    patch 'export_users', on: :collection
+
     get 'impersonate'
     get 'stop_impersonating', on: :collection
   end

@@ -91,6 +91,22 @@ class UserAccountsController < BaseController
     redirect_to user_accounts_path, :flash => { :success => "The user was successfully deleted." }
   end
 
+  def export_users
+    attributes = %w{id email first_name last_name}
+
+    csv = nil
+
+    CSV.generate(headers: true) do |csv|
+      csv << attributes
+
+      User.all.each do |u|
+        csv << attributes.map{ |attr| user.send(attr) }
+      end
+    end
+
+    send_data csv, :type => 'text/csv; charset=iso-8859-1; header=present', :disposition => "attachment; filename=users.csv" 
+  end
+
   def impersonate
     user = User.find(params[:user_account_id])
 

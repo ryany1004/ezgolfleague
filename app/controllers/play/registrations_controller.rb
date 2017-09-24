@@ -35,7 +35,7 @@ class Play::RegistrationsController < Play::BaseController
   def search_leagues
     search_term = "%#{params[:search].downcase}%"
 
-    @leagues = League.where(show_in_search: true).where("lower(name) LIKE ? OR lower(location) LIKE ?", search_term, search_term)
+    @leagues = League.where(show_in_search: true).where("lower(name) LIKE ? OR lower(location) LIKE ?", search_term, search_term).order(:name)
   end
 
   def league_info
