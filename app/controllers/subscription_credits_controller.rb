@@ -22,7 +22,7 @@ class SubscriptionCreditsController < BaseController
     number_of_tournaments = params[:tournaments_per_season].to_i
     payment_amount = calc_payment_amount(number_of_tournaments, number_of_golfers)
 
-    if payment_amount == 0
+    if number_of_golfers <= 12 #TODO: update if we update rules
       redirect_to setup_completed_play_registrations_path
     else
       token = params[:stripeToken]
