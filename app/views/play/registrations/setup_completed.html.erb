@@ -3,43 +3,55 @@
 </script>
 
 <% unless params[:details_amount].blank? %>
-<script>
-  ga('ec:addProduct', {               // Provide product details in an productFieldObject.
-  'id': 'EZGL001',                   // Product ID (string).
-  'name': 'Tournament Credits', // Product name (string).
-  'category': 'Subscriptions',            // Product category (string).
-  'quantity': <%= params[:details_golfers] %>                     // Product quantity (number).
-  });
+  <script>
+    ga('ec:addProduct', {               // Provide product details in an productFieldObject.
+    'id': 'EZGL001',                   // Product ID (string).
+    'name': 'Tournament Credits', // Product name (string).
+    'category': 'Subscriptions',            // Product category (string).
+    'quantity': <%= params[:details_golfers] %>                     // Product quantity (number).
+    });
 
-  ga('ec:setAction', 'purchase', {          // Transaction details are provided in an actionFieldObject.
-  'id': '<%= params[:details_id] %>',                         // (Required) Transaction id (string).
-  'revenue': '<%= params[:details_amount] %>',                     // Revenue (currency).
-  'tax': '0.0',                          // Tax (currency).
-  'shipping': '0.0'                     // Shipping (currency).
-  });
-</script>
+    ga('ec:setAction', 'purchase', {          // Transaction details are provided in an actionFieldObject.
+    'id': '<%= params[:details_id] %>',                         // (Required) Transaction id (string).
+    'revenue': '<%= params[:details_amount] %>',                     // Revenue (currency).
+    'tax': '0.0',                          // Tax (currency).
+    'shipping': '0.0'                     // Shipping (currency).
+    });
+  </script>
 
-<script>
-  fbq('track', 'Purchase', {
-  value: <%= params[:details_amount] %>,
-  currency: 'USD'
-  });
-</script>
+  <script>
+    fbq('track', 'Purchase', {
+    value: <%= params[:details_amount] %>,
+    currency: 'USD'
+    });
+  </script>
 <% end %>
 
 <div class="row">
-  <div class="col-md-12">
-    <div class="panel panel-default panel-success">
+  <div class="col-md-8">
+    <div class="panel panel-default">
       <div class="panel-heading">
-        <h3 class="panel-title">Thanks!</h3>
+        <h3 class="panel-title">Setup is Complete</h3>
       </div>
       <div class="panel-body">
-        <p>Setup has been completed.</p>
+        <p>We've got two videos about our software that you might find interesting:</p>
 
+        <p><iframe width="560" height="315" src="https://www.youtube.com/embed/DS3DgoKVe3Y" frameborder="0" allowfullscreen></iframe></p>
+
+        <p><iframe width="560" height="315" src="https://www.youtube.com/embed/wkE9lN3o_mA" frameborder="0" allowfullscreen></iframe></p>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">Ready to get started?</h3>
+      </div>
+      <div class="panel-body">
         <% if current_user.is_any_league_admin? %>
-          <p><%= link_to "Manage My League", league_admin_root_path %></p>
+          <p><%= link_to "Manage My League", league_admin_root_path, :class => "btn btn-default", :role => "button" %></p>
         <% else %>
-          <p><%= link_to "View My Dashboard", root_path %></p>
+          <p><%= link_to "View My Dashboard", root_path, :class => "btn btn-default", :role => "button" %></p>
         <% end %>
       </div>
     </div>

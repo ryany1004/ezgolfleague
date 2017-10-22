@@ -21,30 +21,29 @@ class SubscriptionCreditsController < BaseController
     number_of_golfers = params[:active_golfers].to_i
     number_of_tournaments = params[:tournaments_per_season].to_i
     payment_amount = calc_payment_amount(number_of_tournaments, number_of_golfers)
+    token = params[:stripeToken]
 
-    if number_of_golfers <= 12 #TODO: update if we update rules
-      redirect_to setup_completed_play_registrations_path
+    create_or_update_stripe_customer(@league, token)
+
+    user = @league.league_memberships.first.user
+
+    charge = charge_customer(@league, payment_amount, "Charge for tournament credits for #{user.email} for league #{@league.name}.")
+
+    unless charge.blank?
+      SubscriptionCredit.create(league: @league, amount: payment_amount, golfer_count: number_of_golfers, tournament_count: number_of_tournaments, tournaments_remaining: number_of_tournaments, transaction_id: charge.id)
+
+      redirect_to setup_completed_play_registrations_path(details_amount: payment_amount, details_golfers: number_of_golfers, details_id: charge.id)
     else
-      token = params[:stripeToken]
-
-      create_or_update_stripe_customer(@league, token)
-
-      user = @league.league_memberships.first.user
-
-      charge = charge_customer(@league, payment_amount, "Charge for tournament credits for #{user.email} for league #{@league.name}.")
-
-      unless charge.blank?
-        SubscriptionCredit.create(league: @league, amount: payment_amount, golfer_count: number_of_golfers, tournament_count: number_of_tournaments, tournaments_remaining: number_of_tournaments, transaction_id: charge.id)
-
-        redirect_to setup_completed_play_registrations_path(details_amount: payment_amount, details_golfers: number_of_golfers, details_id: charge.id)
-      else
-        redirect_to information_league_subscription_credits_path(@league), :flash => { :error => "There was an error processing your payment." }
-      end
+      redirect_to information_league_subscription_credits_path(@league), :flash => { :error => "There was an error processing your payment." }
     end
   end
 
   def update_active
-    active_before_update = @active_subscription.golfer_count
+    if @active_subscription.blank?
+      active_before_update = 0
+    else
+      active_before_update = @active_subscription.golfer_count
+    end
 
     @league.league_memberships.each do |m|
       m.state = MembershipStates::ADDED
@@ -66,7 +65,8 @@ class SubscriptionCreditsController < BaseController
     active_delta = active_after_update - active_before_update
 
     if active_delta > 0
-      per_golfer_cost = SubscriptionCredit.cost_for_tournament_count(@active_subscription.tournament_count)
+      #per_golfer_cost = SubscriptionCredit.cost_for_tournament_count(@active_subscription.tournament_count) #TODO: REMOVE?
+      per_golfer_cost = 5
       payment_amount = per_golfer_cost * active_delta
 
       charge = charge_customer(@league, payment_amount, "Add active golfers for #{current_user.email} for league #{@league.name}.")
@@ -122,6 +122,10 @@ class SubscriptionCreditsController < BaseController
 
   def fetch_league
     @league = League.find(params[:league_id])
+
+    if !@league.user_is_admin(current_user)
+      @league = current_user.leagues_admin.first
+    end
   end
 
   def fetch_active_subscription

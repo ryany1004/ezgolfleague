@@ -47,11 +47,14 @@
     var cost = 0;
     var costPerGolfer = 0;
 
-    if (tournamentCount > 15) {
-      costPerGolfer = 10;
-    } else {
-      costPerGolfer = 5;
-    }
+    // if (tournamentCount > 15) {
+    //   costPerGolfer = 10;
+    // } else {
+    //   costPerGolfer = 5;
+    // }
+    //REMOVE?
+
+    costPerGolfer = 5;
 
     return costPerGolfer;
   }
@@ -338,10 +341,10 @@
               <td>How many active golfers do you have in your league?</td>
               <td class="text-right"><input type="number" name="active_golfers" value="<%= @golfer_count %>" id="active_golfers"></td>
             </tr>
-            <tr>
+<!--             <tr>
               <td>How many tournaments do you want to play?</td>
               <td class="text-right"><input type="number" name="tournaments_per_season" value="<%= @tournament_count %>" id="tournaments_per_season"></td>
-            </tr>
+            </tr> -->
             <tr>
               <td><strong>Total Cost</strong> <span id="cost_details"></span></td>
               <td class="text-right" id="total_cost">XX</td>
@@ -376,30 +379,32 @@
 
   function updateCalculatedCost() {
     var golfers = $("#active_golfers").val();
-    var tournaments = $("#tournaments_per_season").val();
+    // var tournaments = $("#tournaments_per_season").val();
 
-    if (golfers < 13) {
-      $("#total_cost").html("FREE");
-      $("#cost_details").html("");
-      $("#purchase_credits_button").prop('disabled', true);
-    } else {
+    // if (golfers < 13) {
+    //   $("#total_cost").html("FREE");
+    //   $("#cost_details").html("");
+    //   $("#purchase_credits_button").prop('disabled', true);
+    // } else {
       $("#purchase_credits_button").prop('disabled', false);
 
       var cost = 0;
       var costPerGolfer = 0;
 
-      if (tournaments > 15) {
-        costPerGolfer = 10;
-      } else {
-        costPerGolfer = 5;
-      }
+      // if (tournaments > 15) {
+      //   costPerGolfer = 10;
+      // } else {
+      //   costPerGolfer = 5;
+      // }
+
+      costPerGolfer = 5;
 
       cost = golfers * costPerGolfer;
 
       $("#total_cost").html("$" + cost);
       $("#cost_details").html("($"+ costPerGolfer +" per golfer)");
       $("#payment_button_text").html("Submit &amp; Pay $" + cost);
-    }
+    // }
   }
 
   updateCalculatedCost();

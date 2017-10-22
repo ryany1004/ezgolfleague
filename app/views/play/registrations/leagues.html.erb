@@ -1,40 +1,87 @@
 <script>
-  mixpanel.track("Choose League Search or Create");
+  mixpanel.track("Show Existing Leagues");
   mixpanel.track("Created User Account");
+
   mixpanel.alias('<%= current_user.id %>');
 </script>
 
-<div class="row">
-  <div class="col-md-12">
-    <div class="panel panel-default panel-success">
-      <div class="panel-heading">
-        <h3 class="panel-title">Find an Existing League</h3>
-      </div>
-      <div class="panel-body">
-        <ul class="nav nav-pills">
-          In order to use the system you need to join a league or create a new one. Search for leagues that may be nearby to see more information.
-        </ul>
-        <div>&nbsp;</div>
-        <div class="input-group">
-        <%= simple_form_for :league_search, url: search_leagues_play_registrations_path do |f| %>
-          <%= text_field_tag :search, params[:search], class: "form-control", placeholder: "Enter name or location." %>
-          </br></br>
-          <%= f.submit 'Search' %>
-        <% end %>
-        </div>
-        <div>&nbsp;</div>
-      </div>
-    </div>
-  </div>
-</div>
+<ol class="breadcrumb">
+  <li>Create Your Free User Account</li>
+  <li class="active">Join or Create a League</li>
+</ol>
 
-<div id="container" style="padding-top: 20px;">
+<div id="container">
   <div class="panel panel-success">
     <div class="panel-heading">
       <h3 class="panel-title">Create a New Golf League</h3>
     </div>
     <div class="panel-body">
-      <%= link_to "Create a New League", new_league_play_registrations_path %>
+      <p>Are you a league administrator? Create a new league for you and your golfers to play tournaments together.</p>
+
+      <%= link_to "Create a New League", new_league_play_registrations_path, :class => "btn btn-default", :role => "button" %>
+    </div>
+  </div>
+</div>
+
+<div class="row" style="padding-top: 20px;">
+  <div class="col-md-12">
+    <div class="panel panel-default panel-success">
+      <div class="panel-heading">
+        <h3 class="panel-title">Join an Existing League</h3>
+      </div>
+      <div class="panel-body">
+        <p>Does your league already exist in our system? Select below to join an existing league.</p>
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Location</th>
+              <th>&nbsp;</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @leagues.each do |league| %>
+              <% if !current_user.leagues.include? league %>
+                <tr>
+                  <td><%= league.name %></td>
+                  <td><%= league.location %></td>
+                  <td>
+                    <a class="btn btn-primary" data-toggle="collapse" href="#collapse<%= league.id %>" aria-expanded="false" aria-controls="collapse<%= league.id %>">Learn More</a> 
+                  </td>
+                </tr>
+                <tr class="collapse" id="collapse<%= league.id %>">
+                  <td colspan="3">
+                    <div class="card card-block">
+                      <p><%= league.league_description %></p>
+                      <p><strong>Administrator: </strong><%= league.contact_name %></p>
+
+                      <% Tournament.all_upcoming([league], nil).limit(1).each do |t| %>
+                        <hr>
+                        <p>
+                          <strong>Next Tournament</strong>
+                        </p>
+                        <p><%= t.name %></p>
+                        <p><%= t.tournament_days.first.tournament_at.to_s(:date_and_time) %> @ <%= t.tournament_days.first.course.name %></p>
+                      <% end %>
+                      <hr>
+
+                      <% if league.dues_amount == 0 %>
+                        <%= link_to "Join Now", join_league_play_registrations_path(league_id: league.id), type: "button", class: "btn btn-success" %>
+                      <% else %>
+                        <% unless league.encrypted_stripe_production_publishable_key.blank? -%>
+                          <%= link_to "Join Now via Credit Card - #{number_to_currency(league.dues_amount)}", join_league_play_registrations_path(league_id: league.id), type: "button", class: "btn btn-success" %>
+                        <% end -%>
+                      <% end %>
+
+                      <%= link_to "Request Additional Information", request_information_play_registrations_path(league_id: league.id), type: "button", class: "btn btn-default", method: :put %>
+                    </div>
+                  </td>
+                </tr>
+              <% end -%>
+            <% end -%>
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
 </div>

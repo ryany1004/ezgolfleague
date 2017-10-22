@@ -7,7 +7,7 @@ class LeaguesController < BaseController
 
       @page_title = "All Leagues"
     else
-      @leagues = current_user.leagues.order("name").page params[:page]
+      @leagues = current_user.leagues_admin.order("name").page params[:page]
 
       @page_title = "My Leagues"
     end
@@ -83,7 +83,7 @@ class LeaguesController < BaseController
     if current_user.is_super_user
       @league = League.find(league_id)
     else
-      @league = current_user.leagues.find(league_id)
+      @league = current_user.leagues_admin.find(league_id)
     end
   end
 

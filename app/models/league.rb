@@ -9,6 +9,7 @@ class League < ApplicationRecord
   has_many :subscription_credits, ->{ order 'created_at DESC' }
 
   validates :name, presence: true, uniqueness: true
+  validates :location, presence: true
 
   paginates_per 50
 
@@ -33,6 +34,17 @@ class League < ApplicationRecord
       return self.stripe_test_secret_key
     else
       return self.stripe_production_secret_key
+    end
+  end
+
+  ##
+
+  def user_is_admin(user)
+    membership = self.league_memberships.where(user: user).first
+    if membership.blank? || !membership.is_admin
+      false
+    else
+      true
     end
   end
 
@@ -105,7 +117,7 @@ class League < ApplicationRecord
 
   def has_active_subscription?
     return true if self.exempt_from_subscription
-    return true if self.league_memberships.active.count <= 12
+    #return true if self.league_memberships.active.count <= 12
 
     active_subscriptions = self.subscription_credits.where("tournaments_remaining > 0").order("created_at DESC")
     if active_subscriptions.count > 0
@@ -220,6 +232,16 @@ class League < ApplicationRecord
       return self.users.order("last_name, first_name")
     else
       return self.users.where("users.id NOT IN (?)", ids_to_omit).order("last_name, first_name")
+    end
+  end
+
+  #date parsing
+  def start_date=(date)
+    begin
+      parsed = Date.strptime("#{date}", JAVASCRIPT_DATE_PICKER_FORMAT)
+      super parsed
+    rescue
+      write_attribute(:start_date, date)
     end
   end
 

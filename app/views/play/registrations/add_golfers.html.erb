@@ -1,0 +1,37 @@
+<script>
+  mixpanel.track("Created League");
+  mixpanel.track("Display Invite Golfers");
+</script>
+
+<div id="container">
+	<div class="row">
+    	<div class="col-md-7">
+	    	<%= simple_form_for :golfers, url: invite_golfers_play_registrations_path do |f| %>
+	          <h3>Invite Golfers</h3>
+	          <div class="well">
+	          	<p>Invite golfers to your new league by adding email addresses, one per line.</p>
+	          	<p>Each will receive an email invite to create an account and join.</p>
+	            <%= f.input :golfers_to_invite, as: :text, :input_html => {:cols => 5, :rows => 10 } %>
+
+	            <%= f.input :league_id, :as => :hidden, input_html: {value: @league.id}  %>
+	          </div>
+
+	          <div class="form-actions">
+	            <%= f.button :submit, "Invite Golfers", :class => 'btn btn-default' %>
+	          </div>
+	        <% end %>
+	    </div>
+    	<div class="col-md-5">
+    		<div class="panel panel-default">
+		      <div class="panel-heading">
+		        <h3 class="panel-title">You've created your league!</h3>
+		      </div>
+		      <div class="panel-body">
+		      	<p>Your league has been created - now, add some email addresses so of your league members so that we can invite them to your new league.</p>
+		      	<p><strong>Don't want to invite anyone right now?</strong></p>
+		      	<%= link_to "Skip Golfer Invite", setup_completed_play_registrations_path, :class => "btn btn-default", :role => "button" %>
+		      </div>
+		    </div>
+    	</div>
+	</div>
+</div>

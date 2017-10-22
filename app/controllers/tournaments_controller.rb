@@ -11,9 +11,15 @@ class TournamentsController < BaseController
       @past_tournaments = Tournament.all_past(nil).reorder("tournament_starts_at DESC").page(params[:page]).without_count
       @unconfigured_tournaments = Tournament.all_unconfigured(nil).page(params[:page]).without_count
     else
-      @upcoming_tournaments = Tournament.all_upcoming(current_user.leagues).page(params[:page]).without_count
-      @past_tournaments = Tournament.all_past(current_user.leagues).reorder("tournament_starts_at DESC").page(params[:page]).without_count
-      @unconfigured_tournaments = Tournament.all_unconfigured(current_user.leagues).page(params[:page]).without_count
+      @upcoming_tournaments = Tournament.all_upcoming(current_user.leagues_admin).page(params[:page]).without_count
+      @past_tournaments = Tournament.all_past(current_user.leagues_admin).reorder("tournament_starts_at DESC").page(params[:page]).without_count
+      @unconfigured_tournaments = Tournament.all_unconfigured(current_user.leagues_admin).page(params[:page]).without_count
+    end
+
+    if current_user.selected_league.has_active_subscription? || current_user.selected_league.free_tournaments_remaining > 0
+      @can_create_tournaments = true
+    else
+      @can_create_tournaments = false
     end
 
     @page_title = "Tournaments"
@@ -21,7 +27,7 @@ class TournamentsController < BaseController
 
   def new
     @tournament = Tournament.new
-    @tournament.league = current_user.leagues.first if current_user.leagues.count == 1
+    @tournament.league = current_user.leagues_admin.first if current_user.leagues_admin.count == 1
     @tournament.signup_opens_at = DateTime.now
   end
 
@@ -31,6 +37,12 @@ class TournamentsController < BaseController
     @tournament.skip_date_validation = current_user.is_super_user
 
     if @tournament.save
+      league = @tournament.league
+      if league.free_tournaments_remaining > 0
+        league.free_tournaments_remaining -= 1 #decrement the free tournaments
+        league.save
+      end
+
       redirect_to league_tournament_tournament_days_path(@tournament.league, @tournament), :flash => { :success => "The tournament was successfully created. Please update course information." }
     else
       initialize_form

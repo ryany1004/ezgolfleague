@@ -4,19 +4,33 @@
 </script>
 
 <div class="row">
+  <% if !current_user.selected_league.exempt_from_subscription %>
+    <div class="col-md-12">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title">Subscription Information</h3>
+        </div>
+        <div class="panel-body">
+          <p>You currently have <%= current_user.selected_league.free_tournaments_remaining %> free tournaments remaining.</p>
+          <p><%= link_to "View Your Subscription", current_league_subscription_credits_path(current_user.selected_league), :class => 'btn btn-primary' %></p>
+        </div>
+      </div>
+    </div>
+  <% end %>
+
   <% unless @unconfigured_tournaments.blank? -%>
     <%= render partial: 'index_table', locals: {tournaments: @unconfigured_tournaments, title: "Setup In Process", show_create: false} %>
   <% end -%>
 
   <% unless @upcoming_tournaments.blank? -%>
-    <%= render partial: 'index_table', locals: {tournaments: @upcoming_tournaments, title: "Upcoming Tournaments", show_create: true} %>
+    <%= render partial: 'index_table', locals: {tournaments: @upcoming_tournaments, title: "Upcoming Tournaments", show_create: @can_create_tournaments} %>
   <% end -%>
 
   <% unless @past_tournaments.blank? -%>
-    <%= render partial: 'index_table', locals: {tournaments: @past_tournaments, title: "Past Tournaments", show_create: true} %>
+    <%= render partial: 'index_table', locals: {tournaments: @past_tournaments, title: "Past Tournaments", show_create: @can_create_tournaments} %>
   <% end -%>
 
-  <% if @upcoming_tournaments.blank? -%>
+  <% if @can_create_tournaments && @upcoming_tournaments.blank? -%>
     <% if @past_tournaments.blank? -%>
       <h4>You don't have any tournaments yet.</h4>
       <%= link_to 'Create Tournament', new_league_tournament_path(current_user.selected_league), :class => 'btn btn-primary' %>

@@ -74,8 +74,8 @@ class PaymentsController < BaseController
   end
   
   def selected_league
-    selected_league = current_user.leagues.first
-    selected_league = current_user.leagues.find(params[:league_id]) unless params[:league_id].blank?
+    selected_league = current_user.leagues_admin.first
+    selected_league = current_user.leagues_admin.find(params[:league_id]) unless params[:league_id].blank?
     
     return selected_league
   end

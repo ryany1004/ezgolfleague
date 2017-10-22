@@ -30,17 +30,8 @@ class Play::RegistrationsController < Play::BaseController
 
   def leagues
     @show_apps_in_footer = false
-  end
 
-  def search_leagues
-    search_term = "%#{params[:search].downcase}%"
-
-    @leagues = League.where(show_in_search: true).where("lower(name) LIKE ? OR lower(location) LIKE ?", search_term, search_term).order(:name)
-  end
-
-  def league_info
-    @league = League.find(params[:league_id])
-    @upcoming_tournaments = Tournament.all_upcoming([@league], nil)
+    @leagues = League.where(show_in_search: true).order(:name)
   end
 
   def join_league
@@ -82,7 +73,7 @@ class Play::RegistrationsController < Play::BaseController
   end
 
   def new_league
-    @league = League.new(contact_email: current_user.email)
+    @league = League.new(contact_email: current_user.email, contact_name: current_user.complete_name)
     @show_apps_in_footer = false
   end
 
@@ -92,14 +83,24 @@ class Play::RegistrationsController < Play::BaseController
     if @league.save
       LeagueMembership.create(league: @league, user: current_user, is_admin: true)
 
-      if @league.exempt_from_subscription
-        redirect_to setup_completed_play_registrations_path
-      else
-        redirect_to information_league_subscription_credits_path(@league)
-      end
+      redirect_to add_golfers_play_registrations_path(league: @league)
     else
       render :new_league
     end
+  end
+
+  def add_golfers
+    @league = League.find(params[:league])
+  end
+
+  def invite_golfers
+    @league = League.find(params[:golfers][:league_id])
+
+    params[:golfers][:golfers_to_invite].split("\n").each do |g|
+      UserMailer.invite(g, @league).deliver_later
+    end
+
+    redirect_to setup_completed_play_registrations_path
   end
 
   private

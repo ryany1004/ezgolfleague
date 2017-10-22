@@ -38,10 +38,10 @@
               <td>How many active golfers do you have in your league?</td>
               <td class="text-right"><input type="number" name="active_golfers" value="15" id="active_golfers"></td>
             </tr>
-            <tr>
+<!--             <tr>
               <td>How many tournaments do you want to play?</td>
               <td class="text-right"><input type="number" name="tournaments_per_season" value="10" id="tournaments_per_season"></td>
-            </tr>
+            </tr> -->
             <tr>
               <td><strong>Total Cost</strong> <span id="cost_details"></span></td>
               <td class="text-right" id="total_cost">XX</td>
@@ -157,27 +157,29 @@
 
   function updateCalculatedCost() {
     var golfers = $("#active_golfers").val();
-    var tournaments = $("#tournaments_per_season").val();
+    // var tournaments = $("#tournaments_per_season").val();
 
-    if (golfers < 13) {
-      removeStripeBinding();
+    // if (golfers < 13) {
+    //   removeStripeBinding();
 
-      $("#total_cost").html("FREE");
-      $("#cost_details").html("");
-      $("#payment_button_text").html("Continue for Free");
+    //   $("#total_cost").html("FREE");
+    //   $("#cost_details").html("");
+    //   $("#payment_button_text").html("Continue for Free");
 
-      $("#payment_info_row").hide("fast");
-    } else {
+    //   $("#payment_info_row").hide("fast");
+    // } else {
       addStripeBinding();
 
       var cost = 0;
       var costPerGolfer = 0;
 
-      if (tournaments > 15) {
-        costPerGolfer = 10;
-      } else {
-        costPerGolfer = 5;
-      }
+      // if (tournaments > 15) {
+      //   costPerGolfer = 10;
+      // } else {
+      //   costPerGolfer = 5;
+      // }
+
+      costPerGolfer = 5;
 
       cost = golfers * costPerGolfer;
 
@@ -186,7 +188,7 @@
       $("#payment_button_text").html("Submit &amp; Pay $" + cost);
 
       $("#payment_info_row").show("fast");
-    }
+    // }
   }
 
   updateCalculatedCost();

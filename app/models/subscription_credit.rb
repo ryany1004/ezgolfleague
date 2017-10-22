@@ -13,10 +13,14 @@ class SubscriptionCredit < ApplicationRecord
   end
 
   def self.cost_for_tournament_count(tournament_count)
-    if tournament_count > 15
-      10
-    else
-      5
-    end
+    # if tournament_count > 15
+    #   10
+    # else
+    #   5
+    # end
+
+    #TODO: REMOVE?
+
+    5
   end
 end

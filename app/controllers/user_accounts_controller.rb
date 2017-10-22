@@ -6,7 +6,7 @@ class UserAccountsController < BaseController
     if current_user.is_super_user?
       @user_accounts = User.order("last_name").page params[:page]
     else
-      membership_ids = current_user.leagues.map { |n| n.id }
+      membership_ids = current_user.leagues_admin.map { |n| n.id }
       @user_accounts = User.joins(:league_memberships).where("league_memberships.league_id IN (?)", membership_ids).order("last_name").page params[:page]
     end
 
@@ -225,7 +225,7 @@ class UserAccountsController < BaseController
     if current_user.is_super_user?
       @leagues = League.all.order("name")
     else
-      @leagues = current_user.leagues.order("name")
+      @leagues = current_user.leagues_admin.order("name")
     end
   end
 

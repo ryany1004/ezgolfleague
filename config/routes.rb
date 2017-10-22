@@ -38,10 +38,10 @@ Rails.application.routes.draw do
 
     resources :registrations, only: [:new, :create] do
       get :leagues, on: :collection
-      post :search_leagues, on: :collection
-      get :league_info, on: :collection
       get :join_league, on: :collection
       get :new_league, on: :collection
+      get :add_golfers, on: :collection
+      post :invite_golfers, on: :collection
       post :create_league, on: :collection
       post :submit_payment, on: :collection
       put :request_information, on: :collection

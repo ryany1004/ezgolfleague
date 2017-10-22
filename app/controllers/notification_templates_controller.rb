@@ -8,7 +8,7 @@ class NotificationTemplatesController < BaseController
 
       @page_title = "All Notifications"
     else
-      leagues = current_user.leagues
+      leagues = current_user.leagues_admin
       league_ids = leagues.map {|n| n.id}
 
       @notification_templates = NotificationTemplate.where("league_id IN (?)", league_ids).order("deliver_at DESC").page params[:page]
