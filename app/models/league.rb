@@ -109,7 +109,7 @@ class League < ApplicationRecord
     season = self.active_season
 
     unless season.blank?
-      season.dues_amount
+      season.dues_amount.to_f
     else
       0.0
     end

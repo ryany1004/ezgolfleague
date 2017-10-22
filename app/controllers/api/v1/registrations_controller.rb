@@ -63,7 +63,7 @@ class Api::V1::RegistrationsController < Api::V1::ApiBaseController
     search_term.split(" ").each do |s|
       s = s.downcase
 
-      @leagues += League.where(show_in_search: true).where("lower(name) LIKE ? OR lower(location) LIKE ?", s, s)
+      @leagues += League.where(show_in_search: true).where("lower(name) LIKE ? OR lower(location) LIKE ?", s, s).order(:name)
     end
 
     @leagues = @leagues.uniq
