@@ -32,7 +32,7 @@ module Importers
       user_failure_string = "NOT Updating for #{user.complete_name} / #{user.id}: "
 
       begin
-        url = user.ghin_number
+        url = user.ghin_url
 
         puts "Reading: #{url}"
         doc = Nokogiri::HTML(open(url))
