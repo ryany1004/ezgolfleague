@@ -136,7 +136,7 @@ class Tournament < ApplicationRecord
     dues_total = self.dues_amount
 
     cost_lines = [
-      {:name => "#{self.name} Fees", :price => self.dues_amount, :server_id => self.id.to_s}
+      {:name => "#{self.name} Fees", :price => self.dues_amount.to_f, :server_id => self.id.to_s}
     ]
 
     if include_unpaid_contests == true

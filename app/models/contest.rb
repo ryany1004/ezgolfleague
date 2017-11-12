@@ -72,7 +72,7 @@ class Contest < ApplicationRecord
     membership = user.league_memberships.where("league_id = ?", self.tournament_day.tournament.league.id).first
 
     cost_lines = [
-      {:name => "#{self.name} Fees", :price => self.dues_amount, :server_id => self.id.to_s}
+      {:name => "#{self.name} Fees", :price => self.dues_amount.to_f, :server_id => self.id.to_s}
     ]
 
     if include_credit_card_fees == true

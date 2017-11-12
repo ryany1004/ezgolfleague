@@ -66,23 +66,6 @@ class Api::V1::TournamentDaysController < Api::V1::ApiBaseController
     end
   end
 
-  # def payment_details
-  #   tournament_cost_details = [@tournament.cost_breakdown_for_user(@current_user, false, false)]
-
-  #   contest_cost_details = []
-  #   @tournament_day.tournament.tournament_days.each do |td|
-  #     td.contests.each do |c|
-  #       contest_cost_details << c.cost_breakdown_for_user(@current_user, false) if c.dues_amount > 0
-  #     end
-  #   end
-
-  #   cost_details = {:tournament => tournament_cost_details, :contests => contest_cost_details}
-
-  #   respond_with(cost_details) do |format|
-  #     format.json { render :json => cost_details }
-  #   end
-  # end
-
   def payment_details
     tournament_cost_details = @tournament.cost_breakdown_for_user(@current_user, false, false)
 
