@@ -31,6 +31,8 @@ class Api::V1::TournamentDaysController < Api::V1::ApiBaseController
   def register
     registration_information = ActiveSupport::JSON.decode(request.body.read)
 
+    logger.info { "API Registration Details: #{registration_information}" }
+
     user = User.find(registration_information["user_id"])
     tournament_group = @tournament_day.tournament_groups.find(registration_information["tournament_group_id"])
     confirm_user = registration_information["confirm_user"]

@@ -18,6 +18,8 @@ class TournamentDay < ApplicationRecord
 
   attr_accessor :skip_date_validation
 
+  after_create :create_default_flight
+
   delegate :player_score, :compute_player_score, :compute_stroke_play_player_score, :compute_adjusted_player_score, :player_points, :flights_with_rankings, :related_scorecards_for_user, :assign_payouts_from_scores, to: :game_type
   delegate :allow_teams, :show_teams?, :players_create_teams?, :show_team_scores_for_all_teammates?, to: :game_type
   delegate :scorecard_payload_for_scorecard, to: :game_type
@@ -79,6 +81,10 @@ class TournamentDay < ApplicationRecord
     day_string = day_string + " " if add_space == true
 
     return day_string
+  end
+
+  def create_default_flight
+    Flight.create(tournament_day: self, flight_number: 1, lower_bound: 0, upper_bound: 300, course_tee_box: self.course.course_tee_boxes.first)
   end
 
   def eager_groups
