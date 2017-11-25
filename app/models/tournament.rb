@@ -23,6 +23,7 @@ class Tournament < ApplicationRecord
   attr_accessor :contests_to_enter
 
   validates :name, presence: true
+  validates :league, presence: true
   validates :signup_opens_at, presence: true
   validates :signup_closes_at, presence: true
   validates :max_players, presence: true
