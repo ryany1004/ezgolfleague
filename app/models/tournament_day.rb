@@ -122,6 +122,28 @@ class TournamentDay < ApplicationRecord
     return false
   end
 
+  # TODO: Cache
+  # def registered_user_ids
+  #   user_ids = []
+
+  #   self.tournament.players_for_day(self).each do |player|
+  #     user_ids << player.id.to_s unless player.blank?
+  #   end
+
+  #   return user_ids
+  # end
+
+  # # TODO: Cache
+  # def paid_user_ids
+  #   user_ids = []
+
+  #   self.tournament.players_for_day(self).each do |player|
+  #     user_ids << player.id.to_s if self.tournament.user_has_paid?(player)
+  #   end
+
+  #   return user_ids
+  # end
+
   def registered_user_ids
     cache_key = "registereduserids-json#{self.id}-#{self.updated_at.to_i}"
     user_ids = []
@@ -130,6 +152,8 @@ class TournamentDay < ApplicationRecord
       self.tournament.players_for_day(self).each do |player|
         user_ids << player.id.to_s unless player.blank?
       end
+
+      user_ids
     end
 
     user_ids
@@ -143,6 +167,8 @@ class TournamentDay < ApplicationRecord
       self.tournament.players_for_day(self).each do |player|
         user_ids << player.id.to_s if self.tournament.user_has_paid?(player)
       end
+
+      user_ids
     end
 
     user_ids
