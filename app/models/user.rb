@@ -143,7 +143,11 @@ class User < ApplicationRecord
     unless self.current_league.blank?
       return self.current_league
     else
-      return self.leagues.first
+      unless self.leagues_admin.first.blank?
+        return self.leagues_admin.first
+      else
+        return self.leagues.first
+      end
     end
   end
 
