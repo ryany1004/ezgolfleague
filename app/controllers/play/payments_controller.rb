@@ -54,7 +54,7 @@ class Play::PaymentsController < Play::BaseController
       charge_description = "#{current_user.complete_name} Contest Dues"
     elsif params[:league_id] != nil
       league = League.find(params[:league_id])
-      league_season = league.league_seasons.last
+      league_season = league.league_seasons.last #NOTE: this is always going to be attached to the last one
 
       amount = league.dues_for_user(current_user)
       api_key = league.stripe_secret_key

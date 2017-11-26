@@ -3,8 +3,8 @@
   mixpanel.track("Display Player Dashboard");
 </script>
 
-<% unless current_user.selected_league.league_seasons.blank? && current_user.selected_league.dues_amount != 0.0 -%>
-  <%= render partial: 'league_info', locals: {has_paid_dues: current_user.selected_league.league_seasons.last.user_has_paid?(current_user)} %>
+<% unless @league_season.blank? && @league_season.dues_amount != 0.0 -%>
+  <%= render partial: 'league_info', locals: {has_paid_dues: @league_season.user_has_paid?(current_user), league_season: @league_season} %>
 <% end -%>
 
 <% if current_user.selected_league.league_seasons.count > 1 -%>

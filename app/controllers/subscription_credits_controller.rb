@@ -51,12 +51,14 @@ class SubscriptionCreditsController < BaseController
     end
 
     active_status = params[:is_active]
-    active_status.keys.each do |membership_id|
+    unless active_status.blank?
+      active_status.keys.each do |membership_id|
       membership = @league.league_memberships.where(id: membership_id).first
 
       unless membership.blank?
-        membership.state = MembershipStates::ACTIVE_FOR_BILLING
-        membership.save
+         membership.state = MembershipStates::ACTIVE_FOR_BILLING
+         membership.save
+       end
       end
     end
 

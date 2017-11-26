@@ -161,8 +161,12 @@
             <tr>
               <td><strong>Active Golfers</strong></td>
               <td class="text-right">
-                <p>You have <%= @league.league_memberships.active.count %> active golfers in your league</p>
-                <p><a href="#" class="btn btn-default" role="button" data-toggle="modal" data-target="#myModal">Update Active Golfers</a></p>
+                <% if @league.stripe_token.blank? %>
+                  <p>You must enter credit card information below before you can set active golfers.</p>
+                <% else %>
+                  <p>You have <%= @league.league_memberships.active.count %> active golfers in your league</p>
+                  <p><a href="#" class="btn btn-default" role="button" data-toggle="modal" data-target="#myModal">Update Active Golfers</a></p>
+                <% end %>
               </td>
             </tr>
           </tbody>

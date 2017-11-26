@@ -18,6 +18,20 @@
     </div>
   <% end %>
 
+  <% if current_user.selected_league.alert_missing_next_season? %>
+    <div class="col-md-12">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title">Create Your Next Season</h3>
+        </div>
+        <div class="panel-body">
+          <p>Please be sure to create your next season so that your golfers can pay dues and you can create your tournaments.</p>
+          <p><%= link_to "Manage Your Seasons", league_league_seasons_path(current_user.selected_league), :class => 'btn btn-primary' %></p>
+        </div>
+      </div>
+    </div>
+  <% end %>
+
   <% unless @unconfigured_tournaments.blank? -%>
     <%= render partial: 'index_table', locals: {tournaments: @unconfigured_tournaments, title: "Setup In Process", show_create: false} %>
   <% end -%>

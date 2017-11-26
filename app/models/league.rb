@@ -73,6 +73,17 @@ class League < ApplicationRecord
     end
   end
 
+  def alert_missing_next_season?
+    last_season = self.league_seasons.last
+    current_season = self.active_season
+
+    if current_season.ends_at - 60.days < DateTime.now && current_season == last_season
+      true
+    else
+      false
+    end
+  end
+
   def membership_for_user(user)
     return self.league_memberships.where(user: user).first
   end
