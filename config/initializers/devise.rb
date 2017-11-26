@@ -4,13 +4,13 @@ Devise.setup do |config|
   # The secret key used by Devise. Devise uses this key to generate
   # random tokens. Changing this key will render invalid all existing
   # confirmation, reset password and unlock tokens in the database.
-  # config.secret_key = 'f3f2b8d07d45e1f89f510247fa775a9d9c3ca81531e9abcca4a4cd575406133f4d3c4363fddf3bfddb6ac54b191706ec22041463474786c0d186e22e9af7ca80'
+  config.secret_key = 'f3f2b8d07d45e1f89f510247fa775a9d9c3ca81531e9abcca4a4cd575406133f4d3c4363fddf3bfddb6ac54b191706ec22041463474786c0d186e22e9af7ca80'
 
   # ==> Mailer Configuration
   # Configure the e-mail address which will be shown in Devise::Mailer,
   # note that it will be overwritten if you use your own mailer class
   # with default "from" parameter.
-  config.mailer_sender = 'do_not_reply@ezgolfleague.com'
+  config.mailer_sender = 'support@ezgolfleague.com'
 
   # Configure the class responsible to send e-mails.
   # config.mailer = 'Devise::Mailer'
