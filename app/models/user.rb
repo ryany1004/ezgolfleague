@@ -56,7 +56,8 @@ class User < ApplicationRecord
   end
 
   def ghin_url
-    "http://widgets.ghin.com/HandicapLookupResults.aspx?entry=1&ghinno=#{self.ghin_number}&css=default&dynamic=&small=0&mode=&tab=0"
+    #"http://widgets.ghin.com/HandicapLookupResults.aspx?entry=1&ghinno=#{self.ghin_number}&css=default&dynamic=&small=0&mode=&tab=0"
+    "http://162.245.224.193/Widgets/HandicapLookupResults.aspx?entry=1&ghinno=#{self.ghin_number}&css=default&dynamic=&small=0&mode=&tab=0"
   end
 
   ##
