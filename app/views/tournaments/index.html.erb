@@ -4,7 +4,7 @@
 </script>
 
 <div class="row">
-  <% if current_user.selected_league.alert_missing_next_season? || if !current_user.selected_league.exempt_from_subscription %>
+  <% if current_user.selected_league.alert_missing_next_season? || !current_user.selected_league.exempt_from_subscription %>
     <div class="col-md-12">
       <div class="panel panel-default">
         <div class="panel-heading">
