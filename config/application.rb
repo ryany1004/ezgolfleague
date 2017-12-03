@@ -32,7 +32,5 @@ module EzgolfRails
     }
 
     ActiveRecord::Base.include_root_in_json = false
-
-    ActiveSupport.halt_callback_chains_on_return_false = false
   end
 end
