@@ -88,6 +88,12 @@ class League < ApplicationRecord
     return self.league_memberships.where(user: user).first
   end
 
+  def set_user_as_active(user)
+    membership = self.membership_for_user(user)
+    membership.state == MembershipStates::ACTIVE_FOR_BILLING
+    membership.save
+  end
+
   def dues_for_user(user, include_credit_card_fees = true)
     membership = self.league_memberships.where(user: user).first
 

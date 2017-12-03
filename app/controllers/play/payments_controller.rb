@@ -60,6 +60,8 @@ class Play::PaymentsController < Play::BaseController
       api_key = league.stripe_secret_key
       charge_description = "#{current_user.complete_name} League Dues"
 
+      league.set_user_as_active(current_user) #make this golfer active
+
       Payment.create(payment_amount: (amount * -1.0), user: current_user, payment_type: charge_description, league_season: league_season)
 
       LeagueMailer.league_dues_payment_confirmation(current_user, league_season).deliver_later unless league.dues_payment_receipt_email_addresses.blank?

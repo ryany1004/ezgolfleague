@@ -239,8 +239,18 @@ class User < ApplicationRecord
     end
   end
 
+  def names_of_leagues_admin
+    names = ""
+
+    self.leagues_where_admin.each do |l|
+      names += l.name + " "
+    end
+
+    names
+  end
+
   def self.to_csv
-    attributes = %w{id email first_name last_name phone_number created_at}
+    attributes = %w{id email first_name last_name phone_number names_of_leagues_admin created_at}
 
     CSV.generate(headers: true) do |csv|
       csv << attributes

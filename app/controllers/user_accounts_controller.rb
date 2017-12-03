@@ -95,7 +95,18 @@ class UserAccountsController < BaseController
     @users = User.all
 
     respond_to do |format|
-      format.csv { send_data @users.to_csv, filename: "users-#{Date.today}.csv" }
+      format.csv { send_data @users.to_csv, filename: "all_users-#{Date.today}.csv" }
+    end
+  end
+
+  def export_league_admins
+    @users = []
+    User.all.each do |u|
+      @users << u if u.is_any_league_admin?
+    end
+
+    respond_to do |format|
+      format.csv { send_data @users.to_csv, filename: "league_admin_users-#{Date.today}.csv" }
     end
   end
 

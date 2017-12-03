@@ -228,6 +228,7 @@ Rails.application.routes.draw do
     post 'send_golfer_invite', on: :collection
 
     patch 'export_users', on: :collection
+    patch 'export_league_admins', on: :collection
 
     get 'impersonate'
     get 'stop_impersonating', on: :collection
