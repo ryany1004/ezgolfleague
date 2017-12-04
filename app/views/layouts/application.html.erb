@@ -151,7 +151,7 @@ mixpanel.init("567e75f3f6b245aac0a54f6481629537");</script><!-- end Mixpanel -->
 
 <footer class="container">
   <br/>
-  Copyright © EZ Golf League | <%= link_to "Privacy Policy", "/privacy_policy.html" %> | <%= link_to "Terms of Service", "/terms_of_service.html" %>
+  Copyright © EZ Golf League | <%= link_to "Privacy Policy", "/privacy_policy.html" %> | <%= link_to "Terms of Service", "/terms_of_service.html" %> <% if current_user.is_super_user %>| <%= link_to "Jobs Queue", "/jobs" %><% end %>
 
   <br/><br/>
   <div>
