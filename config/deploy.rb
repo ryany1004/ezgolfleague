@@ -42,7 +42,7 @@ role :resque_scheduler, "production.ezgolfleague.com"
 
 set :resque_environment_task, true
 set :resque_log_file, "log/resque.log"
-set :workers, { "ezgolfleague_production_default" => 2 }
+set :workers, { "default" => 2 }
 
 namespace :deploy do
 
@@ -72,7 +72,7 @@ namespace :deploy do
   after :publishing, :restart
   after :publishing, :fix_permissions
   after :finished, 'airbrake:deploy'
-  after "deploy:restart", "resque:restart"
+  after 'airbrake:deploy', 'resque:restart'
 
   after :restart, :clear_cache do
     on roles(:web), in: :groups, limit: 3, wait: 10 do
