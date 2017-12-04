@@ -116,7 +116,7 @@ class TournamentsController < BaseController
       redirect_to league_tournaments_path(current_user.selected_league), :flash => { :error => "One or more days had no tee-times. Re-scheduling was aborted." }
     else
       @tournament.tournament_days.each do |day|
-        Delayed::Job.enqueue AutoscheduleJob.new(day) if day.has_scores? == false
+        AutoscheduleJob.perform_later(day) if day.has_scores? == false
       end
       redirect_to league_tournaments_path(current_user.selected_league), :flash => { :success => "Days without scores were submitted to be auto-scheduled. This usually takes a few minutes." }
     end
@@ -129,23 +129,13 @@ class TournamentsController < BaseController
 
     if @tournament.can_be_finalized?
       @stage_name = "finalize"
+
+      @tournament.run_finalize
+
+      @tournament_days = @tournament.tournament_days.includes(payout_results: [:flight, :user, :payout], tournament_day_results: [:user, :primary_scorecard], tournament_groups: [golf_outings: [:user, :scorecard]])
     else
       redirect_to league_tournament_flights_path(current_user.selected_league, @tournament), :flash => { :error => "This tournament cannot be finalized. Verify all flights and payouts exist and if this is a team tournament that all team-members are correctly registered in all contests." }
     end
-  end
-
-  def run_finalization
-    @job = Delayed::Job.enqueue FinalizeJob.new(@tournament)
-
-    @display_path = league_tournament_display_finalization_path(current_user.selected_league, @tournament)
-  end
-
-  def display_finalization
-    @page_title = "Finalize Tournament"
-
-    @stage_name = "finalize"
-
-    @tournament_days = @tournament.tournament_days.includes(payout_results: [:flight, :user, :payout], tournament_day_results: [:user, :primary_scorecard], tournament_groups: [golf_outings: [:user, :scorecard]])
   end
 
   def confirm_finalization

@@ -44,7 +44,7 @@ Rails.application.configure do
   # config.action_dispatch.x_sendfile_header = 'X-Accel-Redirect' # for NGINX
 
   # Force all access to the app over SSL, use Strict-Transport-Security, and use secure cookies.
-  # config.force_ssl = true
+  config.force_ssl = true
 
   # Use the lowest log level to ensure availability of diagnostic information
   # when problems arise.
@@ -59,8 +59,7 @@ Rails.application.configure do
   # config.logger = ActiveSupport::TaggedLogging.new(SyslogLogger.new)
 
   # Use a different cache store in production.
-  #config.cache_store = :mem_cache_store
-  config.cache_store = :dalli_store, '127.0.0.1', { :username => 'memcached' }
+  config.cache_store = :redis_store
 
   # Enable serving of images, stylesheets, and JavaScripts from an asset server.
   # config.action_controller.asset_host = 'http://assets.example.com'
@@ -85,6 +84,10 @@ Rails.application.configure do
   config.action_mailer.default_url_options = { protocol: 'https', :host => 'app.ezgolfleague.com' }
 
   config.enable_dependency_loading = true
+
+  # Use a real queuing backend for Active Job (and separate queues per environment)
+  config.active_job.queue_adapter     = :resque
+  config.active_job.queue_name_prefix = "ezgolfleague_#{Rails.env}"
 
   ActionMailer::Base.smtp_settings = {
     address: "smtp.sendgrid.net",

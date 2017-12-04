@@ -18,7 +18,7 @@ class TournamentNotificationsController < BaseController
     @notification_template = NotificationTemplate.new(notification_template_params)
 
     if @notification_template.save
-      Delayed::Job.enqueue SendNotificationsJob.new()
+      SendNotificationsJob.perform_later
 
       if params[:commit] == "Save & Complete Tournament Setup"
         redirect_to league_tournaments_path(current_user.selected_league), :flash => { :success => "The notification was successfully created." }
@@ -35,7 +35,7 @@ class TournamentNotificationsController < BaseController
 
   def update
     if @notification_template.update(notification_template_params)
-      Delayed::Job.enqueue SendNotificationsJob.new()
+      SendNotificationsJob.perform_later
 
       redirect_to league_tournament_tournament_notifications_path, :flash => { :success => "The notification was successfully updated." }
     else

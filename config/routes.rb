@@ -1,3 +1,5 @@
+require 'resque/server'
+
 Rails.application.routes.draw do
   if Rails.env.production?
     default_url_options :host => "app.ezgolfleague.com"
@@ -11,8 +13,8 @@ Rails.application.routes.draw do
   get 'apple-app-site-association', to: 'api/v1/tournaments#app_association'
   get '.well-known/apple-app-site-association', to: 'api/v1/tournaments#app_association'
 
-  authenticated :user, -> user { user.is_super_user }  do
-    mount DelayedJobWeb, at: "/delayed_job", :anchor => false, :via => [:get, :post]
+  authenticate :user, -> user { user.is_super_user } do
+    mount Resque::Server, at: '/jobs'
   end
 
   #this is for playing tournaments
@@ -180,8 +182,6 @@ Rails.application.routes.draw do
       patch 'update_auto_schedule'
 
       get 'finalize'
-      get 'run_finalization'
-      get 'display_finalization'
       patch 'confirm_finalization'
 
       patch 'update_course_handicaps'

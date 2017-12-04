@@ -217,6 +217,47 @@ class Tournament < ApplicationRecord
     self.last_day.can_be_finalized?
   end
 
+  def run_finalize
+    tournament_days = self.tournament_days.includes(payout_results: [:flight, :user, :payout], tournament_day_results: [:user, :primary_scorecard], tournament_groups: [golf_outings: [:user, scorecard: :scores]])
+
+    Rails.logger.info { "Finalize: Starting" }
+
+    tournament_days.each do |day|
+      Rails.logger.info { "Finalize #{day.id}: Re-Scoring Users" }
+      day.score_users
+
+      Rails.logger.info { "Finalize #{day.id}: Assigning Payouts" }
+      day.assign_payouts_from_scores
+
+      Rails.logger.info { "Finalize #{day.id}: Scoring Contests" }
+      day.contests.each do |contest|
+        contest.score_contest
+      end
+
+      Rails.logger.info { "Finalize #{day.id}: All Done!" }
+
+      day.touch
+    end
+
+    if self.subscription_credit.blank?
+      subscription_to_attach = self.league.subscription_credits.where("tournaments_remaining > 0").order("created_at").limit(1).first
+
+      unless subscription_to_attach.blank?
+        self.subscription_credit = subscription_to_attach
+        self.save
+
+        subscription_to_attach.tournaments_remaining = subscription_to_attach.tournaments_remaining - 1
+        subscription_to_attach.save
+      end
+    end
+
+    #cache bust
+    self.league.active_season.touch unless self.league.active_season.blank?
+
+    #email completion
+    LeagueMailer.tournament_finalized(self).deliver_later unless self.league.dues_payment_receipt_email_addresses.blank?
+  end
+
   ##
 
   def is_past?

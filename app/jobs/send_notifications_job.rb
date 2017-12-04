@@ -1,12 +1,6 @@
-class SendNotificationsJob < ProgressJob::Base
-  def initialize()
-    @templates = NotificationTemplate.where("deliver_at <= ?", DateTime.now).where("has_been_delivered = ?", false)
-
-    super progress_max: @templates.count
-  end
-
+class SendNotificationsJob < ApplicationJob
   def perform
-    update_stage('Sending Notifications')
+    @templates = NotificationTemplate.where("deliver_at <= ?", DateTime.now).where("has_been_delivered = ?", false)
 
     pusher = User.pusher #this starts to break if we have mixed dev/prod notifications
 
@@ -27,8 +21,6 @@ class SendNotificationsJob < ProgressJob::Base
 
       t.has_been_delivered = true
       t.save
-
-      update_progress
     end
   end
 end

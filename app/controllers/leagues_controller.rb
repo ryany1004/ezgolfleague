@@ -48,7 +48,7 @@ class LeaguesController < BaseController
     @league = League.find(params[:league_id])
 
     users = @league.users.where("ghin_number IS NOT NULL").where("ghin_number != ''").order("ghin_updated_at")
-    Delayed::Job.enqueue GhinUpdateJob.new(users)
+    GhinUpdateJob.perform_later(users)
 
     redirect_to leagues_path, :flash => { :success => "League members will be updated by GHIN." }
   end

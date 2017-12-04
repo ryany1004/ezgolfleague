@@ -28,14 +28,14 @@ module Updaters
             Rails.logger.info { "Updating Score: #{score.id}" }
 
             scorecard_to_rescore = score.scorecard
-            Delayed::Job.enqueue UpdateUserScorecardJob.new(scorecard_to_rescore, []) unless scorecard_to_rescore.blank?
+            UpdateUserScorecardJob.perform_later(scorecard_to_rescore, []) unless scorecard_to_rescore.blank?
           else
             Rails.logger.info { "Not Updating Scores - Too Old #{date_scored}" }
           end
         end
       end
 
-      Delayed::Job.enqueue UpdateUserScorecardJob.new(primary_scorecard, other_scorecards)
+      UpdateUserScorecardJob.perform_later(primary_scorecard, other_scorecards)
     end
 
   end

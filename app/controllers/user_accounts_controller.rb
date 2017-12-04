@@ -32,7 +32,7 @@ class UserAccountsController < BaseController
       redirect_to user_accounts_path, :flash => { :success => "The user was successfully invited." }
     else
       if @user_account.save
-        Delayed::Job.enqueue GhinUpdateJob.new([@user_account]) unless @user_account.ghin_number.blank?
+        GhinUpdateJob.perform_later([@user_account]) unless @user_account.ghin_number.blank?
 
         redirect_to user_accounts_path, :flash => { :success => "The user was successfully created." }
       else
@@ -51,7 +51,7 @@ class UserAccountsController < BaseController
       unless @user_account.ghin_number.blank?
         Rails.logger.info { "Updating GHIN for #{@user_account}" }
 
-        Delayed::Job.enqueue GhinUpdateJob.new([@user_account])
+        GhinUpdateJob.perform_later([@user_account])
       else
         Rails.logger.info { "Not Updating GHIN for #{@user_account}" }
       end

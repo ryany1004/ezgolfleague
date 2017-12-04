@@ -25,10 +25,12 @@ gem 'airbrake', '~> 5.0'
 gem 'nokogiri'
 gem 'attr_encrypted', '~> 3.0.0'
 gem 'stripe', git: 'https://github.com/stripe/stripe-ruby'
-gem 'delayed_job_active_record'
-gem 'delayed_job_web'
+gem 'redis-rails'
+gem 'resque'
+gem 'resque-scheduler'
+gem 'resque-retry'
+gem 'resque-web', require: 'resque_web'
 gem 'daemons'
-gem 'progress_job', github: 'HunterHillegas/progress_job'
 gem 'apnotic'
 gem 'geocoder'
 gem 'fcm'
@@ -37,6 +39,7 @@ gem 'capistrano', '~> 3.3.3'
 gem 'capistrano3-delayed-job', '~> 1.0'
 gem 'capistrano-rails', '~> 1.1'
 gem 'capistrano-bundler', '~> 1.1.3'
+gem "capistrano-resque", "~> 0.2.2", require: false
 
 group :development do
   gem 'web-console'
@@ -60,5 +63,4 @@ end
 group :production do
   gem 'pg'
   gem 'dalli'
-  gem 'scout_apm'
 end

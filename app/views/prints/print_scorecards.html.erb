@@ -1,41 +1,25 @@
-<ol class="breadcrumb">
-  <li><%= link_to "Tournaments", league_tournaments_path(current_user.selected_league) %></li>
-  <li><%= link_to @tournament.name, edit_league_tournament_path(current_user.selected_league, @tournament) %></li>
-  <li class="active">Scorecards</li>
-</ol>
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Print Scorecards - EZ Golf League</title>
+  <%= stylesheet_link_tag 'application', media: 'all' %>
+  <%= javascript_include_tag 'application' %>
+  <%= csrf_meta_tags %>
+</head>
+  <body "data-no-turbolink">
+    <div class="container master-container">
+      <script>
+          javascript:window.print()
+      </script>
 
-<%= render partial: '/shared/tournaments/manage', locals: {tournament: @tournament, stage: @stage_name} %>
+      <% @print_cards.each_with_index do |print_card, index| -%>
+        <% if index > 0 && index % 2 == 0 -%>
+          <h2>&nbsp;</h2>
+        <% end -%>
 
-<!-- Progress Bar -->
-<div class="modal fade" id="progressModal" tabindex="-1" role="dialog">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title">Print Scorecards</h4>
-      </div>
-      <div class="modal-body">
-        <p>This process takes a few minutes up to about 10 minutes for large, active tournaments. When complete, the page will reload automatically and display the scorecards.</p>
-        <p><strong>Please do not close this tab or refresh your browser manually.</strong></p>
-        <%= link_to "Generate Scorecards", run_print_scorecards_prints_path(:tournament_id => @tournament, tournament_day: @tournament_day), :id => 'finalize-button', :class => 'btn btn-primary', id: "print-button", :role => 'button', remote: true %>
-        <br/><br/>
-        <div class='progress-status text-primary'>
-          0
-        </div>
-        <div class='progress progress-striped active'>
-          <div class='progress-bar'>
-            <div class='text-primary'>
-              0%
-            </div>
-          </div>
-        </div>
-      </div>
-    </div><!-- /.modal-content -->
-  </div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
-<script>
-$(document).ready(function() {
-    $('#progressModal').modal('show');
-});
-</script>
-<!-- End PB -->
+        <%= render partial: '/shared/scorecards/print', locals: {p: print_card[:p], print_mode: true} %>
+      <% end -%>
+
+    </div>
+  </body>
+</html>

@@ -9,39 +9,113 @@
 <% if @tournament.players.count == 0 -%>
   <p><strong>This tournament does not yet have any players and cannot be finalized.</strong></p>
 <% else -%>
-  <!-- Progress Bar -->
-  <div class="modal fade" id="progressModal" tabindex="-1" role="dialog">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-          <h4 class="modal-title">Finalize Tournament</h4>
-        </div>
-        <div class="modal-body">
-          <p>Finalizing a tournament will analyze scores and determine payouts by flight as well as for contests.</p>
-          <p>This process takes a few minutes (or more for large or multi-day tournaments). When complete, the page will reload automatically and display the results.</p>
-          <p><strong>Please don't refresh your browser manually.</strong></p>
-          <p><strong>If you don't want to wait, you can close this window and we will email you when this process is complete.</strong></p>
-          <%= link_to "Start Finalization", league_tournament_run_finalization_path(current_user.selected_league, @tournament), :id => 'finalize-button', :class => 'btn btn-primary', :role => 'button', remote: true %>
-          <br/><br/>
-          <div class='progress-status text-primary'>
-            0
-          </div>
-          <div class='progress progress-striped active'>
-            <div class='progress-bar'>
-              <div class='text-primary'>
-                0%
-              </div>
-            </div>
-          </div>
-        </div>
-      </div><!-- /.modal-content -->
-    </div><!-- /.modal-dialog -->
-  </div><!-- /.modal -->
-  <script>
-  $(document).ready(function() {
-      $('#progressModal').modal('show');
-  });
-  </script>
-  <!-- End PB -->
+
+<div class="row">
+  <div class="col-md-12">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">Calculated Payouts</h3>
+      </div>
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>Day</th>
+            <th>Flight</th>
+            <th>Player</th>
+            <th>Score</th>
+            <th>Course Handicap</th>
+            <th>Amount</th>
+            <th>Points</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @tournament_days.each do |day| -%>
+            <% day.payout_results.order("flight_id").order("amount DESC").each do |payout_result| -%>
+              <tr>
+                <td><%= day.tournament_at.to_s(:short) %></td>
+                <td><%= payout_result.flight.flight_number %></td>
+                <td><%= payout_result.user.complete_name unless payout_result.user.blank? %></td>
+                <td><%= day.player_score(payout_result.user) unless payout_result.user.blank? %></td>
+                <td><%= day.golf_outing_for_player(payout_result.user).course_handicap.to_i unless payout_result.user.blank? || day.golf_outing_for_player(payout_result.user).blank? %></td>
+                <td><%= number_to_currency(payout_result.amount) %></td>
+                <td><%= payout_result.points.to_i %></td>
+              </tr>
+            <% end -%>
+          <% end -%>
+        </tbody>
+        <tfoot>
+          <tr>
+            <th>&nbsp;</th>
+            <th>&nbsp;</th>
+            <th>&nbsp;</th>
+            <th>&nbsp;</th>
+            <th>&nbsp;</th>
+            <th>&nbsp;</th>
+            <th><%= link_to 'Confirm Finalization', league_tournament_confirm_finalization_path(@tournament.league, @tournament), :method => :patch, :class => 'btn btn-danger' %></th>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+  </div>
+
+  <div class="col-md-12">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">Contest Results</h3>
+      </div>
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>Day</th>
+            <th>Contest</th>
+            <th>Winner(s)</th>
+            <th>Amount</th>
+            <th>Points</th>
+            <th>Details</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @tournament_days.each do |day| %>
+            <% day.contests.each do |c| %>
+            <tr>
+              <td><%= day.tournament_at.to_s(:short) %></td>
+              <td><%= c.name %></td>
+              <td><%= format_winners(c.winners) %></td>
+              <td><%= format_payout(c.winners) %></td>
+              <td><%= format_points(c.winners) %></td>
+              <td><%= format_results(c.winners) %></td>
+            </tr>
+            <% end %>
+          <% end =%>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <% @tournament_days.each do |day| -%>
+    <div class="col-md-12">
+      <h3><%= day.pretty_day(true) %>Results</h3>
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>Player</th>
+            <th>Gross</th>
+            <th>Net</th>
+            <th>&nbsp;</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% day.tournament_day_results.each do |result| %>
+            <tr>
+              <td><%= result.user.complete_name %><% if result.primary_scorecard != nil && !result.primary_scorecard.is_confirmed? -%> (Unconfirmed by Player)<% end -%></td>
+              <td><%= result.gross_score %></td>
+              <td><%= result.net_score %></td>
+              <td><%= link_to "Edit Scorecard", edit_scorecard_path(result.primary_scorecard) unless result.primary_scorecard.blank? %></td>
+            </tr>
+          <% end -%>
+        </tbody>
+      </table>
+    </div>
+  <% end -%>
+</div>
 <% end -%>

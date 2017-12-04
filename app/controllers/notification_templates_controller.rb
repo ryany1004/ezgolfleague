@@ -30,7 +30,7 @@ class NotificationTemplatesController < BaseController
     end
 
     if @notification_template.save
-      Delayed::Job.enqueue SendNotificationsJob.new()
+      SendNotificationsJob.perform_later
 
       redirect_to notification_templates_path, :flash => { :success => "The notification was successfully created." }
     else
@@ -43,7 +43,7 @@ class NotificationTemplatesController < BaseController
 
   def update
     if @notification_template.update(notification_template_params)
-      Delayed::Job.enqueue SendNotificationsJob.new()
+      SendNotificationsJob.perform_later
 
       redirect_to notification_templates_path, :flash => { :success => "The notification was successfully updated." }
     else
