@@ -130,7 +130,7 @@ class TournamentsController < BaseController
     if @tournament.can_be_finalized?
       @stage_name = "finalize"
 
-      @tournament.run_finalize
+      @tournament.run_finalize unless !params[:bypass_calc].blank?
 
       @tournament_days = @tournament.tournament_days.includes(payout_results: [:flight, :user, :payout], tournament_day_results: [:user, :primary_scorecard], tournament_groups: [golf_outings: [:user, :scorecard]])
     else
