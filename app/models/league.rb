@@ -77,6 +77,8 @@ class League < ApplicationRecord
     last_season = self.league_seasons.last
     current_season = self.active_season
 
+    return false if current_season.blank?
+
     if current_season.ends_at - 60.days < DateTime.now && current_season == last_season
       true
     else
