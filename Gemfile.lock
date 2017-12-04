@@ -1,11 +1,4 @@
 GIT
-  remote: git://github.com/HunterHillegas/progress_job.git
-  revision: d6dbfd8add78d749283aba1ec2b9130bba1ad470
-  specs:
-    progress_job (0.0.4)
-      delayed_job
-
-GIT
   remote: git://github.com/derekprior/momentjs-rails.git
   revision: ea58a20b7b2c901831dd01f34e0054ef6c75bde8
   specs:
@@ -146,8 +139,6 @@ GEM
     crass (1.0.3)
     daemons (1.2.5)
     dalli (2.7.6)
-    delayed_job (4.1.3)
-      activesupport (>= 3.0, < 5.2)
     derailed (0.1.0)
       derailed_benchmarks
     derailed_benchmarks (1.3.2)
@@ -465,7 +456,6 @@ DEPENDENCIES
   paperclip (~> 5.0.0)
   pg
   pretender
-  progress_job!
   rack-mini-profiler
   rails (= 5.1)
   redis-rails
