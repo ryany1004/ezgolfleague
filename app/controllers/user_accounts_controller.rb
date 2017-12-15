@@ -102,6 +102,8 @@ class UserAccountsController < BaseController
   def impersonate
     user = User.find(params[:user_account_id])
 
+    session[:selected_season_id] = nil
+    
     impersonate_user(user)
 
     redirect_to root_path
