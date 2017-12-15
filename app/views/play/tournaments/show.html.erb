@@ -155,8 +155,8 @@
           <tbody>
             <% @tournament_presenter.contests.each do |contest| %>
             <tr>
-              <td><%= contest[:name] %></td>
-              <td><%= format_winners(contest[:winners]) %></td>
+              <td width="20%"><%= contest[:name] %></td>
+              <td width="25%"><%= format_winners(contest[:winners]) %></td>
               <td><%= format_payout(contest[:winners]) %></td>
               <td><%= format_points(contest[:winners]) %></td>
               <td><%= format_results(contest[:winners]) %></td>
