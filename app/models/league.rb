@@ -148,7 +148,7 @@ class League < ApplicationRecord
   ##
 
   def active_season
-    this_year_season = self.league_seasons.where("starts_at < ? AND ends_at > ?", Date.current.in_time_zone, Date.current.in_time_zone).first
+    this_year_season = self.league_seasons.where("starts_at <= ? AND ends_at >= ?", Date.current.in_time_zone, Date.current.in_time_zone).first
 
     return this_year_season
   end

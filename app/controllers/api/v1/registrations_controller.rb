@@ -16,7 +16,7 @@ class Api::V1::RegistrationsController < Api::V1::ApiBaseController
     user = User.create(email: email, first_name: first_name, last_name: last_name, password: password, password_confirmation: password, phone_number: phone_number, ghin_number: ghin_number)
 
     if user.save
-      GhinUpdateJob.perform_later([user]) unless user.ghin_number.blank?
+      GhinUpdateJob.perform_later([user.id]) unless user.ghin_number.blank?
 
       UserMailer.welcome(user).deliver_later
 

@@ -128,7 +128,7 @@ mixpanel.init("567e75f3f6b245aac0a54f6481629537");</script><!-- end Mixpanel -->
     </div>
   <% end %>
 
-  <% if !current_user.selected_league.has_active_subscription? %>
+  <% if user_signed_in? && !current_user.selected_league.has_active_subscription? %>
     <div class="alert alert-warning fade in">
       You do not have an active subscription. Please <%= link_to "visit the subscription page", current_league_subscription_credits_path(current_user.selected_league) %> to setup billing and purchase tournament credits.
     </div>
@@ -137,6 +137,7 @@ mixpanel.init("567e75f3f6b245aac0a54f6481629537");</script><!-- end Mixpanel -->
   <%= yield %>
 </div>
 
+<% if user_signed_in? -%>
 <script>
   $(function() {
     mixpanel.people.set({
@@ -148,6 +149,7 @@ mixpanel.init("567e75f3f6b245aac0a54f6481629537");</script><!-- end Mixpanel -->
     });
   });
 </script>
+<% end %>
 
 <footer class="container">
   <br/>
@@ -160,7 +162,7 @@ mixpanel.init("567e75f3f6b245aac0a54f6481629537");</script><!-- end Mixpanel -->
     <a href='https://play.google.com/store/apps/details?id=com.ezgolfleague.golfapp&hl=en'><%= image_tag 'google-play-badge.png', width: "200" %></a>
   </div>
 
-  <% if current_user != true_user && true_user.is_super_user %>
+  <% if user_signed_in? && current_user != true_user && true_user.is_super_user %>
     <br/><br/>
     <strong>You (<%= true_user.complete_name %>) are signed in as <%= current_user.complete_name %>
     <br/>

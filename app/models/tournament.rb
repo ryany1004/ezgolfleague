@@ -53,6 +53,13 @@ class Tournament < ApplicationRecord
     end
   end
 
+  validate :league_has_season
+  def league_has_season
+    if self.signup_closes_at > self.league.league_seasons.last.ends_at
+      errors.add(:signup_closes_at, "can't be after your last season ends. Please create a league season in Leagues > Actions (Manage Seasons) that includes this date.")
+    end
+  end
+
   paginates_per 20
 
   def league_season

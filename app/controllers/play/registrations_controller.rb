@@ -16,7 +16,7 @@ class Play::RegistrationsController < Play::BaseController
     @show_apps_in_footer = false
 
     if @user_account.save
-      GhinUpdateJob.perform_later([@user_account]) unless @user_account.ghin_number.blank?
+      GhinUpdateJob.perform_later([@user_account.id]) unless @user_account.ghin_number.blank?
 
       UserMailer.welcome(@user_account).deliver_later
 

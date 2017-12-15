@@ -40,7 +40,7 @@ class LeagueMembershipsController < BaseController
       unless @league_membership.user.ghin_number.blank?
         Rails.logger.info { "Updating GHIN for #{@league_membership.user}" }
 
-        GhinUpdateJob.perform_later([@league_membership.user])
+        GhinUpdateJob.perform_later([@league_membership.user.id])
       end
 
       redirect_to league_league_memberships_path(@league), :flash => { :success => "The membership was successfully updated." }

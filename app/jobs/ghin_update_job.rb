@@ -1,5 +1,6 @@
 class GhinUpdateJob < ApplicationJob
-  def perform(users)
+  def perform(user_ids)
+    users = User.where(id: user_ids)
     users.each_with_index do |u, i|
       Importers::GHINImporter.import_ghin_for_user(u)
 
@@ -12,5 +13,4 @@ class GhinUpdateJob < ApplicationJob
 
     Rails.logger.info { "GHIN Update Job Complete" }
   end
-
 end

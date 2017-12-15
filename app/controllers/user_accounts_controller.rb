@@ -51,7 +51,7 @@ class UserAccountsController < BaseController
       unless @user_account.ghin_number.blank?
         Rails.logger.info { "Updating GHIN for #{@user_account}" }
 
-        GhinUpdateJob.perform_later([@user_account])
+        GhinUpdateJob.perform_later([@user_account.id])
       else
         Rails.logger.info { "Not Updating GHIN for #{@user_account}" }
       end
