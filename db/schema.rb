@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171217213810) do
+ActiveRecord::Schema.define(version: 20171217220349) do
 
   create_table "contest_holes", force: :cascade do |t|
     t.integer "contest_id"
@@ -181,6 +181,7 @@ ActiveRecord::Schema.define(version: 20171217213810) do
     t.boolean "is_confirmed", default: false
     t.integer "tournament_group_id"
     t.boolean "disqualified", default: false
+    t.string "registered_by"
     t.index ["course_tee_box_id"], name: "index_golf_outings_on_course_tee_box_id"
     t.index ["is_confirmed"], name: "index_golf_outings_on_is_confirmed"
     t.index ["tournament_group_id"], name: "index_golf_outings_on_tournament_group_id"

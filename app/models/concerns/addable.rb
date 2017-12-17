@@ -1,17 +1,17 @@
 module Addable
   extend ActiveSupport::Concern
 
-  def add_player_to_group(tournament_group, user, paying_with_credit_card = false, confirmed = true)
+  def add_player_to_group(tournament_group, user, paying_with_credit_card = false, confirmed = true, registered_by = nil)
     if self.tournament.includes_player?(user, self) == true
-        Rails.logger.info { "Player is Already Registered - Do Not Register Again. #{user.complete_name}" }
+      Rails.logger.info { "Player is Already Registered - Do Not Register Again. #{user.complete_name}" }
 
-        return
+      return
     end
 
     Tournament.transaction do
       Rails.logger.debug { "Adding to Group" }
 
-      outing = GolfOuting.create!(tournament_group: tournament_group, user: user, confirmed: confirmed)
+      outing = GolfOuting.create!(tournament_group: tournament_group, user: user, confirmed: confirmed, registered_by: registered_by)
       scorecard = Scorecard.create!(golf_outing: outing)
 
       Rails.logger.debug { "Added to Group" }

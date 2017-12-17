@@ -73,7 +73,7 @@ module AutoSchedulable
 
         Rails.logger.debug { "Adding Player #{player.complete_name} to group #{slot.id}." }
 
-        self.add_player_to_group(slot, player, false, true)
+        self.add_player_to_group(slot, player, false, true, "Auto-Schedule")
 
         #add to new team
         if self.tournament.display_teams?
