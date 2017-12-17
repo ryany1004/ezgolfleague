@@ -214,7 +214,7 @@
                 <% flight[:players].each_with_index do |player, i| -%>
                 <tr>
                   <td><strong><%= flight[:flight_number] %></strong></td>
-                  <td><strong><%= i + 1 %></strong></td>
+                  <td><strong><%= player[:ranking] %></strong></td>
                   <td><%= player[:name] %></td>
                   <td><%= player[:net_score] %></td>
                   <td><%= player[:gross_score] %></td>
