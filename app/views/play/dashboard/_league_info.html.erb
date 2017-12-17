@@ -5,7 +5,10 @@
         <h3 class="panel-title"><%= current_user.selected_league.name %></h3>
       </div>
       <div class="panel-body">
-        <p><em>Your current league balance is <%= number_to_currency(current_user.payments_for_league(current_user.selected_league).map(&:payment_amount).sum) %>. You can use positive balances to pay league dues and tournament fees.</em></p>
+        <% if current_user.selected_league.display_balances_to_players %>
+          <p><em>Your current league balance is <%= number_to_currency(current_user.payments_for_league(current_user.selected_league).map(&:payment_amount).sum) %>. You can use positive balances to pay league dues and tournament fees.</em></p>
+        <% end %>
+
         <p><%= link_to "View your complete transaction history.", play_payments_path %></p>
         <% if has_paid_dues == false -%>
           <p><%= link_to "Pay #{league_season.name} Dues Now", new_play_payment_path(:payment_type => "league_dues", :league_id => current_user.selected_league.id, :league_season_id => league_season), :class => 'btn btn-primary' %></p>

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171022175023) do
+ActiveRecord::Schema.define(version: 20171217213810) do
 
   create_table "contest_holes", force: :cascade do |t|
     t.integer "contest_id"
@@ -257,6 +257,7 @@ ActiveRecord::Schema.define(version: 20171022175023) do
     t.integer "cc_expire_year"
     t.date "start_date"
     t.integer "free_tournaments_remaining", default: 2
+    t.boolean "display_balances_to_players", default: true
   end
 
   create_table "mobile_devices", force: :cascade do |t|
