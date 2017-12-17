@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :flight do
     flight_number 1
     lower_bound 0

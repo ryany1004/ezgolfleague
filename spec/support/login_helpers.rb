@@ -1,8 +1,8 @@
 module LoginHelpers
   def login_user
-    user = FactoryGirl.create(:user)
-    league = FactoryGirl.create(:league)
-    league_membership = FactoryGirl.create(:league_membership, league: league, user: user, is_admin: true)
+    user = FactoryBot.create(:user)
+    league = FactoryBot.create(:league)
+    league_membership = FactoryBot.create(:league_membership, league: league, user: user, is_admin: true)
 
     user
   end

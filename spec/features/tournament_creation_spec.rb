@@ -4,7 +4,7 @@ require 'rails_helper'
 
 describe "Creating a tournament" do
   before(:each) do
-    course = FactoryGirl.create(:course_with_holes)
+    course = FactoryBot.create(:course_with_holes)
 
     user = login_user
     login_as(user, scope: :user)

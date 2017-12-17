@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :user do
     email "hunter@lastonepicked.com"
     is_super_user true

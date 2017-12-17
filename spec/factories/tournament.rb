@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :tournament do
     name "Hunter Stroke Play"
     signup_opens_at { DateTime.now }

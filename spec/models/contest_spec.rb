@@ -3,18 +3,18 @@ require 'rails_helper'
 #ActiveRecord::Base.logger = Logger.new(STDOUT) if defined?(ActiveRecord::Base)
 
 describe "Testing Contest" do
-  let(:user) { FactoryGirl.create(:user) }
-  let(:league) { FactoryGirl.create(:league) }
-  let(:league_membership) { FactoryGirl.create(:league_membership, league: league, user: user) }
-  let(:course) { FactoryGirl.create(:course_with_holes) }
-  let(:tournament) { FactoryGirl.create(:tournament, league: league) }
-  let(:tournament_day) { FactoryGirl.create(:tournament_day, tournament: tournament, course: course) }
-  let(:tournament_group) { FactoryGirl.create(:tournament_group, tournament_day: tournament_day) }
+  let(:user) { FactoryBot.create(:user) }
+  let(:league) { FactoryBot.create(:league) }
+  let(:league_membership) { FactoryBot.create(:league_membership, league: league, user: user) }
+  let(:course) { FactoryBot.create(:course_with_holes) }
+  let(:tournament) { FactoryBot.create(:tournament, league: league) }
+  let(:tournament_day) { FactoryBot.create(:tournament_day, tournament: tournament, course: course) }
+  let(:tournament_group) { FactoryBot.create(:tournament_group, tournament_day: tournament_day) }
 
   it "net + gross skins scores correctly" do
     add_to_group_and_create_scores(tournament_day, user, tournament_group)
 
-    contest = FactoryGirl.create(:contest, tournament_day: tournament_day, contest_type: 8)
+    contest = FactoryBot.create(:contest, tournament_day: tournament_day, contest_type: 8)
 
     contest.add_user(user)
     contest.score_contest
@@ -31,7 +31,7 @@ describe "Testing Contest" do
   it "manual contest override" do
     add_to_group_and_create_scores(tournament_day, user, tournament_group)
 
-    contest = FactoryGirl.create(:contest, tournament_day: tournament_day, contest_type: 4, overall_winner_payout_amount: 100, overall_winner_points: 10)
+    contest = FactoryBot.create(:contest, tournament_day: tournament_day, contest_type: 4, overall_winner_payout_amount: 100, overall_winner_points: 10)
 
     contest.add_user(user)
     contest.score_contest
@@ -47,7 +47,7 @@ describe "Testing Contest" do
   it "Add user to a contest" do
     add_to_group_and_create_scores(tournament_day, user, tournament_group)
 
-    contest = FactoryGirl.create(:contest, tournament_day: tournament_day, contest_type: 8)
+    contest = FactoryBot.create(:contest, tournament_day: tournament_day, contest_type: 8)
 
     contest.add_user(user)
 

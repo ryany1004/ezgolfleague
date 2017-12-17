@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :tournament_day do
     game_type_id 1
     tournament_at { DateTime.now }
