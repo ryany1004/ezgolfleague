@@ -10,7 +10,7 @@ class Api::V1::ApiBaseController < ApplicationController
 
       response.headers["ezgl-login-error"] = "Login Error"
 
-      render text: "Unauthorized access", :status => :bad_request
+      render text: "Unauthorized access", :status => :unauthorized
     else
       @current_user = User.where("session_token = ?", session_token).first
 
@@ -19,7 +19,7 @@ class Api::V1::ApiBaseController < ApplicationController
 
         response.headers["ezgl-login-error"] = "Login Error"
 
-        render text: "No such session", :status => :bad_request
+        render text: "No such session", :status => :unauthorized
       else
         Rails.logger.info { "API: Login Successful for #{@current_user.id}" }
       end
