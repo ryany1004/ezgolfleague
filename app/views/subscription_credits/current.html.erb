@@ -142,7 +142,7 @@
               <td><strong>Credits Remaining</strong></td>
               <td class="text-right">
                 <% unless @active_subscription.blank? %>
-                  <p><%= @tournament_credits_remaining %> tournaments with <%= @active_subscription.golfer_count %> active golfers</p>
+                  <p><%= @tournament_credits_remaining %> <%= pluralize(@tournament_credits_remaining, 'tournament') %> with <%= @active_subscription.golfer_count %> active golfers</p>
                 <% else %>
                   <p>No active subscription</p>
                 <% end %>
@@ -179,7 +179,7 @@
     <div class="panel panel-default">
       <div class="panel-body text-center">
         <% if @league.free_tournaments_remaining > 0 %>
-          <h3>You have <%= @league.free_tournaments_remaining %> free tournaments left.</h3>
+          <h3>You have <%= @league.free_tournaments_remaining %> free <%= pluralize(@league.free_tournaments_remaining, 'tournament') %> left.</h3>
         <% else %>
           <h3>You have <%= @tournament_credits_remaining %> tournaments left on your current subscription.</h3>
           <p><a href="#" class="btn btn-default btn-primary" role="button" data-toggle="modal" data-target="#addCreditsModal">Add Tournament Credits Now</a></p>
