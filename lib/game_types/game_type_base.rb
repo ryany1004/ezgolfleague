@@ -46,7 +46,13 @@ module GameTypes
         end
       end
 
-      if flight_payouts == 0 or broken_contests > 0
+      players = 0
+      players = self.tournament_day.tournament.players.count
+
+      has_scores = false
+      has_scores = self.tournament_day.has_scores?
+
+      if flight_payouts == 0 or broken_contests > 0 or players == 0 or has_scores == false
         return false
       else
         return true

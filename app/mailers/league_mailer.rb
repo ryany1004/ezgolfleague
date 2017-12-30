@@ -2,7 +2,7 @@ class LeagueMailer < ApplicationMailer
   def tournament_finalized(tournament)
     @tournament = tournament
 
-    mail(to: @tournament.league.dues_payment_receipt_email_addresses, subject: "#{@tournament.league.name} Tournament Finalized")
+    mail(to: @tournament.league.dues_payment_receipt_email_addresses, subject: "#{@tournament.league.name} Tournament Results Calculated")
   end
 
   def league_message(user, league, subject, contents)
