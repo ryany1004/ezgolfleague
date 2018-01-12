@@ -105,7 +105,7 @@
     function submitContests(form) {
       form.trigger('submit.rails');
 
-      $("#save-indicator").fadeIn(400).delay(800).fadeOut(400);
+      $("#save-indicator").fadeIn(400).delay(1600).fadeOut(400);
     }
 
     $(document).ready(function() {
@@ -115,21 +115,21 @@
       $("#user-select .chosen-select").chosen().change(function() {
         $(this.form).trigger('submit.rails');
 
-        $("#save-indicator").fadeIn(400).delay(800).fadeOut(400);
+        $("#save-indicator").fadeIn(400).delay(1600).fadeOut(400);
       });
 
       //Team
       $("#team-select .chosen-select").chosen().change(function() {
         $(this.form).trigger('submit.rails');
 
-        $("#save-indicator").fadeIn(400).delay(800).fadeOut(400);
+        $("#save-indicator").fadeIn(400).delay(1600).fadeOut(400);
       });
 
       //Contests
       $("#paid-contests .contest-checkbox").change(function() {
-        //include a slight delay in case there are multiple contests and they click quickly
         var contestForm = $(this.form);
-        setTimeout(function(){ self.submitContests(contestForm) }, 2000);
+
+        setTimeout(function(){ self.submitContests(contestForm) }, 2000); //include a slight delay in case there are multiple contests and they click quickly
       });
 
       var selectedGolfers = [];

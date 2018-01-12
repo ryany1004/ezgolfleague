@@ -62,7 +62,6 @@ module Playable
   def includes_player?(user, restrict_to_day = nil)
     player_included = false
 
-    days = []
     if restrict_to_day.blank?
       days = self.tournament_days
     else

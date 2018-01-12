@@ -1,4 +1,4 @@
 class ApplicationMailer < ActionMailer::Base
-  default from: "do_not_reply@ezgolfleague.com"
+  default from: "support@ezgolfleague.com"
   layout 'mailer'
 end

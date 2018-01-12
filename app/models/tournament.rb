@@ -221,6 +221,8 @@ class Tournament < ApplicationRecord
   end
 
   def can_be_finalized?
+    return false if self.last_day.blank?
+
     self.last_day.can_be_finalized?
   end
 

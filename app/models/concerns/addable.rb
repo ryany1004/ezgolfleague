@@ -8,30 +8,28 @@ module Addable
       return
     end
 
-    Tournament.transaction do
-      Rails.logger.debug { "Adding to Group" }
+    Rails.logger.debug { "Adding to Group" }
 
-      outing = GolfOuting.create!(tournament_group: tournament_group, user: user, confirmed: confirmed, registered_by: registered_by)
-      scorecard = Scorecard.create!(golf_outing: outing)
+    outing = GolfOuting.create!(tournament_group: tournament_group, user: user, confirmed: confirmed, registered_by: registered_by)
+    scorecard = Scorecard.create!(golf_outing: outing)
 
-      Rails.logger.debug { "Added to Group" }
+    Rails.logger.debug { "Added to Group" }
 
-      self.assign_players_to_flights
-      flight = self.flight_for_player(user)
-      raise "No Flight for Player #{user.id} (#{user.complete_name})" if flight.blank?
+    self.assign_players_to_flights
+    flight = self.flight_for_player(user)
+    raise "No Flight for Player #{user.id} (#{user.complete_name})" if flight.blank?
 
-      self.course_holes.each_with_index do |hole, i|
-        score = Score.create!(scorecard: scorecard, course_hole: hole, sort_order: i)
-      end
-
-      self.add_player_to_free_contests(user)
-
-      if self == self.tournament.first_day
-        Payment.create(tournament: self.tournament, payment_amount: self.tournament.dues_for_user(user, paying_with_credit_card) * -1.0, user: user, payment_source: "Tournament Dues")
-      end
-
-      user.send_silent_notification #ask device to update
+    self.course_holes.each_with_index do |hole, i|
+      score = Score.create!(scorecard: scorecard, course_hole: hole, sort_order: i)
     end
+
+    self.add_player_to_free_contests(user)
+
+    if self == self.tournament.first_day
+      Payment.create(tournament: self.tournament, payment_amount: self.tournament.dues_for_user(user, paying_with_credit_card) * -1.0, user: user, payment_source: "Tournament Dues")
+    end
+
+    user.send_silent_notification #ask device to update
   end
 
   def remove_player_from_group(tournament_group, user, remove_from_teams = false)
