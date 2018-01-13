@@ -48,6 +48,17 @@ class League < ApplicationRecord
     end
   end
 
+  def league_admins
+    users = []
+
+    admin_memberships = self.league_memberships.where(is_admin: true)
+    admin_memberships.each do |m|
+      users << m.user
+    end
+
+    return users
+  end
+
   ##
 
   def notify_super_users

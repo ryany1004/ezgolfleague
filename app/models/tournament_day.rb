@@ -162,6 +162,16 @@ class TournamentDay < ApplicationRecord
     return user_ids
   end
 
+  def league_admin_user_ids
+    user_ids = []
+
+    self.tournament.league.league_admins.each do |user|
+      user_ids << user.id.to_s
+    end
+
+    return user_ids
+  end
+
   #date parsing
   def tournament_at=(date)
     begin
