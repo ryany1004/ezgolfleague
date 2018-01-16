@@ -3,7 +3,7 @@ class Play::RegistrationsController < Play::BaseController
 
   layout "golfer"
 
-  skip_before_action :authenticate_user!
+  skip_before_action :authenticate_user!, only: [:new, :create]
 
   def new
     @user_account = User.new

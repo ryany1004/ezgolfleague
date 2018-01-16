@@ -95,10 +95,12 @@ class ContestsController < BaseController
   end
 
   def add_registration
-    contest = Contest.find(params[:contest_id])
-    user = User.find(params[:contest_registration][:another_member_id])
+    unless params[:contest_registration][:another_member_id].blank?
+      contest = Contest.find(params[:contest_id])
+      user = User.find(params[:contest_registration][:another_member_id])
 
-    contest.add_user(user)
+      contest.add_user(user)
+    end
 
     redirect_to league_tournament_contests_path(@tournament.league, @tournament, tournament_day: @tournament_day), :flash => { :success => "The contest was successfully updated." }
   end

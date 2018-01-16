@@ -74,7 +74,7 @@ class SubscriptionCreditsController < BaseController
       charge = charge_customer(@league, payment_amount, "Add active golfers for #{current_user.email} for league #{@league.name}.")
 
       unless charge.blank?
-        updated_golfers = @active_subscription.golfer_count + active_delta
+        updated_golfers = active_before_update + active_delta
 
         SubscriptionCredit.create(league: @league, amount: payment_amount, golfer_count: updated_golfers, tournament_count: @active_subscription.tournament_count, tournaments_remaining: @tournament_credits_remaining, transaction_id: charge.id)
 
