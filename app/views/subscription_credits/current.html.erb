@@ -1,5 +1,6 @@
 <script>
   mixpanel.track("Admin: Display Current Subscription");
+  amplitude.getInstance().logEvent("Admin: Display Current Subscription");
 </script>
 
 <script>
@@ -105,6 +106,7 @@
   });
 
   mixpanel.track("Admin: Subscription Purchase Completed");
+  amplitude.getInstance().logEvent("Admin: Subscription Purchase Completed");
 </script>
 <% end %>
 

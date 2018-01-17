@@ -1,6 +1,9 @@
 <script>
   mixpanel.identify();
   mixpanel.track("Admin: Display Tournament List");
+
+  amplitude.getInstance().setUserId('<%= current_user.id %>');
+  amplitude.getInstance().logEvent("Admin: Display Tournament List");
 </script>
 
 <div class="row">

@@ -1,5 +1,6 @@
 <script>
   mixpanel.track("User Account Setup Complete");
+  amplitude.getInstance().logEvent("User Account Setup Complete");
 </script>
 
 <% unless params[:details_amount].blank? %>

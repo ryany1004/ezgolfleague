@@ -1,6 +1,9 @@
 <script>
   mixpanel.track("Created League");
   mixpanel.track("Display Invite Golfers");
+
+  amplitude.getInstance().logEvent("Created League");
+  amplitude.getInstance().logEvent("Display Invite Golfers");
 </script>
 
 <div id="container">

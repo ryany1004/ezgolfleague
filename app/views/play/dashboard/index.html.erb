@@ -1,6 +1,9 @@
 <script>
   mixpanel.identify();
   mixpanel.track("Display Player Dashboard");
+
+  amplitude.getInstance().setUserId('<%= current_user.id %>');
+  amplitude.getInstance().logEvent("Display Player Dashboard");
 </script>
 
 <% unless @league_season.blank? && @league_season.dues_amount != 0.0 -%>
