@@ -76,7 +76,7 @@ class SubscriptionCreditsController < BaseController
       unless charge.blank?
         updated_golfers = active_before_update + active_delta
 
-        SubscriptionCredit.create(league: @league, amount: payment_amount, golfer_count: updated_golfers, tournament_count: @active_subscription.tournament_count, tournaments_remaining: @tournament_credits_remaining, transaction_id: charge.id)
+        SubscriptionCredit.create(league: @league, amount: payment_amount, golfer_count: updated_golfers, tournament_count: @tournament_count, tournaments_remaining: @tournament_credits_remaining, transaction_id: charge.id)
 
         @active_subscriptions.each do |s|
           s.tournaments_remaining = 0

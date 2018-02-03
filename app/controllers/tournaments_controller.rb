@@ -16,7 +16,7 @@ class TournamentsController < BaseController
       @unconfigured_tournaments = Tournament.all_unconfigured(current_user.leagues_admin).page(params[:page]).without_count
     end
 
-    if current_user.selected_league.has_active_subscription? || current_user.selected_league.free_tournaments_remaining > 0
+    if current_user.is_super_user? || current_user.selected_league.has_active_subscription? || current_user.selected_league.free_tournaments_remaining > 0
       @can_create_tournaments = true
     else
       @can_create_tournaments = false
@@ -49,6 +49,10 @@ class TournamentsController < BaseController
 
       render :new
     end
+  end
+
+  def show
+    redirect_to league_tournaments_path(current_user.selected_league)
   end
 
   ##
