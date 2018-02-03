@@ -9,34 +9,34 @@ class SubscriptionCreditsController < BaseController
     render :layout => 'golfer'
   end
 
-  def new
-    unless @league.stripe_token.blank?
-      redirect_to current_league_subscription_credits_path(@league)
-    else
-      render :layout => 'golfer'
-    end
-  end
+  # def new
+  #   unless @league.stripe_token.blank?
+  #     redirect_to current_league_subscription_credits_path(@league)
+  #   else
+  #     render :layout => 'golfer'
+  #   end
+  # end
 
-  def create
-    number_of_golfers = params[:active_golfers].to_i
-    number_of_tournaments = params[:tournaments_per_season].to_i
-    payment_amount = calc_payment_amount(number_of_tournaments, number_of_golfers)
-    token = params[:stripeToken]
+  # def create
+  #   number_of_golfers = params[:active_golfers].to_i
+  #   number_of_tournaments = params[:tournaments_per_season].to_i
+  #   payment_amount = calc_payment_amount(number_of_tournaments, number_of_golfers)
+  #   token = params[:stripeToken]
 
-    create_or_update_stripe_customer(@league, token)
+  #   create_or_update_stripe_customer(@league, token)
 
-    user = @league.league_memberships.first.user
+  #   user = @league.league_memberships.first.user
 
-    charge = charge_customer(@league, payment_amount, "Charge for tournament credits for #{user.email} for league #{@league.name}.")
+  #   charge = charge_customer(@league, payment_amount, "Charge for tournament credits for #{user.email} for league #{@league.name}.")
 
-    unless charge.blank?
-      SubscriptionCredit.create(league: @league, amount: payment_amount, golfer_count: number_of_golfers, tournament_count: number_of_tournaments, tournaments_remaining: number_of_tournaments, transaction_id: charge.id)
+  #   unless charge.blank?
+  #     SubscriptionCredit.create(league: @league, amount: payment_amount, golfer_count: number_of_golfers, tournament_count: number_of_tournaments, tournaments_remaining: number_of_tournaments, transaction_id: charge.id)
 
-      redirect_to setup_completed_play_registrations_path(details_amount: payment_amount, details_golfers: number_of_golfers, details_id: charge.id)
-    else
-      redirect_to information_league_subscription_credits_path(@league), :flash => { :error => "There was an error processing your payment." }
-    end
-  end
+  #     redirect_to setup_completed_play_registrations_path(details_amount: payment_amount, details_golfers: number_of_golfers, details_id: charge.id)
+  #   else
+  #     redirect_to information_league_subscription_credits_path(@league), :flash => { :error => "There was an error processing your payment." }
+  #   end
+  # end
 
   def update_active
     if @active_subscription.blank?
@@ -139,7 +139,7 @@ class SubscriptionCreditsController < BaseController
       @golfer_count = @active_subscription.golfer_count
     else
       @tournament_count = 12
-      @golfer_count = 15
+      @golfer_count = 0
     end
 
     @tournament_credits_remaining = 0

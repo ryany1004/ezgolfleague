@@ -135,6 +135,20 @@
   <div class="row">
     <div class="panel panel-default">
       <div class="panel-heading">
+        <h3 class="panel-title">Pricing Information</h3>
+      </div>
+      <div class="panel-body">
+        <div class="col-md-3">&nbsp;</div>
+        <div class="col-md-6"><%= link_to "Learn More About Our Pricing", information_league_subscription_credits_path, target: :new, class: "btn btn-primary btn-lg btn-block" %></div>
+        <div class="col-md-3">&nbsp;</div>
+      </div>
+    </div>
+  </div>
+
+  <% if @league.free_tournaments_remaining == 0 %>
+  <div class="row">
+    <div class="panel panel-default">
+      <div class="panel-heading">
         <h3 class="panel-title">Your Current Plan</h3>
       </div>
       <div class="panel-body">
@@ -176,6 +190,7 @@
       </div>
     </div>
   </div>
+  <% end %>
 
   <div class="row">
     <div class="panel panel-default">
@@ -190,6 +205,7 @@
     </div>
   </div>
 
+  <% if @league.free_tournaments_remaining == 0 %>
   <div class="row">
     <div class="panel panel-default">
       <div class="panel-heading">
@@ -213,7 +229,9 @@
       </div>
     </div>
   </div>
+  <% end %>
 
+  <% if @league.free_tournaments_remaining == 0 %>
   <div class="row">
     <div class="panel panel-default">
       <div class="panel-heading">
@@ -245,6 +263,7 @@
       <div class="panel-footer"><em>Thank you for using EZ Golf League</em></div>
     </div>
   </div>
+  <% end %>
 
   <div class="row">
     <p>Need support or have a question? Contact us at <a href='mailto:support@ezgolfleague.com?subject=Subscription%20Question%20for%20<%= @league.name %>'>support@ezgolfleague.com</a> for help.</p>
