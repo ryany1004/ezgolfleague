@@ -547,7 +547,11 @@ module GameTypes
           last_rank = rank
           last_score = player[:par_related_net_score]
         else
-          rank = last_rank
+          if last_rank == 0
+            rank = 1
+          else
+            rank = last_rank
+          end
 
           quantity_at_rank = quantity_at_rank + 1
         end
