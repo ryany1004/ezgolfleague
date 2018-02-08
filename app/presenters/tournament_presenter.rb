@@ -172,7 +172,7 @@ class TournamentPresenter
       self.tournament_day.golfer_teams.each do |golfer_team|
         group = golfer_team.users.blank? ? nil : self.tournament_day.tournament_group_for_player(golfer_team.users.first)
 
-        teams << {name_data: golfer_team, group: group}
+        teams << {name_data: golfer_team, group: group, id: nil}
       end
 
       teams
@@ -185,8 +185,9 @@ class TournamentPresenter
         tournament_group.golf_outings.each do |golf_outing|
           flight = tournament_day.flight_for_player(golf_outing.user).blank? ? nil : tournament_day.flight_for_player(golf_outing.user)
           name = golf_outing.user.blank? ? "Error" : golf_outing.user.complete_name
+          user_id = golf_outing.user.blank? ? nil : golf_outing.user.id
 
-          outings << {name: name, handicap: golf_outing.course_handicap.to_i, flight: flight, group: tournament_group}
+          outings << {name: name, id: user_id, handicap: golf_outing.course_handicap.to_i, flight: flight, group: tournament_group}
         end
 
         groups << outings
@@ -214,8 +215,9 @@ class TournamentPresenter
 
           f.payout_results.each do |p|
             username = p.user.blank? ? "" : p.user.complete_name
+            user_id = p.user.blank? ? nil : p.user.id
 
-            payouts << {flight_number: f.flight_number.to_i, name: username, amount: p.amount, points: p.points.to_i}
+            payouts << {flight_number: f.flight_number.to_i, name: username, amount: p.amount, points: p.points.to_i, user_id: user_id}
           end
 
           flights_with_payouts << {payouts: payouts} unless payouts.blank?
@@ -227,8 +229,9 @@ class TournamentPresenter
 
         f.payout_results.each do |p|
           username = p.user.blank? ? "" : p.user.complete_name
+          user_id = p.user.blank? ? nil : p.user.id
 
-          payouts << {flight_number: f.flight_number.to_i, name: username, amount: p.amount, points: p.points.to_i}
+          payouts << {flight_number: f.flight_number.to_i, name: username, amount: p.amount, points: p.points.to_i, user_id: user_id}
         end
 
         flights_with_payouts << {payouts: payouts}
