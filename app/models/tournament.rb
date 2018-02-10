@@ -344,7 +344,7 @@ class Tournament < ApplicationRecord
 
   def as_json(options={})
     super(
-      :only => :name,
+      :only => [:name, :is_finalized],
       :methods => [:server_id, :number_of_players, :is_open_for_registration?, :dues_amount, :allow_credit_card_payment],
       :include => {
         :league => {
