@@ -62,30 +62,7 @@ class Api::V1::TournamentsController < Api::V1::ApiBaseController
           contests << { name: contest[:name], winners: contest[:winners] }
         end
 
-        #all_players
-        all_players_individual = []
-        all_players_teams = []
-
-        if tournament_presenter.day_has_golfer_teams?
-          tournament_presenter.tournament_players.each do |team|
-            team_name = ""
-            team[:name_data].users.each do |user|
-              team_name += user.complete_name
-
-              team_name += ", " unless user == team[:name_data].users.last
-            end
-
-            all_players_teams << { name: team_name, extra_info: format_tournament_group_tee_time(team[:group]) }
-          end
-        else
-          tournament_presenter.tournament_players.each_with_index do |group, i|
-            group.each do |outing|
-              all_players_individual << { name: outing[:name], id: outing[:id], handicap: outing[:handicap], flight: outing[:flight].flight_number, extra_info: format_tournament_group_tee_time(outing[:group]) }
-            end
-          end
-        end
-
-        tournament_results << { payouts: payouts, rankings: rankings, contests: contests, all_players_individual: all_players_individual, all_players_teams: all_players_teams }
+        tournament_results << { payouts: payouts, rankings: rankings, contests: contests }
       end
 
       tournament_results
