@@ -44,7 +44,7 @@ class Api::V1::TournamentsController < Api::V1::ApiBaseController
         payouts = []
         tournament_presenter.payouts.each_with_index do |f, x|
           f[:payouts].each do |p|
-            payouts << { name: p[:name], id: p[:user_id], amount: p[:amount].to_f, points: p[:points] }
+            payouts << { flight_number: f[:flight_number], name: p[:name], id: p[:user_id], amount: p[:amount].to_f, points: p[:points] }
           end
         end
 
