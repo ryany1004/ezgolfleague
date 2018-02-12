@@ -13,7 +13,7 @@
         <li class='disabled'><%= link_to 'Contests', "#" %></li>
         <li class='disabled'><%= link_to 'Notifications', "#" %></li>
         <li class='disabled'><%= link_to 'Players', "#" %></li>
-        <li class='disabled'><%= link_to 'Finalize', "#" %></li>
+        <li class='disabled'><%= link_to 'Calculate Results', "#" %></li>
       <% else -%>
         <% if @tournament.tournament_days.count == 1 -%>
           <li <%= tournament_class_for_stage(stage, "basic_details") %> ><%= link_to 'Basic Details', edit_league_tournament_path(tournament.league, tournament) %></li>
@@ -27,7 +27,7 @@
           <li <%= tournament_class_for_stage(stage, "notifications") %>><%= link_to 'Notifications', league_tournament_tournament_notifications_path(tournament.league, tournament) %></li>
           <li <%= tournament_class_for_stage(stage, "players#{tournament.tournament_days.first.id}") %>><%= link_to 'Players', league_tournament_day_players_path(tournament.league, tournament, tournament.tournament_days.first) %></li>
           <% if !@tournament.new_record? -%>
-            <li <%= tournament_class_for_stage(stage, "finalize") %>><%= link_to 'Finalize', league_tournament_finalize_path(tournament.league, tournament) %></li>
+            <li <%= tournament_class_for_stage(stage, "finalize") %>><%= link_to 'Calculate Results', league_tournament_finalize_path(tournament.league, tournament) %></li>
           <% end -%>
         <% else -%>
           <li <%= tournament_class_for_stage(stage, "basic_details") %> ><%= link_to 'Basic Details', edit_league_tournament_path(tournament.league, tournament) %></li>
@@ -56,7 +56,7 @@
 
     <nav>
       <ul class="pagination">
-        <li <%= tournament_class_for_stage(stage, "finalize") %>><%= link_to 'Finalize Tournament', league_tournament_finalize_path(tournament.league, tournament) %></li>
+        <li <%= tournament_class_for_stage(stage, "finalize") %>><%= link_to 'Calculate Results', league_tournament_finalize_path(tournament.league, tournament) %></li>
       </ul>
     </nav>
   <% end -%>
