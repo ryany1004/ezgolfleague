@@ -102,7 +102,10 @@ class SubscriptionCreditsController < BaseController
 
   def charge_credits
     number_of_tournaments = params[:tournaments_per_season].to_i
+    number_of_tournaments = 1 if number_of_tournaments == 0
+
     number_of_golfers = params[:active_golfers].to_i
+    
     payment_amount = calc_payment_amount(number_of_tournaments, number_of_golfers)
 
     if number_of_golfers == 0 || number_of_tournaments == 0
