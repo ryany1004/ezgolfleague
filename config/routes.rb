@@ -116,10 +116,7 @@ Rails.application.routes.draw do
     resources :subscription_credits, except: :show do
       get 'information', on: :collection
       get 'current', on: :collection
-
       post 'update_credit_card', on: :collection
-      post 'charge_credits', on: :collection
-
       put 'update_active', on: :collection
     end
 
