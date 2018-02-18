@@ -11,7 +11,6 @@ class Tournament < ApplicationRecord
   include Servable
 
   belongs_to :league, inverse_of: :tournaments
-  belongs_to :subscription_credit, inverse_of: :tournaments
   has_many :tournament_days, -> { order(:tournament_at) }, inverse_of: :tournament, :dependent => :destroy
   has_many :payments, inverse_of: :tournament
   has_many :notification_templates, :dependent => :destroy
@@ -246,18 +245,6 @@ class Tournament < ApplicationRecord
       Rails.logger.info { "Finalize #{day.id}: All Done!" }
 
       day.touch
-    end
-
-    if self.subscription_credit.blank?
-      subscription_to_attach = self.league.subscription_credits.where("tournaments_remaining > 0").order("created_at").limit(1).first
-
-      unless subscription_to_attach.blank?
-        self.subscription_credit = subscription_to_attach
-        self.save
-
-        subscription_to_attach.tournaments_remaining = subscription_to_attach.tournaments_remaining - 1
-        subscription_to_attach.save
-      end
     end
 
     #cache bust

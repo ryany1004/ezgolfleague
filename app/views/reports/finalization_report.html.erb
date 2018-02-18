@@ -8,7 +8,7 @@
     		<tr>
           <th>Name</th>
     			<th>League</th>
-          <th>Active Golfers</th>
+          <th>Currently Active</th>
           <th>Played</th>
           <th>Subscribed</th>
     		</tr>
@@ -21,10 +21,10 @@
           <td><%= tournament.league.league_memberships.active.count %></td>
           <td><%= tournament.players.count %></td>
           <td>
-          <% if tournament.subscription_credit.blank? %>
+          <% if tournament.league_season.blank? %>
             0
           <% else %>
-            <%= tournament.subscription_credit.golfer_count %>
+            <%= tournament.league_season.paid_active_golfers %>
           <% end %>
           </td>
     		</tr>

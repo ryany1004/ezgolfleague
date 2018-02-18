@@ -47,6 +47,16 @@ class LeagueSeason < ApplicationRecord
     end
   end
 
+  def paid_active_golfers
+    sum_paid = 0
+
+    self.subscription_credits.each do |s|
+      sum_paid += s.golfer_count
+    end
+
+    sum_paid
+  end
+
   def rankings_cache_key
     return "league-rankings#{self.id}-#{self.updated_at.to_s}"
   end
