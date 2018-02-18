@@ -23,7 +23,7 @@
         var activeGolfers = $(":checkbox:checked").length;
 
         var baselineGolfers = <%= @golfer_count %>;
-        var costPerGolfer = costPerGolferForTournamentCount(<%= @tournament_count %>);
+        var costPerGolfer = self.costPerGolfer();
 
         var newGolfers = activeGolfers - baselineGolfers;
         var proposedCost = costPerGolfer * newGolfers;
@@ -44,20 +44,8 @@
     });
   });
 
-  function costPerGolferForTournamentCount(tournamentCount) {
-    var cost = 0;
-    var costPerGolfer = 0;
-
-    // if (tournamentCount > 15) {
-    //   costPerGolfer = 10;
-    // } else {
-    //   costPerGolfer = 5;
-    // }
-    //REMOVE?
-
-    costPerGolfer = 5;
-
-    return costPerGolfer;
+  function costPerGolfer() {
+    return 5;
   }
 
   function stripeResponseHandler(status, response) {
@@ -158,7 +146,7 @@
               <td><strong>Credits Remaining</strong></td>
               <td class="text-right">
                 <% unless @active_subscription.blank? %>
-                  <p><%= @tournament_credits_remaining %> tournaments with <%= @active_subscription.golfer_count %> active golfers</p>
+                  <p><%= @active_subscription.golfer_count %> active golfers</p>
                 <% else %>
                   <p>No active subscription</p>
                 <% end %>
@@ -168,7 +156,7 @@
               <td><strong>Last Payment</strong></td>
               <td class="text-right">
                 <% unless @active_subscription.blank? %>
-                  <p>Your last payment was <%= number_to_currency(@active_subscription.amount) %> on <%= @active_subscription.created_at.to_s(:short) %> for <%= @active_subscription.tournament_count %> tournaments with <%= @active_subscription.golfer_count %> active golfers</p>
+                  <p>Your last payment was <%= number_to_currency(@active_subscription.amount) %> on <%= @active_subscription.created_at.to_s(:short) %> for <%= @active_subscription.golfer_count %> active golfers</p>
                 <% else %>
                   <p>No active subscription</p>
                 <% end %>
@@ -195,11 +183,11 @@
   <div class="row">
     <div class="panel panel-default">
       <div class="panel-body text-center">
-        <% if @league.free_tournaments_remaining > 0 %>
+        <% if @league.free_tournaments_remaining > 0 || @active_subscription.blank? %>
           <h3>You have <%= @league.free_tournaments_remaining %> free tournaments left.</h3>
         <% else %>
-          <h3>You have <%= @tournament_credits_remaining %> tournaments left on your current subscription.</h3>
-          <p><a href="#" class="btn btn-default btn-primary" role="button" data-toggle="modal" data-target="#addCreditsModal">Add Tournament Credits Now</a></p>
+          <h3>Your active subscription includes <%= @active_subscription.golfer_count %> golfers.</h3>
+          <p><a href="#" class="btn btn-default btn-primary" role="button" data-toggle="modal" data-target="#addCreditsModal">Add Credits Now</a></p>
         <% end %>
       </div>
     </div>

@@ -10,9 +10,13 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171217220349) do
+ActiveRecord::Schema.define(version: 20180218220226) do
 
-  create_table "contest_holes", force: :cascade do |t|
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+  enable_extension "pg_stat_statements"
+
+  create_table "contest_holes", id: :serial, force: :cascade do |t|
     t.integer "contest_id"
     t.integer "course_hole_id"
     t.datetime "created_at", null: false
@@ -21,7 +25,7 @@ ActiveRecord::Schema.define(version: 20171217220349) do
     t.index ["course_hole_id"], name: "index_contest_holes_on_course_hole_id"
   end
 
-  create_table "contest_results", force: :cascade do |t|
+  create_table "contest_results", id: :serial, force: :cascade do |t|
     t.integer "contest_id"
     t.integer "contest_hole_id"
     t.integer "winner_id"
@@ -35,7 +39,7 @@ ActiveRecord::Schema.define(version: 20171217220349) do
     t.index ["winner_id"], name: "index_contest_results_on_winner_id"
   end
 
-  create_table "contests", force: :cascade do |t|
+  create_table "contests", id: :serial, force: :cascade do |t|
     t.string "name"
     t.integer "contest_type"
     t.integer "overall_winner_contest_result_id"
@@ -44,7 +48,6 @@ ActiveRecord::Schema.define(version: 20171217220349) do
     t.datetime "updated_at", null: false
     t.integer "tournament_day_id"
     t.decimal "dues_amount", default: "0.0"
-    t.boolean "overall_winner_payment_amount_automatic", default: true
     t.integer "overall_winner_points", default: 0
     t.boolean "is_opt_in", default: false
     t.index ["overall_winner_contest_result_id"], name: "index_contests_on_overall_winner_contest_result_id"
@@ -58,7 +61,7 @@ ActiveRecord::Schema.define(version: 20171217220349) do
     t.index ["user_id"], name: "index_contests_users_on_user_id"
   end
 
-  create_table "course_hole_tee_boxes", force: :cascade do |t|
+  create_table "course_hole_tee_boxes", id: :serial, force: :cascade do |t|
     t.integer "course_hole_id"
     t.string "description"
     t.integer "yardage"
@@ -69,7 +72,7 @@ ActiveRecord::Schema.define(version: 20171217220349) do
     t.index ["course_tee_box_id"], name: "index_course_hole_tee_boxes_on_course_tee_box_id"
   end
 
-  create_table "course_holes", force: :cascade do |t|
+  create_table "course_holes", id: :serial, force: :cascade do |t|
     t.integer "course_id"
     t.integer "hole_number"
     t.integer "par"
@@ -87,7 +90,7 @@ ActiveRecord::Schema.define(version: 20171217220349) do
     t.index ["tournament_day_id"], name: "index_course_holes_tournament_days_on_tournament_day_id"
   end
 
-  create_table "course_tee_boxes", force: :cascade do |t|
+  create_table "course_tee_boxes", id: :serial, force: :cascade do |t|
     t.integer "course_id"
     t.string "name"
     t.float "rating", default: 0.0
@@ -98,7 +101,7 @@ ActiveRecord::Schema.define(version: 20171217220349) do
     t.index ["course_id"], name: "index_course_tee_boxes_on_course_id"
   end
 
-  create_table "courses", force: :cascade do |t|
+  create_table "courses", id: :serial, force: :cascade do |t|
     t.string "name"
     t.string "phone_number"
     t.string "street_address_1"
@@ -115,7 +118,7 @@ ActiveRecord::Schema.define(version: 20171217220349) do
     t.index ["name"], name: "index_courses_on_name"
   end
 
-  create_table "delayed_jobs", force: :cascade do |t|
+  create_table "delayed_jobs", id: :serial, force: :cascade do |t|
     t.integer "priority", default: 0, null: false
     t.integer "attempts", default: 0, null: false
     t.text "handler", null: false
@@ -133,7 +136,7 @@ ActiveRecord::Schema.define(version: 20171217220349) do
     t.index ["priority", "run_at"], name: "delayed_jobs_priority"
   end
 
-  create_table "flights", force: :cascade do |t|
+  create_table "flights", id: :serial, force: :cascade do |t|
     t.integer "flight_number"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -153,7 +156,7 @@ ActiveRecord::Schema.define(version: 20171217220349) do
     t.index ["user_id"], name: "index_flights_users_on_user_id"
   end
 
-  create_table "game_type_metadata", force: :cascade do |t|
+  create_table "game_type_metadata", id: :serial, force: :cascade do |t|
     t.integer "course_hole_id"
     t.integer "scorecard_id"
     t.integer "golfer_team_id"
@@ -170,7 +173,7 @@ ActiveRecord::Schema.define(version: 20171217220349) do
     t.index ["search_key"], name: "index_game_type_metadata_on_search_key"
   end
 
-  create_table "golf_outings", force: :cascade do |t|
+  create_table "golf_outings", id: :serial, force: :cascade do |t|
     t.integer "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -188,7 +191,7 @@ ActiveRecord::Schema.define(version: 20171217220349) do
     t.index ["user_id"], name: "index_golf_outings_on_user_id"
   end
 
-  create_table "golfer_teams", force: :cascade do |t|
+  create_table "golfer_teams", id: :serial, force: :cascade do |t|
     t.integer "max_players", default: 2
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -209,7 +212,7 @@ ActiveRecord::Schema.define(version: 20171217220349) do
     t.index ["user_id"], name: "index_golfer_teams_users_on_user_id"
   end
 
-  create_table "league_memberships", force: :cascade do |t|
+  create_table "league_memberships", id: :serial, force: :cascade do |t|
     t.integer "league_id"
     t.integer "user_id"
     t.boolean "is_admin", default: false
@@ -221,7 +224,7 @@ ActiveRecord::Schema.define(version: 20171217220349) do
     t.index ["user_id"], name: "index_league_memberships_on_user_id"
   end
 
-  create_table "league_seasons", force: :cascade do |t|
+  create_table "league_seasons", id: :serial, force: :cascade do |t|
     t.integer "league_id"
     t.string "name"
     t.datetime "starts_at"
@@ -232,7 +235,7 @@ ActiveRecord::Schema.define(version: 20171217220349) do
     t.index ["league_id"], name: "index_league_seasons_on_league_id"
   end
 
-  create_table "leagues", force: :cascade do |t|
+  create_table "leagues", id: :serial, force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -261,7 +264,7 @@ ActiveRecord::Schema.define(version: 20171217220349) do
     t.boolean "display_balances_to_players", default: true
   end
 
-  create_table "mobile_devices", force: :cascade do |t|
+  create_table "mobile_devices", id: :serial, force: :cascade do |t|
     t.integer "user_id"
     t.string "device_identifier"
     t.datetime "created_at", null: false
@@ -272,7 +275,7 @@ ActiveRecord::Schema.define(version: 20171217220349) do
     t.index ["user_id"], name: "index_mobile_devices_on_user_id"
   end
 
-  create_table "notification_templates", force: :cascade do |t|
+  create_table "notification_templates", id: :serial, force: :cascade do |t|
     t.integer "tournament_id"
     t.integer "league_id"
     t.string "title"
@@ -288,7 +291,7 @@ ActiveRecord::Schema.define(version: 20171217220349) do
     t.index ["tournament_id"], name: "index_tournament_id_on_notification_templates"
   end
 
-  create_table "notifications", force: :cascade do |t|
+  create_table "notifications", id: :serial, force: :cascade do |t|
     t.integer "notification_template_id"
     t.integer "user_id"
     t.string "title"
@@ -296,12 +299,11 @@ ActiveRecord::Schema.define(version: 20171217220349) do
     t.boolean "is_read", default: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.boolean "has_been_delivered", default: false
     t.index ["notification_template_id"], name: "index_notification_template_id_on_notifications"
     t.index ["user_id"], name: "index_user_id_on_notifications"
   end
 
-  create_table "payments", force: :cascade do |t|
+  create_table "payments", id: :serial, force: :cascade do |t|
     t.integer "user_id"
     t.integer "tournament_id"
     t.decimal "payment_amount"
@@ -319,7 +321,7 @@ ActiveRecord::Schema.define(version: 20171217220349) do
     t.index ["user_id"], name: "index_payments_on_user_id"
   end
 
-  create_table "payout_results", force: :cascade do |t|
+  create_table "payout_results", id: :serial, force: :cascade do |t|
     t.integer "user_id"
     t.integer "payout_id"
     t.integer "flight_id"
@@ -334,7 +336,7 @@ ActiveRecord::Schema.define(version: 20171217220349) do
     t.index ["user_id"], name: "index_payout_results_on_user_id"
   end
 
-  create_table "payouts", force: :cascade do |t|
+  create_table "payouts", id: :serial, force: :cascade do |t|
     t.integer "flight_id"
     t.decimal "amount"
     t.float "points"
@@ -345,7 +347,7 @@ ActiveRecord::Schema.define(version: 20171217220349) do
     t.index ["sort_order"], name: "index_payouts_on_sort_order"
   end
 
-  create_table "scorecards", force: :cascade do |t|
+  create_table "scorecards", id: :serial, force: :cascade do |t|
     t.integer "golf_outing_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -354,7 +356,7 @@ ActiveRecord::Schema.define(version: 20171217220349) do
     t.index ["golf_outing_id"], name: "index_scorecards_on_golf_outing_id"
   end
 
-  create_table "scores", force: :cascade do |t|
+  create_table "scores", id: :serial, force: :cascade do |t|
     t.integer "scorecard_id"
     t.integer "course_hole_id"
     t.integer "strokes", default: 0
@@ -366,19 +368,17 @@ ActiveRecord::Schema.define(version: 20171217220349) do
     t.index ["sort_order"], name: "index_scores_on_sort_order"
   end
 
-  create_table "subscription_credits", force: :cascade do |t|
-    t.integer "league_id"
+  create_table "subscription_credits", id: :serial, force: :cascade do |t|
     t.decimal "amount"
     t.integer "golfer_count"
-    t.integer "tournament_count"
     t.integer "tournaments_remaining"
     t.string "transaction_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["league_id"], name: "index_subscription_credits_on_league_id"
+    t.integer "league_season_id"
   end
 
-  create_table "tournament_day_results", force: :cascade do |t|
+  create_table "tournament_day_results", id: :serial, force: :cascade do |t|
     t.integer "tournament_day_id"
     t.integer "user_id"
     t.integer "user_primary_scorecard_id"
@@ -399,7 +399,7 @@ ActiveRecord::Schema.define(version: 20171217220349) do
     t.index ["user_primary_scorecard_id"], name: "index_tournament_day_results_on_user_primary_scorecard_id"
   end
 
-  create_table "tournament_days", force: :cascade do |t|
+  create_table "tournament_days", id: :serial, force: :cascade do |t|
     t.integer "tournament_id"
     t.integer "course_id"
     t.integer "game_type_id"
@@ -413,7 +413,7 @@ ActiveRecord::Schema.define(version: 20171217220349) do
     t.index ["tournament_id"], name: "index_tournament_days_on_tournament_id"
   end
 
-  create_table "tournament_groups", force: :cascade do |t|
+  create_table "tournament_groups", id: :serial, force: :cascade do |t|
     t.datetime "tee_time_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -422,7 +422,7 @@ ActiveRecord::Schema.define(version: 20171217220349) do
     t.index ["tournament_day_id"], name: "index_tournament_groups_on_tournament_day_id"
   end
 
-  create_table "tournaments", force: :cascade do |t|
+  create_table "tournaments", id: :serial, force: :cascade do |t|
     t.integer "league_id"
     t.string "name"
     t.datetime "signup_opens_at"
@@ -433,7 +433,7 @@ ActiveRecord::Schema.define(version: 20171217220349) do
     t.decimal "dues_amount", default: "0.0"
     t.boolean "is_finalized", default: false
     t.boolean "show_players_tee_times", default: false
-    t.integer "auto_schedule_for_multi_day", default: 0
+    t.integer "auto_schedule_for_multi_day", default: 1
     t.boolean "allow_credit_card_payment", default: true
     t.integer "tournament_days_count", default: 0
     t.datetime "tournament_starts_at"
@@ -442,7 +442,7 @@ ActiveRecord::Schema.define(version: 20171217220349) do
     t.index ["subscription_credit_id"], name: "index_tournaments_on_subscription_credit_id"
   end
 
-  create_table "users", force: :cascade do |t|
+  create_table "users", id: :serial, force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "email", default: "", null: false

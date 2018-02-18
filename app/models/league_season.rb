@@ -1,6 +1,8 @@
 class LeagueSeason < ApplicationRecord
   belongs_to :league, touch: true
+
   has_many :payments, inverse_of: :league_season
+  has_many :subscription_credits, ->{ order 'created_at DESC' }
 
   validates :name, :starts_at, :ends_at, :league, presence: true
 
@@ -12,6 +14,13 @@ class LeagueSeason < ApplicationRecord
 
     if starts_at.present? && ends_at.present? && ends_at < starts_at
       errors.add(:starts_at, "can't be after the ending date")
+    end
+  end
+
+  validate :one_year_maximum
+  def one_year_maximum
+    if (ends_at - starts_at).to_i > (367 * 60 * 60 * 24)
+      errors.add(:ends_at, "can't be before more than a year after the starting date")
     end
   end
 

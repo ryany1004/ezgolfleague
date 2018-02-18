@@ -6,7 +6,6 @@ class League < ApplicationRecord
   has_many :users, ->{ order 'last_name, first_name' }, through: :league_memberships
   has_many :tournaments, :dependent => :destroy, inverse_of: :league
   has_many :notification_templates, :dependent => :destroy
-  has_many :subscription_credits, ->{ order 'created_at DESC' }
 
   validates :name, presence: true, uniqueness: true
   validates :location, presence: true
@@ -147,8 +146,9 @@ class League < ApplicationRecord
 
   def has_active_subscription?
     return true if self.exempt_from_subscription
+    return false if self.active_season.blank?
 
-    active_subscriptions = self.subscription_credits.where("tournaments_remaining > 0").order("created_at DESC")
+    active_subscriptions = self.active_season.subscription_credits
     if active_subscriptions.count > 0
       true
     else
