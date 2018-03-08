@@ -74,6 +74,10 @@ namespace :deploy do
   after :finished, 'airbrake:deploy'
   after 'airbrake:deploy', 'resque:restart'
 
+  set :rollbar_token, '75d79ff8ca4643809de5616d7c6c2265'
+  set :rollbar_env, Proc.new { fetch :stage }
+  set :rollbar_role, Proc.new { :app }
+
   after :restart, :clear_cache do
     on roles(:web), in: :groups, limit: 3, wait: 10 do
       # Here we can do anything such as:

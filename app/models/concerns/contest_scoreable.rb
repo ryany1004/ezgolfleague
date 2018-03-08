@@ -219,7 +219,7 @@ module ContestScoreable
             Rails.logger.info { "CONTEST: #{self.id} Score Blank - Not Scoring Contest. This is weird. #{user.complete_name}" }
           end
         else
-          Rails.logger.info { "CONTEST: #{self.id} Tournament Day Does Not Include Contest Player - This is Weird. #{user.complete_name}" }
+          Rails.logger.info { "CONTEST: #{self.id} Tournament Day Does Not Include Contest Player. Either missing or DQ'd. #{user.complete_name}" }
         end
       end
 
