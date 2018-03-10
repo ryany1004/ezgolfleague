@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180218221937) do
+ActiveRecord::Schema.define(version: 20180218223942) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -436,9 +436,7 @@ ActiveRecord::Schema.define(version: 20180218221937) do
     t.boolean "allow_credit_card_payment", default: true
     t.integer "tournament_days_count", default: 0
     t.datetime "tournament_starts_at"
-    t.integer "subscription_credit_id"
     t.index ["league_id"], name: "index_tournaments_on_league_id"
-    t.index ["subscription_credit_id"], name: "index_tournaments_on_subscription_credit_id"
   end
 
   create_table "users", id: :serial, force: :cascade do |t|

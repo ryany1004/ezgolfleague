@@ -309,7 +309,7 @@ module GameTypes
       points = 0
 
       self.tournament_day.payout_results.each do |p|
-        points = points + p.points if p.user == user
+        points = points + p.points if p.user == user && p.points
       end
 
       #contests
