@@ -9,6 +9,7 @@ class League < ApplicationRecord
 
   validates :name, presence: true, uniqueness: true
   validates :location, presence: true
+  validates :free_tournaments_remaining, presence: true
 
   paginates_per 50
 

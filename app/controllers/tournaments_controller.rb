@@ -38,7 +38,7 @@ class TournamentsController < BaseController
 
     if @tournament.save
       league = @tournament.league
-      if league.free_tournaments_remaining > 0
+      if !league.exempt_from_subscription && league.free_tournaments_remaining > 0
         league.free_tournaments_remaining -= 1 #decrement the free tournaments
         league.save
       end
