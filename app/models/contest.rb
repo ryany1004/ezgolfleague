@@ -159,7 +159,7 @@ class Contest < ApplicationRecord
       if self.overall_winner.blank?
         return nil
       else
-        return [{user: self.overall_winner.winner, name: self.overall_winner.winner.complete_name, result_value: self.overall_winner.result_value, amount: self.overall_winner.payout_amount, points: self.overall_winner.points}]
+        return [{contestName: self.name, user: self.overall_winner.winner, name: self.overall_winner.winner.complete_name, result_value: self.overall_winner.result_value, amount: self.overall_winner.payout_amount, points: self.overall_winner.points}]
       end
     else
       winners = []
@@ -172,7 +172,7 @@ class Contest < ApplicationRecord
           points = team_contest_results.to_a.sum(&:points)
 
           if amount > 0 or points > 0
-            winners << {user: team.users.first, name: team.name, result_value: "#{team_contest_results.count}", amount: amount, points: points, number_of_wins: team_contest_results.count}
+            winners << {contestName: self.name, user: team.users.first, name: team.name, result_value: "#{team_contest_results.count}", amount: amount, points: points, number_of_wins: team_contest_results.count}
           end
         end
       else
@@ -184,7 +184,7 @@ class Contest < ApplicationRecord
             end
 
             if existing_winner.blank?
-              winners << {user: result.winner, name: result.winner.try(:complete_name), result_value: "1", amount: result.payout_amount, points: result.points, number_of_wins: 1}
+              winners << {contestName: self.name, user: result.winner, name: result.winner.try(:complete_name), result_value: "1", amount: result.payout_amount, points: result.points, number_of_wins: 1}
             else
               existing_winner[:number_of_wins] += 1
               existing_winner[:amount] += result.payout_amount
@@ -193,7 +193,7 @@ class Contest < ApplicationRecord
               existing_winner[:result_value] = "#{existing_winner[:number_of_wins]}"
             end
           else
-            winners << {user: result.winner, name: result.winner.try(:complete_name), result_value: result.result_value, amount: result.payout_amount, points: result.points}
+            winners << {contestName: self.name, user: result.winner, name: result.winner.try(:complete_name), result_value: result.result_value, amount: result.payout_amount, points: result.points}
           end
         end
       end
