@@ -28,8 +28,9 @@ class TournamentMailer < ApplicationMailer
     @user = user
     @tournament = tournament
     @league_season = @tournament.league_season
+    @dues = @tournament.dues_for_user(@user, false)
 
-    mail(to: @league_season.league.dues_payment_receipt_email_addresses, subject: "Tournament Pay Later: #{@user.complete_name}")
+    mail(to: @league_season.league.dues_payment_receipt_email_addresses, subject: "Tournament Registration: #{@user.complete_name}")
   end
 
   def tournament_payment_receipt(user, tournament, total_charged)

@@ -1,9 +1,15 @@
-TOURNAMENT DUES PLAYER PAYING LATER
+<% if @dues == 0 %>
+	A player signed up: <%= @user.complete_name %>:
 
-A player signed up to pay later: <%= @user.complete_name %>:
+	<%= @tournament.name %>
+<% else %>
+	TOURNAMENT DUES PLAYER PAYING LATER
 
-<%= @tournament.name %>
-<%= number_to_currency(@tournament.dues_for_user(@user, false)) %>
+	A player signed up to pay later: <%= @user.complete_name %>:
+
+	<%= @tournament.name %>
+	<%= number_to_currency(@dues) %>
+<% end %>
 
 <% @tournament.tournament_days.each do |td| %>
   <% td.contests.each do |c| %>

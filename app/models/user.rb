@@ -11,8 +11,8 @@ class User < ApplicationRecord
   has_many :league_memberships_admin, -> { where is_admin: true }, class_name: 'LeagueMembership'
   has_many :leagues_admin, :through => :league_memberships_admin, class_name: 'League', :source => :league
   has_many :payout_results, inverse_of: :user, :dependent => :destroy
-  has_many :golf_outings, inverse_of: :user
-  has_many :payments, ->{ order 'created_at DESC' }, inverse_of: :user
+  has_many :golf_outings, inverse_of: :user, :dependent => :destroy
+  has_many :payments, ->{ order 'created_at DESC' }, inverse_of: :user, :dependent => :destroy
   has_many :tournament_day_results, inverse_of: :tournament_day, :dependent => :destroy
   has_many :notifications, :dependent => :destroy
   has_many :mobile_devices, :dependent => :destroy
