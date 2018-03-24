@@ -1,8 +1,8 @@
 source 'https://rubygems.org'
 
-ruby '2.3.4'
+ruby '2.3.5'
 
-gem 'rails', '5.1.4'
+gem 'rails', '5.1.5'
 gem 'sass-rails', '~> 5.0'
 gem 'uglifier', '>= 1.3.0'
 gem 'coffee-rails'
@@ -21,7 +21,6 @@ gem 'simple_form'
 gem 'momentjs-rails', '~> 2.9', github: 'derekprior/momentjs-rails'
 gem 'datetimepicker-rails', github: 'zpaulovics/datetimepicker-rails', branch: 'master', submodules: true
 gem 'chosen-rails'
-gem 'airbrake', '~> 5.0'
 gem 'nokogiri'
 gem 'attr_encrypted', '~> 3.0.0'
 gem 'stripe', git: 'https://github.com/stripe/stripe-ruby'
