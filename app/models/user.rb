@@ -261,117 +261,40 @@ class User < ApplicationRecord
     end
   end
 
-  ## Notifications - this stuff should be re-factored out to another class and de-duped
+  ## Notifications
+
+  def ios_devices
+    self.mobile_devices.where(device_type: "iphone")
+  end
+
+  def apple_watch_devices
+    self.mobile_devices.where(device_type: "apple-watch-complication")
+  end
+
+  def android_devices
+    self.mobile_devices.where(device_type: "android")
+  end
 
   def has_ios_devices?
-    self.mobile_devices.where(device_type: "iphone").count >= 1
+    self.ios_devices.count >= 1
   end
 
   def has_android_devices?
-    self.mobile_devices.where(device_type: "android").count >= 1
+    self.android_devices.count >= 1
   end
 
-  def send_mobile_notification(body, pusher = nil)
+  def send_mobile_notification(body, extra_data = nil)
     return if self.wants_push_notifications == false
 
-    self.send_ios_notification(body, pusher) if self.has_ios_devices?
-    self.send_android_notification(body) if self.has_android_devices?
+    push_notifier = Notifications::PushNotification.new
+    push_notifier.send_notification(self, body)
   end
 
-  def send_silent_notification
+  def send_silent_notification(extra_data = nil)
     return if !self.has_ios_devices?
 
-    pusher = User.pusher
-
-    self.mobile_devices.where(device_type: "iphone").each do |device|
-      pusher = User.pusher(true) if device.environment_name == "debug"
-
-      notification = Apnotic::Notification.new(device.device_identifier)
-      notification.topic = "com.ezgolfleague.GolfApp"
-      notification.content_available = 1
-
-      response = pusher.push(notification)
-
-      Rails.logger.info { "Notification Response: #{response.headers} #{response.body}" }
-    end
-
-    pusher.close
-  end
-
-  def send_ios_notification(body, pusher = nil)
-    pusher = User.pusher if pusher.blank?
-
-    self.mobile_devices.where(device_type: "iphone").each do |device|
-      pusher = User.pusher(true) if device.environment_name == "debug"
-
-      notification = Apnotic::Notification.new(device.device_identifier)
-      notification.topic = "com.ezgolfleague.GolfApp"
-      notification.alert = body
-
-      Rails.logger.info { "Pushing Standard Notification to #{device.device_identifier} #{device.environment_name}" }
-
-      response = pusher.push(notification)
-
-      Rails.logger.info { "Notification Response: #{response.headers} #{response.body}" }
-    end
-
-    pusher.close
-  end
-
-  def self.pusher(use_debug = false)
-    certificate_file = "#{Rails.root}/config/apns_cert.pem"
-    passphrase = "golf"
-
-    if use_debug == true
-      connection = Apnotic::Connection.development(cert_path: certificate_file, cert_pass: passphrase)
-    else
-      connection = Apnotic::Connection.new(cert_path: certificate_file, cert_pass: passphrase)
-    end
-
-    return connection
-  end
-
-  def send_complication_notification(content)
-    self.mobile_devices.where(device_type: "apple-watch-complication").each do |device|
-      certificate_file = "#{Rails.root}/config/apns_complication_cert.pem"
-      passphrase = "golf"
-
-      if device.environment_name == "debug"
-        pusher = Apnotic::Connection.development(cert_path: certificate_file, cert_pass: passphrase)
-      else
-        pusher = Apnotic::Connection.new(cert_path: certificate_file, cert_pass: passphrase)
-      end
-
-      notification = Apnotic::Notification.new(device.device_identifier)
-      notification.topic = "com.ezgolfleague.GolfApp.complication"
-      notification.content_available = 1
-      notification.custom_payload = {data: content}
-
-      Rails.logger.info { "Pushing Complication Notification to #{device.device_identifier} #{device.environment_name}" }
-
-      response = pusher.push(notification)
-
-      Rails.logger.info { "Notification Response: #{response.headers} #{response.body}" }
-
-      pusher.close
-    end
-  end
-
-  def send_android_notification(body)
-    firebase = FCM.new(FIREBASE_API_KEY)
-
-    self.mobile_devices.where(device_type: "android").each do |device|
-      registration_ids = [device.device_identifier]
-
-      options = {notification: {
-        body: body,
-        title: "EZ Golf League Update"
-        }}
-
-      response = firebase.send(registration_ids, options)
-
-      Rails.logger.info { "Android Notification Response: #{response}" }
-    end
+    push_notifier = Notifications::IosPushNotification.new
+    push_notifier.send_silent_notification(self, extra_data)
   end
 
   ##Custom Devise

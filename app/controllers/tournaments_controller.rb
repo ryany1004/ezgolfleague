@@ -144,6 +144,16 @@ class TournamentsController < BaseController
 
   def confirm_finalization
     if @tournament.can_be_finalized?
+      if @tournament.is_finalized
+        notification_string = Notifications::NotificationStrings.first_time_finalize(@tournament.name)
+      else
+        notification_string = Notifications::NotificationStrings.update_finalize(@tournament.name)
+      end
+
+      @tournament.players.each do |u|
+        u.send_mobile_notification(notification_string)
+      end
+
       @tournament.is_finalized = true
       @tournament.save
 
