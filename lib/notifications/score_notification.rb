@@ -2,7 +2,7 @@ module Notifications
 	class ScoreNotification
 		def self.notify_for_score(score)
 			tournament = score.scorecard.tournament_day.tournament
-			complete_name = score.scorecard.user.complete_name
+			complete_name = score.scorecard.golf_outing.user.complete_name
 			strokes = score.strokes
 			par = score.course_hole.par
 
