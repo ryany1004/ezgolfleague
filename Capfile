@@ -20,8 +20,6 @@ require 'capistrano/deploy'
 require 'capistrano/bundler'
 require 'capistrano/rails/assets'
 require 'capistrano/rails/migrations'
-require 'airbrake/capistrano/tasks'
-
 require "capistrano-resque"
 require 'rollbar/capistrano3'
 
