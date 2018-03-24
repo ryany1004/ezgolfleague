@@ -279,6 +279,10 @@ class User < ApplicationRecord
     self.ios_devices.count >= 1
   end
 
+  def has_apple_watch_devices?
+    self.apple_watch_devices.count >= 1
+  end
+
   def has_android_devices?
     self.android_devices.count >= 1
   end
@@ -298,7 +302,7 @@ class User < ApplicationRecord
   end
 
   def send_complication_notification(content)
-    return if !self.apple_watch_devices?
+    return if !self.has_apple_watch_devices?
 
     push_notifier = Notifications::IosPushNotification.new
     push_notifier.send_complication_notification(self, content)
