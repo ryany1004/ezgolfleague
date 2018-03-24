@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180218223942) do
+ActiveRecord::Schema.define(version: 20180324231500) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -363,6 +363,7 @@ ActiveRecord::Schema.define(version: 20180218223942) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "sort_order", default: 0
+    t.boolean "has_notified", default: false
     t.index ["course_hole_id"], name: "index_scores_on_course_hole_id"
     t.index ["scorecard_id"], name: "index_scores_on_scorecard_id"
     t.index ["sort_order"], name: "index_scores_on_sort_order"

@@ -23,6 +23,7 @@ module Updaters
 
           if should_update == true
             score.strokes = strokes
+            Notifications::ScoreNotification.notify_for_score(score) unless score.has_notified
             score.save
 
             Rails.logger.info { "Updating Score: #{score.id}" }

@@ -149,10 +149,7 @@ class TournamentsController < BaseController
       else
         notification_string = Notifications::NotificationStrings.update_finalize(@tournament.name)
       end
-
-      @tournament.players.each do |u|
-        u.send_mobile_notification(notification_string, { tournament_id: @tournament.id })
-      end
+      @tournament.notify_tournament_users(notification_string, { tournament_id: @tournament.id })
 
       @tournament.is_finalized = true
       @tournament.save

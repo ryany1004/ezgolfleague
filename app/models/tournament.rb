@@ -110,6 +110,14 @@ class Tournament < ApplicationRecord
 
   ##
 
+  def notify_tournament_users(notification_string, extra_data)
+    self.players.each do |u|
+      u.send_mobile_notification(notification_string, { tournament_id: self.id })
+    end
+  end
+
+  ##
+
   def dues_for_user(user, include_credit_card_fees = false)
     membership = user.league_memberships.where("league_id = ?", self.league.id).first
 
