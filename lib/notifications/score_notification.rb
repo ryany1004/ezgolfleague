@@ -14,7 +14,7 @@ module Notifications
 			end
 
 			metadata = {}
-			if include_metadata
+			if include_metadata == true
 				metadata = { tournament_id: tournament.id }
 			end
 
