@@ -71,8 +71,7 @@ namespace :deploy do
 
   after :publishing, :restart
   after :publishing, :fix_permissions
-  after :finished, 'airbrake:deploy'
-  after 'airbrake:deploy', 'resque:restart'
+  after :finished, 'resque:restart'
 
   set :rollbar_token, '75d79ff8ca4643809de5616d7c6c2265'
   set :rollbar_env, Proc.new { fetch :stage }
