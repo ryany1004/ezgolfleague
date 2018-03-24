@@ -9,12 +9,12 @@ module Notifications
 			return "Final results have been updated for #{tournament_name}."
 		end
 
-		def self.hole_in_one(username)
-			return "#{username} just shot a hole-in-one!"
+		def self.hole_in_one(username, hole_number)
+			return "#{username} just shot a hole-in-one on hole #{hole_number}!"
 		end
 
-		def self.birdie(username)
-			return "#{username} just shot a birdie."
+		def self.birdie(username, hole_number)
+			return "#{username} just shot a birdie on hole #{hole_number}."
 		end
 
 	end

@@ -8,9 +8,9 @@ module Notifications
 			include_metadata = false
 
 			if strokes == 1
-				notification_string = Notifications::NotificationStrings.hole_in_one(complete_name)
+				notification_string = Notifications::NotificationStrings.hole_in_one(complete_name, score.course_hole_number)
 			elsif strokes = par - 1
-				notification_string = Notifications::NotificationStrings.birdie(complete_name)
+				notification_string = Notifications::NotificationStrings.birdie(complete_name, score.course_hole_number)
 			end
 
 			metadata = {}
