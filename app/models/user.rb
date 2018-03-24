@@ -297,6 +297,13 @@ class User < ApplicationRecord
     push_notifier.send_silent_notification(self, extra_data)
   end
 
+  def send_complication_notification(content)
+    return if !self.apple_watch_devices?
+
+    push_notifier = Notifications::IosPushNotification.new
+    push_notifier.send_complication_notification(self, content)
+  end
+
   ##Custom Devise
 
   def league_names_string

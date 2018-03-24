@@ -151,7 +151,7 @@ class TournamentsController < BaseController
       end
 
       @tournament.players.each do |u|
-        u.send_mobile_notification(notification_string)
+        u.send_mobile_notification(notification_string, { tournament_id: @tournament.id })
       end
 
       @tournament.is_finalized = true

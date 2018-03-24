@@ -1,9 +1,5 @@
 class UpdateUserScorecardJob < ApplicationJob
   def perform(primary_scorecard, other_scorecards)
-    #TODO: audit and re-enable
-    # #check for changes in leaderboard
-    # leaderboard_before = primary_scorecard.tournament_day.game_type.flights_with_rankings
-
     Rails.logger.info { "Re-Scoring User #{primary_scorecard.golf_outing.user.complete_name}" }
     primary_scorecard.tournament_day.score_user(primary_scorecard.golf_outing.user)
 
@@ -21,18 +17,17 @@ class UpdateUserScorecardJob < ApplicationJob
       end
     end
 
-    #TODO: audit and re-enable
-    # #check for changes in leaderboard
-    # leaderboard_after = primary_scorecard.tournament_day.game_type.flights_with_rankings
-    # if leaderboard_before != leaderboard_after
-    #   Rails.logger.info { "Sending Notifications for Complications" }
-    #
-    #   primary_scorecard.tournament_day.tournament.players.each do |p|
-    #     slim_leaderboard = FetchingTools::LeaderboardFetching.create_slimmed_down_leaderboard(primary_scorecard.tournament_day)
-    #
-    #     p.send_complication_notification(slim_leaderboard)
-    #   end
-    # end
+    #send to the Apple Watch complication but only if we have not in the last few minutes
+    last_complication_push = Rails.cache.fetch('last_complication_push')
+    if last_complication_push.blank? || last_complication_push < 5.minutes.ago
+      primary_scorecard.tournament_day.tournament.players.each do |p|
+        slim_leaderboard = FetchingTools::LeaderboardFetching.create_slimmed_down_leaderboard(primary_scorecard.tournament_day)
+    
+        p.send_complication_notification(slim_leaderboard)
+      end
+
+      Rails.cache.write('last_complication_push', DateTime.now)
+    end
 
     Rails.logger.info { "Expiring caches: #{primary_scorecard.tournament_day.leaderboard_api_cache_key} | #{primary_scorecard.tournament_day.groups_api_cache_key}" }
 
