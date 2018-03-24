@@ -291,7 +291,7 @@ class User < ApplicationRecord
     return if self.wants_push_notifications == false
 
     push_notifier = Notifications::PushNotification.new
-    push_notifier.send_notification(self, body)
+    push_notifier.send_notification(self, body, extra_data)
   end
 
   def send_silent_notification(extra_data = nil)
