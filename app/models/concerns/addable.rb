@@ -30,6 +30,8 @@ module Addable
     end
 
     user.send_silent_notification #ask device to update
+
+    self.touch
   end
 
   def remove_player_from_group(tournament_group, user, remove_from_teams = false)
