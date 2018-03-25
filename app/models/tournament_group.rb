@@ -9,6 +9,17 @@ class TournamentGroup < ApplicationRecord
 
   after_create :create_golfer_teams
 
+  validate :date_is_valid
+  def date_is_valid
+    if tee_time_at.at_beginning_of_day < tournament_day.tournament_at.at_beginning_of_day
+      errors.add(:tee_time_at, "can't be on a different day than the tournament")
+    end
+
+    if tee_time_at.at_end_of_day > tournament_day.tournament_at.at_end_of_day
+      errors.add(:tee_time_at, "can't be on a different day than the tournament")
+    end
+  end
+
   def create_golfer_teams
     if self.tournament_day.tournament.display_teams?
       Rails.logger.info { "create_golfer_teams" }
