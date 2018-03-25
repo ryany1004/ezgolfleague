@@ -9,6 +9,8 @@ class TournamentGroup < ApplicationRecord
 
   after_create :create_golfer_teams
 
+  validates :tee_time_at, presence: true
+
   validate :date_is_valid
   def date_is_valid
     if tee_time_at.at_beginning_of_day < tournament_day.tournament_at.at_beginning_of_day
