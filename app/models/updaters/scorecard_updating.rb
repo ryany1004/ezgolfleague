@@ -1,7 +1,7 @@
 module Updaters
   class ScorecardUpdating
 
-    def self.update_scorecards_for_scores(scores, primary_scorecard, other_scorecards)
+    def self.update_scorecards_for_scores(scores, primary_scorecard, other_scorecards, notify_score_scores = false)
       scores.each do |score_param|
         Rails.logger.info { "score_param #{score_param}" }
 
@@ -23,7 +23,12 @@ module Updaters
 
           if should_update == true
             score.strokes = strokes
-            Notifications::ScoreNotification.notify_for_score(score) unless score.has_notified
+
+            if notify_score_scores && !score.has_notified
+              Notifications::ScoreNotification.notify_for_score(score)
+            end  
+
+            score.has_notified = true
             score.save
 
             Rails.logger.info { "Updating Score: #{score.id}" }

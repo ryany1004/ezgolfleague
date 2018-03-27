@@ -19,8 +19,6 @@ module Notifications
 			end
 
 			tournament.notify_tournament_users(notification_string, metadata) unless notification_string.blank?
-
-			score.has_notified = true
 		end
 	end
 end
