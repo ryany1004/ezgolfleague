@@ -247,12 +247,12 @@ class TournamentPresenter
     if self.tournament_day == nil
       self.tournament.tournament_days.each do |d|
         d.contests.order(:name).each do |c|
-          items << {name: c.name, winners: c.winners}
+          items << {name: c.name, winners: c.winners} if c.winners.count > 0
         end
       end
     else
       self.tournament_day.contests.order(:name).each do |c|
-        items << {name: c.name, winners: c.winners}
+        items << {name: c.name, winners: c.winners} if c.winners.count > 0
       end
     end
 
