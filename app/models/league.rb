@@ -190,8 +190,11 @@ class League < ApplicationRecord
     tournaments.each do |t|
       t.players.each do |p|
         points = 0
+        payouts = 0
+
         t.tournament_days.each do |day|
           points += day.player_points(p)
+          payouts += day.player_payouts(p)
         end
 
         found_existing_player = false
@@ -205,7 +208,7 @@ class League < ApplicationRecord
         end
 
         if found_existing_player == false
-          ranked_players << { id: p.id, name: p.complete_name, points: points, ranking: 0 }
+          ranked_players << { id: p.id, name: p.complete_name, points: points, payouts: payouts, ranking: 0 }
         end
       end
     end

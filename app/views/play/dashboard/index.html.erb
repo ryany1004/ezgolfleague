@@ -64,6 +64,7 @@
             <th>Rank</th>
             <th>Player</th>
             <th>Points</th>
+            <th>Payouts</th>
           </tr>
         </thead>
         <tbody>
@@ -76,6 +77,7 @@
             <td><%= player[:name] %></td>
             <% end -%>
             <td><%= player[:points].to_i %></td>
+            <td>$<%= player[:payouts].to_i %></td>
           </tr>
           <% end -%>
         </tbody>

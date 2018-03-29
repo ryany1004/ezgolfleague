@@ -322,6 +322,18 @@ module GameTypes
       return points
     end
 
+    def player_payouts(user)
+      return nil if !self.tournament.includes_player?(user)
+
+      payouts = 0
+
+      self.tournament_day.payout_results.each do |p|
+        payouts = payouts + p.amount if p.user == user && p.amount
+      end
+
+      return payouts
+    end
+
     def includes_extra_scoring_column?
       return false
     end
