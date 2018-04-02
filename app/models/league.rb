@@ -23,17 +23,25 @@ class League < ApplicationRecord
 
   def stripe_publishable_key
     if self.stripe_test_mode == true
-      return self.stripe_test_publishable_key
+      self.stripe_test_publishable_key
     else
-      return self.stripe_production_publishable_key
+      self.stripe_production_publishable_key
     end
   end
 
   def stripe_secret_key
     if self.stripe_test_mode == true
-      return self.stripe_test_secret_key
+      self.stripe_test_secret_key
     else
-      return self.stripe_production_secret_key
+      self.stripe_production_secret_key
+    end
+  end
+
+  def stripe_is_setup?
+    if self.stripe_test_publishable_key.blank? || self.stripe_production_publishable_key.blank?
+      false
+    else
+      true
     end
   end
 

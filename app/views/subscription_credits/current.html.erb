@@ -133,7 +133,6 @@
     </div>
   </div>
 
-  <% if @league.free_tournaments_remaining == 0 %>
   <div class="row">
     <div class="panel panel-default">
       <div class="panel-heading">
@@ -178,7 +177,6 @@
       </div>
     </div>
   </div>
-  <% end %>
 
 <% if @league.free_tournaments_remaining > 0 || @active_subscription.blank? %>
   <div class="row">
@@ -190,7 +188,6 @@
   </div>
 <% end %>
 
-  <% if @league.free_tournaments_remaining == 0 %>
   <div class="row">
     <div class="panel panel-default">
       <div class="panel-heading">
@@ -214,9 +211,7 @@
       </div>
     </div>
   </div>
-  <% end %>
 
-  <% if @league.free_tournaments_remaining == 0 %>
   <div class="row">
     <div class="panel panel-default">
       <div class="panel-heading">
@@ -248,7 +243,6 @@
       <div class="panel-footer"><em>Thank you for using EZ Golf League</em></div>
     </div>
   </div>
-  <% end %>
 
   <div class="row">
     <p>Need support or have a question? Contact us at <a href='mailto:support@ezgolfleague.com?subject=Subscription%20Question%20for%20<%= @league.name %>'>support@ezgolfleague.com</a> for help.</p>

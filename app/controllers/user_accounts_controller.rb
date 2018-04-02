@@ -31,6 +31,10 @@ class UserAccountsController < BaseController
 
       redirect_to user_accounts_path, :flash => { :success => "The user was successfully invited." }
     else
+      if !current_user.is_super_user?
+        @user_account.leagues << current_user.leagues_where_admin.first unless current_user.leagues_where_admin.blank? #add the user to at least one league
+      end
+
       if @user_account.save
         GhinUpdateJob.perform_later([@user_account]) unless @user_account.ghin_number.blank?
 
