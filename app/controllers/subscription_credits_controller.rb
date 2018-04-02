@@ -48,11 +48,6 @@ class SubscriptionCreditsController < BaseController
 
         SubscriptionCredit.create(league_season: @league.active_season, amount: payment_amount, golfer_count: updated_golfers, transaction_id: charge.id)
 
-        @active_subscriptions.each do |s|
-          s.tournaments_remaining = 0
-          s.save
-        end
-
         redirect_to current_league_subscription_credits_path(@league, details_amount: payment_amount, details_golfers: updated_golfers, details_id: charge.id), :flash => { :success => "Your payment was recorded. Thanks!" }
       else
         redirect_to current_league_subscription_credits_path(@league), :flash => { :error => "There was an error processing your payment." }
