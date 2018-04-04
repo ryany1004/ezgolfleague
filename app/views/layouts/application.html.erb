@@ -134,7 +134,7 @@ mixpanel.init("567e75f3f6b245aac0a54f6481629537");</script><!-- end Mixpanel -->
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><%= current_user.complete_name %> <span class="caret"></span></a>
           <ul class="dropdown-menu" role="menu">
-            <% if !current_user.has_all_exempt_leagues? %>
+            <% if !current_user.has_all_exempt_leagues? && current_user.is_any_league_admin? %>
             <li><%= link_to "Your Subscription", current_league_subscription_credits_path(current_user.selected_league) %></li>
             <% end %>
             <li><%= link_to "Your User Profile", edit_current_user_accounts_path %></li>

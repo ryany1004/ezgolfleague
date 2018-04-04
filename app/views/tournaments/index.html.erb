@@ -20,7 +20,7 @@
             <br/>
           <% end %>
 
-          <% if !current_user.selected_league.exempt_from_subscription %>
+          <% if !current_user.selected_league.exempt_from_subscription && current_user.is_any_league_admin? %>
             <p>You currently have <%= current_user.selected_league.free_tournaments_remaining %> free tournaments remaining.</p>
             <p><%= link_to "View Your Subscription", current_league_subscription_credits_path(current_user.selected_league), :class => 'btn btn-primary' %></p>
           <% end %>
