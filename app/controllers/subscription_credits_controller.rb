@@ -60,9 +60,17 @@ class SubscriptionCreditsController < BaseController
   def update_credit_card
     token = params[:stripeToken]
 
-    create_or_update_stripe_customer(@league, token)
+    if token.blank?
+      redirect_to current_league_subscription_credits_path(@league), :flash => { :error => "There was a problem updating your credit card. Please check your details and try again." }
+    else
+      updated_successfully = create_or_update_stripe_customer(@league, token)
 
-    redirect_to current_league_subscription_credits_path(@league)
+      if updated_successfully
+        redirect_to current_league_subscription_credits_path(@league)
+      else
+        redirect_to current_league_subscription_credits_path(@league), :flash => { :error => "We were unable to update your details with the credit system. Please check your details and try again." }
+      end
+    end
   end
 
   def charge_credits
@@ -117,6 +125,8 @@ class SubscriptionCreditsController < BaseController
   def create_or_update_stripe_customer(league, token)
     Stripe.api_key = STRIPE_SECRET_KEY
 
+    update_successful = false
+
     if league.stripe_token.blank?
       stripe_customer = Stripe::Customer.create(
         :description => "#{current_user.email} for league #{league.name}",
@@ -131,11 +141,17 @@ class SubscriptionCreditsController < BaseController
       stripe_customer.sources.create({:source => token})
     end
 
-    stripe_card = stripe_customer.sources.data.first
-    league.cc_last_four = stripe_card.last4
-    league.cc_expire_month = stripe_card.exp_month
-    league.cc_expire_year = stripe_card.exp_year
-    league.save
+    unless stripe_customer.sources.data.blank?
+      stripe_card = stripe_customer.sources.data.first
+      league.cc_last_four = stripe_card.last4
+      league.cc_expire_month = stripe_card.exp_month
+      league.cc_expire_year = stripe_card.exp_year
+      league.save
+
+      update_successful = true
+    end
+
+    update_successful
   end
 
   def charge_customer(league, payment_amount, description)
