@@ -77,7 +77,7 @@ class League < ApplicationRecord
     body += "https://app.ezgolfleague.com/leagues/#{self.id}/edit"
 
     User.where(is_super_user: true).each do |u|
-      NotificationMailer.notification_message(u, title, body).deliver_later
+      NotificationMailer.notification_message(u, 'support@ezgolfleague.com', title, body).deliver_later
     end
   end
 

@@ -1,10 +1,10 @@
 class NotificationMailer < ApplicationMailer
 
-  def notification_message(user, subject, contents)
+  def notification_message(user, from, subject, contents)
     @user = user
     @contents = contents
 
-    mail(to: @user.email, subject: "EZ Golf League: #{subject}")
+    mail(to: @user.email, from: from, subject: "EZ Golf League: #{subject}")
   end
 
 end

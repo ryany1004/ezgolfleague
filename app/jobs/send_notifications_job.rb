@@ -6,13 +6,16 @@ class SendNotificationsJob < ApplicationJob
       t.recipients.each do |r|
         Notification.create(notification_template: t, user: r, title: t.title, body: t.body)
 
+        email_from = 'support@ezgolfleague.com'
+
         if t.league.blank?
           subject = t.title
         else
           subject = "#{t.league.name} - #{t.title}"
+          email_from = t.league.contact_email unless e.league.contact_email.blank?
         end
 
-        NotificationMailer.notification_message(r, subject, t.body).deliver_later if r.wants_email_notifications == true
+        NotificationMailer.notification_message(r, email_from, subject, t.body).deliver_later if r.wants_email_notifications == true
 
         r.send_mobile_notification(t.title) if r.wants_push_notifications == true
       end
