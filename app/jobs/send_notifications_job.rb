@@ -12,7 +12,7 @@ class SendNotificationsJob < ApplicationJob
           subject = t.title
         else
           subject = "#{t.league.name} - #{t.title}"
-          email_from = t.league.contact_email unless e.league.contact_email.blank?
+          email_from = t.league.league_admins.first.email
         end
 
         NotificationMailer.notification_message(r, email_from, subject, t.body).deliver_later if r.wants_email_notifications == true

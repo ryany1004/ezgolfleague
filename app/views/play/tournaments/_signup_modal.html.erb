@@ -42,7 +42,7 @@
             <%= f.button :button, "Register & Pay w/ Balance", :class => "btn btn-default", :name => "pay_later", :value => true %>
           <% else -%>
             <%= f.button :button, "Register & Pay Later", :class => "btn btn-default", :name => "pay_later", :value => true %>
-            <% if tournament.allow_credit_card_payment == true -%>
+            <% if tournament.allow_credit_card_payment == true && !tournament.league.stripe_publishable_key.blank? -%>
               <%= f.button :button, "Register & Pay Now", :class => "btn btn-primary", :name => "pay_now", :value => true %>
             <% end -%>
           <% end -%>
