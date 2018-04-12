@@ -22,6 +22,7 @@ module GameTypes
 
     def score_for_hole(user, handicap_allowance, hole)
       scorecard = self.tournament_day.primary_scorecard_for_user(user)
+      return 0 if scorecard.blank?
 
       strokes = 0
       strokes = scorecard.scores.where(course_hole: hole).first.strokes
