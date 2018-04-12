@@ -12,6 +12,10 @@ module GameTypes
       return 6
     end
 
+    def show_other_scorecards?
+      true
+    end
+
     ##Teams
 
     def allow_teams

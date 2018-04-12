@@ -9,6 +9,10 @@ module GameTypes
       return 3
     end
 
+    def show_other_scorecards?
+      true
+    end
+
     ##Setup
 
     def setup_partial
@@ -148,11 +152,11 @@ module GameTypes
     def related_scorecards_for_user(user, only_human_scorecards = false)
       other_scorecards = []
 
-      other_scorecards << self.stableford_scorecard_for_user(user, self.tournament_day.tournament_group_for_player(user)) if only_human_scorecards == false
+      other_scorecards << self.stableford_scorecard_for_user(user) if only_human_scorecards == false
 
       self.tournament_day.other_group_members(user).each do |player|
         other_scorecards << self.tournament_day.primary_scorecard_for_user(player)
-        other_scorecards << self.stableford_scorecard_for_user(player, self.tournament_day.tournament_group_for_player(player)) if only_human_scorecards == false
+        other_scorecards << self.stableford_scorecard_for_user(player) if only_human_scorecards == false
       end
 
       return other_scorecards

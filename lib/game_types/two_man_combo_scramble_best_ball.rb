@@ -9,6 +9,10 @@ module GameTypes
       return 12
     end
 
+    def show_other_scorecards?
+      true
+    end
+
     ##Teams
 
     def number_of_players_per_team

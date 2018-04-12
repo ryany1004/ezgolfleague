@@ -59,6 +59,10 @@ module GameTypes
       end
     end
 
+    def show_other_scorecards?
+      false
+    end
+
     def setup_partial
       return nil
     end

@@ -11,6 +11,10 @@ module GameTypes
     def game_type_id
       return 4
     end
+
+    def show_other_scorecards?
+      true
+    end
     
     ##Teams
     
