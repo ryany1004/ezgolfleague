@@ -58,7 +58,7 @@ module ApplicationHelper
     if score.strokes != 0
       return score.strokes
     else
-      if !score&.scorecard.is_potentially_editable?
+      if !score&.scorecard&.is_potentially_editable?
         return 0
       else
         if print_mode == true
