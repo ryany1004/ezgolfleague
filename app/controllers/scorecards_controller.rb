@@ -40,7 +40,7 @@ class ScorecardsController < BaseController
 
     logger.debug { "Sending: #{scores_to_update}" }
 
-    Updaters::ScorecardUpdating.update_scorecards_for_scores(scores_to_update, @scorecard, @other_scorecards)
+    Updaters::ScorecardUpdating.update_scorecards_for_scores(scores_to_update, @scorecard, @scorecards_to_update)
 
     redirect_to edit_scorecard_path(@scorecard), :flash => { :alert => "The scorecard was successfully updated. NOTE: Net scores are calculated in the background and may not be immediately up to date." }
   end
@@ -103,6 +103,7 @@ class ScorecardsController < BaseController
 
     @scorecard = scorecard_info[:scorecard]
     @other_scorecards = scorecard_info[:other_scorecards]
+    @scorecards_to_update = scorecard_info[:scorecards_to_update]
 
     @scorecard_presenter = ScorecardPresenter.new({primary_scorecard: @scorecard, secondary_scorecards: @other_scorecards, current_user: self.current_user})
   end

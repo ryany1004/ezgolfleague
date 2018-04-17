@@ -8,7 +8,7 @@ class Play::ScorecardsController < Play::BaseController
   end
 
   def update
-    Updaters::ScorecardUpdating.update_scorecards_for_scores(params[:scorecard][:scores].to_unsafe_h, @scorecard, @other_scorecards, true)
+    Updaters::ScorecardUpdating.update_scorecards_for_scores(params[:scorecard][:scores].to_unsafe_h, @scorecard, @scorecards_to_update, true)
 
     logger.info { "SCORE: Re-Scored For Scorecard: #{@scorecard.id}. User: #{@scorecard.golf_outing.user.complete_name}. Net Score: #{@scorecard.tournament_day.tournament_day_results.where(:user_primary_scorecard_id => @scorecard.id).first.net_score}" }
 
@@ -85,6 +85,7 @@ class Play::ScorecardsController < Play::BaseController
 
     @scorecard = scorecard_info[:scorecard]
     @other_scorecards = scorecard_info[:other_scorecards]
+    @scorecards_to_update = scorecard_info[:scorecards_to_update]
 
     @scorecard_presenter = ScorecardPresenter.new({primary_scorecard: @scorecard, secondary_scorecards: @other_scorecards, current_user: self.current_user})
   end

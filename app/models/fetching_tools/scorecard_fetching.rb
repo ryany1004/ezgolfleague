@@ -6,13 +6,18 @@ module FetchingTools
       tournament_day = scorecard.golf_outing.tournament_group.tournament_day
       tournament = tournament_day.tournament
       
+      other_scorecards = []
+      scorecards_to_update = []
+
       if tournament_day.game_type.show_other_scorecards?
         other_scorecards = tournament_day.related_scorecards_for_user(scorecard.golf_outing.user)
-      else
-        other_scorecards = []
+
+        other_scorecards.each do |o|
+          o << scorecards_to_update unless o.id == -1
+        end
       end
 
-      return {:scorecard => scorecard, :tournament_day => tournament_day, :tournament => tournament, :other_scorecards => other_scorecards}
+      return {:scorecard => scorecard, :tournament_day => tournament_day, :tournament => tournament, :other_scorecards => other_scorecards, :scorecards_to_update => scorecards_to_update}
     end
     
   end

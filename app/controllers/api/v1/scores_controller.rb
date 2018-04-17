@@ -19,7 +19,7 @@ class Api::V1::ScoresController < Api::V1::ApiBaseController
 
       logger.debug { "Sending: #{scores_to_update}" }
 
-      Updaters::ScorecardUpdating.update_scorecards_for_scores(scores_to_update, @scorecard, @other_scorecards, true)
+      Updaters::ScorecardUpdating.update_scorecards_for_scores(scores_to_update, @scorecard, @scorecards_to_update, true)
 
       render json: {:text => "Success"}
     else
@@ -34,6 +34,7 @@ class Api::V1::ScoresController < Api::V1::ApiBaseController
     @tournament_day = scorecard_info[:tournament_day]
     @tournament = scorecard_info[:tournament]
     @other_scorecards = scorecard_info[:other_scorecards]
+    @scorecards_to_update = scorecard_info[:scorecards_to_update]
   end
 
 end
