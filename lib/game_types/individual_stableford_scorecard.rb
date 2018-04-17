@@ -25,7 +25,7 @@ module GameTypes
       return 0 if scorecard.blank?
 
       strokes = 0
-      strokes = scorecard.scores.where(course_hole: hole).first.strokes
+      strokes = scorecard&.scores.where(course_hole: hole).first&.strokes
 
       handicap_allowance.each do |h|
         if h[:course_hole] == hole
