@@ -13,7 +13,7 @@ module FetchingTools
         other_scorecards = tournament_day.related_scorecards_for_user(scorecard.golf_outing.user)
 
         other_scorecards.each do |o|
-          o << scorecards_to_update unless o.id == -1
+          scorecards_to_update << o unless o.id == -1
         end
       end
 
