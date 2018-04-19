@@ -45,7 +45,6 @@ set :resque_log_file, "log/resque.log"
 set :workers, { "default" => 2, "ezgolfleague_production_mailers" => 1 }
 
 namespace :deploy do
-
   desc 'Restart application'
   task :restart do
     on roles(:app), in: :sequence, wait: 5 do

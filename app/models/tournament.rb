@@ -29,7 +29,7 @@ class Tournament < ApplicationRecord
   validates :max_players, :numericality => { :greater_than_or_equal_to => 0 }
   validates :dues_amount, :numericality => { :greater_than_or_equal_to => 0 }
 
-  validate :dates_are_valid, on: :create, unless: "self.skip_date_validation == true"
+  validate :dates_are_valid, on: :create, unless: :is_super_user_setup?
   def dates_are_valid
     now = Time.zone.now.at_beginning_of_day
 
@@ -52,10 +52,18 @@ class Tournament < ApplicationRecord
     end
   end
 
+  def is_super_user_setup?
+    self.skip_date_validation
+  end
+
   validate :league_has_season
   def league_has_season
-    if self.signup_closes_at > self.league.league_seasons.last.ends_at
-      errors.add(:signup_closes_at, "can't be after your last season ends. Please create a league season in Leagues > Actions (Manage Seasons) that includes this date.")
+    if self.signup_closes_at.blank?
+      errors.add(:signup_closes_at, "must be present.")
+    else
+      if self.signup_closes_at > self.league.league_seasons.last.ends_at
+        errors.add(:signup_closes_at, "can't be after your last season ends. Please create a league season in Leagues > Actions (Manage Seasons) that includes this date.")
+      end
     end
   end
 
