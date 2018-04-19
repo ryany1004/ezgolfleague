@@ -454,7 +454,7 @@ module GameTypes
         team_name = ""
 
         team = self.tournament_day.golfer_team_for_player(player)
-        team.users.each do |team_user|
+        team&.users.each do |team_user|
           team_name = team_name + "#{team_user.complete_name}"
 
           team_name = team_name + " / " unless team_user == team.users.last

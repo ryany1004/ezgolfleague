@@ -153,7 +153,7 @@ module GameTypes
       other_members = []
 
       team = self.tournament_day.golfer_team_for_player(user)
-      team.users.each do |u|
+      team&.users.each do |u|
         other_members << u if u != user
       end
 
