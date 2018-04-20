@@ -4,7 +4,7 @@ class Play::TournamentsController < Play::BaseController
   before_action :fetch_tournament, :except => [:show]
 
   def show
-    tournament = self.fetch_tournament_from_user_for_tournament_id(params[:id])
+    tournament = self.view_tournament_from_user_for_tournament_id(params[:id])
 
     if tournament.tournament_days.count == 1
       tournament_day = tournament.tournament_days.first
@@ -26,7 +26,7 @@ class Play::TournamentsController < Play::BaseController
   end
 
   def leaderboard
-    @tournament = self.fetch_tournament_from_user_for_tournament_id(params[:tournament_id])
+    @tournament = self.view_tournament_from_user_for_tournament_id(params[:tournament_id])
     @tournament_day = @tournament.tournament_days.find(params[:day])
     @user_scorecard = @tournament_day.primary_scorecard_for_user(current_user)
 
@@ -39,7 +39,7 @@ class Play::TournamentsController < Play::BaseController
   ##
 
   def confirm
-    @tournament = self.fetch_tournament_from_user_for_tournament_id(params[:tournament_id])
+    @tournament = self.view_tournament_from_user_for_tournament_id(params[:tournament_id])
     @tournament.tournament_days.each do |td|
       outing = td.golf_outing_for_player(current_user)
 
@@ -130,7 +130,7 @@ class Play::TournamentsController < Play::BaseController
   private
 
   def fetch_tournament
-    @tournament = self.fetch_tournament_from_user_for_tournament_id(params[:tournament_id])
+    @tournament = self.view_tournament_from_user_for_tournament_id(params[:tournament_id])
   end
 
 end

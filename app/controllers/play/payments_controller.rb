@@ -6,7 +6,7 @@ class Play::PaymentsController < Play::BaseController
 
   def new
     if params[:payment_type] == 'league_dues'
-      @league = self.league_from_user_for_league_id(params[:league_id])
+      @league = self.view_league_from_user_for_league_id(params[:league_id])
 
       @payment_instructions = "Thanks for paying your league dues via EZ Golf League. Please enter your information below."
       @payment_amount = @league.dues_for_user(current_user)
@@ -18,7 +18,7 @@ class Play::PaymentsController < Play::BaseController
       @payment_amount = @contest.dues_for_user(current_user, true)
       @cost_breakdown_lines = @contest.cost_breakdown_for_user(current_user)
     elsif params[:payment_type] == 'tournament_dues'
-      @tournament = self.fetch_tournament_from_user_for_tournament_id(params[:tournament_id])
+      @tournament = self.view_tournament_from_user_for_tournament_id(params[:tournament_id])
 
       @payment_instructions = "Thanks for paying your tournament dues via EZ Golf League. Please enter your information below."
       @payment_amount = @tournament.dues_for_user(current_user, false)
@@ -41,7 +41,7 @@ class Play::PaymentsController < Play::BaseController
 
   def create
     if params[:tournament_id] != nil
-      tournament = self.fetch_tournament_from_user_for_tournament_id(params[:tournament_id])
+      tournament = self.view_tournament_from_user_for_tournament_id(params[:tournament_id])
 
       amount = tournament.total_for_user_with_contest_fees(current_user, true)
       api_key = tournament.league.stripe_secret_key
@@ -53,7 +53,7 @@ class Play::PaymentsController < Play::BaseController
       api_key = contest.tournament_day.tournament.league.stripe_secret_key
       charge_description = "#{current_user.complete_name} Contest Dues"
     elsif params[:league_id] != nil
-      league = self.league_from_user_for_league_id(params[:league_id])
+      league = self.view_league_from_user_for_league_id(params[:league_id])
       league_season = league.league_seasons.last #NOTE: this is always going to be attached to the last one
 
       amount = league.dues_for_user(current_user)

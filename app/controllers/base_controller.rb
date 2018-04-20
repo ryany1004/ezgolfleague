@@ -14,6 +14,16 @@ class BaseController < ActionController::Base
     Time.use_zone(current_user.time_zone, &block)
   end
 
+  def view_tournament_from_user_for_tournament_id(tournament_id)
+    if current_user.is_super_user?
+      @tournament = Tournament.find(tournament_id)
+    else
+      @tournament = current_user.tournaments.where(id: tournament_id).first
+    end
+
+    return @tournament
+  end
+
   def fetch_tournament_from_user_for_tournament_id(tournament_id)
     if current_user.is_super_user?
       @tournament = Tournament.find(tournament_id)
@@ -22,6 +32,16 @@ class BaseController < ActionController::Base
     end
 
     return @tournament
+  end
+
+  def view_league_from_user_for_league_id(league_id)
+    if current_user.is_super_user?
+      @league = League.find(league_id)
+    else
+      @league = current_user.leagues.where(id: league_id).first
+    end
+
+    return @league
   end
 
   def league_from_user_for_league_id(league_id)
