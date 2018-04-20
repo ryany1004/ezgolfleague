@@ -15,17 +15,23 @@ class BaseController < ActionController::Base
   end
 
   def fetch_tournament_from_user_for_tournament_id(tournament_id)
-    @tournament = current_user.tournaments_admin.where(id: tournament_id).first
-    @tournament = Tournament.find(tournament_id) if @tournament.blank? && current_user.is_super_user?
+    if current_user.is_super_user?
+      @tournament = Tournament.find(tournament_id)
+    else
+      @tournament = current_user.tournaments_admin.where(id: tournament_id).first
+    end
 
-    @tournament
+    return @tournament
   end
 
   def league_from_user_for_league_id(league_id)
-    @league = current_user.leagues_admin.where(id: league_id).first
-    @league = League.find(league_id) if @league.blank? && current_user.is_super_user?
+    if current_user.is_super_user?
+      @league = League.find(league_id)
+    else
+      @league = current_user.leagues_admin.where(id: league_id).first
+    end
 
-    @league
+    return @league
   end
 
   impersonates :user

@@ -1,7 +1,7 @@
 class TournamentDaysController < BaseController
   before_action :set_stage
-  before_action :initialize_form, :only => [:new, :edit]
   before_action :fetch_tournament
+  before_action :initialize_form, :only => [:new, :edit]
   before_action :fetch_tournament_day, :only => [:edit, :update, :destroy]
 
   def index

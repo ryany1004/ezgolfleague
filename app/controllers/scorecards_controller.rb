@@ -23,6 +23,8 @@ class ScorecardsController < BaseController
   end
 
   def edit
+    redirect_to root_path if !@scorecard.user_can_edit?(current_user)
+
     eager_groups = fetch_eager_groups
 
     @next_scorecard = find_next_scorecard(@tournament_day, eager_groups, @scorecard)
@@ -106,6 +108,8 @@ class ScorecardsController < BaseController
     @scorecards_to_update = scorecard_info[:scorecards_to_update]
 
     @scorecard_presenter = ScorecardPresenter.new({primary_scorecard: @scorecard, secondary_scorecards: @other_scorecards, current_user: self.current_user})
+
+    redirect_to root_path if !@scorecard.user_can_view?(current_user)
   end
 
 end

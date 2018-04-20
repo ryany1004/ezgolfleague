@@ -4,7 +4,7 @@ class Play::TournamentsController < Play::BaseController
   before_action :fetch_tournament, :except => [:show]
 
   def show
-    tournament = Tournament.find(params[:id])
+    tournament = self.fetch_tournament_from_user_for_tournament_id(params[:id])
 
     if tournament.tournament_days.count == 1
       tournament_day = tournament.tournament_days.first
@@ -26,7 +26,7 @@ class Play::TournamentsController < Play::BaseController
   end
 
   def leaderboard
-    @tournament = Tournament.find(params[:tournament_id])
+    @tournament = self.fetch_tournament_from_user_for_tournament_id(params[:tournament_id])
     @tournament_day = @tournament.tournament_days.find(params[:day])
     @user_scorecard = @tournament_day.primary_scorecard_for_user(current_user)
 
@@ -39,7 +39,7 @@ class Play::TournamentsController < Play::BaseController
   ##
 
   def confirm
-    @tournament = Tournament.find(params[:tournament_id])
+    @tournament = self.fetch_tournament_from_user_for_tournament_id(params[:tournament_id])
     @tournament.tournament_days.each do |td|
       outing = td.golf_outing_for_player(current_user)
 
@@ -63,11 +63,11 @@ class Play::TournamentsController < Play::BaseController
   end
 
   def complete_signup
-    tournament_group = TournamentGroup.find(params[:group_id])
-
     if @tournament.includes_player?(current_user)
       redirect_to play_tournament_signup_path(@tournament), :flash => { :error => "You are already registered for this tournament. Remove your existing registration and try again." }
     else
+      tournament_group = @tournament.first_day.tournament_groups.find(params[:group_id])
+
       paying_now = false
       paying_now = true if !params[:pay_now].blank?
 
@@ -130,7 +130,7 @@ class Play::TournamentsController < Play::BaseController
   private
 
   def fetch_tournament
-    @tournament = Tournament.find(params[:tournament_id])
+    @tournament = self.fetch_tournament_from_user_for_tournament_id(params[:tournament_id])
   end
 
 end

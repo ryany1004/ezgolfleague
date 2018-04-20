@@ -13,7 +13,15 @@ class Scorecard < ApplicationRecord
   accepts_nested_attributes_for :scores
 
   def tournament_day
-    return self.golf_outing.tournament_group.tournament_day
+    self.golf_outing.tournament_group.tournament_day
+  end
+
+  def user
+    self.golf_outing.user
+  end
+
+  def league
+    self.tournament_day.tournament.league
   end
 
   def clear_primary_scorecard_cache
@@ -94,6 +102,28 @@ class Scorecard < ApplicationRecord
     end
 
     return nil
+  end
+
+  # Permissions
+
+  def user_can_view?(user)
+    return true if user.is_super_user
+    return true if self.user == user
+    return false if user.blank?
+
+    return true if self.league.users.include?(user)
+
+    return false
+  end
+
+  def user_can_edit?(user)
+    return true if user.is_super_user
+    return true if self.user == user
+    return false if user.blank?
+
+    return true if self.league.league_admins.include?(user)
+
+    return false
   end
 
   #Team Support

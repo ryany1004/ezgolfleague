@@ -1,7 +1,7 @@
 class LeagueMembershipsController < BaseController
-  before_action :fetch_membership, :only => [:edit, :update, :destroy]
   before_action :fetch_league
   before_action :fetch_users
+  before_action :fetch_membership, :only => [:edit, :update, :destroy]
 
   def index
     @league_memberships = @league.league_memberships.includes(:user).order("users.last_name").page params[:page]

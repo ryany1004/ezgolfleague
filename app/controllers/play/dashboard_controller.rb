@@ -57,7 +57,7 @@ class Play::DashboardController < Play::BaseController
   end
 
   def switch_leagues
-    league = League.find(params[:league_id])
+    league = self.league_from_user_for_league_id(params[:league_id])
     current_user.current_league = league
     current_user.save
 
