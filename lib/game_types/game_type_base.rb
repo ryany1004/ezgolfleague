@@ -12,7 +12,7 @@ module GameTypes
 
     def self.available_types
       #return [GameTypes::IndividualStrokePlay.new, GameTypes::IndividualMatchPlay.new, GameTypes::IndividualModifiedStableford.new, GameTypes::TwoManShamble.new, GameTypes::TwoManScramble.new, GameTypes::FourManScramble.new, GameTypes::TwoManBestBall.new, GameTypes::TwoBestBallsOfFour.new, GameTypes::TwoManComboScrambleBestBall.new, GameTypes::OneTwoThreeBestBallsOfFour.new]
-      return [GameTypes::IndividualStrokePlay.new, GameTypes::IndividualModifiedStableford.new, GameTypes::TwoManScramble.new, GameTypes::FourManScramble.new]
+      return [GameTypes::IndividualStrokePlay.new, GameTypes::IndividualModifiedStableford.new, GameTypes::TwoManScramble.new, GameTypes::FourManScramble.new, GameTypes::TwoManBestBall.new]
     end
 
     def display_name
