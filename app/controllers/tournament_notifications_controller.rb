@@ -72,7 +72,7 @@ class TournamentNotificationsController < BaseController
   end
 
   def fetch_other_details
-    @tournament = Tournament.find(params[:tournament_id])
+    @tournament = self.fetch_tournament_from_user_for_tournament_id(params[:tournament_id])
     @tournament_actions = ["On Finalization", "To Unregistered Members 1 Day Before Registration Closes"]
   end
 end

@@ -83,11 +83,11 @@ class TournamentGroupsController < BaseController
   end
 
   def fetch_tournament
-    @tournament = Tournament.find(params[:tournament_id])
+    @tournament = self.fetch_tournament_from_user_for_tournament_id(params[:tournament_id])
   end
 
   def fetch_tournament_group
-    @tournament_group = TournamentGroup.find(params[:id])
+    @tournament_group = @tournament_day.tournament_groups.find(params[:id])
   end
 
   def fetch_tournament_day

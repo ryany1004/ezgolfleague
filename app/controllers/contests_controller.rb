@@ -116,7 +116,7 @@ class ContestsController < BaseController
   end
 
   def fetch_tournament
-    @tournament = Tournament.find(params[:tournament_id])
+    @tournament = self.fetch_tournament_from_user_for_tournament_id(params[:tournament_id])
   end
 
   def setup_form

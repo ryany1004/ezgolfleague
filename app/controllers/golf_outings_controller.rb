@@ -80,9 +80,9 @@ class GolfOutingsController < BaseController
   end
 
   def fetch_tournament
-    @league = League.find(params[:league_id])
-    @tournament = Tournament.find(params[:tournament_id])
-    @tournament_day = TournamentDay.find(params[:tournament_day_id])
+    @league = self.league_from_user_for_league_id(params[:league_id])
+    @tournament = self.fetch_tournament_from_user_for_tournament_id(params[:tournament_id])
+    @tournament_day = @tournament.tournament_days.find(params[:tournament_day_id])
     @tournament_groups = @tournament_day.tournament_groups
     @all_league_members = @tournament.league.users
   end

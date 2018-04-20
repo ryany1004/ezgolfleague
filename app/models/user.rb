@@ -10,6 +10,7 @@ class User < ApplicationRecord
   has_many :leagues, ->{ order 'name' }, through: :league_memberships
   has_many :league_memberships_admin, -> { where is_admin: true }, class_name: 'LeagueMembership'
   has_many :leagues_admin, :through => :league_memberships_admin, class_name: 'League', :source => :league
+  has_many :tournaments_admin, :through => :leagues_admin, class_name: 'Tournament', :source => :tournaments
   has_many :payout_results, inverse_of: :user, :dependent => :destroy
   has_many :golf_outings, inverse_of: :user, :dependent => :destroy
   has_many :payments, ->{ order 'created_at DESC' }, inverse_of: :user, :dependent => :destroy
@@ -61,6 +62,19 @@ class User < ApplicationRecord
   end
 
   ##
+
+  def can_edit_user?(user)
+    return true if self.is_super_user
+    return false if self.blank?
+
+    is_admin_of_league = false
+
+    self.leagues_admin.each do |l|
+      is_admin_of_league = true if l.users.include?(user)
+    end
+
+    is_admin_of_league
+  end
 
   def impersonatable_users
     if self.child_users.blank? && self.parent_user.blank?
@@ -160,31 +174,7 @@ class User < ApplicationRecord
     return true if self.is_super_user
     return false if self.blank?
 
-    any_admin = false
-
-    self.leagues.each do |league|
-      membership = league.membership_for_user(self)
-
-      unless membership.blank?
-        any_admin = true if membership.is_admin
-      end
-    end
-
-    return any_admin
-  end
-
-  def leagues_where_admin
-    admin_leagues = []
-
-    self.leagues.each do |league|
-      membership = league.membership_for_user(self)
-
-      unless membership.blank?
-        admin_leagues << league if membership.is_admin
-      end
-    end
-
-    admin_leagues
+    return self.leagues_admin.count > 0
   end
 
   def has_all_exempt_leagues?
@@ -242,7 +232,7 @@ class User < ApplicationRecord
   def names_of_leagues_admin
     names = ""
 
-    self.leagues_where_admin.each do |l|
+    self.leagues_admin.each do |l|
       names += l.name + " "
     end
 

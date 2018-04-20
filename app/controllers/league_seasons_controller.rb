@@ -46,10 +46,10 @@ class LeagueSeasonsController < BaseController
   end
 
   def fetch_season
-    @league_season = LeagueSeason.find(params[:id])
+    @league_season = @league.league_seasons.find(params[:id])
   end
 
   def fetch_league
-    @league = League.find(params[:league_id])
+    @league = self.league_from_user_for_league_id(params[:league_id])
   end
 end

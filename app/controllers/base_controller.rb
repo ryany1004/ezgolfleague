@@ -14,5 +14,19 @@ class BaseController < ActionController::Base
     Time.use_zone(current_user.time_zone, &block)
   end
 
+  def fetch_tournament_from_user_for_tournament_id(tournament_id)
+    @tournament = current_user.tournaments_admin.where(id: tournament_id).first
+    @tournament = Tournament.find(tournament_id) if @tournament.blank? && current_user.is_super_user?
+
+    @tournament
+  end
+
+  def league_from_user_for_league_id(league_id)
+    @league = current_user.leagues_admin.where(id: league_id).first
+    @league = League.find(league_id) if @league.blank? && current_user.is_super_user?
+
+    @league
+  end
+
   impersonates :user
 end

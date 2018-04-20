@@ -32,7 +32,7 @@ class UserAccountsController < BaseController
       redirect_to user_accounts_path, :flash => { :success => "The user was successfully invited." }
     else
       if !current_user.is_super_user?
-        @user_account.leagues << current_user.leagues_where_admin.first unless current_user.leagues_where_admin.blank? #add the user to at least one league
+        @user_account.leagues << current_user.leagues_admin.first unless current_user.leagues_admin.blank? #add the user to at least one league
       end
 
       if @user_account.save
@@ -223,6 +223,8 @@ class UserAccountsController < BaseController
 
   def fetch_user_account
     @user_account = User.find(params[:id])
+
+    redirect_to root_path if !current_user.can_edit_user?(@user_account)
   end
 
   def initialize_form

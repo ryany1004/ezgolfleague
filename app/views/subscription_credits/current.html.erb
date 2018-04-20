@@ -102,13 +102,13 @@
   <div class="row">
     <h1>Your Subscription for <%= @league.name %></h1>
 
-    <% if current_user.leagues_where_admin.select {|l| l != @league && !l.exempt_from_subscription}.count > 0 %>
+    <% if current_user.leagues_admin.select {|l| l != @league && !l.exempt_from_subscription}.count > 0 %>
     <div class="btn-group">
       <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         Switch Leagues <span class="caret"></span>
       </button>
       <ul class="dropdown-menu">
-        <% current_user.leagues_where_admin.select {|l| !l.exempt_from_subscription}.each do |l| %>
+        <% current_user.leagues_admin.select {|l| !l.exempt_from_subscription}.each do |l| %>
           <li><%= link_to l.name, current_league_subscription_credits_path(l) %></li>
         <% end %>
       </ul>

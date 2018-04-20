@@ -72,6 +72,7 @@ class NotificationTemplatesController < BaseController
   end
 
   def fetch_notification_template
+    #TODO: Update for secure fetching
     @notification_template = NotificationTemplate.find(params[:id])
   end
 

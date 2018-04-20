@@ -83,6 +83,7 @@ class PaymentsController < BaseController
   private
   
   def fetch_payment
+    #TODO: update for secure fetching
     @payment = Payment.find(params[:id])
   end
   
