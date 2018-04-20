@@ -31,6 +31,7 @@ module Scoreable
   end
 
   def user_can_edit_scorecard(user, scorecard)
+    return false if scorecard.blank?
     return false if self.tournament.is_past?
     return false if self.tournament.is_finalized == true
     return false if scorecard.is_potentially_editable? == false
