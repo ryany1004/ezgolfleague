@@ -58,7 +58,7 @@ class TournamentMailer < ApplicationMailer
     @cost_lines << {:name => "Credit Card Fees", :price => credit_card_fees}
     @cost_lines << {:name => "Total", :price => total_charged}
 
-    mail(to: user.email, subject: "Tournament Payment Receipt: #{user.complete_name}", bcc: league_season.league.dues_payment_receipt_email_addresses)
+    mail(to: user.email, from: "do_not_reply@ezgolfleague.com", subject: "Tournament Payment Receipt: #{user.complete_name}", bcc: league_season.league.dues_payment_receipt_email_addresses)
   end
 
   def tournament_coming_up(tournament, user)

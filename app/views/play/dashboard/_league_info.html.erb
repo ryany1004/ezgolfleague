@@ -10,7 +10,7 @@
           <p><%= link_to "View your complete transaction history.", play_payments_path %></p>
         <% end %>
 
-        <% if has_paid_dues == false -%>
+        <% if current_user.selected_league.stripe_is_setup? && has_paid_dues == false -%>
           <p><%= link_to "Pay #{league_season.name} Dues Now", new_play_payment_path(:payment_type => "league_dues", :league_id => current_user.selected_league.id, :league_season_id => league_season), :class => 'btn btn-primary' %></p>
         <% end -%>
       </div>
