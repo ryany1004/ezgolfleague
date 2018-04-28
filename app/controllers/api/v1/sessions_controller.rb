@@ -48,6 +48,13 @@ class Api::V1::SessionsController < Api::V1::ApiBaseController
       @current_user.avatar = File.open(temp_file_path)
       @current_user.save
 
+      #NOTE: bust the cache for associated tournaments
+      @current_user.tournaments.each do |t|
+        t.tournament_days.each do |d|
+          d.touch
+        end
+      end
+
       render plain: "Success", :status => :ok
     end
   end
