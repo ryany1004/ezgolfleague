@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180324231500) do
+ActiveRecord::Schema.define(version: 20180428230419) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -262,6 +262,8 @@ ActiveRecord::Schema.define(version: 20180324231500) do
     t.date "start_date"
     t.integer "free_tournaments_remaining", default: 2
     t.boolean "display_balances_to_players", default: true
+    t.string "league_type"
+    t.text "more_comments"
   end
 
   create_table "mobile_devices", id: :serial, force: :cascade do |t|

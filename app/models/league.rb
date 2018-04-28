@@ -74,6 +74,9 @@ class League < ApplicationRecord
 
     body = "A new league has been created.\n\n"
     body += self.name + "\n\n"
+    body += "Season Starts: #{self.start_date}\n\n"
+    body += "League Type: #{self.league_type}\n\n"
+    body += "Comments: #{self.more_comments}\n\n"
     body += "https://app.ezgolfleague.com/leagues/#{self.id}/edit"
 
     User.where(is_super_user: true).each do |u|

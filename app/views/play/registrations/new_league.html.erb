@@ -39,8 +39,17 @@ fbq('track', 'CompleteRegistration', {
             <%= f.input :contact_name, :label => 'Contact Name', required: true %>
             <%= f.input :contact_phone, :label => 'Contact Phone', required: true %>
             <%= f.input :contact_email, :label => 'Contact Email', required: true %>
-            <%= f.input :start_date, :label => 'When Does Your Season Start?', :as => :date_picker %>
             <%= f.input :show_in_search, :label => 'Appears in League Search (Other Players Can Join Your League)?' %>
+          </div>
+
+          <div class="well">
+            <p>Please provide some additional information about your league:</p>
+
+            <%= f.input :start_date, :label => 'When Does Your Season Start?', :as => :date_picker %>
+
+            <%= f.input :league_type, collection: ["Individual Play", "Team Play", "Other"] %>
+
+            <%= f.input :more_comments, as: :text, :input_html => {:cols => 5, :rows => 10 } %>
           </div>
 
           <div class="form-actions">
