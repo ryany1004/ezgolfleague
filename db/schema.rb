@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180428230419) do
+ActiveRecord::Schema.define(version: 20180504195421) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -485,6 +485,7 @@ ActiveRecord::Schema.define(version: 20180428230419) do
     t.datetime "ghin_updated_at"
     t.string "time_zone", default: "Pacific Time (US & Canada)"
     t.integer "parent_id"
+    t.boolean "is_blocked", default: false
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["invitation_token"], name: "index_users_on_invitation_token", unique: true
     t.index ["invitations_count"], name: "index_users_on_invitations_count"

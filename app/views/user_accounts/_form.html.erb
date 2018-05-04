@@ -27,6 +27,14 @@
     <% end %>
   </div>
 
+  <% if current_user.is_super_user && @user_account.new_record? == false %>
+  <div class="well">
+    <p>Block User</p>
+
+    <%= f.input :is_blocked, as: :boolean %>
+  </div>
+  <% end %>
+
   <h3>Avatar</h3>
   <div class="well">
     <% unless @user_account.avatar.blank? -%>
