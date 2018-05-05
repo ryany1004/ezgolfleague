@@ -37,7 +37,7 @@ class Api::V1::TournamentsController < Api::V1::ApiBaseController
     tournament_results = Rails.cache.fetch(cache_key, expires_in: 24.hours, race_condition_ttl: 10) do
       tournament.tournament_days.each do |d|
         day_flights = d.flights_with_rankings
-        combined_flights = FetchingTools::LeaderboardFetching.flights_with_rankings_could_be_combined(d, day_flights)
+        combined_flights = FetchingTools::LeaderboardFetching.flights_with_rankings_could_be_combined(d)
         tournament_presenter = TournamentPresenter.new({tournament: tournament, tournament_day: d, user: current_user, day_flights: day_flights, combined_flights: combined_flights})
 
         #payouts

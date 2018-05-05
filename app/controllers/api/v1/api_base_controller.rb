@@ -23,7 +23,7 @@ class Api::V1::ApiBaseController < ApplicationController
 
         render text: "No such session", :status => :unauthorized
       else
-        sign_in(@current_user, :bypass => true)
+        bypass_sign_in(@current_user)
 
         Rails.logger.info { "API: Login Successful for #{@current_user.id}" }
       end

@@ -82,8 +82,8 @@ class Play::TournamentsController < Play::BaseController
 
       #contests
       contest_ids = []
-      if !params[:tournament].blank? && !params[:tournament][:contests_to_enter].blank? && params[:tournament][:contests_to_enter][0] != "" #TODO: Fix this total hack
-        params[:tournament][:contests_to_enter].to_unsafe_h.each do |contest_id|
+      if !params[:tournament].blank? && !params[:tournament][:contests_to_enter].blank? #&& params[:tournament][:contests_to_enter][0] != "" #TODO: Fix this total hack
+        params[:tournament][:contests_to_enter].each do |contest_id|
           unless contest_id.blank?
             contest = Contest.find(contest_id)
 
@@ -124,7 +124,7 @@ class Play::TournamentsController < Play::BaseController
   end
 
   def fetch_combined_flights_with_rankings(tournament_day, day_flights_with_rankings)
-    return FetchingTools::LeaderboardFetching.flights_with_rankings_could_be_combined(tournament_day, day_flights_with_rankings)
+    return FetchingTools::LeaderboardFetching.flights_with_rankings_could_be_combined(tournament_day)
   end
 
   private

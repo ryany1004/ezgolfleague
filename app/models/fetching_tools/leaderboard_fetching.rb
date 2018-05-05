@@ -19,8 +19,8 @@ module FetchingTools
       slimmed_rankings
     end
 
-    def self.flights_with_rankings_could_be_combined(tournament_day, day_rankings)
-      if tournament_day.tournament.tournament_days.count > 1 && tournament_day == tournament_day.tournament.last_day
+    def self.flights_with_rankings_could_be_combined(tournament_day)
+      if tournament_day.tournament.tournament_days.count > 1 && tournament_day == tournament_day.tournament.last_day && tournament_day.has_scores?
         rankings = []
 
         tournament_day.tournament.tournament_days.each do |day|
@@ -33,7 +33,7 @@ module FetchingTools
 
         return flights_with_rankings
       else
-        return day_rankings
+        return tournament_day.tournament.tournament_days.first.flights_with_rankings
       end
     end
 
