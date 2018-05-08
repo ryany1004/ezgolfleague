@@ -107,6 +107,7 @@ class SubscriptionCreditsController < BaseController
     @past_subscriptions = []
 
     season = @league.active_season
+    
     unless season.blank?
       active_subscriptions = @league.active_season.subscription_credits.order("created_at DESC")
       @active_subscription = active_subscriptions.try(:first)
