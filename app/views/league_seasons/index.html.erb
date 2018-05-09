@@ -11,7 +11,9 @@
       <th>Name</th>
 			<th>Start Date</th>
       <th>End Date</th>
-      <th><%= link_to 'Create Season', new_league_league_season_path(@league), :class => 'btn btn-primary' %></th>
+      <% if current_user.is_super_user? %>
+      	<th><%= link_to 'Create Season', new_league_league_season_path(@league), :class => 'btn btn-primary' %></th>
+    	<% end %>
 		</tr>
 	</thead>
 	<tbody>
@@ -20,7 +22,12 @@
       <td><%= link_to season.name, edit_league_league_season_path(@league, season) %></td>
 			<td><%= season.starts_at.to_s(:short) %></td>
 			<td><%= season.ends_at.to_s(:short) %></td>
-      <td><%= link_to "Edit", edit_league_league_season_path(@league, season) %> | <%= link_to 'Delete', league_league_season_path(@league, season), :data => { :confirm => 'Are you sure you want to delete this season?' }, :method => :delete %></td>
+
+			<% if current_user.is_super_user? %>
+      	<td><%= link_to "Edit", edit_league_league_season_path(@league, season) %> | <%= link_to 'Delete', league_league_season_path(@league, season), :data => { :confirm => 'Are you sure you want to delete this season?' }, :method => :delete %></td>
+    	<% else %>
+    		<td>&nbsp;</td>
+    	<% end %>
 		</tr>
 	<% end %>
 	</tbody>
@@ -29,7 +36,9 @@
 			<th>&nbsp;</th>
       <th>&nbsp;</th>
       <th>&nbsp;</th>
-      <th><%= link_to 'Create Season', new_league_league_season_path(@league), :class => 'btn btn-primary' %></th>
+      <% if current_user.is_super_user? %>
+      	<th><%= link_to 'Create Season', new_league_league_season_path(@league), :class => 'btn btn-primary' %></th>
+    	<% end %>
 		</tr>
   </tfoot>
 </table>

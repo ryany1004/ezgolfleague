@@ -12,13 +12,15 @@ class LeagueSeasonsController < BaseController
     @league_season = LeagueSeason.new
     
     @last_season = @league.league_seasons.last
-    if @last_season.blank?
-      @league_season.starts_at = Date.civil(Time.now.year, 1, 1)
-      @league_season.ends_at = Date.civil(Time.now.year, -1, -1)
-    else
-      @league_season.starts_at = Date.civil(@last_season.starts_at.year, 1, 1)
-      @league_season.ends_at = Date.civil(@last_season.ends_at.year, -1, -1)
+
+    year = Time.now.year
+
+    unless @last_season.blank?
+      year = @last_season.starts_at.year + 1
     end
+
+    @league_season.starts_at = Date.civil(year, 1, 1)
+    @league_season.ends_at = Date.civil(year, -1, -1)
   end
 
   def create
