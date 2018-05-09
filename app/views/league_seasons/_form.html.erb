@@ -16,6 +16,9 @@
       <%= f.input :starts_at, :label => 'Start Date', required: true, :as => :date_picker %>
 
       <%= f.input :ends_at, :label => 'End Date', required: true, :as => :date_picker %>
+    <% else %>
+      <%= f.hidden_field :starts_at %>
+      <%= f.hidden_field :ends_at %>
     <% end %>
 
     <%= f.input :dues_amount, :label => 'Dues Amount ($)' %>

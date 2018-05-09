@@ -10,6 +10,15 @@ class LeagueSeasonsController < BaseController
 
   def new
     @league_season = LeagueSeason.new
+    
+    @last_season = @league.league_seasons.last
+    if @last_season.blank?
+      @league_season.start_date = Date.civil(Time.now.year, 1, 1)
+      @league_season.end_date = Date.civil(Time.now.year, -1, -1)
+    else
+      @league_season.start_date = Date.civil(@last_season.start_date.year, 1, 1)
+      @league_season.end_date = Date.civil(@last_season.end_date.year, -1, -1)
+    end
   end
 
   def create
