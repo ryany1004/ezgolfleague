@@ -11,9 +11,7 @@
       <th>Name</th>
 			<th>Start Date</th>
       <th>End Date</th>
-      <% if current_user.is_super_user? %>
-      	<th><%= link_to 'Create Season', new_league_league_season_path(@league), :class => 'btn btn-primary' %></th>
-    	<% end %>
+      <th><%= link_to 'Create Season', new_league_league_season_path(@league), :class => 'btn btn-primary' %></th>
 		</tr>
 	</thead>
 	<tbody>
@@ -36,9 +34,7 @@
 			<th>&nbsp;</th>
       <th>&nbsp;</th>
       <th>&nbsp;</th>
-      <% if current_user.is_super_user? %>
-      	<th><%= link_to 'Create Season', new_league_league_season_path(@league), :class => 'btn btn-primary' %></th>
-    	<% end %>
+      <th><%= link_to 'Create Season', new_league_league_season_path(@league), :class => 'btn btn-primary' %></th>
 		</tr>
   </tfoot>
 </table>
