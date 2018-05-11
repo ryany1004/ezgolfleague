@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180504195421) do
+ActiveRecord::Schema.define(version: 20180511162805) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -224,6 +224,19 @@ ActiveRecord::Schema.define(version: 20180504195421) do
     t.index ["user_id"], name: "index_league_memberships_on_user_id"
   end
 
+  create_table "league_season_scoring_groups", force: :cascade do |t|
+    t.integer "league_season_id"
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "league_season_scoring_groups_users", id: false, force: :cascade do |t|
+    t.bigint "league_season_scoring_group_id", null: false
+    t.bigint "user_id", null: false
+    t.index ["league_season_scoring_group_id", "user_id"], name: "scoring_group_index"
+  end
+
   create_table "league_seasons", id: :serial, force: :cascade do |t|
     t.integer "league_id"
     t.string "name"
@@ -264,6 +277,7 @@ ActiveRecord::Schema.define(version: 20180504195421) do
     t.boolean "display_balances_to_players", default: true
     t.string "league_type"
     t.text "more_comments"
+    t.boolean "allow_scoring_groups", default: false
   end
 
   create_table "mobile_devices", id: :serial, force: :cascade do |t|

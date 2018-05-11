@@ -120,7 +120,12 @@ Rails.application.routes.draw do
       put 'update_active', on: :collection
     end
 
-    resources :league_seasons
+    resources :league_seasons do
+      resources :league_season_scoring_groups do
+        post :update_player
+        delete :delete_player
+      end
+    end
 
     resources :league_memberships do
       get 'print', on: :collection

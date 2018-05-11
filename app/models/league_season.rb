@@ -3,6 +3,7 @@ class LeagueSeason < ApplicationRecord
 
   has_many :payments, inverse_of: :league_season
   has_many :subscription_credits, ->{ order 'created_at DESC' }
+  has_many :league_season_scoring_groups, dependent: :destroy
 
   validates :name, :starts_at, :ends_at, :league, presence: true
 
@@ -57,6 +58,24 @@ class LeagueSeason < ApplicationRecord
     sum_paid
   end
 
+  def users_not_in_scoring_groups
+    users_not_in_groups = []
+
+    self.league.users.each do |u|
+      user_is_in_any_group = false
+
+      self.league_season_scoring_groups.each do |g|
+        user_is_in_any_group = true if g.users.include? u
+      end
+
+      if !user_is_in_any_group
+        users_not_in_groups << u
+      end
+    end
+
+    users_not_in_groups
+  end
+
   def rankings_cache_key
     return "league-rankings#{self.id}-#{self.updated_at.to_s}"
   end
@@ -64,7 +83,7 @@ class LeagueSeason < ApplicationRecord
   #date parsing
   def starts_at=(date)
     begin
-      parsed = DateTime.strptime("#{date} 12:01 AM #{Time.zone.now.formatted_offset}", JAVASCRIPT_DATETIME_PICKER_FORMAT) #does this need to be the offset of the actual time to match DST?!?
+      parsed = DateTime.strptime("#{date} 12:01 AM #{Time.zone.now.formatted_offset}", JAVASCRIPT_DATETIME_PICKER_FORMAT)
       super parsed
     rescue
       write_attribute(:starts_at, date)
