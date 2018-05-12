@@ -6,7 +6,7 @@ module ContestsHelper
     html = ""
     
     winners.each do |winner|
-      html << "#{winner[:user].complete_name}"
+      html << "#{winner[:user]&.complete_name}"
       
       html << "<br/>" if winner != winners.last
     end
