@@ -356,7 +356,7 @@ class Tournament < ApplicationRecord
         },
         :tournament_days => {
           :only => [:tournament_at],
-          :methods => [:server_id, :can_be_played?, :registered_user_ids, :paid_user_ids, :superuser_user_ids, :league_admin_user_ids],
+          :methods => [:server_id, :can_be_played?, :registered_user_ids, :paid_user_ids, :superuser_user_ids, :league_admin_user_ids, :show_teams?],
           :include => {
             :course => {
               :only => [:name, :street_address_1, :city, :us_state, :postal_code, :latitude, :longitude],
