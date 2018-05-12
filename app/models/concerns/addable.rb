@@ -159,24 +159,30 @@ module Addable
     self.flights.each do |f|
       f.users.clear
 
-      self.tournament.players_for_day(self).each do |p|
-        player_course_handicap = self.player_course_handicap_for_player(p, f)
-        team_course_handicap = self.team_course_handicap_for_player(p)
+      if self.tournament.league.allow_scoring_groups
+        Rails.logger.info { "Adding Users From Scoring Group to Flight" }
 
-        Rails.logger.info { "Flighting - Player HCP: #{player_course_handicap} Team HCP: #{team_course_handicap} - #{p.complete_name}. Checking against Flight #{f.flight_number}" }
+        f.users << f.league_season_scoring_group.users
+      else
+        self.tournament.players_for_day(self).each do |p|
+          player_course_handicap = self.player_course_handicap_for_player(p, f)
+          team_course_handicap = self.team_course_handicap_for_player(p)
 
-        player_course_handicap = team_course_handicap if team_course_handicap > player_course_handicap #the highest handicap is the one used if this is a team
+          Rails.logger.info { "Flighting - Player HCP: #{player_course_handicap} Team HCP: #{team_course_handicap} - #{p.complete_name}. Checking against Flight #{f.flight_number}" }
 
-        unless player_course_handicap.blank?
-          if player_course_handicap >= f.lower_bound && player_course_handicap <= f.upper_bound
-            f.users << p
+          player_course_handicap = team_course_handicap if team_course_handicap > player_course_handicap #the highest handicap is the one used if this is a team
 
-            Rails.logger.info { "Flighted: #{player_course_handicap} (#{f.lower_bound} to #{f.upper_bound}) for Player: #{p.id} #{p.complete_name} for Flight Num #{f.flight_number}" }
+          unless player_course_handicap.blank?
+            if player_course_handicap >= f.lower_bound && player_course_handicap <= f.upper_bound
+              f.users << p
+
+              Rails.logger.info { "Flighted: #{player_course_handicap} (#{f.lower_bound} to #{f.upper_bound}) for Player: #{p.id} #{p.complete_name} for Flight Num #{f.flight_number}" }
+            else
+              Rails.logger.debug { "NOT Flighted: #{player_course_handicap} (#{f.lower_bound} to #{f.upper_bound}) for Player: #{p.id} #{p.complete_name} for Flight Num #{f.flight_number}" }
+            end
           else
-            Rails.logger.debug { "NOT Flighted: #{player_course_handicap} (#{f.lower_bound} to #{f.upper_bound}) for Player: #{p.id} #{p.complete_name} for Flight Num #{f.flight_number}" }
+            Rails.logger.debug { "Flighting - Player Course Handicap Blank: #{p.id} #{p.complete_name}" }
           end
-        else
-          Rails.logger.debug { "Flighting - Player Course Handicap Blank: #{p.id} #{p.complete_name}" }
         end
       end
     end

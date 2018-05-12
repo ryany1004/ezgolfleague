@@ -74,7 +74,7 @@ class Scorecard < ApplicationRecord
     flight = self.tournament_day.flight_for_player(self.golf_outing.user)
 
     unless flight.blank?
-      return flight.flight_number
+      return flight.display_name
     else
       return nil
     end

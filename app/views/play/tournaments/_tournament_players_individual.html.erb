@@ -7,9 +7,9 @@
     	<thead>
     		<tr>
     			<th>Name</th>
-          <th>Course Handicap</th>
-          <th>Flight</th>
-          <th>Group</th>
+          <th>Course HDCP</th>
+          <th><%= flight_or_group_name %></th>
+          <th>Tee-Group</th>
           <th>Tee Time</th>
     		</tr>
     	</thead>
@@ -22,7 +22,11 @@
               <% if outing[:flight].blank? -%>
                 <td>&nbsp;</td>
               <% else -%>
-                <td><strong><%= (outing[:flight].flight_number) %></strong></td>
+                <td>
+                  <strong>
+                    <%= (outing[:flight].display_name) %>  
+                  </strong>
+                </td>
               <% end -%>
               <td><strong><%= i + 1 %></strong></td>
               <td><%= display_tee_time_or_position(outing[:group]) %></td>

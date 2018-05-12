@@ -11,6 +11,7 @@ class ScorecardPresenter
   attr_accessor :number_of_holes
   attr_accessor :score_count
   attr_accessor :tournament_day
+  attr_accessor :tournament
 
   def initialize args
     args.each do |k,v|
@@ -29,6 +30,7 @@ class ScorecardPresenter
     self.number_of_holes = self.course_holes.count
     self.score_count = self.primary_scorecard.scores.count
     self.tournament_day = self.primary_scorecard.golf_outing.tournament_group.tournament_day
+    self.tournament = self.tournament_day.tournament
   end
 
   def tee_time

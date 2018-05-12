@@ -68,8 +68,10 @@ class Api::V1::TournamentsController < Api::V1::ApiBaseController
       tournament_results
     end
 
+    uses_scoring_groups = tournament.league.allow_scoring_groups
+
     respond_with(tournament_results) do |format|
-      format.json { render :json => {tournament_day_results: tournament_results}, content_type: 'application/json' }
+      format.json { render :json => {tournament_day_results: tournament_results, uses_scoring_groups: uses_scoring_groups}, content_type: 'application/json' }
     end
   end
 

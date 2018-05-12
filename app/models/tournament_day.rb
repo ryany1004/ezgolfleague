@@ -84,7 +84,23 @@ class TournamentDay < ApplicationRecord
   end
 
   def create_default_flight
+    if self.tournament.league.allow_scoring_groups
+      self.create_scoring_group_flights
+    else
+      self.create_traditional_flight
+    end
+  end
+
+  def create_traditional_flight
     Flight.create(tournament_day: self, flight_number: 1, lower_bound: 0, upper_bound: 300, course_tee_box: self.course.course_tee_boxes.first)
+  end
+
+  def create_scoring_group_flights
+    self.tournament.league_season.league_season_scoring_groups.each_with_index do |g, i|
+      f = Flight.new(tournament_day: self, flight_number: i + 1, lower_bound: 0, upper_bound: 0, course_tee_box: self.course.course_tee_boxes.first, league_season_scoring_group: g)
+
+      f.save(:validate => false)
+    end
   end
 
   def eager_groups

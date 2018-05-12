@@ -95,6 +95,14 @@ class TournamentPresenter
     self.tournament.signup_closes_at.to_s(:date_and_time)
   end
 
+  def flight_or_group_name
+    if self.tournament.league.allow_scoring_groups
+      "Group"
+    else
+      "Flight"
+    end
+  end
+
   ##
 
   def day_is_playable?
@@ -187,7 +195,7 @@ class TournamentPresenter
           name = golf_outing.user.blank? ? "Error" : golf_outing.user.complete_name
           user_id = golf_outing.user.blank? ? nil : golf_outing.user.id
 
-          outings << {name: name, id: user_id, handicap: golf_outing.course_handicap.to_i, flight: flight, group: tournament_group}
+          outings << {name: name, id: user_id, handicap: golf_outing.course_handicap.to_i, flight: flight, scoring_group_name: flight.league_season_scoring_group&.name, group: tournament_group}
         end
 
         groups << outings
@@ -217,7 +225,7 @@ class TournamentPresenter
             username = p.user.blank? ? "" : p.user.complete_name
             user_id = p.user.blank? ? nil : p.user.id
 
-            payouts << {flight_number: f.flight_number.to_i, name: username, amount: p.amount, points: p.points.to_i, user_id: user_id}
+            payouts << {flight_number: f.flight_number.to_i, flight_name: f.display_name, name: username, amount: p.amount, points: p.points.to_i, user_id: user_id}
           end
 
           flights_with_payouts << {payouts: payouts} unless payouts.blank?
@@ -231,7 +239,7 @@ class TournamentPresenter
           username = p.user.blank? ? "" : p.user.complete_name
           user_id = p.user.blank? ? nil : p.user.id
 
-          payouts << {flight_number: f.flight_number.to_i, name: username, amount: p.amount, points: p.points.to_i, user_id: user_id}
+          payouts << {flight_number: f.flight_number.to_i, flight_name: f.display_name, name: username, amount: p.amount, points: p.points.to_i, user_id: user_id}
         end
 
         flights_with_payouts << {payouts: payouts}

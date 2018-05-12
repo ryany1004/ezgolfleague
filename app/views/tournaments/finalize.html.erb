@@ -20,7 +20,7 @@
         <thead>
           <tr>
             <th>Day</th>
-            <th>Flight</th>
+            <th><%= flight_or_group(@tournament) %></th>
             <th>Name</th>
             <th>Amount</th>
             <th>Points</th>
@@ -33,7 +33,7 @@
             <% day.payout_results.order("flight_id").order("amount DESC").each do |payout_result| -%>
               <tr>
                 <td><%= day.tournament_at.to_s(:short) %></td>
-                <td><%= payout_result.flight.flight_number %></td>
+                <td><%= payout_result.flight.display_name %></td>
                 <td><%= payout_result.user.complete_name unless payout_result.user.blank? %></td>
                 <td><%= number_to_currency(payout_result.amount) %></td>
                 <td><%= payout_result.points.to_i %></td>
@@ -98,7 +98,7 @@
       <table class="table table-striped">
         <thead>
           <tr>
-            <th>Flight</th>
+            <th><%= flight_or_group(@tournament) %></th>
             <th>Player</th>
             <th>Net</th>
             <th>Gross</th>
@@ -108,7 +108,7 @@
         <tbody>
           <% day.tournament_day_results.each do |result| %>
             <tr>
-              <td><%= result.flight.flight_number %></td>
+              <td><%= result.flight.display_name %></td>
               <td><%= result.user.complete_name %><% if result.primary_scorecard != nil && !result.primary_scorecard.is_confirmed? -%> (Unconfirmed by Player)<% end -%><%- if result.primary_scorecard.golf_outing.disqualified %> (Disqualified)<%- end %></td>
               <td><%= result.net_score %></td>
               <td><%= result.gross_score %></td>

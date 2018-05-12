@@ -1,6 +1,7 @@
 class Flight < ApplicationRecord
   belongs_to :tournament_day, inverse_of: :flights, touch: true
   belongs_to :course_tee_box
+  has_one :league_season_scoring_group
   has_many :payouts, -> { order(:sort_order, "amount DESC, points DESC") }, inverse_of: :flight, :dependent => :destroy
   has_many :payout_results, -> { order("amount DESC, points DESC") }, inverse_of: :flight, :dependent => :destroy
   has_many :tournament_day_results, inverse_of: :flight, :dependent => :destroy
@@ -52,6 +53,14 @@ class Flight < ApplicationRecord
           errors.add(:upper_bound, "can't be in inside the range of an existing flight for this tournament")
         end
       end
+    end
+  end
+
+  def display_name
+    if self.league_season_scoring_group.blank?
+      flight_number
+    else
+      league_season_scoring_group.name
     end
   end
 

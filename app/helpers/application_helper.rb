@@ -201,4 +201,12 @@ module ApplicationHelper
     end
   end
 
+  def flight_or_group(tournament)
+    if tournament.league.allow_scoring_groups
+      "Group"
+    else
+      "Flight"
+    end
+  end
+
 end

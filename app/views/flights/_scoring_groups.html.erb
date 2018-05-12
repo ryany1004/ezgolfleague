@@ -1,0 +1,30 @@
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h3 class="panel-title"><%= tournament_day.pretty_day(true) %>Flights</h3>
+  </div>
+  <div class="panel-body">
+    Your league uses scoring groups instead of handicap-based flights. Be sure to configure your scoring groups before creating your tournaments - flights are automatically managed for your tournament.
+  </div>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Group Name</th>
+        <th>Payouts</th>
+      </tr>
+    </thead>
+    <tbody>
+    <% flights.each do |flight| %>
+      <tr>
+        <td><%= flight.league_season_scoring_group.name %></td>
+        <td><%= link_to "Setup (#{flight.payouts.count})", league_tournament_payouts_path(tournament.league, tournament, flight: flight, tournament_day: tournament_day) %></td>
+      </tr>
+    <% end %>
+    </tbody>
+    <tfoot>
+      <tr>
+        <th>&nbsp;</th>
+        <th>&nbsp;</th>
+      </tr>
+    </tfoot>
+  </table>
+</div>

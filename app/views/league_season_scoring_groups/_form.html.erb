@@ -18,29 +18,31 @@
   </div>
 <% end %>
 
-<br/>
+<% if !@scoring_group.new_record? %>
+  <br/>
 
-<div class="panel panel-default">
-  <div class="panel-heading">
-    <h3 class="panel-title">Players</h3>
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h3 class="panel-title">Players</h3>
+    </div>
+
+    <div class="well">
+      <%= simple_form_for :add_player, url: league_league_season_league_season_scoring_group_update_player_path(@league, @league_season, @scoring_group) do |f| %>
+        <%= f.input "user_id", label: false, collection: @players, label_method: :complete_name, value_method: :id, input_html: { class: 'chosen-select' } %>
+
+        <%= f.button :submit, "Add", :class => 'btn btn-default' %>
+      <% end %>
+    </div>
+
+    <table class="table table-striped">
+      <tbody>
+      <% @scoring_group.users.each do |user| %>
+        <tr>
+          <td><%= user.complete_name %></td>
+          <td><%= link_to 'Remove', league_league_season_league_season_scoring_group_delete_player_path(@league, @league_season, @scoring_group, user: user), :method => :delete %></td>
+        </tr>
+      <% end %>
+      </tbody>
+    </table>
   </div>
-
-  <div class="well">
-    <%= simple_form_for :add_player, url: league_league_season_league_season_scoring_group_update_player_path(@league, @league_season, @scoring_group) do |f| %>
-      <%= f.input "user_id", label: false, collection: @players, label_method: :complete_name, value_method: :id, input_html: { class: 'chosen-select' } %>
-
-      <%= f.button :submit, "Add", :class => 'btn btn-default' %>
-    <% end %>
-  </div>
-
-  <table class="table table-striped">
-    <tbody>
-    <% @scoring_group.users.each do |user| %>
-      <tr>
-        <td><%= user.complete_name %></td>
-        <td><%= link_to 'Remove', league_league_season_league_season_scoring_group_delete_player_path(@league, @league_season, @scoring_group, user: user), :method => :delete %></td>
-      </tr>
-    <% end %>
-    </tbody>
-  </table>
-</div>
+<% end %>
