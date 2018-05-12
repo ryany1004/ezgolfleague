@@ -10,7 +10,7 @@ class GolfOuting < ApplicationRecord
     if self.tournament_group.golfer_teams.count == 0
       return nil
     else
-      golfer_team = golfer_team_for_user_or_index(self.user)
+      golfer_team = self.tournament_group.golfer_team_for_user_or_index(self.user, 0)
 
       return golfer_team.short_name
     end
