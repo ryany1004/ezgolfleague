@@ -40,7 +40,7 @@ class GolferTeam < ApplicationRecord
     complete_name = ""
 
     self.users.each do |u|
-      complete_name += u.first_name + " " + u.last_name + "."
+      complete_name += u.first_name + " " + u.last_name[0] + "."
 
       complete_name += " / " unless self.users.last == u
     end
