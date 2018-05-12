@@ -184,13 +184,12 @@ class Contest < ApplicationRecord
             end
 
             if existing_winner.blank?
-              winners << {contest_name: self.name, user: result.winner, name: result.winner.try(:complete_name), result_value: "1", amount: result.payout_amount, points: result.points, number_of_wins: 1}
+              winners << {contest_name: self.name, user: result.winner, name: result.winner.try(:complete_name), result_value: "Hole #{result.result_value}", amount: result.payout_amount, points: result.points, number_of_wins: 1}
             else
-              existing_winner[:number_of_wins] += 1
               existing_winner[:amount] += result.payout_amount
               existing_winner[:points] += result.points
 
-              existing_winner[:result_value] = "#{existing_winner[:number_of_wins]}"
+              existing_winner[:result_value] += ", #{result.result_value}"
             end
           else
             winners << {contest_name: self.name, user: result.winner, name: result.winner.try(:complete_name), result_value: result.result_value, amount: result.payout_amount, points: result.points}

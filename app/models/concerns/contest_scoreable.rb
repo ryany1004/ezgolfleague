@@ -138,7 +138,7 @@ module ContestScoreable
       hole_winners = winner_info[:winners]
 
       hole_winners.each do |winner|
-        ContestResult.create(contest: self, winner: winner, payout_amount: value_per_skin, contest_hole: contest_hole, result_value: "Hole #{hole.hole_number}")
+        ContestResult.create(contest: self, winner: winner, payout_amount: value_per_skin, contest_hole: contest_hole, result_value: "#{hole.hole_number}")
       end
     end
 
