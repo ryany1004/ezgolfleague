@@ -6,6 +6,16 @@ class GolfOuting < ApplicationRecord
   belongs_to :course_tee_box
   has_one :scorecard, inverse_of: :golf_outing, :dependent => :destroy
 
+  def team_combined_name
+    if self.tournament_group.golfer_teams.count == 0
+      return nil
+    else
+      golfer_team = golfer_team_for_user_or_index(self.user)
+
+      return golfer_team.short_name
+    end
+  end
+
   def disqualification_description
     if self.disqualified
       "Re-Qualify"

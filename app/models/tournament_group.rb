@@ -158,7 +158,7 @@ class TournamentGroup < ApplicationRecord
         :include => {
           :golf_outings => {
             :only => [:course_handicap],
-            :methods => [:server_id],
+            :methods => [:server_id, :team_combined_name],
             :include => {
               :user => {
                 :only => [:first_name, :last_name],

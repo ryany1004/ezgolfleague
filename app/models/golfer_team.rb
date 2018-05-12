@@ -36,4 +36,16 @@ class GolferTeam < ApplicationRecord
     return complete_name
   end
 
+  def short_name
+    complete_name = ""
+
+    self.users.each do |u|
+      complete_name += u.first_name + " " + u.last_name + "."
+
+      complete_name += " / " unless self.users.last == u
+    end
+
+    return complete_name
+  end
+
 end
