@@ -130,6 +130,22 @@ class TournamentDay < ApplicationRecord
     return "print-scorecards#{self.id}-#{self.updated_at.to_i}"
   end
 
+  def scorecard_display_partial
+    if self.course_holes.count <= 9
+      "/shared/scorecards/nine_hole"
+    else
+      "/shared/scorecards/standard"
+    end
+  end
+
+  def scorecard_print_partial
+    if self.course_holes.count <= 9
+      "/shared/scorecards/nine_hole_print"
+    else
+      "/shared/scorecards/print"
+    end
+  end
+
   def has_payouts?
     self.flights.each do |flight|
       return true if flight.payouts.count > 0

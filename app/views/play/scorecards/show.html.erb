@@ -14,7 +14,7 @@
 </p>
 
 <% cache(cache_key_for_scorecard(@scorecard.id)) do %>
-  <%= render partial: '/shared/scorecards/standard', locals: {p: @scorecard_presenter, print_mode: false} %>
+  <%= render partial: @scorecard_presenter.tournament_day.scorecard_display_partial, locals: {p: @scorecard_presenter, print_mode: false} %>
 <% end -%>
 
 <% if @scorecard_presenter.user_can_become_designated_scorer?(current_user) -%>

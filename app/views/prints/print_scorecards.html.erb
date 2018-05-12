@@ -17,7 +17,7 @@
           <h2>&nbsp;</h2>
         <% end -%>
 
-        <%= render partial: '/shared/scorecards/print', locals: {p: print_card[:p], print_mode: true} %>
+        <%= render partial: @tournament_day.scorecard_print_partial, locals: {p: print_card[:p], print_mode: true} %>
       <% end -%>
 
     </div>
