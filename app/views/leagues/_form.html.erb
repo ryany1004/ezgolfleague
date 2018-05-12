@@ -27,7 +27,7 @@
   <% if current_user.is_super_user %>
     <h3>Super User Options</h3>
     <div class="well">
-      <%= f.input :allow_scoring_groups, :label => 'Allow League Season Scoring Groups' %>
+      <%= f.input :allow_scoring_groups, :label => 'User Season Scoring Groups Instead of Flights' %>
 
       <%= f.input :exempt_from_subscription, :label => 'League Exempt From Billing' %>
 

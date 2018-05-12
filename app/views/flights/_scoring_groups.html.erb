@@ -4,6 +4,12 @@
   </div>
   <div class="panel-body">
     Your league uses scoring groups instead of handicap-based flights. Be sure to configure your scoring groups before creating your tournaments - flights are automatically managed for your tournament.
+
+    <% if tournament_day.tournament.players_for_day(tournament_day).count > 0 -%>
+    <p>
+      <%= link_to 'Re-Sync Scoring Groups', reflight_players_league_tournament_flights_path(tournament.league, tournament, tournament_day: tournament_day), :class => 'btn btn-primary', :method => :patch %>
+    </p>
+    <% end -%>
   </div>
   <table class="table table-striped">
     <thead>
