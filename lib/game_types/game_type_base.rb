@@ -75,6 +75,10 @@ module GameTypes
       #do nothing
     end
 
+    def leaderboard_partial_name
+      'standard_leaderboard'
+    end
+
     ##Group
 
     def other_group_members(user)

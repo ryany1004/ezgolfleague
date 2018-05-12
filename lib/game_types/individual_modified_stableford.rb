@@ -19,6 +19,10 @@ module GameTypes
       return "shared/game_type_setup/individual_stableford"
     end
 
+    def leaderboard_partial_name
+      'stableford_leaderboard'
+    end
+
     def score_key(prefix)
       return "StablefordScore-#{self.tournament_day.id}-GT-#{self.game_type_id}-#{prefix}"
     end
