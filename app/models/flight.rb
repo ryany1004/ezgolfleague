@@ -58,7 +58,7 @@ class Flight < ApplicationRecord
 
   def display_name
     if self.league_season_scoring_group.blank?
-      flight_number
+      flight_number.to_s
     else
       league_season_scoring_group.name
     end

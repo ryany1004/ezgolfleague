@@ -19,11 +19,19 @@ module TournamentsHelper
   end
 
   def split_scores_for_scorecard(scorecard, number_of_holes)
-    return scorecard.scores.each_slice(number_of_holes / 2).to_a
+    if number_of_holes <= 9
+      return scorecard.scores.each_slice(number_of_holes).to_a
+    else
+      return scorecard.scores.each_slice(number_of_holes / 2).to_a
+    end
   end
 
   def split_holes_for_course_tournament(tournament)
-    return tournament.course_holes.each_slice(tournament.course_holes.count / 2).to_a
+    if tournament.course_holes.count <= 9
+      return tournament.course_holes.each_slice(tournament.course_holes.count).to_a
+    else
+      return tournament.course_holes.each_slice(tournament.course_holes.count / 2).to_a
+    end
   end
 
   def team_name_for_player(player, tournament_day)
