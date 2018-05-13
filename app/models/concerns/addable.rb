@@ -163,7 +163,7 @@ module Addable
         Rails.logger.info { "Adding Users From Scoring Group to Flight" }
 
         f.league_season_scoring_group.users.each do |u|
-          f.users << u if self.players.include? u
+          f.users << u if self.tournament.players_for_day(self).include? u
         end
       else
         self.tournament.players_for_day(self).each do |p|
