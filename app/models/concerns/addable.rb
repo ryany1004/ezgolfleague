@@ -165,8 +165,6 @@ module Addable
         f.league_season_scoring_group.users.each do |u|
           f.users << u if self.players.include? u
         end
-
-        f.users << f.league_season_scoring_group.users
       else
         self.tournament.players_for_day(self).each do |p|
           player_course_handicap = self.player_course_handicap_for_player(p, f)
