@@ -162,6 +162,10 @@ module Addable
       if self.tournament.league.allow_scoring_groups
         Rails.logger.info { "Adding Users From Scoring Group to Flight" }
 
+        f.league_season_scoring_group.users.each do |u|
+          f.users << u if self.players.include? u
+        end
+
         f.users << f.league_season_scoring_group.users
       else
         self.tournament.players_for_day(self).each do |p|

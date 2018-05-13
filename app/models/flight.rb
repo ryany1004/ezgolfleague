@@ -1,7 +1,7 @@
 class Flight < ApplicationRecord
   belongs_to :tournament_day, inverse_of: :flights, touch: true
   belongs_to :course_tee_box
-  has_one :league_season_scoring_group
+  has_one :league_season_scoring_group, inverse_of: :flight
   has_many :payouts, -> { order(:sort_order, "amount DESC, points DESC") }, inverse_of: :flight, :dependent => :destroy
   has_many :payout_results, -> { order("amount DESC, points DESC") }, inverse_of: :flight, :dependent => :destroy
   has_many :tournament_day_results, inverse_of: :flight, :dependent => :destroy
