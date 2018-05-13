@@ -485,7 +485,7 @@ module GameTypes
       eager_flights = self.tournament_day.flights.includes(:users, :tournament_day_results)
 
       eager_flights.each do |f|
-        ranked_flight = { flight_id: f.id, flight_number: f.flight_number, display_name: f.display_name, players: [] }
+        ranked_flight = { flight_id: f.id, flight_number: f.flight_number, display_name: f.display_name, api_display_name: f.display_name(true), players: [] }
 
         rankable_players = self.players_for_flight(f)
         rankable_players.each do |player|
