@@ -355,7 +355,7 @@ class Tournament < ApplicationRecord
           :methods => [:server_id, :stripe_publishable_key]
         },
         :tournament_days => {
-          :only => [:tournament_at],
+          :only => [:tournament_at, :game_type_id],
           :methods => [:server_id, :can_be_played?, :registered_user_ids, :paid_user_ids, :superuser_user_ids, :league_admin_user_ids, :show_teams?],
           :include => {
             :course => {
