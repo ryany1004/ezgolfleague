@@ -9,5 +9,5 @@
 <% if @tournament.league.allow_scoring_groups %>
   <%= render partial: 'scoring_groups', locals: {tournament: @tournament, tournament_day: @tournament_day, flights: @flights} %>
 <% else %>
-  <%= render partial: 'scoring_groups', locals: {tournament: @tournament, tournament_day: @tournament_day, flights: @flights} %>
+  <%= render partial: 'flights', locals: {tournament: @tournament, tournament_day: @tournament_day, flights: @flights} %>
 <% end %>
