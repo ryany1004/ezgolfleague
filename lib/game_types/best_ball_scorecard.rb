@@ -78,6 +78,8 @@ module GameTypes
             unless scorecard.blank? || scorecard.scores.blank?
               raw_score = scorecard.scores.where(course_hole: hole).first.strokes
             else
+              Rails.logger.info { "Raw Score is 0 - No Scorecard or Scores: \(scorecard.id) \(scorecard.scores&.where(course_hole: hole))" }
+
               raw_score = 0
             end
 
