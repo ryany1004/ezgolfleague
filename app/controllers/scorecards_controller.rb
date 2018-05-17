@@ -1,6 +1,7 @@
 class ScorecardsController < BaseController
   before_action :fetch_all_params, :only => [:edit]
   before_action :fetch_scorecard, :only => [:show, :update]
+  before_action :repair_scorecard, :only => [:show, :edit]
 
   def index
     @tournament = Tournament.find(params[:tournament_id])
@@ -60,6 +61,10 @@ class ScorecardsController < BaseController
 
   def fetch_eager_groups
     TournamentGroup.includes(golf_outings: [{scorecard: :scores}, :user]).where(tournament_day: @tournament_day).order(:tee_time_at)
+  end
+
+  def repair_scorecard
+    @scorecard.tournament_day.update_scores_for_scorecard(@scorecard) if !@scorecard.tournament_day.has_scores?
   end
 
   def find_next_scorecard(tournament_day, groups, current_scorecard)
