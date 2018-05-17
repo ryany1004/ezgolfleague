@@ -19,9 +19,7 @@ module Addable
     flight = self.flight_for_player(user)
     raise "No Flight for Player #{user.id} (#{user.complete_name})" if flight.blank?
 
-    self.course_holes.each_with_index do |hole, i|
-      score = Score.create!(scorecard: scorecard, course_hole: hole, sort_order: i)
-    end
+    self.create_scores_for_scorecard(scorecard)
 
     self.add_player_to_free_contests(user)
 
@@ -32,6 +30,20 @@ module Addable
     user.send_silent_notification #ask device to update
 
     self.touch
+  end
+
+  def create_scores_for_scorecard(scorecard)
+    self.course_holes.each_with_index do |hole, i|
+      score = Score.create!(scorecard: scorecard, course_hole: hole, sort_order: i)
+    end
+  end
+
+  def update_scores_for_scorecard(scorecard)
+    if self.course_holes.count != scorecard.scores.count
+      scorecard.scores.destroy_all
+
+      self.create_scores_for_scorecard(scorecard)
+    end
   end
 
   def remove_player_from_group(tournament_group, user, remove_from_teams = false)
