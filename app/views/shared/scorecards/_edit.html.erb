@@ -10,7 +10,7 @@
 	</thead>
 	<tbody>
 		<tr>
-      <td><%= (tournament_day.flight_for_player(scorecard.golf_outing.user).flight_number) %></td>
+      <td><%= (tournament_day.flight_for_player(scorecard.golf_outing.user)&.flight_number) %></td>
       <td><%= scorecard.scores.map {|score| score.strokes }.sum %></td>
       <td><%= scorecard.net_score %></td>
       <td><%= tournament_day.course_holes.map {|hole| hole.par }.sum %></td>
