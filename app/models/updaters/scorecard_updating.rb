@@ -26,7 +26,7 @@ module Updaters
 
             if notify_score_scores && !score.has_notified
               Notifications::ScoreNotification.notify_for_score(score)
-            end  
+            end
 
             score.has_notified = true
             score.save
