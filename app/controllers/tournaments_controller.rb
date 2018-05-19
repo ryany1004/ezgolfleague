@@ -122,7 +122,7 @@ class TournamentsController < BaseController
       @tournament.tournament_days.each do |day|
         AutoscheduleJob.perform_later(day) if day.has_scores? == false
       end
-      redirect_to league_tournaments_path(current_user.selected_league), :flash => { :success => "Days without scores were submitted to be auto-scheduled. This usually takes a few minutes." }
+      redirect_to league_tournaments_path(current_user.selected_league), :flash => { :success => "Days without scores were submitted to be auto-scheduled. This usually takes a few minutes, depending on the size of the tournament." }
     end
   end
 
