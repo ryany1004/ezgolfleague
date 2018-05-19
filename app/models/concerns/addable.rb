@@ -15,7 +15,7 @@ module Addable
 
     Rails.logger.debug { "Added to Group" }
 
-    self.assign_players_to_flights
+    self.assign_player_to_flight(user)
     flight = self.flight_for_player(user)
     raise "No Flight for Player #{user.id} (#{user.complete_name})" if flight.blank?
 
@@ -168,64 +168,79 @@ module Addable
 
     self.reload
 
-    self.flights.each do |f|
-      f.users.clear
-
-      if self.tournament.league.allow_scoring_groups
-        Rails.logger.info { "Adding Users From Scoring Group to Flight" }
-
-        f.league_season_scoring_group.users.each do |u|
-          f.users << u if self.tournament.players_for_day(self).include? u
-        end
-      else
-        self.tournament.players_for_day(self).each do |p|
-          player_course_handicap = self.player_course_handicap_for_player(p, f)
-          team_course_handicap = self.team_course_handicap_for_player(p)
-
-          Rails.logger.info { "Flighting - Player HCP: #{player_course_handicap} Team HCP: #{team_course_handicap} - #{p.complete_name}. Checking against Flight #{f.flight_number}" }
-
-          player_course_handicap = team_course_handicap if team_course_handicap > player_course_handicap #the highest handicap is the one used if this is a team
-
-          unless player_course_handicap.blank?
-            if player_course_handicap >= f.lower_bound && player_course_handicap <= f.upper_bound
-              f.users << p
-
-              Rails.logger.info { "Flighted: #{player_course_handicap} (#{f.lower_bound} to #{f.upper_bound}) for Player: #{p.id} #{p.complete_name} for Flight Num #{f.flight_number}" }
-            else
-              Rails.logger.debug { "NOT Flighted: #{player_course_handicap} (#{f.lower_bound} to #{f.upper_bound}) for Player: #{p.id} #{p.complete_name} for Flight Num #{f.flight_number}" }
-            end
-          else
-            Rails.logger.debug { "Flighting - Player Course Handicap Blank: #{p.id} #{p.complete_name}" }
-          end
-        end
+    if self.tournament.league.allow_scoring_groups
+      self.assign_players_to_flights_from_scoring_groups
+    else
+      self.tournament.players_for_day(self).each do |p|
+        self.assign_player_to_flight(p)
       end
     end
 
     self.touch #bust the cache, yo.
+  end
 
-    #flight any players not flighted
-    if self.flights.count > 0
-      self.tournament.players_for_day(self).each do |p|
-        if self.flight_for_player(p) == nil
-          Rails.logger.info { "Adding Player to Last Flight - Not Normally Flighted" }
+  def assign_players_to_flights_from_scoring_groups
+    self.flights.each do |f|
+      f.users.clear
 
-          last_flight = self.flights.last #add the player to the 'last' flight
-          last_flight.users << p
+      Rails.logger.info { "Adding Users From Scoring Group to Flight" }
+
+      f.league_season_scoring_group.users.each do |u|
+        f.users << u if self.tournament.players_for_day(self).include? u
+      end
+    end
+  end
+
+  def assign_player_to_flight(player)
+    self.flights.each do |f|
+      f.users.delete(player)
+
+      course_handicap = self.usable_handicap_for_player(player, f)
+
+      unless course_handicap.blank?
+        if course_handicap >= f.lower_bound && course_handicap <= f.upper_bound
+          f.users << player
+
+          Rails.logger.info { "Flighted: #{course_handicap} (#{f.lower_bound} to #{f.upper_bound}) for Player: #{player.id} #{player.complete_name} for Flight Num #{f.flight_number}" }
+        else
+          Rails.logger.debug { "NOT Flighted: #{course_handicap} (#{f.lower_bound} to #{f.upper_bound}) for Player: #{player.id} #{player.complete_name} for Flight Num #{f.flight_number}" }
         end
+      else
+        Rails.logger.debug { "Flighting - Player Course Handicap Blank: #{player.id} #{player.complete_name}" }
       end
     end
 
-    #assign the course tee box
-    self.tournament.players_for_day(self).each do |p|
-      flight = self.flight_for_player(p)
-      golf_outing = self.golf_outing_for_player(p)
+    assigned_flight = self.flight_for_player(player)
 
-      if flight.blank? == false && golf_outing.blank? == false
-        golf_outing.course_tee_box = flight.course_tee_box
-        golf_outing.save
+    if assigned_flight == nil
+      Rails.logger.info { "Adding Player to Last Flight - Not Normally Flighted" }
 
-        Rails.logger.debug { "Golf Outing Saved" }
-      end
+      last_flight = self.flights.last #add the player to the 'last' flight
+      last_flight.users << player
+    end
+
+    self.assign_course_tee_box_to_player(player, assigned_flight)
+  end
+
+  def usable_handicap_for_player(player, flight)
+    player_course_handicap = self.player_course_handicap_for_player(player, flight)
+    team_course_handicap = self.team_course_handicap_for_player(player)
+
+    Rails.logger.info { "Flighting - Player HCP: #{player_course_handicap} Team HCP: #{team_course_handicap} - #{player.complete_name}. Checking against Flight #{flight.flight_number}" }
+
+    player_course_handicap = team_course_handicap if team_course_handicap > player_course_handicap #the highest handicap is the one used if this is a team
+
+    player_course_handicap
+  end
+
+  def assign_course_tee_box_to_player(player, flight)
+    golf_outing = self.golf_outing_for_player(player)
+
+    if flight.blank? == false && golf_outing.blank? == false
+      golf_outing.course_tee_box = flight.course_tee_box
+      golf_outing.save
+
+      Rails.logger.debug { "Golf Outing Saved" }
     end
   end
 

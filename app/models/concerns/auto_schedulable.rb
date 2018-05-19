@@ -7,6 +7,8 @@ module AutoSchedulable
 
     self.tournament.tournament_days.first.assign_players_to_flights(false)
 
+    Rails.logger.info { "Completed Auto-Schedule Flighting" }
+
     players_with_scores = []
     self.tournament.players.each do |p|
       flight = previous_day.flight_for_player(p)
