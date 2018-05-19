@@ -5,10 +5,10 @@ module AutoSchedulable
     previous_day = self.tournament.previous_day_for_day(self)
     return if previous_day.blank?
 
+    self.tournament.tournament_days.first.assign_players_to_flights(false)
+
     players_with_scores = []
     self.tournament.players.each do |p|
-      self.tournament.tournament_days.first.assign_players_to_flights(false)
-
       flight = previous_day.flight_for_player(p)
       group = previous_day.tournament_group_for_player(p)
 
