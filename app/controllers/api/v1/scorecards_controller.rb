@@ -6,7 +6,9 @@ class Api::V1::ScorecardsController < Api::V1::ApiBaseController
 
   def show
     if @scorecard.blank?
-      render :status => 404
+      Rails.logger.info { "API Scorecard Call Nil #{params[:id]}" }
+
+      render nothing: true, status: 404
     else
       payload = @tournament_day.scorecard_payload_for_scorecard(@scorecard)
 
