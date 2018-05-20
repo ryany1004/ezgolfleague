@@ -26,7 +26,7 @@ class CourseHole < ApplicationRecord
   end
 
   def yards_for_flight(flight)
-    tee_box_name = flight.course_tee_box.name
+    tee_box_name = flight&.course_tee_box&.name
 
     yardage = 0
 

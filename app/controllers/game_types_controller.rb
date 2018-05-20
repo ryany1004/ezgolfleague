@@ -14,6 +14,14 @@ class GameTypesController < BaseController
         else          
           day.game_type.remove_game_type_options
         end
+
+        day.tournament_groups.each do |group|
+          if day.tournament.display_teams? && group.golfer_teams.count == 0 #manage teams after changing the game type
+            group.create_golfer_teams
+          elsif !day.tournament.display_teams? && group.golfer_teams.count > 0
+            group.golfer_teams.destroy_all
+          end
+        end
       end
 
       if params[:tournament_day].blank?
