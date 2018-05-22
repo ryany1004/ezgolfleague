@@ -110,7 +110,7 @@ class Contest < ApplicationRecord
     else
       results = []
 
-      self.contest_holes.each do |hole|
+      self.contest_holes.includes(:contest_results).each do |hole|
         hole.contest_results.each do |result|
           results << result
         end
@@ -123,7 +123,7 @@ class Contest < ApplicationRecord
   def remove_results
     self.overall_winner = nil
 
-    self.contest_holes.each do |hole|
+    self.contest_holes.includes(:contest_results).each do |hole|
       hole.contest_results.destroy_all
     end
   end

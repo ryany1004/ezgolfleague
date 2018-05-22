@@ -22,11 +22,11 @@ module ContestScoreable
   end
 
   def all_team_members_are_contestants?
-    self.tournament_day.golfer_teams.each do |team|
+    self.tournament_day.golfer_teams.includes(:golfer_teams, :users).each do |team|
       team_participation = []
 
       if team.users.count > 0 #empty teams do not count
-        team.users.each do |teammate|
+        team.users.includes(:golfer_teams).each do |teammate|
           if self.users.include? teammate
             team_participation << true
           else
@@ -176,13 +176,11 @@ module ContestScoreable
 
       self.users.each do |user|
         if self.tournament_day.tournament.includes_player?(user) && !self.tournament_day.golf_outing_for_player(user).disqualified
-          if use_gross == true
-            use_handicap = false
-          else
-            use_handicap = true
-          end
+          use_handicap = !use_gross
 
+          Rails.logger.info { "Forcing Stroke Play Calc" }
           score = self.tournament_day.compute_stroke_play_player_score(user, use_handicap, holes = [hole.hole_number]) #force stroke play calculation for other game types
+          Rails.logger.info { "Forced Stroke Play Calc" }
 
           unless score.blank? || score == 0
             if gross_skins_require_birdies == true #check if gross birdie

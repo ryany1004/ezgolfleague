@@ -54,6 +54,8 @@ group :development, :test do
   gem 'derailed'
   gem 'bullet'
   gem 'rack-mini-profiler', require: false
+  gem 'flamegraph'
+  gem 'stackprof'
 end
 
 group :test do

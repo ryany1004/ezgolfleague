@@ -45,9 +45,9 @@ Rails.application.configure do
   STRIPE_PUBLISHABLE_KEY = "pk_test_vD1sXkxAPhH2SXnEksf8H03x"
   STRIPE_SECRET_KEY = "sk_test_pl0464y2hBtGzSRdOCgmP484"
 
-  # config.after_initialize do
-  #   Bullet.enable = true
-  #   Bullet.bullet_logger = true
-  #   Bullet.add_footer = true
-  # end
+  config.after_initialize do
+    Bullet.enable = true
+    Bullet.bullet_logger = true
+    # Bullet.add_footer = true
+  end
 end
