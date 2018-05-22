@@ -169,6 +169,20 @@ module ContestScoreable
   def users_with_skins(use_gross, gross_skins_require_birdies = false)
     all_winners = []
 
+    use_handicap = !use_gross
+    hole_scores = {}
+
+    #pre-compute the scores for each hole for each person
+    self.course_holes.each do |hole|
+      self.users.each do |user|
+        if self.tournament_day.tournament.includes_player?(user) && !self.tournament_day.golf_outing_for_player(user).disqualified
+          score = self.tournament_day.compute_stroke_play_player_score(user, use_handicap, holes = [hole.hole_number])
+
+          hole_scores["#{hole.id}-#{user.id}"] = score
+        end
+      end
+    end
+
     self.course_holes.each do |hole|
       users_getting_skins = []
       gross_birdie_skins = []
@@ -176,11 +190,7 @@ module ContestScoreable
 
       self.users.each do |user|
         if self.tournament_day.tournament.includes_player?(user) && !self.tournament_day.golf_outing_for_player(user).disqualified
-          use_handicap = !use_gross
-
-          Rails.logger.info { "Forcing Stroke Play Calc" }
-          score = self.tournament_day.compute_stroke_play_player_score(user, use_handicap, holes = [hole.hole_number]) #force stroke play calculation for other game types
-          Rails.logger.info { "Forced Stroke Play Calc" }
+          score = hole_scores["#{hole.id}-#{user.id}"]
 
           unless score.blank? || score == 0
             if gross_skins_require_birdies == true #check if gross birdie
