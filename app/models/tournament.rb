@@ -235,6 +235,20 @@ class Tournament < ApplicationRecord
     playable
   end
 
+  def sum_player_scores_for_multi_day?
+    sum_scores = true
+
+    self.tournament_days.each do |d|
+      if d != self.tournament_days.last
+        d.flights.each do |f|
+          sum_scores = false if f.payouts.count > 0
+        end
+      end
+    end
+
+    sum_scores
+  end
+
   def can_be_finalized?
     return false if self.last_day.blank?
 

@@ -131,23 +131,25 @@ module GameTypes
 
       if holes == [10, 11, 12, 13, 14, 15, 16, 17, 18]
         if use_handicap == true
-          return tournament_day_result.back_nine_net_score
+          score = tournament_day_result.back_nine_net_score
         else
-          return self.compute_player_score(user, false, holes)
+          score = self.compute_player_score(user, false, holes)
         end
       elsif holes == [1, 2, 3, 4, 5, 6, 7, 8, 9]
         if use_handicap == true
-          return tournament_day_result.front_nine_net_score
+          score = tournament_day_result.front_nine_net_score
         else
-          return tournament_day_result.front_nine_gross_score
+          score = tournament_day_result.front_nine_gross_score
         end
       else
         if use_handicap == true
-          return tournament_day_result.net_score
+          score = tournament_day_result.net_score
         else
-          return tournament_day_result.gross_score
+          score = tournament_day_result.gross_score
         end
       end
+
+      score
     end
 
     def compute_stroke_play_player_score(user, use_handicap = true, holes = [])

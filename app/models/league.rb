@@ -45,6 +45,17 @@ class League < ApplicationRecord
     end
   end
 
+  def self.clean_for_dev
+    League.all.each do |l|
+      l.encrypted_stripe_test_secret_key = nil
+      l.encrypted_stripe_production_secret_key = nil
+      l.encrypted_stripe_test_publishable_key = nil
+      l.encrypted_stripe_production_publishable_key = nil
+
+      l.save
+    end
+  end
+
   ##
 
   def user_is_admin(user)

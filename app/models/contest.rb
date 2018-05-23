@@ -172,7 +172,7 @@ class Contest < ApplicationRecord
           points = team_contest_results.to_a.sum(&:points)
 
           if amount > 0 or points > 0
-            winners << {contest_name: self.name, user: team.users.first, name: team.name, result_value: "#{team_contest_results.count}", amount: amount, points: points, number_of_wins: team_contest_results.count}
+            winners << {contest_name: self.name, user: team.users.first, name: team.short_name, result_value: "#{team_contest_results.count}", amount: amount, points: points, number_of_wins: team_contest_results.count}
           end
         end
       else
