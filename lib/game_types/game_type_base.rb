@@ -170,7 +170,7 @@ module GameTypes
 
       total_score = 0
 
-      total_score = Rails.cache.fetch("scorecard#{scorecard.id}-#{holes.map {|s|"#{s}" }.join('-')}-#{scorecard.updated_at.to_i}-#{self.tournament_day.updated_at.to_i}", expires_in: 20.minute, race_condition_ttl: 10) do
+      total_score = Rails.cache.fetch("scorecard#{scorecard.id}-#{use_handicap}-#{holes.map {|s|"#{s}" }.join('-')}-#{scorecard.updated_at.to_i}", expires_in: 20.minute, race_condition_ttl: 10) do
         Rails.logger.debug { "Scorecard has #{scorecard.scores.count} scores." }
 
         scorecard.scores.includes(:course_hole).each do |score|
@@ -217,7 +217,7 @@ module GameTypes
     def net_scores_for_scorecard(handicap_allowance, scorecard)
       net_scores = []
 
-      net_scores = Rails.cache.fetch("scorecard#{handicap_allowance}-#{scorecard.id}-#{scorecard.updated_at.to_i}-#{self.tournament_day.updated_at.to_i}", expires_in: 20.minute, race_condition_ttl: 10) do
+      net_scores = Rails.cache.fetch("scorecard#{handicap_allowance}-#{scorecard.id}-#{scorecard.updated_at.to_i}", expires_in: 20.minute, race_condition_ttl: 10) do
         scorecard.scores.includes(:course_hole).each do |score|
           hole_score = score.strokes
 
