@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180511200418) do
+ActiveRecord::Schema.define(version: 20180528171623) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -144,8 +144,10 @@ ActiveRecord::Schema.define(version: 20180511200418) do
     t.integer "upper_bound"
     t.integer "course_tee_box_id"
     t.integer "tournament_day_id"
+    t.integer "league_season_scoring_group_id"
     t.index ["course_tee_box_id"], name: "index_flights_on_course_tee_box_id"
     t.index ["flight_number"], name: "index_flights_on_flight_number"
+    t.index ["league_season_scoring_group_id"], name: "index_flights_on_league_season_scoring_group_id"
     t.index ["tournament_day_id"], name: "index_flights_on_tournament_day_id"
   end
 
@@ -229,7 +231,6 @@ ActiveRecord::Schema.define(version: 20180511200418) do
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "flight_id"
   end
 
   create_table "league_season_scoring_groups_users", id: false, force: :cascade do |t|
