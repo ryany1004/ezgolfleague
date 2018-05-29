@@ -330,7 +330,7 @@ module GameTypes
 
       #contests
       self.tournament_day.contests.each do |c|
-        c.contest_results.each do |r|
+        c.combined_contest_results.each do |r|
           points = points + r.points if r.winner == user
         end
       end

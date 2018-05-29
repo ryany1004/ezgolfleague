@@ -20,7 +20,7 @@ describe "Testing Contest" do
     contest.score_contest
     contest.reload
 
-    results = contest.contest_results
+    results = contest.combined_contest_results
     results_users = results.map(&:winner)
 
     expect(results_users).to include(user)
@@ -37,7 +37,7 @@ describe "Testing Contest" do
     contest.score_contest
     contest.reload
 
-    result = contest.contest_results.first
+    result = contest.combined_contest_results.first
 
     expect(result).not_to be_nil
     expect(result.payout_amount).to eq(100)

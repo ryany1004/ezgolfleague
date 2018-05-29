@@ -100,7 +100,7 @@ class Contest < ApplicationRecord
     end
   end
 
-  def contest_results
+  def combined_contest_results
     if self.is_by_hole? == false
       if self.overall_winner.blank?
         return []
@@ -176,7 +176,7 @@ class Contest < ApplicationRecord
           end
         end
       else
-        self.contest_results.each do |result|
+        self.combined_contest_results.each do |result|
           if self.should_sum_winners?
             existing_winner = nil
             winners.each do |w|
@@ -211,6 +211,23 @@ class Contest < ApplicationRecord
     dues = self.dues_for_user(user)
     if dues > 0
       Payment.create(contest: self, payment_amount: dues * -1, user: user, payment_source: "Contest Dues")
+    end
+  end
+
+  def remove_winner(winner, rebalance_amount = nil)
+    result_to_remove = self.contest_results.find_by_winner(winner)
+
+    unless result_to_remove.blank?
+      result_to_remove.destroy
+
+      self.reload
+
+      unless rebalance_amount.blank?
+        self.contest_results.each do |w|
+          w.payout_amount = rebalance_amount
+          w.save
+        end
+      end
     end
   end
 

@@ -58,7 +58,7 @@ class ContestResultsController < BaseController
   end
   
   def fetch_contest_results
-    @contest_results = @contest.contest_results
+    @contest_results = @contest.combined_contest_results
   end
   
   def fetch_contest_result
