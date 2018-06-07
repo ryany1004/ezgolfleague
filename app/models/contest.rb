@@ -215,10 +215,10 @@ class Contest < ApplicationRecord
   end
 
   def remove_winner(winner, rebalance_amount = nil)
-    result_to_remove = self.contest_results.find_by_winner(winner)
+    results_to_remove = self.contest_results.where(winner: winner)
 
-    unless result_to_remove.blank?
-      result_to_remove.destroy
+    unless results_to_remove.blank?
+      results_to_remove.destroy_all
 
       self.reload
 
