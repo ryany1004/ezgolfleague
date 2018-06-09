@@ -52,10 +52,6 @@
               <% unless score.associated_text.blank? -%>
                 </br><em><%= score.associated_text %></em>
               <% end -%>
-
-              <% unless p.scorecard_score_cell_partial.blank? -%>
-                </br><%= render partial: p.scorecard_score_cell_partial, locals: {score: score, scorecards: other_scorecards} %>
-              <% end -%>
             </td>
           <% end -%>
           <td>

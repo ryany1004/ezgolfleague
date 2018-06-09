@@ -38,7 +38,7 @@ class ScorecardPresenter
   end
 
   def tee_names
-    return self.primary_scorecard.golf_outing.course_tee_box.name
+    return self.primary_scorecard&.golf_outing&.course_tee_box&.name
   end
 
   def user_can_edit_any_scorecard?
