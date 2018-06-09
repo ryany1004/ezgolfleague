@@ -32,6 +32,11 @@ module Notifications
 	      notification.alert = body
 	      notification.custom_payload = extra_data
 
+	      #add a thread id for grouping notifications if they are from the same tournament
+	      unless extra_data.blank? || extra_data[:tournament_id].blank?
+	      	notification.thread_id = "tournament-#{extra_data[:tournament_id]}"
+	      end
+
 	      Rails.logger.info { "Pushing Standard Notification to #{device.device_identifier} #{device.environment_name}" }
 
 	      response = pusher.push(notification)
