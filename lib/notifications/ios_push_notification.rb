@@ -62,7 +62,7 @@ module Notifications
 
 	  def send_complication_notification(user, content)
 	    user.apple_watch_devices.each do |device|
-	      certificate_file = "#{Rails.root}/config/apns_complication_cert.pem"
+	      certificate_file = "#{Rails.root}/config/apns_cert.pem"
 	      passphrase = "golf"
 
 	      if device.environment_name == "debug"
