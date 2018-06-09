@@ -21,7 +21,7 @@ class TournamentMailer < ApplicationMailer
     @tournament = tournament
     @league_season = @tournament.league_season
 
-    mail(to: @league_season.league.dues_payment_receipt_email_addresses, subject: "Tournament Dues Payment: #{@user.complete_name}")
+    mail(to: @league_season.league.dues_payment_receipt_email_addresses, subject: "Tournament Dues Payment: #{@user.complete_name}") unless @league_season.league.dues_payment_receipt_email_addresses.blank?
   end
 
   def tournament_player_paying_later(user, tournament)
@@ -30,7 +30,7 @@ class TournamentMailer < ApplicationMailer
     @league_season = @tournament.league_season
     @dues = @tournament.dues_for_user(@user, false)
 
-    mail(to: @league_season.league.dues_payment_receipt_email_addresses, subject: "Tournament Registration: #{@user.complete_name}")
+    mail(to: @league_season.league.dues_payment_receipt_email_addresses, subject: "Tournament Registration: #{@user.complete_name}") unless @league_season.league.dues_payment_receipt_email_addresses.blank?
   end
 
   def tournament_payment_receipt(user, tournament, total_charged)
