@@ -347,6 +347,13 @@ module GameTypes
         payouts = payouts + p.amount if p.user == user && p.amount
       end
 
+      #contests
+      self.tournament_day.contests.each do |c|
+        c.combined_contest_results.each do |r|
+          payouts = payouts + r.payout_amount if r.winner == user && r.payout_amount
+        end
+      end
+
       return payouts
     end
 

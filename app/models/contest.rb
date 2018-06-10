@@ -217,6 +217,8 @@ class Contest < ApplicationRecord
   def add_winner(winner, amount, contest_hole = nil, result_value = nil)
     ContestResult.create(contest: self, winner: winner, payout_amount: amount, contest_hole: contest_hole, result_value: result_value)
 
+    self.reload
+
     self.contest_results.each do |w|
       w.payout_amount = amount
       w.save
