@@ -214,6 +214,15 @@ class Contest < ApplicationRecord
     end
   end
 
+  def add_winner(winner, amount, contest_hole = nil, result_value = nil)
+    ContestResult.create(contest: self, winner: winner, payout_amount: amount, contest_hole: contest_hole, result_value: result_value)
+
+    self.contest_results.each do |w|
+      w.payout_amount = amount
+      w.save
+    end
+  end
+
   def remove_winner(winner, rebalance_amount = nil)
     results_to_remove = self.contest_results.where(winner: winner)
 
