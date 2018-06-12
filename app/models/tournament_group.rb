@@ -10,6 +10,7 @@ class TournamentGroup < ApplicationRecord
   after_create :create_golfer_teams
 
   validates :tee_time_at, presence: true
+  validates :max_number_of_players, :inclusion => 0..10
 
   validate :date_is_valid
   def date_is_valid
