@@ -195,7 +195,7 @@ class TournamentPresenter
           name = golf_outing.user.blank? ? "Error" : golf_outing.user.complete_name
           user_id = golf_outing.user.blank? ? nil : golf_outing.user.id
 
-          outings << {name: name, id: user_id, handicap: golf_outing.course_handicap.to_i, flight: flight, scoring_group_name: flight.league_season_scoring_group&.name, group: tournament_group}
+          outings << {name: name, id: user_id, handicap: golf_outing.course_handicap.to_i, flight: flight, scoring_group_name: flight.league_season_scoring_group&.name, group: tournament_group} unless flight.blank?
         end
 
         groups << outings
