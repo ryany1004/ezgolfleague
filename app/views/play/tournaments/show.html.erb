@@ -57,7 +57,7 @@
             DNP
             <% end -%>
           <% end -%>
-          <% if @tournament_presenter.tournament.dues_amount > 0 && && @tournament_presenter.includes_user? && !@tournament_presenter.user_paid? -%>
+          <% if @tournament_presenter.tournament.dues_amount > 0 && @tournament_presenter.includes_user? && !@tournament_presenter.user_paid? -%>
            | <%= link_to "Pay for Registration", new_play_payment_path(:payment_type => "tournament_dues", :tournament_id => @tournament_presenter.tournament.id) %>
           <% end -%>
         </li>
