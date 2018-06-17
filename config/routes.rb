@@ -241,6 +241,7 @@ Rails.application.routes.draw do
     get 'send_tournament_registration_emails', on: :collection
     get 'send_tournament_registration_reminder_emails', on: :collection
     get 'update_all_players_from_ghin', on: :collection
+    get 'send_tournament_registration_status', on: :collection
   end
 
 end

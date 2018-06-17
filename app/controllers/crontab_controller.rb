@@ -49,4 +49,17 @@ class CrontabController < ApplicationController
     render :nothing => true
   end
 
+  def send_tournament_registration_status
+    start_date = Date.current.in_time_zone - 72.hours
+    end_date = Date.current.in_time_zone
+
+    tournaments = Tournament.where("tournament_at >= ? AND tournament_at < ?", start_date, end_date)
+
+    tournaments.each do |t|
+      TournamentMailer.tournament_registrations(t).deliver_later
+    end
+
+    render :nothing => true
+  end
+
 end

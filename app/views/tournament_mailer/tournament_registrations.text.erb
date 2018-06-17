@@ -1,0 +1,11 @@
+The following have registered for <%= @tournament.name %>:
+
+<% @tournament.tournament_days.each do |d| %>
+	<%= d.tournament_at.to_s(:short) %>
+
+	<% @tournament.players_for_day(d).each do |p| %>
+		<%= p.complete_name %>
+	<% end %>
+
+
+<% end %>
