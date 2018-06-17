@@ -50,8 +50,8 @@ class CrontabController < ApplicationController
   end
 
   def send_tournament_registration_status
-    start_date = Date.current.in_time_zone - 72.hours
-    end_date = Date.current.in_time_zone
+    start_date = Date.current.in_time_zone + 72.hours
+    end_date = start_date + 1.day
 
     tournaments = Tournament.where("tournament_at >= ? AND tournament_at < ?", start_date, end_date)
 
