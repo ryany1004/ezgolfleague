@@ -33,6 +33,14 @@ class TournamentMailer < ApplicationMailer
     mail(to: @league_season.league.dues_payment_receipt_email_addresses, subject: "Tournament Registration: #{@user.complete_name}") unless @league_season.league.dues_payment_receipt_email_addresses.blank?
   end
 
+  def tournament_player_cancelled(user, tournament)
+    @user = user
+    @tournament = tournament
+    @league_season = @tournament.league_season
+
+    mail(to: @league_season.league.dues_payment_receipt_email_addresses, subject: "Tournament Cancellation: #{@user.complete_name}") unless @league_season.league.dues_payment_receipt_email_addresses.blank?
+  end
+
   def tournament_payment_receipt(user, tournament, total_charged)
     @tournament = tournament
     league_season = @tournament.league_season

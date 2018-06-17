@@ -59,6 +59,8 @@ class Api::V1::TournamentDaysController < Api::V1::ApiBaseController
       end
     end
 
+    TournamentMailer.tournament_player_cancelled(@current_user, @tournament).deliver_later
+
     Rails.cache.delete(@tournament_day.groups_api_cache_key)
 
     eager_groups = @tournament_day.eager_groups

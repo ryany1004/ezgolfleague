@@ -112,6 +112,8 @@ class Play::TournamentsController < Play::BaseController
       end
     end
 
+    TournamentMailer.tournament_player_cancelled(current_user, @tournament).deliver_later
+
     redirect_to play_dashboard_index_path, :flash => { :success => "Your registration has been canceled." }
   end
 
