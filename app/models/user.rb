@@ -32,6 +32,7 @@ class User < ApplicationRecord
 
   attr_accessor :should_invite, :agreed_to_terms, :account_to_merge_to
 
+  before_update :clear_current_league
   before_update :reset_session, if: :encrypted_password_changed?
 
   paginates_per 50
@@ -45,6 +46,12 @@ class User < ApplicationRecord
   def reset_session
     self.session_token = nil
   end
+
+  def clear_current_league
+    self.current_league = nil if !self.leagues.include?(self.current_league)
+  end
+
+  ##
 
   def complete_name
     return "#{self.first_name} #{self.last_name}"
