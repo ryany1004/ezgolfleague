@@ -157,7 +157,7 @@ class User < ApplicationRecord
   end
 
   def selected_league
-    unless self.current_league.blank?
+    unless self.current_league.blank? || !self.leagues.include?(self.current_league)
       return self.current_league
     else
       unless self.leagues_admin.first.blank?
