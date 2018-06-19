@@ -224,6 +224,7 @@ class League < ApplicationRecord
         ranked_players.each do |r|
           if r[:id] == p.id
             r[:points] = r[:points] + points
+            r[:payouts] = r[:payouts] + payouts
 
             found_existing_player = true
           end

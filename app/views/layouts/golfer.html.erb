@@ -201,6 +201,13 @@ mixpanel.init("567e75f3f6b245aac0a54f6481629537");</script><!-- end Mixpanel -->
     <a href='https://play.google.com/store/apps/details?id=com.ezgolfleague.golfapp&hl=en'><%= image_tag 'google-play-badge.png', width: "200" %></a>
   </div>
   <% end %>
+
+  <% if user_signed_in? && current_user != true_user && true_user.is_super_user %>
+    <br/><br/>
+    <strong>You (<%= true_user.complete_name %>) are signed in as <%= current_user.complete_name %>
+    <br/>
+    <%= link_to "Stop Impersonating", stop_impersonating_user_accounts_path %></strong>
+<% end %>
 </footer>
 
 </body>
