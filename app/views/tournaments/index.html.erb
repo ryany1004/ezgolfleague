@@ -21,7 +21,7 @@
           <% end %>
 
           <% if !current_user.selected_league.exempt_from_subscription && current_user.is_any_league_admin? %>
-            <% if !current_user.selected_league.has_active_subscription?
+            <% if !current_user.selected_league.has_active_subscription? %>
               <p>You currently have <%= current_user.selected_league.free_tournaments_remaining %> free tournaments remaining.</p>
             <% end %>
 
