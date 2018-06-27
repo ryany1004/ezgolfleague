@@ -8,7 +8,7 @@ class ContestResult < ApplicationRecord
   validates :payout_amount, presence: true
 
   def location
-    if !self.contest.blank?
+    if self.contest_hole.blank?
       return "Tournament Overall"
     else
       return "Hole #{self.contest_hole.course_hole.hole_number}"

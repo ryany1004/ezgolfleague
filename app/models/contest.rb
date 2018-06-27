@@ -88,7 +88,11 @@ class Contest < ApplicationRecord
     if self.contest_type < 2
       return true
     else
-      return false
+      if self.winners.blank? || self.winners.count == 0
+        return false
+      else
+        return true
+      end
     end
   end
 

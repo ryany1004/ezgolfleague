@@ -72,6 +72,7 @@
             <th>Amount</th>
             <th>Points</th>
             <th>Details</th>
+            <th>&nbsp;</th>
           </tr>
         </thead>
         <tbody>
@@ -84,6 +85,7 @@
               <td><%= format_payout(c.winners) %></td>
               <td><%= format_points(c.winners) %></td>
               <td><%= format_results(c.winners) %></td>
+              <td><% if c.manual_results_entry? -%><%= link_to "Edit Results", league_tournament_contest_contest_results_path(@tournament.league, @tournament, c, tournament_day: day), target: :new %><% else %>&nbsp;<% end -%></td>
             </tr>
             <% end %>
           <% end =%>

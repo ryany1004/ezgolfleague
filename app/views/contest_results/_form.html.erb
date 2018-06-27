@@ -13,11 +13,11 @@
     <p><strong>Winner</strong></p>
     <%= f.association :winner, collection: @tournament.league.users, label_method: :complete_name, label: false, include_blank: true, input_html: { class: 'chosen-select' } %>
 
-    <% if @contest.contest_type == 1 -%>
+    <% if @contest.contest_type <= 3 -%>
       <%= f.association :contest_hole, collection: @contest.contest_holes, label_method: :hole_number %>
     <% end -%>
 
-    <%= f.input :result_value, :label => 'Result (i.e. 300 yards)', required: true %>
+    <%= f.input :result_value, :label => 'Result (i.e. 300 yards, hole number)', required: true %>
 
     <%= f.input :payout_amount, :label => "Payout Amount ($)" %>
 
