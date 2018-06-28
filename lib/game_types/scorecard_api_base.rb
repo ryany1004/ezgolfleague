@@ -76,12 +76,16 @@ module GameTypes
     def handicap_row(allowance)
       handicap_info = []
       self.tournament_day.course_holes.each do |course_hole|
-        allowance.each do |h|
-          if h[:course_hole] == course_hole
-            if h[:strokes] != 0
-              handicap_info << ["-#{h[:strokes]}"]
-            else
-              handicap_info << [""]
+        if allowance.blank?
+          handicap_info << [""]
+        else
+          allowance.each do |h|
+            if h[:course_hole] == course_hole
+              if h[:strokes] != 0
+                handicap_info << ["-#{h[:strokes]}"]
+              else
+                handicap_info << [""]
+              end
             end
           end
         end
