@@ -38,7 +38,7 @@ class CrontabController < ApplicationController
     start_date = Date.current.in_time_zone + number_of_days
     end_date = start_date + 1.day
 
-    tournaments = Tournament.where("tournament_at >= ? AND tournament_at < ?", start_date, end_date)
+    tournaments = Tournament.where("tournament_starts_at >= ? AND tournament_starts_at < ?", start_date, end_date)
 
     tournaments.each do |t|
       t.players.each do |u|
@@ -53,7 +53,7 @@ class CrontabController < ApplicationController
     start_date = Date.current.in_time_zone + 72.hours
     end_date = start_date + 1.day
 
-    tournaments = Tournament.where("tournament_at >= ? AND tournament_at < ?", start_date, end_date)
+    tournaments = Tournament.where("tournament_starts_at >= ? AND tournament_starts_at < ?", start_date, end_date)
 
     tournaments.each do |t|
       TournamentMailer.tournament_registrations(t).deliver_later
