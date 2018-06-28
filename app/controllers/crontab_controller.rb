@@ -5,7 +5,7 @@ class CrontabController < ApplicationController
 
     Importers::GHINImporter.import_for_all_users
 
-    render :nothing => true
+    head :ok, content_type: "text/html"
   end
 
   def send_tournament_registration_emails
@@ -17,7 +17,7 @@ class CrontabController < ApplicationController
       end
     end
 
-    render :nothing => true
+    head :ok, content_type: "text/html"
   end
 
   def send_tournament_registration_reminder_emails
@@ -29,7 +29,7 @@ class CrontabController < ApplicationController
       end
     end
 
-    render :nothing => true
+    head :ok, content_type: "text/html"
   end
 
   def send_tournament_coming_up_emails
@@ -46,7 +46,7 @@ class CrontabController < ApplicationController
       end
     end
 
-    render :nothing => true
+    head :ok, content_type: "text/html"
   end
 
   def send_tournament_registration_status
@@ -59,7 +59,7 @@ class CrontabController < ApplicationController
       TournamentMailer.tournament_registrations(t).deliver_later
     end
 
-    render :nothing => true
+    head :ok, content_type: "text/html"
   end
 
 end
