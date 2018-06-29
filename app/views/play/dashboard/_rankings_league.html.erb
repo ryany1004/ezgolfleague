@@ -1,0 +1,14 @@
+<tbody>
+  <% rankings.each do |player| %>
+  <tr>
+    <td><strong><%= player[:ranking] %></strong></td>
+    <% if current_user.id == player[:id] -%>
+    <td><strong><%= player[:name] %></strong></td>
+    <% else -%>
+    <td><%= player[:name] %></td>
+    <% end -%>
+    <td><%= player[:points].to_i %></td>
+    <td>$<%= player[:payouts].to_i %></td>
+  </tr>
+  <% end -%>
+</tbody>
