@@ -1,6 +1,10 @@
+<!-- Scoring Groups -->
 <tbody>
   <% rankings.each do |group| %>
-    <% group.each do |player| %>
+    <tr>
+      <td colspan="5"><strong><%= group[:name] %></strong></td>
+    </tr>
+    <% group[:ranked_players].each do |player| %>
       <tr>
         <td><strong><%= player[:ranking] %></strong></td>
         <% if current_user.id == player[:id] -%>
@@ -12,6 +16,5 @@
         <td>$<%= player[:payouts].to_i %></td>
       </tr>
     <% end -%>
-    <tr>&nbsp;</tr>
   <% end %>
 </tbody>

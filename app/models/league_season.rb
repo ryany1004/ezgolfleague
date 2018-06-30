@@ -3,7 +3,7 @@ class LeagueSeason < ApplicationRecord
 
   has_many :payments, inverse_of: :league_season
   has_many :subscription_credits, ->{ order 'created_at DESC' }
-  has_many :league_season_scoring_groups, inverse_of: :league_season, dependent: :destroy
+  has_many :league_season_scoring_groups, ->{ order 'name' }, inverse_of: :league_season, dependent: :destroy
 
   validates :name, :starts_at, :ends_at, :league, presence: true
 

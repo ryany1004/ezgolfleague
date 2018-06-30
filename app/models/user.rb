@@ -63,6 +63,18 @@ class User < ApplicationRecord
     return complete_name + " (#{self.email})"
   end
 
+  def scoring_group_name_for_league_season(league_season)
+    if league_season.league.allow_scoring_groups
+      league_season.league_season_scoring_groups.each do |group|
+        if group.users.include? self
+          return "(#{group.name})"
+        end
+      end
+    else
+      ""
+    end
+  end
+
   def short_name
     return "#{self.first_name} #{self.last_name[0]}."
   end

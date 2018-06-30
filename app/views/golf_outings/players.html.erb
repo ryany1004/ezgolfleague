@@ -49,7 +49,7 @@
             </td>
             <td id="user-select" class="user-select">
               <% if tournament_group.user_for_index(i).try(:id) %>
-                <%= tournament_group.user_for_index(i).try(:complete_name) %>
+                <%= tournament_group.user_for_index(i).try(:complete_name) %> <%= tournament_group.user_for_index(i)&.scoring_group_name_for_league_season(@tournament.league_season) %>
                 <%= f.input "member_id[#{i}]", :as => :hidden, :input_html => { :value => tournament_group.user_for_index(i).try(:id), :class => "member-id" } %>
               <% else %>
                 <span id="user-select-container">

@@ -6,7 +6,7 @@ class LeagueSeasonScoringGroup < ApplicationRecord
   def ranked_users
     ranked_players = []
 
-    tournaments = Tournament.tournaments_happening_at_some_point(self.league_season.starts_at, self.league_season.ends_at, [self], true)
+    tournaments = Tournament.tournaments_happening_at_some_point(self.league_season.starts_at, self.league_season.ends_at, [self.league_season.league], true)
     tournaments.each do |t|
       self.users.each do |p|
         points = 0
@@ -69,6 +69,6 @@ class LeagueSeasonScoringGroup < ApplicationRecord
       player[:ranking] = rank
     end
 
-    return ranked_players
+    return { name: self.name, ranked_players: ranked_players }
   end
 end
