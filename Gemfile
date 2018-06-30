@@ -40,6 +40,7 @@ gem 'capistrano-rails', '~> 1.1'
 gem 'capistrano-bundler', '~> 1.1.3'
 gem "capistrano-resque", "~> 0.2.2", require: false
 gem 'rollbar'
+gem 'acts_as_paranoid', '~> 0.6.0'
 
 group :development do
   gem 'web-console'

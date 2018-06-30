@@ -61,6 +61,9 @@ GEM
       i18n (~> 0.7)
       minitest (~> 5.1)
       tzinfo (~> 1.1)
+    acts_as_paranoid (0.6.0)
+      activerecord (>= 4.2, < 6.0)
+      activesupport (>= 4.2, < 6.0)
     addressable (2.5.2)
       public_suffix (>= 2.0.2, < 4.0)
     apnotic (1.3.1)
@@ -431,6 +434,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  acts_as_paranoid (~> 0.6.0)
   apnotic
   attr_encrypted (~> 3.0.0)
   aws-sdk (~> 2.3)

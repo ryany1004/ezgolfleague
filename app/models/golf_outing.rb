@@ -1,6 +1,8 @@
 class GolfOuting < ApplicationRecord
   include Servable
 
+  acts_as_paranoid
+
   belongs_to :tournament_group, inverse_of: :golf_outings, touch: true
   belongs_to :user, inverse_of: :golf_outings
   belongs_to :course_tee_box

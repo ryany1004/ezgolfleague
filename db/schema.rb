@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180528171623) do
+ActiveRecord::Schema.define(version: 20180630160059) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -187,7 +187,9 @@ ActiveRecord::Schema.define(version: 20180528171623) do
     t.integer "tournament_group_id"
     t.boolean "disqualified", default: false
     t.string "registered_by"
+    t.datetime "deleted_at"
     t.index ["course_tee_box_id"], name: "index_golf_outings_on_course_tee_box_id"
+    t.index ["deleted_at"], name: "index_golf_outings_on_deleted_at"
     t.index ["is_confirmed"], name: "index_golf_outings_on_is_confirmed"
     t.index ["tournament_group_id"], name: "index_golf_outings_on_tournament_group_id"
     t.index ["user_id"], name: "index_golf_outings_on_user_id"
@@ -222,6 +224,8 @@ ActiveRecord::Schema.define(version: 20180528171623) do
     t.datetime "updated_at", null: false
     t.string "state"
     t.decimal "league_dues_discount", default: "0.0"
+    t.datetime "deleted_at"
+    t.index ["deleted_at"], name: "index_league_memberships_on_deleted_at"
     t.index ["league_id"], name: "index_league_memberships_on_league_id"
     t.index ["user_id"], name: "index_league_memberships_on_user_id"
   end
@@ -334,6 +338,8 @@ ActiveRecord::Schema.define(version: 20180528171623) do
     t.integer "contest_id"
     t.integer "league_season_id"
     t.integer "payment_id"
+    t.datetime "deleted_at"
+    t.index ["deleted_at"], name: "index_payments_on_deleted_at"
     t.index ["league_season_id"], name: "index_payments_on_league_season_id"
     t.index ["tournament_id"], name: "index_payments_on_tournament_id"
     t.index ["user_id"], name: "index_payments_on_user_id"
@@ -348,6 +354,8 @@ ActiveRecord::Schema.define(version: 20180528171623) do
     t.float "points"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.datetime "deleted_at"
+    t.index ["deleted_at"], name: "index_payout_results_on_deleted_at"
     t.index ["flight_id"], name: "index_payout_results_on_flight_id"
     t.index ["payout_id"], name: "index_payout_results_on_payout_id"
     t.index ["tournament_day_id"], name: "index_payout_results_on_tournament_day_id"
@@ -371,6 +379,8 @@ ActiveRecord::Schema.define(version: 20180528171623) do
     t.datetime "updated_at", null: false
     t.boolean "is_confirmed", default: false
     t.integer "designated_editor_id"
+    t.datetime "deleted_at"
+    t.index ["deleted_at"], name: "index_scorecards_on_deleted_at"
     t.index ["golf_outing_id"], name: "index_scorecards_on_golf_outing_id"
   end
 
@@ -382,7 +392,9 @@ ActiveRecord::Schema.define(version: 20180528171623) do
     t.datetime "updated_at", null: false
     t.integer "sort_order", default: 0
     t.boolean "has_notified", default: false
+    t.datetime "deleted_at"
     t.index ["course_hole_id"], name: "index_scores_on_course_hole_id"
+    t.index ["deleted_at"], name: "index_scores_on_deleted_at"
     t.index ["scorecard_id"], name: "index_scores_on_scorecard_id"
     t.index ["sort_order"], name: "index_scores_on_sort_order"
   end
@@ -502,6 +514,8 @@ ActiveRecord::Schema.define(version: 20180528171623) do
     t.string "time_zone", default: "Pacific Time (US & Canada)"
     t.integer "parent_id"
     t.boolean "is_blocked", default: false
+    t.datetime "deleted_at"
+    t.index ["deleted_at"], name: "index_users_on_deleted_at"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["invitation_token"], name: "index_users_on_invitation_token", unique: true
     t.index ["invitations_count"], name: "index_users_on_invitations_count"

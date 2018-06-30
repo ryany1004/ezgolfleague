@@ -2,6 +2,8 @@ class User < ApplicationRecord
   include Handicapable
   include Servable
 
+  acts_as_paranoid
+
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable, :registerable
   devise :invitable, :database_authenticatable, :recoverable, :rememberable, :trackable, :validatable

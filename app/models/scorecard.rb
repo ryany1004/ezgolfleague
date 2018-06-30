@@ -1,6 +1,8 @@
 class Scorecard < ApplicationRecord
   include Servable
 
+  acts_as_paranoid
+
   belongs_to :golf_outing, inverse_of: :scorecard, touch: true
   has_many :scores, -> { order("sort_order") }, inverse_of: :scorecard, :dependent => :destroy
   has_many :game_type_metadatum, inverse_of: :scorecard, :dependent => :destroy

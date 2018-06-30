@@ -1,6 +1,8 @@
 class Score < ApplicationRecord
   include Servable
 
+  acts_as_paranoid
+
   belongs_to :scorecard, inverse_of: :scores, touch: true
   belongs_to :course_hole
 
