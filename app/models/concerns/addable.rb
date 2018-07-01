@@ -216,7 +216,7 @@ module Addable
       Rails.logger.info { "Adding Player to Last Flight - Not Normally Flighted" }
 
       last_flight = self.flights.last #add the player to the 'last' flight
-      last_flight.users << player
+      last_flight.users << player unless last_flight.blank?
     end
 
     self.assign_course_tee_box_to_player(player, assigned_flight)
