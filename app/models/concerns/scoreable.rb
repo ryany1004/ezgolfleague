@@ -101,7 +101,7 @@ module Scoreable
   end
 
   def score_user(user)
-    return 0 if !self.tournament.includes_player?(user)
+    return nil if !self.tournament.includes_player?(user)
 
     self.tournament_day_results.where(user: user).destroy_all
 
