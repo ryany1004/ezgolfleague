@@ -68,10 +68,17 @@ namespace :deploy do
     end
   end
 
+  desc 'Clear cache'
+  task :clear_memcached do
+    on roles(:app), in: :sequence, wait: 5 do
+      execute :sudo, "cd #{deploy_to}/current && /usr/bin/env rake memcached_clear RAILS_ENV=production"
+    end
+  end
+
   after :publishing, :restart
   after :publishing, :fix_permissions
   after :finished, 'resque:restart'
-  after :finished, execute :sudo, "cd #{deploy_to}/current && /usr/bin/env rake memcached_clear RAILS_ENV=production"
+  after :finished, :clear_memcached
 
   set :rollbar_token, '75d79ff8ca4643809de5616d7c6c2265'
   set :rollbar_env, Proc.new { fetch :stage }
