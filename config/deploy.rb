@@ -71,7 +71,7 @@ namespace :deploy do
   desc 'Clear cache'
   task :clear_memcached do
     on roles(:app), in: :sequence, wait: 5 do
-      execute :sudo, "cd #{deploy_to}/current && /usr/bin/env rake memcached_clear RAILS_ENV=production"
+      execute "cd #{deploy_to}current && /usr/bin/env rake memcached_clear RAILS_ENV=production"
     end
   end
 
