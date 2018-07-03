@@ -71,7 +71,7 @@ namespace :deploy do
   after :publishing, :restart
   after :publishing, :fix_permissions
   after :finished, 'resque:restart'
-  after :finished, execute :sudo, ("cd #{deploy_to}/current && /usr/bin/env rake memcached_clear RAILS_ENV=production")
+  after :finished, execute :sudo, "cd #{deploy_to}/current && /usr/bin/env rake memcached_clear RAILS_ENV=production"
 
   set :rollbar_token, '75d79ff8ca4643809de5616d7c6c2265'
   set :rollbar_env, Proc.new { fetch :stage }
