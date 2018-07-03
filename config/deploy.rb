@@ -68,13 +68,8 @@ namespace :deploy do
     end
   end
 
-  desc 'Clear memcache'
-  task :clear_memcache do
-    Rails.cache.clear
-  end
-
   after :publishing, :restart
-  after :publishing, :clear_memcache
+  after :publishing, 'memcached:clear'
   after :publishing, :fix_permissions
   after :finished, 'resque:restart'
 
