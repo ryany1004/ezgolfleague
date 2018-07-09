@@ -16,71 +16,10 @@
 		</tr>
 	</thead>
   <tbody>
-    <% tournaments.each do |t| %>
-      <tr>
-        <td><%= link_to "#{t.name} #{tournament_paid(t, current_user)}", play_tournament_path(t, tournament_day: t.tournament_days.first) %></td>
-        <td>
-          <% t.tournament_days.each do |d| -%>
-            <%= d.tournament_at.to_s(:date_and_time) %> @ <%= d.course.name %><br/>
-          <% end -%>
-        </td>
-        <% if is_current == true -%>
-          <% if t.includes_player?(current_user) -%>
-            <td><%= scorecard_links_for_user_in_tournament(current_user, t) %></td>
-            <td><%= t.total_score(current_user) %></td>
-          <% else -%>
-            <td>DNP</td>
-            <td>&nbsp;</td>
-          <% end -%>
-        <% elsif is_previous == true -%>
-          <% if t.includes_player?(current_user) -%>
-          <td><%= scorecard_links_for_user_in_tournament(current_user, t) %></td>
-          <td><%= t.total_score(current_user) %></td>
-          <td><%= t.total_points(current_user) %></td>
-          <% else %>
-            <td>DNP</td>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-          <% end -%>
-        <% else -%>
-        <td>
-          <% if t.is_open_for_registration? -%>
-            <% if !t.includes_player?(current_user) -%>
-             <%= link_to "Register", play_tournament_signup_path(t) %>
-            <% else %>
-            <div class="btn-group">
-              <button class="btn btn-default btn-xs dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false">
-                Actions <span class="caret"></span>
-              </button>
-              <ul class="dropdown-menu" role="menu">
-                <li><%= link_to "View Registration", play_tournament_signup_path(t) %></li>
-                <% if t.dues_amount > 0 && !t.user_has_paid?(current_user) -%>
-                <li><%= link_to "Pay for Registration", new_play_payment_path(:payment_type => "tournament_dues", :tournament_id => t.id) %></li>
-                <% end -%>
-                <li><%= link_to "Cancel Registration", play_tournament_remove_signup_path(t), :data => { :confirm => 'Are you sure you want to cancel this registration?' }, :method => :delete %></li>
-                <li class="divider"></li>
-                <li>
-                  <% t.tournament_days.each do |d| -%>
-                    <% unless d.primary_scorecard_for_user(current_user).blank? -%>
-                      <%= link_to "#{d.pretty_day} Scorecard", play_scorecard_path(d.primary_scorecard_for_user(current_user)) %>
-                    <% else -%>
-                      <%= link_to "#{d.pretty_day} Not Tee-Timed", "#" %>
-                    <% end -%>
-                  <% end -%>
-                </li>
-              </ul>
-            </div>
-            <% end -%>
-          <% else -%>
-            <% if t.number_of_players >= t.max_players -%>
-              Full
-            <% else -%>
-              <%= t.signup_opens_at.to_s(:date_and_time) %>
-            <% end -%>
-          <% end -%>
-        </td>
-        <% end -%>
-      </tr>
+    <% tournaments.each do |tournament| %>
+      <% cache tournament do %>
+        <%= render partial: 'play/dashboard/tournament', locals: { tournament: tournament, is_current: is_current, is_previous: is_previous } %>
+      <% end %>
     <% end %>
   </tbody>
 </table>
