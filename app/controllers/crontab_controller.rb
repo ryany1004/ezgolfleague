@@ -33,7 +33,7 @@ class CrontabController < ApplicationController
   end
 
   def send_tournament_coming_up_emails
-    number_of_days = params[:days_away]
+    number_of_days = params[:days_away].to_i
 
     start_date = Date.current.in_time_zone + number_of_days
     end_date = start_date + 1.day
