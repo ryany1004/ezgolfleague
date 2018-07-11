@@ -43,6 +43,7 @@ class TournamentMailer < ApplicationMailer
 
   def tournament_registrations(tournament)
     @tournament = tournament
+    @league_season = @tournament.league_season
 
     mail(to: @league_season.league.dues_payment_receipt_email_addresses, subject: "Tournament Registrations: #{@tournament.name}") unless @league_season.league.dues_payment_receipt_email_addresses.blank?
   end
