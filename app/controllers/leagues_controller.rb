@@ -11,6 +11,12 @@ class LeaguesController < BaseController
 
       @page_title = "My Leagues"
     end
+
+    unless params[:search].blank?
+      search_string = "%#{params[:search].downcase}%"
+
+      @leagues = @leagues.where("lower(name) LIKE ?", search_string)
+    end
   end
 
   def new

@@ -1,6 +1,6 @@
 <tr>
   <td><%= link_to_unless !is_editable?(tournament), tournament.name, edit_league_tournament_path(tournament.league, tournament) %></td>
-  <td><%= tournament.league.name %><br/><%= tournament.season_name %></td>
+  <td><%= link_to_if(current_user.is_super_user, tournament.league.name, edit_league_path(tournament.league)) %><br/><%= link_to_if(current_user.is_super_user && tournament.league_season.present?, tournament.season_name, league_league_seasons_path(tournament.league, tournament.league_season)) %></td>
   <td>
     <% tournament.tournament_days.each do |day| -%>
       <%= day.course.name %><br/>
