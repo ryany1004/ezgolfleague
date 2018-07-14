@@ -8,7 +8,11 @@ class FlightsController < BaseController
   def index
     @page_title = "Flights for #{@tournament.name} #{@tournament_day.pretty_day}"
 
-    @tournament_day.create_scoring_group_flights if @tournament.league.allow_scoring_groups && @tournament_day.flights.count == 0
+    if @tournament.league.allow_scoring_groups && @tournament_day.flights.count == 0
+      @tournament_day.create_scoring_group_flights
+    elsif !@tournament.league.allow_scoring_groups && @tournament_day.flights.count == 0
+      @tournament_day.copy_flights_from_previous_day
+    end
   end
 
   def new

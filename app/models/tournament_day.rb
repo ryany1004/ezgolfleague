@@ -18,7 +18,7 @@ class TournamentDay < ApplicationRecord
 
   attr_accessor :skip_date_validation
 
-  after_create :create_default_flight
+  after_create :create_default_flight, if: :is_first_day?
 
   delegate :player_score, :compute_player_score, :compute_stroke_play_player_score, :compute_adjusted_player_score, :player_points, :player_payouts, :flights_with_rankings, :related_scorecards_for_user, :assign_payouts_from_scores, to: :game_type
   delegate :allow_teams, :show_teams?, :players_create_teams?, :show_team_scores_for_all_teammates?, to: :game_type
@@ -68,6 +68,10 @@ class TournamentDay < ApplicationRecord
     return new_game_type
   end
 
+  def is_first_day?
+    self.tournament.first_day == self
+  end
+
   def pretty_day(add_space = false)
     return nil if self.tournament.tournament_days.count == 1
 
@@ -100,6 +104,12 @@ class TournamentDay < ApplicationRecord
       f = Flight.new(tournament_day: self, flight_number: i + 1, lower_bound: 0, upper_bound: 0, course_tee_box: self.course.course_tee_boxes.first, league_season_scoring_group: g)
 
       f.save(:validate => false)
+    end
+  end
+
+  def copy_flights_from_previous_day
+    self.tournament.first_day.flights.each do |f|
+      Flight.create(tournament_day: self, flight_number: f.flight_number, lower_bound: f.lower_bound, upper_bound: f.upper_bound, course_tee_box: f.course_tee_box)
     end
   end
 
