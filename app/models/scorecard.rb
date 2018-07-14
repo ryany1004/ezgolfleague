@@ -44,6 +44,8 @@ class Scorecard < ApplicationRecord
     end
 
     if force_recalculation == true or (self.golf_outing.course_handicap.blank? or self.golf_outing.course_handicap == 0)
+      Rails.logger.debug { "Recalculating handicaps..." }
+
       calculated_course_handicap = self.golf_outing.user.course_handicap_for_golf_outing(self.golf_outing)
       calculated_course_handicap = 0 if calculated_course_handicap.blank?
 

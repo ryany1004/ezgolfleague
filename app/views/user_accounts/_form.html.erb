@@ -43,35 +43,12 @@
     <%= f.input :avatar, :label => 'Avatar Photo' %>
   </div>
 
-  <h3>GHIN Number</h3>
-  <div class="well">
-    <%= f.input :ghin_number, :label => 'GHIN System Number' %>
-  </div>
-
-  <% if current_user.is_super_user && @user_account.new_record? == false && @user_account.ghin_number.blank? == false %>
-  <div class="well">
-    <p>View their GHIN page, useful for debugging. Saving a user will submit a request to update from GHIN.</p>
-
-    <p>GHIN URL: <%= link_to @user_account.ghin_url, @user_account.ghin_url %></p>
-
-    <p>GHIN Last Updated: <%= @user_account.ghin_updated_at %></p>
-  </div>
-  <% end %>
-
-  <% if current_user_is_admin_for_user(@user_account) -%>
-  <h3>Handicap</h3>
-  <div class="well">
-    <%= f.input :handicap_index, :label => '18-Hole Handicap Index' %>
-    <p>Handicaps will automatically be converted for 9-hole tournaments.</p>
-  </div>
-  <% end -%>
-
   <% if @user_account.new_record? -%>
   <h3>Password</h3>
   <div class="well">
-	  <%= f.input :password, :label => 'Password' %>
+    <%= f.input :password, :label => 'Password' %>
 
-	  <%= f.input :password_confirmation, :label => 'Password Confirmation' %>
+    <%= f.input :password_confirmation, :label => 'Password Confirmation' %>
   </div>
   <% end -%>
 
@@ -82,6 +59,22 @@
     <%= f.input :wants_push_notifications, :label => 'Send Notifications via Mobile App', as: :boolean %>
   </div>
   <% end -%>
+
+  <h3>Handicap Indexes</h3>
+  <div class="well">
+    <p>We offer several options for handicapping: automatic via GHIN or manual handicap index. You can also override the handicap index with a manual course handicap - you can enter that below.</p>
+
+    <%= f.input :ghin_number, :label => 'GHIN System Number' %>
+
+    <% if current_user.is_super_user && @user_account.new_record? == false && @user_account.ghin_number.blank? == false %>
+    <p>View their GHIN page, useful for debugging. Saving a user will submit a request to update from GHIN.</p>
+    <p>GHIN URL: <%= link_to @user_account.ghin_url, @user_account.ghin_url %></p>
+    <p>GHIN Last Updated: <%= @user_account.ghin_updated_at %></p>
+    <% end %>
+
+    <%= f.input :handicap_index, :label => '18-Hole Handicap Index' %>
+    <p>Handicaps will automatically be converted for 9-hole tournaments.</p>
+  </div>
 
   <h3>Contact Information</h3>
   <div class="well">
@@ -98,6 +91,19 @@
     <%= f.input :phone_number, :label => 'Phone Number' %>
   </div>
 
+  <% if @user_account.new_record? == false && @editing_current_user != true -%>
+    <% @user_account.league_memberships.each do |league_membership| %>
+      <h3><%= league_membership.league.name %> League Settings</h3>
+      <div class="well">
+        <%= f.simple_fields_for :league_memberships, league_membership do |l| %>
+          <%= l.input :is_admin, label: "League Admin?" %>
+          <%= l.input :league_dues_discount, label: "Discount on League Dues" %>
+          <%= l.input :course_handicap, label: "Course Handicap Override" %>
+        <% end %>
+      </div>
+    <% end -%>
+  <% end -%>
+
   <% if current_user.is_super_user %>
   <h3>Parent User</h3>
   <div class="well">
@@ -113,37 +119,6 @@
     <%= f.input :account_to_merge_to, collection: User.all.order("last_name").where("id != ?", @user_account.id), label: false, :label_method => :complete_name_with_email, include_blank: true, input_html: { class: 'chosen-select' } %>
   </div>
   <% end %>
-
-  <% if @user_account.new_record? == false && @editing_current_user != true -%>
-  <h3>Leagues</h3>
-
-  <table class="table table-striped">
-  	<thead>
-  		<tr>
-  			<th>Name</th>
-        <th>Status</th>
-  		</tr>
-  	</thead>
-  	<tbody>
-  	<% @user_account.leagues.each do |league| %>
-  		<tr>
-        <% if current_user.is_super_user || current_user == @user_account %>
-  			<td><%= link_to league.name, edit_league_path(league) %></td>
-        <% else -%>
-        <td><%= league.name %></td>
-        <% end -%>
-        <td><%= league.state_for_user(@user_account) %></td>
-  		</tr>
-  	<% end %>
-  	</tbody>
-    <tfoot>
-  		<tr>
-  			<th>&nbsp;</th>
-        <th>&nbsp;</th>
-  		</tr>
-    </tfoot>
-  </table>
-  <% end -%>
 
   <div class="form-actions">
     <%= f.button :submit, :class => 'btn btn-default' %>

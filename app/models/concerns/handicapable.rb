@@ -2,18 +2,28 @@ module Handicapable
   extend ActiveSupport::Concern
 
   def course_handicap_for_golf_outing(golf_outing, flight = nil)
-    unless flight.blank?
-      course_tee_box = flight.course_tee_box
-    else
-      course_tee_box = golf_outing.course_tee_box
-    end
+    membership = self.league_membership_for_league(golf_outing.tournament_group.tournament_day.tournament.league)
 
-    return nil if self.handicap_index.blank? or course_tee_box.blank? or golf_outing.blank? #this will fail if the user is not flighted
+    if membership.present? && membership.course_handicap.present?
+      Rails.logger.info { "Handicap: Using Override Course Handicap: #{membership.course_handicap}" }
 
-    if golf_outing.tournament_group.tournament_day.course_holes.count == 9
-      self.nine_hole_handicap(golf_outing.tournament_group.tournament_day.course, course_tee_box)
+      membership.course_handicap
     else
-      self.standard_handicap(golf_outing.tournament_group.tournament_day.course, course_tee_box)
+      Rails.logger.info { "Handicap: Using Index Derived Handicap" }
+
+      unless flight.blank?
+        course_tee_box = flight.course_tee_box
+      else
+        course_tee_box = golf_outing.course_tee_box
+      end
+
+      return nil if self.handicap_index.blank? or course_tee_box.blank? or golf_outing.blank? #this will fail if the user is not flighted
+
+      if golf_outing.tournament_group.tournament_day.course_holes.count == 9
+        self.nine_hole_handicap(golf_outing.tournament_group.tournament_day.course, course_tee_box)
+      else
+        self.standard_handicap(golf_outing.tournament_group.tournament_day.course, course_tee_box)
+      end
     end
   end
 

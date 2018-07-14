@@ -14,7 +14,7 @@
       <td><%= scorecard.scores.map {|score| score.strokes }.sum %></td>
       <td><%= scorecard.net_score %></td>
       <td><%= tournament_day.course_holes.map {|hole| hole.par }.sum %></td>
-      <td><%= scorecard.golf_outing.course_handicap %></td>
+      <td><%= scorecard.course_handicap %></td>
 		</tr>
 	</tbody>
 </table>

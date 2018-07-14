@@ -37,6 +37,8 @@ class User < ApplicationRecord
   before_update :clear_current_league
   before_update :reset_session, if: :encrypted_password_changed?
 
+  accepts_nested_attributes_for :league_memberships
+
   paginates_per 50
 
   has_attached_file :avatar, :styles => { :medium => "300x300#", :thumb => "100x100#" }, :default_url => "/images/:style/missing.png"
@@ -216,6 +218,10 @@ class User < ApplicationRecord
     else
       return true
     end
+  end
+
+  def league_membership_for_league(league)
+    self.league_memberships.where("league_id = ?", league.id).first
   end
 
   def payments_for_current_league

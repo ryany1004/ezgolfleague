@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180630160059) do
+ActiveRecord::Schema.define(version: 20180714212936) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -225,6 +225,7 @@ ActiveRecord::Schema.define(version: 20180630160059) do
     t.string "state"
     t.decimal "league_dues_discount", default: "0.0"
     t.datetime "deleted_at"
+    t.float "course_handicap"
     t.index ["deleted_at"], name: "index_league_memberships_on_deleted_at"
     t.index ["league_id"], name: "index_league_memberships_on_league_id"
     t.index ["user_id"], name: "index_league_memberships_on_user_id"
