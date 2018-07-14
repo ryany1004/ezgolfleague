@@ -51,6 +51,7 @@ class League < ApplicationRecord
       l.encrypted_stripe_production_secret_key = nil
       l.encrypted_stripe_test_publishable_key = nil
       l.encrypted_stripe_production_publishable_key = nil
+      l.stripe_token = nil
 
       l.save
     end

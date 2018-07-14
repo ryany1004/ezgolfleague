@@ -88,6 +88,8 @@
   'shipping': '0.0'                     // Shipping (currency).
   });
 
+  ga('send', 'pageview');
+
   fbq('track', 'Purchase', {
   value: <%= params[:details_amount] %>,
   currency: 'USD'
