@@ -399,11 +399,15 @@ module GameTypes
 
     ##Handicap
 
+    def course_handicap_for_game_type(golf_outing)
+      return golf_outing.course_handicap
+    end
+
     def handicap_allowance(user)
       golf_outing = self.tournament_day.golf_outing_for_player(user)
       return nil if golf_outing.blank? #did not play
 
-      course_handicap = golf_outing.course_handicap
+      course_handicap = self.course_handicap_for_game_type(golf_outing)
 
       ##
       allowance = Rails.cache.fetch("golf_outing#{golf_outing.id}-#{golf_outing.updated_at.to_i}", expires_in: 15.minute, race_condition_ttl: 10) do

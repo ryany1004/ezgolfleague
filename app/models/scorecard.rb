@@ -83,7 +83,7 @@ class Scorecard < ApplicationRecord
   end
 
   def course_handicap
-    return self.golf_outing.course_handicap.to_i
+    return self.tournament_day.game_type.course_handicap_for_game_type(self.golf_outing).to_i
   end
 
   def has_empty_scores?
