@@ -32,6 +32,10 @@ class ScorecardsController < BaseController
   end
 
   def update
+    #handicap update
+    @scorecard.update(scorecard_params)
+
+    #scores
     scores_to_update = Hash.new
 
     params[:scorecard][:scores_attributes].to_unsafe_h.keys.each do |key|
@@ -91,7 +95,7 @@ class ScorecardsController < BaseController
   private
 
   def scorecard_params
-    params.require(:scorecard).permit(scores_attributes: [:id, :strokes])
+    params.require(:scorecard).permit(scores_attributes: [:id, :strokes], golf_outing_attributes: [:id, :course_handicap])
   end
 
   def fetch_all_params

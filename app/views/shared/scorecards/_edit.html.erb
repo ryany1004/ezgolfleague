@@ -1,3 +1,5 @@
+<%= simple_form_for scorecard, url: edit_url, html: { autocomplete: 'off' } do |f| %>
+
 <table class="table table-striped table-bordered">
 	<thead>
 		<tr>
@@ -14,12 +16,14 @@
       <td><%= scorecard.scores.map {|score| score.strokes }.sum %></td>
       <td><%= scorecard.net_score %></td>
       <td><%= tournament_day.course_holes.map {|hole| hole.par }.sum %></td>
-      <td><%= scorecard.course_handicap %></td>
+      <td>
+        <%= f.simple_fields_for :golf_outing, scorecard.golf_outing do |g| %>
+          <%= g.input :course_handicap, label: false %>
+        <% end %>
+      </td>
 		</tr>
 	</tbody>
 </table>
-
-<%= simple_form_for scorecard, url: edit_url, html: { autocomplete: 'off' } do |f| %>
 
 <% split_holes.each_with_index do |split, j| %>
 <table class="table table-striped table-bordered">

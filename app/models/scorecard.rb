@@ -12,7 +12,7 @@ class Scorecard < ApplicationRecord
   after_save :set_course_handicap
   before_destroy :clear_primary_scorecard_cache
 
-  accepts_nested_attributes_for :scores
+  accepts_nested_attributes_for :scores, :golf_outing
 
   def tournament_day
     self.golf_outing.tournament_group.tournament_day
