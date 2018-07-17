@@ -97,7 +97,7 @@ class SubscriptionCreditsController < BaseController
 
   def fetch_league
     @league = self.league_from_user_for_league_id(params[:league_id])
-    @league = current_user.leagues_admin.first if !@league.user_is_admin(current_user)
+    @league = current_user.leagues_admin.first if !@league&.user_is_admin(current_user)
 
     redirect_to root_path if @league.blank?
   end
