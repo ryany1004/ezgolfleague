@@ -10,8 +10,6 @@ class Play::ScorecardsController < Play::BaseController
   def update
     Updaters::ScorecardUpdating.update_scorecards_for_scores(params[:scorecard][:scores].to_unsafe_h, @scorecard, @scorecards_to_update, false)
 
-    logger.info { "SCORE: Re-Scored For Scorecard: #{@scorecard.id}. User: #{@scorecard.golf_outing.user.complete_name}. Net Score: #{@scorecard.tournament_day.tournament_day_results.where(:user_primary_scorecard_id => @scorecard.id).first.net_score}" }
-
     reload_scorecard = @scorecard
     reload_scorecard = Scorecard.find(params[:original_scorecard_id]) unless params[:original_scorecard_id].blank?
 
