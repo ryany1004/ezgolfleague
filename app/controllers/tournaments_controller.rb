@@ -144,7 +144,7 @@ class TournamentsController < BaseController
 
   def confirm_finalization
     if @tournament.can_be_finalized?
-      if @tournament.is_finalized
+      if !@tournament.is_finalized
         notification_string = Notifications::NotificationStrings.first_time_finalize(@tournament.name)
       else
         notification_string = Notifications::NotificationStrings.update_finalize(@tournament.name)
@@ -159,8 +159,9 @@ class TournamentsController < BaseController
         n.save
       end
 
+      #bust the cache
       @tournament.tournament_days.each do |day|
-        day.touch #bust the cache
+        day.touch
       end
 
       redirect_to league_tournaments_path(current_user.selected_league), :flash => { :success => "The tournament was successfully finalized." }
