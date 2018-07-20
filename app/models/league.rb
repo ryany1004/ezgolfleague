@@ -206,6 +206,14 @@ class League < ApplicationRecord
     return membership.state
   end
 
+  def ranked_users_for_league_season(league_season)
+    if self.allow_scoring_groups
+      league_season.ranked_users_for_scoring_groups
+    else
+      ranked_users_for_year(league_season.starts_at, league_season.ends_at)
+    end
+  end
+
   def ranked_users_for_year(starts_at, ends_at)
     ranked_players = []
 

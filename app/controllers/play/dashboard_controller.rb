@@ -32,17 +32,7 @@ class Play::DashboardController < Play::BaseController
       @past_tournaments = Tournament.past_for_league_season(@league_season).select {|t| t.all_days_are_playable? }.to_a
 
       @rankings = Rails.cache.fetch(@league_season.rankings_cache_key, expires_in: 24.hours, race_condition_ttl: 10) do
-        if current_user.selected_league.allow_scoring_groups
-          all_rankings = []
-
-          @league_season.league_season_scoring_groups.each do |group|
-            all_rankings << group.ranked_users
-          end
-
-          all_rankings
-        else
-          current_user.selected_league.ranked_users_for_year(@league_season.starts_at, @league_season.ends_at)
-        end
+        current_user.selected_league.ranked_users_for_league_season(@league_season)
       end
     end
   end

@@ -48,6 +48,16 @@ class LeagueSeason < ApplicationRecord
     end
   end
 
+  def ranked_users_for_scoring_groups
+    all_rankings = []
+
+    self.league_season_scoring_groups.each do |group|
+      all_rankings << group.ranked_users
+    end
+
+    all_rankings
+  end
+
   def paid_active_golfers
     sum_paid = 0
 
