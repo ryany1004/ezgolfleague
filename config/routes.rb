@@ -92,6 +92,8 @@ Rails.application.routes.draw do
 
       resources :payments, only: [:create]
 
+      resources :leagues, only: [:index, :show]
+
       resources :tournaments do
         get 'results'
 
