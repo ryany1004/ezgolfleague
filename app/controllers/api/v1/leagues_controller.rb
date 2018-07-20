@@ -21,7 +21,9 @@ class Api::V1::LeaguesController < Api::V1::ApiBaseController
     league_season = league.active_season
     league_season = league.league_seasons.last if league_season.blank?
 
-    rankings = league.ranked_users_for_league_season(league_season)
+    rankings = Rails.cache.fetch(league_season.rankings_cache_key, expires_in: 24.hours, race_condition_ttl: 10) do
+      rankings = league.ranked_users_for_league_season(league_season)
+    end
 
     respond_with(rankings) do |format|
       format.json { render :json => rankings, content_type: 'application/json' }
