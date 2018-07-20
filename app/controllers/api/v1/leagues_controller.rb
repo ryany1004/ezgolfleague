@@ -12,7 +12,12 @@ class Api::V1::LeaguesController < Api::V1::ApiBaseController
   end
 
   def show
-    league = @current_user.leagues.find(params[:id])
+    if params[:id] == "0"
+      league = @current_user.leagues.first
+    else
+      league = @current_user.leagues.find(params[:id])
+    end
+
     league_season = league.active_season
     league_season = league.league_seasons.last if league_season.blank?
 
