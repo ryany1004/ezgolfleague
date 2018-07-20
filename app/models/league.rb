@@ -224,8 +224,8 @@ class League < ApplicationRecord
         payouts = 0
 
         t.tournament_days.each do |day|
-          points += day.player_points(p)
-          payouts += day.player_payouts(p)
+          points += day.player_points(p).to_i
+          payouts += day.player_payouts(p).to_i
         end
 
         found_existing_player = false

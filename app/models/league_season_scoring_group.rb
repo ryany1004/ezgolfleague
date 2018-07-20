@@ -13,8 +13,8 @@ class LeagueSeasonScoringGroup < ApplicationRecord
         payouts = 0
 
         t.tournament_days.each do |day|
-        	day_points = day.player_points(p)
-        	day_payouts = day.player_payouts(p)
+        	day_points = day.player_points(p).to_i
+        	day_payouts = day.player_payouts(p).to_i
 
           points += day_points unless day_points.blank?
           payouts += day_payouts unless day_payouts.blank?
