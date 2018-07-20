@@ -16,6 +16,8 @@ class Play::DashboardController < Play::BaseController
         @league_season = current_user.selected_league.league_seasons.where(id: session[:selected_season_id]).first
       end
 
+      @league_season = current_user.selected_league.league_seasons.last if @league_season.blank?
+
       @has_unpaid_upcoming_tournaments = false
 
       if @league_season == active_season
@@ -26,35 +28,20 @@ class Play::DashboardController < Play::BaseController
         end
       end
 
-      unless @league_season.blank?
-        @upcoming_tournaments = Tournament.all_upcoming([current_user.selected_league], @league_season.ends_at).select {|t| t.all_days_are_playable? }.to_a
-        @past_tournaments = Tournament.past_for_league_season(@league_season).select {|t| t.all_days_are_playable? }.to_a
+      @upcoming_tournaments = Tournament.all_upcoming([current_user.selected_league], @league_season.ends_at).select {|t| t.all_days_are_playable? }.to_a
+      @past_tournaments = Tournament.past_for_league_season(@league_season).select {|t| t.all_days_are_playable? }.to_a
 
-        @rankings = Rails.cache.fetch(@league_season.rankings_cache_key, expires_in: 24.hours, race_condition_ttl: 10) do
-          if current_user.selected_league.allow_scoring_groups
-            all_rankings = []
-
-            @league_season.league_season_scoring_groups.each do |group|
-              all_rankings << group.ranked_users
-            end
-
-            all_rankings
-          else
-            current_user.selected_league.ranked_users_for_year(@league_season.starts_at, @league_season.ends_at)
-          end
-        end
-      else
-        @upcoming_tournaments = Tournament.all_upcoming([current_user.selected_league], nil).select {|t| t.all_days_are_playable? }.to_a
-        @past_tournaments = Tournament.all_past([current_user.selected_league], nil).select {|t| t.all_days_are_playable? }.to_a
-
+      @rankings = Rails.cache.fetch(@league_season.rankings_cache_key, expires_in: 24.hours, race_condition_ttl: 10) do
         if current_user.selected_league.allow_scoring_groups
-            @rankings = []
+          all_rankings = []
 
-            @league_season.league_season_scoring_groups.each do |group|
-              @rankings << group.ranked_users
-            end
+          @league_season.league_season_scoring_groups.each do |group|
+            all_rankings << group.ranked_users
+          end
+
+          all_rankings
         else
-          @rankings = current_user.selected_league.ranked_users_for_year(nil, nil)
+          current_user.selected_league.ranked_users_for_year(@league_season.starts_at, @league_season.ends_at)
         end
       end
     end
