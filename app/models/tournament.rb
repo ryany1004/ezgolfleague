@@ -120,7 +120,9 @@ class Tournament < ApplicationRecord
 
   def notify_tournament_users(notification_string, extra_data)
     self.players.each do |u|
+      Rails.logger.info { "sending to #{u.complete_name}" }
       u.send_mobile_notification(notification_string, { tournament_id: self.id })
+      Rails.logger.info { "sent" }
     end
   end
 
