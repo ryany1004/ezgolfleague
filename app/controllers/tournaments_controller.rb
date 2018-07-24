@@ -143,33 +143,27 @@ class TournamentsController < BaseController
   end
 
   def confirm_finalization
-    Rails.logger.info { "can_be_finalized?" }
     if @tournament.can_be_finalized?
       if !@tournament.is_finalized
         notification_string = Notifications::NotificationStrings.first_time_finalize(@tournament.name)
       else
         notification_string = Notifications::NotificationStrings.update_finalize(@tournament.name)
       end
-      Rails.logger.info { "notify_tournament_users" }
       @tournament.notify_tournament_users(notification_string, { tournament_id: @tournament.id })
-      Rails.logger.info { "notify_tournament_users DONE" }
 
       @tournament.is_finalized = true
       @tournament.save
-      Rails.logger.info { "saved finalization" }
 
       @tournament.finalization_notifications.each do |n|
         n.has_been_delivered = false
         n.save
       end
-      Rails.logger.info { "saving finalization notifications" }
 
       #bust the cache
       @tournament.tournament_days.each do |day|
         day.touch
       end
-      Rails.logger.info { "busted cache" }
-
+      
       redirect_to league_tournaments_path(current_user.selected_league), :flash => { :success => "The tournament was successfully finalized." }
     else
       redirect_to league_tournaments_path(current_user.selected_league), :flash => { :error => "The tournament could not be finalized - it is missing required data." }
