@@ -82,7 +82,7 @@
         <h3 class="panel-title">Upcoming League Tournaments</h3>
       </div>
       <% if @upcoming_tournaments.count > 0 -%>
-      <%= render partial: 'tournament_table', locals: {tournaments: @upcoming_tournaments, is_previous: false, is_current: false} %>
+        <%= render partial: 'tournament_table', locals: {tournaments: @upcoming_tournaments, is_previous: false, is_current: false} %>
       <% else -%>
       <div class="panel-body">
         No upcoming tournaments in this league.
