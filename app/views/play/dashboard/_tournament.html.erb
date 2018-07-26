@@ -1,7 +1,3 @@
-<!-- 
-is_current <%= is_current %>
-is_previous <%= is_previous %>
--->
 <tr>
   <td><%= link_to "#{tournament.name} #{tournament_paid(tournament, current_user)}", play_tournament_path(tournament, tournament_day: tournament.tournament_days.first) %></td>
   <td>
