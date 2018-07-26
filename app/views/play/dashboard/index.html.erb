@@ -58,21 +58,7 @@
       <div class="panel-heading">
         <h3 class="panel-title"><%= @league_season.name unless @league_season.blank? %> League Rankings</h3>
       </div>
-      <table class="table table-striped">
-        <thead>
-          <tr>
-            <th>Rank</th>
-            <th>Player</th>
-            <th>Points</th>
-            <th>Payouts</th>
-          </tr>
-        </thead>
-        <% if @league_season.league.allow_scoring_groups %>
-          <%= render partial: 'rankings_scoring_groups', locals: {rankings: @rankings} %>
-        <% else %>
-          <%= render partial: 'rankings_league', locals: {rankings: @rankings} %>
-        <% end %>
-      </table>
+      <%= render partial: 'ranking_table', locals: {league_season: @league_season, rankings: @rankings} %>
     </div>
   </div>
 

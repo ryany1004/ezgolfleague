@@ -1,0 +1,17 @@
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Rank</th>
+      <th>Player</th>
+      <th>Points</th>
+      <th>Payouts</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% if league_season.league.allow_scoring_groups %>
+      <%= render partial: 'rankings_scoring_groups', locals: {rankings: rankings} %>
+    <% else %>
+      <%= render partial: 'rankings_league', locals: {rankings: rankings} %>
+    <% end %>
+  </tbody>
+</table>
