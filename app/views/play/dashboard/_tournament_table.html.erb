@@ -17,7 +17,9 @@
 	</thead>
   <tbody>
     <% tournaments.each do |tournament| %>
-      <%= render partial: 'play/dashboard/tournament', locals: { tournament: tournament, is_current: is_current, is_previous: is_previous } %>
+      <% cache [tournament, current_user] do %>
+        <%= render partial: 'play/dashboard/tournament', locals: { tournament: tournament, is_current: is_current, is_previous: is_previous } %>
+      <% end %>
     <% end %>
   </tbody>
 </table>
