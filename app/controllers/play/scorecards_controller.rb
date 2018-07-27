@@ -41,6 +41,8 @@ class Play::ScorecardsController < Play::BaseController
       end
     end
 
+    RankFlightsJob.perform_later(tournament_day)
+
     redirect_to play_scorecard_path(scorecard), :flash => { :success => "The scorecard was successfully finalized." }
   end
 

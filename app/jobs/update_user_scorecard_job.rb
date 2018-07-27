@@ -38,6 +38,8 @@ class UpdateUserScorecardJob < ApplicationJob
       Rails.logger.info { "SCORE: Re-Scoring For Scorecard: #{primary_scorecard.id}. User: #{primary_scorecard.golf_outing.user.complete_name}. Net Score: #{primary_scorecard.tournament_day.tournament_day_results.where(:user_primary_scorecard_id => primary_scorecard.id).first.net_score}" }
     end
 
+    RankFlightsJob.perform_later(primary_scorecard.tournament_day)
+
     Rails.logger.info { "UpdateUserScorecardJob Completed" }
   end
 

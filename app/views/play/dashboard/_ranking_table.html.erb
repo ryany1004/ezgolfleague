@@ -8,10 +8,15 @@
     </tr>
   </thead>
   <tbody>
-    <% if league_season.league.allow_scoring_groups %>
-      <%= render partial: 'rankings_scoring_groups', locals: {rankings: rankings} %>
-    <% else %>
-      <%= render partial: 'rankings_league', locals: {rankings: rankings} %>
+  <% rankings.each do |group| %>
+    <tr>
+      <td colspan="5"><strong><%= group.name %></strong></td>
+    </tr>
+    <% group.league_season_rankings.each do |ranking| %>
+      <% cache [ranking] do %>
+        <%= render partial: 'rankings', locals: {ranking: ranking} %>
+      <% end %>
     <% end %>
+  <% end %>
   </tbody>
 </table>

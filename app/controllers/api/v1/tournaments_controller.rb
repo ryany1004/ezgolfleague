@@ -51,8 +51,8 @@ class Api::V1::TournamentsController < Api::V1::ApiBaseController
         #rankings
         rankings = []
         tournament_presenter.flights_with_rankings.each_with_index do |flight, x|
-          flight[:players].each_with_index do |player, i|
-            rankings << { flight_number: flight[:flight_number], ranking: player[:ranking], id: player[:id], name: player[:name], net_score: player[:net_score], gross_score: player[:gross_score], points: player[:points].to_i }
+          flight.tournament_day_results.each_with_index do |result, i|
+            rankings << { flight_number: flight[:flight_number], ranking: result.rank, id: result.user.id, name: result.name, net_score: result.net_score, gross_score: result.gross_score, points: result.points.to_i }
           end
         end        
 

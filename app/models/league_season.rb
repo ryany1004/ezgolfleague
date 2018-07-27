@@ -4,6 +4,7 @@ class LeagueSeason < ApplicationRecord
   has_many :payments, inverse_of: :league_season
   has_many :subscription_credits, ->{ order 'created_at DESC' }
   has_many :league_season_scoring_groups, ->{ order 'name' }, inverse_of: :league_season, dependent: :destroy
+  has_many :league_season_ranking_groups, ->{ order 'name' }, inverse_of: :league_season, dependent: :destroy
 
   validates :name, :starts_at, :ends_at, :league, presence: true
 
@@ -48,14 +49,8 @@ class LeagueSeason < ApplicationRecord
     end
   end
 
-  def ranked_users_for_scoring_groups
-    all_rankings = []
-
-    self.league_season_scoring_groups.each do |group|
-      all_rankings << group.ranked_users
-    end
-
-    all_rankings
+  def tournaments
+    Tournament.tournaments_happening_at_some_point(self.starts_at, self.ends_at, [self.league], true)
   end
 
   def paid_active_golfers
@@ -84,10 +79,6 @@ class LeagueSeason < ApplicationRecord
     end
 
     users_not_in_groups
-  end
-
-  def rankings_cache_key
-    return "league-rankings#{self.id}-#{self.updated_at.to_s}"
   end
 
   #date parsing

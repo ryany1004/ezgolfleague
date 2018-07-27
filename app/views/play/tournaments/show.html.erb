@@ -212,15 +212,15 @@
           <tbody>
             <% cache(@tournament_presenter.day_cache_key("tournament-rankings")) do %>
               <% @tournament_presenter.flights_with_rankings.each_with_index do |flight, x| %>
-                <% flight[:players].each_with_index do |player, i| -%>
+                <% flight.tournament_day_results.each_with_index do |result, i| -%>
                 <tr>
-                  <td><strong><%= flight[:display_name] %></strong></td>
-                  <td><strong><%= player[:ranking] %></strong></td>
-                  <td><%= player[:name] %></td>
-                  <td><%= player[:net_score] %></td>
-                  <td><%= player[:gross_score] %></td>
-                  <td><%= player[:points].to_i %></td>
-                  <td><%= link_to "Scorecard", player[:scorecard_url] %></td>
+                  <td><strong><%= result.flight.display_name %></strong></td>
+                  <td><strong><%= result.rank %></strong></td>
+                  <td><%= result.name %></td>
+                  <td><%= result.net_score %></td>
+                  <td><%= result.gross_score %></td>
+                  <td><%= result.points.to_i %></td>
+                  <td><%= link_to "Scorecard", result.scorecard_url %></td>
                 </tr>
                 <% end -%>
                 <% if x < @tournament_presenter.flights_with_rankings.count - 1 -%>

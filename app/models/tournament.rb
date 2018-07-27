@@ -277,6 +277,8 @@ class Tournament < ApplicationRecord
       day.touch
     end
 
+    RankLeagueSeasonJob.perform_later(self.league_season)
+
     #cache bust
     self.league.active_season.touch unless self.league.active_season.blank?
 
