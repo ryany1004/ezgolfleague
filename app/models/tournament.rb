@@ -255,7 +255,7 @@ class Tournament < ApplicationRecord
     self.last_day.can_be_finalized?
   end
 
-  def run_finalize
+  def run_finalize(should_email = true)
     tournament_days = self.tournament_days.includes(payout_results: [:flight, :user, :payout], tournament_day_results: [:user, :primary_scorecard], tournament_groups: [golf_outings: [:user, scorecard: :scores]])
 
     Rails.logger.info { "Finalize: Starting" }
@@ -283,7 +283,7 @@ class Tournament < ApplicationRecord
     self.league.active_season.touch unless self.league.active_season.blank?
 
     #email completion
-    LeagueMailer.tournament_finalized(self).deliver_later unless self.league.dues_payment_receipt_email_addresses.blank?
+    LeagueMailer.tournament_finalized(self).deliver_later unless self.league.dues_payment_receipt_email_addresses.blank? || !should_email
   end
 
   ##

@@ -42,6 +42,7 @@
               <li><%= link_to "Manage Golfers", league_league_memberships_path(league) %></li>
               <li><%= link_to "Manage Seasons", league_league_seasons_path(league) %></li>
               <li><%= link_to "Update Handicaps from GHIN", league_update_from_ghin_path(league), method: :patch %></li>
+              <li><%= link_to "Re-Calculate League Standings", league_update_league_standings_path(league), method: :patch %></li>
             </ul>
           </div>
           </td>

@@ -242,8 +242,8 @@ ActiveRecord::Schema.define(version: 20180727170612) do
   create_table "league_season_rankings", force: :cascade do |t|
     t.integer "league_season_ranking_group_id"
     t.integer "user_id"
-    t.integer "points"
-    t.decimal "payouts"
+    t.integer "points", default: 0
+    t.decimal "payouts", default: "0.0"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "rank", default: 0

@@ -59,6 +59,16 @@ class LeaguesController < BaseController
     redirect_to leagues_path, :flash => { :success => "League members will be updated by GHIN." }
   end
 
+  def update_league_standings
+    @league = League.find(params[:league_id])
+
+    @league.league_seasons.each do |s|
+      RankLeagueSeasonJob.perform_later(s)
+    end
+
+    redirect_to leagues_path, :flash => { :success => "All seasons have been queued for standings re-calculation." }
+  end
+
   def write_member_email
     @league = League.find(params[:league_id])
   end

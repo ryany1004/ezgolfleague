@@ -534,28 +534,27 @@ module GameTypes
         ranked_flights = self.flights_with_rankings
       end
 
-      ranked_flights.each do |flight_ranking|
-        flight_ranking.tournament_day_results.each do |p|
-          if eligible_player_list.include? p.user.id
-            flight = Flight.find(flight_ranking[:flight_id])
+      ranked_flights.each do |flight|
+        flight.tournament_day_results.each do |result|
+          if eligible_player_list.include? result.user.id
             flight.payouts.each_with_index do |payout, i|
-              if flight_ranking.tournament_day_results.count > i
-                if payout.payout_results.blank?
-                  player = flight_ranking.tournament_day_results[i].user
+              if payout.payout_results.blank?
+                player = result.user
 
-                  Rails.logger.info { "Assigning #{player.complete_name} to Payout #{payout.id}" }
+                Rails.logger.info { "Assigning #{player.complete_name} to Payout #{payout.id}" }
 
-                  PayoutResult.create(payout: payout, user: player, flight: flight, tournament_day: flight.tournament_day, amount: payout.amount, points: payout.points)
-                else
-                  Rails.logger.info { "Already Assigned Payout" }
-                end
+                PayoutResult.create(payout: payout, user: player, flight: flight, tournament_day: flight.tournament_day, amount: payout.amount, points: payout.points)
+              else
+                Rails.logger.info { "Already Assigned Payout" }
               end
             end
           else
-            Rails.logger.info { "Player Not Eligible: #{p.user}" }
+            Rails.logger.info { "Player Not Eligible: #{result.user}" }
           end
         end
       end
+
+
     end
 
   end

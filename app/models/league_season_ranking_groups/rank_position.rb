@@ -26,16 +26,18 @@ module LeagueSeasonRankingGroups
 			league_season.league_season_scoring_groups.each do |scoring_group|
 				group = LeagueSeasonRankingGroup.create(name: scoring_group.name, league_season: self.league_season)
 
-				self.common_rank(group)
+				self.common_rank(group, scoring_group.users)
 			end
 		end
 
-		def common_rank(group = nil)
-			#compute combined results
+		def common_rank(group = nil, limit_to_players = nil)
 			self.league_season.tournaments.each do |t|
-	      t.players.each do |p|
+				players = t.players
+				players = players.select { |item| limit_to_players.include? item } if limit_to_players.exists?
+
+	      players.each do |p|
 	      	ranking = group.league_season_rankings.where(user: p).first
-	      	ranking = LeagueSeasonRanking.create(user: p, league_season_ranking_group: group, points: 0, payouts: 0) if ranking.blank?
+	      	ranking = LeagueSeasonRanking.create(user: p, league_season_ranking_group: group) if ranking.blank?
 
 	        t.tournament_days.includes(:tournament_day_results).each do |day|
 	          day.tournament_day_results.where(user: p).limit(1).each do |result|
