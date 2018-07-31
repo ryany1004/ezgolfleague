@@ -89,15 +89,15 @@ Rails.application.configure do
   config.active_job.queue_adapter     = :resque
   config.active_job.queue_name_prefix = "staging_ezgolfleague_#{Rails.env}"
 
-  ActionMailer::Base.smtp_settings = {
-    address: "smtp.sendgrid.net",
-    port: 587,
-    authentication: :plain,
-    enable_starttls_auto: true,
-    user_name: 'apikey',
-    password: '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',
-    domain: 'ezgolfleague.com'
-  }
+  # ActionMailer::Base.smtp_settings = {
+  #   address: "smtp.sendgrid.net",
+  #   port: 587,
+  #   authentication: :plain,
+  #   enable_starttls_auto: true,
+  #   user_name: 'apikey',
+  #   password: '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',
+  #   domain: 'ezgolfleague.com'
+  # }
 
   config.paperclip_defaults = {
     storage: :s3,
