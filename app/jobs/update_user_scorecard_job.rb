@@ -18,7 +18,8 @@ class UpdateUserScorecardJob < ApplicationJob
     end
 
     #send to the Apple Watch complication but only if we have not in the last few minutes
-    last_complication_push = Rails.cache.fetch('last_complication_push')
+    complication_cache_key = "#{primary_scorecard.id}-last_complication_push"
+    last_complication_push = Rails.cache.fetch(complication_cache_key)
     if last_complication_push.blank? || last_complication_push < 5.minutes.ago
       primary_scorecard.tournament_day.tournament.players.each do |p|
         slim_leaderboard = FetchingTools::LeaderboardFetching.create_slimmed_down_leaderboard(primary_scorecard.tournament_day)
@@ -26,7 +27,7 @@ class UpdateUserScorecardJob < ApplicationJob
         p.send_complication_notification(slim_leaderboard)
       end
 
-      Rails.cache.write('last_complication_push', DateTime.now)
+      Rails.cache.write(complication_cache_key, DateTime.now)
     end
 
     Rails.logger.info { "Expiring caches: #{primary_scorecard.tournament_day.leaderboard_api_cache_key} | #{primary_scorecard.tournament_day.groups_api_cache_key}" }
