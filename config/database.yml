@@ -23,6 +23,12 @@ development:
   pool: 5
   timeout: 5000
 
+staging:
+  adapter: postgresql
+  host: localhost
+  database: ezgolfleague_staging
+  username: postgres
+
 production:
   adapter: postgresql
   host: localhost
