@@ -33,7 +33,7 @@ module LeagueSeasonRankingGroups
 		def common_rank(group = nil, limit_to_players = nil)
 			self.league_season.tournaments.each do |t|
 				players = t.players
-				players = players.select { |item| limit_to_players.include? item } if limit_to_players.exists?
+				players = players.select { |item| limit_to_players.include? item } unless limit_to_players.blank?
 
 	      players.each do |p|
 	      	ranking = group.league_season_rankings.where(user: p).first
