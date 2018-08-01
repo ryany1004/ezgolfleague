@@ -41,8 +41,8 @@ module LeagueSeasonRankingGroups
 
 	        t.tournament_days.includes(:tournament_day_results).each do |day|
 	          day.tournament_day_results.where(user: p).limit(1).each do |result|
-	            ranking.points += result.points
-	            ranking.payouts += result.payouts
+	            ranking.points += result.points unless result.points.blank?
+	            ranking.payouts += result.payouts unless result.payouts.blank?
 	          end
 	        end
 
