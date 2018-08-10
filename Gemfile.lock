@@ -16,9 +16,9 @@ GIT
 
 GIT
   remote: https://github.com/stripe/stripe-ruby
-  revision: 99a1d57c0a4041ed8bf128d048aef524266f423a
+  revision: 24143ab7d7a65f5b8e58f55c64c14200ead50720
   specs:
-    stripe (3.17.0)
+    stripe (3.21.0)
       faraday (~> 0.10)
 
 GEM
@@ -72,15 +72,15 @@ GEM
     arel (8.0.0)
     attr_encrypted (3.0.3)
       encryptor (~> 3.0.0)
-    autoprefixer-rails (9.0.0)
+    autoprefixer-rails (9.1.0)
       execjs
-    aws-sdk (2.11.90)
-      aws-sdk-resources (= 2.11.90)
-    aws-sdk-core (2.11.90)
+    aws-sdk (2.11.106)
+      aws-sdk-resources (= 2.11.106)
+    aws-sdk-core (2.11.106)
       aws-sigv4 (~> 1.0)
       jmespath (~> 1.0)
-    aws-sdk-resources (2.11.90)
-      aws-sdk-core (= 2.11.90)
+    aws-sdk-resources (2.11.106)
+      aws-sdk-core (= 2.11.106)
     aws-sigv4 (1.0.3)
     bcrypt (3.1.12)
     benchmark-ips (2.7.2)
@@ -161,7 +161,7 @@ GEM
     diff-lcs (1.3)
     encryptor (3.0.0)
     erubi (1.7.1)
-    et-orbi (1.1.3)
+    et-orbi (1.1.4)
       tzinfo
     execjs (2.7.0)
     factory_bot (4.10.0)
@@ -176,16 +176,16 @@ GEM
       json
     ffi (1.9.25)
     flamegraph (0.9.5)
-    font-awesome-sass (5.0.13)
+    font-awesome-sass (5.2.0)
       sassc (>= 1.11)
-    fugit (1.1.3)
-      et-orbi (~> 1.1, >= 1.1.1)
+    fugit (1.1.5)
+      et-orbi (~> 1.1, >= 1.1.3)
       raabro (~> 1.1)
-    geocoder (1.4.9)
+    geocoder (1.5.0)
     get_process_mem (0.2.2)
     globalid (0.4.1)
       activesupport (>= 4.2.0)
-    heapy (0.1.3)
+    heapy (0.1.4)
     http-2 (0.9.0)
     httparty (0.16.2)
       multi_xml (>= 0.5.2)
@@ -229,7 +229,7 @@ GEM
     marginalia (1.5.0)
       actionpack (>= 2.3)
       activerecord (>= 2.3)
-    memory_profiler (0.9.10)
+    memory_profiler (0.9.11)
     method_source (0.9.0)
     mime-types (3.1)
       mime-types-data (~> 3.2015)
@@ -268,7 +268,7 @@ GEM
       rack (>= 1.2.0)
     rack-protection (2.0.3)
       rack
-    rack-test (1.0.0)
+    rack-test (1.1.0)
       rack (>= 1.0, < 3)
     rails (5.1.5)
       actioncable (= 5.1.5)
@@ -341,7 +341,7 @@ GEM
       resque
       sass-rails
       twitter-bootstrap-rails
-    rollbar (2.16.3)
+    rollbar (2.16.4)
       multi_json
     rspec-core (3.5.0.beta3)
       rspec-support (= 3.5.0.beta3)
@@ -360,8 +360,8 @@ GEM
       rspec-mocks (= 3.5.0.beta3)
       rspec-support (= 3.5.0.beta3)
     rspec-support (3.5.0.beta3)
-    rufus-scheduler (3.5.0)
-      fugit (~> 1.1, >= 1.1.1)
+    rufus-scheduler (3.5.2)
+      fugit (~> 1.1, >= 1.1.5)
     sass (3.5.7)
       sass-listen (~> 4.0.0)
     sass-listen (4.0.0)
@@ -411,7 +411,7 @@ GEM
       railties (~> 5.0, >= 5.0.1)
     tzinfo (1.2.5)
       thread_safe (~> 0.1)
-    uglifier (4.1.15)
+    uglifier (4.1.18)
       execjs (>= 0.3.0, < 3)
     uniform_notifier (1.11.0)
     vegas (0.1.11)
@@ -491,4 +491,4 @@ RUBY VERSION
    ruby 2.3.4p301
 
 BUNDLED WITH
-   1.16.1
+   1.16.2
