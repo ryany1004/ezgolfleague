@@ -17,7 +17,20 @@ class UpdateUserScorecardJob < ApplicationJob
       end
     end
 
-    #send to the Apple Watch complication but only if we have not in the last few minutes
+    self.complication_notification(primary_scorecard) #send to the Apple Watch complication but only if we have not in the last few minutes
+
+    self.clear_caches(primary_scorecard)
+
+    unless primary_scorecard.tournament_day.tournament_day_results.where(:user_primary_scorecard_id => primary_scorecard.id).blank?
+      Rails.logger.info { "SCORE: Re-Scoring For Scorecard: #{primary_scorecard.id}. User: #{primary_scorecard.golf_outing.user.complete_name}. Net Score: #{primary_scorecard.tournament_day.tournament_day_results.where(:user_primary_scorecard_id => primary_scorecard.id).first.net_score}" }
+    end
+
+    RankFlightsJob.perform_later(primary_scorecard.tournament_day)
+
+    Rails.logger.info { "UpdateUserScorecardJob Completed" }
+  end
+
+  def complication_notification(primary_scorecard)
     complication_cache_key = "#{primary_scorecard.id}-last_complication_push"
     last_complication_push = Rails.cache.fetch(complication_cache_key)
     if last_complication_push.blank? || last_complication_push < 5.minutes.ago
@@ -29,18 +42,13 @@ class UpdateUserScorecardJob < ApplicationJob
 
       Rails.cache.write(complication_cache_key, DateTime.now)
     end
+  end
 
+  def clear_caches(primary_scorecard)
     Rails.logger.info { "Expiring caches: #{primary_scorecard.tournament_day.leaderboard_api_cache_key} | #{primary_scorecard.tournament_day.groups_api_cache_key}" }
 
     Rails.cache.delete(primary_scorecard.tournament_day.leaderboard_api_cache_key)
     Rails.cache.delete(primary_scorecard.tournament_day.groups_api_cache_key)
-
-    unless primary_scorecard.tournament_day.tournament_day_results.where(:user_primary_scorecard_id => primary_scorecard.id).blank?
-      Rails.logger.info { "SCORE: Re-Scoring For Scorecard: #{primary_scorecard.id}. User: #{primary_scorecard.golf_outing.user.complete_name}. Net Score: #{primary_scorecard.tournament_day.tournament_day_results.where(:user_primary_scorecard_id => primary_scorecard.id).first.net_score}" }
-    end
-
-    RankFlightsJob.perform_later(primary_scorecard.tournament_day)
-
-    Rails.logger.info { "UpdateUserScorecardJob Completed" }
   end
+
 end
