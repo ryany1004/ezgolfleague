@@ -68,4 +68,25 @@ class Flight < ApplicationRecord
     end
   end
 
+  def api_display_name
+    self.display_name(true)
+  end
+
+  def flight_id
+    self.id
+  end
+
+  def players
+    self.tournament_day_results
+  end
+
+  #JSON
+
+  def as_json(options={})
+    super(
+      :only => [:flight_number],
+      :methods => [:display_name, :api_display_name, :players]
+    )
+  end
+
 end

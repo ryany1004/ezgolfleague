@@ -46,4 +46,14 @@ class TournamentDayResult < ApplicationRecord
   def thru
   	primary_scorecard.last_hole_played
   end
+
+  #JSON
+
+  def as_json(options={})
+    super(
+      :only => [:id, :name, :net_score, :back_nine_net_score, :gross_score, :points, :par_related_net_score, :par_related_gross_score],
+      :methods => [:thru]
+    )
+  end
+
 end
