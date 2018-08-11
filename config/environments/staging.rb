@@ -85,8 +85,10 @@ Rails.application.configure do
   config.enable_dependency_loading = true
 
   # Use a real queuing backend for Active Job (and separate queues per environment)
-  config.active_job.queue_adapter     = :resque
-  config.active_job.queue_name_prefix = "staging_ezgolfleague_#{Rails.env}"
+  #config.active_job.queue_adapter     = :resque
+  config.active_job.queue_adapter     = :async
+  config.active_job.queue_name_prefix = Rails.env
+
   config.action_mailer.perform_deliveries = false
 
   config.paperclip_defaults = {
