@@ -29,7 +29,7 @@ module Rankable
         end
       end
 
-      last_day_flight.tournament_day_results.sort! { |x,y| x.par_related_net_score <=> y.par_related_net_score }
+      last_day_flight.tournament_day_results.sort! { |x,y| x.par_related_net_score <=> y.par_related_net_score } unless last_day_flight.tournament_day_results.blank?
     end
 
     return last_day_flights
