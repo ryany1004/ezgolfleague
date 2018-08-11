@@ -43,5 +43,4 @@ class UpdateUserScorecardJob < ApplicationJob
 
     Rails.logger.info { "UpdateUserScorecardJob Completed" }
   end
-
 end
