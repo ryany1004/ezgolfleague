@@ -6,6 +6,8 @@ class TournamentDayResult < ApplicationRecord
   belongs_to :primary_scorecard, :class_name => "Scorecard", :foreign_key => "user_primary_scorecard_id"
   belongs_to :flight, inverse_of: :tournament_day_results
 
+  validates :name, presence: true
+
   #TODO: refactor, could store not compute
   def points
     return 0 if flight.blank?
