@@ -5,10 +5,10 @@ class Api::V1::TournamentDaysController < Api::V1::ApiBaseController
   respond_to :json
 
   def tournament_groups
-    eager_groups = Rails.cache.fetch(@tournament_day.groups_api_cache_key, expires_in: 2.minute, race_condition_ttl: 10) do
+    eager_groups = Rails.cache.fetch(@tournament_day.groups_api_cache_key, expires_in: 24.hours, race_condition_ttl: 10) do
       logger.info { "Fetching Tournament Day - Not Cached" }
 
-      @tournament_day.eager_groups.to_a
+      @tournament_day.eager_groups.to_a.to_json
     end
 
     respond_with(eager_groups) do |format|
@@ -17,7 +17,7 @@ class Api::V1::TournamentDaysController < Api::V1::ApiBaseController
   end
 
   def leaderboard
-    leaderboard = Rails.cache.fetch(@tournament_day.leaderboard_api_cache_key, expires_in: 5.minute, race_condition_ttl: 10) do
+    leaderboard = Rails.cache.fetch(@tournament_day.tournament_day_results_cache_key("leaderboard-json"), expires_in: 5.minutes, race_condition_ttl: 10) do
       logger.info { "Fetching Leaderboard - Not Cached" }
 
       self.fetch_leaderboard

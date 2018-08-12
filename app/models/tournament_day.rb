@@ -31,7 +31,7 @@ class TournamentDay < ApplicationRecord
   validates :tournament_at, presence: true
   validates :tournament_at, uniqueness: { scope: :tournament }
 
-  validate :dates_are_valid, on: :create, unless: "self.skip_date_validation == true"
+  validate :dates_are_valid, on: :create, unless: -> { self.skip_date_validation }
   def dates_are_valid
     now = Time.zone.now.at_beginning_of_day
 
@@ -126,10 +126,6 @@ class TournamentDay < ApplicationRecord
 
   def groups_api_cache_key
     return "groups-json#{self.id}-#{self.updated_at.to_i}"
-  end
-
-  def leaderboard_api_cache_key
-    return "leaderboard-json#{self.id}-#{self.updated_at.to_i}"
   end
 
   def scorecard_print_cache_key
