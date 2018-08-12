@@ -105,32 +105,30 @@ module Scoreable
   def score_user(user)
     return nil if !self.tournament.includes_player?(user)
 
-    TournamentDayResult.transaction do
-      self.tournament_day_results.where(user: user).destroy_all
+    primary_scorecard = self.primary_scorecard_for_user(user)
+    flight = self.flight_for_player(user)
 
-      primary_scorecard = self.primary_scorecard_for_user(user)
-      flight = self.flight_for_player(user)
+    net_score = self.compute_player_score(user, true)
+    gross_score = self.compute_player_score(user, false)
+    adjusted_score = self.compute_adjusted_player_score(user)
 
-      net_score = self.compute_player_score(user, true)
-      gross_score = self.compute_player_score(user, false)
-      adjusted_score = self.compute_adjusted_player_score(user)
+    front_nine_gross_score = self.compute_player_score(user, false, [1, 2, 3, 4, 5, 6, 7, 8, 9])
+    front_nine_net_score = self.compute_player_score(user, true, [1, 2, 3, 4, 5, 6, 7, 8, 9])
+    back_nine_net_score = self.compute_player_score(user, true, [10, 11, 12, 13, 14, 15, 16, 17, 18])
 
-      front_nine_gross_score = self.compute_player_score(user, false, [1, 2, 3, 4, 5, 6, 7, 8, 9])
-      front_nine_net_score = self.compute_player_score(user, true, [1, 2, 3, 4, 5, 6, 7, 8, 9])
-      back_nine_net_score = self.compute_player_score(user, true, [10, 11, 12, 13, 14, 15, 16, 17, 18])
+    user_par = self.user_par_for_played_holes(user)
+    par_related_net_score = net_score - user_par
+    par_related_gross_score = gross_score - user_par
 
-      user_par = self.user_par_for_played_holes(user)
-      par_related_net_score = net_score - user_par
-      par_related_gross_score = gross_score - user_par
+    result_name = Users::ResultName.result_name_for_user(user, self)
 
-      result_name = Users::ResultName.result_name_for_user(user, self)
+    self.tournament_day_results.where(user: user).destroy_all
 
-      result = TournamentDayResult.create(tournament_day: self, user: user, name: result_name, primary_scorecard: primary_scorecard, flight: flight, gross_score: gross_score, net_score: net_score, adjusted_score: adjusted_score, front_nine_gross_score: front_nine_gross_score, front_nine_net_score: front_nine_net_score, back_nine_net_score: back_nine_net_score, par_related_net_score: par_related_net_score, par_related_gross_score: par_related_gross_score)
+    result = TournamentDayResult.create(tournament_day: self, user: user, name: result_name, primary_scorecard: primary_scorecard, flight: flight, gross_score: gross_score, net_score: net_score, adjusted_score: adjusted_score, front_nine_gross_score: front_nine_gross_score, front_nine_net_score: front_nine_net_score, back_nine_net_score: back_nine_net_score, par_related_net_score: par_related_net_score, par_related_gross_score: par_related_gross_score)
+    
+    Rails.logger.info { "Wrote TournamentDayResult for Scorecard: #{primary_scorecard.try(:id)} for User #{user.try(:complete_name)}" }
 
-      Rails.logger.info { "Wrote TournamentDayResult for Scorecard: #{primary_scorecard.try(:id)} for User #{user.try(:complete_name)}" }
-
-      return result
-    end    
+    return result
   end
 
   def user_par_for_played_holes(user)
