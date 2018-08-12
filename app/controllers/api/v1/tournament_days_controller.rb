@@ -20,7 +20,7 @@ class Api::V1::TournamentDaysController < Api::V1::ApiBaseController
     leaderboard = Rails.cache.fetch(@tournament_day.tournament_day_results_cache_key("leaderboard-json"), expires_in: 5.minutes, race_condition_ttl: 10) do
       logger.info { "Fetching Leaderboard - Not Cached" }
 
-      self.fetch_leaderboard
+      self.fetch_leaderboard.to_json
     end
 
     respond_with(leaderboard) do |format|
