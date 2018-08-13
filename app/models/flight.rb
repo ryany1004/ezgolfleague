@@ -77,7 +77,7 @@ class Flight < ApplicationRecord
   end
 
   def players
-    self.tournament_day_results.where("rank > 0").uniq
+    self.tournament_day_results.where("rank > 0")
   end
 
   #JSON

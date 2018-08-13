@@ -34,7 +34,7 @@ module Updaters
             Rails.logger.info { "Updating Score: #{score.id}" }
 
             scorecard_to_rescore = score.scorecard
-            UpdateUserScorecardJob.perform_later(scorecard_to_rescore, []) unless scorecard_to_rescore.blank?
+            UpdateUserScorecardJob.perform_later(scorecard_to_rescore, []) if scorecard_to_rescore != primary_scorecard && !scorecard_to_rescore.blank?
           else
             Rails.logger.info { "Not Updating Scores - Too Old #{date_scored}" }
           end
