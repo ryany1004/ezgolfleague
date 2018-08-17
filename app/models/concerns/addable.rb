@@ -217,9 +217,13 @@ module Addable
 
       last_flight = self.flights.last #add the player to the 'last' flight
       last_flight.users << player unless last_flight.blank?
+
+      assigned_flight = last_flight
     end
 
     self.assign_course_tee_box_to_player(player, assigned_flight)
+
+    assigned_flight
   end
 
   def usable_handicap_for_player(player, flight)

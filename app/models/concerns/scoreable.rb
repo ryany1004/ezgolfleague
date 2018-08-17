@@ -106,7 +106,9 @@ module Scoreable
     return nil if !self.tournament.includes_player?(user)
 
     primary_scorecard = self.primary_scorecard_for_user(user)
+
     flight = self.flight_for_player(user)
+    flight = self.assign_player_to_flight(user) if flight.blank?
 
     net_score = self.compute_player_score(user, true)
     gross_score = self.compute_player_score(user, false)
