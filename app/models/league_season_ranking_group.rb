@@ -7,25 +7,4 @@ class LeagueSeasonRankingGroup < ApplicationRecord
   def displayable_league_season_rankings
     league_season_rankings.where("points > 0 OR payouts > 0")
   end
-
-  #JSON
-
-  def as_json(options={})
-    super(
-      :only => [:name],
-      :methods => [:server_id],
-      :include => {
-        :league_season_rankings => {
-          :only => [:points, :payouts, :rank],
-          :methods => [:server_id, :name],
-          :include => {
-            :user => {
-              :methods => [:server_id]
-            }
-          }
-        }
-      }
-    )
-  end
-
 end

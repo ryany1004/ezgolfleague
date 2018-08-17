@@ -1,1 +1,1 @@
-json.template_message 'This template got rendered and nobody knows why.'
+json.template_message 'Nothing here.'

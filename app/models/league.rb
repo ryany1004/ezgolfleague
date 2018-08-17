@@ -22,7 +22,9 @@ class League < ApplicationRecord
   attr_encrypted :stripe_production_publishable_key, :key => ENCRYPYTED_ATTRIBUTES_KEY, algorithm: 'aes-256-cbc', mode: :single_iv_and_salt, insecure_mode: true
 
   def stripe_publishable_key
-    if self.stripe_test_mode == true
+    return nil if Rails.env.development?
+
+    if self.stripe_test_mode
       self.stripe_test_publishable_key
     else
       self.stripe_production_publishable_key
@@ -30,7 +32,9 @@ class League < ApplicationRecord
   end
 
   def stripe_secret_key
-    if self.stripe_test_mode == true
+    return nil if Rails.env.development?
+
+    if self.stripe_test_mode
       self.stripe_test_secret_key
     else
       self.stripe_production_secret_key
@@ -235,12 +239,4 @@ class League < ApplicationRecord
       write_attribute(:start_date, date)
     end
   end
-
-  def as_json(options={})
-    super(
-      :only => [:name, :league_description, :contact_name, :contact_phone, :contact_email, :location, :supports_apple_pay, :apple_pay_merchant_id],
-      :methods => [:server_id, :stripe_publishable_key, :dues_amount]
-    )
-  end
-
 end

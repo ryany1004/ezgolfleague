@@ -4,11 +4,7 @@ class Api::V1::LeaguesController < Api::V1::ApiBaseController
   respond_to :json
 
   def index
-    leagues = @current_user.leagues
-
-    respond_with(leagues) do |format|
-      format.json { render :json => leagues, content_type: 'application/json' }
-    end
+    @leagues = @current_user.leagues
   end
 
   def show
@@ -21,11 +17,6 @@ class Api::V1::LeaguesController < Api::V1::ApiBaseController
     league_season = league.active_season
     league_season = league.league_seasons.last if league_season.blank?
 
-    rankings = league_season.league_season_ranking_groups
-
-    respond_with(rankings) do |format|
-      format.json { render :json => rankings, content_type: 'application/json' }
-    end
+    @rankings = league_season.league_season_ranking_groups
   end
-
 end
