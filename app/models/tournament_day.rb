@@ -8,12 +8,12 @@ class TournamentDay < ApplicationRecord
 
   belongs_to :tournament, inverse_of: :tournament_days, touch: true, counter_cache: true
   belongs_to :course, inverse_of: :tournament_days
-  has_many :tournament_groups, -> { order(:tee_time_at) }, inverse_of: :tournament_day, :dependent => :destroy
-  has_many :flights, -> { order(:flight_number) }, inverse_of: :tournament_day, :dependent => :destroy
-  has_many :contests, -> { order(:name) }, inverse_of: :tournament_day, :dependent => :destroy
-  has_many :golfer_teams, inverse_of: :tournament_day, :dependent => :destroy
-  has_many :tournament_day_results, -> { order(:flight_id, :net_score) }, inverse_of: :tournament_day, :dependent => :destroy
-  has_many :payout_results, inverse_of: :tournament_day, :dependent => :destroy
+  has_many :tournament_groups, -> { order(:tee_time_at) }, inverse_of: :tournament_day, dependent: :destroy
+  has_many :flights, -> { order(:flight_number) }, inverse_of: :tournament_day, dependent: :destroy
+  has_many :contests, -> { order(:name) }, inverse_of: :tournament_day, dependent: :destroy
+  has_many :golfer_teams, inverse_of: :tournament_day, dependent: :destroy
+  has_many :tournament_day_results, -> { order(:flight_id, :net_score) }, inverse_of: :tournament_day, dependent: :destroy
+  has_many :payout_results, inverse_of: :tournament_day, dependent: :destroy
   has_and_belongs_to_many :course_holes, -> { order(:hole_number) }
 
   attr_accessor :skip_date_validation

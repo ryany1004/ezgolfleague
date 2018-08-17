@@ -11,9 +11,9 @@ class Tournament < ApplicationRecord
   include Servable
 
   belongs_to :league, inverse_of: :tournaments
-  has_many :tournament_days, -> { order(:tournament_at) }, inverse_of: :tournament, :dependent => :destroy
+  has_many :tournament_days, -> { order(:tournament_at) }, inverse_of: :tournament, dependent: :destroy
   has_many :payments, inverse_of: :tournament
-  has_many :notification_templates, :dependent => :destroy
+  has_many :notification_templates, dependent: :destroy
 
   accepts_nested_attributes_for :tournament_days
 
@@ -41,7 +41,7 @@ class Tournament < ApplicationRecord
       errors.add(:signup_closes_at, "can't be in the past")
     end
 
-    unless self.first_day.blank?
+    unless !self.has_tournament_days?
       if signup_opens_at.present? && self.first_day.tournament_at.present? && self.first_day.tournament_at < signup_opens_at
         errors.add(:signup_opens_at, "can't be after the tournament")
       end
@@ -70,7 +70,7 @@ class Tournament < ApplicationRecord
   paginates_per 20
 
   def league_season
-    return nil if self.first_day.blank?
+    return nil if !self.has_tournament_days?
 
     self.league.league_seasons.each do |s|
       if self.first_day.tournament_at >= s.starts_at && self.first_day.tournament_at < s.ends_at
@@ -97,6 +97,10 @@ class Tournament < ApplicationRecord
 
   def last_day
     return self.tournament_days.last
+  end
+
+  def has_tournament_days?
+    self.tournament_days.count > 0
   end
 
   def previous_day_for_day(day)

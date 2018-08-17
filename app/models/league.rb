@@ -121,7 +121,7 @@ class League < ApplicationRecord
   end
 
   def membership_for_user(user)
-    return self.league_memberships.where(user: user).first
+    self.league_memberships.where(user: user).first
   end
 
   def set_user_as_active(user)
