@@ -362,30 +362,4 @@ class Tournament < ApplicationRecord
       write_attribute(:signup_closes_at, date)
     end
   end
-
-  #JSON
-
-  def as_json(options={})
-    super(
-      :only => [:name, :is_finalized],
-      :methods => [:server_id, :number_of_players, :is_open_for_registration?, :dues_amount, :allow_credit_card_payment],
-      :include => {
-        :league => {
-          :only => [:name, :apple_pay_merchant_id, :supports_apple_pay],
-          :methods => [:server_id, :stripe_publishable_key]
-        },
-        :tournament_days => {
-          :only => [:tournament_at, :game_type_id],
-          :methods => [:server_id, :can_be_played?, :registered_user_ids, :paid_user_ids, :superuser_user_ids, :league_admin_user_ids, :show_teams?],
-          :include => {
-            :course => {
-              :only => [:name, :street_address_1, :city, :us_state, :postal_code, :latitude, :longitude],
-              :methods => [:server_id]
-            }
-          }
-        }
-      }
-    )
-  end
-
 end

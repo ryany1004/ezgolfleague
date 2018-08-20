@@ -5,26 +5,22 @@ class Api::V1::TournamentsController < Api::V1::ApiBaseController
 
   def index
     if @current_user.leagues.blank?
-      all_tournaments = []
+      @tournaments = []
     else
       cache_key = self.user_tournaments_cache_key
-      all_tournaments = Rails.cache.fetch(cache_key, expires_in: 24.hours, race_condition_ttl: 10) do
+      @tournaments = Rails.cache.fetch(cache_key, expires_in: 24.hours, race_condition_ttl: 10) do
         logger.info { "Fetching Tournaments - Not Cached for #{cache_key}" }
 
         todays_tournaments = Tournament.all_today(@current_user.leagues)
         upcoming_tournaments = Tournament.all_upcoming(@current_user.leagues, nil)
         past_tournaments = Tournament.all_past(@current_user.leagues, nil).limit(8).reorder("tournament_starts_at DESC")
 
-        all_tournaments = todays_tournaments + upcoming_tournaments + past_tournaments
-        all_tournaments = all_tournaments.select {|t| t.all_days_are_playable? }.to_a #only include tournaments with all playable days
-        all_tournaments = all_tournaments.uniq
+        tournaments = todays_tournaments + upcoming_tournaments + past_tournaments
+        tournaments = tournaments.select {|t| t.all_days_are_playable? }.to_a #only include tournaments with all playable days
+        tournaments = tournaments.uniq
 
-        all_tournaments
+        tournaments
       end
-    end
-
-    respond_with(all_tournaments) do |format|
-      format.json { render :json => all_tournaments, content_type: 'application/json' }
     end
   end
 
@@ -33,8 +29,8 @@ class Api::V1::TournamentsController < Api::V1::ApiBaseController
 
     cache_key = "tournament-json#{tournament.id}-#{tournament.updated_at.to_i}"
 
-    tournament_results = []
-    tournament_results = Rails.cache.fetch(cache_key, expires_in: 24.hours, race_condition_ttl: 10) do
+    @tournament_results = []
+    @tournament_results = Rails.cache.fetch(cache_key, expires_in: 24.hours, race_condition_ttl: 10) do
       tournament.tournament_days.each do |d|
         day_flights = d.flights_with_rankings
         combined_flights = FetchingTools::LeaderboardFetching.flights_with_rankings_could_be_combined(d)
@@ -62,31 +58,23 @@ class Api::V1::TournamentsController < Api::V1::ApiBaseController
           contests << { name: contest[:name], winners: contest[:winners] }
         end
 
-        tournament_results << { payouts: payouts, rankings: rankings, contests: contests }
+        @tournament_results << { payouts: payouts, rankings: rankings, contests: contests }
       end
 
-      tournament_results
+      @tournament_results
     end
 
-    uses_scoring_groups = tournament.league.allow_scoring_groups
-
-    respond_with(tournament_results) do |format|
-      format.json { render :json => {tournament_day_results: tournament_results, uses_scoring_groups: uses_scoring_groups}, content_type: 'application/json' }
-    end
+    @uses_scoring_groups = tournament.league.allow_scoring_groups
   end
 
   def validate_tournaments_exist
     tournament_ids = params[:tournament_ids]
     split_ids = tournament_ids.split(",")
 
-    invalid_ids = ["0"]
+    @invalid_ids = ["0"]
 
     split_ids.each do |split_id|
-      invalid_ids << split_id if !Tournament.exists?(split_id) || Tournament.find(split_id).league.membership_for_user(@current_user).blank?
-    end
-
-    respond_with(invalid_ids) do |format|
-      format.json { render :json => invalid_ids, content_type: 'application/json' }
+      @invalid_ids << split_id if !Tournament.exists?(split_id) || Tournament.find(split_id).league.membership_for_user(@current_user).blank?
     end
   end
 
