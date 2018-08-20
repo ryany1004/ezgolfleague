@@ -10,7 +10,7 @@ json.cache! ['v1', league_season_ranking_group] do
 		json.rank										league_season_ranking.rank
 
 		json.user do
-			json.id										league_season_ranking.user.server_id
+			json.id										league_season_ranking.user.id
 		end
 	end
 end
