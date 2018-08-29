@@ -26,8 +26,8 @@
         <tbody>
           <% @report.results.each do |result| %>
             <tr>
-              <td><%= result.flight.flight_number %></td>
-              <td><%= link_to result.user.complete_name, scorecard_path(result.primary_scorecard) %></td>
+              <td><%= result.flight&.flight_number %></td>
+              <td><%= link_to result.user&.complete_name, scorecard_path(result.primary_scorecard) %></td>
               <td><%= result.adjusted_score %></td>
               <td><%= result.gross_score %></td>
             </tr>
