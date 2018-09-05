@@ -131,4 +131,13 @@
       <% end -%>
     <% end -%>
   </div>
+
+  <h3>Tournaments</h3>
+  <div class="well">
+    <ul>
+      <% @user_account.tournaments.each do |tournament| %>
+      <li><%= link_to_unless !is_editable?(tournament), tournament.name, edit_league_tournament_path(tournament.league, tournament) %></li>
+      <% end %>
+    </ul>
+  </div>
 <% end %>

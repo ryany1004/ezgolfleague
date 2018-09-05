@@ -39,6 +39,12 @@ module ApplicationHelper
     end
   end
 
+  def is_editable?(tournament)
+    return true if tournament.league.try(:membership_for_user, current_user).try(:is_admin)
+    return true if current_user.is_super_user?
+    return false
+  end
+
   def bootstrap_class_for(flash_type)
     case flash_type
       when "success"

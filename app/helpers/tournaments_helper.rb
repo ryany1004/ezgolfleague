@@ -1,13 +1,4 @@
 module TournamentsHelper
-
-  def is_editable?(tournament)
-    return true if tournament.league.try(:membership_for_user, current_user).try(:is_admin)
-
-    return true if current_user.is_super_user?
-
-    return false
-  end
-
   def is_today?(tournament)
     return false if tournament.tournament_days.count == 0
 

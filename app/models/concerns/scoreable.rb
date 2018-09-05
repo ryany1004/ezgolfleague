@@ -95,7 +95,7 @@ module Scoreable
   end
 
   def score_users
-    self.tournament.players.each do |player|
+    self.tournament.players_for_day(self).each do |player|
       self.score_user(player)
     end
 

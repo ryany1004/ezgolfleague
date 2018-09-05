@@ -3,7 +3,7 @@ class TournamentMailer < ApplicationMailer
   def signup_open(tournament, user)
     @tournament = tournament
     @user = user
-    @registration_url = "https://app.ezgolfleague.com/leagues/#{@tournament.league.id}/tournaments"
+    @registration_url = "https://app.ezgolfleague.com/play/dashboard"
 
     mail(to: @user.email, subject: 'EZGolfLeague - A New Tournament is Open for Registration')
   end
@@ -11,7 +11,7 @@ class TournamentMailer < ApplicationMailer
   def signup_closing(tournament, user)
     @tournament = tournament
     @user = user
-    @registration_url = "https://app.ezgolfleague.com/leagues/#{@tournament.league.id}/tournaments"
+    @registration_url = "https://app.ezgolfleague.com/play/dashboard"
 
     mail(to: @user.email, subject: 'EZGolfLeague - Tournament Registration is About to Close')
   end
@@ -79,7 +79,7 @@ class TournamentMailer < ApplicationMailer
   def tournament_coming_up(tournament, user)
     @tournament = tournament
     @user = user
-    @registration_url = "https://app.ezgolfleague.com/leagues/#{@tournament.league.id}/tournaments"
+    @registration_url = "https://app.ezgolfleague.com/play/dashboard"
 
     mail(to: @user.email, subject: 'EZGolfLeague - Your Tournament is Coming Up')
   end
