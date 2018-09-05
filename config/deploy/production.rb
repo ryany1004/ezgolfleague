@@ -6,3 +6,6 @@ set :rails_env, :production
 set :branch, 'master'
 set :workers, { "default" => 2, "ezgolfleague_production_mailers" => 1 }
 set :resque_rails_env, "production"
+
+role :resque_worker, "production.ezgolfleague.com"
+role :resque_scheduler, "production.ezgolfleague.com"

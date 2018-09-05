@@ -7,9 +7,6 @@ set :repo_url, "git@github.com:dopp10/ezgolfleague.git"
 set :stages, ["staging", "production"]
 set :default_stage, "production"
 
-role :resque_worker, "production.ezgolfleague.com"
-role :resque_scheduler, "production.ezgolfleague.com"
-
 set :resque_environment_task, true
 set :resque_log_file, "log/resque.log"
 
@@ -32,15 +29,15 @@ namespace :deploy do
       execute :sudo, "chmod 777 -R #{current_path}/public"
       execute :sudo, "chmod 777 -R #{current_path}/tmp"
 
-      execute :sudo, "chown daemon -R /var/web/production/shared/public/assets"
-      execute :sudo, "chmod 777 -R /var/web/production/shared/public/assets"
+      execute :sudo, "chown daemon -R /var/web/#{stage}/shared/public/assets"
+      execute :sudo, "chmod 777 -R /var/web/#{stage}/shared/public/assets"
     end
   end
 
   desc 'Clear cache'
   task :clear_memcached do
     on roles(:app), in: :sequence, wait: 5 do
-      execute "cd #{deploy_to}current && /usr/bin/env bundle exec rake memcached:clear RAILS_ENV=production"
+      execute "cd #{deploy_to}current && /usr/bin/env bundle exec rake memcached:clear RAILS_ENV=#{stage}"
     end
   end
 
