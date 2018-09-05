@@ -7,9 +7,6 @@ set :repo_url, "git@github.com:dopp10/ezgolfleague.git"
 set :stages, ["staging", "production"]
 set :default_stage, "production"
 
-role :resque_worker, "production.ezgolfleague.com"
-role :resque_scheduler, "production.ezgolfleague.com"
-
 set :resque_environment_task, true
 set :resque_log_file, "log/resque.log"
 
