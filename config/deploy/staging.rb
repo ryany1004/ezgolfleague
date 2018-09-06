@@ -1,8 +1,5 @@
 server 'staging.ezgolfleague.com', roles: %w{web app db resque_worker resque_scheduler}, user: "root"
 
-# role :resque_worker, "staging.ezgolfleague.com", user: "root"
-# role :resque_scheduler, "staging.ezgolfleague.com", user: "root"
-
 set :deploy_to, "/var/web/staging/"
 set :stage, :staging
 set :rails_env, :staging
