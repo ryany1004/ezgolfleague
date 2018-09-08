@@ -538,6 +538,8 @@ module GameTypes
         flight.tournament_day_results.each do |result|
           if eligible_player_list.include? result.user.id
             flight.payouts.each_with_index do |payout, i|
+              payout.reload #NOTE: without this, the blank? sometimes returns false when the count is > 0 - that is very strange.
+
               if payout.payout_results.blank?
                 player = result.user
 
