@@ -49,8 +49,7 @@ Rails.application.configure do
   # Use the lowest log level to ensure availability of diagnostic information
   # when problems arise.
 
-  config.log_level = :info
-  #config.log_level = :debug
+  config.log_level = :debug
 
   # Prepend all log lines with the following tags.
   # config.log_tags = [ :subdomain, :uuid ]
@@ -87,22 +86,9 @@ Rails.application.configure do
 
   # Use a real queuing backend for Active Job (and separate queues per environment)
   config.active_job.queue_adapter     = :resque
-  config.active_job.queue_name_prefix = "staging_ezgolfleague_#{Rails.env}"
-
-<<<<<<< Updated upstream
-  ActionMailer::Base.smtp_settings = {
-    address: "smtp.sendgrid.net",
-    port: 587,
-    authentication: :plain,
-    enable_starttls_auto: true,
-    user_name: 'apikey',
-    password: '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',
-    domain: 'ezgolfleague.com'
-  }
-=======
+  config.active_job.queue_name_prefix = "ezgolfleague_#{Rails.env}"
 
   config.action_mailer.perform_deliveries = false
->>>>>>> Stashed changes
 
   config.paperclip_defaults = {
     storage: :s3,

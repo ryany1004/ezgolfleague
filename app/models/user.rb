@@ -228,34 +228,46 @@ class User < ApplicationRecord
     return self.payments_for_league(self.selected_league)
   end
 
+  def payments_cache_key
+    max_updated_at = self.payments.maximum(:updated_at).try(:utc).try(:to_s, :number)
+    cache_key = "payments/#{self.id}-#{max_updated_at}"
+  end
+
   def payments_for_league(league)
-    league_season_ids = []
-    league.league_seasons.each do |l|
-      league_season_ids << l.id
-    end
+    cache_key = self.payments_cache_key
+    total_payments = 0.0
 
-    tournament_payments = []
-    unless league_season_ids.blank?
-      league_payments = self.payments.where("league_season_id IN (?)", league_season_ids)
-      tournament_payments = self.payments.joins(:tournament).where(tournaments: {league_id: league.id})
-    end
+    total_payments = Rails.cache.fetch(cache_key, expires_in: 24.hours, race_condition_ttl: 10) do
+      league_season_ids = []
+      league.league_seasons.each do |l|
+        league_season_ids << l.id
+      end
 
-    contest_ids = []
-    self.selected_league.tournaments.each do |t|
-      t.tournament_days.each do |d|
-        d.contests.each do |c|
-          contest_ids << c
+      tournament_payments = []
+      unless league_season_ids.blank?
+        league_payments = self.payments.where("league_season_id IN (?)", league_season_ids)
+        tournament_payments = self.payments.joins(:tournament).where(tournaments: {league_id: league.id})
+      end
+
+      contest_ids = []
+      self.selected_league.tournaments.each do |t|
+        t.tournament_days.each do |d|
+          d.contests.each do |c|
+            contest_ids << c
+          end
         end
+      end
+
+      unless contest_ids.blank?
+        contest_payments = self.payments.where("contest_id IN (?)", contest_ids)
+
+        return league_payments + tournament_payments + contest_payments
+      else
+        return league_payments + tournament_payments
       end
     end
 
-    unless contest_ids.blank?
-      contest_payments = self.payments.where("contest_id IN (?)", contest_ids)
-
-      return league_payments + tournament_payments + contest_payments
-    else
-      return league_payments + tournament_payments
-    end
+    total_payments
   end
 
   def names_of_leagues_admin

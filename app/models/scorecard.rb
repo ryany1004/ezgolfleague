@@ -54,7 +54,7 @@ class Scorecard < ApplicationRecord
       outing = self.golf_outing
       outing.update_column(:course_handicap, calculated_course_handicap) #prevent infinite loop
     else
-      Rails.logger.info { "Did Not Re-Calculate For User #{self.golf_outing.user.complete_name}" }
+      Rails.logger.info { "Did Not Re-Calculate Handicap For User #{self.golf_outing.user.complete_name}" }
     end
   end
 

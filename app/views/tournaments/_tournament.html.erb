@@ -43,6 +43,9 @@
         <li class="divider"></li>
         <li><%= link_to 'Calculate Results', league_tournament_finalize_path(tournament.league, tournament) %></li>
         <li class="divider"></li>
+        <% if current_user.is_super_user -%>
+        <li><%= link_to 'Player View', play_tournament_path(tournament, tournament_day: tournament.tournament_days.first) %></li>
+        <% end %>
         <% if current_user.is_super_user || tournament.is_past? == false -%>
         <li><%= link_to "Recalculate Course Handicaps", league_tournament_update_course_handicaps_path(tournament.league, tournament), method: :patch %></li>
         <% end -%>

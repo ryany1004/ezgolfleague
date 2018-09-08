@@ -8,12 +8,12 @@ class TournamentDay < ApplicationRecord
 
   belongs_to :tournament, inverse_of: :tournament_days, touch: true, counter_cache: true
   belongs_to :course, inverse_of: :tournament_days
-  has_many :tournament_groups, -> { order(:tee_time_at) }, inverse_of: :tournament_day, :dependent => :destroy
-  has_many :flights, -> { order(:flight_number) }, inverse_of: :tournament_day, :dependent => :destroy
-  has_many :contests, -> { order(:name) }, inverse_of: :tournament_day, :dependent => :destroy
-  has_many :golfer_teams, inverse_of: :tournament_day, :dependent => :destroy
-  has_many :tournament_day_results, -> { order(:flight_id, :net_score) }, inverse_of: :tournament_day, :dependent => :destroy
-  has_many :payout_results, inverse_of: :tournament_day, :dependent => :destroy
+  has_many :tournament_groups, -> { order(:tee_time_at) }, inverse_of: :tournament_day, dependent: :destroy
+  has_many :flights, -> { order(:flight_number) }, inverse_of: :tournament_day, dependent: :destroy
+  has_many :contests, -> { order(:name) }, inverse_of: :tournament_day, dependent: :destroy
+  has_many :golfer_teams, inverse_of: :tournament_day, dependent: :destroy
+  has_many :tournament_day_results, -> { order(:flight_id, :net_score) }, inverse_of: :tournament_day, dependent: :destroy
+  has_many :payout_results, inverse_of: :tournament_day, dependent: :destroy
   has_and_belongs_to_many :course_holes, -> { order(:hole_number) }
 
   attr_accessor :skip_date_validation
@@ -31,7 +31,7 @@ class TournamentDay < ApplicationRecord
   validates :tournament_at, presence: true
   validates :tournament_at, uniqueness: { scope: :tournament }
 
-  validate :dates_are_valid, on: :create, unless: "self.skip_date_validation == true"
+  validate :dates_are_valid, on: :create, unless: -> { self.skip_date_validation }
   def dates_are_valid
     now = Time.zone.now.at_beginning_of_day
 
@@ -126,14 +126,6 @@ class TournamentDay < ApplicationRecord
 
   def groups_api_cache_key
     return "groups-json#{self.id}-#{self.updated_at.to_i}"
-  end
-
-  def leaderboard_api_cache_key
-    return "leaderboard-json#{self.id}-#{self.updated_at.to_i}"
-  end
-
-  def flights_with_rankings_cache_key
-    return "flightswithrankings-json#{self.id}-#{self.updated_at.to_i}"
   end
 
   def scorecard_print_cache_key

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180714212936) do
+ActiveRecord::Schema.define(version: 20180727170612) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -231,6 +231,26 @@ ActiveRecord::Schema.define(version: 20180714212936) do
     t.index ["user_id"], name: "index_league_memberships_on_user_id"
   end
 
+  create_table "league_season_ranking_groups", force: :cascade do |t|
+    t.integer "league_season_id"
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["league_season_id"], name: "index_league_season_id"
+  end
+
+  create_table "league_season_rankings", force: :cascade do |t|
+    t.integer "league_season_ranking_group_id"
+    t.integer "user_id"
+    t.integer "points", default: 0
+    t.decimal "payouts", default: "0.0"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "rank", default: 0
+    t.index ["league_season_ranking_group_id"], name: "index_league_season_ranking_group_id"
+    t.index ["user_id"], name: "index_league_season_ranking_group_user_id"
+  end
+
   create_table "league_season_scoring_groups", force: :cascade do |t|
     t.integer "league_season_id"
     t.string "name"
@@ -424,6 +444,8 @@ ActiveRecord::Schema.define(version: 20180714212936) do
     t.integer "par_related_net_score"
     t.integer "par_related_gross_score"
     t.integer "adjusted_score", default: 0
+    t.integer "rank", default: 0
+    t.string "name"
     t.index ["flight_id"], name: "index_tournament_day_results_on_flight_id"
     t.index ["tournament_day_id"], name: "index_tournament_day_results_on_tournament_day_id"
     t.index ["user_id"], name: "index_tournament_day_results_on_user_id"

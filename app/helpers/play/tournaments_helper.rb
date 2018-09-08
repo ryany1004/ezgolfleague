@@ -1,13 +1,4 @@
 module Play::TournamentsHelper
-
-  def cache_key_for_tournament_day_leaderboard_with_prefix(tournament_day, prefix)
-    cache_key = tournament_day.tournament_day_results_cache_key(prefix)
-
-    Rails.logger.debug { "Tournament Day Leaderboard Cache Key: #{cache_key}" }
-
-    return cache_key
-  end
-
   def team_name(tournament_group, index)
     return "" if tournament_group.tournament_day.tournament.display_teams? == false
 
@@ -25,7 +16,11 @@ module Play::TournamentsHelper
 
     flattened_array = slots.flatten
 
-    return "(Team #{flattened_array[index] + 1})"
+    if flattened_array.count > (index + 1)
+      return "(Team #{flattened_array[index] + 1})"
+    else
+      return ""
+    end
   end
 
   def format_winners(winners)

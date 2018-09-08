@@ -1,0 +1,10 @@
+<tr>
+  <td><strong><%= ranking.rank %></strong></td>
+  <% if current_user.id == ranking.user.id -%>
+  <td><strong><%= ranking.name %></strong></td>
+  <% else -%>
+  <td><%= ranking.name %></td>
+  <% end -%>
+  <td><%= ranking.points.to_i %></td>
+  <td>$<%= ranking.payouts.to_i %></td>
+</tr>

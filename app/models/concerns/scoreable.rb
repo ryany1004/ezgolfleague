@@ -98,15 +98,17 @@ module Scoreable
     self.tournament.players_for_day(self).each do |player|
       self.score_user(player)
     end
+
+    RankFlightsJob.perform_later(self)
   end
 
   def score_user(user)
     return nil if !self.tournament.includes_player?(user)
 
-    self.tournament_day_results.where(user: user).destroy_all
-
     primary_scorecard = self.primary_scorecard_for_user(user)
+
     flight = self.flight_for_player(user)
+    flight = self.assign_player_to_flight(user) if flight.blank?
 
     net_score = self.compute_player_score(user, true)
     gross_score = self.compute_player_score(user, false)
@@ -120,8 +122,12 @@ module Scoreable
     par_related_net_score = net_score - user_par
     par_related_gross_score = gross_score - user_par
 
-    result = TournamentDayResult.create(tournament_day: self, user: user, primary_scorecard: primary_scorecard, flight: flight, gross_score: gross_score, net_score: net_score, adjusted_score: adjusted_score, front_nine_gross_score: front_nine_gross_score, front_nine_net_score: front_nine_net_score, back_nine_net_score: back_nine_net_score, par_related_net_score: par_related_net_score, par_related_gross_score: par_related_gross_score)
+    result_name = Users::ResultName.result_name_for_user(user, self)
 
+    self.tournament_day_results.where(user: user).destroy_all
+
+    result = self.tournament_day_results.create(user: user, name: result_name, primary_scorecard: primary_scorecard, flight: flight, gross_score: gross_score, net_score: net_score, adjusted_score: adjusted_score, front_nine_gross_score: front_nine_gross_score, front_nine_net_score: front_nine_net_score, back_nine_net_score: back_nine_net_score, par_related_net_score: par_related_net_score, par_related_gross_score: par_related_gross_score)
+    
     Rails.logger.info { "Wrote TournamentDayResult for Scorecard: #{primary_scorecard.try(:id)} for User #{user.try(:complete_name)}" }
 
     return result

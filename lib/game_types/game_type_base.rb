@@ -127,7 +127,13 @@ module GameTypes
 
     def player_score(user, use_handicap = true, holes = [])
       tournament_day_result = self.tournament_day.tournament_day_results.where(user: user).first
-      tournament_day_result = self.tournament_day.score_user(user) if tournament_day_result.blank?
+
+      if tournament_day_result.blank?
+        tournament_day_result = self.tournament_day.score_user(user) 
+
+        RankFlightsJob.perform_later(self.tournament_day)
+      end
+
       return 0 if tournament_day_result.blank?
 
       if holes == [10, 11, 12, 13, 14, 15, 16, 17, 18]
@@ -215,6 +221,7 @@ module GameTypes
       total_score
     end
 
+    #TODO: refactor into Scorecard::NetScores
     def net_scores_for_scorecard(handicap_allowance, scorecard)
       net_scores = []
 
@@ -465,146 +472,14 @@ module GameTypes
 
         flight.users.each do |u|
           players << u if (!players.include? u) && (!players_to_omit.include? u)
-
-          team = self.tournament_day.golfer_team_for_player(u)
-          unless team.blank?
-            team.users.each do |team_user|
-              players_to_omit << team_user
-            end
-          end
         end
 
         return players
       end
     end
 
-    def player_team_name_for_player(player)
-      if self.tournament_day.golfer_teams.count == 0
-        return player.complete_name
-      else
-        team_name = ""
-
-        team = self.tournament_day.golfer_team_for_player(player)
-        team&.users&.each do |team_user|
-          team_name = team_name + "#{team_user.complete_name}"
-
-          team_name = team_name + " / " unless team_user == team.users.last
-        end
-
-        return team_name
-      end
-    end
-
-    def player_par_relation_for_tournament_day(player, tournament_day, use_handicap = true)
-      result = tournament_day.tournament_day_results.where(user: player).first
-      return nil if result.blank?
-
-      if use_handicap == true
-        return result.par_related_net_score
-      else
-        return result.par_related_gross_score
-      end
-    end
-
     def flights_with_rankings
-      ranked_flights = []
-
-      eager_flights = self.tournament_day.flights.includes(:users, :tournament_day_results)
-
-      eager_flights.each do |f|
-        ranked_flight = { flight_id: f.id, flight_number: f.flight_number, display_name: f.display_name, api_display_name: f.display_name(true), players: [] }
-
-        rankable_players = self.players_for_flight(f)
-        rankable_players.each do |player|
-          Rails.logger.debug { "Fetching Net Score" }
-          net_score = self.player_score(player, true)
-
-          Rails.logger.debug { "Fetching Back Nine Net Score" }
-          back_nine_net_score = self.player_score(player, true, [10, 11, 12, 13, 14, 15, 16, 17, 18])
-
-          Rails.logger.debug { "Fetching Gross Score" }
-          gross_score = self.player_score(player, false)
-
-          par_related_net_score = self.player_par_relation_for_tournament_day(player, self.tournament_day, true)
-          par_related_gross_score = self.player_par_relation_for_tournament_day(player, self.tournament_day, false)
-
-          Rails.logger.info { "Ranking Player: #{player.complete_name} in Flight #{f.flight_number}. Net: #{net_score} Gross: #{gross_score} Par Related Net Score: #{par_related_net_score}" }
-
-          scorecard = self.tournament_day.primary_scorecard_for_user(player)
-          unless scorecard.blank?
-            scorecard_url = play_scorecard_path(scorecard)
-
-            raw_scores = scorecard.scores.map(&:strokes)
-
-            handicaps = handicap_allowance(player)
-            net_scores = self.net_scores_for_scorecard(handicaps, scorecard)
-          else
-            Rails.logger.info { "Error Finding Scorecard For #{player.id}" }
-
-            scorecard_url = "#"
-            raw_scores = []
-            net_scores = []
-          end
-
-          points = 0
-          f.payout_results.each do |payout_result|
-            points = payout_result.points if payout_result.user == player
-          end
-
-          if !scorecard&.golf_outing&.disqualified && !net_score.blank? && net_score > 0
-            ranked_flight[:players] << { id: player.id, name: self.player_team_name_for_player(player), net_score: net_score, back_nine_net_score: back_nine_net_score, gross_score: gross_score, scorecard_url: scorecard_url, points: points, par_related_net_score: par_related_net_score, par_related_gross_score: par_related_gross_score, thru: scorecard.last_hole_played, raw_scores: raw_scores, net_scores: net_scores }
-          else
-            Rails.logger.info { "Not Including Player #{player.id} in Ranking. Net Score: #{net_score}" }
-          end
-        end
-
-        self.sort_rank_players_in_flight!(ranked_flight[:players])
-
-        self.calculate_rank_position_for_players_in_flight!(ranked_flight[:players])
-
-        ranked_flights << ranked_flight
-      end
-
-      return ranked_flights
-    end
-
-    def sort_rank_players_in_flight!(flight_players)
-      flight_players.sort! { |x,y| x[:par_related_net_score] <=> y[:par_related_net_score] }
-    end
-
-    def calculate_rank_position_for_players_in_flight!(flight_players)
-      last_rank = 0
-      last_score = 0
-      quantity_at_rank = 0
-
-      flight_players.each_with_index do |player, i|
-        #rank = last rank + 1
-        #unless last_score are the same, then rank does not change
-        #when last_score then does differ, need to move the rank up the number of slots
-
-        if player[:par_related_net_score] != last_score
-          rank = last_rank + 1
-
-          if quantity_at_rank != 0
-            quantity_at_rank = 0
-
-            rank = i + 1
-          end
-
-          last_rank = rank
-          last_score = player[:par_related_net_score]
-        else
-          if last_rank == 0
-            rank = 1
-          else
-            rank = last_rank
-          end
-
-          quantity_at_rank = quantity_at_rank + 1
-        end
-
-        player[:ranking] = rank
-      end
+      eager_flights = self.tournament_day.flights.includes(:users, :tournament_day_results, :payout_results)
     end
 
     ##Payouts
@@ -659,28 +534,29 @@ module GameTypes
         ranked_flights = self.flights_with_rankings
       end
 
-      ranked_flights.each do |flight_ranking|
-        flight_ranking[:players].each do |p|
-          if eligible_player_list.include? p[:id]
-            flight = Flight.find(flight_ranking[:flight_id])
+      ranked_flights.each do |flight|
+        flight.tournament_day_results.each do |result|
+          if eligible_player_list.include? result.user.id
             flight.payouts.each_with_index do |payout, i|
-              if flight_ranking[:players].count > i
-                if payout.payout_results.blank?
-                  player = User.find(flight_ranking[:players][i][:id])
+              payout.reload #NOTE: without this, the blank? sometimes returns false when the count is > 0 - that is very strange.
 
-                  Rails.logger.info { "Assigning #{player.complete_name} to Payout #{payout.id}" }
+              if payout.payout_results.blank?
+                player = result.user
 
-                  PayoutResult.create(payout: payout, user: player, flight: flight, tournament_day: flight.tournament_day, amount: payout.amount, points: payout.points)
-                else
-                  Rails.logger.info { "Already Assigned Payout" }
-                end
+                Rails.logger.info { "Assigning #{player.complete_name} to Payout #{payout.id}" }
+
+                PayoutResult.create(payout: payout, user: player, flight: flight, tournament_day: flight.tournament_day, amount: payout.amount, points: payout.points)
+              else
+                Rails.logger.info { "Already Assigned Payout" }
               end
             end
           else
-            Rails.logger.info { "Player Not Eligible: #{p}" }
+            Rails.logger.info { "Player Not Eligible: #{result.user}" }
           end
         end
       end
+
+
     end
 
   end

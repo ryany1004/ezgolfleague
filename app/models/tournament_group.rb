@@ -148,42 +148,4 @@ class TournamentGroup < ApplicationRecord
       write_attribute(:tee_time_at, date)
     end
   end
-
-  #JSON
-
-  def as_json(options={})
-    Rails.cache.fetch("groups-json#{self.id}-#{self.updated_at.to_s}-#{self.tournament_day.updated_at.to_s}") do
-      super(
-        :only => [:tee_time_at, :max_number_of_players],
-        :methods => [:server_id, :api_time_description],
-        :include => {
-          :golf_outings => {
-            :only => [:course_handicap],
-            :methods => [:server_id, :team_combined_name],
-            :include => {
-              :user => {
-                :only => [:first_name, :last_name],
-                :methods => [:server_id, :avatar_image_url]
-              },
-              :course_tee_box => {
-                :only => [:name],
-                :methods => [:server_id]
-              },
-              :scorecard => {
-                :only => [:id],
-                :methods => [:server_id],
-                :include => {
-                  :scores => {
-                    :only => [:id, :strokes],
-                    :methods => [:server_id, :course_hole_number, :course_hole_par, :course_hole_yards, :tee_group_name]
-                  }
-                }
-              }
-            }
-          }
-        }
-      )
-    end
-  end
-
 end

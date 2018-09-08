@@ -1,0 +1,1 @@
+json.partial! 'tournament', collection: @tournaments, as: :tournament

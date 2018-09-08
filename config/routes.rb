@@ -83,7 +83,7 @@ Rails.application.routes.draw do
         get 'league_tournament_info', on: :collection
         get 'notify_interest', on: :collection
         post 'pay_dues', on: :collection
-        post 'create_league', on: :collection
+        #post 'create_league', on: :collection
       end
 
       resources :scores do
@@ -115,6 +115,9 @@ Rails.application.routes.draw do
 
   #this is for admin
   resources :leagues do
+    patch 'update_from_ghin'
+    patch 'update_league_standings'
+
     resources :subscription_credits, except: :show do
       get 'information', on: :collection
       get 'current', on: :collection
@@ -196,8 +199,6 @@ Rails.application.routes.draw do
 
       get 'debug'
     end
-
-    patch 'update_from_ghin'
   end
 
   resources :payments

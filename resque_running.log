@@ -1,1 +1,397 @@
 # Logfile created on 2017-12-17 13:45:48 -0800 by logger.rb/56438
+I, [2018-07-27T13:00:29.711273 #8388]  INFO -- : Starting worker main
+D, [2018-07-27T13:00:29.711354 #8388] DEBUG -- : Registered signals
+E, [2018-07-27T13:00:29.713634 #8388] ERROR -- : Failed to start worker : #<Redis::CannotConnectError: Error connecting to Redis on localhost:6379 (Errno::ECONNREFUSED)>
+I, [2018-07-27T13:03:43.702308 #8470]  INFO -- : Starting worker main
+D, [2018-07-27T13:03:43.702391 #8470] DEBUG -- : Registered signals
+E, [2018-07-27T13:03:43.704504 #8470] ERROR -- : Failed to start worker : #<Redis::CannotConnectError: Error connecting to Redis on localhost:6379 (Errno::ECONNREFUSED)>
+I, [2018-07-27T13:04:25.072765 #8488]  INFO -- : Starting worker main
+D, [2018-07-27T13:04:25.072844 #8488] DEBUG -- : Registered signals
+I, [2018-07-27T13:04:25.074716 #8488]  INFO -- : Running before_first_fork hooks
+D, [2018-07-27T13:04:25.075496 #8488] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:04:25.075836 #8488] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:04:30.080990 #8488] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:04:30.081221 #8488] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:04:35.086420 #8488] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:04:35.086625 #8488] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:04:40.091797 #8488] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:04:40.092003 #8488] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:04:45.096373 #8488] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:04:45.096600 #8488] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:04:50.101271 #8488] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:04:50.101448 #8488] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:04:55.101996 #8488] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:04:55.102190 #8488] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:05:00.107191 #8488] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:05:00.107374 #8488] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:05:05.110537 #8488] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:05:05.110754 #8488] DEBUG -- : resque-1.27.4: Waiting for 
+I, [2018-07-27T13:05:58.038747 #8538]  INFO -- : Starting worker main
+D, [2018-07-27T13:05:58.041231 #8538] DEBUG -- : Registered signals
+I, [2018-07-27T13:05:58.042899 #8538]  INFO -- : Running before_first_fork hooks
+D, [2018-07-27T13:05:58.043565 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:05:58.043860 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:06:03.047192 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:06:03.047416 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:06:08.048744 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:06:08.048930 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:06:13.049436 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:06:13.049647 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:06:18.051000 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:06:18.051185 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:06:23.052069 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:06:23.052264 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:06:28.054717 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:06:28.055036 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:06:33.060312 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:06:33.060619 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:06:38.064384 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:06:38.064647 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:06:43.066040 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:06:43.066218 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:06:48.066628 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:06:48.066864 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:06:53.068802 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:06:53.069053 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:06:58.071240 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:06:58.071477 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:07:03.071968 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:07:03.072179 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:07:08.074259 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:07:08.074452 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:07:13.078845 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:07:13.079041 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:07:18.084122 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:07:18.084325 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:07:23.085344 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:07:23.085550 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:07:28.090551 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:07:28.090719 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:07:33.092238 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:07:33.092436 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:07:38.093399 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:07:38.093589 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:07:43.093987 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:07:43.094190 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:07:48.096014 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:07:48.096245 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:07:53.097538 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:07:53.097739 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:07:58.098159 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:07:58.098406 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:08:03.099720 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:08:03.099907 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:08:08.101053 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:08:08.101251 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:08:13.102329 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:08:13.102531 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:08:18.103439 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:08:18.103623 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:08:23.104113 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:08:23.104360 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:08:28.104771 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:08:28.110749 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:08:33.112117 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:08:33.112307 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:08:38.115852 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:08:38.116102 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:08:43.117218 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:08:43.117408 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:08:48.118007 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:08:48.118186 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:08:53.118857 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:08:53.119041 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:08:58.120227 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:08:58.120431 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:09:03.121633 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:09:03.121847 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:09:08.123374 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:09:08.123560 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:09:13.126510 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:09:13.126732 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:09:18.127814 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:09:18.127994 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:09:23.129327 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:09:23.129532 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:09:28.130431 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:09:28.130606 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:09:33.131001 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:09:33.131178 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:09:38.135954 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:09:38.136274 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:09:43.140097 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:09:43.140285 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:09:48.141180 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:09:48.141375 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:09:53.141704 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:09:53.141885 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:09:58.143604 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:09:58.143778 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:10:03.144490 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:10:03.144684 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:10:08.149383 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:10:08.149620 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:10:13.153479 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:10:13.153677 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:10:18.158987 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:10:18.159166 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:10:23.159517 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:10:23.159766 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:10:28.163818 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:10:28.164027 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:10:33.165108 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:10:33.165306 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:10:38.169243 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:10:38.169420 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:10:43.170740 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:10:43.170950 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:10:48.171453 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:10:48.171621 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:10:53.173170 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:10:53.173358 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:10:58.178249 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:10:58.179899 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:11:03.180317 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:11:03.180567 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:11:08.181732 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:11:08.181938 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:11:13.183136 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:11:13.183323 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:11:18.184013 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:11:18.184212 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:11:23.184754 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:11:23.184971 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:11:28.187630 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:11:28.187840 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:11:33.192743 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:11:33.193014 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:11:38.194268 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:11:38.194463 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:11:43.195553 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:11:43.195740 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:11:48.196135 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:11:48.196326 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:11:53.197199 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:11:53.197449 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:11:58.197760 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:11:58.197937 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:12:03.200794 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:12:03.201024 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:12:08.201589 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:12:08.201801 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:12:13.203251 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:12:13.203442 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:12:18.204936 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:12:18.205165 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:12:23.206461 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:12:23.206641 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:12:28.211900 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:12:28.212096 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:12:33.213284 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:12:33.213537 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:12:38.215049 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:12:38.215268 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:12:43.216764 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:12:43.216977 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:12:48.218386 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:12:48.218613 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:12:53.219842 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:12:53.220058 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:12:58.225385 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:12:58.225602 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:13:03.226088 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:13:03.226330 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:13:08.227757 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:13:08.227938 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:13:13.229152 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:13:13.229361 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:13:18.233188 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:13:18.233375 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:13:23.234619 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:13:23.234839 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:13:28.235307 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:13:28.235502 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:13:33.236621 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:13:33.236828 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:13:38.241736 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:13:38.241971 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:13:43.243353 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:13:43.243545 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:13:48.243903 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:13:48.244128 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:13:53.249125 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:13:53.249349 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:13:58.250046 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:13:58.250258 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:14:03.251203 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:14:03.251382 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:14:08.252726 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:14:08.252924 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:14:13.254435 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:14:13.254633 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:14:18.256154 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:14:18.257245 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:14:23.257742 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:14:23.258002 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:14:28.263026 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:14:28.264078 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:14:33.264594 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:14:33.264828 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:14:38.265606 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:14:38.266745 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:14:43.271091 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:14:43.271274 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:14:48.276378 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:14:48.277220 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:14:53.278202 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:14:53.278400 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:14:58.278811 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:14:58.280020 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:15:03.282743 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:15:03.282936 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:15:08.284244 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:15:08.285299 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:15:13.286152 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:15:13.286368 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:15:18.287812 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:15:18.288919 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:15:23.289396 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:15:23.289593 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:15:28.291117 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:15:28.292262 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:15:33.292762 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:15:33.292936 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:15:38.294326 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:15:38.294562 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:15:43.295434 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:15:43.296534 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:15:48.297335 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:15:48.297575 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:15:53.298266 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:15:53.299368 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:15:58.304065 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:15:58.304279 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:16:03.309204 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:16:03.310160 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:16:08.315203 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:16:08.315389 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:16:13.320105 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:16:13.320485 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:16:18.320858 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:16:18.321094 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:16:23.321909 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:16:23.322326 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:16:28.322630 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:16:28.322987 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:16:33.326875 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:16:33.327050 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:16:38.330847 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:16:38.331149 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:16:43.331795 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:16:43.331982 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:16:48.337060 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:16:48.337389 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:16:53.342262 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:16:53.342459 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:16:58.344801 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:16:58.345888 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:17:03.346625 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:17:03.346801 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:17:08.347666 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:17:08.348694 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:17:13.350391 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:17:13.350572 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:17:18.352173 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:17:18.353157 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:17:23.353533 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:17:23.353772 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:17:28.358221 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:17:28.358440 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:17:33.358776 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:17:33.358986 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:17:38.360092 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:17:38.360279 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:17:43.362569 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:17:43.362758 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:17:48.366579 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:17:48.366758 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:17:53.367761 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:17:53.368018 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:17:58.370000 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:17:58.372655 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:18:03.373996 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:18:03.374196 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:18:08.375660 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:18:08.375916 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:18:13.378304 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:18:13.378488 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:18:18.381613 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:18:18.381836 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:18:23.384028 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:18:23.384207 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:18:28.388186 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:18:28.388387 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:18:33.388882 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:18:33.389062 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:18:38.391383 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:18:38.391610 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:18:43.395131 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:18:43.395320 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:18:48.400244 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:18:48.400426 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:18:53.401095 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:18:53.401346 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:18:58.403424 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:18:58.403605 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:19:03.405255 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:19:03.405543 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:19:08.410745 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:19:08.410988 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:19:13.413098 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:19:13.413373 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:19:18.414593 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:19:18.414794 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:19:23.415148 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:19:23.415348 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:19:28.416891 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:19:28.417079 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:19:33.419557 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:19:33.419788 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:19:38.421574 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:19:38.421777 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:19:43.425283 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:19:43.425487 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:19:48.430754 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:19:48.431009 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:19:53.432742 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:19:53.432980 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:19:58.437219 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:19:58.437427 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:20:03.438176 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:20:03.438395 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:20:08.440445 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:20:08.440635 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:20:13.444078 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:20:13.444292 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:20:18.448080 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:20:18.448323 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:20:23.452809 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:20:23.453053 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:20:28.453815 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:20:28.454018 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:20:33.455229 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:20:33.455485 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:20:38.459434 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:20:38.459689 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:20:43.464912 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:20:43.465176 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:20:48.466426 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:20:48.466694 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:20:53.468290 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:20:53.468508 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:20:58.470070 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:20:58.474486 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:21:03.478939 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:21:03.479141 #8538] DEBUG -- : resque-1.27.4: Waiting for 
+D, [2018-07-27T13:21:08.482232 #8538] DEBUG -- : Sleeping for 5.0 seconds
+D, [2018-07-27T13:21:08.482482 #8538] DEBUG -- : resque-1.27.4: Waiting for 

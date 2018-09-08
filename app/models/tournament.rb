@@ -11,9 +11,9 @@ class Tournament < ApplicationRecord
   include Servable
 
   belongs_to :league, inverse_of: :tournaments
-  has_many :tournament_days, -> { order(:tournament_at) }, inverse_of: :tournament, :dependent => :destroy
+  has_many :tournament_days, -> { order(:tournament_at) }, inverse_of: :tournament, dependent: :destroy
   has_many :payments, inverse_of: :tournament
-  has_many :notification_templates, :dependent => :destroy
+  has_many :notification_templates, dependent: :destroy
 
   accepts_nested_attributes_for :tournament_days
 
@@ -41,7 +41,7 @@ class Tournament < ApplicationRecord
       errors.add(:signup_closes_at, "can't be in the past")
     end
 
-    unless self.first_day.blank?
+    unless !self.has_tournament_days?
       if signup_opens_at.present? && self.first_day.tournament_at.present? && self.first_day.tournament_at < signup_opens_at
         errors.add(:signup_opens_at, "can't be after the tournament")
       end
@@ -70,7 +70,7 @@ class Tournament < ApplicationRecord
   paginates_per 20
 
   def league_season
-    return nil if self.first_day.blank?
+    return nil if !self.has_tournament_days?
 
     self.league.league_seasons.each do |s|
       if self.first_day.tournament_at >= s.starts_at && self.first_day.tournament_at < s.ends_at
@@ -97,6 +97,10 @@ class Tournament < ApplicationRecord
 
   def last_day
     return self.tournament_days.last
+  end
+
+  def has_tournament_days?
+    self.tournament_days.count > 0
   end
 
   def previous_day_for_day(day)
@@ -255,7 +259,7 @@ class Tournament < ApplicationRecord
     self.last_day.can_be_finalized?
   end
 
-  def run_finalize
+  def run_finalize(should_email = true)
     tournament_days = self.tournament_days.includes(payout_results: [:flight, :user, :payout], tournament_day_results: [:user, :primary_scorecard], tournament_groups: [golf_outings: [:user, scorecard: :scores]])
 
     Rails.logger.info { "Finalize: Starting" }
@@ -277,11 +281,13 @@ class Tournament < ApplicationRecord
       day.touch
     end
 
+    RankLeagueSeasonJob.perform_later(self.league_season)
+
     #cache bust
     self.league.active_season.touch unless self.league.active_season.blank?
 
     #email completion
-    LeagueMailer.tournament_finalized(self).deliver_later unless self.league.dues_payment_receipt_email_addresses.blank?
+    LeagueMailer.tournament_finalized(self).deliver_later unless self.league.dues_payment_receipt_email_addresses.blank? || !should_email
   end
 
   ##
@@ -356,30 +362,4 @@ class Tournament < ApplicationRecord
       write_attribute(:signup_closes_at, date)
     end
   end
-
-  #JSON
-
-  def as_json(options={})
-    super(
-      :only => [:name, :is_finalized],
-      :methods => [:server_id, :number_of_players, :is_open_for_registration?, :dues_amount, :allow_credit_card_payment],
-      :include => {
-        :league => {
-          :only => [:name, :apple_pay_merchant_id, :supports_apple_pay],
-          :methods => [:server_id, :stripe_publishable_key]
-        },
-        :tournament_days => {
-          :only => [:tournament_at, :game_type_id],
-          :methods => [:server_id, :can_be_played?, :registered_user_ids, :paid_user_ids, :superuser_user_ids, :league_admin_user_ids, :show_teams?],
-          :include => {
-            :course => {
-              :only => [:name, :street_address_1, :city, :us_state, :postal_code, :latitude, :longitude],
-              :methods => [:server_id]
-            }
-          }
-        }
-      }
-    )
-  end
-
 end

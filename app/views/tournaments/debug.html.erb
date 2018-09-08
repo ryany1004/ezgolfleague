@@ -8,7 +8,7 @@
         <div class="panel-body">
           <p>Day Last Modified: <%= d.updated_at %></p>
           <p>Groups API Cache Key: <%= d.groups_api_cache_key %></p>
-          <p>Leaderyboard API Cache Key: <%= d.leaderboard_api_cache_key %></p>
+          <p>Leaderyboard API Cache Key: <%= d.tournament_day_results_cache_key("leaderboard-json") %></p>
 
           <p><strong>Players</strong></p>
           <table class="table table-striped">
@@ -70,7 +70,7 @@
       </p>
 
       <p>
-        <%= Rails.cache.fetch(d.leaderboard_api_cache_key) %>
+        <%= Rails.cache.fetch(d.tournament_day_results_cache_key("leaderboard-json")) %>
       </p>
     <% end %>
   </div>

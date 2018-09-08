@@ -118,11 +118,7 @@ class Play::TournamentsController < Play::BaseController
   end
 
   def fetch_flights_with_rankings(tournament_day)
-    flights_with_rankings = Rails.cache.fetch(tournament_day.flights_with_rankings_cache_key, expires_in: 8.minutes, race_condition_ttl: 10) do
-      tournament_day.flights_with_rankings
-    end
-
-    return flights_with_rankings
+    tournament_day.flights_with_rankings
   end
 
   def fetch_combined_flights_with_rankings(tournament_day, day_flights_with_rankings)

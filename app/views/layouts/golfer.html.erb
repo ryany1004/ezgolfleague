@@ -165,7 +165,15 @@ mixpanel.init("567e75f3f6b245aac0a54f6481629537");</script><!-- end Mixpanel -->
 
 <% end -%>
 
+<!-- <%= Rails.env %> -->
+
 <div class="container master-container">
+  <% if Rails.env.staging? %>
+    <div class="alert alert-danger alert-dismissable fade in">
+      You are running in the staging environment.
+    </div>
+  <% end %>
+
   <% flash.each do |type, message| %>
     <div class="alert <%= bootstrap_class_for(type) %> alert-dismissable fade in">
       <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
@@ -213,19 +221,19 @@ mixpanel.init("567e75f3f6b245aac0a54f6481629537");</script><!-- end Mixpanel -->
 </body>
 
 <% unless current_user.blank? || current_user.selected_league.blank? || current_user.selected_league.required_container_frame_url.blank? %>
-<script>
-  function inIframe() {
-    try {
-        return window.self !== window.top;
-    } catch (e) {
-        return true;
+  <script>
+    function inIframe() {
+      try {
+          return window.self !== window.top;
+      } catch (e) {
+          return true;
+      }
     }
-  }
 
-  if (inIframe() == false) {
-    window.location = "/invalid_container.html?container=<%= current_user.selected_league.required_container_frame_url %>";
-  }
-</script>
+    if (inIframe() == false) {
+      window.location = "/invalid_container.html?container=<%= current_user.selected_league.required_container_frame_url %>";
+    }
+  </script>
 <% end %>
 
 </html>
