@@ -535,26 +535,42 @@ module GameTypes
       end
 
       ranked_flights.each do |flight|
-        flight.tournament_day_results.each do |result|
-          if eligible_player_list.include? result.user.id
-            flight.payouts.each_with_index do |payout, i|
-              payout.reload #NOTE: without this, the blank? sometimes returns false when the count is > 0 - that is very strange.
+        flight.payouts.each_with_index do |payout, i|
+          if payout.payout_results.blank?
+            result = flight.tournament_day_results[i]
+            if result.exists? && eligible_player_list.include? result.user.id
+              player = result.user
 
-              if payout.payout_results.blank?
-                player = result.user
+              Rails.logger.info { "Assigning #{player.complete_name} to Payout #{payout.id}" }
 
-                Rails.logger.info { "Assigning #{player.complete_name} to Payout #{payout.id}" }
-
-                PayoutResult.create(payout: payout, user: player, flight: flight, tournament_day: flight.tournament_day, amount: payout.amount, points: payout.points)
-              else
-                Rails.logger.info { "Already Assigned Payout" }
-              end
+              PayoutResult.create(payout: payout, user: player, flight: flight, tournament_day: flight.tournament_day, amount: payout.amount, points: payout.points)
             end
-          else
-            Rails.logger.info { "Player Not Eligible: #{result.user}" }
           end
         end
       end
+
+
+      # ranked_flights.each do |flight|
+      #   flight.tournament_day_results.each do |result|
+      #     if eligible_player_list.include? result.user.id
+      #       flight.payouts.each_with_index do |payout, i|
+      #         payout.reload #NOTE: without this, the blank? sometimes returns false when the count is > 0 - that is very strange.
+
+      #         if payout.payout_results.blank?
+      #           player = result.user
+
+      #           Rails.logger.info { "Assigning #{player.complete_name} to Payout #{payout.id}" }
+
+      #           PayoutResult.create(payout: payout, user: player, flight: flight, tournament_day: flight.tournament_day, amount: payout.amount, points: payout.points)
+      #         else
+      #           Rails.logger.info { "Already Assigned Payout #{payout.id} to #{payout.user.complete_name}" }
+      #         end
+      #       end
+      #     else
+      #       Rails.logger.info { "Player Not Eligible: #{result.user}" }
+      #     end
+      #   end
+      # end
 
 
     end
