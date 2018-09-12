@@ -537,11 +537,11 @@ module GameTypes
       ranked_flights.each do |flight|
         flight.payouts.each_with_index do |payout, i|
           if payout.payout_results.count == 0
-            result = flight.tournament_day_results[i]
+            result = flight.tournament_day_results.order(:net_score)[i]
             if result.present? and eligible_player_list.include? result.user.id
               player = result.user
 
-              Rails.logger.info { "Assigning #{player.complete_name} to Payout #{payout.id} Result ID: #{result.id}" }
+              Rails.logger.info { "Assigning #{player.complete_name} to Payout #{payout.id}. Result ID: #{result.id}" }
 
               PayoutResult.create(payout: payout, user: player, flight: flight, tournament_day: flight.tournament_day, amount: payout.amount, points: payout.points)
             end
