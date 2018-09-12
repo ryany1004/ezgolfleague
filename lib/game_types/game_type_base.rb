@@ -541,10 +541,12 @@ module GameTypes
             if result.present? and eligible_player_list.include? result.user.id
               player = result.user
 
-              Rails.logger.info { "Assigning #{player.complete_name} to Payout #{payout.id}" }
+              Rails.logger.info { "Assigning #{player.complete_name} to Payout #{payout.id} Result ID: #{result.id}" }
 
               PayoutResult.create(payout: payout, user: player, flight: flight, tournament_day: flight.tournament_day, amount: payout.amount, points: payout.points)
             end
+          else
+            Rails.logger.info { "Payout Already Has Results: #{payout.payout_results.map(&:id)}" }
           end
         end
       end
