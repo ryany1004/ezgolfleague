@@ -10,6 +10,8 @@ class HandicapCalculationJob < ApplicationJob
       user = membership.user
       user.handicap_index = calculated_handicap_index
       user.save
+
+      self.update_future_tournaments(league, user)
     end
   end
 
@@ -55,5 +57,20 @@ class HandicapCalculationJob < ApplicationJob
     end
 
     averaged_handicap
+  end
+
+  def update_future_tournaments(league, user)
+    tournaments = Tournament.tournaments_happening_at_some_point(nil, nil, [league], true).where(is_finalized: false)
+    tournaments.each do |t|
+      t.tournament_days.each do |td|
+        scorecard = td.primary_scorecard_for_user(user)
+
+        unless scorecard.blank?
+          Rails.logger.info "Updating Scorecard #{scorecard.id} Course Handicap for #{user.complete_name}"
+
+          scorecard.set_course_handicap(true)
+        end
+      end
+    end
   end
 end
