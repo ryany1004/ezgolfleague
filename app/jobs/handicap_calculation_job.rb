@@ -3,12 +3,13 @@ class HandicapCalculationJob < ApplicationJob
     league.league_memberships.each do |membership|
       scorecards = self.scorecards_for_player(membership.user)
 
-      calculated_handicap = self.handicap_for_player_with_scorecards(scorecards).round
+      calculated_handicap_index = self.handicap_for_player_with_scorecards(scorecards)
 
-      Rails.logger.info { "Calculated Handicap of #{calculated_handicap} for user #{membership.user.complete_name} in #{league.name}" }
+      Rails.logger.info { "Calculated Handicap Index of #{calculated_handicap_index} for user #{membership.user.complete_name} in #{league.name}" }
 
-      membership.course_handicap
-      membership.save
+      user = membership.user
+      user.handicap_index = calculated_handicap_index
+      user.save
     end
   end
 
@@ -30,13 +31,28 @@ class HandicapCalculationJob < ApplicationJob
 
     scorecards.each do |scorecard|
       gross_score = scorecard.gross_score
-      course = scorecard.golf_outing.tournament_group.tournament_day.course
-      user = scorecard.golf_outing.user
+      course_tee_box = scorecard.golf_outing.course_tee_box
 
-      handicap_sum += user.index_derived_handicap(nil, scorecard.golf_outing)
+      if course_tee_box.rating <= 0 && course_tee_box.slope <= 0
+        Rails.logger.debug "Course Tee Box Does Not Have Rating or Slope: #{course_tee_box.id}"
+
+        next
+      end
+
+      differential = ((gross_score - course_tee_box.rating) * 113) / course_tee_box.slope
+
+      Rails.logger.debug "Differential: #{differential}"
+
+      handicap_sum += differential
     end
 
-    averaged_handicap = handicap_sum / scorecards.count
+    Rails.logger.debug "Handicap Sum: #{handicap_sum}"
+
+    if handicap_sum > 0
+      averaged_handicap = ((handicap_sum / scorecards.count) * 0.96).round
+    else
+      averaged_handicap = 0
+    end
 
     averaged_handicap
   end
