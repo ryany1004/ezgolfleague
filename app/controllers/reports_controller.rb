@@ -1,5 +1,5 @@
 class ReportsController < BaseController
-  before_action :fetch_tournament_day, except: [:index, :finalization_report]
+  before_action :fetch_tournament_day, except: [:index, :finalization_report, :leagues_report]
 
   def index
     leagues = nil
@@ -12,6 +12,10 @@ class ReportsController < BaseController
 
   def finalization_report
     @past_tournaments = Tournament.tournaments_happening_at_some_point(nil, nil, nil, true).where(is_finalized: true).reorder("tournament_starts_at DESC").page(params[:page]).without_count
+  end
+
+  def leagues_report
+    @leagues = League.all.order(:name)
   end
 
   def adjusted_scores

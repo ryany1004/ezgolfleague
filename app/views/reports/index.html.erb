@@ -1,6 +1,7 @@
 <% if current_user.is_super_user %>
-  <%= link_to 'Finalization Report', finalization_report_league_reports_path, :class => 'btn btn-primary' %>
-  <br/><br/>
+  <div class="row">
+    <%= render partial: 'static_table' %>
+  </div>
 <% end %>
 
 <% unless @past_tournaments.blank? -%>
