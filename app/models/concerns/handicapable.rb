@@ -11,19 +11,23 @@ module Handicapable
     else
       Rails.logger.info { "Handicap: Using Index Derived Handicap" }
 
-      unless flight.blank?
-        course_tee_box = flight.course_tee_box
-      else
-        course_tee_box = golf_outing.course_tee_box
-      end
+      self.index_derived_handicap(flight, golf_outing)
+    end
+  end
 
-      return nil if self.handicap_index.blank? or course_tee_box.blank? or golf_outing.blank? #this will fail if the user is not flighted
+  def index_derived_handicap(flight, golf_outing)
+    unless flight.blank?
+      course_tee_box = flight.course_tee_box
+    else
+      course_tee_box = golf_outing.course_tee_box
+    end
 
-      if golf_outing.tournament_group.tournament_day.course_holes.count == 9
-        self.nine_hole_handicap(golf_outing.tournament_group.tournament_day.course, course_tee_box)
-      else
-        self.standard_handicap(golf_outing.tournament_group.tournament_day.course, course_tee_box)
-      end
+    return nil if self.handicap_index.blank? or course_tee_box.blank? or golf_outing.blank? #this will fail if the user is not flighted
+
+    if golf_outing.tournament_group.tournament_day.course_holes.count == 9
+      self.nine_hole_handicap(golf_outing.tournament_group.tournament_day.course, course_tee_box)
+    else
+      self.standard_handicap(golf_outing.tournament_group.tournament_day.course, course_tee_box)
     end
   end
 

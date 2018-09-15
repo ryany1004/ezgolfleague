@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180727170612) do
+ActiveRecord::Schema.define(version: 20180915162704) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -305,6 +305,7 @@ ActiveRecord::Schema.define(version: 20180727170612) do
     t.string "league_type"
     t.text "more_comments"
     t.boolean "allow_scoring_groups", default: false
+    t.boolean "calculate_handicaps_from_past_rounds", default: false
   end
 
   create_table "mobile_devices", id: :serial, force: :cascade do |t|
