@@ -11,10 +11,15 @@
 
     <h3>Basic Details</h3>
     <div class="well">
-      <p><strong>Select a course:</strong></p>
-      <%= f.input :course_id, collection: @courses, label: false, :label_method => :complete_name, input_html: { class: 'chosen-select' } %>
+      <% if @tournament.players_for_day(@tournament_day).count > 0 %>
+        <p><strong><%= @tournament_day.course.name %></strong></p>
+        <p><em>A tournament day's course cannot be changed after players have signed up - remove the players or create a new tournament day to select a different course.</em></p>
+      <% else %>
+        <p><strong>Select a course:</strong></p>
+        <%= f.input :course_id, collection: @courses, label: false, :label_method => :complete_name, input_html: { class: 'chosen-select' } %>
 
-      <p>Don't see your course? We're adding courses all the time. <a href='mailto:support@ezgolfleague.com?subject=New%20Course'>Drop us a line</a> to let us know what you're missing.</p>
+        <p>Don't see your course? We're adding courses all the time. <a href='mailto:support@ezgolfleague.com?subject=New%20Course'>Drop us a line</a> to let us know what you're missing.</p>
+      <% end %>
 
       <%= f.input :tournament_at, :label => 'Tournament Date', required: true, :as => :datetime_picker %>
     </div>
