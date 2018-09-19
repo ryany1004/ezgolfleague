@@ -99,7 +99,7 @@ module Scoreable
       self.score_user(player)
     end
 
-    RankFlightsJob.perform_later(self)
+    RankFlightsJob.perform_now(self)
   end
 
   def score_user(user)
