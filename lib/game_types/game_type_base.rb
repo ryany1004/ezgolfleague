@@ -537,7 +537,7 @@ module GameTypes
       ranked_flights.each do |flight|
         flight.payouts.each_with_index do |payout, i|
           if payout.payout_results.count == 0
-            result = flight.tournament_day_results.order(:net_score)[i]
+            result = flight.tournament_day_results[i]
             if result.present? and eligible_player_list.include? result.user.id
               player = result.user
 
