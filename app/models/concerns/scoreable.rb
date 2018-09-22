@@ -126,11 +126,15 @@ module Scoreable
 
     self.tournament_day_results.where(user: user).destroy_all
 
-    result = self.tournament_day_results.create(user: user, name: result_name, primary_scorecard: primary_scorecard, flight: flight, gross_score: gross_score, net_score: net_score, adjusted_score: adjusted_score, front_nine_gross_score: front_nine_gross_score, front_nine_net_score: front_nine_net_score, back_nine_net_score: back_nine_net_score, par_related_net_score: par_related_net_score, par_related_gross_score: par_related_gross_score)
-    
-    Rails.logger.info { "Wrote TournamentDayResult for Scorecard: #{primary_scorecard.try(:id)} for User #{user.try(:complete_name)}" }
+    if gross_score > 0
+      result = self.tournament_day_results.create(user: user, name: result_name, primary_scorecard: primary_scorecard, flight: flight, gross_score: gross_score, net_score: net_score, adjusted_score: adjusted_score, front_nine_gross_score: front_nine_gross_score, front_nine_net_score: front_nine_net_score, back_nine_net_score: back_nine_net_score, par_related_net_score: par_related_net_score, par_related_gross_score: par_related_gross_score)
+      
+      Rails.logger.info { "Wrote TournamentDayResult for Scorecard: #{primary_scorecard.try(:id)} for User #{user.try(:complete_name)}" }
 
-    return result
+      return result
+    else
+      return nil
+    end
   end
 
   def user_par_for_played_holes(user)
