@@ -1,7 +1,7 @@
 class HandicapCalculationJob < ApplicationJob
   def perform(league)
     league.league_memberships.each do |membership|
-      scorecards = self.scorecards_for_player(membership.user)
+      scorecards = self.scorecards_for_player(membership.user, league)
 
       calculated_handicap_index = self.handicap_for_player_with_scorecards(scorecards)
 
@@ -15,11 +15,13 @@ class HandicapCalculationJob < ApplicationJob
     end
   end
 
-  def scorecards_for_player(player)
+  def scorecards_for_player(player, league)
     scorecards = []
 
-    player.golf_outings.order("created_at DESC").limit(20).each do |outing|
-      scorecards << outing.scorecard if !outing.scorecard.has_empty_scores?
+    player.golf_outings.order("created_at DESC").limit(100).each do |outing| #the 100 is arbitrary, to make sure we fetch enough records to have 10 valid scorecards
+      if !outing.scorecard.has_empty_scores? && outing.in_league?(league)
+        scorecards << outing.scorecard
+      end
     end
 
     scorecards = scorecards.sort { |x,y| x.gross_score <=> y.gross_score }
@@ -43,7 +45,7 @@ class HandicapCalculationJob < ApplicationJob
 
       differential = ((gross_score - course_tee_box.rating) * 113) / course_tee_box.slope
 
-      Rails.logger.debug "Differential: #{differential}"
+      Rails.logger.debug "Gross Score: #{gross_score}. Rating: #{course_tee_box.rating}. Slope: #{course_tee_box.slope}. Differential: #{differential}"
 
       handicap_sum += differential
     end
@@ -51,7 +53,7 @@ class HandicapCalculationJob < ApplicationJob
     Rails.logger.debug "Handicap Sum: #{handicap_sum}"
 
     if handicap_sum > 0
-      averaged_handicap = ((handicap_sum / scorecards.count) * 0.96).round
+      averaged_handicap = ((handicap_sum / scorecards.count) * 0.96).round(1)
     else
       averaged_handicap = 0
     end
