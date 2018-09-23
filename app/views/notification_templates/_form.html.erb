@@ -14,18 +14,26 @@
 
     <%= f.input :body, :label => 'Body Text (Email Only)' %>
 
-    <%= f.input :deliver_at, :label => 'Delivery Date', required: true, :as => :datetime_picker %>
+    <% if @notification_template.tournament_notification_action.blank? %>
+      <%= f.input :deliver_at, :label => 'Delivery Date', required: true, :as => :datetime_picker %>
+    <% else %>
+      <p>This notification will be sent: <%= @notification_template.tournament_notification_action %></p>
+    <% end %>
   </div>
 
   <h3>Who Should This Go To?</h3>
   <div class="well">
-    <%= f.input :league_id, collection: @leagues, :label => 'All League Members', :label_method => :name %>
+    <% if @notification_template.tournament_notification_action.blank? %>
+      <%= f.input :league_id, collection: @leagues, :label => 'All League Members', :label_method => :name %>
 
-    <%= f.input :tournament_id, collection: @tournaments, :label => 'Just These Tournament Players', :label_method => :name %>
+      <%= f.input :tournament_id, collection: @tournaments, :label => 'Just These Tournament Players', :label_method => :name %>
 
-    <p>
-      <em>Note that child users with parents will also be notified even if they are not members of the league.</em>
-    </p>
+      <p>
+        <em>Note that child users with parents will also be notified even if they are not members of the league.</em>
+      </p>
+    <% else %>
+      <p>This will be sent to all players in the tournament: <%= @notification_template.tournament.name %></p>
+    <% end %>
   </div>
 
   <% if @notification_template.has_been_delivered == true -%>

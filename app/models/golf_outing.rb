@@ -22,6 +22,10 @@ class GolfOuting < ApplicationRecord
     end
   end
 
+  def in_league?(league)
+    self.tournament_group.tournament_day.tournament.league == league
+  end
+
   def disqualification_description
     if self.disqualified
       "Re-Qualify"
