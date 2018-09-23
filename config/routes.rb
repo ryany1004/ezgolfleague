@@ -104,6 +104,8 @@ Rails.application.routes.draw do
           put 'cancel_registration'
           get 'payment_details'
 
+          post 'register_contests'
+
           get 'tournament_groups'
           get 'leaderboard'
 

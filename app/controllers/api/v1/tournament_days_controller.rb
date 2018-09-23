@@ -61,6 +61,18 @@ class Api::V1::TournamentDaysController < Api::V1::ApiBaseController
     @eager_groups = @tournament_day.eager_groups
   end
 
+  def register_contests
+    contests = ActiveSupport::JSON.decode(request.body.read)
+
+    contests.each do |c_info|
+      contest = Contest.find(c_info["server_id"])
+
+      contest.add_user(@current_user)
+    end
+
+    render json: {"success" => true}
+  end
+
   def payment_details
     tournament_cost_details = @tournament.cost_breakdown_for_user(@current_user, false, false)
 
