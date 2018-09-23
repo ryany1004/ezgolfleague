@@ -26,6 +26,12 @@ json.cache! ['v1', tournament] do
 		json.league_admin_user_ids		day.league_admin_user_ids
 		json.show_teams?							day.show_teams?
 
+		json.paid_contests day.paid_contests do |contest|
+			json.server_id							contest.server_id
+			json.name										contest.name
+			json.dues_amount						contest.dues_amount
+		end
+
 		json.course do
 			json.server_id						day.course.server_id
 			json.name									day.course.name

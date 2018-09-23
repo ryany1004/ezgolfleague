@@ -156,6 +156,10 @@ class TournamentDay < ApplicationRecord
     return false
   end
 
+  def paid_contests
+    self.contests.where("dues_amount > 0")
+  end
+
   def registered_user_ids
     cache_key = "registereduserids-json#{self.id}-#{self.updated_at.to_i}"
     user_ids = []
