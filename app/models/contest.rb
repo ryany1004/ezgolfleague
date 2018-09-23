@@ -1,5 +1,6 @@
 class Contest < ApplicationRecord
   include ContestScoreable
+  include Servable
 
   belongs_to :tournament_day, inverse_of: :contests, touch: true
 
