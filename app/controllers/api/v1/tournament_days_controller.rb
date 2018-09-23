@@ -65,7 +65,7 @@ class Api::V1::TournamentDaysController < Api::V1::ApiBaseController
     contests = ActiveSupport::JSON.decode(request.body.read)
 
     contests.each do |c_info|
-      contest = Contest.find(c_info["server_id"])
+      contest = Contest.find(c_info)
 
       contest.add_user(@current_user)
     end
