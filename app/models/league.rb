@@ -42,6 +42,8 @@ class League < ApplicationRecord
   end
 
   def stripe_is_setup?
+    return false if Rails.env.development?
+
     if self.stripe_test_publishable_key.blank? || self.stripe_production_publishable_key.blank?
       false
     else

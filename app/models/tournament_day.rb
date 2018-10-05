@@ -61,6 +61,8 @@ class TournamentDay < ApplicationRecord
       new_game_type = GameTypes::TwoManComboScrambleBestBall.new
     elsif self.game_type_id == 13
       new_game_type = GameTypes::OneTwoThreeBestBallsOfFour.new
+    elsif self.game_type_id == 14
+      new_game_type = GameTypes::TwoManIndividualStrokePlay.new
     end
 
     new_game_type.tournament_day = self
