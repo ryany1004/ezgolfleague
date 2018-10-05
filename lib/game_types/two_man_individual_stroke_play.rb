@@ -65,5 +65,16 @@ module GameTypes
 
       return other_scorecards
     end
+
+    ##API
+
+    def scorecard_payload_for_scorecard(scorecard)
+      scorecard_api = ScorecardAPIBestBall.new
+      scorecard_api.tournament_day = self.tournament_day
+      scorecard_api.scorecard = scorecard
+      scorecard_api.handicap_allowance = self.handicap_allowance(scorecard.golf_outing.user)
+
+      return scorecard_api.scorecard_representation
+    end
   end
 end
