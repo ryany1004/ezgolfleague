@@ -44,12 +44,12 @@ module Flights
           primary_scorecard = self.flight.tournament_day.primary_scorecard_for_user(primary_user)
           result_name = Users::ResultName.result_name_for_user(primary_user, self.flight.tournament_day)
 
-          results = self.flight.tournament_day_results.where(user: team.users)
+          results = self.flight.tournament_day_results.where(user: team.users).where(aggregated_result: false)
 
           if results.sum(:net_score) > 0
             Rails.logger.info { "Summing results of #{results.count} results for team #{result_name}." }
 
-            team_results << TournamentDayResult.new(tournament_day: self.flight.tournament_day, user: primary_user, name: result_name, primary_scorecard: primary_scorecard, flight: self.flight, gross_score: results.sum(:gross_score), net_score: results.sum(:net_score), adjusted_score: results.sum(:adjusted_score), front_nine_gross_score: results.sum(:front_nine_gross_score), front_nine_net_score: results.sum(:front_nine_net_score), back_nine_net_score: results.sum(:back_nine_net_score), par_related_net_score: results.sum(:par_related_net_score), par_related_gross_score: results.sum(:par_related_gross_score))
+            team_results << TournamentDayResult.new(aggregated_result: true, tournament_day: self.flight.tournament_day, user: primary_user, name: result_name, primary_scorecard: primary_scorecard, flight: self.flight, gross_score: results.sum(:gross_score), net_score: results.sum(:net_score), adjusted_score: results.sum(:adjusted_score), front_nine_gross_score: results.sum(:front_nine_gross_score), front_nine_net_score: results.sum(:front_nine_net_score), back_nine_net_score: results.sum(:back_nine_net_score), par_related_net_score: results.sum(:par_related_net_score), par_related_gross_score: results.sum(:par_related_gross_score))
           end
 
           computed_teams << team
@@ -61,6 +61,8 @@ module Flights
       team_results.each do |r|
         r.save
       end
+
+      self.tournament_day_results.reload
     end
 
     # Sort
@@ -81,16 +83,16 @@ module Flights
           if par_related_net_scores.uniq.length != par_related_net_scores.length
             Rails.logger.info { "We have tied players, using net_scores" }
 
-            self.sorted_results.sort_by { |x| [x.par_related_net_score, x.net_scores] }
+            self.sorted_results = self.tournament_day_results.sort_by { |x| [x.par_related_net_score, x.net_scores] }
           else
             Rails.logger.info { "No tied players..." }
 
-            self.sorted_results.sort_by { |x| [x.par_related_net_score, x.back_nine_net_score] }
+            self.sorted_results = self.tournament_day_results.sort_by { |x| [x.par_related_net_score, x.back_nine_net_score] }
           end
         else
           Rails.logger.info { "18-Hole Tie-Breaking" }
 
-          self.sorted_results.sort_by { |x| [x.par_related_net_score, x.back_nine_net_score] }
+          self.sorted_results = self.tournament_day_results.sort_by { |x| [x.par_related_net_score, x.back_nine_net_score] }
         end
       else
         Rails.logger.info { "Tie-breaking is disabled" }
@@ -105,6 +107,8 @@ module Flights
       last_rank = 0
       last_score = 0
       quantity_at_rank = 0
+
+      Rails.logger.debug { "Ranking #{self.sorted_results.count} results" }
 
       self.sorted_results.each_with_index do |result, i|
         #rank = last rank + 1
@@ -131,6 +135,8 @@ module Flights
 
           quantity_at_rank = quantity_at_rank + 1
         end
+
+        Rails.logger.debug { "Setting rank of #{rank} for result with ID #{result.id} / #{result.name}" }
 
         result.rank = rank
         result.save

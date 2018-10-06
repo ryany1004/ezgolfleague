@@ -126,7 +126,7 @@ module GameTypes
     end
 
     def player_score(user, use_handicap = true, holes = [])
-      tournament_day_result = self.tournament_day.tournament_day_results.where(user: user).first
+      tournament_day_result = self.tournament_day.tournament_day_results.where(aggregated_result: false).where(user: user).first
 
       if tournament_day_result.blank?
         tournament_day_result = self.tournament_day.score_user(user) 

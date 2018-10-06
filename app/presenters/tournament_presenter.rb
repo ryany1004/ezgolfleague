@@ -180,7 +180,7 @@ class TournamentPresenter
       self.tournament_day.golfer_teams.each do |golfer_team|
         group = golfer_team.users.blank? ? nil : self.tournament_day.tournament_group_for_player(golfer_team.users.first)
 
-        teams << {name_data: golfer_team, group: group, id: nil}
+        teams << {name_data: golfer_team, group: group, id: nil} unless group.blank?
       end
 
       teams

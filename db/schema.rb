@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181006165710) do
+ActiveRecord::Schema.define(version: 20181006174213) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -447,6 +447,7 @@ ActiveRecord::Schema.define(version: 20181006165710) do
     t.integer "adjusted_score", default: 0
     t.integer "rank", default: 0
     t.string "name"
+    t.boolean "aggregated_result", default: false
     t.index ["flight_id"], name: "index_tournament_day_results_on_flight_id"
     t.index ["tournament_day_id"], name: "index_tournament_day_results_on_tournament_day_id"
     t.index ["user_id"], name: "index_tournament_day_results_on_user_id"
