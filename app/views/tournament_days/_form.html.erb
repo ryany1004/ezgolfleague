@@ -22,6 +22,9 @@
       <% end %>
 
       <%= f.input :tournament_at, :label => 'Tournament Date', required: true, :as => :datetime_picker %>
+
+      <%= f.input :enter_scores_until_finalized, :label => 'Allow Players to Enter Scores Until Finalized?', required: true, :as => :boolean %>
+      <p>If you leave this un-checked, players are only able to score on the day of the tournament. Selecting this option allows scoring until you finalize the tournament.</p>
     </div>
 
     <div class="form-actions">
