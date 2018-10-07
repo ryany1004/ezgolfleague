@@ -68,7 +68,7 @@ module Flights
     # Sort
 
     def sort_by_parameter(parameter)
-    	self.sorted_results = tournament_day_results.sort { |x,y| x.send(parameter) <=> y.send(parameter) }
+    	self.sorted_results = tournament_day_results.order(parameter)
     end
 
      def sort_individual_stroke_play
@@ -83,16 +83,16 @@ module Flights
           if par_related_net_scores.uniq.length != par_related_net_scores.length
             Rails.logger.info { "We have tied players, using net_scores" }
 
-            self.sorted_results = self.tournament_day_results.sort_by { |x| [x.par_related_net_score, x.net_scores] }
+            self.sorted_results = self.tournament_day_results.order("par_related_net_score").order("net_score")
           else
             Rails.logger.info { "No tied players..." }
 
-            self.sorted_results = self.tournament_day_results.sort_by { |x| [x.par_related_net_score, x.back_nine_net_score] }
+            self.sorted_results = self.tournament_day_results.order("par_related_net_score").order("back_nine_net_score")
           end
         else
           Rails.logger.info { "18-Hole Tie-Breaking" }
 
-          self.sorted_results = self.tournament_day_results.sort_by { |x| [x.par_related_net_score, x.back_nine_net_score] }
+          self.sorted_results = self.tournament_day_results.order("par_related_net_score").order("back_nine_net_score")
         end
       else
         Rails.logger.info { "Tie-breaking is disabled" }
