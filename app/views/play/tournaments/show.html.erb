@@ -214,9 +214,9 @@
               <% @tournament_presenter.flights_with_rankings.each_with_index do |flight, x| %>
                 <% flight.tournament_day_results.each_with_index do |result, i| -%>
                 <tr>
-                  <td><strong><%= result.flight.display_name %></strong></td>
+                  <td><strong><%= result.flight.display_name %> <!-- <%= flight.id %> --></strong></td>
                   <td><strong><%= result.rank %></strong></td>
-                  <td><%= result.name %></td>
+                  <td><%= result.name %> <!-- <%= result.id %> --></td>
                   <td><%= result.net_score %></td>
                   <td><%= result.gross_score %></td>
                   <td><%= result.points.to_i %></td>

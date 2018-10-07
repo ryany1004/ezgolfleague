@@ -16,15 +16,16 @@ json.cache! ['v1', tournament] do
 	end
 
 	json.tournament_days tournament.tournament_days do |day|
-		json.server_id								day.server_id
-		json.tournament_at						day.tournament_at
-		json.game_type_id							day.game_type_id
-		json.can_be_played?						day.can_be_played?
-		json.registered_user_ids			day.registered_user_ids
-		json.paid_user_ids						day.paid_user_ids
-		json.superuser_user_ids				day.superuser_user_ids
-		json.league_admin_user_ids		day.league_admin_user_ids
-		json.show_teams?							day.show_teams?
+		json.server_id										day.server_id
+		json.tournament_at								day.tournament_at
+		json.game_type_id									day.game_type_id
+		json.can_be_played?								day.can_be_played?
+		json.registered_user_ids					day.registered_user_ids
+		json.paid_user_ids								day.paid_user_ids
+		json.superuser_user_ids						day.superuser_user_ids
+		json.league_admin_user_ids				day.league_admin_user_ids
+		json.show_teams?									day.show_teams?
+		json.enter_scores_until_finalized	day.enter_scores_until_finalized
 
 		json.paid_contests day.paid_contests do |contest|
 			json.server_id							contest.server_id

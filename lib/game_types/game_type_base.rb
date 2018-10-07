@@ -12,7 +12,7 @@ module GameTypes
 
     def self.available_types
       #return [GameTypes::IndividualStrokePlay.new, GameTypes::IndividualMatchPlay.new, GameTypes::IndividualModifiedStableford.new, GameTypes::TwoManShamble.new, GameTypes::TwoManScramble.new, GameTypes::FourManScramble.new, GameTypes::TwoManBestBall.new, GameTypes::TwoBestBallsOfFour.new, GameTypes::TwoManComboScrambleBestBall.new, GameTypes::OneTwoThreeBestBallsOfFour.new]
-      return [GameTypes::IndividualStrokePlay.new, GameTypes::IndividualModifiedStableford.new, GameTypes::TwoManScramble.new, GameTypes::FourManScramble.new, GameTypes::TwoManBestBall.new]
+      return [GameTypes::IndividualStrokePlay.new, GameTypes::TwoManIndividualStrokePlay.new, GameTypes::IndividualModifiedStableford.new, GameTypes::TwoManScramble.new, GameTypes::FourManScramble.new, GameTypes::TwoManBestBall.new]
     end
 
     def display_name
@@ -126,7 +126,7 @@ module GameTypes
     end
 
     def player_score(user, use_handicap = true, holes = [])
-      tournament_day_result = self.tournament_day.tournament_day_results.where(user: user).first
+      tournament_day_result = self.tournament_day.tournament_day_results.where(aggregated_result: false).where(user: user).first
 
       if tournament_day_result.blank?
         tournament_day_result = self.tournament_day.score_user(user) 
