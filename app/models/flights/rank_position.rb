@@ -138,6 +138,7 @@ module Flights
 
         Rails.logger.debug { "Setting rank of #{rank} for result with ID #{result.id} / #{result.name}" }
 
+        result.sort_rank = i
         result.rank = rank
         result.save
       end

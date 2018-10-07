@@ -47,7 +47,7 @@
                 <th>Par Net</th>
               </tr>
             </thead>
-            <% d.tournament_day_results.order("rank").each do |r| %>
+            <% d.tournament_day_results.order("sort_rank").each do |r| %>
             <tr>
               <td><%= r.user.complete_name %></td>
               <td><%= r.rank %></td>
