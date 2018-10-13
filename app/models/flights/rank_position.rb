@@ -68,7 +68,7 @@ module Flights
     # Sort
 
     def sort_by_parameter(parameter)
-    	self.sorted_results = tournament_day_results.order(parameter)
+    	self.sorted_results = tournament_day_results.reorder(parameter)
     end
 
      def sort_individual_stroke_play
@@ -83,16 +83,16 @@ module Flights
           if par_related_net_scores.uniq.length != par_related_net_scores.length
             Rails.logger.info { "We have tied players, using net_scores" }
 
-            self.sorted_results = self.tournament_day_results.order("par_related_net_score").order("net_score")
+            self.sorted_results = self.tournament_day_results.reorder("par_related_net_score").reorder("net_score")
           else
             Rails.logger.info { "No tied players..." }
 
-            self.sorted_results = self.tournament_day_results.order("par_related_net_score").order("back_nine_net_score")
+            self.sorted_results = self.tournament_day_results.reorder("par_related_net_score").reorder("back_nine_net_score")
           end
         else
           Rails.logger.info { "18-Hole Tie-Breaking" }
 
-          self.sorted_results = self.tournament_day_results.order("par_related_net_score").order("back_nine_net_score")
+          self.sorted_results = self.tournament_day_results.reorder("par_related_net_score").reorder("back_nine_net_score")
         end
       else
         Rails.logger.info { "Tie-breaking is disabled" }
@@ -136,7 +136,7 @@ module Flights
           quantity_at_rank = quantity_at_rank + 1
         end
 
-        Rails.logger.debug { "Setting rank of #{rank} for result with ID #{result.id} / #{result.name}" }
+        Rails.logger.debug { "Rank of #{rank} for #{result.name}. Net score: #{result.net_score}. Back Nine Net Score (if applicable): #{result.back_nine_net_score}. Param: #{sort_parameter}" }
 
         result.sort_rank = i
         result.rank = rank
