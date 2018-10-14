@@ -13,8 +13,15 @@ class TournamentDayResult < ApplicationRecord
     return 0 if flight.blank?
 
     total_points = 0
+    
     flight.payout_results.where(user: user).each do |payout_result|
-      total_points = payout_result.points
+      total_points += payout_result.points
+    end
+
+    tournament_day.contests.each do |c|
+      c.contest_results.where(winner: user).each do |payout_result|
+        total_points += payout_result.points
+      end
     end
 
     total_points
@@ -24,9 +31,16 @@ class TournamentDayResult < ApplicationRecord
     return 0 if flight.blank?
 
     total_payouts = 0
+
     flight.payout_results.where(user: user).each do |payout_result|
-      total_payouts = payout_result.amount
+      total_payouts += payout_result.amount
     end
+
+    tournament_day.contests.each do |c|
+      c.contest_results.where(winner: user).each do |payout_result|
+        total_payouts += payout_result.payout_amount
+      end
+    end   
 
     total_payouts
   end
