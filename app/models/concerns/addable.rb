@@ -125,9 +125,10 @@ module Addable
           golf_outing.scorecard.set_course_handicap(true) unless golf_outing.scorecard.blank?
 
           player_course_handicap = p.course_handicap_for_golf_outing(golf_outing, f)
-
           golf_outing.course_handicap = player_course_handicap
           golf_outing.save
+        else
+          Rails.logger.debug { "golf_outing.course_handicap is not zero" }
         end
       else
         Rails.logger.debug { "Not Setting Course Handicap - Player Not Flighted #{p.complete_name}" }

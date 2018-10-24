@@ -8,6 +8,8 @@ class GolfOuting < ApplicationRecord
   belongs_to :course_tee_box
   has_one :scorecard, inverse_of: :golf_outing, :dependent => :destroy
 
+  validates :course_handicap, presence: true
+
   def team_combined_name
     if self.tournament_group.golfer_teams.count == 0
       return nil
