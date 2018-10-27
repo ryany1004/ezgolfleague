@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :contest do
-    name "Contest"
+    name { "Contest" }
 
     after(:create) do |contest|
       unless contest.tournament_day.blank?

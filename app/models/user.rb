@@ -58,11 +58,11 @@ class User < ApplicationRecord
   ##
 
   def complete_name
-    return "#{self.first_name} #{self.last_name}"
+    "#{self.first_name} #{self.last_name}"
   end
 
   def complete_name_with_email
-    return complete_name + " (#{self.email})"
+    complete_name + " (#{self.email})"
   end
 
   def scoring_group_name_for_league_season(league_season)
@@ -78,7 +78,7 @@ class User < ApplicationRecord
   end
 
   def short_name
-    return "#{self.first_name} #{self.last_name[0]}."
+    "#{self.first_name} #{self.last_name[0]}."
   end
 
   def ghin_url
@@ -103,7 +103,7 @@ class User < ApplicationRecord
 
   def impersonatable_users
     if self.child_users.blank? && self.parent_user.blank?
-      return []
+      []
     else
       users = []
 
@@ -114,6 +114,7 @@ class User < ApplicationRecord
     end
   end
 
+  #TODO: MOVE
   def merge_into_user(user, should_delete = false)
     User.transaction do
       self.league_memberships.each do |l|
@@ -168,25 +169,25 @@ class User < ApplicationRecord
   end
 
   def avatar_image_url
-    return self.avatar.url(:thumb)
+    self.avatar.url(:thumb)
   end
 
   def requires_additional_profile_data?
     if self.phone_number.blank? and self.street_address_1.blank?
-      return true
+      true
     else
-      return false
+      false
     end
   end
 
   def selected_league
     unless self.current_league.blank? || !self.leagues.include?(self.current_league)
-      return self.current_league
+      self.current_league
     else
       unless self.leagues_admin.first.blank?
-        return self.leagues_admin.first
+        self.leagues_admin.first
       else
-        return self.leagues.first
+        self.leagues.first
       end
     end
   end
@@ -199,7 +200,7 @@ class User < ApplicationRecord
     return true if self.is_super_user
     return false if self.blank?
 
-    return self.leagues_admin.count > 0
+    self.leagues_admin.count > 0
   end
 
   def has_all_exempt_leagues?
@@ -214,9 +215,9 @@ class User < ApplicationRecord
 
   def is_member_of_league?(league)
     if self.league_memberships.where("league_id = ?", league.id).blank?
-      return false
+      false
     else
-      return true
+      true
     end
   end
 
@@ -225,7 +226,7 @@ class User < ApplicationRecord
   end
 
   def payments_for_current_league
-    return self.payments_for_league(self.selected_league)
+    self.payments_for_league(self.selected_league)
   end
 
   def payments_cache_key
@@ -293,6 +294,7 @@ class User < ApplicationRecord
   end
 
   ## Notifications
+  #MOVE
 
   def ios_devices
     self.mobile_devices.where(device_type: "iphone")
@@ -339,20 +341,9 @@ class User < ApplicationRecord
     push_notifier.send_complication_notification(self, content)
   end
 
-  ##Custom Devise
-
   def league_names_string
     league_names = self.leagues.map {|n| n.name}
 
     return league_names.join(", ")
   end
-
-  def invite_email_subject
-    unless self.leagues.count == 0
-      return self.league_names_string + " - You Have Been Invited!"
-    else
-      return "EZ Golf League - You Have Been Invited!"
-    end
-  end
-
 end

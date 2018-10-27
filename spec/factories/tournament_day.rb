@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :tournament_day do
-    game_type_id 1
+    game_type_id { 1 }
     tournament_at { DateTime.now }
     association :course, factory: :course_with_holes
 

@@ -69,8 +69,4 @@ RSpec.configure do |config|
   config.after :each do
     Warden.test_reset!
   end
-
-  config.before do
-    Delayed::Worker.delay_jobs = false
-  end
 end

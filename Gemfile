@@ -48,7 +48,7 @@ end
 
 group :development, :test do
   gem 'sqlite3', require: 'sqlite3'
-  gem 'rspec-rails', '3.5.0.beta3'
+  gem 'rspec-rails', '3.5.0'
   gem 'factory_bot_rails'
   gem 'byebug'
   gem 'spring'

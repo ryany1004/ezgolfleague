@@ -38,7 +38,7 @@ module Handicapable
     Rails.logger.info { "U: #{self.id} HI: #{self.handicap_index.to_f} Slope: #{course_tee_box.slope.to_f} Course Tee Box: #{course_tee_box.id}" }
     Rails.logger.info { "Handicap: #{handicap}" }
 
-    return handicap
+    handicap
   end
 
   #http://www.mygolfinstructor.com/instruction/rules-of-golf/tips/calculate-9-hole-handicap-18-hole-handicap/569/
@@ -48,7 +48,7 @@ module Handicapable
     Rails.logger.info { "U: #{self.id} HI: #{self.handicap_index.to_f} Slope: #{course_tee_box.slope.to_f} Course Tee Box: #{course_tee_box.id}" }
     Rails.logger.info { "9 Hole Handicap: #{handicap}" }
 
-    return handicap
+    handicap
   end
 
 end
