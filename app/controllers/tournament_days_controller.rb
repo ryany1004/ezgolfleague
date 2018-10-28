@@ -83,7 +83,7 @@ class TournamentDaysController < BaseController
   end
 
   def initialize_form
-    @courses = Course.all.order("name")
+    @courses = Course.all.order(:name)
   end
 
 end

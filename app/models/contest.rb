@@ -5,18 +5,18 @@ class Contest < ApplicationRecord
   belongs_to :tournament_day, inverse_of: :contests, touch: true
 
   #handle single winner contests
-  belongs_to :overall_winner, :class_name => "ContestResult", :foreign_key => "overall_winner_contest_result_id", :dependent => :destroy
+  belongs_to :overall_winner, class_name: "ContestResult", foreign_key: "overall_winner_contest_result_id", dependent: :destroy
 
   has_many :payments, inverse_of: :contest
   has_many :contest_results, inverse_of: :contest
 
   #handle multiple hole contests
-  has_many :contest_holes, :dependent => :destroy
+  has_many :contest_holes, dependent: :destroy
   has_many :course_holes, through: :contest_holes
 
   has_and_belongs_to_many :users #contestants
 
-  validates :dues_amount, :numericality => { :greater_than_or_equal_to => 0 }
+  validates :dues_amount, numericality: { greater_than_or_equal_to: 0 }
 
   def human_type
     if self.contest_type == 0
@@ -272,9 +272,9 @@ class Contest < ApplicationRecord
     ids_to_omit = self.users.map { |n| n.id }
 
     if ids_to_omit.blank?
-      return self.tournament_day.tournament.league.users.where("users.id IN (?)", tournament_user_ids).order("last_name, first_name")
+      return self.tournament_day.tournament.league.users.where("users.id IN (?)", tournament_user_ids).order(:last_name).order(:first_name)
     else
-      return self.tournament_day.tournament.league.users.where("users.id IN (?)", tournament_user_ids).where("users.id NOT IN (?)", ids_to_omit).order("last_name, first_name")
+      return self.tournament_day.tournament.league.users.where("users.id IN (?)", tournament_user_ids).where("users.id NOT IN (?)", ids_to_omit).order(:last_name).order(:first_name)
     end
   end
 

@@ -3,7 +3,7 @@ class LeagueSeasonsController < BaseController
   before_action :fetch_season, only: [:edit, :update, :destroy]
 
   def index
-    @league_seasons = @league.league_seasons.order("starts_at")
+    @league_seasons = @league.league_seasons.order(:starts_at)
 
     @page_title = "League Seasons"
   end

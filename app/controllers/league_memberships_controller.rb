@@ -73,9 +73,9 @@ class LeagueMembershipsController < BaseController
     if @league.users.count > 0
       existing_user_ids = @league.users.map { |n| n.id }
 
-      @users = User.where("id NOT IN (?)", existing_user_ids).order("last_name").order("first_name").order("created_at DESC")
+      @users = User.where("id NOT IN (?)", existing_user_ids).order(:last_name).order(:first_name).order(created_at: :desc)
     else
-      @users = User.all.order("last_name").order("first_name").order("created_at DESC")
+      @users = User.all.order(:last_name).order(:first_name).order(created_at: :desc)
     end
 
     @users = User.where(id: @league_membership.user.id) if @users.count == 0 && @league_membership.blank? == false

@@ -4,10 +4,10 @@ class UserAccountsController < BaseController
 
   def index
     if current_user.is_super_user?
-      @user_accounts = User.order("last_name").page params[:page]
+      @user_accounts = User.order(:last_name).page params[:page]
     else
       membership_ids = current_user.leagues_admin.map { |n| n.id }
-      @user_accounts = User.joins(:league_memberships).where("league_memberships.league_id IN (?)", membership_ids).order("last_name").page params[:page]
+      @user_accounts = User.joins(:league_memberships).where("league_memberships.league_id IN (?)", membership_ids).order(:last_name).page params[:page]
     end
 
     unless params[:search].blank?
@@ -129,14 +129,14 @@ class UserAccountsController < BaseController
 
   def setup_league_admin_invite
     @user_account = User.new
-    @leagues = League.all.order("name")
+    @leagues = League.all.order(:name)
   end
 
   def send_league_admin_invite
     if self.invite_user(user_params, true)
       redirect_to user_accounts_path, flash: { success: "The league admin was successfully invited." }
     else
-      redirect_to user_accounts_path, flash: { :error => "There was an error inviting the league admin. Please check your information and try again." }
+      redirect_to user_accounts_path, flash: { error: "There was an error inviting the league admin. Please check your information and try again." }
     end
   end
 
@@ -154,9 +154,9 @@ class UserAccountsController < BaseController
     @user_account = User.new
 
     if current_user.is_super_user?
-      @leagues = League.all.order("name")
+      @leagues = League.all.order(:name)
     else
-      @leagues = current_user.leagues.order("name")
+      @leagues = current_user.leagues.order(:name)
     end
   end
 
@@ -164,7 +164,7 @@ class UserAccountsController < BaseController
     if self.invite_user(user_params, false)
       redirect_to user_accounts_path, flash: { success: "The golfer was successfully invited." }
     else
-      redirect_to user_accounts_path, flash: { :error => "There was an error inviting the golfer. Please check your information and try again." }
+      redirect_to user_accounts_path, flash: { error: "There was an error inviting the golfer. Please check your information and try again." }
     end
   end
 
@@ -231,9 +231,9 @@ class UserAccountsController < BaseController
     @us_states = US_STATES
 
     if current_user.is_super_user?
-      @leagues = League.all.order("name")
+      @leagues = League.all.order(:name)
     else
-      @leagues = current_user.leagues_admin.order("name")
+      @leagues = current_user.leagues_admin.order(:name)
     end
   end
 

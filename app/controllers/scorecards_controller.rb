@@ -49,7 +49,7 @@ class ScorecardsController < BaseController
 
     Updaters::ScorecardUpdating.update_scorecards_for_scores(scores_to_update, @scorecard, @scorecards_to_update)
 
-    redirect_to edit_scorecard_path(@scorecard), flash: { :alert => "The scorecard was successfully updated. NOTE: Net scores are calculated in the background and may not be immediately up to date." }
+    redirect_to edit_scorecard_path(@scorecard), flash: { alert: "The scorecard was successfully updated. NOTE: Net scores are calculated in the background and may not be immediately up to date." }
   end
 
   def disqualify
@@ -60,7 +60,7 @@ class ScorecardsController < BaseController
     golf_outing = @tournament_day.golf_outing_for_player(@player)
     golf_outing.disqualify
 
-    redirect_to edit_scorecard_path(@scorecard), flash: { :alert => "The scorecard disqualification was toggled." }
+    redirect_to edit_scorecard_path(@scorecard), flash: { alert: "The scorecard disqualification was toggled." }
   end
 
   def fetch_eager_groups

@@ -8,11 +8,11 @@ class TournamentsController < BaseController
   def index
     if current_user.is_super_user?
       @upcoming_tournaments = Tournament.all_upcoming(nil).page(params[:page]).without_count
-      @past_tournaments = Tournament.all_past(nil).reorder("tournament_starts_at DESC").page(params[:page]).without_count
+      @past_tournaments = Tournament.all_past(nil).reorder(tournament_starts_at: :desc).page(params[:page]).without_count
       @unconfigured_tournaments = Tournament.all_unconfigured(nil).page(params[:page]).without_count
     else
       @upcoming_tournaments = Tournament.all_upcoming(current_user.leagues_admin).page(params[:page]).without_count
-      @past_tournaments = Tournament.all_past(current_user.leagues_admin).reorder("tournament_starts_at DESC").page(params[:page]).without_count
+      @past_tournaments = Tournament.all_past(current_user.leagues_admin).reorder(tournament_starts_at: :desc).page(params[:page]).without_count
       @unconfigured_tournaments = Tournament.all_unconfigured(current_user.leagues_admin).page(params[:page]).without_count
     end
 
@@ -117,7 +117,7 @@ class TournamentsController < BaseController
     end
 
     if groups_error == true
-      redirect_to league_tournaments_path(current_user.selected_league), flash: { :error => "One or more days had no tee-times. Re-scheduling was aborted." }
+      redirect_to league_tournaments_path(current_user.selected_league), flash: { error: "One or more days had no tee-times. Re-scheduling was aborted." }
     else
       @tournament.tournament_days.each do |day|
         AutoscheduleJob.perform_later(day) if day.has_scores? == false
@@ -138,7 +138,7 @@ class TournamentsController < BaseController
 
       @tournament_days = @tournament.tournament_days.includes(payout_results: [:flight, :user, :payout], tournament_day_results: [:user, :primary_scorecard], tournament_groups: [golf_outings: [:user, :scorecard]])
     else
-      redirect_to league_tournament_flights_path(@tournament.league, @tournament), flash: { :error => "This tournament cannot be finalized. Verify all flights and payouts exist and if this is a team tournament that all team-members are correctly registered in all contests. Only tournaments with scores can be finalized." }
+      redirect_to league_tournament_flights_path(@tournament.league, @tournament), flash: { error: "This tournament cannot be finalized. Verify all flights and payouts exist and if this is a team tournament that all team-members are correctly registered in all contests. Only tournaments with scores can be finalized." }
     end
   end
 
@@ -166,7 +166,7 @@ class TournamentsController < BaseController
       
       redirect_to league_tournaments_path(current_user.selected_league), flash: { success: "The tournament was successfully finalized." }
     else
-      redirect_to league_tournaments_path(current_user.selected_league), flash: { :error => "The tournament could not be finalized - it is missing required data." }
+      redirect_to league_tournaments_path(current_user.selected_league), flash: { error: "The tournament could not be finalized - it is missing required data." }
     end
   end
 
@@ -222,7 +222,7 @@ class TournamentsController < BaseController
 
   def initialize_form
     if current_user.is_super_user?
-      @leagues = League.all.order("name")
+      @leagues = League.all.order(:name)
     else
       @leagues = current_user.leagues.select {|league| league.membership_for_user(current_user).is_admin}
     end

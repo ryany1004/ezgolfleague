@@ -64,7 +64,7 @@ class Play::TournamentsController < Play::BaseController
 
   def complete_signup
     if @tournament.includes_player?(current_user)
-      redirect_to play_tournament_signup_path(@tournament), flash: { :error => "You are already registered for this tournament. Remove your existing registration and try again." }
+      redirect_to play_tournament_signup_path(@tournament), flash: { error: "You are already registered for this tournament. Remove your existing registration and try again." }
     else
       tournament_group = @tournament.first_day.tournament_groups.find(params[:group_id])
 

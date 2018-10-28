@@ -51,7 +51,7 @@ module Findable
         relation = relation.where("tournament_starts_at IS NULL")
       end
 
-      relation = relation.order("tournament_starts_at")
+      relation = relation.order(:tournament_starts_at)
 
       relation = relation.references(:tournament_days)
 

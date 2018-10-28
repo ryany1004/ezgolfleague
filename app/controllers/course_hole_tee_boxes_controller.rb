@@ -1,7 +1,7 @@
 class CourseHoleTeeBoxesController < BaseController
   before_action :fetch_course
   before_action :fetch_course_hole
-  before_action :fetch_tee_box, :except => [:new, :create]
+  before_action :fetch_tee_box, except: [:new, :create]
   
   def new
     @course_hole_tee_box = CourseHoleTeeBox.new

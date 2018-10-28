@@ -3,11 +3,11 @@ class LeaguesController < BaseController
 
   def index
     if current_user.is_super_user?
-      @leagues = League.order("name").page params[:page]
+      @leagues = League.order(:name).page params[:page]
 
       @page_title = "All Leagues"
     else
-      @leagues = current_user.leagues_admin.order("name").page params[:page]
+      @leagues = current_user.leagues_admin.order(:name).page params[:page]
 
       @page_title = "My Leagues"
     end
@@ -53,7 +53,7 @@ class LeaguesController < BaseController
   def update_from_ghin
     @league = League.find(params[:league_id])
 
-    users = @league.users.where("ghin_number IS NOT NULL").where("ghin_number != ''").order("ghin_updated_at")
+    users = @league.users.where("ghin_number IS NOT NULL").where("ghin_number != ''").order(:ghin_updated_at)
     GhinUpdateJob.perform_later(users.pluck(:id))
 
     redirect_to leagues_path, flash: { success: "League members will be updated by GHIN." }

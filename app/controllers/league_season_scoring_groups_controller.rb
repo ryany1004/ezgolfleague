@@ -4,7 +4,7 @@ class LeagueSeasonScoringGroupsController < BaseController
   before_action :fetch_available_users, only: [:edit]
 
   def index
-    @scoring_groups = @league_season.league_season_scoring_groups.order("name")
+    @scoring_groups = @league_season.league_season_scoring_groups.order(:name)
 
     @page_title = "Season Scoring Groups"
   end

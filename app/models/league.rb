@@ -1,11 +1,11 @@
 class League < ApplicationRecord
   include Servable
 
-  has_many :league_seasons, ->{ order 'starts_at' }, :dependent => :destroy, inverse_of: :league
-  has_many :league_memberships, ->{includes(:user).order("users.last_name")}, :dependent => :destroy
+  has_many :league_seasons, ->{ order 'starts_at' }, dependent: :destroy, inverse_of: :league
+  has_many :league_memberships, ->{includes(:user).order("users.last_name")}, dependent: :destroy
   has_many :users, ->{ order 'last_name, first_name' }, through: :league_memberships
-  has_many :tournaments, :dependent => :destroy, inverse_of: :league
-  has_many :notification_templates, :dependent => :destroy
+  has_many :tournaments, dependent: :destroy, inverse_of: :league
+  has_many :notification_templates, dependent: :destroy
 
   validates :name, presence: true, uniqueness: true
   validates :location, presence: true
@@ -16,10 +16,10 @@ class League < ApplicationRecord
   after_create :create_default_league_season
   after_create :notify_super_users
 
-  attr_encrypted :stripe_test_secret_key, :key => ENCRYPYTED_ATTRIBUTES_KEY, algorithm: 'aes-256-cbc', mode: :single_iv_and_salt, insecure_mode: true
-  attr_encrypted :stripe_production_secret_key, :key => ENCRYPYTED_ATTRIBUTES_KEY, algorithm: 'aes-256-cbc', mode: :single_iv_and_salt, insecure_mode: true
-  attr_encrypted :stripe_test_publishable_key, :key => ENCRYPYTED_ATTRIBUTES_KEY, algorithm: 'aes-256-cbc', mode: :single_iv_and_salt, insecure_mode: true
-  attr_encrypted :stripe_production_publishable_key, :key => ENCRYPYTED_ATTRIBUTES_KEY, algorithm: 'aes-256-cbc', mode: :single_iv_and_salt, insecure_mode: true
+  attr_encrypted :stripe_test_secret_key, key: ENCRYPYTED_ATTRIBUTES_KEY, algorithm: 'aes-256-cbc', mode: :single_iv_and_salt, insecure_mode: true
+  attr_encrypted :stripe_production_secret_key, key: ENCRYPYTED_ATTRIBUTES_KEY, algorithm: 'aes-256-cbc', mode: :single_iv_and_salt, insecure_mode: true
+  attr_encrypted :stripe_test_publishable_key, key: ENCRYPYTED_ATTRIBUTES_KEY, algorithm: 'aes-256-cbc', mode: :single_iv_and_salt, insecure_mode: true
+  attr_encrypted :stripe_production_publishable_key, key: ENCRYPYTED_ATTRIBUTES_KEY, algorithm: 'aes-256-cbc', mode: :single_iv_and_salt, insecure_mode: true
 
   def stripe_publishable_key
     return nil if Rails.env.development?

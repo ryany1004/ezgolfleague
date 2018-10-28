@@ -2,8 +2,8 @@ class TournamentGroup < ApplicationRecord
   include Servable
 
   belongs_to :tournament_day, inverse_of: :tournament_groups, touch: true
-  has_many :golf_outings, -> { order(:created_at) }, inverse_of: :tournament_group, :dependent => :destroy
-  has_many :golfer_teams, -> { order(:created_at) }, inverse_of: :tournament_group, :dependent => :destroy
+  has_many :golf_outings, -> { order(:created_at) }, inverse_of: :tournament_group, dependent: :destroy
+  has_many :golfer_teams, -> { order(:created_at) }, inverse_of: :tournament_group, dependent: :destroy
 
   paginates_per 50
 

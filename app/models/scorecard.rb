@@ -4,10 +4,10 @@ class Scorecard < ApplicationRecord
   acts_as_paranoid
 
   belongs_to :golf_outing, inverse_of: :scorecard, touch: true
-  has_many :scores, -> { order("sort_order") }, inverse_of: :scorecard, :dependent => :destroy
-  has_many :game_type_metadatum, inverse_of: :scorecard, :dependent => :destroy
-  has_many :tournament_day_results, inverse_of: :primary_scorecard, :dependent => :destroy, :foreign_key => "user_primary_scorecard_id"
-  belongs_to :designated_editor, :class_name => "User", :foreign_key => "designated_editor_id"
+  has_many :scores, -> { order("sort_order") }, inverse_of: :scorecard, dependent: :destroy
+  has_many :game_type_metadatum, inverse_of: :scorecard, dependent: :destroy
+  has_many :tournament_day_results, inverse_of: :primary_scorecard, dependent: :destroy, foreign_key: "user_primary_scorecard_id"
+  belongs_to :designated_editor, class_name: "User", foreign_key: "designated_editor_id"
 
   after_save :set_course_handicap
   before_destroy :clear_primary_scorecard_cache

@@ -1,7 +1,7 @@
 class TournamentGroupsController < BaseController
   before_action :fetch_tournament
   before_action :fetch_tournament_day
-  before_action :fetch_tournament_group, :except => [:index, :new, :create, :batch_create]
+  before_action :fetch_tournament_group, except: [:index, :new, :create, :batch_create]
   before_action :set_stage
 
   def index

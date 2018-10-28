@@ -2,10 +2,10 @@ class CourseHole < ApplicationRecord
   belongs_to :course, inverse_of: :course_holes, touch: true
   has_and_belongs_to_many :tournament_days
 
-  has_many :course_hole_tee_boxes, -> { order("yardage desc") }, :dependent => :destroy, inverse_of: :course_hole
+  has_many :course_hole_tee_boxes, -> { order("yardage desc") }, dependent: :destroy, inverse_of: :course_hole
   accepts_nested_attributes_for :course_hole_tee_boxes
 
-  validates :par, :inclusion => 1..7
+  validates :par, inclusion: 1..7
 
   def name
     "##{self.hole_number} (Par #{self.par})"

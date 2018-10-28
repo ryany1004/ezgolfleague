@@ -1,6 +1,6 @@
 class CourseTeeBoxesController < BaseController
   before_action :fetch_course
-  before_action :fetch_course_tee_box, :except => [:index, :new, :create]
+  before_action :fetch_course_tee_box, except: [:index, :new, :create]
 
   def index
     @course_tee_boxes = @course.course_tee_boxes

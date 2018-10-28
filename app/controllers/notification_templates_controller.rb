@@ -4,14 +4,14 @@ class NotificationTemplatesController < BaseController
 
   def index
     if current_user.is_super_user?
-      @notification_templates = NotificationTemplate.order("deliver_at DESC").page params[:page]
+      @notification_templates = NotificationTemplate.order(deliver_at: :desc).page params[:page]
 
       @page_title = "All Notifications"
     else
       leagues = current_user.leagues_admin
       league_ids = leagues.map {|n| n.id}
 
-      @notification_templates = NotificationTemplate.where("league_id IN (?)", league_ids).order("deliver_at DESC").page params[:page]
+      @notification_templates = NotificationTemplate.where("league_id IN (?)", league_ids).order(deliver_at: :desc).page params[:page]
 
       @page_title = "League Notifications"
     end
@@ -78,7 +78,7 @@ class NotificationTemplatesController < BaseController
 
   def fetch_other_details
     if current_user.is_super_user?
-      @leagues = League.all.order("name")
+      @leagues = League.all.order(:name)
     else
       @leagues = current_user.leagues
     end
