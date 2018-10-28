@@ -1,6 +1,6 @@
 class CourseHolesController < BaseController
-  before_action :fetch_course, :only => [:index, :new, :edit, :create, :update, :destroy]
-  before_action :fetch_course_hole, :only => [:edit, :update, :destroy]
+  before_action :fetch_course, only: [:index, :new, :edit, :create, :update, :destroy]
+  before_action :fetch_course_hole, only: [:edit, :update, :destroy]
   
   respond_to :html
   

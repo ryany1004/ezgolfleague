@@ -1,8 +1,8 @@
 class PayoutsController < BaseController
   before_action :fetch_tournament
-  before_action :fetch_payout, :only => [:edit, :update, :destroy]
+  before_action :fetch_payout, only: [:edit, :update, :destroy]
   before_action :fetch_tournament_day
-  before_action :fetch_payouts, :only => [:index]
+  before_action :fetch_payouts, only: [:index]
   before_action :set_stage
 
   def index

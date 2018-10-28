@@ -1,7 +1,7 @@
 class PaymentsController < BaseController
   before_action :fetch_collections, :except => [:index]
-  before_action :fetch_payment, :only => [:edit, :update, :destroy]
-  before_action :payment_options, :only => [:new, :edit]
+  before_action :fetch_payment, only: [:edit, :update, :destroy]
+  before_action :payment_options, only: [:new, :edit]
   
   def index
     if current_user.is_super_user?

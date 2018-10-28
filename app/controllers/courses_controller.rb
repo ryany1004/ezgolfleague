@@ -1,6 +1,6 @@
 class CoursesController < BaseController
-  before_action :fetch_course, :only => [:edit, :update, :destroy]
-  before_action :initialize_form, :only => [:new, :edit]
+  before_action :fetch_course, only: [:edit, :update, :destroy]
+  before_action :initialize_form, only: [:new, :edit]
 
   def index
     @page_title = "Courses"

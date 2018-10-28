@@ -1,5 +1,5 @@
 class NotificationTemplatesController < BaseController
-  before_action :fetch_notification_template, :only => [:edit, :update, :destroy]
+  before_action :fetch_notification_template, only: [:edit, :update, :destroy]
   before_action :fetch_other_details
 
   def index

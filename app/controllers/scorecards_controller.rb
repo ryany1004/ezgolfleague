@@ -1,7 +1,7 @@
 class ScorecardsController < BaseController
-  before_action :fetch_all_params, :only => [:edit]
-  before_action :fetch_scorecard, :only => [:show, :update]
-  before_action :repair_scorecard, :only => [:show, :edit]
+  before_action :fetch_all_params, only: [:edit]
+  before_action :fetch_scorecard, only: [:show, :update]
+  before_action :repair_scorecard, only: [:show, :edit]
 
   def index
     @tournament = Tournament.find(params[:tournament_id])

@@ -1,8 +1,8 @@
 class TournamentsController < BaseController
   helper Play::TournamentsHelper
 
-  before_action :fetch_tournament, :only => [:edit, :update, :destroy, :signups, :manage_holes, :update_holes, :add_signup, :move_signup, :delete_signup, :finalize, :run_finalization, :display_finalization, :debug, :confirm_finalization, :update_course_handicaps, :touch_tournament, :rescore_players, :update_auto_schedule, :auto_schedule, :confirmed_players, :disqualify_signup]
-  before_action :initialize_form, :only => [:new, :edit]
+  before_action :fetch_tournament, only: [:edit, :update, :destroy, :signups, :manage_holes, :update_holes, :add_signup, :move_signup, :delete_signup, :finalize, :run_finalization, :display_finalization, :debug, :confirm_finalization, :update_course_handicaps, :touch_tournament, :rescore_players, :update_auto_schedule, :auto_schedule, :confirmed_players, :disqualify_signup]
+  before_action :initialize_form, only: [:new, :edit]
   before_action :set_stage
 
   def index

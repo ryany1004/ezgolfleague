@@ -1,9 +1,9 @@
 class ContestsController < BaseController
   before_action :fetch_tournament
   before_action :fetch_tournament_day
-  before_action :fetch_contests, :only => [:index]
-  before_action :fetch_contest, :only => [:edit, :update, :destroy]
-  before_action :setup_form, :only => [:new, :edit]
+  before_action :fetch_contests, only: [:index]
+  before_action :fetch_contest, only: [:edit, :update, :destroy]
+  before_action :setup_form, only: [:new, :edit]
   before_action :set_stage
 
   def index

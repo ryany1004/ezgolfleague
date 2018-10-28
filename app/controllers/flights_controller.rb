@@ -1,8 +1,8 @@
 class FlightsController < BaseController
   before_action :fetch_tournament
   before_action :fetch_tournament_day
-  before_action :fetch_flights, :only => [:index, :edit, :update]
-  before_action :fetch_flight, :only => [:edit, :update, :destroy]
+  before_action :fetch_flights, only: [:index, :edit, :update]
+  before_action :fetch_flight, only: [:edit, :update, :destroy]
   before_action :set_stage
 
   def index
