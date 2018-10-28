@@ -49,7 +49,7 @@ class Play::TournamentsController < Play::BaseController
       end
     end
 
-    redirect_to play_dashboard_index_path, :flash => { :success => "You are confirmed for the tournament." }
+    redirect_to play_dashboard_index_path, flash: { success: "You are confirmed for the tournament." }
   end
 
   ##
@@ -64,7 +64,7 @@ class Play::TournamentsController < Play::BaseController
 
   def complete_signup
     if @tournament.includes_player?(current_user)
-      redirect_to play_tournament_signup_path(@tournament), :flash => { :error => "You are already registered for this tournament. Remove your existing registration and try again." }
+      redirect_to play_tournament_signup_path(@tournament), flash: { :error => "You are already registered for this tournament. Remove your existing registration and try again." }
     else
       tournament_group = @tournament.first_day.tournament_groups.find(params[:group_id])
 
@@ -98,7 +98,7 @@ class Play::TournamentsController < Play::BaseController
       else
         TournamentMailer.tournament_player_paying_later(current_user, @tournament).deliver_later
 
-        redirect_to play_dashboard_index_path, :flash => { :success => "You are registered for the tournament." }
+        redirect_to play_dashboard_index_path, flash: { success: "You are registered for the tournament." }
       end
     end
   end
@@ -114,7 +114,7 @@ class Play::TournamentsController < Play::BaseController
 
     TournamentMailer.tournament_player_cancelled(current_user, @tournament).deliver_later
 
-    redirect_to play_dashboard_index_path, :flash => { :success => "Your registration has been canceled." }
+    redirect_to play_dashboard_index_path, flash: { success: "Your registration has been canceled." }
   end
 
   def fetch_flights_with_rankings(tournament_day)

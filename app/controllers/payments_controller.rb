@@ -32,7 +32,7 @@ class PaymentsController < BaseController
         Payment.create(payment_amount: (@payment.payment_amount * -1.0), user: @payment.user, payment_type: "#{@payment.user.complete_name} League Dues", league_season: @payment.league_season)
       end
       
-      redirect_to payments_path, :flash => { :success => "The payment was successfully created." }
+      redirect_to payments_path, flash: { success: "The payment was successfully created." }
     else
       render :new
     end
@@ -47,7 +47,7 @@ class PaymentsController < BaseController
   
   def update
     if @payment.update(payment_params)
-      redirect_to payments_path, :flash => { :success => "The payment was successfully updated." }
+      redirect_to payments_path, flash: { success: "The payment was successfully updated." }
     else      
       render :edit
     end
@@ -56,7 +56,7 @@ class PaymentsController < BaseController
   def destroy
     @payment.destroy
     
-    redirect_to payments_path, :flash => { :success => "The payment was successfully deleted." }
+    redirect_to payments_path, flash: { success: "The payment was successfully deleted." }
   end
   
   def show

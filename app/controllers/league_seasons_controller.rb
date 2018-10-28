@@ -27,7 +27,7 @@ class LeagueSeasonsController < BaseController
     @league_season = LeagueSeason.new(season_params)
 
     if @league_season.save
-      redirect_to league_league_seasons_path(@league), :flash => { :success => "The season was successfully created." }
+      redirect_to league_league_seasons_path(@league), flash: { success: "The season was successfully created." }
     else
       render :new
     end
@@ -38,7 +38,7 @@ class LeagueSeasonsController < BaseController
 
   def update
     if @league_season.update(season_params)
-      redirect_to league_league_seasons_path(@league), :flash => { :success => "The season was successfully updated." }
+      redirect_to league_league_seasons_path(@league), flash: { success: "The season was successfully updated." }
     else
       render :edit
     end
@@ -47,7 +47,7 @@ class LeagueSeasonsController < BaseController
   def destroy
     @league_season.destroy
 
-    redirect_to league_league_seasons_path(@league), :flash => { :success => "The season was successfully deleted." }
+    redirect_to league_league_seasons_path(@league), flash: { success: "The season was successfully deleted." }
   end
 
   private

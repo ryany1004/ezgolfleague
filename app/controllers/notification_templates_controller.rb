@@ -32,7 +32,7 @@ class NotificationTemplatesController < BaseController
     if @notification_template.save
       SendNotificationsJob.perform_later
 
-      redirect_to notification_templates_path, :flash => { :success => "The notification was successfully created." }
+      redirect_to notification_templates_path, flash: { success: "The notification was successfully created." }
     else
       render :new
     end
@@ -45,7 +45,7 @@ class NotificationTemplatesController < BaseController
     if @notification_template.update(notification_template_params)
       SendNotificationsJob.perform_later
 
-      redirect_to notification_templates_path, :flash => { :success => "The notification was successfully updated." }
+      redirect_to notification_templates_path, flash: { success: "The notification was successfully updated." }
     else
       render :edit
     end
@@ -62,7 +62,7 @@ class NotificationTemplatesController < BaseController
   def destroy
     @notification_template.destroy
 
-    redirect_to notification_templates_path, :flash => { :success => "The notification was successfully deleted." }
+    redirect_to notification_templates_path, flash: { success: "The notification was successfully deleted." }
   end
 
   private

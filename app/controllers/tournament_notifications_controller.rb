@@ -21,9 +21,9 @@ class TournamentNotificationsController < BaseController
       SendNotificationsJob.perform_later
 
       if params[:commit] == "Save & Complete Tournament Setup"
-        redirect_to league_tournaments_path(current_user.selected_league), :flash => { :success => "The notification was successfully created." }
+        redirect_to league_tournaments_path(current_user.selected_league), flash: { success: "The notification was successfully created." }
       else
-        redirect_to league_tournament_tournament_notifications_path, :flash => { :success => "The notification was successfully created." }
+        redirect_to league_tournament_tournament_notifications_path, flash: { success: "The notification was successfully created." }
       end
     else
       render :new
@@ -37,7 +37,7 @@ class TournamentNotificationsController < BaseController
     if @notification_template.update(notification_template_params)
       SendNotificationsJob.perform_later
 
-      redirect_to league_tournament_tournament_notifications_path, :flash => { :success => "The notification was successfully updated." }
+      redirect_to league_tournament_tournament_notifications_path, flash: { success: "The notification was successfully updated." }
     else
       render :edit
     end
@@ -46,7 +46,7 @@ class TournamentNotificationsController < BaseController
   def destroy
     @notification_template.destroy
 
-    redirect_to league_tournament_tournament_notifications_path, :flash => { :success => "The notification was successfully deleted." }
+    redirect_to league_tournament_tournament_notifications_path, flash: { success: "The notification was successfully deleted." }
   end
 
   private

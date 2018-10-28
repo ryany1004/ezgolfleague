@@ -48,12 +48,12 @@ class SubscriptionCreditsController < BaseController
 
         SubscriptionCredit.create(league_season: @league.active_season, amount: payment_amount, golfer_count: updated_golfers, transaction_id: charge.id)
 
-        redirect_to current_league_subscription_credits_path(@league, details_amount: payment_amount, details_golfers: updated_golfers, details_id: charge.id), :flash => { :success => "Your payment was recorded. Thanks!" }
+        redirect_to current_league_subscription_credits_path(@league, details_amount: payment_amount, details_golfers: updated_golfers, details_id: charge.id), flash: { success: "Your payment was recorded. Thanks!" }
       else
-        redirect_to current_league_subscription_credits_path(@league), :flash => { :error => "There was an error processing your payment." }
+        redirect_to current_league_subscription_credits_path(@league), flash: { :error => "There was an error processing your payment." }
       end
     else
-      redirect_to current_league_subscription_credits_path(@league), :flash => { :success => "The memberships were successfully updated." }
+      redirect_to current_league_subscription_credits_path(@league), flash: { success: "The memberships were successfully updated." }
     end
   end
 
@@ -61,14 +61,14 @@ class SubscriptionCreditsController < BaseController
     token = params[:stripeToken]
 
     if token.blank?
-      redirect_to current_league_subscription_credits_path(@league), :flash => { :error => "There was a problem updating your credit card. Please check your details and try again." }
+      redirect_to current_league_subscription_credits_path(@league), flash: { :error => "There was a problem updating your credit card. Please check your details and try again." }
     else
       updated_successfully = create_or_update_stripe_customer(@league, token)
 
       if updated_successfully
         redirect_to current_league_subscription_credits_path(@league)
       else
-        redirect_to current_league_subscription_credits_path(@league), :flash => { :error => "We were unable to update your details with the credit system. Please check your details and try again." }
+        redirect_to current_league_subscription_credits_path(@league), flash: { :error => "We were unable to update your details with the credit system. Please check your details and try again." }
       end
     end
   end
@@ -79,16 +79,16 @@ class SubscriptionCreditsController < BaseController
     payment_amount = calc_payment_amount(number_of_golfers)
 
     if number_of_golfers == 0
-      redirect_to current_league_subscription_credits_path(@league), :flash => { :error => "We were unable to find your customer information. Please contact customer support." }
+      redirect_to current_league_subscription_credits_path(@league), flash: { :error => "We were unable to find your customer information. Please contact customer support." }
     else
       charge = charge_customer(@league, payment_amount, "Charge for tournament credits for #{current_user.email} for league #{@league.name}.")
 
       unless charge.blank?
         SubscriptionCredit.create(league_season: @league.active_season, amount: payment_amount, golfer_count: number_of_golfers, transaction_id: charge.id)
 
-        redirect_to current_league_subscription_credits_path(@league, details_amount: payment_amount, details_golfers: number_of_golfers, details_id: charge.id), :flash => { :success => "Your payment was recorded. Thanks!" }
+        redirect_to current_league_subscription_credits_path(@league, details_amount: payment_amount, details_golfers: number_of_golfers, details_id: charge.id), flash: { success: "Your payment was recorded. Thanks!" }
       else
-        redirect_to current_league_subscription_credits_path(@league), :flash => { :error => "There was an error processing your payment. Please verify you have a valid credit card on file. You can change your card below." }
+        redirect_to current_league_subscription_credits_path(@league), flash: { :error => "There was an error processing your payment. Please verify you have a valid credit card on file. You can change your card below." }
       end
     end
   end

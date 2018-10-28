@@ -3,7 +3,7 @@ class Play::DashboardController < Play::BaseController
 
   def index
     if current_user.selected_league.blank? && current_user.impersonatable_users.blank?
-      redirect_to leagues_play_registrations_path, :flash => { :success => "Please create or join a league to continue." }
+      redirect_to leagues_play_registrations_path, flash: { success: "Please create or join a league to continue." }
     elsif current_user.selected_league.blank? && !current_user.impersonatable_users.blank?
       render 'select_user'
     else

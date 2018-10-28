@@ -26,7 +26,7 @@ class LeagueMembershipsController < BaseController
     @league_membership.league = @league
 
     if @league_membership.save
-      redirect_to league_league_memberships_path(@league), :flash => { :success => "The membership was successfully created." }
+      redirect_to league_league_memberships_path(@league), flash: { success: "The membership was successfully created." }
     else
       render :new
     end
@@ -43,7 +43,7 @@ class LeagueMembershipsController < BaseController
         GhinUpdateJob.perform_later([@league_membership.user.id])
       end
 
-      redirect_to league_league_memberships_path(@league), :flash => { :success => "The membership was successfully updated." }
+      redirect_to league_league_memberships_path(@league), flash: { success: "The membership was successfully updated." }
     else
       render :edit
     end
@@ -52,7 +52,7 @@ class LeagueMembershipsController < BaseController
   def destroy
     @league_membership.destroy
 
-    redirect_to league_league_memberships_path(@league), :flash => { :success => "The membership was successfully deleted." }
+    redirect_to league_league_memberships_path(@league), flash: { success: "The membership was successfully deleted." }
   end
 
   private

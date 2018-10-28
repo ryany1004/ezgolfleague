@@ -43,7 +43,7 @@ class TournamentsController < BaseController
         league.save
       end
 
-      redirect_to league_tournament_tournament_days_path(@tournament.league, @tournament), :flash => { :success => "The tournament was successfully created. Please update course information." }
+      redirect_to league_tournament_tournament_days_path(@tournament.league, @tournament), flash: { success: "The tournament was successfully created. Please update course information." }
     else
       initialize_form
 
@@ -62,7 +62,7 @@ class TournamentsController < BaseController
 
   def update
     if @tournament.update(tournament_params)
-      redirect_to league_tournaments_path(current_user.selected_league), :flash => { :success => "The tournament was successfully updated." }
+      redirect_to league_tournaments_path(current_user.selected_league), flash: { success: "The tournament was successfully updated." }
     else
       initialize_form
 
@@ -73,7 +73,7 @@ class TournamentsController < BaseController
   def destroy
     @tournament.destroy
 
-    redirect_to league_tournaments_path(current_user.selected_league), :flash => { :success => "The tournament was successfully deleted." }
+    redirect_to league_tournaments_path(current_user.selected_league), flash: { success: "The tournament was successfully deleted." }
   end
 
   ## team stuff
@@ -96,7 +96,7 @@ class TournamentsController < BaseController
         day.update_scores_for_course_holes
       end
 
-      redirect_to edit_league_tournament_game_types_path(current_user.selected_league, @tournament), :flash => { :success => "The tournament holes were successfully updated. Please select a game type." }
+      redirect_to edit_league_tournament_game_types_path(current_user.selected_league, @tournament), flash: { success: "The tournament holes were successfully updated. Please select a game type." }
     else
       render :manage_holes
     end
@@ -106,7 +106,7 @@ class TournamentsController < BaseController
 
   def update_auto_schedule
     if @tournament.update(tournament_params)
-      redirect_to league_tournament_day_players_path(@tournament.league, @tournament, @tournament.tournament_days.first), :flash => { :success => "The scoring mechanism was updated." }
+      redirect_to league_tournament_day_players_path(@tournament.league, @tournament, @tournament.tournament_days.first), flash: { success: "The scoring mechanism was updated." }
     end
   end
 
@@ -117,12 +117,12 @@ class TournamentsController < BaseController
     end
 
     if groups_error == true
-      redirect_to league_tournaments_path(current_user.selected_league), :flash => { :error => "One or more days had no tee-times. Re-scheduling was aborted." }
+      redirect_to league_tournaments_path(current_user.selected_league), flash: { :error => "One or more days had no tee-times. Re-scheduling was aborted." }
     else
       @tournament.tournament_days.each do |day|
         AutoscheduleJob.perform_later(day) if day.has_scores? == false
       end
-      redirect_to league_tournaments_path(current_user.selected_league), :flash => { :success => "Days without scores were submitted to be auto-scheduled. This usually takes a few minutes, depending on the size of the tournament." }
+      redirect_to league_tournaments_path(current_user.selected_league), flash: { success: "Days without scores were submitted to be auto-scheduled. This usually takes a few minutes, depending on the size of the tournament." }
     end
   end
 
@@ -138,7 +138,7 @@ class TournamentsController < BaseController
 
       @tournament_days = @tournament.tournament_days.includes(payout_results: [:flight, :user, :payout], tournament_day_results: [:user, :primary_scorecard], tournament_groups: [golf_outings: [:user, :scorecard]])
     else
-      redirect_to league_tournament_flights_path(@tournament.league, @tournament), :flash => { :error => "This tournament cannot be finalized. Verify all flights and payouts exist and if this is a team tournament that all team-members are correctly registered in all contests. Only tournaments with scores can be finalized." }
+      redirect_to league_tournament_flights_path(@tournament.league, @tournament), flash: { :error => "This tournament cannot be finalized. Verify all flights and payouts exist and if this is a team tournament that all team-members are correctly registered in all contests. Only tournaments with scores can be finalized." }
     end
   end
 
@@ -164,9 +164,9 @@ class TournamentsController < BaseController
         day.touch
       end
       
-      redirect_to league_tournaments_path(current_user.selected_league), :flash => { :success => "The tournament was successfully finalized." }
+      redirect_to league_tournaments_path(current_user.selected_league), flash: { success: "The tournament was successfully finalized." }
     else
-      redirect_to league_tournaments_path(current_user.selected_league), :flash => { :error => "The tournament could not be finalized - it is missing required data." }
+      redirect_to league_tournaments_path(current_user.selected_league), flash: { :error => "The tournament could not be finalized - it is missing required data." }
     end
   end
 
@@ -185,13 +185,13 @@ class TournamentsController < BaseController
       end
     end
 
-    redirect_to league_tournaments_path(current_user.selected_league), :flash => { :success => "Cached data for this tournament was discarded." }
+    redirect_to league_tournaments_path(current_user.selected_league), flash: { success: "Cached data for this tournament was discarded." }
   end
 
   def update_course_handicaps
     @tournament.update_course_handicaps
 
-    redirect_to league_tournaments_path(current_user.selected_league), :flash => { :success => "The tournament's course handicaps were re-calculated." }
+    redirect_to league_tournaments_path(current_user.selected_league), flash: { success: "The tournament's course handicaps were re-calculated." }
   end
 
   def rescore_players
@@ -199,7 +199,7 @@ class TournamentsController < BaseController
       d.score_users
     end
 
-    redirect_to league_tournaments_path(current_user.selected_league), :flash => { :success => "The tournament's scores have been re-calculated." }
+    redirect_to league_tournaments_path(current_user.selected_league), flash: { success: "The tournament's scores have been re-calculated." }
   end
 
   private

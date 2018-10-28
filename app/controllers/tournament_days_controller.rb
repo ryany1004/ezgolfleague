@@ -27,9 +27,9 @@ class TournamentDaysController < BaseController
       self.update_tournament_date
 
       if params[:commit] == "Save & Continue"
-        redirect_to league_tournament_manage_holes_path(@tournament.league, @tournament), :flash => { :success => "The day was successfully created." }
+        redirect_to league_tournament_manage_holes_path(@tournament.league, @tournament), flash: { success: "The day was successfully created." }
       else
-        redirect_to new_league_tournament_tournament_day_path(@tournament.league, @tournament), :flash => { :success => "The day was successfully created." }
+        redirect_to new_league_tournament_tournament_day_path(@tournament.league, @tournament), flash: { success: "The day was successfully created." }
       end
     else
       initialize_form
@@ -45,7 +45,7 @@ class TournamentDaysController < BaseController
     if @tournament_day.update(tournament_day_params)
       self.update_tournament_date
 
-      redirect_to league_tournament_tournament_days_path(@tournament.league, @tournament), :flash => { :success => "The day was successfully updated." }
+      redirect_to league_tournament_tournament_days_path(@tournament.league, @tournament), flash: { success: "The day was successfully updated." }
     else
       initialize_form
 
@@ -56,7 +56,7 @@ class TournamentDaysController < BaseController
   def destroy
     @tournament_day.destroy
 
-    redirect_to league_tournament_tournament_days_path(@tournament.league, @tournament), :flash => { :success => "The day was successfully deleted." }
+    redirect_to league_tournament_tournament_days_path(@tournament.league, @tournament), flash: { success: "The day was successfully deleted." }
   end
 
   def update_tournament_date

@@ -9,7 +9,7 @@ class Play::UserAccountController < Play::BaseController
 
     def update
       if @user_account.update(user_params)
-        redirect_to play_dashboard_index_path, :flash => { :success => "Your profile was successfully updated." }
+        redirect_to play_dashboard_index_path, flash: { success: "Your profile was successfully updated." }
       else
         initialize_form
 
@@ -24,7 +24,7 @@ class Play::UserAccountController < Play::BaseController
       if @user_account.update(user_params)
         sign_in(@user_account, :bypass => true)
 
-        redirect_to play_dashboard_index_path, :flash => { :success => "Your password was successfully updated." }
+        redirect_to play_dashboard_index_path, flash: { success: "Your password was successfully updated." }
       else
         render :password
       end

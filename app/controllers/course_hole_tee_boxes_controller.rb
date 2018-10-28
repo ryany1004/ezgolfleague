@@ -12,7 +12,7 @@ class CourseHoleTeeBoxesController < BaseController
     @course_hole_tee_box.course_hole = @course_hole
     
     if @course_hole_tee_box.save      
-      redirect_to course_course_holes_path(@course), :flash => { :success => "The tee box was successfully created." }
+      redirect_to course_course_holes_path(@course), flash: { success: "The tee box was successfully created." }
     else            
       render :new
     end
@@ -21,7 +21,7 @@ class CourseHoleTeeBoxesController < BaseController
   def destroy
     @course_hole_tee_box.destroy
     
-    redirect_to course_course_holes_path(@course), :flash => { :success => "The tee box was successfully deleted." }
+    redirect_to course_course_holes_path(@course), flash: { success: "The tee box was successfully deleted." }
   end
   
   private

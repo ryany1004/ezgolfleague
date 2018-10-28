@@ -22,7 +22,7 @@ class Play::RegistrationsController < Play::BaseController
 
       sign_in(@user_account, scope: :user)
 
-      redirect_to leagues_play_registrations_path, :flash => { :success => "Your account was created." }
+      redirect_to leagues_play_registrations_path, flash: { success: "Your account was created." }
     else
       render :new
     end
@@ -85,7 +85,7 @@ class Play::RegistrationsController < Play::BaseController
 
       flash_message = "Please note - we are currently developing our team play features. More robust team play will be available in a future update." if @league.league_type == "Team Play"
 
-      redirect_to add_golfers_play_registrations_path(league: @league), :flash => { :success => flash_message }
+      redirect_to add_golfers_play_registrations_path(league: @league), flash: { success: flash_message }
     else
       render :new_league
     end

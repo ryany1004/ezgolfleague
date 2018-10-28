@@ -29,7 +29,7 @@ class UserAccountsController < BaseController
     if @user_account.should_invite == "1"
       User.invite!(user_params, current_user)
 
-      redirect_to user_accounts_path, :flash => { :success => "The user was successfully invited." }
+      redirect_to user_accounts_path, flash: { success: "The user was successfully invited." }
     else
       if !current_user.is_super_user?
         @user_account.leagues << current_user.leagues_admin.first unless current_user.leagues_admin.blank? #add the user to at least one league
@@ -38,7 +38,7 @@ class UserAccountsController < BaseController
       if @user_account.save
         GhinUpdateJob.perform_later([@user_account]) unless @user_account.ghin_number.blank?
 
-        redirect_to user_accounts_path, :flash => { :success => "The user was successfully created." }
+        redirect_to user_accounts_path, flash: { success: "The user was successfully created." }
       else
         initialize_form
 
@@ -69,7 +69,7 @@ class UserAccountsController < BaseController
       if @user_account == current_user
         redirect_to root_path
       else
-        redirect_to user_accounts_path, :flash => { :success => "The user was successfully updated." }
+        redirect_to user_accounts_path, flash: { success: "The user was successfully updated." }
       end
     else
       initialize_form
@@ -92,7 +92,7 @@ class UserAccountsController < BaseController
 
     @user_account.destroy
 
-    redirect_to user_accounts_path, :flash => { :success => "The user was successfully deleted." }
+    redirect_to user_accounts_path, flash: { success: "The user was successfully deleted." }
   end
 
   def export_users
@@ -134,9 +134,9 @@ class UserAccountsController < BaseController
 
   def send_league_admin_invite
     if self.invite_user(user_params, true)
-      redirect_to user_accounts_path, :flash => { :success => "The league admin was successfully invited." }
+      redirect_to user_accounts_path, flash: { success: "The league admin was successfully invited." }
     else
-      redirect_to user_accounts_path, :flash => { :error => "There was an error inviting the league admin. Please check your information and try again." }
+      redirect_to user_accounts_path, flash: { :error => "There was an error inviting the league admin. Please check your information and try again." }
     end
   end
 
@@ -147,7 +147,7 @@ class UserAccountsController < BaseController
 
     user.invite!(current_user)
 
-    redirect_to user_accounts_path, :flash => { :success => "The golfer was successfully re-invited." }
+    redirect_to user_accounts_path, flash: { success: "The golfer was successfully re-invited." }
   end
 
   def setup_golfer_invite
@@ -162,9 +162,9 @@ class UserAccountsController < BaseController
 
   def send_golfer_invite
     if self.invite_user(user_params, false)
-      redirect_to user_accounts_path, :flash => { :success => "The golfer was successfully invited." }
+      redirect_to user_accounts_path, flash: { success: "The golfer was successfully invited." }
     else
-      redirect_to user_accounts_path, :flash => { :error => "There was an error inviting the golfer. Please check your information and try again." }
+      redirect_to user_accounts_path, flash: { :error => "There was an error inviting the golfer. Please check your information and try again." }
     end
   end
 

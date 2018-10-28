@@ -32,7 +32,7 @@ class GameTypesController < BaseController
       
       @tournament_day.tournament_day_results.destroy_all #removed cached results as gametype influences scores
 
-      redirect_to league_tournament_tournament_groups_path(current_user.selected_league, @tournament, tournament_day: @tournament_day), :flash => { :success => "The tournament was successfully updated." }
+      redirect_to league_tournament_tournament_groups_path(current_user.selected_league, @tournament, tournament_day: @tournament_day), flash: { success: "The tournament was successfully updated." }
     else
       render :edit
     end
