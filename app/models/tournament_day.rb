@@ -67,7 +67,7 @@ class TournamentDay < ApplicationRecord
 
     new_game_type.tournament_day = self
 
-    return new_game_type
+    new_game_type
   end
 
   def is_first_day?
@@ -86,7 +86,7 @@ class TournamentDay < ApplicationRecord
     day_string = "Day #{day_index + 1}"
     day_string = day_string + " " if add_space == true
 
-    return day_string
+    day_string
   end
 
   def create_default_flight
@@ -119,19 +119,20 @@ class TournamentDay < ApplicationRecord
     TournamentGroup.includes(golf_outings: [:user, course_tee_box: :course_hole_tee_boxes, scorecard: [{scores: :course_hole}]]).where(tournament_day: self)
   end
 
+  #TODO move elsewhere
   def tournament_day_results_cache_key(prefix)
     max_updated_at = self.tournament_day_results.maximum(:updated_at).try(:utc).try(:to_s, :number)
     cache_key = "tournament_days/#{prefix}-#{self.id}-#{max_updated_at}"
 
-    return cache_key
+    cache_key
   end
 
   def groups_api_cache_key
-    return "groups-json#{self.id}-#{self.updated_at.to_i}"
+    "groups-json#{self.id}-#{self.updated_at.to_i}"
   end
 
   def scorecard_print_cache_key
-    return "print-scorecards#{self.id}-#{self.updated_at.to_i}"
+    "print-scorecards#{self.id}-#{self.updated_at.to_i}"
   end
 
   def scorecard_display_partial
@@ -155,13 +156,14 @@ class TournamentDay < ApplicationRecord
       return true if flight.payouts.count > 0
     end
 
-    return false
+    false
   end
 
   def paid_contests
     self.contests.where("dues_amount > 0")
   end
 
+  #TODO: move, API support
   def registered_user_ids
     cache_key = "registereduserids-json#{self.id}-#{self.updated_at.to_i}"
     user_ids = []
@@ -199,7 +201,7 @@ class TournamentDay < ApplicationRecord
       user_ids << player.id.to_s if player.is_super_user
     end
 
-    return user_ids
+    user_ids
   end
 
   def league_admin_user_ids
@@ -209,7 +211,7 @@ class TournamentDay < ApplicationRecord
       user_ids << user.id.to_s
     end
 
-    return user_ids
+    user_ids
   end
 
   #date parsing

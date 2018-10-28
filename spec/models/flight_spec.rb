@@ -3,40 +3,27 @@ require 'rails_helper'
 #ActiveRecord::Base.logger = Logger.new(STDOUT) if defined?(ActiveRecord::Base)
 
 describe "Testing Flight" do
-  let(:user) { FactoryBot.create(:user) }
-  let(:league) { FactoryBot.create(:league) }
-  let(:league_membership) { FactoryBot.create(:league_membership, league: league, user: user) }
-  let(:course) { FactoryBot.create(:course_with_holes) }
-  let(:tournament) { FactoryBot.create(:tournament, league: league) }
-  let(:tournament_day) { FactoryBot.create(:tournament_day, tournament: tournament, course: course) }
-  let(:tournament_group) { FactoryBot.create(:tournament_group, tournament_day: tournament_day) }
+  let(:user) { create(:user) }
+  let(:league) { create(:league) }
+  let(:tournament) { create(:tournament, league: league) }
+  let(:tournament_day) { create(:tournament_day, tournament: tournament) }
+  let(:tournament_group) { create(:tournament_group, tournament_day: tournament_day) }
+  let(:generic_flight) { create(:flight, tournament_day: tournament_day) }
 
-  it "player is flighted correctly" do
-    add_to_group_and_create_scores(tournament_day, user, tournament_group)
+  it "#display_name" do
+    league_season_scoring_group = create(:league_season_scoring_group, name: "Super")
+    flight_with_scoring_group = create(:flight, tournament_day: tournament_day, league_season_scoring_group: league_season_scoring_group)
 
-    flight = tournament_day.flights.first
-
-    expect(flight.users).to include(user)
+    expect(generic_flight.display_name).to eq("1")
+    expect(generic_flight.display_name(true)).to eq("Flight 1")
+    expect(flight_with_scoring_group.display_name).to eq("Super")
   end
 
-  it "team is flighted correctly" do
-    team_tournament_day = FactoryBot.create(:tournament_day, tournament: tournament, course: course, game_type_id: 10)
-    team_tournament_group = FactoryBot.create(:tournament_group, tournament_day: team_tournament_day)
+  it "can flight a player" do
+    tournament_day.add_player_to_group(tournament_group, user)
+    flight = tournament_day.flights.first
 
-    good_golfer = FactoryBot.create(:user, email: "test@test.com", handicap_index: 2)
-    bad_golfer = FactoryBot.create(:user, email: "test2@test.com", handicap_index: 20)
-
-    team_tournament_day.flights.destroy_all
-
-    first_flight = FactoryBot.create(:flight, tournament_day: team_tournament_day, course_tee_box: course.course_tee_boxes.first, flight_number: 1, lower_bound: 0, upper_bound: 10)
-    second_flight = FactoryBot.create(:flight, tournament_day: team_tournament_day, course_tee_box: course.course_tee_boxes.first, flight_number: 2, lower_bound: 11, upper_bound: 100)
-
-    team = FactoryBot.create(:golfer_team, tournament_day: team_tournament_day, tournament_group: team_tournament_group, users: [good_golfer, bad_golfer])
-
-    add_to_group_and_create_scores(team_tournament_day, good_golfer, team_tournament_group)
-    add_to_group_and_create_scores(team_tournament_day, bad_golfer, team_tournament_group)
-
-    expect(second_flight.users).to include(good_golfer)
-    expect(second_flight.users).to include(bad_golfer)
+    expect(tournament_group.players_signed_up).to include(user)
+    expect(flight.users).to include(user)
   end
 end

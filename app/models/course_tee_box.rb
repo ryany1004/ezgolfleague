@@ -7,5 +7,4 @@ class CourseTeeBox < ApplicationRecord
   validates :name, presence: true
   validates :rating, presence: true
   validates :slope, presence: true
-
 end

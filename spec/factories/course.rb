@@ -57,6 +57,10 @@ FactoryBot.define do
   end
 
   factory :course_hole
+  
   factory :course_hole_tee_box
-  factory :course_tee_box
+
+  factory :course_tee_box do
+    name { "Men" }
+  end
 end

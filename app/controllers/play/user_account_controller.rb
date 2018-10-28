@@ -1,8 +1,8 @@
 class Play::UserAccountController < Play::BaseController
     layout "golfer"
 
-    before_action :fetch_user, :only => [:edit, :update, :password, :change_password]
-    before_action :initialize_form, :only => [:edit]
+    before_action :fetch_user, only: [:edit, :update, :password, :change_password]
+    before_action :initialize_form, only: [:edit]
 
     def edit
     end

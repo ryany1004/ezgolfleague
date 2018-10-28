@@ -20,23 +20,23 @@ class Contest < ApplicationRecord
 
   def human_type
     if self.contest_type == 0
-      return "Custom: Overall Winner"
+      "Custom: Overall Winner"
     elsif self.contest_type == 1
-      return "Custom: By Hole"
+      "Custom: By Hole"
     elsif self.contest_type == 2
-      return "Net Skins"
+      "Net Skins"
     elsif self.contest_type == 3
-      return "Gross Skins"
+      "Gross Skins"
     elsif self.contest_type == 4
-      return "Net Low"
+      "Net Low"
     elsif self.contest_type == 5
-      return "Gross Low"
+      "Gross Low"
     elsif self.contest_type == 6
-      return "Net Low Tournament Total"
+      "Net Low Tournament Total"
     elsif self.contest_type == 7
-      return "Gross Low Tournament Total"
+      "Gross Low Tournament Total"
     elsif self.contest_type == 8
-      return "Net Skins + Gross Skins"
+      "Net Skins + Gross Skins"
     end
   end
 

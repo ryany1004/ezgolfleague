@@ -1,7 +1,6 @@
 FactoryBot.define do
   factory :user do
     email { "hunter@lastonepicked.com" }
-    is_super_user { true }
     first_name { "Hunter" }
     last_name { "Hillegas" }
     handicap_index { 12 }
@@ -9,9 +8,9 @@ FactoryBot.define do
     phone_number { "999-111-1111" }
 
     factory :user_with_mobile_devices do
-    	transient do
-    		mobile_devices_count { 1 }
-    		mobile_device_type { "unknown" }
+        transient do
+    	   mobile_devices_count { 1 }
+    	   mobile_device_type { "unknown" }
     	end
 
     	after(:create) do |user, evaluator|

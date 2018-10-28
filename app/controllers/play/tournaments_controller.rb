@@ -1,7 +1,7 @@
 class Play::TournamentsController < Play::BaseController
   layout "golfer"
 
-  before_action :fetch_tournament, :except => [:show]
+  before_action :fetch_tournament, except: [:show]
 
   def show
     tournament = self.view_tournament_from_user_for_tournament_id(params[:id])

@@ -5,11 +5,11 @@ module GameTypes
     METADATA_KEY = "scramble_scorecard_for_best_ball_hole"
 
     def display_name
-      return "Scramble"
+      "Scramble"
     end
 
     def game_type_id
-      return 6
+      6
     end
 
     def show_other_scorecards?
@@ -19,41 +19,41 @@ module GameTypes
     ##Teams
 
     def allow_teams
-      return GameTypes::TEAMS_REQUIRED
+      GameTypes::TEAMS_REQUIRED
     end
 
     def show_teams?
-      return true
+      true
     end
 
     def number_of_players_per_team
-      return GameTypes::VARIABLE
+      GameTypes::VARIABLE
     end
 
     def players_create_teams?
-      return false
+      false
     end
 
     ##Setup
 
     def setup_partial
-      return "shared/game_type_setup/scramble"
+      "shared/game_type_setup/scramble"
     end
 
     def scorecard_score_cell_partial
-      return "shared/game_types/scramble_popup"
+      "shared/game_types/scramble_popup"
     end
 
     def scorecard_post_embed_partial
-      return "shared/game_types/scramble_post_embed"
+      "shared/game_types/scramble_post_embed"
     end
 
     def handicap_percentage_key
-      return "HandicapPercentageKey-T-#{self.tournament_day.id}-GT-#{self.game_type_id}"
+      "HandicapPercentageKey-T-#{self.tournament_day.id}-GT-#{self.game_type_id}"
     end
 
     def use_back_nine_key
-      return "ShouldUseBackNineForTies-T-#{self.tournament_day.id}-GT-#{self.game_type_id}"
+      "ShouldUseBackNineForTies-T-#{self.tournament_day.id}-GT-#{self.game_type_id}"
     end
 
     def save_setup_details(game_type_options)
@@ -84,9 +84,9 @@ module GameTypes
       metadata = GameTypeMetadatum.where(search_key: handicap_percentage_key).first
 
       if metadata.blank?
-        return "0.0"
+        "0.0"
       else
-        return metadata.float_value
+        metadata.float_value
       end
     end
 
@@ -94,9 +94,9 @@ module GameTypes
       metadata = GameTypeMetadatum.where(search_key: use_back_nine_key).first
 
       if !metadata.blank? && metadata.integer_value == 1
-        return true
+        true
       else
-        return false
+        false
       end
     end
 
@@ -120,11 +120,7 @@ module GameTypes
       team = tournament_day.golfer_team_for_player(score.scorecard.golf_outing.user)
       metadata = GameTypeMetadatum.where(golfer_team: team, course_hole: score.course_hole, search_key: METADATA_KEY).first
 
-      if metadata.blank?
-        return nil
-      else
-        return metadata.scorecard
-      end
+      metadata&.scorecard
     end
 
     ##Scoring
@@ -157,11 +153,11 @@ module GameTypes
         other_members << u if u != user
       end
 
-      return other_members
+      other_members
     end
 
     def related_scorecards_for_user(user, only_human_scorecards = false)
-      return []
+      []
     end
 
     def override_scorecard_name_for_scorecard(scorecard)
@@ -174,7 +170,7 @@ module GameTypes
         player_names << "/" if player != other_members.last
       end
 
-      return "#{player_names} Scramble"
+      "#{player_names} Scramble"
     end
 
     def individual_team_scorecards_for_scorecard(scorecard)
@@ -187,7 +183,7 @@ module GameTypes
         scorecards << other_scorecard
       end
 
-      return scorecards
+      scorecards
     end
 
     def after_updating_scores_for_scorecard(scorecard)

@@ -1,7 +1,7 @@
 class Play::ScorecardsController < Play::BaseController
   layout "golfer"
 
-  before_action :fetch_scorecard, :except => [:finalize_scorecard, :become_designated_scorer, :update_game_type_metadata]
+  before_action :fetch_scorecard, except: [:finalize_scorecard, :become_designated_scorer, :update_game_type_metadata]
 
   def show
     @page_title = "#{@scorecard.golf_outing.user.complete_name} Scorecard"

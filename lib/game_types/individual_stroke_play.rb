@@ -3,11 +3,11 @@ module GameTypes
     include Rails.application.routes.url_helpers
 
     def display_name
-      return "Individual Stroke Play"
+      "Individual Stroke Play"
     end
 
     def game_type_id
-      return 1
+      1
     end
 
     def other_group_members(user)
@@ -18,7 +18,7 @@ module GameTypes
         other_members << outing.user if outing.user != user
       end
 
-      return other_members
+      other_members
     end
 
     def user_is_in_group?(user, tournament_group)
@@ -26,17 +26,17 @@ module GameTypes
         return true if user == outing.user
       end
 
-      return false
+      false
     end
 
     ##Setup
 
     def setup_partial
-      return "shared/game_type_setup/individual_stroke_play"
+      "shared/game_type_setup/individual_stroke_play"
     end
 
     def use_back_nine_key
-      return "ShouldUseBackNineForTies-T-#{self.tournament_day.id}-GT-#{self.game_type_id}"
+      "ShouldUseBackNineForTies-T-#{self.tournament_day.id}-GT-#{self.game_type_id}"
     end
 
     def save_setup_details(game_type_options)
@@ -57,9 +57,9 @@ module GameTypes
       metadata = GameTypeMetadatum.where(search_key: use_back_nine_key).first
 
       if !metadata.blank? && metadata.integer_value == 1
-        return true
+        true
       else
-        return false
+        false
       end
     end
 
@@ -70,7 +70,7 @@ module GameTypes
       return false if self.tournament_day.flights.count == 0
       return false if self.tournament_day.course_holes.count == 0
 
-      return true
+      true
     end
 
     ##Scoring
@@ -82,7 +82,7 @@ module GameTypes
         other_scorecards << self.tournament_day.primary_scorecard_for_user(player)
       end
 
-      return other_scorecards
+      other_scorecards
     end
 
   end

@@ -48,14 +48,14 @@ class TournamentGroup < ApplicationRecord
       players << g.user unless g.user.blank?
     end
 
-    return players
+    players
   end
 
   def golfer_outing_for_index(index)
     if index < self.golf_outings.count
-      return self.golf_outings[index]
+      self.golf_outings[index]
     else
-      return nil
+      nil
     end
   end
 
@@ -70,20 +70,20 @@ class TournamentGroup < ApplicationRecord
       end
 
       if index < exploded_teams.count
-        return exploded_teams[index]
+        exploded_teams[index]
       else
-        return nil
+        nil
       end
     else #find the team this user is signed up for
-      return self.tournament_day.golfer_team_for_player(user)
+      self.tournament_day.golfer_team_for_player(user)
     end
   end
 
   def user_for_index(index)
     if index < self.golf_outings.count
-      return self.golf_outings[index].user
+      self.golf_outings[index].user
     else
-      return nil
+      nil
     end
   end
 

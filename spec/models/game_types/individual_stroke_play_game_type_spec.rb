@@ -2,21 +2,24 @@ require 'rails_helper'
 
 #ActiveRecord::Base.logger = Logger.new(STDOUT) if defined?(ActiveRecord::Base)
 
-describe "Testing ISP Game Type" do
-  let(:user) { FactoryBot.create(:user) }
-  let(:league) { FactoryBot.create(:league) }
-  let(:league_membership) { FactoryBot.create(:league_membership, league: league, user: user) }
-  let(:course) { FactoryBot.create(:course_with_holes) }
-  let(:tournament) { FactoryBot.create(:tournament, league: league) }
-  let(:tournament_day) { FactoryBot.create(:tournament_day, tournament: tournament, course: course) }
-  let(:tournament_group) { FactoryBot.create(:tournament_group, tournament_day: tournament_day) }
+describe "Individual Stroke Play" do
+  let(:generic_stroke_play) { build(:individual_stroke_play_game_type) }
 
-  it "stroke play scoring" do
-    scores = [1,1,6,4,6,3,5,6,5,7,6,5,3,6,6,5,3,10]
-
-    add_to_group_and_create_scores(tournament_day, user, tournament_group, scores)
-
-    expect(tournament_day.player_score(user, false)).to eq(scores.sum)
-    expect(tournament_day.player_score(user)).to eq(76)
+  it "#display_name" do
+    expect(generic_stroke_play.display_name).to eq("Individual Stroke Play")
   end
+
+  it "#game_type_id" do
+    expect(generic_stroke_play.game_type_id).to eq(1)
+  end
+
+  it "#other_group_members"
+
+  it "#user_is_in_group?"
+
+  it "#setup_partial"
+
+  it "#can_be_played?"
+
+  it "#related_scorecards_for_user"
 end

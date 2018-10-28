@@ -4,7 +4,6 @@ class ContestHole < ApplicationRecord
   has_many :contest_results, :dependent => :destroy
 
   def hole_number
-    return self.course_hole.hole_number
+    self.course_hole.hole_number
   end
-
 end

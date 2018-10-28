@@ -14,12 +14,12 @@ class TournamentDayResult < ApplicationRecord
 
     total_points = 0
     
-    flight.payout_results.where(user: user).each do |payout_result|
+    flight.payout_results.where(user: user).where("points > 0").each do |payout_result|
       total_points += payout_result.points
     end
 
     tournament_day.contests.each do |c|
-      c.contest_results.where(winner: user).each do |payout_result|
+      c.contest_results.where(winner: user).where("points > 0").each do |payout_result|
         total_points += payout_result.points
       end
     end

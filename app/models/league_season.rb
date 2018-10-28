@@ -1,5 +1,5 @@
 class LeagueSeason < ApplicationRecord
-  belongs_to :league, touch: true
+  belongs_to :league, touch: true, inverse_of: :league_seasons
 
   has_many :payments, inverse_of: :league_season
   has_many :subscription_credits, ->{ order 'created_at DESC' }
