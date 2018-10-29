@@ -2,7 +2,7 @@ module Users
 	class ResultName
     def self.result_name_for_user(user, tournament_day)
       if tournament_day.golfer_teams.count == 0
-        return user.complete_name
+        user.complete_name
       else
         team_name = ""
 
@@ -13,7 +13,7 @@ module Users
           team_name = team_name + " / " unless team_user == team.users.last
         end
 
-        return team_name
+        team_name
       end
     end
 	end

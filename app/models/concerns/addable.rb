@@ -137,7 +137,7 @@ module Addable
       Rails.logger.debug { "Player Course Handicap for Course/Outing: #{player_course_handicap}" }
     end
 
-    return player_course_handicap
+    player_course_handicap
   end
 
   def team_course_handicap_for_player(player)
@@ -158,9 +158,9 @@ module Addable
         end
       end
 
-      return highest_handicap
+      highest_handicap
     else
-      return 0
+      0
     end
   end
 
@@ -248,5 +248,4 @@ module Addable
       Rails.logger.debug { "Golf Outing Saved" }
     end
   end
-
 end

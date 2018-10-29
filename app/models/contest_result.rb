@@ -9,9 +9,9 @@ class ContestResult < ApplicationRecord
 
   def location
     if self.contest_hole.blank?
-      return "Tournament Overall"
+      "Tournament Overall"
     else
-      return "Hole #{self.contest_hole.course_hole.hole_number}"
+      "Hole #{self.contest_hole.course_hole.hole_number}"
     end
   end
 

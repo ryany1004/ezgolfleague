@@ -6,7 +6,7 @@ module FindPlayers
       return f if f.users.include? user
     end
 
-    return nil
+    nil
   end
 
   def golfer_team_for_player(user)
@@ -14,7 +14,7 @@ module FindPlayers
       return t if t.users.include? user
     end
 
-    return nil
+    nil
   end
 
   def tournament_group_for_player(user)
@@ -24,7 +24,7 @@ module FindPlayers
       end
     end
 
-    return nil
+    nil
   end
 
   def golf_outing_for_player(user)
@@ -34,16 +34,16 @@ module FindPlayers
       end
     end
 
-    return nil
+    nil
   end
 
   def player_is_confirmed?(user)
     outing = self.golf_outing_for_player(user)
 
     if outing.blank?
-      return false
+      false
     else
-      return outing.is_confirmed
+      outing.is_confirmed
     end
   end
 
@@ -54,7 +54,7 @@ module FindPlayers
       player_contests << c if c.users.include?(user)
     end
 
-    return player_contests
+    player_contests
   end
 
 end

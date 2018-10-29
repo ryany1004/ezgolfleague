@@ -78,7 +78,7 @@ describe "Base Game Type" do
 	end
 
 	it "#override_scorecard_name_for_scorecard" do
-		expect(generic_game_type.override_scorecard_name_for_scorecard).to eq(nil)
+		expect(generic_game_type.override_scorecard_name_for_scorecard(nil)).to eq(nil)
 	end
 
 	it "#scorecard_score_cell_partial" do

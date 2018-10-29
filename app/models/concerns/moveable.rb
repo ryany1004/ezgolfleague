@@ -7,5 +7,4 @@ module Moveable
     golf_outing.tournament_group = new_tournament_group
     golf_outing.save
   end
-
 end

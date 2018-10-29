@@ -78,34 +78,34 @@ class Scorecard < ApplicationRecord
     flight = self.tournament_day.flight_for_player(self.golf_outing.user)
 
     unless flight.blank?
-      return flight.display_name
+      flight.display_name
     else
-      return nil
+      nil
     end
   end
 
   def course_handicap
-    return self.tournament_day.game_type.course_handicap_for_game_type(self.golf_outing).to_i
+    self.tournament_day.game_type.course_handicap_for_game_type(self.golf_outing).to_i
   end
 
   def has_empty_scores?
     self.scores.each do |s|
-      return true if s.strokes == 0 or s.strokes.blank?
+      true if s.strokes == 0 or s.strokes.blank?
     end
 
-    return false
+    false
   end
 
   def last_hole_played
     self.scores.each_with_index do |score, i|
       if score == self.scores.last and score.strokes > 0
-        return "F" #finished
+        "F" #finished
       else
-        return "#{i}" if score.strokes == 0
+        "#{i}" if score.strokes == 0
       end
     end
 
-    return nil
+    nil
   end
 
   # Permissions
@@ -117,7 +117,7 @@ class Scorecard < ApplicationRecord
 
     return true if self.league.users.include?(user)
 
-    return false
+    false
   end
 
   def user_can_edit?(user)
@@ -127,53 +127,53 @@ class Scorecard < ApplicationRecord
 
     return true if self.league.league_admins.include?(user)
 
-    return false
+    false
   end
 
   #Team Support
 
   def is_potentially_editable?
-    return true
+    true
   end
 
   def should_highlight?
-    return false
+    false
   end
 
   def name(shorten_for_print = false)
     override_name = self.tournament_day.game_type.override_scorecard_name_for_scorecard(self)
 
     unless override_name.blank?
-      return override_name
+      override_name
     else
-      return self.golf_outing.user.short_name
+      self.golf_outing.user.short_name
     end
   end
 
   def individual_name
-    return self.golf_outing.user.complete_name
+    self.golf_outing.user.complete_name
   end
 
   ##Customization
 
   def can_display_handicap?
-    return true
+    true
   end
 
   def should_subtotal?
-    return true
+    true
   end
 
   def should_total?
-    return true
+    true
   end
 
   def includes_extra_scoring_column?
-    return self.tournament_day.game_type.includes_extra_scoring_column?
+    self.tournament_day.game_type.includes_extra_scoring_column?
   end
 
   def extra_scoring_column_data
-    return nil
+    nil
   end
 
 end

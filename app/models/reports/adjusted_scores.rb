@@ -7,6 +7,5 @@ module Reports
       
       self.results = self.tournament_day.tournament_day_results.order(:flight_id)
     end
-    
   end
 end

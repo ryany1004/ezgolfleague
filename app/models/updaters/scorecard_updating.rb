@@ -1,6 +1,5 @@
 module Updaters
   class ScorecardUpdating
-
     def self.update_scorecards_for_scores(scores, primary_scorecard, other_scorecards, notify_score_scores = false)
       scores.each do |score_param|
         Rails.logger.info { "score_param #{score_param}" }
@@ -43,6 +42,5 @@ module Updaters
 
       UpdateUserScorecardJob.perform_later(primary_scorecard, other_scorecards)
     end
-
   end
 end

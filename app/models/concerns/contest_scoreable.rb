@@ -3,21 +3,17 @@ module ContestScoreable
 
   def contest_can_be_scored?
     if self.is_team_contest?
-      if self.all_team_members_are_contestants? == true
-        return true
-      else
-        return false
-      end
+      self.all_team_members_are_contestants?
     else
-      return true
+      true
     end
   end
 
   def is_team_contest?
     if self.is_team_scored? and self.tournament_day.allow_teams != GameTypes::TEAMS_DISALLOWED
-      return true
+      true
     else
-      return false
+      false
     end
   end
 
@@ -40,7 +36,7 @@ module ContestScoreable
       end
     end
 
-    return true
+    true
   end
 
   def score_contest
@@ -141,30 +137,7 @@ module ContestScoreable
         ContestResult.create(contest: self, winner: winner, payout_amount: value_per_skin, contest_hole: contest_hole, result_value: "#{hole.hole_number}")
       end
     end
-
-    #self.recalculate_contest_results_for_team_split if self.is_team_contest?
   end
-
-  #TODO: turn contest results into payments
-
-  # def recalculate_contest_results_for_team_split
-  #   Rails.logger.info { "CONTEST: #{self.id} recalculate_contest_results_for_team_split" }
-  #
-  #   self.tournament_day.golfer_teams.each do |team|
-  #     team_contest_results = ContestResult.where(contest: self).where(winner: team.users)
-  #
-  #     if team_contest_results.count > 1
-  #       team_contest_results.in_groups(team.users.count, false).each_with_index do |result_group, i|
-  #         user = team.users[i]
-  #
-  #         result_group.each do |result|
-  #           result.winner = user
-  #           result.save
-  #         end
-  #       end
-  #     end
-  #   end
-  # end
 
   def users_with_skins(use_gross, gross_skins_require_birdies = false)
     all_winners = []
@@ -258,7 +231,7 @@ module ContestScoreable
       all_winners << {hole: hole, winners: users_getting_skins}
     end
 
-    return all_winners
+    all_winners
   end
 
   def score_net_contest(use_gross, across_all_days = false)

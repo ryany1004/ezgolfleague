@@ -57,14 +57,14 @@ class NotificationTemplate < ApplicationRecord
       recipient_list << u.parent_user if !u.parent_user.blank? && !recipient_list.include?(u.parent_user)
     end
 
-    return recipient_list
+    recipient_list
   end
 
   def recipient_text
     if self.tournament.blank?
-      return self.league.name
+      self.league.name
     else
-      return self.tournament.name
+      self.tournament.name
     end
   end
 

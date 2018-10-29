@@ -48,3 +48,7 @@ describe "Scorecard" do
   it "#includes_extra_scoring_column?"
 
 end
+
+describe "Scorecard Updating" do
+  it "#update_scorecards_for_scores"
+end

@@ -4,16 +4,14 @@ class User < ApplicationRecord
 
   acts_as_paranoid
 
-  # Include default devise modules. Others available are:
-  # :confirmable, :lockable, :timeoutable and :omniauthable, :registerable
   devise :invitable, :database_authenticatable, :recoverable, :rememberable, :trackable, :validatable
 
-  has_many :league_memberships, dependent: :destroy
+  has_many :league_memberships, inverse_of: :user, dependent: :destroy
   has_many :leagues, ->{ order 'name' }, through: :league_memberships
   has_many :league_memberships_admin, -> { where is_admin: true }, class_name: 'LeagueMembership'
-  has_many :leagues_admin, :through => :league_memberships_admin, class_name: 'League', :source => :league
-  has_many :tournaments, :through => :leagues, class_name: 'Tournament', :source => :tournaments
-  has_many :tournaments_admin, :through => :leagues_admin, class_name: 'Tournament', :source => :tournaments
+  has_many :leagues_admin, :through => :league_memberships_admin, class_name: 'League', source: :league
+  has_many :tournaments, :through => :leagues, class_name: 'Tournament', source: :tournaments
+  has_many :tournaments_admin, through: :leagues_admin, class_name: 'Tournament', source: :tournaments
   has_many :payout_results, inverse_of: :user, dependent: :destroy
   has_many :golf_outings, inverse_of: :user, dependent: :destroy
   has_many :payments, ->{ order 'created_at DESC' }, inverse_of: :user, dependent: :destroy

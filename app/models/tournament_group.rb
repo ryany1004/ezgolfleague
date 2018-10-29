@@ -100,9 +100,9 @@ class TournamentGroup < ApplicationRecord
 
   def formatted_tee_time
     if self.tournament_day.tournament.show_players_tee_times == true
-      return self.tee_time_at.to_s(:time_only)
+      self.tee_time_at.to_s(:time_only)
     else
-      return "#{self.tee_time_at.to_s(:time_only)} - #{self.time_description}"
+      "#{self.tee_time_at.to_s(:time_only)} - #{self.time_description}"
     end
   end
 
@@ -115,27 +115,27 @@ class TournamentGroup < ApplicationRecord
     late = (count / 3) * 2
 
     if index >= early && index < middle
-      return "Early"
+      "Early"
     elsif index >= middle && index < late
-      return "Middle"
+      "Middle"
     else
-      return "Late"
+      "Late"
     end
   end
 
   def api_time_description
     if self.tournament_day.tournament.show_players_tee_times == true
-      return self.tee_time_at.to_s(:time_only)
+      self.tee_time_at.to_s(:time_only)
     else
-      return self.time_description
+      self.time_description
     end
   end
 
   def can_be_deleted?
     if self.golf_outings.count > 0
-      return false
+      false
     else
-      return true
+      true
     end
   end
 
