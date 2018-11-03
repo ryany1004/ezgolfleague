@@ -61,30 +61,35 @@ module Notifications
 	  end
 
 	  def send_complication_notification(user, content)
-	    user.apple_watch_devices.each do |device|
-	      certificate_file = "#{Rails.root}/config/apns_cert.pem"
-	      passphrase = "golf"
+	    begin
+		    user.apple_watch_devices.each do |device|
+		      certificate_file = "#{Rails.root}/config/apns_cert.pem"
+		      passphrase = "golf"
 
-	      if device.environment_name == "debug"
-	        pusher = Apnotic::Connection.development(cert_path: certificate_file, cert_pass: passphrase)
-	      else
-	        pusher = Apnotic::Connection.new(cert_path: certificate_file, cert_pass: passphrase)
-	      end
+		      if device.environment_name == "debug"
+		        pusher = Apnotic::Connection.development(cert_path: certificate_file, cert_pass: passphrase)
+		      else
+		        pusher = Apnotic::Connection.new(cert_path: certificate_file, cert_pass: passphrase)
+		      end
 
-	      notification = Apnotic::Notification.new(device.device_identifier)
-	      notification.topic = "com.ezgolfleague.GolfApp.complication"
-	      notification.content_available = 1
-	      notification.custom_payload = {data: content}
+		      notification = Apnotic::Notification.new(device.device_identifier)
+		      notification.topic = "com.ezgolfleague.GolfApp.complication"
+		      notification.content_available = 1
+		      notification.custom_payload = {data: content}
 
-	      Rails.logger.info { "Pushing Complication Notification to #{device.device_identifier} #{device.environment_name}" }
+		      Rails.logger.info { "Pushing Complication Notification to #{device.device_identifier} #{device.environment_name}" }
 
-	      response = pusher.push(notification)
+		      response = pusher.push(notification)
 
-	      Rails.logger.info { "Notification Response: #{response.headers} #{response.body}" }
+		      Rails.logger.info { "Notification Response: #{response.headers} #{response.body}" }
 
-	      pusher.close
+		      pusher.close
+		    end
+	    rescue SocketError => e
+	      Rails.logger.info { "Socket Error Sending Push Notification: #{e}" }
+	    rescue Errno::ECONNRESET => e
+	    	Rails.logger.info { "Connection Reset Error Sending Push Notification: #{e}" }
 	    end
 	  end
-
 	end
 end
