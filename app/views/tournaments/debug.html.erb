@@ -72,7 +72,13 @@
       </p>
 
       <p>
-        leaderboard-json: <%= Rails.cache.fetch(d.tournament_day_results_cache_key("leaderboard-json")) %>
+        <% leaderboard_json = Rails.cache.fetch(d.tournament_day_results_cache_key("leaderboard-json")) %>
+        <% if !leaderboard_json.blank? %>
+          <span>leaderboard-json:</span>
+          <pre>
+            <%= JSON.pretty_generate(leaderboard_json) %>
+          </pre>
+        <% end %>
       </p>
     <% end %>
   </div>
