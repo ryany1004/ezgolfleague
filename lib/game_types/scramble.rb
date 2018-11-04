@@ -105,10 +105,10 @@ module GameTypes
     def update_metadata(metadata)
       scorecard = Scorecard.find(metadata[:scorecard_id])
       tournament_day = scorecard.tournament_day
-      team = tournament_day.golfer_team_for_player(scorecard.golf_outing.user)
+      team = tournament_day.tournament_team_for_player(scorecard.golf_outing.user)
       course_hole = CourseHole.find(metadata[:course_hole_id])
 
-      metadata = GameTypeMetadatum.find_or_create_by(golfer_team: team, course_hole: course_hole, search_key: METADATA_KEY)
+      metadata = GameTypeMetadatum.find_or_create_by(tournament_team: team, course_hole: course_hole, search_key: METADATA_KEY)
       metadata.scorecard = scorecard
       metadata.save
     end
@@ -117,8 +117,8 @@ module GameTypes
       return nil if score.scorecard.golf_outing.blank?
 
       tournament_day = score.scorecard.tournament_day
-      team = tournament_day.golfer_team_for_player(score.scorecard.golf_outing.user)
-      metadata = GameTypeMetadatum.where(golfer_team: team, course_hole: score.course_hole, search_key: METADATA_KEY).first
+      team = tournament_day.tournament_team_for_player(score.scorecard.golf_outing.user)
+      metadata = GameTypeMetadatum.where(tournament_team: team, course_hole: score.course_hole, search_key: METADATA_KEY).first
 
       if metadata.blank?
         return nil
@@ -137,7 +137,7 @@ module GameTypes
       self.tournament_day.reload
 
       self.tournament_day.payout_results.each do |result|
-        team = self.tournament_day.golfer_team_for_player(result.user)
+        team = self.tournament_day.tournament_team_for_player(result.user)
 
         unless team.blank?
           team.users.where("id != ?", result.user.id).each do |teammate|
@@ -152,7 +152,7 @@ module GameTypes
     def other_group_members(user)
       other_members = []
 
-      team = self.tournament_day.golfer_team_for_player(user)
+      team = self.tournament_day.tournament_team_for_player(user)
       team&.users&.each do |u|
         other_members << u if u != user
       end

@@ -33,10 +33,10 @@ module GameTypes
       return false
     end
 
-    def stroke_play_scorecard_for_user_in_team(user, golfer_team, use_handicaps)
+    def stroke_play_scorecard_for_user_in_team(user, tournament_team, use_handicaps)
       scorecard = TwoManIndividualStrokePlayScorecard.new
       scorecard.user = user
-      scorecard.golfer_team = golfer_team
+      scorecard.tournament_team = tournament_team
       scorecard.should_use_handicap = use_handicaps
       scorecard.calculate_scores
 
@@ -46,7 +46,7 @@ module GameTypes
     def related_scorecards_for_user(user, only_human_scorecards = false)
       other_scorecards = []
 
-      team = self.tournament_day.golfer_team_for_player(user)
+      team = self.tournament_day.tournament_team_for_player(user)
       unless team.blank?
         team.users.each do |u|
           if u != user
@@ -73,12 +73,12 @@ module GameTypes
       payout_results = self.tournament_day.reload.payout_results
 
       payout_results.each do |result|
-        golfer_team = self.tournament_day.golfer_team_for_player(result.user)
+        tournament_team = self.tournament_day.tournament_team_for_player(result.user)
 
-        unless golfer_team.blank?
+        unless tournament_team.blank?
           payout_amount = result.amount / 2.0
 
-          golfer_team.users.each do |u|
+          tournament_team.users.each do |u|
             if u != result.user
               PayoutResult.create(payout: result.payout, user: u, flight: result.flight, tournament_day: result.tournament_day, amount: payout_amount, points: result.points)
             else

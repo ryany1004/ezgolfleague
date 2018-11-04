@@ -68,9 +68,9 @@ module Addable
 
       #remove from teams
       if remove_from_teams == true
-        Rails.logger.debug { "Removing Player from Teams" }
+        Rails.logger.debug { "Removing Player from Tournament Teams" }
 
-        tournament_group.golfer_teams.each do |team|
+        tournament_group.tournament_teams.each do |team|
           if team.users.include? user
             team.users.destroy(user)
           end
@@ -141,7 +141,7 @@ module Addable
   end
 
   def team_course_handicap_for_player(player)
-    team = self.golfer_team_for_player(player)
+    team = self.tournament_team_for_player(player)
 
     unless team.blank?
       highest_handicap = 0

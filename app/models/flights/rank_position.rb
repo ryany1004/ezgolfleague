@@ -34,7 +34,7 @@ module Flights
       team_results = []
 
       self.flight.users.each do |u|
-        team = self.flight.tournament_day.golfer_team_for_player(u)
+        team = self.flight.tournament_day.tournament_team_for_player(u)
         unless team.blank? || computed_teams.include?(team)
           team.users.each do |team_user| #must re-score users first
             self.flight.tournament_day.score_user(team_user)

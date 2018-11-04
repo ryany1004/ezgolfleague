@@ -39,17 +39,17 @@ module GameTypes
     def update_metadata(metadata)
       scorecard = Scorecard.find(metadata[:scorecard_id])
       tournament_day = scorecard.tournament_day
-      team = tournament_day.golfer_team_for_player(scorecard.golf_outing.user)
+      team = tournament_day.tournament_team_for_player(scorecard.golf_outing.user)
     
-      metadata = GameTypeMetadatum.find_or_create_by(golfer_team: team, search_key: METADATA_KEY)
+      metadata = GameTypeMetadatum.find_or_create_by(tournament_team: team, search_key: METADATA_KEY)
       metadata.scorecard = scorecard
       metadata.save
     end
     
     def selected_scorecard_for_score(score)
       tournament_day = score.scorecard.tournament_day
-      team = tournament_day.golfer_team_for_player(score.scorecard.golf_outing.user)
-      metadata = GameTypeMetadatum.where(golfer_team: team, search_key: METADATA_KEY).first
+      team = tournament_day.tournament_team_for_player(score.scorecard.golf_outing.user)
+      metadata = GameTypeMetadatum.where(tournament_team: team, search_key: METADATA_KEY).first
       
       if metadata.blank?
         return nil

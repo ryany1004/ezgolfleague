@@ -4,7 +4,7 @@ module Play::TournamentsHelper
 
     slots = []
 
-    tournament_group.golfer_teams.each_with_index do |t, i|
+    tournament_group.tournament_team.each_with_index do |t, i|
       slot = []
 
       t.max_players.times do

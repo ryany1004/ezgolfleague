@@ -28,7 +28,7 @@ module TournamentsHelper
   def team_name_for_player(player, tournament_day)
     return "N/A" if tournament_day.tournament.display_teams? == false
 
-    team = tournament_day.golfer_team_for_player(player)
+    team = tournament_day.tournament_team_for_player(player)
 
     if team.blank?
       return "-"

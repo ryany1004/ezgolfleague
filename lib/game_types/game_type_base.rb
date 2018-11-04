@@ -464,7 +464,7 @@ module GameTypes
     ##Ranking
 
     def players_for_flight(flight)
-      if self.tournament_day.golfer_teams.count == 0
+      if self.tournament_day.tournament_teams.count == 0
         return flight.users
       else
         players = []

@@ -16,10 +16,10 @@ class GameTypesController < BaseController
         end
 
         day.tournament_groups.each do |group|
-          if day.tournament.display_teams? && group.golfer_teams.count == 0 #manage teams after changing the game type
-            group.create_golfer_teams
-          elsif !day.tournament.display_teams? && group.golfer_teams.count > 0
-            group.golfer_teams.destroy_all
+          if day.tournament.display_teams? && group.tournament_teams.count == 0 #manage teams after changing the game type
+            group.create_tournament_teams
+          elsif !day.tournament.display_teams? && group.tournament_teams.count > 0
+            group.tournament_teams.destroy_all
           end
         end
       end

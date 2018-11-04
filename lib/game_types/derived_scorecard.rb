@@ -2,7 +2,7 @@ module GameTypes
   class DerivedScorecard
 
     attr_accessor :user
-    attr_accessor :golfer_team
+    attr_accessor :tournament_team
     attr_accessor :underlying_tournament_day
     attr_accessor :scores
 
@@ -17,8 +17,8 @@ module GameTypes
     end
 
     def tournament_day
-      unless self.golfer_team.blank?
-        return self.golfer_team.tournament_day
+      unless self.tournament_team.blank?
+        return self.tournament_team.tournament_day
       else
         return self.underlying_tournament_day
       end

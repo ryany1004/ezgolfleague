@@ -51,20 +51,20 @@ module GameTypes
     def calculate_scores
       new_scores = []
 
-      if golfer_team.blank?
+      if tournament_team.blank?
         Rails.logger.debug { "Calculate Scores - No Team" }
 
         return
       end
 
-      self.golfer_team.tournament_day.course_holes.each_with_index do |hole, i|
+      self.tournament_team.tournament_day.course_holes.each_with_index do |hole, i|
         score = DerivedScorecardScore.new
         score.scorecard = self
         score.course_hole = hole
 
         comparable_scores = []
-        self.golfer_team.users.each do |user|
-          scorecard = self.golfer_team.tournament_day.primary_scorecard_for_user(user)
+        self.tournament_team.users.each do |user|
+          scorecard = self.tournament_team.tournament_day.primary_scorecard_for_user(user)
 
           unless scorecard.blank? || scorecard.scores.blank?
             raw_score = scorecard.scores.where(course_hole: hole).first.strokes

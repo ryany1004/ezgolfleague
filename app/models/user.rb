@@ -24,7 +24,7 @@ class User < ApplicationRecord
   has_many :child_users, ->{ order 'last_name' }, class_name: "User", foreign_key: "parent_id", inverse_of: :parent_user
   belongs_to :parent_user, class_name: "User", foreign_key: "parent_id", inverse_of: :child_users
   has_and_belongs_to_many :flights, inverse_of: :users
-  has_and_belongs_to_many :golfer_teams, inverse_of: :users
+  has_and_belongs_to_many :tournament_teams, inverse_of: :users
   has_and_belongs_to_many :contests, inverse_of: :users
   has_and_belongs_to_many :league_season_scoring_groups, inverse_of: :users
 
@@ -150,10 +150,10 @@ class User < ApplicationRecord
       end
       self.flights.clear
 
-      self.golfer_teams.each do |g|
-        user.golfer_teams << g
+      self.tournament_teams.each do |g|
+        user.tournament_teams << g
       end
-      self.golfer_teams.clear
+      self.tournament_teams.clear
 
       self.contests.each do |c|
         user.contests << c

@@ -24,7 +24,7 @@ module Importers
         tournament_lines.each do |line|
           tournament_day = TournamentDay.where(id: line[:tournament_day_id]).first
           tournament_day.tournament_groups.destroy_all
-          tournament_day.golfer_teams.destroy_all
+          tournament_day.tournament_teams.destroy_all
           tournament_day.flights.destroy_all
           
           tournament_day.tournament.is_finalized = false
@@ -173,14 +173,14 @@ module Importers
     end
     
     def create_or_add_player_to_team(player, team_code, tournament_day)    
-      golfer_team = self.team_mapping[team_code]
-      if golfer_team.blank?
-        golfer_team = GolferTeam.create(tournament_day: tournament_day)
+      tournament_team = self.team_mapping[team_code]
+      if tournament_team.blank?
+        tournament_team = TournamentTeam.create(tournament_day: tournament_day)
       end
       
-      golfer_team.users << player
+      tournament_team.users << player
       
-      self.team_mapping[team_code] = golfer_team
+      self.team_mapping[team_code] = tournament_team
     end
     
     def create_or_add_payouts_for_player(player, payout_dollars, payout_points, tournament_day)

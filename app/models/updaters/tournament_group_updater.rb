@@ -6,8 +6,8 @@ module Updaters
       players_signed_up = self.player_signup(tournament_group, player_info) unless player_info.blank?
 
       unless players_signed_up.blank?
-        team_info = params[:player_submit][:golfer_team_ids]
-        self.team_signup(tournament_group, team_info) unless team_info.blank?
+        tournament_team_info = params[:player_submit][:tournament_team_ids]
+        self.tournament_team_signup(tournament_group, team_info) unless tournament_team_info.blank?
 
         contest_info = params[:player_submit][:contest_signups]
         self.contest_signup(tournament_group, contest_info) unless contest_info.blank?
@@ -31,16 +31,16 @@ module Updaters
       players_signed_up
     end
 
-    def team_signup(tournament_group, team_info)
+    def tournament_team_signup(tournament_group, team_info)
       team_info.keys.each do |slot_id|
         golf_outing = tournament_group.golf_outings[slot_id.to_i]
 
         unless golf_outing.blank?
           user = golf_outing.user
-          team = GolferTeam.find(team_info[slot_id])
+          team = TournamentTeam.find(team_info[slot_id])
 
           unless user.blank? || team.blank?
-            existing_team = tournament_group.tournament_day.golfer_team_for_player(user)
+            existing_team = tournament_group.tournament_day.tournament_team_for_player(user)
 
             if team != existing_team
               existing_team.users.delete(user) unless existing_team.blank?

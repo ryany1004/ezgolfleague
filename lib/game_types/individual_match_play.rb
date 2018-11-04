@@ -17,7 +17,7 @@ module GameTypes
       #return false if !self.tournament_day.tournament.league.has_active_subscription?
 
       self.tournament.players.each do |p|
-        return false if self.tournament_day.golfer_team_for_player(p) == nil
+        return false if self.tournament_day.tournament_team_for_player(p) == nil
       end
 
       return true
@@ -49,10 +49,10 @@ module GameTypes
       return true
     end
 
-    def match_play_scorecard_for_user_in_team(user, golfer_team)
+    def match_play_scorecard_for_user_in_team(user, tournament_team)
       scorecard = IndividualMatchPlayScorecard.new
       scorecard.user = user
-      scorecard.golfer_team = golfer_team
+      scorecard.tournament_team = tournament_team
       scorecard.calculate_scores
 
       return scorecard
@@ -125,7 +125,7 @@ module GameTypes
     def related_scorecards_for_user(user, only_human_scorecards = false)
       other_scorecards = []
 
-      team = self.tournament_day.golfer_team_for_player(user)
+      team = self.tournament_day.tournament_team_for_player(user)
       unless team.blank?
         if only_human_scorecards == false
           user_match_play_card = self.match_play_scorecard_for_user_in_team(user, team)
@@ -148,7 +148,7 @@ module GameTypes
     end
 
     def opponent_for_user(user)
-      team = self.tournament_day.golfer_team_for_player(user)
+      team = self.tournament_day.tournament_team_for_player(user)
       unless team.blank?
         team.users.each do |u|
           if u != user
