@@ -29,8 +29,6 @@ describe "User" do
     membership.is_admin = true
     membership.save
 
-    user.is_any_league_admin?
-
     expect(user.is_any_league_admin?).to eq(true)
   end
 
@@ -43,19 +41,47 @@ describe "User" do
     expect(user.is_member_of_league?(league)).to eq(true)
   end
 
-  it "#scoring_group_name_for_league_season"
+  it "#scoring_group_name_for_league_season" do
+    user = create(:user)
+    league = create(:league, allow_scoring_groups: true)
+    league_season = create(:league_season, league: league)
+    scoring_group = create(:league_season_scoring_group, name: "Scoring Group", league_season: league_season)
 
-  it "#can_edit_user?"
+    user.leagues << league
+    scoring_group.users << user
 
-  it "#impersonatable_users"
+    expect(user.scoring_group_name_for_league_season(league_season)).to eq("(Scoring Group)")
+  end
+
+  it "#can_edit_user?" do
+    user_one = create(:user)
+    user_two = create(:user, email: 'test@test123.com')
+    league = create(:league)
+
+    user_one.leagues << league
+    user_two.leagues << league
+
+    membership = user_one.league_memberships.first
+    membership.is_admin = true
+    membership.save
+
+    expect(user_one.can_edit_user?(user_two)).to eq(true)
+  end
+
+  it "#impersonatable_users" do
+    user_one = create(:user)
+    user_two = create(:user, email: 'test@test123.com')
+
+    user_one.child_users << user_two
+
+    expect(user_one.impersonatable_users).to include(user_two)
+  end
 
   it "#requires_additional_profile_data?" do
     user = build(:user, first_name: "Hunter", last_name: "Hillegas", phone_number: nil)
 
     expect(user.requires_additional_profile_data?).to eq(true)
   end
-
-  it "#has_all_exempt_leagues?"
 
   it "#ios_devices" do 
     user = create(:user_with_mobile_devices, mobile_device_type: "iphone")
@@ -70,10 +96,6 @@ end
 
 describe "User - Handicaps" do
   let (:generic_user) { build(:user, handicap_index: 12) }
-
-  it "#course_handicap_for_golf_outing"
-
-  it "#index_derived_handicap"
 
   it "#standard_handicap" do
     course = create(:course_with_eighteen_holes)
