@@ -38,4 +38,18 @@ describe "Scramble" do
   it "#assign_payouts_from_scores"
 
   it "#compute_player_score"
+
+  it "verify_results" do
+    tournament = create_two_person_scramble_tournament(strokes: [1,1,6,4,6,3,5,6,5,7,6,5,3,6,6,5,3,10])
+    result = tournament.first_day.tournament_day_results.first
+
+    expect(result.net_score).to eq(63)
+    expect(result.gross_score).to eq(88)
+    expect(result.back_nine_net_score).to eq(37)
+    expect(result.front_nine_net_score).to eq(26)
+    expect(result.front_nine_gross_score).to eq(37)
+    expect(result.par_related_net_score).to eq(-8)
+    expect(result.par_related_gross_score).to eq(17)
+    expect(result.adjusted_score).to eq(85)
+  end
 end

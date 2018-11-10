@@ -32,4 +32,6 @@ describe "Best Ball" do
   it "#compute_player_score"
 
   it "#best_ball_scorecard_for_user_in_team"
+
+  it "verify_results"
 end
