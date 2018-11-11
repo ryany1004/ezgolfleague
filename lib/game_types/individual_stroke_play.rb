@@ -1,3 +1,5 @@
+#TEAM: REMOVE
+
 module GameTypes
   class IndividualStrokePlay < GameTypes::GameTypeBase
     include Rails.application.routes.url_helpers

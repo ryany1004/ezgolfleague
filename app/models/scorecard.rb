@@ -1,5 +1,7 @@
 class Scorecard < ApplicationRecord
   include Servable
+  include ScorecardNetScores
+  include ScorecardAdjustedScore
 
   acts_as_paranoid
 

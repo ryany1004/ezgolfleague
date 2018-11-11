@@ -55,7 +55,7 @@ class TournamentDayResult < ApplicationRecord
   #TODO: this should be refactored, calc's handicaps each time
   def net_scores
   	handicaps = tournament_day.game_type.handicap_allowance(user)
-  	tournament_day.game_type.net_scores_for_scorecard(handicaps, primary_scorecard)
+    primary_scorecard.net_scores(handicap_allowance: handicaps)
   end
 
   def scorecard_url

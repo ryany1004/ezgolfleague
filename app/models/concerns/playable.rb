@@ -96,20 +96,31 @@ module Playable
     total_score = 0
 
     self.tournament_days.each do |day|
-      total_score += day.player_score(user)
+      day.scoring_rules.each do |rule|
+        total_score += rule.user_score(user: user)
+      end
     end
 
-    return total_score
+    total_score
   end
 
   def total_points(user)
     total_points = 0
 
     self.tournament_days.each do |day|
-      total_points += day.player_points(user)
+      day.scoring_rules.each do |rule|
+        total_points += rule.points_for_user(user: user)
+      end
     end
 
-    return total_points
+    #TODO: remove when contests are re-factored
+    self.tournament_day.contests.each do |c|
+      c.combined_contest_results.each do |r|
+        total_points = total_points + r.points if r.winner == user
+      end
+    end
+
+    total_points
   end
 
 end

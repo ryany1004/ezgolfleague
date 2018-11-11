@@ -27,6 +27,25 @@ module FindPlayers
     return nil
   end
 
+  def other_tournament_group_members(user)
+    other_members = []
+
+    group = self.tournament_group_for_player(user)
+    group.golf_outings.each do |outing|
+      other_members << outing.user if outing.user != user
+    end
+
+    other_members
+  end
+
+  def user_is_in_tournament_group?(user, tournament_group)
+    tournament_group.golf_outings.each do |outing|
+      return true if user == outing.user
+    end
+
+    false
+  end
+
   def golf_outing_for_player(user)
     self.tournament_groups.includes(golf_outings: [:user]).each do |group|
       group.golf_outings.each do |outing|

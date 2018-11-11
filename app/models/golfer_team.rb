@@ -49,3 +49,5 @@ class GolferTeam < ApplicationRecord
   end
 
 end
+
+#TEAM: REMOVE

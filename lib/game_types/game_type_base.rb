@@ -126,243 +126,218 @@ module GameTypes
     end
 
     def player_score(user, use_handicap = true, holes = [])
-      tournament_day_result = self.tournament_day.tournament_day_results.where(aggregated_result: false).where(user: user).first
+      # tournament_day_result = self.tournament_day.tournament_day_results.where(aggregated_result: false).where(user: user).first
 
-      if tournament_day_result.blank?
-        tournament_day_result = self.tournament_day.score_user(user) 
+      # if tournament_day_result.blank?
+      #   tournament_day_result = self.tournament_day.score_user(user) 
 
-        RankFlightsJob.perform_later(self.tournament_day)
-      end
+      #   RankFlightsJob.perform_later(self.tournament_day)
+      # end
 
-      return 0 if tournament_day_result.blank?
+      # return 0 if tournament_day_result.blank?
 
-      if holes == [10, 11, 12, 13, 14, 15, 16, 17, 18]
-        if use_handicap == true
-          score = tournament_day_result.back_nine_net_score
-        else
-          score = self.compute_player_score(user, false, holes)
-        end
-      elsif holes == [1, 2, 3, 4, 5, 6, 7, 8, 9]
-        if use_handicap == true
-          score = tournament_day_result.front_nine_net_score
-        else
-          score = tournament_day_result.front_nine_gross_score
-        end
-      else
-        if use_handicap == true
-          score = tournament_day_result.net_score
-        else
-          score = tournament_day_result.gross_score
-        end
-      end
+      # if holes == [10, 11, 12, 13, 14, 15, 16, 17, 18]
+      #   if use_handicap == true
+      #     score = tournament_day_result.back_nine_net_score
+      #   else
+      #     score = self.compute_player_score(user, false, holes)
+      #   end
+      # elsif holes == [1, 2, 3, 4, 5, 6, 7, 8, 9]
+      #   if use_handicap == true
+      #     score = tournament_day_result.front_nine_net_score
+      #   else
+      #     score = tournament_day_result.front_nine_gross_score
+      #   end
+      # else
+      #   if use_handicap == true
+      #     score = tournament_day_result.net_score
+      #   else
+      #     score = tournament_day_result.gross_score
+      #   end
+      # end
 
-      score
+      # score
+
+      0
     end
 
     def compute_stroke_play_player_score(user, use_handicap = true, holes = [])
-      return nil if !self.tournament.includes_player?(user)
+      # return nil if !self.tournament.includes_player?(user)
 
-      if use_handicap == true
-        handicap_allowance = self.tournament_day.handicap_allowance(user)
+      # if use_handicap == true
+      #   handicap_allowance = self.tournament_day.handicap_allowance(user)
 
-        Rails.logger.debug { "Handicap Allowance: #{handicap_allowance}" }
-      end
+      #   Rails.logger.debug { "Handicap Allowance: #{handicap_allowance}" }
+      # end
 
-      scorecard = self.tournament_day.primary_scorecard_for_user(user)
-      if scorecard.blank?
-        Rails.logger.debug { "Returning 0 - No Scorecard" }
+      # scorecard = self.tournament_day.primary_scorecard_for_user(user)
+      # if scorecard.blank?
+      #   Rails.logger.debug { "Returning 0 - No Scorecard" }
 
-        return 0
-      end
+      #   return 0
+      # end
 
-      total_score = 0
+      # total_score = 0
 
-      total_score = Rails.cache.fetch("scorecard#{scorecard.id}-#{use_handicap}-#{holes.map {|s|"#{s}" }.join('-')}-#{scorecard.updated_at.to_i}", expires_in: 20.minute, race_condition_ttl: 10) do
-        Rails.logger.debug { "Scorecard has #{scorecard.scores.count} scores." }
+      # total_score = Rails.cache.fetch("scorecard#{scorecard.id}-#{use_handicap}-#{holes.map {|s|"#{s}" }.join('-')}-#{scorecard.updated_at.to_i}", expires_in: 20.minute, race_condition_ttl: 10) do
+      #   Rails.logger.debug { "Scorecard has #{scorecard.scores.count} scores." }
 
-        scorecard.scores.includes(:course_hole).each do |score|
-          should_include_score = true #allows us to calculate partial scores, i.e. back 9
-          if holes.blank? == false
-            should_include_score = false if !holes.include? score.course_hole.hole_number
-          end
+      #   scorecard.scores.includes(:course_hole).each do |score|
+      #     should_include_score = true #allows us to calculate partial scores, i.e. back 9
+      #     if holes.blank? == false
+      #       should_include_score = false if !holes.include? score.course_hole.hole_number
+      #     end
 
-          if should_include_score == true
-            hole_score = score.strokes
+      #     if should_include_score == true
+      #       hole_score = score.strokes
 
-            Rails.logger.debug { "Hole: #{score.course_hole.hole_number} - Score Strokes #{score.strokes}" }
+      #       Rails.logger.debug { "Hole: #{score.course_hole.hole_number} - Score Strokes #{score.strokes}" }
 
-            #TODO: re-factor with below method
-            if use_handicap == true && !handicap_allowance.blank?
-              handicap_allowance.each do |h|
-                if h[:course_hole] == score.course_hole
-                  if h[:strokes] != 0
-                    Rails.logger.debug { "Handicap Adjusting Hole #{score.course_hole.hole_number} Score From #{hole_score} w/ Handicap Strokes #{h[:strokes]}" }
+      #       #TODO: re-factor with below method
+      #       if use_handicap == true && !handicap_allowance.blank?
+      #         handicap_allowance.each do |h|
+      #           if h[:course_hole] == score.course_hole
+      #             if h[:strokes] != 0
+      #               Rails.logger.debug { "Handicap Adjusting Hole #{score.course_hole.hole_number} Score From #{hole_score} w/ Handicap Strokes #{h[:strokes]}" }
 
-                    adjusted_hole_score = hole_score - h[:strokes]
-                    hole_score = adjusted_hole_score if adjusted_hole_score > 0
+      #               adjusted_hole_score = hole_score - h[:strokes]
+      #               hole_score = adjusted_hole_score if adjusted_hole_score > 0
 
-                    Rails.logger.debug { "Handicap Adjusted: #{hole_score}" }
-                  end
-                end
-              end
-            end
+      #               Rails.logger.debug { "Handicap Adjusted: #{hole_score}" }
+      #             end
+      #           end
+      #         end
+      #       end
 
-            total_score = total_score + hole_score
-          end
-        end
+      #       total_score = total_score + hole_score
+      #     end
+      #   end
 
-        total_score = 0 if total_score < 0
+      #   total_score = 0 if total_score < 0
 
-        Rails.logger.debug { "Base Score Computed: #{total_score}. User: #{user.complete_name} use handicap: #{use_handicap} holes: #{holes}" }
+      #   Rails.logger.debug { "Base Score Computed: #{total_score}. User: #{user.complete_name} use handicap: #{use_handicap} holes: #{holes}" }
 
-        total_score
-      end
+      #   total_score
+      # end
 
-      total_score
-    end
+      # total_score
 
-    #TODO: refactor into Scorecard::NetScores
-    def net_scores_for_scorecard(handicap_allowance, scorecard)
-      net_scores = []
-
-      net_scores = Rails.cache.fetch("scorecard#{handicap_allowance}-#{scorecard.id}-#{scorecard.updated_at.to_i}", expires_in: 20.minute, race_condition_ttl: 10) do
-        scorecard.scores.includes(:course_hole).each do |score|
-          hole_score = score.strokes
-
-          Rails.logger.debug { "Hole: #{score.course_hole.hole_number} - Score Strokes #{score.strokes}" }
-
-          if !handicap_allowance.blank?
-            handicap_allowance.each do |h|
-              if h[:course_hole] == score.course_hole
-                if h[:strokes] != 0
-                  Rails.logger.debug { "Handicap Adjusting Hole #{score.course_hole.hole_number} Score From #{hole_score} w/ Handicap Strokes #{h[:strokes]}" }
-
-                  adjusted_hole_score = hole_score - h[:strokes]
-                  hole_score = adjusted_hole_score if adjusted_hole_score > 0
-
-                  Rails.logger.debug { "Handicap Adjusted: #{hole_score}" }
-
-                  net_scores << hole_score
-                end
-              end
-            end
-          end
-        end
-
-        net_scores
-      end
+      0
     end
 
     def compute_player_score(user, use_handicap = true, holes = [])
-      return self.compute_stroke_play_player_score(user, use_handicap, holes)
+      #return self.compute_stroke_play_player_score(user, use_handicap, holes)
+      nil
     end
 
     def compute_adjusted_player_score(user)
-      Rails.logger.info { "compute_adjusted_player_score: #{user.complete_name}" }
+      # Rails.logger.info { "compute_adjusted_player_score: #{user.complete_name}" }
 
-      return nil if !self.tournament.includes_player?(user)
+      # return nil if !self.tournament.includes_player?(user)
 
-      scorecard = self.tournament_day.primary_scorecard_for_user(user)
-      if scorecard.blank?
-        Rails.logger.info { "Returning 0 - No Scorecard" }
+      # scorecard = self.tournament_day.primary_scorecard_for_user(user)
+      # if scorecard.blank?
+      #   Rails.logger.info { "Returning 0 - No Scorecard" }
 
-        return 0
-      end
+      #   return 0
+      # end
 
-      total_score = 0
+      # total_score = 0
 
-      scorecard.scores.each do |score|
-        adjusted_score = self.score_or_maximum_for_hole(score.strokes, scorecard.golf_outing.course_handicap, score.course_hole)
+      # scorecard.scores.each do |score|
+      #   adjusted_score = self.score_or_maximum_for_hole(score.strokes, scorecard.golf_outing.course_handicap, score.course_hole)
 
-        total_score = total_score + adjusted_score
-      end
+      #   total_score = total_score + adjusted_score
+      # end
 
-      Rails.logger.info { "User Adjusted Score: #{user.complete_name} - #{total_score}" }
+      # Rails.logger.info { "User Adjusted Score: #{user.complete_name} - #{total_score}" }
 
-      total_score = 0 if total_score < 0
+      # total_score = 0 if total_score < 0
 
-      return total_score
+      # return total_score
+
+      0
     end
 
-    def score_or_maximum_for_hole(strokes, course_handicap, hole)
-      if course_handicap == 0
-        Rails.logger.debug { "No Course Handicap" }
+    # def score_or_maximum_for_hole(strokes, course_handicap, hole)
+    #   if course_handicap == 0
+    #     Rails.logger.debug { "No Course Handicap" }
 
-        return strokes
-      end
+    #     return strokes
+    #   end
 
-      double_bogey = hole.par + 2
+    #   double_bogey = hole.par + 2
 
-      Rails.logger.info { "Double Bogey for #{hole.hole_number} - #{double_bogey}" }
+    #   Rails.logger.info { "Double Bogey for #{hole.hole_number} - #{double_bogey}" }
 
-      if strokes <= double_bogey
-        Rails.logger.info { "Strokes <= double_bogey: #{double_bogey}. #{strokes}" }
+    #   if strokes <= double_bogey
+    #     Rails.logger.info { "Strokes <= double_bogey: #{double_bogey}. #{strokes}" }
 
-        return strokes
-      else
-        adjusted_score = strokes
+    #     return strokes
+    #   else
+    #     adjusted_score = strokes
 
-        case course_handicap
-        when 0..9
-          adjusted_score = double_bogey
-        when 10..19
-          adjusted_score = 7
-        when 20..29
-          adjusted_score = 8
-        when 30..39
-          adjusted_score = 9
-        else
-          adjusted_score = 10
-        end
+    #     case course_handicap
+    #     when 0..9
+    #       adjusted_score = double_bogey
+    #     when 10..19
+    #       adjusted_score = 7
+    #     when 20..29
+    #       adjusted_score = 8
+    #     when 30..39
+    #       adjusted_score = 9
+    #     else
+    #       adjusted_score = 10
+    #     end
 
-        if adjusted_score <= strokes
-          Rails.logger.info { "Adjusted Score for #{hole.hole_number} (Par #{hole.par}) w/ strokes: #{strokes} = #{adjusted_score}. Course handicap: #{course_handicap}" }
+    #     if adjusted_score <= strokes
+    #       Rails.logger.info { "Adjusted Score for #{hole.hole_number} (Par #{hole.par}) w/ strokes: #{strokes} = #{adjusted_score}. Course handicap: #{course_handicap}" }
 
-          return adjusted_score
-        else
-          Rails.logger.info { "Adjusted Score Was Too High... Bailing" }
+    #       return adjusted_score
+    #     else
+    #       Rails.logger.info { "Adjusted Score Was Too High... Bailing" }
 
-          return strokes
-        end
-      end
-    end
+    #       return strokes
+    #     end
+    #   end
+    # end
 
     def player_points(user)
-      return nil if !self.tournament.includes_player?(user)
+      # return nil if !self.tournament.includes_player?(user)
 
-      points = 0
+      # points = 0
 
-      self.tournament_day.payout_results.each do |p|
-        points = points + p.points if p.user == user && p.points
-      end
+      # self.tournament_day.payout_results.each do |p|
+      #   points = points + p.points if p.user == user && p.points
+      # end
 
-      #contests
-      self.tournament_day.contests.each do |c|
-        c.combined_contest_results.each do |r|
-          points = points + r.points if r.winner == user
-        end
-      end
+      # #contests
+      # self.tournament_day.contests.each do |c|
+      #   c.combined_contest_results.each do |r|
+      #     points = points + r.points if r.winner == user
+      #   end
+      # end
 
-      return points
+      # return points
     end
 
     def player_payouts(user)
-      return nil if !self.tournament.includes_player?(user)
+      # return nil if !self.tournament.includes_player?(user)
 
-      payouts = 0
+      # payouts = 0
 
-      self.tournament_day.payout_results.each do |p|
-        payouts = payouts + p.amount if p.user == user && p.amount
-      end
+      # self.tournament_day.payout_results.each do |p|
+      #   payouts = payouts + p.amount if p.user == user && p.amount
+      # end
 
-      #contests
-      self.tournament_day.contests.each do |c|
-        c.combined_contest_results.each do |r|
-          payouts = payouts + r.payout_amount if r.winner == user && r.payout_amount
-        end
-      end
+      # #contests
+      # self.tournament_day.contests.each do |c|
+      #   c.combined_contest_results.each do |r|
+      #     payouts = payouts + r.payout_amount if r.winner == user && r.payout_amount
+      #   end
+      # end
 
-      return payouts
+      # return payouts
     end
 
     def includes_extra_scoring_column?

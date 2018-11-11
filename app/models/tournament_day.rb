@@ -11,19 +11,21 @@ class TournamentDay < ApplicationRecord
   has_many :tournament_groups, -> { order(:tee_time_at) }, inverse_of: :tournament_day, dependent: :destroy
   has_many :flights, -> { order(:flight_number) }, inverse_of: :tournament_day, dependent: :destroy
   has_many :contests, -> { order(:name) }, inverse_of: :tournament_day, dependent: :destroy
-  has_many :golfer_teams, inverse_of: :tournament_day, dependent: :destroy
+  has_many :golfer_teams, inverse_of: :tournament_day, dependent: :destroy #TEAM: REMOVE
   has_many :tournament_day_results, -> { order(:flight_id, :sort_rank) }, inverse_of: :tournament_day, dependent: :destroy
-  has_many :payout_results, inverse_of: :tournament_day, dependent: :destroy
+  has_many :payout_results, inverse_of: :tournament_day, dependent: :destroy #TEAM: REMOVE
+  has_many :scoring_rules, inverse_of: :tournament_day, dependent: :destroy
   has_and_belongs_to_many :course_holes, -> { order(:hole_number) }
 
   attr_accessor :skip_date_validation
 
   after_create :create_default_flight, if: :is_first_day?
 
+  #TEAM - MOVE ALL OF THESE
   delegate :player_score, :compute_player_score, :compute_stroke_play_player_score, :compute_adjusted_player_score, :player_points, :player_payouts, :flights_with_rankings, :related_scorecards_for_user, :assign_payouts_from_scores, to: :game_type
   delegate :allow_teams, :show_teams?, :players_create_teams?, :show_team_scores_for_all_teammates?, to: :game_type
   delegate :scorecard_payload_for_scorecard, to: :game_type
-  delegate :other_group_members, :user_is_in_group?, to: :game_type
+  #delegate :other_group_members, :user_is_in_group?, to: :game_type
   delegate :handicap_allowance, to: :game_type
   delegate :can_be_played?, :can_be_finalized?, to: :game_type
 
@@ -40,6 +42,7 @@ class TournamentDay < ApplicationRecord
     end
   end
 
+  #TEAM: REMOVE
   def game_type
     if self.game_type_id == 1
       new_game_type = GameTypes::IndividualStrokePlay.new
