@@ -151,9 +151,15 @@ Rails.application.routes.draw do
         resources :flights, only: [:create, :update] do
           resources :payouts, only: [:new, :edit, :create, :update]
         end
+
         resources :tournament_groups, only: [:create, :update]
+
         resources :contests, only: [:create, :update] do
           resources :contest_results, only: [:new, :create, :update]
+        end
+
+        resources :scoring_rules do
+          get 'options', on: :collection
         end
       end
 
@@ -163,6 +169,7 @@ Rails.application.routes.draw do
       patch 'tournament_days/:tournament_day_id/disqualify_signup' => 'golf_outings#disqualify_signup', as: :disqualify_day_players
       delete 'tournament_days/:tournament_day_id/delete_signup' => 'golf_outings#delete_signup', as: :delete_day_players
 
+      #TEAM: REMOVE
       resource :game_types do
         get 'options', on: :collection
       end

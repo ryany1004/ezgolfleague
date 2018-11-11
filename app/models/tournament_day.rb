@@ -66,9 +66,11 @@ class TournamentDay < ApplicationRecord
       new_game_type = GameTypes::OneTwoThreeBestBallsOfFour.new
     elsif self.game_type_id == 14
       new_game_type = GameTypes::TwoManIndividualStrokePlay.new
+    else
+      new_game_type = GameTypes::IndividualStrokePlay.new ##### REMOVE
     end
 
-    new_game_type.tournament_day = self
+    new_game_type&.tournament_day = self
 
     new_game_type
   end

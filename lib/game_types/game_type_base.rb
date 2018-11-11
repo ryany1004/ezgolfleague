@@ -40,29 +40,31 @@ module GameTypes
     end
 
     def can_be_finalized?
-      flight_payouts = 0
-      self.tournament_day.flights.each do |f|
-        flight_payouts += f.payouts.count
-      end
+      # flight_payouts = 0
+      # self.tournament_day.flights.each do |f|
+      #   flight_payouts += f.payouts.count
+      # end
 
-      broken_contests = 0
-      self.tournament_day.tournament.tournament_days.includes(:contests).each do |day|
-        day.contests.each do |c|
-          broken_contests += 1 if c.contest_can_be_scored? == false
-        end
-      end
+      # broken_contests = 0
+      # self.tournament_day.tournament.tournament_days.includes(:contests).each do |day|
+      #   day.contests.each do |c|
+      #     broken_contests += 1 if c.contest_can_be_scored? == false
+      #   end
+      # end
 
-      players = 0
-      players = self.tournament_day.tournament.players.count
+      # players = 0
+      # players = self.tournament_day.tournament.players.count
 
-      has_scores = false
-      has_scores = self.tournament_day.has_scores?
+      # has_scores = false
+      # has_scores = self.tournament_day.has_scores?
 
-      if flight_payouts == 0 or broken_contests > 0 or players == 0 or has_scores == false
-        false
-      else
-        true
-      end
+      # if flight_payouts == 0 or broken_contests > 0 or players == 0 or has_scores == false
+      #   false
+      # else
+      #   true
+      # end
+
+      false
     end
 
     def show_other_scorecards?

@@ -1,0 +1,2 @@
+module ScoringRulesHelper
+end

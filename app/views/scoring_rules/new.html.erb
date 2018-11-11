@@ -1,0 +1,27 @@
+<ol class="breadcrumb">
+  <li><%= link_to "Tournaments", league_tournaments_path(current_user.selected_league) %></li>
+  <li><%= link_to @tournament.name, edit_league_tournament_path(current_user.selected_league, @tournament) %></li>
+  <li class="active">Select Scoring Rule</li>
+</ol>
+
+<%= render partial: '/shared/tournaments/manage', locals: {tournament: @tournament, stage: @stage_name} %>
+
+<%= simple_form_for :scoring_rule, url: league_tournament_tournament_day_scoring_rules_path(@tournament.league, @tournament, @tournament_day, @scoring_rule) do |f| %>
+  <% if notification = f.error_notification %>
+    <div class="alert alert-error fade in">
+      <a class="close" data-dismiss="alert" href="#">&times;</a>
+      <%= notification %>
+    </div>
+  <% end %>
+
+  <legend><%= @tournament_day.pretty_day(true) %>Scoring Rule Details</legend>
+
+  <h3>Basic Details</h3>
+  <div class="well">
+    <%= f.input :selected_class_name, collection: ScoringRuleOption.scoring_rule_options, label: 'Scoring Rule', label_method: :name, value_method: :class_name, include_blank: false %>
+  </div>
+
+  <div class="form-actions">
+    <%= f.button :submit, "Save & Continue", :class => 'btn btn-primary' %>
+  </div>
+<% end %>

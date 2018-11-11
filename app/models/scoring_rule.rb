@@ -4,6 +4,8 @@ class ScoringRule < ApplicationRecord
 	belongs_to :tournament_day, touch: true, inverse_of: :scoring_rules
 	has_many :payout_results, inverse_of: :scoring_rule, dependent: :destroy
 
+	attr_accessor :selected_class_name
+
 	def name
 		"BASE_CLASS"
 	end
@@ -65,9 +67,23 @@ class ScoringRule < ApplicationRecord
 	def users
 		self.tournament.players
 	end
+end
 
-	def self.scoring_rules
-		[{name: "Individual Stroke Play", class_name: "StrokePlayScoringRule"}]
-		#[{name: "Individual Stroke Play" : class_name: "StrokePlayScoringRule"}, {name: "Match Play" : class_name: "MatchPlayScoringRule"}]
+class ScoringRuleOption
+	attr_accessor :name
+	attr_accessor :class_name
+
+	def self.option(name:, class_name:)
+		o = ScoringRuleOption.new
+		o.name = name
+		o.class_name = class_name
+
+		o
+	end
+
+	def self.scoring_rule_options
+		[
+			ScoringRuleOption.option(name: "Individual Stroke Play", class_name: "StrokePlayScoringRule")
+		]
 	end
 end

@@ -1,3 +1,5 @@
+#TEAM: REMOVE
+
 class GameTypesController < BaseController
   before_action :fetch_tournament
   before_action :set_stage
@@ -79,5 +81,4 @@ class GameTypesController < BaseController
   def set_stage
     @stage_name = "game_types"
   end
-  
 end

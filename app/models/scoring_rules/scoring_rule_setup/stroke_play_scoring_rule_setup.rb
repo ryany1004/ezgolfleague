@@ -4,7 +4,7 @@ module StrokePlayScoringRuleSetup
 	end
 
   def use_back_nine_key
-   	"ShouldUseBackNineForTies-T-#{self.tournament_day.id}-GT-#{self.game_type_id}"
+   	"ShouldUseBackNineForTies-T-#{self.tournament_day.id}-#{self.id}"
   end
 
   def save_setup_details(game_type_options)
