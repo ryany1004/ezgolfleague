@@ -2,8 +2,8 @@ class TournamentGroup < ApplicationRecord
   include Servable
 
   belongs_to :tournament_day, inverse_of: :tournament_groups, touch: true
-  has_many :golf_outings, -> { order(:created_at) }, inverse_of: :tournament_group, :dependent => :destroy
-  has_many :golfer_teams, -> { order(:created_at) }, inverse_of: :tournament_group, :dependent => :destroy
+  has_many :golf_outings, -> { order(:created_at) }, inverse_of: :tournament_group, dependent: :destroy
+  has_many :golfer_teams, -> { order(:created_at) }, inverse_of: :tournament_group, dependent: :destroy
 
   paginates_per 50
 
@@ -48,14 +48,14 @@ class TournamentGroup < ApplicationRecord
       players << g.user unless g.user.blank?
     end
 
-    return players
+    players
   end
 
   def golfer_outing_for_index(index)
     if index < self.golf_outings.count
-      return self.golf_outings[index]
+      self.golf_outings[index]
     else
-      return nil
+      nil
     end
   end
 
@@ -70,20 +70,20 @@ class TournamentGroup < ApplicationRecord
       end
 
       if index < exploded_teams.count
-        return exploded_teams[index]
+        exploded_teams[index]
       else
-        return nil
+        nil
       end
     else #find the team this user is signed up for
-      return self.tournament_day.golfer_team_for_player(user)
+      self.tournament_day.golfer_team_for_player(user)
     end
   end
 
   def user_for_index(index)
     if index < self.golf_outings.count
-      return self.golf_outings[index].user
+      self.golf_outings[index].user
     else
-      return nil
+      nil
     end
   end
 
@@ -100,9 +100,9 @@ class TournamentGroup < ApplicationRecord
 
   def formatted_tee_time
     if self.tournament_day.tournament.show_players_tee_times == true
-      return self.tee_time_at.to_s(:time_only)
+      self.tee_time_at.to_s(:time_only)
     else
-      return "#{self.tee_time_at.to_s(:time_only)} - #{self.time_description}"
+      "#{self.tee_time_at.to_s(:time_only)} - #{self.time_description}"
     end
   end
 
@@ -115,27 +115,27 @@ class TournamentGroup < ApplicationRecord
     late = (count / 3) * 2
 
     if index >= early && index < middle
-      return "Early"
+      "Early"
     elsif index >= middle && index < late
-      return "Middle"
+      "Middle"
     else
-      return "Late"
+      "Late"
     end
   end
 
   def api_time_description
     if self.tournament_day.tournament.show_players_tee_times == true
-      return self.tee_time_at.to_s(:time_only)
+      self.tee_time_at.to_s(:time_only)
     else
-      return self.time_description
+      self.time_description
     end
   end
 
   def can_be_deleted?
     if self.golf_outings.count > 0
-      return false
+      false
     else
-      return true
+      true
     end
   end
 

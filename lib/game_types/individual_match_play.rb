@@ -73,9 +73,9 @@ module GameTypes
           baseline_handicap = user1_course_handicap - user2_course_handicap
 
           if golf_outing.course_tee_box.tee_box_gender == "Men"
-            sorted_course_holes_by_handicap = self.tournament_day.course.course_holes.order("mens_handicap")
+            sorted_course_holes_by_handicap = self.tournament_day.course.course_holes.order(:mens_handicap)
           else
-            sorted_course_holes_by_handicap = self.tournament_day.course.course_holes.order("womens_handicap")
+            sorted_course_holes_by_handicap = self.tournament_day.course.course_holes.order(:womens_handicap)
           end
 
           allowance = []

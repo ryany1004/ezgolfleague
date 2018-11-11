@@ -1,7 +1,7 @@
 class Play::ScorecardsController < Play::BaseController
   layout "golfer"
 
-  before_action :fetch_scorecard, :except => [:finalize_scorecard, :become_designated_scorer, :update_game_type_metadata]
+  before_action :fetch_scorecard, except: [:finalize_scorecard, :become_designated_scorer, :update_game_type_metadata]
 
   def show
     @page_title = "#{@scorecard.golf_outing.user.complete_name} Scorecard"
@@ -13,7 +13,7 @@ class Play::ScorecardsController < Play::BaseController
     reload_scorecard = @scorecard
     reload_scorecard = Scorecard.find(params[:original_scorecard_id]) unless params[:original_scorecard_id].blank?
 
-    redirect_to play_scorecard_path(reload_scorecard), :flash => { :success => "The scorecard was successfully updated." }
+    redirect_to play_scorecard_path(reload_scorecard), flash: { success: "The scorecard was successfully updated." }
   end
 
   def finalize_scorecard
@@ -43,7 +43,7 @@ class Play::ScorecardsController < Play::BaseController
 
     RankFlightsJob.perform_later(tournament_day)
 
-    redirect_to play_scorecard_path(scorecard), :flash => { :success => "The scorecard was successfully finalized." }
+    redirect_to play_scorecard_path(scorecard), flash: { success: "The scorecard was successfully finalized." }
   end
 
   def become_designated_scorer
@@ -60,7 +60,7 @@ class Play::ScorecardsController < Play::BaseController
       scorecard.save
     end
 
-    redirect_to play_scorecard_path(@scorecard), :flash => { :success => "The scorecard was successfully updated." }
+    redirect_to play_scorecard_path(@scorecard), flash: { success: "The scorecard was successfully updated." }
   end
 
   def update_game_type_metadata
@@ -68,7 +68,7 @@ class Play::ScorecardsController < Play::BaseController
 
     @scorecard.tournament_day.game_type.update_metadata(params[:metadata])
 
-    redirect_to play_scorecard_path(@scorecard), :flash => { :success => "The scorecard was successfully updated." }
+    redirect_to play_scorecard_path(@scorecard), flash: { success: "The scorecard was successfully updated." }
   end
 
   private

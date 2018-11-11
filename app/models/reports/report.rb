@@ -5,6 +5,5 @@ module Reports
     def initialize(tournament_day)    
       self.tournament_day = tournament_day
     end
-    
   end
 end

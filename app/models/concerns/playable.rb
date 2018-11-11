@@ -6,7 +6,7 @@ module Playable
       return true if day.allow_teams == GameTypes::TEAMS_ALLOWED || day.allow_teams == GameTypes::TEAMS_REQUIRED
     end
 
-    return false
+    false
   end
 
   def players
@@ -18,7 +18,7 @@ module Playable
       end
     end
 
-    return players
+    players
   end
 
   def qualified_players
@@ -32,7 +32,7 @@ module Playable
       end
     end
 
-    return players
+    players
   end
 
   def players_for_day(day)
@@ -44,7 +44,7 @@ module Playable
       end
     end
 
-    return players
+    players
   end
 
   def number_of_players
@@ -56,7 +56,7 @@ module Playable
       number_of_players = number_of_players + group.players_signed_up.count
     end
 
-    return number_of_players
+    number_of_players
   end
 
   def includes_player?(user, restrict_to_day = nil)
@@ -76,7 +76,7 @@ module Playable
       end
     end
 
-    return player_included
+    player_included
   end
 
   def confirm_player(user)

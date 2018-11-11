@@ -1,7 +1,5 @@
 module FetchingTools
-
   class LeaderboardFetching
-
     def self.create_slimmed_down_leaderboard(tournament_day)
       complete_rankings = tournament_day.flights_with_rankings
 
@@ -30,12 +28,10 @@ module FetchingTools
 
         flights_with_rankings = tournament_day.tournament.combine_rankings(rankings)
 
-        return flights_with_rankings
+        flights_with_rankings
       else
-        return tournament_day.tournament.tournament_days.first.flights_with_rankings
+        tournament_day.tournament.tournament_days.first.flights_with_rankings
       end
     end
-
   end
-
 end

@@ -1,8 +1,8 @@
 class PayoutsController < BaseController
   before_action :fetch_tournament
-  before_action :fetch_payout, :only => [:edit, :update, :destroy]
+  before_action :fetch_payout, only: [:edit, :update, :destroy]
   before_action :fetch_tournament_day
-  before_action :fetch_payouts, :only => [:index]
+  before_action :fetch_payouts, only: [:index]
   before_action :set_stage
 
   def index
@@ -19,9 +19,9 @@ class PayoutsController < BaseController
 
     if @payout.save
       if params[:commit] == "Save & Continue"
-        redirect_to league_tournament_contests_path(@tournament.league, @tournament, tournament_day: @tournament_day), :flash => { :success => "The payout was successfully created." }
+        redirect_to league_tournament_contests_path(@tournament.league, @tournament, tournament_day: @tournament_day), flash: { success: "The payout was successfully created." }
       else
-        redirect_to new_league_tournament_payout_path(@tournament.league, @tournament, tournament_day: @payout.flight.tournament_day), :flash => { :success => "The payout was successfully created." }
+        redirect_to new_league_tournament_payout_path(@tournament.league, @tournament, tournament_day: @payout.flight.tournament_day), flash: { success: "The payout was successfully created." }
       end
     else
       render :new
@@ -33,7 +33,7 @@ class PayoutsController < BaseController
 
   def update
     if @payout.update(payout_params)
-      redirect_to league_tournament_payouts_path(@tournament.league, @tournament, tournament_day: @payout.flight.tournament_day), :flash => { :success => "The payout was successfully updated." }
+      redirect_to league_tournament_payouts_path(@tournament.league, @tournament, tournament_day: @payout.flight.tournament_day), flash: { success: "The payout was successfully updated." }
     else
       render :edit
     end
@@ -42,7 +42,7 @@ class PayoutsController < BaseController
   def destroy
     @payout.destroy
 
-    redirect_to league_tournament_payouts_path(@tournament.league, @tournament, tournament_day: @payout.flight.tournament_day), :flash => { :success => "The payout was successfully deleted." }
+    redirect_to league_tournament_payouts_path(@tournament.league, @tournament, tournament_day: @payout.flight.tournament_day), flash: { success: "The payout was successfully deleted." }
   end
 
   private

@@ -5,50 +5,50 @@ class Contest < ApplicationRecord
   belongs_to :tournament_day, inverse_of: :contests, touch: true
 
   #handle single winner contests
-  belongs_to :overall_winner, :class_name => "ContestResult", :foreign_key => "overall_winner_contest_result_id", :dependent => :destroy
+  belongs_to :overall_winner, class_name: "ContestResult", foreign_key: "overall_winner_contest_result_id", dependent: :destroy
 
   has_many :payments, inverse_of: :contest
   has_many :contest_results, inverse_of: :contest
 
   #handle multiple hole contests
-  has_many :contest_holes, :dependent => :destroy
+  has_many :contest_holes, dependent: :destroy
   has_many :course_holes, through: :contest_holes
 
   has_and_belongs_to_many :users #contestants
 
-  validates :dues_amount, :numericality => { :greater_than_or_equal_to => 0 }
+  validates :dues_amount, numericality: { greater_than_or_equal_to: 0 }
 
   def human_type
     if self.contest_type == 0
-      return "Custom: Overall Winner"
+      "Custom: Overall Winner"
     elsif self.contest_type == 1
-      return "Custom: By Hole"
+      "Custom: By Hole"
     elsif self.contest_type == 2
-      return "Net Skins"
+      "Net Skins"
     elsif self.contest_type == 3
-      return "Gross Skins"
+      "Gross Skins"
     elsif self.contest_type == 4
-      return "Net Low"
+      "Net Low"
     elsif self.contest_type == 5
-      return "Gross Low"
+      "Gross Low"
     elsif self.contest_type == 6
-      return "Net Low Tournament Total"
+      "Net Low Tournament Total"
     elsif self.contest_type == 7
-      return "Gross Low Tournament Total"
+      "Gross Low Tournament Total"
     elsif self.contest_type == 8
-      return "Net Skins + Gross Skins"
+      "Net Skins + Gross Skins"
     end
   end
 
   def name_with_cost
-    return "#{self.name} ($#{self.dues_amount.to_i})"
+    "#{self.name} ($#{self.dues_amount.to_i})"
   end
 
   def is_team_scored?
     if self.contest_type == 2 or self.contest_type == 3 or self.contest_type == 8
-      return true
+      true
     else
-      return false
+      false
     end
   end
 
@@ -63,9 +63,11 @@ class Contest < ApplicationRecord
       credit_card_fees = 0
       credit_card_fees = Stripe::StripeFees.fees_for_transaction_amount(dues_amount) if include_credit_card_fees == true
 
-      return dues_amount + credit_card_fees
+      total = dues_amount + credit_card_fees
+
+      total
     else
-      return 0
+      0
     end
   end
 
@@ -80,37 +82,37 @@ class Contest < ApplicationRecord
       cost_lines << {:name => "Credit Card Fees", :price => Stripe::StripeFees.fees_for_transaction_amount(self.dues_amount)}
     end
 
-    return cost_lines
+    cost_lines
   end
 
   ##
 
   def manual_results_entry?
     if self.contest_type < 2
-      return true
+      true
     else
       if self.winners.blank? || self.winners.count == 0
-        return false
+        false
       else
-        return true
+        true
       end
     end
   end
 
   def allows_overall_winner_points_and_payouts?
     if self.contest_type >= 4 && self.contest_type <= 7
-      return true
+      true
     else
-      return false
+      false
     end
   end
 
   def combined_contest_results
     if self.is_by_hole? == false
       if self.overall_winner.blank?
-        return []
+        []
       else
-        return [self.overall_winner]
+        [self.overall_winner]
       end
     else
       results = []
@@ -121,7 +123,7 @@ class Contest < ApplicationRecord
         end
       end
 
-      return results
+      results
     end
   end
 
@@ -140,7 +142,7 @@ class Contest < ApplicationRecord
     return false if self.contest_type == 6
     return false if self.contest_type == 7
 
-    return true
+    true
   end
 
   def should_sum_winners?
@@ -148,23 +150,23 @@ class Contest < ApplicationRecord
     return true if self.contest_type == 3
     return true if self.contest_type == 8
 
-    return false
+    false
   end
 
   def can_accept_more_results?
     if self.contest_type == 0 && !self.overall_winner.blank?
-      return false
+      false
     else
-      return true
+      true
     end
   end
 
   def winners
     if self.is_by_hole? == false
       if self.overall_winner.blank?
-        return nil
+        nil
       else
-        return [{contest_name: self.name, user: self.overall_winner.winner, name: self.overall_winner.winner.complete_name, result_value: self.overall_winner.result_value, amount: self.overall_winner.payout_amount, points: self.overall_winner.points}]
+        [{contest_name: self.name, user: self.overall_winner.winner, name: self.overall_winner.winner.complete_name, result_value: self.overall_winner.result_value, amount: self.overall_winner.payout_amount, points: self.overall_winner.points}]
       end
     else
       winners = []
@@ -204,7 +206,7 @@ class Contest < ApplicationRecord
 
       winners.sort! { |x,y| x[:amount] <=> y[:amount] }
 
-      return winners
+      winners
     end
   end
 
@@ -272,9 +274,9 @@ class Contest < ApplicationRecord
     ids_to_omit = self.users.map { |n| n.id }
 
     if ids_to_omit.blank?
-      return self.tournament_day.tournament.league.users.where("users.id IN (?)", tournament_user_ids).order("last_name, first_name")
+      self.tournament_day.tournament.league.users.where("users.id IN (?)", tournament_user_ids).order(:last_name).order(:first_name)
     else
-      return self.tournament_day.tournament.league.users.where("users.id IN (?)", tournament_user_ids).where("users.id NOT IN (?)", ids_to_omit).order("last_name, first_name")
+      self.tournament_day.tournament.league.users.where("users.id IN (?)", tournament_user_ids).where("users.id NOT IN (?)", ids_to_omit).order(:last_name).order(:first_name)
     end
   end
 

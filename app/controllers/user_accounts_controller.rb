@@ -1,13 +1,13 @@
 class UserAccountsController < BaseController
-  before_action :fetch_user_account, :only => [:edit, :update, :destroy]
-  before_action :initialize_form, :only => [:new, :edit, :edit_current]
+  before_action :fetch_user_account, only: [:edit, :update, :destroy]
+  before_action :initialize_form, only: [:new, :edit, :edit_current]
 
   def index
     if current_user.is_super_user?
-      @user_accounts = User.order("last_name").page params[:page]
+      @user_accounts = User.order(:last_name).page params[:page]
     else
       membership_ids = current_user.leagues_admin.map { |n| n.id }
-      @user_accounts = User.joins(:league_memberships).where("league_memberships.league_id IN (?)", membership_ids).order("last_name").page params[:page]
+      @user_accounts = User.joins(:league_memberships).where("league_memberships.league_id IN (?)", membership_ids).order(:last_name).page params[:page]
     end
 
     unless params[:search].blank?
@@ -29,7 +29,7 @@ class UserAccountsController < BaseController
     if @user_account.should_invite == "1"
       User.invite!(user_params, current_user)
 
-      redirect_to user_accounts_path, :flash => { :success => "The user was successfully invited." }
+      redirect_to user_accounts_path, flash: { success: "The user was successfully invited." }
     else
       if !current_user.is_super_user?
         @user_account.leagues << current_user.leagues_admin.first unless current_user.leagues_admin.blank? #add the user to at least one league
@@ -38,7 +38,7 @@ class UserAccountsController < BaseController
       if @user_account.save
         GhinUpdateJob.perform_later([@user_account]) unless @user_account.ghin_number.blank?
 
-        redirect_to user_accounts_path, :flash => { :success => "The user was successfully created." }
+        redirect_to user_accounts_path, flash: { success: "The user was successfully created." }
       else
         initialize_form
 
@@ -69,7 +69,7 @@ class UserAccountsController < BaseController
       if @user_account == current_user
         redirect_to root_path
       else
-        redirect_to user_accounts_path, :flash => { :success => "The user was successfully updated." }
+        redirect_to user_accounts_path, flash: { success: "The user was successfully updated." }
       end
     else
       initialize_form
@@ -92,7 +92,7 @@ class UserAccountsController < BaseController
 
     @user_account.destroy
 
-    redirect_to user_accounts_path, :flash => { :success => "The user was successfully deleted." }
+    redirect_to user_accounts_path, flash: { success: "The user was successfully deleted." }
   end
 
   def export_users
@@ -129,14 +129,14 @@ class UserAccountsController < BaseController
 
   def setup_league_admin_invite
     @user_account = User.new
-    @leagues = League.all.order("name")
+    @leagues = League.all.order(:name)
   end
 
   def send_league_admin_invite
     if self.invite_user(user_params, true)
-      redirect_to user_accounts_path, :flash => { :success => "The league admin was successfully invited." }
+      redirect_to user_accounts_path, flash: { success: "The league admin was successfully invited." }
     else
-      redirect_to user_accounts_path, :flash => { :error => "There was an error inviting the league admin. Please check your information and try again." }
+      redirect_to user_accounts_path, flash: { error: "There was an error inviting the league admin. Please check your information and try again." }
     end
   end
 
@@ -147,24 +147,24 @@ class UserAccountsController < BaseController
 
     user.invite!(current_user)
 
-    redirect_to user_accounts_path, :flash => { :success => "The golfer was successfully re-invited." }
+    redirect_to user_accounts_path, flash: { success: "The golfer was successfully re-invited." }
   end
 
   def setup_golfer_invite
     @user_account = User.new
 
     if current_user.is_super_user?
-      @leagues = League.all.order("name")
+      @leagues = League.all.order(:name)
     else
-      @leagues = current_user.leagues.order("name")
+      @leagues = current_user.leagues.order(:name)
     end
   end
 
   def send_golfer_invite
     if self.invite_user(user_params, false)
-      redirect_to user_accounts_path, :flash => { :success => "The golfer was successfully invited." }
+      redirect_to user_accounts_path, flash: { success: "The golfer was successfully invited." }
     else
-      redirect_to user_accounts_path, :flash => { :error => "There was an error inviting the golfer. Please check your information and try again." }
+      redirect_to user_accounts_path, flash: { error: "There was an error inviting the golfer. Please check your information and try again." }
     end
   end
 
@@ -231,9 +231,9 @@ class UserAccountsController < BaseController
     @us_states = US_STATES
 
     if current_user.is_super_user?
-      @leagues = League.all.order("name")
+      @leagues = League.all.order(:name)
     else
-      @leagues = current_user.leagues_admin.order("name")
+      @leagues = current_user.leagues_admin.order(:name)
     end
   end
 

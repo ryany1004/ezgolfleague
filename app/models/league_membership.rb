@@ -4,7 +4,7 @@ class LeagueMembership < ApplicationRecord
   scope :active, -> { where("state = ?", MembershipStates::ACTIVE_FOR_BILLING) }
 
   belongs_to :league, touch: true
-  belongs_to :user
+  belongs_to :user, inverse_of: :league_memberships
 
   validates :league, presence: true
   validates :user, presence: true

@@ -28,32 +28,32 @@ class Payment < ApplicationRecord
   def generated_description
     if !self.tournament.blank?
       if self.payment_amount < 0.0
-        return "Dues for #{self.tournament.name}"
+        "Dues for #{self.tournament.name}"
       else
-        return "Payment for #{self.tournament.name}"
+        "Payment for #{self.tournament.name}"
       end
     elsif !self.league_season.blank?
       if self.payment_amount < 0.0
-        return "Dues for #{self.league_season.league.name} #{self.league_season.name}"
+        "Dues for #{self.league_season.league.name} #{self.league_season.name}"
       else
-        return "Payment for #{self.league_season.league.name} #{self.league_season.name}"
+        "Payment for #{self.league_season.league.name} #{self.league_season.name}"
       end
     elsif !self.contest.blank?
       if self.payment_amount < 0.0
-        return "Dues for #{self.contest.name} (#{self.contest.tournament_day.tournament.name})"
+        "Dues for #{self.contest.name} (#{self.contest.tournament_day.tournament.name})"
       else
-        return "Payment for #{self.contest.name} (#{self.contest.tournament_day.tournament.name})"
+        "Payment for #{self.contest.name} (#{self.contest.tournament_day.tournament.name})"
       end
     else
-      return self.payment_type
+      self.payment_type
     end
   end
 
   def modifiable?
     if self.payment_source == PAYMENT_METHOD_CREDIT_CARD
-      return false
+      false
     else
-      return true
+      true
     end
   end
 

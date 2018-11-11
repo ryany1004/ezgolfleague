@@ -1,6 +1,6 @@
 class CourseTeeBoxesController < BaseController
   before_action :fetch_course
-  before_action :fetch_course_tee_box, :except => [:index, :new, :create]
+  before_action :fetch_course_tee_box, except: [:index, :new, :create]
 
   def index
     @course_tee_boxes = @course.course_tee_boxes
@@ -15,7 +15,7 @@ class CourseTeeBoxesController < BaseController
     @course_tee_box.course = @course
 
     if @course_tee_box.save
-      redirect_to course_course_holes_path(@course), :flash => { :success => "The tee box was successfully created. Please add the hole information next." }
+      redirect_to course_course_holes_path(@course), flash: { success: "The tee box was successfully created. Please add the hole information next." }
     else
       render :new
     end
@@ -26,7 +26,7 @@ class CourseTeeBoxesController < BaseController
   
   def update
     if @course_tee_box.update(course_tee_box_params)
-      redirect_to course_course_tee_boxes_path(@course), :flash => { :success => "The course tee box was successfully updated." }
+      redirect_to course_course_tee_boxes_path(@course), flash: { success: "The course tee box was successfully updated." }
     else      
       render :edit
     end
@@ -35,7 +35,7 @@ class CourseTeeBoxesController < BaseController
   def destroy
     @course_tee_box.destroy
     
-    redirect_to course_course_tee_boxes_path(@course), :flash => { :success => "The course tee box was successfully deleted." }
+    redirect_to course_course_tee_boxes_path(@course), flash: { success: "The course tee box was successfully deleted." }
   end
   
   private

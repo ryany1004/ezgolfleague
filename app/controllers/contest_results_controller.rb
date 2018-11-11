@@ -2,8 +2,8 @@ class ContestResultsController < BaseController
   before_action :fetch_tournament
   before_action :fetch_tournament_day
   before_action :fetch_contest
-  before_action :fetch_contest_results, :only => [:index]
-  before_action :fetch_contest_result, :only => [:edit, :update, :destroy]
+  before_action :fetch_contest_results, only: [:index]
+  before_action :fetch_contest_result, only: [:edit, :update, :destroy]
   before_action :set_stage
   
   def index
@@ -24,7 +24,7 @@ class ContestResultsController < BaseController
         @contest.save
       end
 
-      redirect_to league_tournament_contest_contest_results_path(@tournament.league, @tournament, @contest, tournament_day: @tournament_day), :flash => { :success => "The contest result was successfully added." }
+      redirect_to league_tournament_contest_contest_results_path(@tournament.league, @tournament, @contest, tournament_day: @tournament_day), flash: { success: "The contest result was successfully added." }
     else
       render :new
     end
@@ -35,7 +35,7 @@ class ContestResultsController < BaseController
   
   def update
     if @contest_result.update(contest_result_params)      
-      redirect_to league_tournament_contest_contest_results_path(@tournament.league, @tournament, @contest, tournament_day: @tournament_day), :flash => { :success => "The contest result was successfully updated." }
+      redirect_to league_tournament_contest_contest_results_path(@tournament.league, @tournament, @contest, tournament_day: @tournament_day), flash: { success: "The contest result was successfully updated." }
     else      
       render :edit
     end
@@ -44,7 +44,7 @@ class ContestResultsController < BaseController
   def destroy
     @contest_result.destroy
     
-    redirect_to league_tournament_contest_contest_results_path(@tournament.league, @tournament, @contest, tournament_day: @tournament_day), :flash => { :success => "The contest result was successfully deleted." }
+    redirect_to league_tournament_contest_contest_results_path(@tournament.league, @tournament, @contest, tournament_day: @tournament_day), flash: { success: "The contest result was successfully deleted." }
   end
   
   private

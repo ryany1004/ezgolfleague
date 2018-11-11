@@ -1,11 +1,11 @@
 class PaymentsController < BaseController
-  before_action :fetch_collections, :except => [:index]
-  before_action :fetch_payment, :only => [:edit, :update, :destroy]
-  before_action :payment_options, :only => [:new, :edit]
+  before_action :fetch_collections, except: [:index]
+  before_action :fetch_payment, only: [:edit, :update, :destroy]
+  before_action :payment_options, only: [:new, :edit]
   
   def index
     if current_user.is_super_user?
-      @payments = Payment.order("created_at DESC").page params[:page]
+      @payments = Payment.order(created_at: :desc).page params[:page]
 
       @page_title = "All Payments"
     else
@@ -32,7 +32,7 @@ class PaymentsController < BaseController
         Payment.create(payment_amount: (@payment.payment_amount * -1.0), user: @payment.user, payment_type: "#{@payment.user.complete_name} League Dues", league_season: @payment.league_season)
       end
       
-      redirect_to payments_path, :flash => { :success => "The payment was successfully created." }
+      redirect_to payments_path, flash: { success: "The payment was successfully created." }
     else
       render :new
     end
@@ -47,7 +47,7 @@ class PaymentsController < BaseController
   
   def update
     if @payment.update(payment_params)
-      redirect_to payments_path, :flash => { :success => "The payment was successfully updated." }
+      redirect_to payments_path, flash: { success: "The payment was successfully updated." }
     else      
       render :edit
     end
@@ -56,7 +56,7 @@ class PaymentsController < BaseController
   def destroy
     @payment.destroy
     
-    redirect_to payments_path, :flash => { :success => "The payment was successfully deleted." }
+    redirect_to payments_path, flash: { success: "The payment was successfully deleted." }
   end
   
   def show
@@ -89,15 +89,15 @@ class PaymentsController < BaseController
   
   def fetch_collections
     if current_user.is_super_user?
-      @users = User.all.order("last_name, first_name")
-      @tournaments = Tournament.all.order("signup_closes_at DESC")
-      @league_seasons = LeagueSeason.all.order("starts_at DESC")
+      @users = User.all.order(:last_name).order(:first_name)
+      @tournaments = Tournament.all.order(signup_closes_at: :desc)
+      @league_seasons = LeagueSeason.all.order(starts_at: :desc)
     else
       selected_league = self.selected_league
       
-      @users = selected_league.users.order("last_name, first_name")
-      @tournaments = selected_league.tournaments.order("signup_closes_at DESC")
-      @league_seasons = LeagueSeason.where("league_id = ?", selected_league.id).order("starts_at DESC")
+      @users = selected_league.users.order(:last_name).order(:first_name)
+      @tournaments = selected_league.tournaments.order(signup_closes_at: :desc)
+      @league_seasons = LeagueSeason.where("league_id = ?", selected_league.id).order(starts_at: :desc)
     end
   end
   

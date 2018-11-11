@@ -1,6 +1,6 @@
 class CourseHolesController < BaseController
-  before_action :fetch_course, :only => [:index, :new, :edit, :create, :update, :destroy]
-  before_action :fetch_course_hole, :only => [:edit, :update, :destroy]
+  before_action :fetch_course, only: [:index, :new, :edit, :create, :update, :destroy]
+  before_action :fetch_course_hole, only: [:edit, :update, :destroy]
   
   respond_to :html
   
@@ -19,7 +19,7 @@ class CourseHolesController < BaseController
     @course_hole.course = @course
     
     if @course_hole.save
-      redirect_to course_course_holes_path(@course), :flash => { :success => "The hole was successfully created." }
+      redirect_to course_course_holes_path(@course), flash: { success: "The hole was successfully created." }
     else
       render :new
     end
@@ -30,7 +30,7 @@ class CourseHolesController < BaseController
   
   def update
     if @course_hole.update(course_hole_params)
-      redirect_to course_course_holes_path(@course), :flash => { :success => "The hole was successfully updated." }
+      redirect_to course_course_holes_path(@course), flash: { success: "The hole was successfully updated." }
     else      
       render :edit
     end
@@ -39,7 +39,7 @@ class CourseHolesController < BaseController
   def destroy
     @course_hole.destroy
     
-    redirect_to course_course_holes_path(@course), :flash => { :success => "The course hole was successfully deleted." }
+    redirect_to course_course_holes_path(@course), flash: { success: "The course hole was successfully deleted." }
   end
 
   private

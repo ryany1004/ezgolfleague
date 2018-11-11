@@ -26,8 +26,8 @@ class Tournament < ApplicationRecord
   validates :signup_opens_at, presence: true
   validates :signup_closes_at, presence: true
   validates :max_players, presence: true
-  validates :max_players, :numericality => { :greater_than_or_equal_to => 0 }
-  validates :dues_amount, :numericality => { :greater_than_or_equal_to => 0 }
+  validates :max_players, numericality: { greater_than_or_equal_to: 0 }
+  validates :dues_amount, numericality: { greater_than_or_equal_to: 0 }
 
   validate :dates_are_valid, on: :create, unless: :is_super_user_setup?
   def dates_are_valid
@@ -78,25 +78,25 @@ class Tournament < ApplicationRecord
       end
     end
 
-    return nil
+    nil
   end
 
   def season_name
     season = self.league_season
 
     unless season.blank?
-      return season.name
+      season.name
     else
-      return "?"
+      "?"
     end
   end
 
   def first_day
-    return self.tournament_days.first
+    self.tournament_days.first
   end
 
   def last_day
-    return self.tournament_days.last
+    self.tournament_days.last
   end
 
   def has_tournament_days?
@@ -109,10 +109,10 @@ class Tournament < ApplicationRecord
       if self.tournament_days.count >= (index_for_day - 1)
         self.tournament_days[index_for_day - 1]
       else
-        return nil
+        nil
       end
     else
-      return nil
+      nil
     end
   end
 
@@ -139,9 +139,11 @@ class Tournament < ApplicationRecord
       credit_card_fees = 0
       credit_card_fees = Stripe::StripeFees.fees_for_transaction_amount(dues_amount) if include_credit_card_fees == true
 
-      return dues_amount + credit_card_fees
+      total = dues_amount + credit_card_fees
+
+      total
     else
-      return 0
+      0
     end
   end
 
@@ -156,7 +158,9 @@ class Tournament < ApplicationRecord
 
     credit_card_fees = Stripe::StripeFees.fees_for_transaction_amount(dues_amount)
 
-    return dues_amount + credit_card_fees
+    total = dues_amount + credit_card_fees
+
+    total
   end
 
   def cost_breakdown_for_user(user, include_unpaid_contests = true, include_credit_card_fees = true)
@@ -180,7 +184,7 @@ class Tournament < ApplicationRecord
       cost_lines << {:name => "Credit Card Fees", :price => Stripe::StripeFees.fees_for_transaction_amount(dues_total)}
     end
 
-    return cost_lines
+    cost_lines
   end
 
   ##
@@ -192,7 +196,7 @@ class Tournament < ApplicationRecord
       distinct_courses << day.course unless distinct_courses.include? day.course
     end
 
-    return distinct_courses
+    distinct_courses
   end
 
   def paid_contests
@@ -204,10 +208,8 @@ class Tournament < ApplicationRecord
       end
     end
 
-    return contests
+    contests
   end
-
-  ##
 
   def is_paid?
     if self.league.exempt_from_subscription
@@ -296,9 +298,9 @@ class Tournament < ApplicationRecord
     return false if self.first_day.blank?
 
     if self.last_day.tournament_at > DateTime.yesterday
-      return false
+      false
     else
-      return true
+      true
     end
   end
 
@@ -313,7 +315,7 @@ class Tournament < ApplicationRecord
     end
     return false if unplayable_days == true
 
-    return true
+    true
   end
 
   ##
@@ -338,9 +340,9 @@ class Tournament < ApplicationRecord
     end
 
     if tournament_balance > 0 && tournament_balance >= self.dues_for_user(user)
-      return true
+      true
     else
-      return false
+      false
     end
   end
 

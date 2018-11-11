@@ -1,6 +1,6 @@
 class CoursesController < BaseController
-  before_action :fetch_course, :only => [:edit, :update, :destroy]
-  before_action :initialize_form, :only => [:new, :edit]
+  before_action :fetch_course, only: [:edit, :update, :destroy]
+  before_action :initialize_form, only: [:new, :edit]
 
   def index
     @page_title = "Courses"
@@ -23,7 +23,7 @@ class CoursesController < BaseController
     @course.geocode
 
     if @course.save
-      redirect_to course_course_tee_boxes_path(@course), :flash => { :success => "The course was successfully created. Please add tee box information next." }
+      redirect_to course_course_tee_boxes_path(@course), flash: { success: "The course was successfully created. Please add tee box information next." }
     else
       initialize_form
 
@@ -36,7 +36,7 @@ class CoursesController < BaseController
 
   def update
     if @course.update(course_params)
-      redirect_to courses_path, :flash => { :success => "The course was successfully updated." }
+      redirect_to courses_path, flash: { success: "The course was successfully updated." }
     else
       initialize_form
 
@@ -47,7 +47,7 @@ class CoursesController < BaseController
   def destroy
     @course.destroy
 
-    redirect_to courses_path, :flash => { :success => "The course was successfully deleted." }
+    redirect_to courses_path, flash: { success: "The course was successfully deleted." }
   end
 
   private

@@ -1,17 +1,17 @@
 class NotificationTemplatesController < BaseController
-  before_action :fetch_notification_template, :only => [:edit, :update, :destroy]
+  before_action :fetch_notification_template, only: [:edit, :update, :destroy]
   before_action :fetch_other_details
 
   def index
     if current_user.is_super_user?
-      @notification_templates = NotificationTemplate.order("deliver_at DESC").page params[:page]
+      @notification_templates = NotificationTemplate.order(deliver_at: :desc).page params[:page]
 
       @page_title = "All Notifications"
     else
       leagues = current_user.leagues_admin
       league_ids = leagues.map {|n| n.id}
 
-      @notification_templates = NotificationTemplate.where("league_id IN (?)", league_ids).order("deliver_at DESC").page params[:page]
+      @notification_templates = NotificationTemplate.where("league_id IN (?)", league_ids).order(deliver_at: :desc).page params[:page]
 
       @page_title = "League Notifications"
     end
@@ -32,7 +32,7 @@ class NotificationTemplatesController < BaseController
     if @notification_template.save
       SendNotificationsJob.perform_later
 
-      redirect_to notification_templates_path, :flash => { :success => "The notification was successfully created." }
+      redirect_to notification_templates_path, flash: { success: "The notification was successfully created." }
     else
       render :new
     end
@@ -45,7 +45,7 @@ class NotificationTemplatesController < BaseController
     if @notification_template.update(notification_template_params)
       SendNotificationsJob.perform_later
 
-      redirect_to notification_templates_path, :flash => { :success => "The notification was successfully updated." }
+      redirect_to notification_templates_path, flash: { success: "The notification was successfully updated." }
     else
       render :edit
     end
@@ -62,7 +62,7 @@ class NotificationTemplatesController < BaseController
   def destroy
     @notification_template.destroy
 
-    redirect_to notification_templates_path, :flash => { :success => "The notification was successfully deleted." }
+    redirect_to notification_templates_path, flash: { success: "The notification was successfully deleted." }
   end
 
   private
@@ -78,7 +78,7 @@ class NotificationTemplatesController < BaseController
 
   def fetch_other_details
     if current_user.is_super_user?
-      @leagues = League.all.order("name")
+      @leagues = League.all.order(:name)
     else
       @leagues = current_user.leagues
     end

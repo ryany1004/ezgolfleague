@@ -1,7 +1,7 @@
 class LeagueMembershipsController < BaseController
   before_action :fetch_league
   before_action :fetch_users
-  before_action :fetch_membership, :only => [:edit, :update, :destroy]
+  before_action :fetch_membership, only: [:edit, :update, :destroy]
 
   def index
     @league_memberships = @league.league_memberships.includes(:user).order("users.last_name").page params[:page]
@@ -26,7 +26,7 @@ class LeagueMembershipsController < BaseController
     @league_membership.league = @league
 
     if @league_membership.save
-      redirect_to league_league_memberships_path(@league), :flash => { :success => "The membership was successfully created." }
+      redirect_to league_league_memberships_path(@league), flash: { success: "The membership was successfully created." }
     else
       render :new
     end
@@ -43,7 +43,7 @@ class LeagueMembershipsController < BaseController
         GhinUpdateJob.perform_later([@league_membership.user.id])
       end
 
-      redirect_to league_league_memberships_path(@league), :flash => { :success => "The membership was successfully updated." }
+      redirect_to league_league_memberships_path(@league), flash: { success: "The membership was successfully updated." }
     else
       render :edit
     end
@@ -52,7 +52,7 @@ class LeagueMembershipsController < BaseController
   def destroy
     @league_membership.destroy
 
-    redirect_to league_league_memberships_path(@league), :flash => { :success => "The membership was successfully deleted." }
+    redirect_to league_league_memberships_path(@league), flash: { success: "The membership was successfully deleted." }
   end
 
   private
@@ -73,9 +73,9 @@ class LeagueMembershipsController < BaseController
     if @league.users.count > 0
       existing_user_ids = @league.users.map { |n| n.id }
 
-      @users = User.where("id NOT IN (?)", existing_user_ids).order("last_name").order("first_name").order("created_at DESC")
+      @users = User.where("id NOT IN (?)", existing_user_ids).order(:last_name).order(:first_name).order(created_at: :desc)
     else
-      @users = User.all.order("last_name").order("first_name").order("created_at DESC")
+      @users = User.all.order(:last_name).order(:first_name).order(created_at: :desc)
     end
 
     @users = User.where(id: @league_membership.user.id) if @users.count == 0 && @league_membership.blank? == false

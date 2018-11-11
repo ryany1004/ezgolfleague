@@ -11,8 +11,14 @@ module GameTypes
     attr_accessor :tournament_day
 
     def self.available_types
-      #return [GameTypes::IndividualStrokePlay.new, GameTypes::IndividualMatchPlay.new, GameTypes::IndividualModifiedStableford.new, GameTypes::TwoManShamble.new, GameTypes::TwoManScramble.new, GameTypes::FourManScramble.new, GameTypes::TwoManBestBall.new, GameTypes::TwoBestBallsOfFour.new, GameTypes::TwoManComboScrambleBestBall.new, GameTypes::OneTwoThreeBestBallsOfFour.new]
-      return [GameTypes::IndividualStrokePlay.new, GameTypes::TwoManIndividualStrokePlay.new, GameTypes::IndividualModifiedStableford.new, GameTypes::TwoManScramble.new, GameTypes::FourManScramble.new, GameTypes::TwoManBestBall.new]
+      [
+        GameTypes::IndividualStrokePlay.new,
+        GameTypes::TwoManIndividualStrokePlay.new,
+        GameTypes::IndividualModifiedStableford.new,
+        GameTypes::TwoManScramble.new,
+        GameTypes::FourManScramble.new,
+        GameTypes::TwoManBestBall.new,
+      ]
     end
 
     def display_name
@@ -53,9 +59,9 @@ module GameTypes
       has_scores = self.tournament_day.has_scores?
 
       if flight_payouts == 0 or broken_contests > 0 or players == 0 or has_scores == false
-        return false
+        false
       else
-        return true
+        true
       end
     end
 
@@ -82,17 +88,17 @@ module GameTypes
     ##Group
 
     def other_group_members(user)
-      return nil
+      nil
     end
 
     def user_is_in_group?(user, tournament_group)
-      return false
+      false
     end
 
     ##Teams
 
     def allow_teams
-      return GameTypes::TEAMS_DISALLOWED
+      GameTypes::TEAMS_DISALLOWED
     end
 
     def show_teams?
@@ -454,7 +460,7 @@ module GameTypes
     end
 
     def flights_with_rankings
-      eager_flights = self.tournament_day.flights.includes(:users, :tournament_day_results, :payout_results)
+      self.tournament_day.flights.includes(:users, :tournament_day_results, :payout_results)
     end
 
     ##Payouts
@@ -479,7 +485,7 @@ module GameTypes
 
       Rails.logger.debug { "Completed eligible_players_for_payouts" }
 
-      return eligible_player_list
+      eligible_player_list
     end
 
     def assign_payouts_from_scores

@@ -4,7 +4,7 @@ class LeagueSeasonScoringGroupsController < BaseController
   before_action :fetch_available_users, only: [:edit]
 
   def index
-    @scoring_groups = @league_season.league_season_scoring_groups.order("name")
+    @scoring_groups = @league_season.league_season_scoring_groups.order(:name)
 
     @page_title = "Season Scoring Groups"
   end
@@ -18,7 +18,7 @@ class LeagueSeasonScoringGroupsController < BaseController
     @scoring_group.league_season = @league_season
 
     if @scoring_group.save
-      redirect_to league_league_season_league_season_scoring_groups_path(@league, @league_season), :flash => { :success => "The scoring group was successfully created." }
+      redirect_to league_league_season_league_season_scoring_groups_path(@league, @league_season), flash: { success: "The scoring group was successfully created." }
     else
       render :new
     end
@@ -29,7 +29,7 @@ class LeagueSeasonScoringGroupsController < BaseController
 
   def update
     if @scoring_group.update(scoring_group_params)
-      redirect_to league_league_season_league_season_scoring_groups_path(@league, @league_season), :flash => { :success => "The scoring group was successfully updated." }
+      redirect_to league_league_season_league_season_scoring_groups_path(@league, @league_season), flash: { success: "The scoring group was successfully updated." }
     else
       render :edit
     end
@@ -38,7 +38,7 @@ class LeagueSeasonScoringGroupsController < BaseController
   def destroy
     @scoring_group.destroy
 
-    redirect_to league_league_season_league_season_scoring_groups_path(@league, @league_season), :flash => { :success => "The scoring group was successfully deleted." }
+    redirect_to league_league_season_league_season_scoring_groups_path(@league, @league_season), flash: { success: "The scoring group was successfully deleted." }
   end
 
   def update_player

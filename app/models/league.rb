@@ -1,11 +1,11 @@
 class League < ApplicationRecord
   include Servable
 
-  has_many :league_seasons, ->{ order 'starts_at' }, :dependent => :destroy
-  has_many :league_memberships, ->{includes(:user).order("users.last_name")}, :dependent => :destroy
+  has_many :league_seasons, ->{ order 'starts_at' }, dependent: :destroy, inverse_of: :league
+  has_many :league_memberships, ->{includes(:user).order("users.last_name")}, dependent: :destroy
   has_many :users, ->{ order 'last_name, first_name' }, through: :league_memberships
-  has_many :tournaments, :dependent => :destroy, inverse_of: :league
-  has_many :notification_templates, :dependent => :destroy
+  has_many :tournaments, dependent: :destroy, inverse_of: :league
+  has_many :notification_templates, dependent: :destroy
 
   validates :name, presence: true, uniqueness: true
   validates :location, presence: true
@@ -16,10 +16,10 @@ class League < ApplicationRecord
   after_create :create_default_league_season
   after_create :notify_super_users
 
-  attr_encrypted :stripe_test_secret_key, :key => ENCRYPYTED_ATTRIBUTES_KEY, algorithm: 'aes-256-cbc', mode: :single_iv_and_salt, insecure_mode: true
-  attr_encrypted :stripe_production_secret_key, :key => ENCRYPYTED_ATTRIBUTES_KEY, algorithm: 'aes-256-cbc', mode: :single_iv_and_salt, insecure_mode: true
-  attr_encrypted :stripe_test_publishable_key, :key => ENCRYPYTED_ATTRIBUTES_KEY, algorithm: 'aes-256-cbc', mode: :single_iv_and_salt, insecure_mode: true
-  attr_encrypted :stripe_production_publishable_key, :key => ENCRYPYTED_ATTRIBUTES_KEY, algorithm: 'aes-256-cbc', mode: :single_iv_and_salt, insecure_mode: true
+  attr_encrypted :stripe_test_secret_key, key: ENCRYPYTED_ATTRIBUTES_KEY, algorithm: 'aes-256-cbc', mode: :single_iv_and_salt, insecure_mode: true
+  attr_encrypted :stripe_production_secret_key, key: ENCRYPYTED_ATTRIBUTES_KEY, algorithm: 'aes-256-cbc', mode: :single_iv_and_salt, insecure_mode: true
+  attr_encrypted :stripe_test_publishable_key, key: ENCRYPYTED_ATTRIBUTES_KEY, algorithm: 'aes-256-cbc', mode: :single_iv_and_salt, insecure_mode: true
+  attr_encrypted :stripe_production_publishable_key, key: ENCRYPYTED_ATTRIBUTES_KEY, algorithm: 'aes-256-cbc', mode: :single_iv_and_salt, insecure_mode: true
 
   def stripe_publishable_key
     return nil if Rails.env.development?
@@ -146,9 +146,11 @@ class League < ApplicationRecord
 
       credit_card_fees = Stripe::StripeFees.fees_for_transaction_amount(discount_amount) if include_credit_card_fees == true
 
-      return discount_amount + credit_card_fees
+      total = discount_amount + credit_card_fees
+
+      total
     else
-      return 0
+      0
     end
   end
 
@@ -161,7 +163,7 @@ class League < ApplicationRecord
       {:name => "Credit Card Fees", :price => Stripe::StripeFees.fees_for_transaction_amount(self.dues_amount - membership.league_dues_discount)}
     ]
 
-    return cost_lines
+    cost_lines
   end
 
   def dues_amount
@@ -191,16 +193,16 @@ class League < ApplicationRecord
   def active_season
     this_year_season = self.league_seasons.where("starts_at <= ? AND ends_at >= ?", Date.current.in_time_zone, Date.current.in_time_zone).first
 
-    return this_year_season
+    this_year_season
   end
 
   def active_season_for_user(user)
     this_year_season = user.selected_league.league_seasons.where("starts_at < ? AND ends_at > ?", Date.current.in_time_zone, Date.current.in_time_zone).first
 
     unless this_year_season.blank?
-      return this_year_season
+      this_year_season
     else
-      return user.selected_league.league_seasons.last
+      user.selected_league.league_seasons.last
     end
   end
 
@@ -209,7 +211,7 @@ class League < ApplicationRecord
   def state_for_user(user)
     membership = self.membership_for_user(user)
 
-    return membership.state
+    membership.state
   end
 
   def users_not_signed_up_for_tournament(tournament, tournament_day, extra_ids_to_omit)
@@ -226,9 +228,9 @@ class League < ApplicationRecord
     end
 
     if ids_to_omit.blank?
-      return self.users.order("last_name, first_name")
+      self.users.order("last_name, first_name")
     else
-      return self.users.where("users.id NOT IN (?)", ids_to_omit).order("last_name, first_name")
+      self.users.where("users.id NOT IN (?)", ids_to_omit).order("last_name, first_name")
     end
   end
 

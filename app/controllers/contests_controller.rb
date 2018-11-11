@@ -1,9 +1,9 @@
 class ContestsController < BaseController
   before_action :fetch_tournament
   before_action :fetch_tournament_day
-  before_action :fetch_contests, :only => [:index]
-  before_action :fetch_contest, :only => [:edit, :update, :destroy]
-  before_action :setup_form, :only => [:new, :edit]
+  before_action :fetch_contests, only: [:index]
+  before_action :fetch_contest, only: [:edit, :update, :destroy]
+  before_action :setup_form, only: [:new, :edit]
   before_action :set_stage
 
   def index
@@ -41,14 +41,14 @@ class ContestsController < BaseController
           end
         end
 
-        redirect_to edit_league_tournament_contest_path(@tournament.league, @tournament, @contest, :skip_to_complete => skip_to_completion, tournament_day: @tournament_day), :flash => { :success => success_message }
+        redirect_to edit_league_tournament_contest_path(@tournament.league, @tournament, @contest, :skip_to_complete => skip_to_completion, tournament_day: @tournament_day), flash: { success: success_message }
       else
         if params[:commit] == "Save & Continue"
-          redirect_to league_tournament_tournament_notifications_path(@tournament.league, @tournament), :flash => { :success => "The contest was successfully created." }
+          redirect_to league_tournament_tournament_notifications_path(@tournament.league, @tournament), flash: { success: "The contest was successfully created." }
         elsif params[:commit] == "Save & Continue to Next Day"
-          redirect_to league_tournament_tournament_groups_path(@tournament.league, @tournament, tournament_day: @tournament.tournament_days.last), :flash => { :success => "The contest was successfully created." }
+          redirect_to league_tournament_tournament_groups_path(@tournament.league, @tournament, tournament_day: @tournament.tournament_days.last), flash: { success: "The contest was successfully created." }
         else
-          redirect_to new_league_tournament_contest_path(@tournament.league, @tournament, tournament_day: @tournament_day), :flash => { :success => "The contest was successfully created." }
+          redirect_to new_league_tournament_contest_path(@tournament.league, @tournament, tournament_day: @tournament_day), flash: { success: "The contest was successfully created." }
         end
       end
     else
@@ -62,11 +62,11 @@ class ContestsController < BaseController
   def update
     if @contest.update(contest_params)
       if params[:commit] == "Save & Continue"
-        redirect_to league_tournaments_path(current_user.selected_league), :flash => { :success => "The contest was successfully updated." }
+        redirect_to league_tournaments_path(current_user.selected_league), flash: { success: "The contest was successfully updated." }
       elsif params[:commit] == "Save & Continue to Next Day"
-        redirect_to league_tournament_tournament_groups_path(@tournament.league, @tournament, tournament_day: @tournament.tournament_days.last), :flash => { :success => "The contest was successfully updated." }
+        redirect_to league_tournament_tournament_groups_path(@tournament.league, @tournament, tournament_day: @tournament.tournament_days.last), flash: { success: "The contest was successfully updated." }
       else
-        redirect_to league_tournament_contests_path(@tournament.league, @tournament, tournament_day: @tournament_day), :flash => { :success => "The contest was successfully updated." }
+        redirect_to league_tournament_contests_path(@tournament.league, @tournament, tournament_day: @tournament_day), flash: { success: "The contest was successfully updated." }
       end
     else
       render :edit
@@ -76,7 +76,7 @@ class ContestsController < BaseController
   def destroy
     @contest.destroy
 
-    redirect_to league_tournament_contests_path(@tournament.league, @tournament, tournament_day: @tournament_day), :flash => { :success => "The contest was successfully deleted." }
+    redirect_to league_tournament_contests_path(@tournament.league, @tournament, tournament_day: @tournament_day), flash: { success: "The contest was successfully deleted." }
   end
 
   def registrations
@@ -91,7 +91,7 @@ class ContestsController < BaseController
 
     contest.remove_user(user)
 
-    redirect_to league_tournament_contests_path(@tournament.league, @tournament, tournament_day: @tournament_day), :flash => { :success => "The contest was successfully updated." }
+    redirect_to league_tournament_contests_path(@tournament.league, @tournament, tournament_day: @tournament_day), flash: { success: "The contest was successfully updated." }
   end
 
   def add_registration
@@ -102,7 +102,7 @@ class ContestsController < BaseController
       contest.add_user(user)
     end
 
-    redirect_to league_tournament_contests_path(@tournament.league, @tournament, tournament_day: @tournament_day), :flash => { :success => "The contest was successfully updated." }
+    redirect_to league_tournament_contests_path(@tournament.league, @tournament, tournament_day: @tournament_day), flash: { success: "The contest was successfully updated." }
   end
 
   private

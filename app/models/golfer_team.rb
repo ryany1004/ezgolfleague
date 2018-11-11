@@ -33,7 +33,7 @@ class GolferTeam < ApplicationRecord
       complete_name += " / " unless self.users.last == u
     end
 
-    return complete_name
+    complete_name
   end
 
   def short_name
@@ -45,7 +45,7 @@ class GolferTeam < ApplicationRecord
       complete_name += " / " unless self.users.last == u
     end
 
-    return complete_name
+    complete_name
   end
 
 end

@@ -1,7 +1,7 @@
 class CourseHoleTeeBoxesController < BaseController
   before_action :fetch_course
   before_action :fetch_course_hole
-  before_action :fetch_tee_box, :except => [:new, :create]
+  before_action :fetch_tee_box, except: [:new, :create]
   
   def new
     @course_hole_tee_box = CourseHoleTeeBox.new
@@ -12,7 +12,7 @@ class CourseHoleTeeBoxesController < BaseController
     @course_hole_tee_box.course_hole = @course_hole
     
     if @course_hole_tee_box.save      
-      redirect_to course_course_holes_path(@course), :flash => { :success => "The tee box was successfully created." }
+      redirect_to course_course_holes_path(@course), flash: { success: "The tee box was successfully created." }
     else            
       render :new
     end
@@ -21,7 +21,7 @@ class CourseHoleTeeBoxesController < BaseController
   def destroy
     @course_hole_tee_box.destroy
     
-    redirect_to course_course_holes_path(@course), :flash => { :success => "The tee box was successfully deleted." }
+    redirect_to course_course_holes_path(@course), flash: { success: "The tee box was successfully deleted." }
   end
   
   private

@@ -56,7 +56,7 @@ class GolfOutingsController < BaseController
 
     @tournament_day.remove_player_from_group(tournament_group, user, true)
 
-    redirect_to league_tournament_day_players_path(@tournament.league, @tournament, @tournament_day), :flash => { :success => "The registration was successfully deleted." }
+    redirect_to league_tournament_day_players_path(@tournament.league, @tournament, @tournament_day), flash: { success: "The registration was successfully deleted." }
   end
 
   def disqualify_signup
@@ -70,7 +70,7 @@ class GolfOutingsController < BaseController
     golf_outing = @tournament_day.golf_outing_for_player(user)
     golf_outing.disqualify
 
-    redirect_to league_tournament_day_players_path(@tournament.league, @tournament, @tournament_day), :flash => { :success => "The player qualification status changed. You may need to re-finalize the tournament." }
+    redirect_to league_tournament_day_players_path(@tournament.league, @tournament, @tournament_day), flash: { success: "The player qualification status changed. You may need to re-finalize the tournament." }
   end
 
   private

@@ -27,7 +27,7 @@ module Scoreable
       return Scorecard.where(id: scorecard_id).first
     end
 
-    return nil
+    nil
   end
 
   def user_can_edit_scorecard(user, scorecard)
@@ -47,7 +47,7 @@ module Scoreable
       end
     end
 
-    return false
+    false
   end
 
   def user_can_become_designated_scorer(user, scorecard)
@@ -56,7 +56,7 @@ module Scoreable
     group = scorecard.golf_outing.tournament_group
     return true if self.user_is_in_group?(user, group)
 
-    return false
+    false
   end
 
   def has_scores?
@@ -70,7 +70,7 @@ module Scoreable
       end
     end
 
-    return false
+    false
   end
 
   def update_scores_for_course_holes
@@ -131,9 +131,9 @@ module Scoreable
       
       Rails.logger.info { "Wrote TournamentDayResult for Scorecard: #{primary_scorecard.try(:id)} for User #{user.try(:complete_name)}" }
 
-      return result
+      result
     else
-      return nil
+      nil
     end
   end
 
@@ -153,7 +153,7 @@ module Scoreable
 
     Rails.logger.debug { "User Par: #{par}" }
 
-    return par
+    par
   end
 
 end

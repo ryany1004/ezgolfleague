@@ -1,7 +1,7 @@
 class TournamentGroupsController < BaseController
   before_action :fetch_tournament
   before_action :fetch_tournament_day
-  before_action :fetch_tournament_group, :except => [:index, :new, :create, :batch_create]
+  before_action :fetch_tournament_group, except: [:index, :new, :create, :batch_create]
   before_action :set_stage
 
   def index
@@ -32,9 +32,9 @@ class TournamentGroupsController < BaseController
 
     if @tournament_group.save
       if params[:commit] == "Save & Continue"
-        redirect_to league_tournament_flights_path(@tournament.league, @tournament, tournament_day: @tournament_day), :flash => { :success => "The tee time was successfully created." }
+        redirect_to league_tournament_flights_path(@tournament.league, @tournament, tournament_day: @tournament_day), flash: { success: "The tee time was successfully created." }
       else
-        redirect_to new_league_tournament_tournament_group_path(@tournament.league, @tournament, tournament_day: @tournament_day), :flash => { :success => "The tee time was successfully created." }
+        redirect_to new_league_tournament_tournament_group_path(@tournament.league, @tournament, tournament_day: @tournament_day), flash: { success: "The tee time was successfully created." }
       end
     else
       render :new
@@ -43,7 +43,7 @@ class TournamentGroupsController < BaseController
 
   def update
     if @tournament_group.update(tournament_group_params)
-      redirect_to league_tournament_tournament_groups_path(@tournament.league, @tournament, tournament_day: @tournament_day), :flash => { :success => "The tee time was successfully updated." }
+      redirect_to league_tournament_tournament_groups_path(@tournament.league, @tournament, tournament_day: @tournament_day), flash: { success: "The tee time was successfully updated." }
     else
       render :edit
     end
@@ -52,7 +52,7 @@ class TournamentGroupsController < BaseController
   def destroy
     @tournament_group.destroy
 
-    redirect_to league_tournament_tournament_groups_path(@tournament.league, @tournament, tournament_day: @tournament_day), :flash => { :success => "The tee time was successfully deleted." }
+    redirect_to league_tournament_tournament_groups_path(@tournament.league, @tournament, tournament_day: @tournament_day), flash: { success: "The tee time was successfully deleted." }
   end
 
   #batch processing
@@ -70,9 +70,9 @@ class TournamentGroupsController < BaseController
     end
 
     if @tournament_day.can_be_played?
-      redirect_to league_tournaments_path(@tournament.league), :flash => { :success => "The tee times were successfully created." }
+      redirect_to league_tournaments_path(@tournament.league), flash: { success: "The tee times were successfully created." }
     else
-      redirect_to league_tournament_flights_path(@tournament.league, @tournament, tournament_day: @tournament_day), :flash => { :success => "The tee times were successfully created." }
+      redirect_to league_tournament_flights_path(@tournament.league, @tournament, tournament_day: @tournament_day), flash: { success: "The tee times were successfully created." }
     end
   end
 
