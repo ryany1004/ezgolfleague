@@ -51,7 +51,7 @@ module GameTypes
 
       total_score = 0
 
-      team = self.tournament_day.tournament_team_for_player(user)
+      team = self.tournament_day.golfer_team_for_player(user)
       scorecard = self.best_ball_scorecard_for_user_in_team(user, team, use_handicap)
       return 0 if scorecard.blank? || scorecard.scores.blank?
 
@@ -75,11 +75,11 @@ module GameTypes
       return total_score
     end
 
-    def best_ball_scorecard_for_user_in_team(user, tournament_team, use_handicaps)
+    def best_ball_scorecard_for_user_in_team(user, golfer_team, use_handicaps)
       scorecard = BestBallScorecard.new
       scorecard.course_hole_number_suppression_list = self.course_hole_number_suppression_list
       scorecard.user = user
-      scorecard.tournament_team = tournament_team
+      scorecard.golfer_team = golfer_team
       scorecard.should_use_handicap = use_handicaps
       scorecard.calculate_scores
 
@@ -89,7 +89,7 @@ module GameTypes
     def related_scorecards_for_user(user, only_human_scorecards = false)
       other_scorecards = []
 
-      team = self.tournament_day.tournament_team_for_player(user)
+      team = self.tournament_day.golfer_team_for_player(user)
       unless team.blank?
         team.users.each do |u|
           if u != user

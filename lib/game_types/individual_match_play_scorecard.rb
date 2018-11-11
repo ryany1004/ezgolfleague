@@ -15,21 +15,21 @@ module GameTypes
       user1 = self.user
       user2 = nil
       
-      self.tournament_team.users.each do |u|
+      self.golfer_team.users.each do |u|
         if u != user
           user2 = u
         end
       end
 
-      self.unplayed_holes = self.tournament_team.tournament_day.course_holes.count
+      self.unplayed_holes = self.golfer_team.tournament_day.course_holes.count
 
       user1_handicap_allowance = self.tournament_day.handicap_allowance(user1)
       user2_handicap_allowance = self.tournament_day.handicap_allowance(user2)
 
-      self.tournament_team.tournament_day.course_holes.each_with_index do |hole, i|
+      self.golfer_team.tournament_day.course_holes.each_with_index do |hole, i|
         score = DerivedScorecardScore.new
         
-        running_score_holes = self.tournament_team.tournament_day.course_holes.limit(i + 1)
+        running_score_holes = self.golfer_team.tournament_day.course_holes.limit(i + 1)
         score.strokes = self.score_for_holes(user1, user1_handicap_allowance, user2, user2_handicap_allowance, hole, running_score_holes)
         
         score.course_hole = hole
@@ -42,8 +42,8 @@ module GameTypes
     def score_for_holes(user1, user1_handicap_allowance, user2, user2_handicap_allowance, current_hole, holes)      
       return 0 if user1.blank? or user2.blank?
             
-      scorecard1 = self.tournament_team.tournament_day.primary_scorecard_for_user(user1)
-      scorecard2 = self.tournament_team.tournament_day.primary_scorecard_for_user(user2)
+      scorecard1 = self.golfer_team.tournament_day.primary_scorecard_for_user(user1)
+      scorecard2 = self.golfer_team.tournament_day.primary_scorecard_for_user(user2)
 
       #verify the hole has been played
       current_hole_strokes1 = 0

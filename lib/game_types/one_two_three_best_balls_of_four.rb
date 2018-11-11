@@ -80,10 +80,10 @@ module GameTypes
       return 4
     end
 
-    def best_ball_scorecard_for_user_in_team(user, tournament_team, use_handicaps)
+    def best_ball_scorecard_for_user_in_team(user, golfer_team, use_handicaps)
       scorecard = OneTwoThreeBestBallScorecard.new
       scorecard.user = user
-      scorecard.tournament_team = tournament_team
+      scorecard.golfer_team = golfer_team
       scorecard.should_use_handicap = use_handicaps
       scorecard.calculate_scores
 
@@ -100,7 +100,7 @@ module GameTypes
       self.tournament_day.reload
       
       self.tournament_day.payout_results.each do |result|
-        team = self.tournament_day.tournament_team_for_player(result.user)
+        team = self.tournament_day.golfer_team_for_player(result.user)
 
         unless team.blank?
           team.users.where("id != ?", result.user.id).each do |teammate|

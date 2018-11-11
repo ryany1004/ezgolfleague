@@ -183,7 +183,7 @@
 <div class="row">
   <% unless @tournament_presenter.tournament_players.blank? %>
     <% cache(@tournament_presenter.day_cache_key("tournament-players")) do %>
-      <% if @tournament_presenter.day_has_tournament_teams? %>
+      <% if @tournament_presenter.day_has_golfer_teams? %>
         <%= render partial: 'tournament_players_teams', locals: {name: @tournament_presenter.day_name, teams: @tournament_presenter.tournament_players } %>
       <% else %>
         <%= render partial: 'tournament_players_individual', locals: {name: @tournament_presenter.day_name, players: @tournament_presenter.tournament_players, count: @tournament_presenter.player_count, flight_or_group_name: @tournament_presenter.flight_or_group_name } %>

@@ -62,11 +62,11 @@ module GameTypes
 
     ##Scores
 
-    def best_ball_scorecard_for_user_in_team(user, tournament_team, use_handicaps)
+    def best_ball_scorecard_for_user_in_team(user, golfer_team, use_handicaps)
       game_type = BestBall.new
       game_type.tournament_day = self.tournament_day
 
-      return game_type.best_ball_scorecard_for_user_in_team(user, tournament_team, use_handicaps)
+      return game_type.best_ball_scorecard_for_user_in_team(user, golfer_team, use_handicaps)
     end
 
     def related_scorecards_for_user(user, only_human_scorecards = false)
