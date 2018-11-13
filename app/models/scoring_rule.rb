@@ -58,8 +58,6 @@ class ScoringRule < ApplicationRecord
 	  payouts
 	end
 
-	private
-
 	def flight_payouts
 		tournament_day.flights.map(&:payouts).flatten
 	end

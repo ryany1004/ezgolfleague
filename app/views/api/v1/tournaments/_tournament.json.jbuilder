@@ -4,6 +4,7 @@ json.cache! ['v1', tournament] do
 	json.is_finalized									tournament.is_finalized
 	json.number_of_players						tournament.number_of_players
 	json.is_open_for_registration? 		tournament.is_open_for_registration?
+#TEAM: update
 	json.dues_amount									tournament.dues_amount
 	json.allow_credit_card_payment 		tournament.allow_credit_card_payment
 

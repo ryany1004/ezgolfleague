@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181111171222) do
+ActiveRecord::Schema.define(version: 20181113001233) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -428,6 +428,8 @@ ActiveRecord::Schema.define(version: 20181111171222) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "tournament_day_id"
+    t.boolean "is_opt_in", default: false
+    t.decimal "dues_amount", default: "0.0"
     t.index ["tournament_day_id"], name: "index_scoring_rules_on_tournament_day_id"
     t.index ["type"], name: "index_scoring_rules_on_type"
   end
@@ -500,7 +502,6 @@ ActiveRecord::Schema.define(version: 20181111171222) do
     t.integer "max_players"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.decimal "dues_amount", default: "0.0"
     t.boolean "is_finalized", default: false
     t.boolean "show_players_tee_times", default: false
     t.integer "auto_schedule_for_multi_day", default: 1

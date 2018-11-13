@@ -14,15 +14,21 @@
     </div>
   <% end %>
 
-  <legend><%= @tournament_day.pretty_day(true) %>Scoring Rule Details</legend>
+  <legend><%= @tournament_day.pretty_day(true) %>Competition Details</legend>
 
   <div class="well">
-    <% if @scoring_rule.setup_partial %>
-      <%= render partial: @scoring_rule.setup_partial, locals: {scoring_rule: @scoring_rule, tournament_day: @scoring_rule.tournament_day} %>
-    <% else %>
-    	<p>This scoring rule has no configurable properties.</p>
-    <% end %>
+    <%= f.input :dues_amount, label: 'Dues Amount ($)' %>
+
+    <%= f.input :is_opt_in, label: 'Users can choose whether or not to enter this competition?', as: :boolean %>
+
+    <p>If this item is checked, users will be able to opt-out of this competition when they register.</p>
   </div>
+
+  <% if @scoring_rule.setup_partial %>
+  <div class="well">
+    <%= render partial: @scoring_rule.setup_partial, locals: {scoring_rule: @scoring_rule, tournament_day: @scoring_rule.tournament_day} %>
+  </div>
+  <% end %>
 
   <div class="form-actions">
      <%= f.button :submit, "Save", :class => 'btn btn-default' %>

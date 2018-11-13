@@ -52,6 +52,7 @@ class TournamentMailer < ApplicationMailer
     @tournament = tournament
     league_season = @tournament.league_season
 
+#TEAM: update
     total_cost = @tournament.dues_amount
 
     @cost_lines = [

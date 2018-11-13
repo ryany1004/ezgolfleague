@@ -15,6 +15,8 @@ class ScoringRulesController < BaseController
   end
 
   def update
+    @scoring_rule.update(scoring_rule_params)
+
   	unless params[:scoring_rule_options][@scoring_rule.id.to_s].blank?
   		@scoring_rule.save_setup_details(params[:scoring_rule_options][@scoring_rule.id.to_s])
   	else
@@ -33,6 +35,10 @@ class ScoringRulesController < BaseController
   end
 
   private
+
+  def scoring_rule_params
+    params.require(:scoring_rule).permit(:dues_amount, :is_opt_in)
+  end
   
   def scoring_rule_class_for_name(name)
   	name.constantize

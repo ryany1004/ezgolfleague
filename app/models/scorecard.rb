@@ -1,7 +1,7 @@
 class Scorecard < ApplicationRecord
   include Servable
-  include ScorecardNetScores
-  include ScorecardAdjustedScore
+  include ::ScorecardNetScores
+  include ::ScorecardAdjustedScore
 
   acts_as_paranoid
 
@@ -61,19 +61,19 @@ class Scorecard < ApplicationRecord
   end
 
   def gross_score
-    return self.scores.map {|score| score.strokes }.sum
+    self.scores.map {|score| score.strokes}.sum
   end
 
   def net_score
-    return self.tournament_day.game_type.player_score(self.golf_outing.user, true)
+    self.tournament_day.game_type.player_score(self.golf_outing.user, true)
   end
 
   def front_nine_score(use_handicap = false)
-    return self.tournament_day.game_type.player_score(self.golf_outing.user, use_handicap, [1, 2, 3, 4, 5, 6, 7, 8, 9])
+    self.tournament_day.game_type.player_score(self.golf_outing.user, use_handicap, [1, 2, 3, 4, 5, 6, 7, 8, 9])
   end
 
   def back_nine_score(use_handicap = false)
-    return self.tournament_day.game_type.player_score(self.golf_outing.user, use_handicap, [10, 11, 12, 13, 14, 15, 16, 17, 18])
+    self.tournament_day.game_type.player_score(self.golf_outing.user, use_handicap, [10, 11, 12, 13, 14, 15, 16, 17, 18])
   end
 
   def flight_number

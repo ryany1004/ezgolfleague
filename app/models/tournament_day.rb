@@ -27,7 +27,6 @@ class TournamentDay < ApplicationRecord
   delegate :scorecard_payload_for_scorecard, to: :game_type
   #delegate :other_group_members, :user_is_in_group?, to: :game_type
   delegate :handicap_allowance, to: :game_type
-  delegate :can_be_played?, :can_be_finalized?, to: :game_type
 
   validates :course, presence: true
   validates :tournament_at, presence: true
@@ -73,6 +72,26 @@ class TournamentDay < ApplicationRecord
     new_game_type&.tournament_day = self
 
     new_game_type
+  end
+
+  def can_be_finalized?
+    self.scoring_rules.each do |r|
+      if r.can_be_finalized? == false
+        return false
+      end
+    end
+
+    true
+  end
+
+  def can_be_played?
+    self.scoring_rules.each do |r|
+      if r.can_be_played? == false
+        return false
+      end
+    end
+
+    true
   end
 
   def is_first_day?

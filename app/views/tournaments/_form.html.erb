@@ -16,9 +16,7 @@
       <%= f.input :league_id, collection: @leagues, label: false, :label_method => :name, include_blank: true, input_html: { class: 'chosen-select' } %>
 
   	  <%= f.input :name, :label => 'Name', required: true %>
-
-      <%= f.input :dues_amount, :label => 'Dues Amount ($)' %>
-
+      
       <%= f.input :allow_credit_card_payment, :label => 'Users Can Pay w/ a Credit Card?' %>
     </div>
 
