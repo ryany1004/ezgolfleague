@@ -45,7 +45,7 @@
   });
 
   function costPerGolfer() {
-    return 5;
+    return <%= SubscriptionCredit.cost_per_golfer %>;
   }
 
   function stripeResponseHandler(status, response) {
@@ -358,7 +358,7 @@
     $("#purchase_credits_button").prop('disabled', false);
 
     var cost = 0;
-    var costPerGolfer = 5;
+    var costPerGolfer = <%= SubscriptionCredit.cost_per_golfer %>;
 
     cost = golfers * costPerGolfer;
 
