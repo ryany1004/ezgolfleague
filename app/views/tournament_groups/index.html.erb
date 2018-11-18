@@ -30,7 +30,7 @@
       </div>
 
       <div class="form-actions">
-        <%= f.button :submit, "Save Tee Time Batch", :class => 'btn btn-default' %>
+        <%= f.button :submit, "Save Tee Time Batch", class: 'btn btn-default' %>
       </div>
     <% end %>
   </div>
@@ -45,7 +45,7 @@
       <th>Max Players</th>
       <th>Currently Signed Up</th>
       <% if user_is_league_admin(current_user, @tournament.league) -%>
-      <th><%= link_to 'Create Individual Tee Time', new_league_tournament_tournament_group_path(@tournament.league, @tournament, tournament_day: @tournament_day), :class => 'btn btn-primary' %></th>
+      <th><%= link_to 'Create Individual Tee Time', new_league_tournament_tournament_group_path(@tournament.league, @tournament, tournament_day: @tournament_day), class: 'btn btn-primary' %></th>
       <% else -%>
       <th>&nbsp;</th>
       <% end -%>
@@ -71,7 +71,7 @@
       <th>&nbsp;</th>
 			<th>&nbsp;</th>
       <% if user_is_league_admin(current_user, @tournament.league) -%>
-      <th><%= link_to 'Create Individual Tee Time', new_league_tournament_tournament_group_path(@tournament.league, @tournament, tournament_day: @tournament_day), :class => 'btn btn-primary' %></th>
+      <th><%= link_to 'Create Individual Tee Time', new_league_tournament_tournament_group_path(@tournament.league, @tournament, tournament_day: @tournament_day), class: 'btn btn-primary' %></th>
       <% else -%>
       <th>&nbsp;</th>
       <% end -%>

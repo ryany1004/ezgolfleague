@@ -31,7 +31,7 @@
               <td><%= contest.users.count %></td>
               <td><%= number_to_currency(contest.dues_amount) %></td>
               <% if !(contest.users.include? current_user) -%>
-              <td><%= link_to "Sign Up & Pay Dues", new_play_payment_path(:payment_type => "contest_dues", :contest_id => contest.id), :class => 'btn btn-primary' %></td>
+              <td><%= link_to "Sign Up & Pay Dues", new_play_payment_path(:payment_type => "contest_dues", :contest_id => contest.id), class: 'btn btn-primary' %></td>
               <% else -%>
               <td>Signed Up</td>
               <% end -%>

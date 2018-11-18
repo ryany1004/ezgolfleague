@@ -284,7 +284,7 @@
         <p id="activation_text">Activating <span id="active_golfer_number">&nbsp;</span> golfer(s) will result in a charge of <mark id="golfer_change_cost">&nbsp;</mark>.</p>
 
         <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-        <%= f.button :submit, "Save", :class => 'btn btn-primary', :id => "save_and_charge_button" %>
+        <%= f.button :submit, "Save", class: 'btn btn-primary', :id => "save_and_charge_button" %>
       </div>
     </div>
   </div>
@@ -322,7 +322,7 @@
           <tfoot>
             <tr>
               <th>&nbsp;</th>
-              <th><%= f.button :button, "Update Credit Card", :class => "btn btn-primary", :id => "submit_button" %></th>
+              <th><%= f.button :button, "Update Credit Card", class: "btn btn-primary", :id => "submit_button" %></th>
             </tr>
           </tfoot>
         </table>

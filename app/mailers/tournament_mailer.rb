@@ -56,7 +56,7 @@ class TournamentMailer < ApplicationMailer
     total_cost = @tournament.dues_amount
 
     @cost_lines = [
-      {name: "#{@tournament.name} Fees", :price => @tournament.dues_amount}
+      {name: "#{@tournament.name} Fees", price: @tournament.dues_amount}
     ]
 
     @tournament.tournament_days.each do |td|
@@ -64,15 +64,15 @@ class TournamentMailer < ApplicationMailer
         if c.dues_amount == 0 or c.users.include? user
           total_cost += c.dues_amount
 
-          @cost_lines << {name: c.name, :price => c.dues_amount}
+          @cost_lines << {name: c.name, price: c.dues_amount}
         end
       end
     end
 
     credit_card_fees = Stripe::StripeFees.fees_for_transaction_amount(total_cost)
 
-    @cost_lines << {name: "Credit Card Fees", :price => credit_card_fees}
-    @cost_lines << {name: "Total", :price => total_charged}
+    @cost_lines << {name: "Credit Card Fees", price: credit_card_fees}
+    @cost_lines << {name: "Total", price: total_charged}
 
     mail(to: user.email, from: "do_not_reply@ezgolfleague.com", subject: "Tournament Payment Receipt: #{user.complete_name}", bcc: league_season.league.dues_payment_receipt_email_addresses)
   end

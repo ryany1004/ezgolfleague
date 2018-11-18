@@ -158,9 +158,9 @@ class League < ApplicationRecord
     membership = self.league_memberships.where(user: user).first
 
     cost_lines = [
-      {name: "#{self.name} League Fees", :price => self.dues_amount},
-      {name: "Dues Discount", :price => (membership.league_dues_discount * -1.0)},
-      {name: "Credit Card Fees", :price => Stripe::StripeFees.fees_for_transaction_amount(self.dues_amount - membership.league_dues_discount)}
+      {name: "#{self.name} League Fees", price: self.dues_amount},
+      {name: "Dues Discount", price: (membership.league_dues_discount * -1.0)},
+      {name: "Credit Card Fees", price: Stripe::StripeFees.fees_for_transaction_amount(self.dues_amount - membership.league_dues_discount)}
     ]
 
     cost_lines

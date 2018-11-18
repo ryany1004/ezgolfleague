@@ -37,11 +37,11 @@
         </div>
         <div class="modal-footer">
           <% if !@tournament.league.stripe_is_setup? || @tournament.dues_amount == 0.0 -%>
-            <%= f.button :button, "Register", :class => "btn btn-default", name: "pay_later", :value => true %>
+            <%= f.button :button, "Register", class: "btn btn-default", name: "pay_later", :value => true %>
           <% else -%>
-            <%= f.button :button, "Register & Pay Later", :class => "btn btn-default", name: "pay_later", :value => true %>
+            <%= f.button :button, "Register & Pay Later", class: "btn btn-default", name: "pay_later", :value => true %>
             <% if tournament.allow_credit_card_payment == true && !tournament.league.stripe_publishable_key.blank? -%>
-              <%= f.button :button, "Register & Pay Now", :class => "btn btn-primary", name: "pay_now", :value => true %>
+              <%= f.button :button, "Register & Pay Now", class: "btn btn-primary", name: "pay_now", :value => true %>
             <% end -%>
           <% end -%>
         </div>

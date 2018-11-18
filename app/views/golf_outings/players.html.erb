@@ -50,7 +50,7 @@
             <td id="user-select" class="user-select">
               <% if tournament_group.user_for_index(i).try(:id) %>
                 <%= tournament_group.user_for_index(i).try(:complete_name) %> <%= tournament_group.user_for_index(i)&.scoring_group_name_for_league_season(@tournament.league_season) %>
-                <%= f.input "member_id[#{i}]", :as => :hidden, :input_html => { :value => tournament_group.user_for_index(i).try(:id), :class => "member-id" } %>
+                <%= f.input "member_id[#{i}]", :as => :hidden, :input_html => { :value => tournament_group.user_for_index(i).try(:id), class: "member-id" } %>
               <% else %>
                 <span id="user-select-container">
                   <%= f.input "member_id[#{i}]", label: false, collection: @all_league_members, label_method: :complete_name, value_method: :id, tournament_group: tournament_group, selected: tournament_group.user_for_index(i).try(:id), include_blank: true, multiple: true, input_html: { class: 'chosen-select' } %>
@@ -73,8 +73,8 @@
             </td>
             <td id="action-buttons">
               <% unless tournament_group.golfer_outing_for_index(i).blank? %>
-                <%= link_to "#{tournament_group.golfer_outing_for_index(i).disqualification_description}", league_tournament_disqualify_day_players_path(@tournament.league, @tournament, @tournament_day, user_id: tournament_group.user_for_index(i)), :method => :patch, :role => "button", :class => "btn btn-info btn-xs" %>
-                <%= link_to "Remove", league_tournament_delete_day_players_path(@tournament.league, @tournament, @tournament_day, group_id: tournament_group.id, user_id: tournament_group.user_for_index(i)), :data => { :confirm => 'Are you sure you want to remove this registration? This will delete all scorecard information for this golfer for this tournament.' }, :method => :delete, :role => "button", :class => "btn btn-danger btn-xs" %>
+                <%= link_to "#{tournament_group.golfer_outing_for_index(i).disqualification_description}", league_tournament_disqualify_day_players_path(@tournament.league, @tournament, @tournament_day, user_id: tournament_group.user_for_index(i)), :method => :patch, :role => "button", class: "btn btn-info btn-xs" %>
+                <%= link_to "Remove", league_tournament_delete_day_players_path(@tournament.league, @tournament, @tournament_day, group_id: tournament_group.id, user_id: tournament_group.user_for_index(i)), :data => { :confirm => 'Are you sure you want to remove this registration? This will delete all scorecard information for this golfer for this tournament.' }, :method => :delete, :role => "button", class: "btn btn-danger btn-xs" %>
               <% else %>
                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
               <% end %>

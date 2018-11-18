@@ -19,7 +19,7 @@
           <th>Active</th>
           <th>Actions</th>
           <% if current_user.is_super_user? -%>
-          <th><%= link_to 'Create League', new_league_path, :class => 'btn btn-primary' %></th>
+          <th><%= link_to 'Create League', new_league_path, class: 'btn btn-primary' %></th>
           <% else -%>
           <th>&nbsp;</th>
           <% end -%>
@@ -65,7 +65,7 @@
           <th>&nbsp;</th>
     			<th>&nbsp;</th>
           <% if current_user.is_super_user? -%>
-          <th><%= link_to 'Create League', new_league_path, :class => 'btn btn-primary' %></th>
+          <th><%= link_to 'Create League', new_league_path, class: 'btn btn-primary' %></th>
           <% else -%>
           <th>&nbsp;</th>
           <% end -%>

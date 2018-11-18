@@ -12,7 +12,7 @@
           <th>Delivery Date</th>
           <th>Recipients</th>
           <th>Delivered To</th>
-          <th><%= link_to 'Create Notification', new_league_tournament_tournament_notification_path(@tournament.league, @tournament), :class => 'btn btn-primary', :id => "notification_button_1" %></th>
+          <th><%= link_to 'Create Notification', new_league_tournament_tournament_notification_path(@tournament.league, @tournament), class: 'btn btn-primary', :id => "notification_button_1" %></th>
     		</tr>
     	</thead>
     	<tbody>
@@ -32,7 +32,7 @@
           <th>&nbsp;</th>
           <th>&nbsp;</th>
           <th>&nbsp;</th>
-          <th><%= link_to 'Create Notification', new_league_tournament_tournament_notification_path(@tournament.league, @tournament), :class => 'btn btn-primary' %></th>
+          <th><%= link_to 'Create Notification', new_league_tournament_tournament_notification_path(@tournament.league, @tournament), class: 'btn btn-primary' %></th>
     		</tr>
       </tfoot>
     </table>

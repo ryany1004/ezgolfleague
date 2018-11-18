@@ -8,7 +8,7 @@
 
     <% if tournament_day.tournament.players_for_day(tournament_day).count > 0 -%>
     <p>
-      <%= link_to 'Re-Flight Players', reflight_players_league_tournament_flights_path(tournament.league, tournament, tournament_day: tournament_day), :class => 'btn btn-primary', :method => :patch %>
+      <%= link_to 'Re-Flight Players', reflight_players_league_tournament_flights_path(tournament.league, tournament, tournament_day: tournament_day), class: 'btn btn-primary', :method => :patch %>
     </p>
     <% end -%>
   </div>
@@ -20,7 +20,7 @@
         <th>Handicap Upper Bound</th>
         <th>Tee Box</th>
         <th>Payouts</th>
-        <th><%= link_to 'Create Flight', new_league_tournament_flight_path(tournament_day: tournament_day), :class => 'btn btn-primary', :id => "add_flight_1" %></th>
+        <th><%= link_to 'Create Flight', new_league_tournament_flight_path(tournament_day: tournament_day), class: 'btn btn-primary', :id => "add_flight_1" %></th>
   		</tr>
   	</thead>
   	<tbody>
@@ -42,7 +42,7 @@
         <th>&nbsp;</th>
         <th>&nbsp;</th>
         <th>&nbsp;</th>
-        <th><%= link_to 'Create Flight', new_league_tournament_flight_path(tournament_day: tournament_day), :class => 'btn btn-primary' %></th>
+        <th><%= link_to 'Create Flight', new_league_tournament_flight_path(tournament_day: tournament_day), class: 'btn btn-primary' %></th>
   		</tr>
     </tfoot>
   </table>

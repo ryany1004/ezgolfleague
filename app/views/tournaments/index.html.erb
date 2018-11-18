@@ -16,7 +16,7 @@
         <div class="panel-body">
           <% if current_user.selected_league.alert_missing_next_season? %>
             <p>Please be sure to create your next season so that your golfers can pay dues and you can create your tournaments.</p>
-            <p><%= link_to "Manage Your Seasons", league_league_seasons_path(current_user.selected_league), :class => 'btn btn-primary' %></p>
+            <p><%= link_to "Manage Your Seasons", league_league_seasons_path(current_user.selected_league), class: 'btn btn-primary' %></p>
             <br/>
           <% end %>
 
@@ -25,7 +25,7 @@
               <p>You currently have <%= current_user.selected_league.free_tournaments_remaining %> free tournaments remaining.</p>
             <% end %>
 
-            <p><%= link_to "View Your Subscription", current_league_subscription_credits_path(current_user.selected_league), :class => 'btn btn-primary' %></p>
+            <p><%= link_to "View Your Subscription", current_league_subscription_credits_path(current_user.selected_league), class: 'btn btn-primary' %></p>
           <% end %>
         </div>
       </div>
@@ -47,10 +47,10 @@
   <% if @can_create_tournaments && @upcoming_tournaments.blank? -%>
     <% if @past_tournaments.blank? -%>
       <h4>You don't have any tournaments yet.</h4>
-      <%= link_to 'Create Tournament', new_league_tournament_path(current_user.selected_league), :class => 'btn btn-primary' %>
+      <%= link_to 'Create Tournament', new_league_tournament_path(current_user.selected_league), class: 'btn btn-primary' %>
     <% end -%>
   <% end -%>
 
-  <%= link_to_prev_page @past_tournaments, '← Previous Page', :class => 'btn btn-default' %>
-  <%= link_to_next_page @past_tournaments, 'Next Page →', :class => 'btn btn-default' %>
+  <%= link_to_prev_page @past_tournaments, '← Previous Page', class: 'btn btn-default' %>
+  <%= link_to_next_page @past_tournaments, 'Next Page →', class: 'btn btn-default' %>
 </div>

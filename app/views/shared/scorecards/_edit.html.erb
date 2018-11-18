@@ -51,10 +51,10 @@
 </table>
 <% end -%>
 
-<%= f.button :submit, :class => 'btn btn-default' %>
+<%= f.button :submit, class: 'btn btn-default' %>
 
 <%= link_to 'Toggle Disqualify', scorecard_disqualify_path(scorecard), class: "btn btn-warning", method: :patch, role: "button" %>
 
-<%= link_to 'Next Golfer >>', edit_scorecard_path(@next_scorecard), :class => 'btn btn-success' unless @next_scorecard.blank? %>
+<%= link_to 'Next Golfer >>', edit_scorecard_path(@next_scorecard), class: 'btn btn-success' unless @next_scorecard.blank? %>
 
 <% end %>

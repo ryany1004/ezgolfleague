@@ -14,7 +14,7 @@
           <th>Players</th>
           <th>Playable?</th>
           <th>Manage</th>
-          <th><% if show_create == true -%><%= link_to 'Create Tournament', new_league_tournament_path(current_user.selected_league), :class => 'btn btn-primary' %><% else -%>&nbsp;<% end -%></th>
+          <th><% if show_create == true -%><%= link_to 'Create Tournament', new_league_tournament_path(current_user.selected_league), class: 'btn btn-primary' %><% else -%>&nbsp;<% end -%></th>
     		</tr>
     	</thead>
     	<tbody>
@@ -36,7 +36,7 @@
           <th>&nbsp;</th>
           <th>&nbsp;</th>
           <th>&nbsp;</th>
-          <th><% if show_create == true -%><%= link_to 'Create Tournament', new_league_tournament_path(current_user.selected_league), :class => 'btn btn-primary' %><% else -%>&nbsp;<% end -%></th>
+          <th><% if show_create == true -%><%= link_to 'Create Tournament', new_league_tournament_path(current_user.selected_league), class: 'btn btn-primary' %><% else -%>&nbsp;<% end -%></th>
     		</tr>
       </tfoot>
     </table>
