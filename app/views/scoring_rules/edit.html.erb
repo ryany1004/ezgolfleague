@@ -1,7 +1,7 @@
 <ol class="breadcrumb">
   <li><%= link_to "Tournaments", league_tournaments_path(current_user.selected_league) %></li>
   <li><%= link_to @tournament.name, edit_league_tournament_path(current_user.selected_league, @tournament) %></li>
-  <li class="active">Configure Scoring Rule</li>
+  <li class="active">Configure Game Type</li>
 </ol>
 
 <%= render partial: '/shared/tournaments/manage', locals: {tournament: @tournament, stage: @stage_name} %>
@@ -14,14 +14,14 @@
     </div>
   <% end %>
 
-  <legend><%= @tournament_day.pretty_day(true) %>Competition Details</legend>
+  <legend><%= @tournament_day.pretty_day(true) %>Game Type Details</legend>
 
   <div class="well">
     <%= f.input :dues_amount, label: 'Dues Amount ($)' %>
 
-    <%= f.input :is_opt_in, label: 'Users can choose whether or not to enter this competition?', as: :boolean %>
+    <%= f.input :is_opt_in, label: 'Users can choose whether or not to particpate this game type?', as: :boolean %>
 
-    <p>If this item is checked, users will be able to opt-out of this competition when they register.</p>
+    <p>If this option is checked, users will be able to opt-out of this game type when they register.</p>
   </div>
 
   <% if @scoring_rule.setup_partial %>

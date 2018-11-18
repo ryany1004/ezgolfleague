@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181113001233) do
+ActiveRecord::Schema.define(version: 20181118220533) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -371,7 +371,6 @@ ActiveRecord::Schema.define(version: 20181113001233) do
     t.integer "user_id"
     t.integer "payout_id"
     t.integer "flight_id"
-    t.integer "tournament_day_id"
     t.decimal "amount"
     t.float "points"
     t.datetime "created_at", null: false
@@ -382,7 +381,6 @@ ActiveRecord::Schema.define(version: 20181113001233) do
     t.index ["flight_id"], name: "index_payout_results_on_flight_id"
     t.index ["payout_id"], name: "index_payout_results_on_payout_id"
     t.index ["scoring_rule_id"], name: "index_payout_results_on_scoring_rule_id"
-    t.index ["tournament_day_id"], name: "index_payout_results_on_tournament_day_id"
     t.index ["user_id"], name: "index_payout_results_on_user_id"
   end
 
@@ -444,7 +442,6 @@ ActiveRecord::Schema.define(version: 20181113001233) do
   end
 
   create_table "tournament_day_results", id: :serial, force: :cascade do |t|
-    t.integer "tournament_day_id"
     t.integer "user_id"
     t.integer "user_primary_scorecard_id"
     t.integer "flight_id"
@@ -462,10 +459,11 @@ ActiveRecord::Schema.define(version: 20181113001233) do
     t.string "name"
     t.boolean "aggregated_result", default: false
     t.integer "sort_rank"
+    t.bigint "scoring_rule_id"
     t.index ["aggregated_result"], name: "index_tournament_day_results_on_aggregated_result"
     t.index ["flight_id"], name: "index_tournament_day_results_on_flight_id"
+    t.index ["scoring_rule_id"], name: "index_tournament_day_results_on_scoring_rule_id"
     t.index ["sort_rank"], name: "index_tournament_day_results_on_sort_rank"
-    t.index ["tournament_day_id"], name: "index_tournament_day_results_on_tournament_day_id"
     t.index ["user_id"], name: "index_tournament_day_results_on_user_id"
     t.index ["user_primary_scorecard_id"], name: "index_tournament_day_results_on_user_primary_scorecard_id"
   end

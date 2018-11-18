@@ -12,8 +12,6 @@ class TournamentDay < ApplicationRecord
   has_many :flights, -> { order(:flight_number) }, inverse_of: :tournament_day, dependent: :destroy
   has_many :contests, -> { order(:name) }, inverse_of: :tournament_day, dependent: :destroy
   has_many :golfer_teams, inverse_of: :tournament_day, dependent: :destroy #TEAM: REMOVE
-  has_many :tournament_day_results, -> { order(:flight_id, :sort_rank) }, inverse_of: :tournament_day, dependent: :destroy
-  has_many :payout_results, inverse_of: :tournament_day, dependent: :destroy #TEAM: REMOVE
   has_many :scoring_rules, inverse_of: :tournament_day, dependent: :destroy
   has_and_belongs_to_many :course_holes, -> { order(:hole_number) }
 
@@ -27,6 +25,7 @@ class TournamentDay < ApplicationRecord
   delegate :scorecard_payload_for_scorecard, to: :game_type
   #delegate :other_group_members, :user_is_in_group?, to: :game_type
   delegate :handicap_allowance, to: :game_type
+  ##END MOVE
 
   validates :course, presence: true
   validates :tournament_at, presence: true

@@ -1,15 +1,18 @@
 class TournamentDayResult < ApplicationRecord
 	include Rails.application.routes.url_helpers
 
-  belongs_to :tournament_day, inverse_of: :tournament_day_results, touch: true
+  belongs_to :scoring_rule, inverse_of: :tournament_day_results, touch: true
   belongs_to :user, inverse_of: :tournament_day_results
   belongs_to :primary_scorecard, class_name: "Scorecard", foreign_key: "user_primary_scorecard_id"
   #TEAM: does this need to be primary_scorecard(s) instead?
   #TEAM: do we also tie a TDR to the ScoringRule that generated it so we can display results by scoring rule
-
   belongs_to :flight, inverse_of: :tournament_day_results, touch: true
 
   validates :name, presence: true
+
+  def tournament_day
+    scoring_rule.tournament_day
+  end
 
   #TODO: refactor, could store not compute
   def points

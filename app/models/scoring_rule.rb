@@ -3,6 +3,9 @@ class ScoringRule < ApplicationRecord
 
 	belongs_to :tournament_day, touch: true, inverse_of: :scoring_rules
 	has_many :payout_results, inverse_of: :scoring_rule, dependent: :destroy
+	has_many :tournament_day_results, -> { order(:flight_id, :sort_rank) }, inverse_of: :tournament_day, dependent: :destroy
+
+	#TODO: move payouts from TD
 
 	attr_accessor :selected_class_name
 

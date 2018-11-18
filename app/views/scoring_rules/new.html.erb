@@ -1,7 +1,7 @@
 <ol class="breadcrumb">
   <li><%= link_to "Tournaments", league_tournaments_path(current_user.selected_league) %></li>
   <li><%= link_to @tournament.name, edit_league_tournament_path(current_user.selected_league, @tournament) %></li>
-  <li class="active">Select Competition</li>
+  <li class="active">Select Game Type</li>
 </ol>
 
 <%= render partial: '/shared/tournaments/manage', locals: {tournament: @tournament, stage: @stage_name} %>
@@ -14,11 +14,11 @@
     </div>
   <% end %>
 
-  <legend><%= @tournament_day.pretty_day(true) %>Competition Details</legend>
+  <legend><%= @tournament_day.pretty_day(true) %>Game Type Details</legend>
 
   <h3>Basic Details</h3>
   <div class="well">
-    <%= f.input :selected_class_name, collection: ScoringRuleOption.scoring_rule_options, label: 'Scoring Rule', label_method: :name, value_method: :class_name, include_blank: false %>
+    <%= f.input :selected_class_name, collection: ScoringRuleOption.scoring_rule_options, label: 'Game Type', label_method: :name, value_method: :class_name, include_blank: false %>
   </div>
 
   <div class="form-actions">
