@@ -43,8 +43,8 @@ class Play::RegistrationsController < Play::BaseController
       redirect_to setup_completed_play_registrations_path
     else
       @cost_breakdown_lines = [
-        {:name => "#{@league.name} League Fees", :price => @league.dues_amount},
-        {:name => "Credit Card Fees", :price => Stripe::StripeFees.fees_for_transaction_amount(@league.dues_amount)}
+        {name: "#{@league.name} League Fees", :price => @league.dues_amount},
+        {name: "Credit Card Fees", :price => Stripe::StripeFees.fees_for_transaction_amount(@league.dues_amount)}
       ]
 
       @payment_amount = Payments::LeagueJoinService.payment_amount(@league)

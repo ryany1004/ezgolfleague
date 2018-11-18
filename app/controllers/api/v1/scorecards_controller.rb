@@ -44,5 +44,4 @@ class Api::V1::ScorecardsController < Api::V1::ApiBaseController
     @tournament_day = @tournament.tournament_days.find(params[:tournament_day_id])
     @scorecard = Scorecard.where(id: params[:id]).first
   end
-
 end

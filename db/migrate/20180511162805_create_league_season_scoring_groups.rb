@@ -7,7 +7,7 @@ class CreateLeagueSeasonScoringGroups < ActiveRecord::Migration[5.1]
     end
 
 		create_join_table :league_season_scoring_groups, :users do |t|
-		  t.index [:league_season_scoring_group_id, :user_id], :name => 'scoring_group_index'
+		  t.index [:league_season_scoring_group_id, :user_id], name: 'scoring_group_index'
 		end
 
 		change_table :leagues do |t|

@@ -84,7 +84,7 @@ class Api::V1::RegistrationsController < Api::V1::ApiBaseController
 
     LeagueMailer.league_interest(@current_user, league).deliver_later unless league.blank?
 
-    render json: {"success" => true}
+    render json: { success: true }
   end
 
   def pay_dues
@@ -97,7 +97,7 @@ class Api::V1::RegistrationsController < Api::V1::ApiBaseController
     begin
       Payments::LeagueJoinService.charge_and_join(@current_user, league, stripe_token)
 
-      render json: {"success" => true}
+      render json: { success: true }
     rescue Stripe::CardError => e
       render json: {"success" => false}, status: :bad_request
     end

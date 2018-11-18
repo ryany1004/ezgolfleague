@@ -70,7 +70,7 @@ class Api::V1::TournamentDaysController < Api::V1::ApiBaseController
       contest.add_user(@current_user)
     end
 
-    render json: {"success" => true}
+    render json: { success: true }
   end
 
   def payment_details

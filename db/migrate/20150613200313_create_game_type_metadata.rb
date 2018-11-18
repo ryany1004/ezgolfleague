@@ -10,6 +10,6 @@ class CreateGameTypeMetadata < ActiveRecord::Migration
       t.timestamps null: false
     end
     
-    add_index :game_type_metadata, [:scorecard_id, :search_key], :name => "scorecard_search_key_index"
+    add_index :game_type_metadata, [:scorecard_id, :search_key], name: "scorecard_search_key_index"
   end
 end

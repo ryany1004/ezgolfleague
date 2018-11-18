@@ -41,7 +41,7 @@ class GolfOutingsController < BaseController
       end
     end
 
-    render json: {"success" => true}
+    render json: { success: true }
   end
 
   def delete_signup

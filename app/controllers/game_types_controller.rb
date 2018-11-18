@@ -52,7 +52,7 @@ class GameTypesController < BaseController
         format.js {}
       end
     else
-      render :text => "There are no configurable options for this game type.", :layout => false
+      render :text => "There are no configurable options for this game type.", layout: false
     end
   end
   

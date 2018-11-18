@@ -167,7 +167,7 @@ class Tournament < ApplicationRecord
     dues_total = self.dues_amount
 
     cost_lines = [
-      {:name => "#{self.name} Fees", :price => self.dues_amount.to_f, :server_id => self.id.to_s}
+      {name: "#{self.name} Fees", :price => self.dues_amount.to_f, :server_id => self.id.to_s}
     ]
 
     if include_unpaid_contests == true
@@ -181,7 +181,7 @@ class Tournament < ApplicationRecord
     end
 
     if include_credit_card_fees == true
-      cost_lines << {:name => "Credit Card Fees", :price => Stripe::StripeFees.fees_for_transaction_amount(dues_total)}
+      cost_lines << {name: "Credit Card Fees", :price => Stripe::StripeFees.fees_for_transaction_amount(dues_total)}
     end
 
     cost_lines
