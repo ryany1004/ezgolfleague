@@ -20,13 +20,13 @@
 
       <h3>Create a Batch of Tee Times at Once</h3>
       <div class="well">
-        <%= f.input :starting_time, :label => 'First Tee Time', required: true, :as => :datetime_picker, input_html: { value: @starting_tee_time.to_s(:date_and_time) } %>
+        <%= f.input :starting_time, label: 'First Tee Time', required: true, :as => :datetime_picker, input_html: { value: @starting_tee_time.to_s(:date_and_time) } %>
 
-        <%= f.input :separation_interval, :label => 'Minutes Between Tee Times', required: true, :as => :integer %>
+        <%= f.input :separation_interval, label: 'Minutes Between Tee Times', required: true, :as => :integer %>
 
-        <%= f.input :max_number_of_players, :label => "Max Players for Each Tee Time", :as => :integer %>
+        <%= f.input :max_number_of_players, label: "Max Players for Each Tee Time", :as => :integer %>
 
-        <%= f.input :number_of_tee_times_to_create, :label => "Number of Tee Times", :as => :integer %>
+        <%= f.input :number_of_tee_times_to_create, label: "Number of Tee Times", :as => :integer %>
       </div>
 
       <div class="form-actions">

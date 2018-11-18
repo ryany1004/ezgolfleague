@@ -10,48 +10,48 @@
 
   <h3>Basic Details</h3>
   <div class="well">
-	  <%= f.input :name, :label => 'Name', required: true %>
-    <%= f.input :dues_payment_receipt_email_addresses, :label => 'Address(es) For Dues Email Confirmations (separate with commas)' %>
-    <%= f.input :display_balances_to_players, :label => 'Show win balances to players?' %>
-    <%= f.input :calculate_handicaps_from_past_rounds, :label => 'Automatically Calculate Handicaps From Past Rounds?' %>
+	  <%= f.input :name, label: 'Name', required: true %>
+    <%= f.input :dues_payment_receipt_email_addresses, label: 'Address(es) For Dues Email Confirmations (separate with commas)' %>
+    <%= f.input :display_balances_to_players, label: 'Show win balances to players?' %>
+    <%= f.input :calculate_handicaps_from_past_rounds, label: 'Automatically Calculate Handicaps From Past Rounds?' %>
   </div>
 
   <div class="well">
-	  <%= f.input :league_description, :label => 'Description' %>
-    <%= f.input :location, :label => 'Play Location' %>
-    <%= f.input :contact_name, :label => 'Contact Name' %>
-    <%= f.input :contact_phone, :label => 'Contact Phone' %>
-    <%= f.input :contact_email, :label => 'Contact Email' %>
-    <%= f.input :show_in_search, :label => 'Appears in League Search?' %>
+	  <%= f.input :league_description, label: 'Description' %>
+    <%= f.input :location, label: 'Play Location' %>
+    <%= f.input :contact_name, label: 'Contact Name' %>
+    <%= f.input :contact_phone, label: 'Contact Phone' %>
+    <%= f.input :contact_email, label: 'Contact Email' %>
+    <%= f.input :show_in_search, label: 'Appears in League Search?' %>
   </div>
 
   <% if current_user.is_super_user %>
     <h3>Super User Options</h3>
     <div class="well">
-      <%= f.input :allow_scoring_groups, :label => 'User Season Scoring Groups Instead of Flights' %>
+      <%= f.input :allow_scoring_groups, label: 'User Season Scoring Groups Instead of Flights' %>
 
-      <%= f.input :exempt_from_subscription, :label => 'League Exempt From Billing' %>
+      <%= f.input :exempt_from_subscription, label: 'League Exempt From Billing' %>
 
-      <%= f.input :free_tournaments_remaining, :label => 'Remaining Free Tournaments' %>
+      <%= f.input :free_tournaments_remaining, label: 'Remaining Free Tournaments' %>
 
-      <%= f.input :required_container_frame_url, :label => 'Container Site URL for Embedding' %>
+      <%= f.input :required_container_frame_url, label: 'Container Site URL for Embedding' %>
     </div>
   <% end %>
 
   <% if current_user.is_super_user %>
     <h3>Credit Card Info</h3>
     <div class="well">
-      <%= f.input :stripe_production_secret_key, :label => 'Stripe Secret Key (Production)' %>
-      <%= f.input :stripe_production_publishable_key, :label => 'Stripe Publishable Key (Production)' %>
-      <%= f.input :stripe_test_secret_key, :label => 'Stripe Secret Key (Test)' %>
-      <%= f.input :stripe_test_publishable_key, :label => 'Stripe Publishable Key (Test)' %>
-      <%= f.input :stripe_test_mode, :label => 'Use Test Mode?' %>
+      <%= f.input :stripe_production_secret_key, label: 'Stripe Secret Key (Production)' %>
+      <%= f.input :stripe_production_publishable_key, label: 'Stripe Publishable Key (Production)' %>
+      <%= f.input :stripe_test_secret_key, label: 'Stripe Secret Key (Test)' %>
+      <%= f.input :stripe_test_publishable_key, label: 'Stripe Publishable Key (Test)' %>
+      <%= f.input :stripe_test_mode, label: 'Use Test Mode?' %>
     </div>
 
     <h3>Apple Pay</h3>
     <div class="well">
-      <%= f.input :apple_pay_merchant_id, :label => 'Apple Pay Merchant ID' %>
-      <%= f.input :supports_apple_pay, :label => 'Supports Apple Pay?' %>
+      <%= f.input :apple_pay_merchant_id, label: 'Apple Pay Merchant ID' %>
+      <%= f.input :supports_apple_pay, label: 'Supports Apple Pay?' %>
     </div>
   <% end %>
 

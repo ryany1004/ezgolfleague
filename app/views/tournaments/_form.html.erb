@@ -15,20 +15,20 @@
       <p><strong>League</strong></p>
       <%= f.input :league_id, collection: @leagues, label: false, :label_method => :name, include_blank: true, input_html: { class: 'chosen-select' } %>
 
-  	  <%= f.input :name, :label => 'Name', required: true %>
+  	  <%= f.input :name, label: 'Name', required: true %>
       
-      <%= f.input :allow_credit_card_payment, :label => 'Users Can Pay w/ a Credit Card?' %>
+      <%= f.input :allow_credit_card_payment, label: 'Users Can Pay w/ a Credit Card?' %>
     </div>
 
     <h3>Sign Up Info</h3>
     <div class="well">
-      <%= f.input :signup_opens_at, :label => 'Signup Opening Date', :as => :datetime_picker, required: true %>
+      <%= f.input :signup_opens_at, label: 'Signup Opening Date', :as => :datetime_picker, required: true %>
 
-      <%= f.input :signup_closes_at, :label => 'Signup Closing Date', :as => :datetime_picker, required: true %>
+      <%= f.input :signup_closes_at, label: 'Signup Closing Date', :as => :datetime_picker, required: true %>
 
-      <%= f.input :max_players, :label => 'Maximum Number of Players', required: true %>
+      <%= f.input :max_players, label: 'Maximum Number of Players', required: true %>
 
-      <%= f.input :show_players_tee_times, :label => 'Players Should See Tee-Times' %>
+      <%= f.input :show_players_tee_times, label: 'Players Should See Tee-Times' %>
     </div>
 
     <div class="form-actions">

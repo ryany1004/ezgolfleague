@@ -10,18 +10,18 @@
 
   <h3>Basic Details</h3>
   <div class="well">
-    <%= f.input :email, :label => 'Email Address', placeholder: 'i.e. user@domain.com', required: true %>
+    <%= f.input :email, label: 'Email Address', placeholder: 'i.e. user@domain.com', required: true %>
 
-	  <%= f.input :first_name, :label => 'First Name', required: true %>
+	  <%= f.input :first_name, label: 'First Name', required: true %>
 
-	  <%= f.input :last_name, :label => 'Last Name', required: true %>
+	  <%= f.input :last_name, label: 'Last Name', required: true %>
 
-    <%= f.input :time_zone, :label => 'Time Zone', required: true, collection: ActiveSupport::TimeZone.us_zones, value_method: :name %>
+    <%= f.input :time_zone, label: 'Time Zone', required: true, collection: ActiveSupport::TimeZone.us_zones, value_method: :name %>
   </div>
 
   <h3>GHIN Number</h3>
   <div class="well">
-    <%= f.input :ghin_number, :label => 'GHIN System Number' %>
+    <%= f.input :ghin_number, label: 'GHIN System Number' %>
   </div>
 
   <h3>Avatar</h3>
@@ -29,7 +29,7 @@
     <% unless @user_account.avatar.blank? -%>
     <p><%= image_tag @user_account.avatar.url(:medium) %></p>
     <% end -%>
-    <%= f.input :avatar, :label => 'Avatar Photo' %>
+    <%= f.input :avatar, label: 'Avatar Photo' %>
   </div>
 
   <h3>Password</h3>
@@ -40,24 +40,24 @@
   <% if !@user_account.new_record? -%>
   <h3>Notifications</h3>
   <div class="well">
-    <%= f.input :wants_email_notifications, :label => 'Send Notifications via Email', as: :boolean %>
-    <%= f.input :wants_push_notifications, :label => 'Send Notifications via Mobile App', as: :boolean %>
+    <%= f.input :wants_email_notifications, label: 'Send Notifications via Email', as: :boolean %>
+    <%= f.input :wants_push_notifications, label: 'Send Notifications via Mobile App', as: :boolean %>
   </div>
   <% end -%>
 
   <h3>Contact Information</h3>
   <div class="well">
-    <%= f.input :street_address_1, :label => 'Street Address 1', placeholder: 'i.e. 123 Main Street' %>
+    <%= f.input :street_address_1, label: 'Street Address 1', placeholder: 'i.e. 123 Main Street' %>
 
-    <%= f.input :street_address_2, :label => 'Street Address 2', placeholder: 'i.e. Suite 200' %>
+    <%= f.input :street_address_2, label: 'Street Address 2', placeholder: 'i.e. Suite 200' %>
 
-    <%= f.input :city, :label => 'City' %>
+    <%= f.input :city, label: 'City' %>
 
-	  <%= f.input :us_state, :label => 'State', collection: @us_states %>
+	  <%= f.input :us_state, label: 'State', collection: @us_states %>
 
-	  <%= f.input :postal_code, :label => 'Zip Code' %>
+	  <%= f.input :postal_code, label: 'Zip Code' %>
 
-    <%= f.input :phone_number, :label => 'Phone Number' %>
+    <%= f.input :phone_number, label: 'Phone Number' %>
   </div>
 
   <div class="form-actions">

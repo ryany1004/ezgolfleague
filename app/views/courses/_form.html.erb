@@ -10,22 +10,22 @@
   
   <h3>Basic Details</h3>
   <div class="well">  
-	  <%= f.input :name, :label => 'Name', required: true %>
+	  <%= f.input :name, label: 'Name', required: true %>
   </div>
 
   <h3>Location</h3>
   <div class="well">
-    <%= f.input :street_address_1, :label => 'Street Address 1', placeholder: '123 Main Street' %>
+    <%= f.input :street_address_1, label: 'Street Address 1', placeholder: '123 Main Street' %>
   
-    <%= f.input :street_address_2, :label => 'Street Address 2', placeholder: 'Suite 200' %>
+    <%= f.input :street_address_2, label: 'Street Address 2', placeholder: 'Suite 200' %>
   
-    <%= f.input :city, :label => 'City' %>
+    <%= f.input :city, label: 'City' %>
     
-	  <%= f.input :us_state, :label => 'State', collection: @us_states %>
+	  <%= f.input :us_state, label: 'State', collection: @us_states %>
 
-	  <%= f.input :postal_code, :label => 'Zip Code' %>
+	  <%= f.input :postal_code, label: 'Zip Code' %>
     
-    <%= f.input :phone_number, :label => 'Phone Number' %>
+    <%= f.input :phone_number, label: 'Phone Number' %>
   </div>
   
   <div class="form-actions">

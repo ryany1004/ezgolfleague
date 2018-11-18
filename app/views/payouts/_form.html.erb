@@ -10,11 +10,11 @@
 
   <h3>Basic Details</h3>
   <div class="well">
-    <%= f.input :flight_id, collection: @tournament_day.flights, :label => flight_or_group(@tournament), :label_method => :display_name, required: true %>
+    <%= f.input :flight_id, collection: @tournament_day.flights, label: flight_or_group(@tournament), :label_method => :display_name, required: true %>
 
-	  <%= f.input :amount, :label => 'Amount ($)', required: true %>
+	  <%= f.input :amount, label: 'Amount ($)', required: true %>
 
-    <%= f.input :points, :label => 'Points', required: true %>
+    <%= f.input :points, label: 'Points', required: true %>
   </div>
 
   <div class="form-actions">

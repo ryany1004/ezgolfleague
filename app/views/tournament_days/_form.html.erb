@@ -21,9 +21,9 @@
         <p>Don't see your course? We're adding courses all the time. <a href='mailto:support@ezgolfleague.com?subject=New%20Course'>Drop us a line</a> to let us know what you're missing.</p>
       <% end %>
 
-      <%= f.input :tournament_at, :label => 'Tournament Date', required: true, :as => :datetime_picker %>
+      <%= f.input :tournament_at, label: 'Tournament Date', required: true, :as => :datetime_picker %>
 
-      <%= f.input :enter_scores_until_finalized, :label => 'Allow Players to Enter Scores Until Finalized?', required: true, :as => :boolean %>
+      <%= f.input :enter_scores_until_finalized, label: 'Allow Players to Enter Scores Until Finalized?', required: true, :as => :boolean %>
       <p>If you leave this un-checked, players are only able to score on the day of the tournament. Selecting this option allows scoring until you finalize the tournament.</p>
     </div>
 

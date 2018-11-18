@@ -17,11 +17,11 @@
       <%= f.association :contest_hole, collection: @contest.contest_holes, label_method: :hole_number %>
     <% end -%>
 
-    <%= f.input :result_value, :label => 'Result (i.e. 300 yards, hole number)', required: true %>
+    <%= f.input :result_value, label: 'Result (i.e. 300 yards, hole number)', required: true %>
 
-    <%= f.input :payout_amount, :label => "Payout Amount ($)" %>
+    <%= f.input :payout_amount, label: "Payout Amount ($)" %>
 
-    <%= f.input :points, :label => "Points" %>
+    <%= f.input :points, label: "Points" %>
   </div>
 
   <div class="form-actions">

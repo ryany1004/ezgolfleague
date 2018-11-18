@@ -10,12 +10,12 @@
 
   <h3>Basic Details</h3>
   <div class="well">
-    <%= f.input :title, :label => 'Title (Mobile + Email)', required: true %>
+    <%= f.input :title, label: 'Title (Mobile + Email)', required: true %>
 
-    <%= f.input :body, :label => 'Body Text (Email Only)' %>
+    <%= f.input :body, label: 'Body Text (Email Only)' %>
 
     <% if @notification_template.tournament_notification_action.blank? %>
-      <%= f.input :deliver_at, :label => 'Delivery Date', required: true, :as => :datetime_picker %>
+      <%= f.input :deliver_at, label: 'Delivery Date', required: true, :as => :datetime_picker %>
     <% else %>
       <p>This notification will be sent: <%= @notification_template.tournament_notification_action %></p>
     <% end %>
@@ -24,9 +24,9 @@
   <h3>Who Should This Go To?</h3>
   <div class="well">
     <% if @notification_template.tournament_notification_action.blank? %>
-      <%= f.input :league_id, collection: @leagues, :label => 'All League Members', :label_method => :name %>
+      <%= f.input :league_id, collection: @leagues, label: 'All League Members', :label_method => :name %>
 
-      <%= f.input :tournament_id, collection: @tournaments, :label => 'Just These Tournament Players', :label_method => :name %>
+      <%= f.input :tournament_id, collection: @tournaments, label: 'Just These Tournament Players', :label_method => :name %>
 
       <p>
         <em>Note that child users with parents will also be notified even if they are not members of the league.</em>

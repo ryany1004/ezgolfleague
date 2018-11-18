@@ -10,20 +10,20 @@
 
   <h3>Basic Details</h3>
   <div class="well">
-    <%= f.input :email, :label => 'Email Address', placeholder: 'i.e. user@domain.com', required: true %>
+    <%= f.input :email, label: 'Email Address', placeholder: 'i.e. user@domain.com', required: true %>
 
-	  <%= f.input :first_name, :label => 'First Name', required: true %>
+	  <%= f.input :first_name, label: 'First Name', required: true %>
 
-	  <%= f.input :last_name, :label => 'Last Name', required: true %>
+	  <%= f.input :last_name, label: 'Last Name', required: true %>
 
-    <%= f.input :time_zone, :label => 'Time Zone', required: true, collection: ActiveSupport::TimeZone.us_zones, value_method: :name %>
+    <%= f.input :time_zone, label: 'Time Zone', required: true, collection: ActiveSupport::TimeZone.us_zones, value_method: :name %>
 
     <% if @user_account.new_record? -%>
-      <%= f.input :should_invite, :label => 'Send Invitation via Email', as: :boolean %>
+      <%= f.input :should_invite, label: 'Send Invitation via Email', as: :boolean %>
     <% end -%>
 
     <% if current_user.is_super_user %>
-      <%= f.association :leagues, collection: @leagues, :label => 'Leagues', :label_method => :name, as: :check_boxes, required: true %>
+      <%= f.association :leagues, collection: @leagues, label: 'Leagues', :label_method => :name, as: :check_boxes, required: true %>
     <% end %>
   </div>
 
@@ -40,23 +40,23 @@
     <% unless @user_account.avatar.blank? -%>
     <p><%= image_tag @user_account.avatar.url(:medium) %></p>
     <% end -%>
-    <%= f.input :avatar, :label => 'Avatar Photo' %>
+    <%= f.input :avatar, label: 'Avatar Photo' %>
   </div>
 
   <% if @user_account.new_record? -%>
   <h3>Password</h3>
   <div class="well">
-    <%= f.input :password, :label => 'Password' %>
+    <%= f.input :password, label: 'Password' %>
 
-    <%= f.input :password_confirmation, :label => 'Password Confirmation' %>
+    <%= f.input :password_confirmation, label: 'Password Confirmation' %>
   </div>
   <% end -%>
 
   <% if !@user_account.new_record? -%>
   <h3>Notifications</h3>
   <div class="well">
-    <%= f.input :wants_email_notifications, :label => 'Send Notifications via Email', as: :boolean %>
-    <%= f.input :wants_push_notifications, :label => 'Send Notifications via Mobile App', as: :boolean %>
+    <%= f.input :wants_email_notifications, label: 'Send Notifications via Email', as: :boolean %>
+    <%= f.input :wants_push_notifications, label: 'Send Notifications via Mobile App', as: :boolean %>
   </div>
   <% end -%>
 
@@ -64,7 +64,7 @@
   <div class="well">
     <p>We offer several options for handicapping: pulling from GHIN, automatic based on past performance or manual handicap index. You can also override the handicap index with a manual course handicap - you can enter that below.</p>
 
-    <%= f.input :ghin_number, :label => 'GHIN System Number' %>
+    <%= f.input :ghin_number, label: 'GHIN System Number' %>
 
     <% if current_user.is_super_user && @user_account.new_record? == false && @user_account.ghin_number.blank? == false %>
     <p>View their GHIN page, useful for debugging. Saving a user will submit a request to update from GHIN.</p>
@@ -72,23 +72,23 @@
     <p>GHIN Last Updated: <%= @user_account.ghin_updated_at %></p>
     <% end %>
 
-    <%= f.input :handicap_index, :label => '18-Hole Handicap Index' %>
+    <%= f.input :handicap_index, label: '18-Hole Handicap Index' %>
     <p>Handicaps will automatically be converted for 9-hole tournaments.</p>
   </div>
 
   <h3>Contact Information</h3>
   <div class="well">
-    <%= f.input :street_address_1, :label => 'Street Address 1', placeholder: 'i.e. 123 Main Street' %>
+    <%= f.input :street_address_1, label: 'Street Address 1', placeholder: 'i.e. 123 Main Street' %>
 
-    <%= f.input :street_address_2, :label => 'Street Address 2', placeholder: 'i.e. Suite 200' %>
+    <%= f.input :street_address_2, label: 'Street Address 2', placeholder: 'i.e. Suite 200' %>
 
-    <%= f.input :city, :label => 'City' %>
+    <%= f.input :city, label: 'City' %>
 
-	  <%= f.input :us_state, :label => 'State', collection: @us_states %>
+	  <%= f.input :us_state, label: 'State', collection: @us_states %>
 
-	  <%= f.input :postal_code, :label => 'Zip Code' %>
+	  <%= f.input :postal_code, label: 'Zip Code' %>
 
-    <%= f.input :phone_number, :label => 'Phone Number' %>
+    <%= f.input :phone_number, label: 'Phone Number' %>
   </div>
 
   <% if @user_account.new_record? == false && @editing_current_user != true -%>
