@@ -146,13 +146,17 @@ Rails.application.routes.draw do
       get 'leagues_report', on: :collection
     end
 
-    resources :tournaments do #this is for setting them up
+    resources :tournaments do
       resources :tournament_days do
-        resources :flights, only: [:create, :update] do
-          resources :payouts, only: [:new, :edit, :create, :update]
+        resources :flights do
+          patch 'reflight_players', on: :collection
+
+          resources :payouts
         end
 
-        resources :tournament_groups, only: [:create, :update]
+        resources :tournament_groups do
+          post 'batch_create', on: :collection
+        end
 
         resources :contests, only: [:create, :update] do
           resources :contest_results, only: [:new, :create, :update]
@@ -160,9 +164,14 @@ Rails.application.routes.draw do
 
         resources :scoring_rules do
           get 'options', on: :collection
+
+          resources :payouts
         end
+
+        resources :tournament_notifications
       end
 
+      #UPDATE/FIX
       get 'tournament_days/:tournament_day_id/players' => 'golf_outings#players', as: :day_players
       post 'tournament_days/:tournament_day_id/:tournament_group_id/update_players' => 'golf_outings#update_players', as: :update_day_players
       patch 'tournament_days/:tournament_day_id/move_group' => 'golf_outings#move_group', as: :move_group_players
@@ -170,16 +179,6 @@ Rails.application.routes.draw do
       delete 'tournament_days/:tournament_day_id/delete_signup' => 'golf_outings#delete_signup', as: :delete_day_players
 
       #TEAM: REMOVE
-      resource :game_types do
-        get 'options', on: :collection
-      end
-
-      resources :flights do
-        patch 'reflight_players', on: :collection
-      end
-
-      resources :payouts
-
       resources :contests do
         resources :contest_results
 
@@ -188,12 +187,7 @@ Rails.application.routes.draw do
         post 'add_registration'
       end
 
-      resources :tournament_groups do
-        post 'batch_create', on: :collection
-      end
-
-      resources :tournament_notifications
-
+      #MOVE
       get 'manage_holes'
       patch 'update_holes'
 

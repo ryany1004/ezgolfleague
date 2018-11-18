@@ -7,7 +7,7 @@
 
     <% if tournament_day.tournament.players_for_day(tournament_day).count > 0 -%>
     <p>
-      <%= link_to 'Re-Sync Scoring Groups', reflight_players_league_tournament_flights_path(tournament.league, tournament, tournament_day: tournament_day), class: 'btn btn-primary', method: :patch %>
+      <%= link_to 'Re-Flight Players', reflight_players_league_tournament_tournament_day_flights_path(tournament.league, tournament, tournament_day), class: 'btn btn-primary', method: :patch %>
     </p>
     <% end -%>
   </div>
@@ -22,7 +22,7 @@
     <% flights.each do |flight| %>
       <tr>
         <td><%= flight.league_season_scoring_group.name %></td>
-        <td><%= link_to "Setup (#{flight.payouts.count})", league_tournament_payouts_path(tournament.league, tournament, flight: flight, tournament_day: tournament_day) %></td>
+        <td><%= link_to "Setup (#{flight.payouts.count})", league_tournament_tournament_day_flight_payouts_path(tournament.league, tournament, tournament_day, flight) %></td>
       </tr>
     <% end %>
     </tbody>

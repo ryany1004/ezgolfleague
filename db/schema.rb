@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181118220533) do
+ActiveRecord::Schema.define(version: 20181118222137) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -391,7 +391,9 @@ ActiveRecord::Schema.define(version: 20181118220533) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "sort_order", default: 0
+    t.bigint "scoring_rule_id"
     t.index ["flight_id"], name: "index_payouts_on_flight_id"
+    t.index ["scoring_rule_id"], name: "index_payouts_on_scoring_rule_id"
     t.index ["sort_order"], name: "index_payouts_on_sort_order"
   end
 
