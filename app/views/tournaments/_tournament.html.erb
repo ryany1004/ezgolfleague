@@ -38,7 +38,7 @@
         <li><%= link_to 'Notifications', league_tournament_tournament_notifications_path(tournament.league, tournament) %></li>
         <% if tournament.tournament_days.count > 1 %>
         <li class="divider"></li>
-        <li><%= link_to "Auto-Schedule For Secondary Days", league_tournament_auto_schedule_path(tournament.league, tournament), :data => { :confirm => 'Are you sure you want to schedule secondary days? This will remove any existing scores for those days.' }, method: :patch %></li>
+        <li><%= link_to "Auto-Schedule For Secondary Days", league_tournament_auto_schedule_path(tournament.league, tournament), :data => { confirm: 'Are you sure you want to schedule secondary days? This will remove any existing scores for those days.' }, method: :patch %></li>
         <% end %>
         <li class="divider"></li>
         <li><%= link_to 'Calculate Results', league_tournament_finalize_path(tournament.league, tournament) %></li>
@@ -49,8 +49,8 @@
         <% if current_user.is_super_user || tournament.is_past? == false -%>
         <li><%= link_to "Recalculate Course Handicaps", league_tournament_update_course_handicaps_path(tournament.league, tournament), method: :patch %></li>
         <% end -%>
-        <li><%= link_to "Recalculate Tournament Scoring", league_tournament_rescore_players_path(tournament.league, tournament), method: :patch, :data => { :confirm => 'This will re-calculate all tournament scores. Can be useful if you have changed underlying data.' } %></li>
-        <li><%= link_to "Remove Cached Data", league_tournament_touch_tournament_path(tournament.league, tournament), method: :patch, :data => { :confirm => 'Are you sure you want to remove the cached data? Regenerating the data can take several minutes the next time it is accessed.' } %></li>
+        <li><%= link_to "Recalculate Tournament Scoring", league_tournament_rescore_players_path(tournament.league, tournament), method: :patch, :data => { confirm: 'This will re-calculate all tournament scores. Can be useful if you have changed underlying data.' } %></li>
+        <li><%= link_to "Remove Cached Data", league_tournament_touch_tournament_path(tournament.league, tournament), method: :patch, :data => { confirm: 'Are you sure you want to remove the cached data? Regenerating the data can take several minutes the next time it is accessed.' } %></li>
         <% if current_user.is_super_user -%>
         <li><%= link_to "Tournament Debugger", league_tournament_debug_path(tournament.league, tournament) %></li>
         <% end -%>
@@ -61,7 +61,7 @@
   <% end %>
   </td>
   <td>
-    <% if is_editable?(tournament) -%><%= link_to "Edit", edit_league_tournament_path(tournament.league, tournament) %> | <%= link_to 'Delete', league_tournament_path(tournament.league, tournament), :data => { :confirm => 'Are you sure you want to delete this tournament? That will remove all player score data and results.' }, method: :delete %><% else -%><em>Currently underway.</em><% end -%>
+    <% if is_editable?(tournament) -%><%= link_to "Edit", edit_league_tournament_path(tournament.league, tournament) %> | <%= link_to 'Delete', league_tournament_path(tournament.league, tournament), :data => { confirm: 'Are you sure you want to delete this tournament? That will remove all player score data and results.' }, method: :delete %><% else -%><em>Currently underway.</em><% end -%>
 
     <% if tournament.can_be_finalized? && tournament.is_finalized == false %>
       <p>

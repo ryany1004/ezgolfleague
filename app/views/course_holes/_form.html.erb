@@ -28,7 +28,7 @@
       
       <% if !@course_hole.new_record? -%>
         <p>
-          <%= link_to 'Delete This Tee Box', course_course_hole_course_hole_tee_box_path(@course, @course_hole, b.object), :data => { :confirm => 'Are you sure you want to delete this tee box?' }, method: :delete %>
+          <%= link_to 'Delete This Tee Box', course_course_hole_course_hole_tee_box_path(@course, @course_hole, b.object), :data => { confirm: 'Are you sure you want to delete this tee box?' }, method: :delete %>
         </p>
         <p>
           <%= link_to 'Add New Tee Box', new_course_course_hole_course_hole_tee_box_path(@course, @course_hole)  %>

@@ -35,7 +35,7 @@
 			<td><%= result.winner.complete_name %></td>
       <td><%= result.result_value %></td>
       <td><%= number_to_currency(result.payout_amount) %></td>
-      <td><%= link_to "Edit", edit_league_tournament_contest_contest_result_path(@tournament.league, @tournament, @contest, result, tournament_day: @tournament_day) %> | <%= link_to 'Delete', league_tournament_contest_contest_result_path(@tournament.league, @tournament, @contest, result, tournament_day: @tournament_day), :data => { :confirm => 'Are you sure you want to delete this contest result?' }, method: :delete %></td>
+      <td><%= link_to "Edit", edit_league_tournament_contest_contest_result_path(@tournament.league, @tournament, @contest, result, tournament_day: @tournament_day) %> | <%= link_to 'Delete', league_tournament_contest_contest_result_path(@tournament.league, @tournament, @contest, result, tournament_day: @tournament_day), :data => { confirm: 'Are you sure you want to delete this contest result?' }, method: :delete %></td>
 		</tr>
 	<% end %>
 	</tbody>

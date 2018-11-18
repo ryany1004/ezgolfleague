@@ -50,7 +50,7 @@
           <td>&nbsp;</td>
           <% end -%>
           <% if current_user.is_super_user? %>
-            <td><%= link_to "Edit", edit_league_path(league) %> | <%= link_to 'Delete', league_path(league), :data => { :confirm => 'USE CAUTION. Are you sure you want to delete this league?' }, method: :delete %></td>
+            <td><%= link_to "Edit", edit_league_path(league) %> | <%= link_to 'Delete', league_path(league), :data => { confirm: 'USE CAUTION. Are you sure you want to delete this league?' }, method: :delete %></td>
           <% else -%>
           <td>&nbsp;</td>
           <% end -%>

@@ -7,5 +7,5 @@
     <% end -%>
   </td>
   <td><%= course_hole.mens_handicap %> / <%= course_hole.womens_handicap %></td>
-  <td><%= link_to "Edit", edit_course_course_hole_path(course, course_hole) %> | <%= link_to 'Delete', course_course_hole_path(course, course_hole), :data => { :confirm => 'Are you sure you want to delete this hole?' }, method: :delete %></td>
+  <td><%= link_to "Edit", edit_course_course_hole_path(course, course_hole) %> | <%= link_to 'Delete', course_course_hole_path(course, course_hole), :data => { confirm: 'Are you sure you want to delete this hole?' }, method: :delete %></td>
 </tr>

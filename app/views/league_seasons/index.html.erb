@@ -30,7 +30,7 @@
 			</td>
 
 			<% if current_user.is_super_user? %>
-      	<td><%= link_to "Edit", edit_league_league_season_path(@league, season) %> | <%= link_to 'Delete', league_league_season_path(@league, season), :data => { :confirm => 'Are you sure you want to delete this season?' }, method: :delete %></td>
+      	<td><%= link_to "Edit", edit_league_league_season_path(@league, season) %> | <%= link_to 'Delete', league_league_season_path(@league, season), :data => { confirm: 'Are you sure you want to delete this season?' }, method: :delete %></td>
     	<% else %>
     		<td>&nbsp;</td>
     	<% end %>
