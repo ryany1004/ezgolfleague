@@ -2,7 +2,7 @@ require 'resque/server'
 
 Rails.application.routes.draw do
   if Rails.env.production?
-    default_url_options :host => "app.ezgolfleague.com"
+    default_url_options host: "app.ezgolfleague.com"
   end
 
   devise_for :users
