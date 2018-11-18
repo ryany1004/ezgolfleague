@@ -13,7 +13,7 @@ class Api::V1::ScorecardsController < Api::V1::ApiBaseController
       payload = @tournament_day.scorecard_payload_for_scorecard(@scorecard)
 
       respond_with(payload) do |format|
-        format.json { render :json => payload }
+        format.json { render json: payload }
       end
     end
   end
@@ -35,7 +35,7 @@ class Api::V1::ScorecardsController < Api::V1::ApiBaseController
     end
 
     respond_with(leaderboard) do |format|
-      format.json { render :json => leaderboard }
+      format.json { render json: leaderboard }
     end
   end
 

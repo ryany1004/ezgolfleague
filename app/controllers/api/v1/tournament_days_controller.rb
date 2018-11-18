@@ -41,7 +41,7 @@ class Api::V1::TournamentDaysController < Api::V1::ApiBaseController
     eager_groups = @tournament_day.eager_groups
 
     respond_with(eager_groups) do |format|
-      format.json { render :json => eager_groups }
+      format.json { render json: eager_groups }
     end
   end
 
@@ -86,7 +86,7 @@ class Api::V1::TournamentDaysController < Api::V1::ApiBaseController
     cost_details = {:tournament => tournament_cost_details, :contests => contest_cost_details}
 
     respond_with(cost_details) do |format|
-      format.json { render :json => cost_details }
+      format.json { render json: cost_details }
     end
   end
 

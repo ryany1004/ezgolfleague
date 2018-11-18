@@ -38,7 +38,7 @@ class Api::V1::SessionsController < Api::V1::ApiBaseController
     uploaded_image = request.body.read
 
     if uploaded_image.blank?
-      render plain: "Bad Image", :status => :bad_request
+      render plain: "Bad Image", status: :bad_request
     else
       temp_file_path = "#{Rails.root}/tmp/#{SecureRandom.uuid}_golfer_avatar.jpg"
 
@@ -55,7 +55,7 @@ class Api::V1::SessionsController < Api::V1::ApiBaseController
         end
       end
 
-      render plain: "Success", :status => :ok
+      render plain: "Success", status: :ok
     end
   end
 

@@ -46,10 +46,10 @@ class Api::V1::PaymentsController < Api::V1::ApiBaseController
 
         render json: {"success" => true}
       rescue Stripe::CardError => e
-        render json: {"success" => false}, :status => :bad_request
+        render json: {"success" => false}, status: :bad_request
       end
     else
-      render json: {"success" => false}, :status => :bad_request
+      render json: {"success" => false}, status: :bad_request
     end
   end
 

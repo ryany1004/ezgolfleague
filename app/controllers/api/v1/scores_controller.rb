@@ -23,7 +23,7 @@ class Api::V1::ScoresController < Api::V1::ApiBaseController
 
       render json: {:text => "Success"}
     else
-      render text: "Score Updating Failure", :status => :bad_request
+      render text: "Score Updating Failure", status: :bad_request
     end
   end
 

@@ -27,7 +27,7 @@ class Api::V1::RegistrationsController < Api::V1::ApiBaseController
       create_errors = { errors: user.errors }
 
       respond_with(create_errors) do |format|
-        format.json { render :json => create_errors }
+        format.json { render json: create_errors }
       end
     end
   end
@@ -50,7 +50,7 @@ class Api::V1::RegistrationsController < Api::V1::ApiBaseController
       create_errors = { errors: league.errors }
 
       respond_with(create_errors) do |format|
-        format.json { render :json => create_errors }
+        format.json { render json: create_errors }
       end
     end
   end
@@ -75,7 +75,7 @@ class Api::V1::RegistrationsController < Api::V1::ApiBaseController
       upcoming_tournaments = Tournament.all_upcoming([@league], nil)
 
       respond_with(upcoming_tournaments) do |format|
-        format.json { render :json => upcoming_tournaments }
+        format.json { render json: upcoming_tournaments }
       end
   end
 
@@ -99,7 +99,7 @@ class Api::V1::RegistrationsController < Api::V1::ApiBaseController
 
       render json: {"success" => true}
     rescue Stripe::CardError => e
-      render json: {"success" => false}, :status => :bad_request
+      render json: {"success" => false}, status: :bad_request
     end
   end
 end
