@@ -10,7 +10,7 @@
   
   <h3>Basic Details</h3>
   <div class="well">      
-    <%= f.input :user_id, collection: @users, label: 'User', :label_method => :complete_name %>
+    <%= f.input :user_id, collection: @users, label: 'User', label_method: :complete_name %>
     
 	  <%= f.input :payment_amount, label: 'Amount ($)', required: true, :hint => "This number should be positive when the player pays the club (i.e. dues payment) and negative when the club pays the player (i.e. a refund)." %>
     
@@ -21,9 +21,9 @@
   
   <h3>Pick One of These Options</h3>
   <div class="well">
-    <%= f.input :league_season_id, collection: @league_seasons, label: 'League Season', :label_method => :complete_name, :hint => "Specify a league if this credit is for dues." %>
+    <%= f.input :league_season_id, collection: @league_seasons, label: 'League Season', label_method: :complete_name, :hint => "Specify a league if this credit is for dues." %>
       
-    <%= f.input :tournament_id, collection: @tournaments, label: 'Tournament', :label_method => :name, :hint => "Specify a tournament if this credit is for play." %>
+    <%= f.input :tournament_id, collection: @tournaments, label: 'Tournament', label_method: :name, :hint => "Specify a tournament if this credit is for play." %>
   </div>
   
   <div class="form-actions">

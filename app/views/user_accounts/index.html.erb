@@ -30,7 +30,7 @@
           <td><%= user_account.created_at.to_s(:date_and_time) %></td>
           <td><%= user_account.ghin_updated_at.to_s(:date_and_time) unless user_account.ghin_updated_at.blank? %></td>
           <% if current_user.is_super_user? %>
-          <td><%= link_to "Edit", edit_user_account_path(user_account) %> | <%= link_to 'Delete', user_account_path(user_account), :data => { confirm: 'Are you sure you want to delete this user? Instead of deleting a user, alternatively simply remove them from their leagues to make them disappear.' }, method: :delete %></td>
+          <td><%= link_to "Edit", edit_user_account_path(user_account) %> | <%= link_to 'Delete', user_account_path(user_account), data: { confirm: 'Are you sure you want to delete this user? Instead of deleting a user, alternatively simply remove them from their leagues to make them disappear.' }, method: :delete %></td>
           <% else -%>
           <td>&nbsp;</td>
           <% end -%>

@@ -155,7 +155,7 @@
 
 <!-- Finalize Buttons -->
 <% if p.show_finalization? -%>
-  <p><%= link_to 'Finalize Scorecard', play_scorecard_finalize_scorecard_path(p.primary_scorecard), class: 'btn btn-danger', method: :patch, :data => { confirm: 'Are you sure you want to finalize your scorecard? This indicates to the league administrator that you are ready to be ranked for this tournament.' } %></p>
+  <p><%= link_to 'Finalize Scorecard', play_scorecard_finalize_scorecard_path(p.primary_scorecard), class: 'btn btn-danger', method: :patch, data: { confirm: 'Are you sure you want to finalize your scorecard? This indicates to the league administrator that you are ready to be ranked for this tournament.' } %></p>
 <% end -%>
 
 <!-- Modals -->

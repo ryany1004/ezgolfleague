@@ -26,7 +26,7 @@
       <tr>
         <td><%= player.complete_name %> <%= team_name(group, i) %></td>
         <% if player == current_user -%>
-        <td><%= link_to "Cancel Registration", play_tournament_remove_signup_path(@tournament), :data => { confirm: 'Are you sure you want to cancel this registration?' }, method: :delete %></td>
+        <td><%= link_to "Cancel Registration", play_tournament_remove_signup_path(@tournament), data: { confirm: 'Are you sure you want to cancel this registration?' }, method: :delete %></td>
         <% else -%>
         <td>Booked</td>
         <% end -%>

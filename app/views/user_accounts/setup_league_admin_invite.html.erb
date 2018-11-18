@@ -21,7 +21,7 @@
 
 	  <%= f.input :last_name, label: 'Last Name', required: true %>
     
-    <%= f.association :leagues, collection: @leagues, label: 'Leagues', :label_method => :name, as: :check_boxes, required: true %>
+    <%= f.association :leagues, collection: @leagues, label: 'Leagues', label_method: :name, as: :check_boxes, required: true %>
   </div>
 
   <div class="form-actions">

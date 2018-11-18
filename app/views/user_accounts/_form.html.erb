@@ -23,7 +23,7 @@
     <% end -%>
 
     <% if current_user.is_super_user %>
-      <%= f.association :leagues, collection: @leagues, label: 'Leagues', :label_method => :name, as: :check_boxes, required: true %>
+      <%= f.association :leagues, collection: @leagues, label: 'Leagues', label_method: :name, as: :check_boxes, required: true %>
     <% end %>
   </div>
 
@@ -107,7 +107,7 @@
   <% if current_user.is_super_user %>
   <h3>Parent User</h3>
   <div class="well">
-    <%= f.input :parent_id, collection: User.all.order("last_name"), label: false, :label_method => :complete_name, include_blank: true, input_html: { class: 'chosen-select' } %>
+    <%= f.input :parent_id, collection: User.all.order("last_name"), label: false, label_method: :complete_name, include_blank: true, input_html: { class: 'chosen-select' } %>
   </div>
 
   <h3>Merge Into Account</h3>
@@ -116,7 +116,7 @@
 
     <p>The currently viewed user has participated in <%= @user_account.golf_outings.count %> tournaments.</p>
 
-    <%= f.input :account_to_merge_to, collection: User.all.order("last_name").where("id != ?", @user_account.id), label: false, :label_method => :complete_name_with_email, include_blank: true, input_html: { class: 'chosen-select' } %>
+    <%= f.input :account_to_merge_to, collection: User.all.order("last_name").where("id != ?", @user_account.id), label: false, label_method: :complete_name_with_email, include_blank: true, input_html: { class: 'chosen-select' } %>
   </div>
   <% end %>
 

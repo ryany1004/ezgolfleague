@@ -16,7 +16,7 @@
 
     <%= f.input :upper_bound, label: 'Handicap Upper Bound', required: true %>
 
-    <%= f.input :course_tee_box_id, collection: @tournament_day.course.course_tee_boxes, label: "Tee Box", :label_method => :name, required: true %>
+    <%= f.input :course_tee_box_id, collection: @tournament_day.course.course_tee_boxes, label: "Tee Box", label_method: :name, required: true %>
   </div>
 
   <div class="form-actions">

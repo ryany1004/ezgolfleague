@@ -38,7 +38,7 @@
             <% if tournament.dues_amount > 0 && !tournament.user_has_paid?(current_user) -%>
             <li><%= link_to "Pay for Registration", new_play_payment_path(:payment_type => "tournament_dues", :tournament_id => tournament.id) %></li>
             <% end -%>
-            <li><%= link_to "Cancel Registration", play_tournament_remove_signup_path(tournament), :data => { confirm: 'Are you sure you want to cancel this registration?' }, method: :delete %></li>
+            <li><%= link_to "Cancel Registration", play_tournament_remove_signup_path(tournament), data: { confirm: 'Are you sure you want to cancel this registration?' }, method: :delete %></li>
             <li class="divider"></li>
             <li>
               <% tournament.tournament_days.each do |d| -%>

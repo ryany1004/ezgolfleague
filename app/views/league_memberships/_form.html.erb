@@ -12,7 +12,7 @@
   <div class="well">
     <% if @league_membership.new_record? -%>
       <p><strong>Select a user:</strong></p>
-      <%= f.association :user, collection: @users, label: false, :label_method => :complete_name, input_html: { class: 'chosen-select' } %>
+      <%= f.association :user, collection: @users, label: false, label_method: :complete_name, input_html: { class: 'chosen-select' } %>
     <% else -%>
       <p><strong><%= @league_membership.user.complete_name %></strong></p>
     <% end -%>
