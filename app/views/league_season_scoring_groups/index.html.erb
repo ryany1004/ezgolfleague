@@ -17,7 +17,7 @@
 	<% @scoring_groups.each do |group| %>
 		<tr>
       <td><%= link_to group.name, edit_league_league_season_league_season_scoring_group_path(@league, @league_season, group) %></td>
-      <td><%= link_to "Edit", edit_league_league_season_league_season_scoring_group_path(@league, @league_season, group) %> | <%= link_to 'Delete', league_league_season_league_season_scoring_group_path(@league, @league_season, group), :data => { :confirm => 'Are you sure you want to delete this scoring group?' }, :method => :delete %></td>
+      <td><%= link_to "Edit", edit_league_league_season_league_season_scoring_group_path(@league, @league_season, group) %> | <%= link_to 'Delete', league_league_season_league_season_scoring_group_path(@league, @league_season, group), :data => { :confirm => 'Are you sure you want to delete this scoring group?' }, method: :delete %></td>
 		</tr>
 	<% end %>
 	</tbody>

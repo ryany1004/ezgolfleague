@@ -58,7 +58,7 @@
 			<td><%= tournament_group.max_number_of_players %></td>
       <td><%= tournament_group.players_signed_up.count %></td>
       <% if user_is_league_admin(current_user, @tournament.league) %>
-      <td><%= link_to "Edit", edit_league_tournament_tournament_group_path(@tournament.league, @tournament, tournament_group, tournament_day: @tournament_day) %><% if tournament_group.can_be_deleted? %> | <%= link_to 'Delete', league_tournament_tournament_group_path(@tournament.league, @tournament, tournament_group, tournament_day: @tournament_day), :data => { :confirm => 'Are you sure you want to delete this tee time?' }, :method => :delete %><% end %></td>
+      <td><%= link_to "Edit", edit_league_tournament_tournament_group_path(@tournament.league, @tournament, tournament_group, tournament_day: @tournament_day) %><% if tournament_group.can_be_deleted? %> | <%= link_to 'Delete', league_tournament_tournament_group_path(@tournament.league, @tournament, tournament_group, tournament_day: @tournament_day), :data => { :confirm => 'Are you sure you want to delete this tee time?' }, method: :delete %><% end %></td>
       <% else -%>
       <td>&nbsp;</td>
       <% end -%>

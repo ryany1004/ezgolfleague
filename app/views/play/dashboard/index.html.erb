@@ -21,7 +21,7 @@
         <ul class="nav nav-pills">
           <% current_user.selected_league.league_seasons.each do |season| -%>
             <li role="presentation" <% if season == @league_season -%>class='active'<% end -%>>
-              <%= link_to season.name, play_dashboard_switch_seasons_path(current_user.selected_league, season_id: season.id), :method => :put %>
+              <%= link_to season.name, play_dashboard_switch_seasons_path(current_user.selected_league, season_id: season.id), method: :put %>
             </li>
           <% end -%>
         </ul>

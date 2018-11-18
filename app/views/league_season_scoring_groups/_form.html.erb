@@ -39,7 +39,7 @@
       <% @scoring_group.users.each do |user| %>
         <tr>
           <td><%= user.complete_name %></td>
-          <td><%= link_to 'Remove', league_league_season_league_season_scoring_group_delete_player_path(@league, @league_season, @scoring_group, user: user), :method => :delete %></td>
+          <td><%= link_to 'Remove', league_league_season_league_season_scoring_group_delete_player_path(@league, @league_season, @scoring_group, user: user), method: :delete %></td>
         </tr>
       <% end %>
       </tbody>

@@ -24,7 +24,7 @@
     			<td><%= link_to tee_box.name, edit_course_course_tee_box_path(@course, tee_box) %></td>
           <td><%= tee_box.slope %></td>
     			<td><%= tee_box.rating %></td>
-          <td><%= link_to "Edit", edit_course_course_tee_box_path(@course, tee_box) %> | <%= link_to 'Delete', course_course_tee_box_path(@course, tee_box), :data => { :confirm => 'Are you sure you want to delete this course tee box?' }, :method => :delete %></td>
+          <td><%= link_to "Edit", edit_course_course_tee_box_path(@course, tee_box) %> | <%= link_to 'Delete', course_course_tee_box_path(@course, tee_box), :data => { :confirm => 'Are you sure you want to delete this course tee box?' }, method: :delete %></td>
     		</tr>
     	<% end %>
     	</tbody>

@@ -7,7 +7,7 @@
 
     <% if tournament_day.tournament.players_for_day(tournament_day).count > 0 -%>
     <p>
-      <%= link_to 'Re-Sync Scoring Groups', reflight_players_league_tournament_flights_path(tournament.league, tournament, tournament_day: tournament_day), class: 'btn btn-primary', :method => :patch %>
+      <%= link_to 'Re-Sync Scoring Groups', reflight_players_league_tournament_flights_path(tournament.league, tournament, tournament_day: tournament_day), class: 'btn btn-primary', method: :patch %>
     </p>
     <% end -%>
   </div>
