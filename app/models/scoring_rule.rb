@@ -8,6 +8,10 @@ class ScoringRule < ApplicationRecord
 
 	attr_accessor :selected_class_name
 
+	def form_class
+		becomes(ScoringRule)
+	end
+
 	def name
 		"BASE_CLASS"
 	end

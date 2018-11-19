@@ -150,8 +150,6 @@ Rails.application.routes.draw do
       resources :tournament_days do
         resources :flights do
           patch 'reflight_players', on: :collection
-
-          resources :payouts
         end
 
         resources :tournament_groups do

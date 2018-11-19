@@ -98,7 +98,7 @@ class TournamentDay < ApplicationRecord
   end
 
   def pretty_day(add_space = false)
-    return nil if self.tournament.tournament_days.count == 1
+    return "Day 1" if self.tournament.tournament_days.count == 1
 
     day_index = 0
 

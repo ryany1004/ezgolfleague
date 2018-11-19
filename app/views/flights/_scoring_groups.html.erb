@@ -15,20 +15,17 @@
     <thead>
       <tr>
         <th>Group Name</th>
-        <th>Payouts</th>
       </tr>
     </thead>
     <tbody>
     <% flights.each do |flight| %>
       <tr>
         <td><%= flight.league_season_scoring_group.name %></td>
-        <td><%= link_to "Setup (#{flight.payouts.count})", league_tournament_tournament_day_flight_payouts_path(tournament.league, tournament, tournament_day, flight) %></td>
       </tr>
     <% end %>
     </tbody>
     <tfoot>
       <tr>
-        <th>&nbsp;</th>
         <th>&nbsp;</th>
       </tr>
     </tfoot>

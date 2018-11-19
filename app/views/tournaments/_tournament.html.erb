@@ -30,12 +30,11 @@
         <% end %>
         <li><%= link_to "Scorecards", scorecards_path(tournament_id: tournament) %></li>
         <li class="divider"></li>
-        <li><%= link_to "Competitions", league_tournament_tournament_day_scoring_rules_path(tournament.league, tournament, tournament.tournament_days.first) %></li>
-        <li><%= link_to "Tee Times", league_tournament_tournament_groups_path(tournament.league, tournament) %></li>
-        <li><%= link_to "Flights", league_tournament_flights_path(tournament.league, tournament) %></li>
-        <li><%= link_to "Payouts", league_tournament_payouts_path(tournament.league, tournament) %></li>
+        <li><%= link_to "Game Types & Payouts", league_tournament_tournament_day_scoring_rules_path(tournament.league, tournament, tournament.tournament_days.first) %></li>
+        <li><%= link_to "Tee Times", league_tournament_tournament_day_tournament_groups_path(tournament.league, tournament, tournament.tournament_days.first) %></li>
+        <li><%= link_to "Flights", league_tournament_tournament_day_flights_path(tournament.league, tournament, tournament.tournament_days.first) %></li>
         <li><%= link_to "Contests", league_tournament_contests_path(tournament.league, tournament) %></li>
-        <li><%= link_to 'Notifications', league_tournament_tournament_notifications_path(tournament.league, tournament) %></li>
+        <li><%= link_to 'Notifications', league_tournament_tournament_day_tournament_notifications_path(tournament.league, tournament, tournament.tournament_days.first) %></li>
         <% if tournament.tournament_days.count > 1 %>
         <li class="divider"></li>
         <li><%= link_to "Auto-Schedule For Secondary Days", league_tournament_auto_schedule_path(tournament.league, tournament), data: { confirm: 'Are you sure you want to schedule secondary days? This will remove any existing scores for those days.' }, method: :patch %></li>

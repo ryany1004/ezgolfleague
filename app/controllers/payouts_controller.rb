@@ -1,7 +1,7 @@
 class PayoutsController < BaseController
   before_action :fetch_tournament
-  before_action :fetch_payout, only: [:edit, :update, :destroy]
   before_action :fetch_tournament_day
+  before_action :fetch_payout, only: [:edit, :update, :destroy]
   before_action :fetch_payouts, only: [:index]
   before_action :set_stage
 
@@ -48,17 +48,17 @@ class PayoutsController < BaseController
   private
 
   def set_stage
-    if params[:tournament_day].blank?
+    if params[:tournament_day_id].blank?
       if @tournament.tournament_days.count > 1
-        @stage_name = "payouts#{@tournament.first_day.id}"
+        @stage_name = "scoring_rules#{@tournament.first_day.id}"
       else
-        @stage_name = "payouts"
+        @stage_name = "scoring_rules"
       end
     else
       if @tournament.tournament_days.count > 1
-        @stage_name = "payouts#{@tournament_day.id}"
+        @stage_name = "scoring_rules#{@tournament_day.id}"
       else
-        @stage_name = "payouts"
+        @stage_name = "scoring_rules"
       end
     end
   end
@@ -84,18 +84,12 @@ class PayoutsController < BaseController
   end
 
   def fetch_payout
-    #TODO: update to secure fetching
-    @payout = Payout.find(params[:id])
+    @payout = @scoring_rule.payouts.find(params[:id])
   end
 
   def fetch_tournament_day
-    unless @payout.blank?
-      @tournament_day = @payout.flight.tournament_day
-    else
-      @tournament_day = @tournament.tournament_days.find(params[:tournament_day]) unless params[:tournament_day].blank?
-    end
-
-    @tournament_day = @tournament.tournament_days.first if @tournament_day.blank?
+    @tournament_day = @tournament.tournament_days.find(params[:tournament_day_id])
+    @scoring_rule = @tournament_day.scoring_rules.find(params[:scoring_rule_id])
   end
 
 end
