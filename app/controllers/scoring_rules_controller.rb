@@ -17,13 +17,13 @@ class ScoringRulesController < BaseController
   def update
     @scoring_rule.update(scoring_rule_params)
 
-  	unless params[:scoring_rule_options][@scoring_rule.id.to_s].blank?
+    if params[:scoring_rule_options].blank? || params[:scoring_rule_options][@scoring_rule.id.to_s].blank?
+      @scoring_rule.remove_game_type_options
+    else
   		@scoring_rule.save_setup_details(params[:scoring_rule_options][@scoring_rule.id.to_s])
-  	else
-  		@scoring_rule.remove_game_type_options
   	end
 
-  	@tournament_day.tournament_day_results.destroy_all #removed cached results as gametype influences scores
+  	@scoring_rule.tournament_day_results.destroy_all #removed cached results as gametype influences scores
 
   	redirect_to league_tournament_tournament_day_scoring_rules_path(@tournament.league, @tournament, @tournament_day)
   end

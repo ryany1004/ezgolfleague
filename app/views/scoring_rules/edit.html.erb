@@ -6,7 +6,7 @@
 
 <%= render partial: '/shared/tournaments/manage', locals: {tournament: @tournament, stage: @stage_name} %>
 
-<%= simple_form_for @scoring_rule, url: league_tournament_tournament_day_scoring_rule_path(@tournament.league, @tournament, @tournament_day, @scoring_rule) do |f| %>
+<%= simple_form_for @scoring_rule.form_class, url: league_tournament_tournament_day_scoring_rule_path(@tournament.league, @tournament, @tournament_day, @scoring_rule) do |f| %>
   <% if notification = f.error_notification %>
     <div class="alert alert-error fade in">
       <a class="close" data-dismiss="alert" href="#">&times;</a>
@@ -19,9 +19,9 @@
   <div class="well">
     <%= f.input :dues_amount, label: 'Dues Amount ($)' %>
 
-    <%= f.input :is_opt_in, label: 'Users can choose whether or not to particpate this game type?', as: :boolean %>
+    <%= f.input :is_opt_in, label: 'Game type is optional?', as: :boolean %>
 
-    <p>If this option is checked, users will be able to opt-out of this game type when they register.</p>
+    <p>If this option is checked, users will be able to opt-out of this game type when they register. <strong>At least one game type must be marked as required.</strong></p>
   </div>
 
   <% if @scoring_rule.setup_partial %>

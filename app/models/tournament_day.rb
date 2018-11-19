@@ -90,6 +90,9 @@ class TournamentDay < ApplicationRecord
       end
     end
 
+    #has at least one non-optional rule
+    return false if self.mandatory_scoring_rules.count == 0
+
     true
   end
 
@@ -180,6 +183,10 @@ class TournamentDay < ApplicationRecord
     end
 
     false
+  end
+
+  def mandatory_scoring_rules
+    self.scoring_rules.where(is_opt_in: false)
   end
 
   def paid_contests
