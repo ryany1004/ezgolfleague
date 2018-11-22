@@ -1,7 +1,7 @@
 class TournamentsController < BaseController
   helper Play::TournamentsHelper
 
-  before_action :fetch_tournament, only: [:edit, :update, :destroy, :signups, :manage_holes, :update_holes, :add_signup, :move_signup, :delete_signup, :finalize, :run_finalization, :display_finalization, :debug, :confirm_finalization, :update_course_handicaps, :touch_tournament, :rescore_players, :update_auto_schedule, :auto_schedule, :confirmed_players, :disqualify_signup]
+  before_action :fetch_tournament, only: [:edit, :update, :destroy, :signups, :manage_holes, :update_holes, :add_signup, :move_signup, :delete_signup, :debug, :confirm_finalization, :update_course_handicaps, :touch_tournament, :rescore_players, :confirmed_players, :disqualify_signup]
   before_action :initialize_form, only: [:new, :edit]
   before_action :set_stage
 
@@ -55,8 +55,6 @@ class TournamentsController < BaseController
     redirect_to league_tournaments_path(current_user.selected_league)
   end
 
-  ##
-
   def edit
   end
 
@@ -76,101 +74,11 @@ class TournamentsController < BaseController
     redirect_to league_tournaments_path(current_user.selected_league), flash: { success: "The tournament was successfully deleted." }
   end
 
-  ## team stuff
-
   def options
     tournament_group = TournamentGroup.find(params[:tournament_group_id])
 
     @golfer_teams = tournament_group.golfer_teams
   end
-
-  #Course Holes
-
-  def manage_holes
-    @stage_name = "hole_information"
-  end
-
-  def update_holes
-    if @tournament.update(tournament_params)
-      @tournament.tournament_days.each do |day|
-        day.update_scores_for_course_holes
-      end
-
-      redirect_to edit_league_tournament_game_types_path(current_user.selected_league, @tournament), flash: { success: "The tournament holes were successfully updated. Please select a game type." }
-    else
-      render :manage_holes
-    end
-  end
-
-  ##
-
-  def update_auto_schedule
-    if @tournament.update(tournament_params)
-      redirect_to league_tournament_day_players_path(@tournament.league, @tournament, @tournament.tournament_days.first), flash: { success: "The scoring mechanism was updated." }
-    end
-  end
-
-  def auto_schedule
-    groups_error = false
-    @tournament.tournament_days.each do |day|
-      groups_error = true if day.tournament_groups.count == 0
-    end
-
-    if groups_error == true
-      redirect_to league_tournaments_path(current_user.selected_league), flash: { error: "One or more days had no tee-times. Re-scheduling was aborted." }
-    else
-      @tournament.tournament_days.each do |day|
-        AutoscheduleJob.perform_later(day) if day.has_scores? == false
-      end
-      redirect_to league_tournaments_path(current_user.selected_league), flash: { success: "Days without scores were submitted to be auto-scheduled. This usually takes a few minutes, depending on the size of the tournament." }
-    end
-  end
-
-  # Finalize
-
-  def finalize
-    @page_title = "Finalize Tournament"
-
-    if @tournament.can_be_finalized?
-      @stage_name = "finalize"
-
-      @tournament.run_finalize unless !params[:bypass_calc].blank?
-
-      @tournament_days = @tournament.tournament_days.includes(payout_results: [:flight, :user, :payout], tournament_day_results: [:user, :primary_scorecard], tournament_groups: [golf_outings: [:user, :scorecard]])
-    else
-      redirect_to league_tournament_flights_path(@tournament.league, @tournament), flash: { error: "This tournament cannot be finalized. Verify all flights and payouts exist and if this is a team tournament that all team-members are correctly registered in all contests. Only tournaments with scores can be finalized." }
-    end
-  end
-
-  def confirm_finalization
-    if @tournament.can_be_finalized?
-      if !@tournament.is_finalized
-        notification_string = Notifications::NotificationStrings.first_time_finalize(@tournament.name)
-      else
-        notification_string = Notifications::NotificationStrings.update_finalize(@tournament.name)
-      end
-      @tournament.notify_tournament_users(notification_string, { tournament_id: @tournament.id })
-
-      @tournament.is_finalized = true
-      @tournament.save
-
-      @tournament.finalization_notifications.each do |n|
-        n.has_been_delivered = false
-        n.save
-      end
-
-      #bust the cache
-      @tournament.tournament_days.each do |day|
-        day.touch
-      end
-      
-      redirect_to league_tournaments_path(current_user.selected_league), flash: { success: "The tournament was successfully finalized." }
-    else
-      redirect_to league_tournaments_path(current_user.selected_league), flash: { error: "The tournament could not be finalized - it is missing required data." }
-    end
-  end
-
-  #Misc
 
   def touch_tournament
     @tournament.touch
@@ -224,7 +132,7 @@ class TournamentsController < BaseController
     if current_user.is_super_user?
       @leagues = League.all.order(:name)
     else
-      @leagues = current_user.leagues.select {|league| league.membership_for_user(current_user).is_admin}
+      @leagues = current_user.leagues.select { |league| league.membership_for_user(current_user).is_admin }
     end
   end
 

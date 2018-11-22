@@ -37,10 +37,10 @@
         <li><%= link_to 'Notifications', league_tournament_tournament_day_tournament_notifications_path(tournament.league, tournament, tournament.tournament_days.first) %></li>
         <% if tournament.tournament_days.count > 1 %>
         <li class="divider"></li>
-        <li><%= link_to "Auto-Schedule For Secondary Days", league_tournament_auto_schedule_path(tournament.league, tournament), data: { confirm: 'Are you sure you want to schedule secondary days? This will remove any existing scores for those days.' }, method: :patch %></li>
+        <li><%= link_to "Auto-Schedule For Secondary Days", run_auto_scheduling_league_tournament_auto_scheduling_path(tournament.league, tournament), data: { confirm: 'Are you sure you want to schedule secondary days? This will remove any existing scores for those days.' }, method: :patch %></li>
         <% end %>
         <li class="divider"></li>
-        <li><%= link_to 'Calculate Results', league_tournament_finalize_path(tournament.league, tournament) %></li>
+        <li><%= link_to 'Calculate Results', league_tournament_finalization_path(tournament.league, tournament) %></li>
         <li class="divider"></li>
         <% if current_user.is_super_user -%>
         <li><%= link_to 'Player View', play_tournament_path(tournament, tournament_day: tournament.tournament_days.first) %></li>
@@ -64,7 +64,7 @@
 
     <% if tournament.can_be_finalized? && tournament.is_finalized == false %>
       <p>
-        <%= link_to 'Calculate Results', league_tournament_finalize_path(tournament.league, tournament), class: "btn btn-danger btn-sm", :role => "button", :style => "margin-top:5px;" %>
+        <%= link_to 'Calculate Results', league_tournament_finalization_path(tournament.league, tournament), class: "btn btn-danger btn-sm", :role => "button", :style => "margin-top:5px;" %>
       </p>
     <% end %>
   </td>

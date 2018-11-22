@@ -5,10 +5,11 @@ module AutoScheduleType
 end
 
 class Tournament < ApplicationRecord
-  include Findable
   include Playable
   include Rankable
   include Servable
+
+  extend FinderSupport
 
   belongs_to :league, inverse_of: :tournaments
   has_many :tournament_days, -> { order(:tournament_at) }, inverse_of: :tournament, dependent: :destroy
@@ -27,7 +28,6 @@ class Tournament < ApplicationRecord
   validates :signup_closes_at, presence: true
   validates :max_players, presence: true
   validates :max_players, numericality: { greater_than_or_equal_to: 0 }
-  validates :dues_amount, numericality: { greater_than_or_equal_to: 0 }
 
   validate :dates_are_valid, on: :create, unless: :is_super_user_setup?
   def dates_are_valid

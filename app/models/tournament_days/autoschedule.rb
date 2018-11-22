@@ -1,6 +1,4 @@
-module AutoSchedulable
-  extend ActiveSupport::Concern
-
+module Autoschedule
   def schedule_golfers
     previous_day = self.tournament.previous_day_for_day(self)
     return if previous_day.blank?
@@ -88,5 +86,4 @@ module AutoSchedulable
       end
     end
   end
-
 end

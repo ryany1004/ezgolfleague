@@ -169,6 +169,14 @@ Rails.application.routes.draw do
         resources :tournament_notifications
       end
 
+      resource :auto_scheduling, path: "autoschedule", only: [:update], controller: "tournaments/auto_scheduling" do
+        patch 'run_auto_scheduling'
+      end
+
+      resource :finalization, path: "finalize", only: [:show, :update], controller: "tournaments/finalization"
+
+      resource :course_holes, path: "course-holes", only: [:edit, :update], controller: "tournaments/course_holes"
+
       #UPDATE/FIX
       get 'tournament_days/:tournament_day_id/players' => 'golf_outings#players', as: :day_players
       post 'tournament_days/:tournament_day_id/:tournament_group_id/update_players' => 'golf_outings#update_players', as: :update_day_players
@@ -184,16 +192,6 @@ Rails.application.routes.draw do
         delete 'remove_registration'
         post 'add_registration'
       end
-
-      #MOVE
-      get 'manage_holes'
-      patch 'update_holes'
-
-      patch 'auto_schedule'
-      patch 'update_auto_schedule'
-
-      get 'finalize'
-      patch 'confirm_finalization'
 
       patch 'update_course_handicaps'
       patch 'touch_tournament'
