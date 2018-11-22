@@ -60,19 +60,12 @@ class TournamentNotificationsController < BaseController
   end
 
   def set_stage
-    if params[:tournament_day].blank?
-      if @tournament.tournament_days.count > 1
-        @stage_name = "notifications#{@tournament.first_day.id}"
-      else
-        @stage_name = "notifications"
-      end
-    else
-      @stage_name = "notifications#{@tournament_day.id}"
-    end
+    @stage_name = "notifications#{@tournament_day.id}"
   end
 
   def fetch_other_details
     @tournament = self.fetch_tournament_from_user_for_tournament_id(params[:tournament_id])
+    @tournament_day = @tournament.tournament_days.find(params[:tournament_day_id])
     @tournament_actions = ["On Finalization", "To Unregistered Members 1 Day Before Registration Closes"]
   end
 end

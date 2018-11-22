@@ -1,4 +1,4 @@
-<%= simple_form_for @notification_template, url: @notification_template.new_record? ? league_tournament_tournament_notifications_path(@tournament.league, @tournament) : league_tournament_tournament_notification_path(@tournament.league, @tournament, @notification_template) do |f| %>
+<%= simple_form_for @notification_template, url: @notification_template.new_record? ? league_tournament_tournament_day_tournament_notifications_path(@tournament.league, @tournament, @tournament_day) : league_tournament_tournament_day_tournament_notification_path(@tournament.league, @tournament, @tournament_day, @notification_template) do |f| %>
   <% if notification = f.error_notification %>
     <div class="alert alert-error fade in">
       <a class="close" data-dismiss="alert" href="#">&times;</a>

@@ -52,7 +52,7 @@ class TournamentGroupsController < BaseController
   def destroy
     @tournament_group.destroy
 
-    redirect_to league_tournament_tournament_groups_path(@tournament.league, @tournament, tournament_day: @tournament_day), flash: { success: "The tee time was successfully deleted." }
+    redirect_to league_tournament_tournament_day_tournament_groups_path(@tournament.league, @tournament, @tournament_day), flash: { success: "The tee time was successfully deleted." }
   end
 
   #batch processing
@@ -91,15 +91,7 @@ class TournamentGroupsController < BaseController
   end
 
   def fetch_tournament_day
-    if params[:tournament_day].blank?
-      if params[:tournament_day_id].blank?
-        @tournament_day = @tournament.first_day
-      else
-        @tournament_day = @tournament.tournament_days.find(params[:tournament_day_id])
-      end
-    else
-      @tournament_day = @tournament.tournament_days.find(params[:tournament_day])
-    end
+    @tournament_day = @tournament.tournament_days.find(params[:tournament_day_id])
   end
 
   def set_stage
