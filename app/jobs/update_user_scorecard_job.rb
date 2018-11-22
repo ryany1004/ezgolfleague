@@ -31,8 +31,8 @@ class UpdateUserScorecardJob < ApplicationJob
   end
 
   def clear_caches(primary_scorecard)
-    Rails.logger.info { "Expiring caches: #{primary_scorecard.tournament_day.groups_api_cache_key}" }
+    Rails.logger.info { "Expiring caches: #{primary_scorecard.tournament_day.cache_key("groups")}" }
 
-    Rails.cache.delete(primary_scorecard.tournament_day.groups_api_cache_key)
+    Rails.cache.delete(primary_scorecard.tournament_day.cache_key("groups"))
   end
 end

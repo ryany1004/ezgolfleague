@@ -7,8 +7,8 @@
         </div>
         <div class="panel-body">
           <p>Day Last Modified: <%= d.updated_at %></p>
-          <p>Groups API Cache Key: <%= d.groups_api_cache_key %></p>
-          <p>Leaderyboard API Cache Key: <%= d.tournament_day_results_cache_key("leaderboard-json") %></p>
+          <p>Groups API Cache Key: <%= d.cache_key("groups") %></p>
+          <p>Leaderyboard API Cache Key: <%= d.relation_cache_key(d.tournament_day_results, "leaderboard-json") %></p>
 
           <p><strong>Players</strong></p>
           <table class="table table-striped">
@@ -68,11 +68,11 @@
       </div>
 
       <p>
-       groups_api_cache_key: <%= Rails.cache.fetch(d.groups_api_cache_key) %>
+       Cached Groups: <%= Rails.cache.fetch(d.cache_key("groups")) %>
       </p>
 
       <p>
-        <% leaderboard_json = Rails.cache.fetch(d.tournament_day_results_cache_key("leaderboard-json")) %>
+        <% leaderboard_json = Rails.cache.fetch(d.relation_cache_key(d.tournament_day_results, "leaderboard-json")) %>
         <% if !leaderboard_json.blank? %>
           <span>leaderboard-json:</span>
           <pre>

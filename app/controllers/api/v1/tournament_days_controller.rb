@@ -5,7 +5,7 @@ class Api::V1::TournamentDaysController < Api::V1::ApiBaseController
   respond_to :json
 
   def tournament_groups
-    @eager_groups = Rails.cache.fetch(@tournament_day.groups_api_cache_key, expires_in: 24.hours, race_condition_ttl: 10) do
+    @eager_groups = Rails.cache.fetch(@tournament_day.cache_key("groups"), expires_in: 24.hours, race_condition_ttl: 10) do
       logger.info { "Fetching Tournament Day - Not Cached" }
 
       @tournament_day.eager_groups
@@ -13,7 +13,7 @@ class Api::V1::TournamentDaysController < Api::V1::ApiBaseController
   end
 
   def leaderboard
-    @leaderboard = Rails.cache.fetch(@tournament_day.tournament_day_results_cache_key("leaderboard-json"), expires_in: 24.hours, race_condition_ttl: 10) do
+    @leaderboard = Rails.cache.fetch(@tournament_day.relation_cache_key(@tournament_day.tournament_day_results, "leaderboard-json"), expires_in: 24.hours, race_condition_ttl: 10) do
       logger.info { "Fetching Leaderboard - Not Cached" }
 
       self.fetch_leaderboard
@@ -34,7 +34,7 @@ class Api::V1::TournamentDaysController < Api::V1::ApiBaseController
 
     @tournament_day.add_player_to_group(tournament_group, user, false, confirm_user, "App: #{user.complete_name}")
 
-    Rails.cache.delete(@tournament_day.groups_api_cache_key)
+    Rails.cache.delete(@tournament_day.cache_key("groups"))
 
     TournamentMailer.tournament_player_paying_later(user, @tournament_day.tournament).deliver_later if confirm_user == false
 
@@ -56,7 +56,7 @@ class Api::V1::TournamentDaysController < Api::V1::ApiBaseController
 
     TournamentMailer.tournament_player_cancelled(@current_user, @tournament).deliver_later
 
-    Rails.cache.delete(@tournament_day.groups_api_cache_key)
+    Rails.cache.delete(@tournament_day.cache_key("groups"))
 
     @eager_groups = @tournament_day.eager_groups
   end

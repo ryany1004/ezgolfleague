@@ -1,5 +1,7 @@
 class Scorecard < ApplicationRecord
   include Servable
+  include CacheKeyable
+
   include ::ScorecardNetScores
   include ::ScorecardAdjustedScore
 

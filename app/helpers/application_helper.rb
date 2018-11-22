@@ -146,13 +146,8 @@ module ApplicationHelper
 
   def cache_key_for_scorecard(scorecard_id)
     scorecard = Scorecard.find(scorecard_id)
-    max_updated_at = scorecard.updated_at.try(:utc).try(:to_s, :number)
 
-    cache_key = "scorecards/#{scorecard_id}-#{max_updated_at}"
-
-    Rails.logger.debug { "Scorecard Cache Key: #{cache_key}" }
-
-    return cache_key
+    scorecard.cache_key
   end
 
   def team_member_names(golfer_team, show_available_text = true)

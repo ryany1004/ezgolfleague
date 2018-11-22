@@ -6,6 +6,8 @@ class TournamentDay < ApplicationRecord
   include AutoSchedulable
   include Servable
 
+  include CacheKeyable
+
   belongs_to :tournament, inverse_of: :tournament_days, touch: true, counter_cache: true
   belongs_to :course, inverse_of: :tournament_days
   has_many :tournament_groups, -> { order(:tee_time_at) }, inverse_of: :tournament_day, dependent: :destroy
@@ -143,22 +145,6 @@ class TournamentDay < ApplicationRecord
 
   def eager_groups
     TournamentGroup.includes(golf_outings: [:user, course_tee_box: :course_hole_tee_boxes, scorecard: [{scores: :course_hole}]]).where(tournament_day: self)
-  end
-
-  #TODO move elsewhere
-  def tournament_day_results_cache_key(prefix)
-    max_updated_at = self.tournament_day_results.maximum(:updated_at).try(:utc).try(:to_s, :number)
-    cache_key = "tournament_days/#{prefix}-#{self.id}-#{max_updated_at}"
-
-    cache_key
-  end
-
-  def groups_api_cache_key
-    "groups-json#{self.id}-#{self.updated_at.to_i}"
-  end
-
-  def scorecard_print_cache_key
-    "print-scorecards#{self.id}-#{self.updated_at.to_i}"
   end
 
   def scorecard_display_partial
