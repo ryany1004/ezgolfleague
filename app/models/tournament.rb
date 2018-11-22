@@ -124,7 +124,7 @@ class Tournament < ApplicationRecord
 
   def notify_tournament_users(notification_string, extra_data)
     self.players.each do |u|
-      SendPushNotificationJob.perform_later(u, notification_string, self.id)
+      u.send_mobile_notification(notification_string, { tournament_id: self.id })
     end
   end
 

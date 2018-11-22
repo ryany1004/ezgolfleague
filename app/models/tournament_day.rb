@@ -1,5 +1,4 @@
 class TournamentDay < ApplicationRecord
-  include Addable
   include Moveable
   include Scoreable
   include FindPlayers
@@ -7,6 +6,11 @@ class TournamentDay < ApplicationRecord
   include Servable
 
   include CacheKeyable
+
+  include ::AddToTournamentDay
+  include ::RemoveFromTournamentDay
+  include ::CourseHandicapTournamentDay
+  include ::FlightTournamentDay
 
   belongs_to :tournament, inverse_of: :tournament_days, touch: true, counter_cache: true
   belongs_to :course, inverse_of: :tournament_days

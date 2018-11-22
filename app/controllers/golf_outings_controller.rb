@@ -54,7 +54,7 @@ class GolfOutingsController < BaseController
       @tournament_day = @tournament.tournament_days.find(params[:tournament_day])
     end
 
-    @tournament_day.remove_player_from_group(tournament_group, user, true)
+    @tournament_day.remove_player_from_group(tournament_group: tournament_group, user: user, remove_from_teams: true)
 
     redirect_to league_tournament_day_players_path(@tournament.league, @tournament, @tournament_day), flash: { success: "The registration was successfully deleted." }
   end

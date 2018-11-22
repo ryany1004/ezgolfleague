@@ -71,13 +71,13 @@ class Play::TournamentsController < Play::BaseController
       paying_now = false
       paying_now = true if !params[:pay_now].blank?
 
-      @tournament.first_day.add_player_to_group(tournament_group, current_user, paying_now, current_user.complete_name)
+      @tournament.first_day.add_player_to_group(tournament_group: tournament_group, user: current_user, paying_with_credit_card: paying_now, registered_by: current_user.complete_name)
 
       #other associated signup
       if !params[:tournament].blank? && !params[:tournament][:another_member_id].blank?
         other_user = User.find(params[:tournament][:another_member_id])
 
-        @tournament.first_day.add_player_to_group(tournament_group, other_user, false, false, current_user.complete_name)
+        @tournament.first_day.add_player_to_group(tournament_group: tournament_group, user: other_user, paying_with_credit_card: false, confirmed: false, registered_by: current_user.complete_name)
       end
 
       #contests

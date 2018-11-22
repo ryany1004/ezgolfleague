@@ -32,7 +32,7 @@ class Api::V1::TournamentDaysController < Api::V1::ApiBaseController
     tournament_group = @tournament_day.tournament_groups.find(registration_information["tournament_group_id"])
     confirm_user = registration_information["confirm_user"]
 
-    @tournament_day.add_player_to_group(tournament_group, user, false, confirm_user, "App: #{user.complete_name}")
+    @tournament_day.add_player_to_group(tournament_group: tournament_group, user: user, paying_with_credit_card: false, confirmed: confirm_user, registered_by: "App: #{user.complete_name}")
 
     Rails.cache.delete(@tournament_day.cache_key("groups"))
 

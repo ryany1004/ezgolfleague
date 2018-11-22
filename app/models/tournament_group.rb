@@ -94,7 +94,7 @@ class TournamentGroup < ApplicationRecord
       existing_outing.tournament_group = self
       existing_outing.save
     else
-      self.tournament_day.add_player_to_group(self, user)
+      self.tournament_day.add_player_to_group(tournament_group: self, user: user)
     end
   end
 
