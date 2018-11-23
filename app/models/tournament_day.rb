@@ -30,7 +30,6 @@ class TournamentDay < ApplicationRecord
   delegate :player_points, :player_payouts, :flights_with_rankings, :assign_payouts_from_scores, to: :game_type
   delegate :allow_teams, :show_teams?, :players_create_teams?, :show_team_scores_for_all_teammates?, to: :game_type
   delegate :scorecard_payload_for_scorecard, to: :game_type
-  delegate :handicap_allowance, to: :game_type
   ##END MOVE
 
   validates :course, presence: true
@@ -121,6 +120,7 @@ class TournamentDay < ApplicationRecord
     day_string
   end
 
+  #TODO: MOVE
   def create_default_flight
     if self.tournament.league.allow_scoring_groups
       self.create_scoring_group_flights
@@ -129,10 +129,12 @@ class TournamentDay < ApplicationRecord
     end
   end
 
+  #TODO: MOVE
   def create_traditional_flight
     Flight.create(tournament_day: self, flight_number: 1, lower_bound: 0, upper_bound: 300, course_tee_box: self.course.course_tee_boxes.first)
   end
 
+  #TODO: MOVE
   def create_scoring_group_flights
     self.tournament.league_season.league_season_scoring_groups.each_with_index do |g, i|
       f = Flight.new(tournament_day: self, flight_number: i + 1, lower_bound: 0, upper_bound: 0, course_tee_box: self.course.course_tee_boxes.first, league_season_scoring_group: g)
@@ -141,6 +143,7 @@ class TournamentDay < ApplicationRecord
     end
   end
 
+  #TODO: MOVE
   def copy_flights_from_previous_day
     self.tournament.first_day.flights.each do |f|
       Flight.create(tournament_day: self, flight_number: f.flight_number, lower_bound: f.lower_bound, upper_bound: f.upper_bound, course_tee_box: f.course_tee_box)
@@ -151,21 +154,23 @@ class TournamentDay < ApplicationRecord
     TournamentGroup.includes(golf_outings: [:user, course_tee_box: :course_hole_tee_boxes, scorecard: [{scores: :course_hole}]]).where(tournament_day: self)
   end
 
+  #TODO: MOVE
   def scorecard_display_partial
     if self.course_holes.count <= 9
-      "/shared/scorecards/nine_hole"
+      '/shared/scorecards/nine_hole'
     else
-      "/shared/scorecards/standard"
+      '/shared/scorecards/standard'
     end
   end
 
   def scorecard_print_partial
     if self.course_holes.count <= 9
-      "/shared/scorecards/nine_hole_print"
+      '/shared/scorecards/nine_hole_print'
     else
-      "/shared/scorecards/print"
+      '/shared/scorecards/print'
     end
   end
+  #TODO: MOVE
 
   def has_scores?
     self.eager_groups.each do |group|
@@ -189,6 +194,12 @@ class TournamentDay < ApplicationRecord
 
   def mandatory_scoring_rules
     self.scoring_rules.where(is_opt_in: false)
+  end
+
+  def handicap_allowance(user:)
+    handicap_computer = self.mandatory_scoring_rules.first.handicap_computer
+
+    handicap_computer.handicap_allowance(user: user)
   end
 
   def paid_contests

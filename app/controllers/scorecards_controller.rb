@@ -103,7 +103,7 @@ class ScorecardsController < BaseController
     @player = @scorecard.golf_outing.user
     @tournament_day = @scorecard.golf_outing.tournament_group.tournament_day
     @tournament = @tournament_day.tournament
-    @handicap_allowance = @tournament_day.handicap_allowance(@scorecard.golf_outing.user)
+    @handicap_allowance = @tournament_day.handicap_allowance(user: @scorecard.golf_outing.user)
   end
 
   def fetch_scorecard

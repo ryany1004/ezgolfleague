@@ -6,7 +6,8 @@ module ScoringComputer
 			scorecard = self.tournament_day.primary_scorecard_for_user(user)
 			return nil if scorecard.blank?
 
-			handicap_allowance = self.tournament_day.handicap_allowance(user)
+			handicap_computer = @scoring_rule.handicap_computer
+			handicap_allowance = handicap_computer.handicap_allowance(user: user)
 			Rails.logger.debug { "Handicap Allowance: #{handicap_allowance}" }
 
 			flight = self.tournament_day.flight_for_player(user)

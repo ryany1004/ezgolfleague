@@ -1,8 +1,8 @@
 class User < ApplicationRecord
-  include Handicapable
   include Servable
 
   include Users::NotificationSupport
+  include Users::HandicapSupport
 
   acts_as_paranoid
 

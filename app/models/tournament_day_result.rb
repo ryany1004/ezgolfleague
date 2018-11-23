@@ -3,10 +3,7 @@ class TournamentDayResult < ApplicationRecord
 
   belongs_to :scoring_rule, inverse_of: :tournament_day_results, touch: true
   belongs_to :user, inverse_of: :tournament_day_results
-  
-  belongs_to :primary_scorecard, class_name: "Scorecard", foreign_key: "user_primary_scorecard_id"
-  #TEAM: does this need to be primary_scorecard(s) instead?
-
+  belongs_to :primary_scorecard, class_name: "Scorecard", foreign_key: "user_primary_scorecard_id" #TEAM: does this need to be primary_scorecard(s) instead?
   belongs_to :flight, inverse_of: :tournament_day_results, touch: true
 
   validates :name, presence: true
@@ -58,7 +55,7 @@ class TournamentDayResult < ApplicationRecord
 
   #TODO: this should be refactored, calc's handicaps each time
   def net_scores
-  	handicaps = tournament_day.game_type.handicap_allowance(user)
+  	handicaps = tournament_day.handicap_allowance(user: user)
     primary_scorecard.net_scores(handicap_allowance: handicaps)
   end
 

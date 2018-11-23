@@ -22,6 +22,10 @@ class ScoringRule < ApplicationRecord
 		raise "Base Class Has No Scoring Computer"
 	end
 
+	def handicap_computer
+		HandicapComputer::BaseHandicapComputer.new(self)
+	end
+
 	def ranked_results
 		#base class does nothing
 	end

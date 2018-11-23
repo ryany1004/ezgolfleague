@@ -125,189 +125,28 @@ module GameTypes
 
     ##Scoring
 
-    def after_updating_scores_for_scorecard(scorecard)
-      #nada
-    end
+    # def after_updating_scores_for_scorecard(scorecard)
+    #   #nada
+    # end
 
-    def related_scorecards_for_user(user, only_human_scorecards = false)
-      return []
-    end
+    # def related_scorecards_for_user(user, only_human_scorecards = false)
+    #   return []
+    # end
 
-    def player_score(user, use_handicap = true, holes = [])
-      # tournament_day_result = self.tournament_day.tournament_day_results.where(aggregated_result: false).where(user: user).first
+    # def player_score(user, use_handicap = true, holes = [])
+    #   0
+    # end
 
-      # if tournament_day_result.blank?
-      #   tournament_day_result = self.tournament_day.score_user(user) 
+    # def compute_stroke_play_player_score(user, use_handicap = true, holes = [])
+    #   0
+    # end
 
-      #   RankFlightsJob.perform_later(self.tournament_day)
-      # end
+    # def compute_player_score(user, use_handicap = true, holes = [])
+    #   nil
+    # end
 
-      # return 0 if tournament_day_result.blank?
-
-      # if holes == [10, 11, 12, 13, 14, 15, 16, 17, 18]
-      #   if use_handicap == true
-      #     score = tournament_day_result.back_nine_net_score
-      #   else
-      #     score = self.compute_player_score(user, false, holes)
-      #   end
-      # elsif holes == [1, 2, 3, 4, 5, 6, 7, 8, 9]
-      #   if use_handicap == true
-      #     score = tournament_day_result.front_nine_net_score
-      #   else
-      #     score = tournament_day_result.front_nine_gross_score
-      #   end
-      # else
-      #   if use_handicap == true
-      #     score = tournament_day_result.net_score
-      #   else
-      #     score = tournament_day_result.gross_score
-      #   end
-      # end
-
-      # score
-
-      0
-    end
-
-    def compute_stroke_play_player_score(user, use_handicap = true, holes = [])
-      # return nil if !self.tournament.includes_player?(user)
-
-      # if use_handicap == true
-      #   handicap_allowance = self.tournament_day.handicap_allowance(user)
-
-      #   Rails.logger.debug { "Handicap Allowance: #{handicap_allowance}" }
-      # end
-
-      # scorecard = self.tournament_day.primary_scorecard_for_user(user)
-      # if scorecard.blank?
-      #   Rails.logger.debug { "Returning 0 - No Scorecard" }
-
-      #   return 0
-      # end
-
-      # total_score = 0
-
-      # total_score = Rails.cache.fetch("scorecard#{scorecard.id}-#{use_handicap}-#{holes.map {|s|"#{s}" }.join('-')}-#{scorecard.updated_at.to_i}", expires_in: 20.minute, race_condition_ttl: 10) do
-      #   Rails.logger.debug { "Scorecard has #{scorecard.scores.count} scores." }
-
-      #   scorecard.scores.includes(:course_hole).each do |score|
-      #     should_include_score = true #allows us to calculate partial scores, i.e. back 9
-      #     if holes.blank? == false
-      #       should_include_score = false if !holes.include? score.course_hole.hole_number
-      #     end
-
-      #     if should_include_score == true
-      #       hole_score = score.strokes
-
-      #       Rails.logger.debug { "Hole: #{score.course_hole.hole_number} - Score Strokes #{score.strokes}" }
-
-      #       #TODO: re-factor with below method
-      #       if use_handicap == true && !handicap_allowance.blank?
-      #         handicap_allowance.each do |h|
-      #           if h[:course_hole] == score.course_hole
-      #             if h[:strokes] != 0
-      #               Rails.logger.debug { "Handicap Adjusting Hole #{score.course_hole.hole_number} Score From #{hole_score} w/ Handicap Strokes #{h[:strokes]}" }
-
-      #               adjusted_hole_score = hole_score - h[:strokes]
-      #               hole_score = adjusted_hole_score if adjusted_hole_score > 0
-
-      #               Rails.logger.debug { "Handicap Adjusted: #{hole_score}" }
-      #             end
-      #           end
-      #         end
-      #       end
-
-      #       total_score = total_score + hole_score
-      #     end
-      #   end
-
-      #   total_score = 0 if total_score < 0
-
-      #   Rails.logger.debug { "Base Score Computed: #{total_score}. User: #{user.complete_name} use handicap: #{use_handicap} holes: #{holes}" }
-
-      #   total_score
-      # end
-
-      # total_score
-
-      0
-    end
-
-    def compute_player_score(user, use_handicap = true, holes = [])
-      #return self.compute_stroke_play_player_score(user, use_handicap, holes)
-      nil
-    end
-
-    def compute_adjusted_player_score(user)
-      # Rails.logger.info { "compute_adjusted_player_score: #{user.complete_name}" }
-
-      # return nil if !self.tournament.includes_player?(user)
-
-      # scorecard = self.tournament_day.primary_scorecard_for_user(user)
-      # if scorecard.blank?
-      #   Rails.logger.info { "Returning 0 - No Scorecard" }
-
-      #   return 0
-      # end
-
-      # total_score = 0
-
-      # scorecard.scores.each do |score|
-      #   adjusted_score = self.score_or_maximum_for_hole(score.strokes, scorecard.golf_outing.course_handicap, score.course_hole)
-
-      #   total_score = total_score + adjusted_score
-      # end
-
-      # Rails.logger.info { "User Adjusted Score: #{user.complete_name} - #{total_score}" }
-
-      # total_score = 0 if total_score < 0
-
-      # return total_score
-
-      0
-    end
-
-    # def score_or_maximum_for_hole(strokes, course_handicap, hole)
-    #   if course_handicap == 0
-    #     Rails.logger.debug { "No Course Handicap" }
-
-    #     return strokes
-    #   end
-
-    #   double_bogey = hole.par + 2
-
-    #   Rails.logger.info { "Double Bogey for #{hole.hole_number} - #{double_bogey}" }
-
-    #   if strokes <= double_bogey
-    #     Rails.logger.info { "Strokes <= double_bogey: #{double_bogey}. #{strokes}" }
-
-    #     return strokes
-    #   else
-    #     adjusted_score = strokes
-
-    #     case course_handicap
-    #     when 0..9
-    #       adjusted_score = double_bogey
-    #     when 10..19
-    #       adjusted_score = 7
-    #     when 20..29
-    #       adjusted_score = 8
-    #     when 30..39
-    #       adjusted_score = 9
-    #     else
-    #       adjusted_score = 10
-    #     end
-
-    #     if adjusted_score <= strokes
-    #       Rails.logger.info { "Adjusted Score for #{hole.hole_number} (Par #{hole.par}) w/ strokes: #{strokes} = #{adjusted_score}. Course handicap: #{course_handicap}" }
-
-    #       return adjusted_score
-    #     else
-    #       Rails.logger.info { "Adjusted Score Was Too High... Bailing" }
-
-    #       return strokes
-    #     end
-    #   end
+    # def compute_adjusted_player_score(user)
+    #   0
     # end
 
     def player_points(user)
@@ -389,60 +228,60 @@ module GameTypes
 
     ##Handicap
 
-    def course_handicap_for_game_type(golf_outing)
-      return golf_outing.course_handicap
-    end
+    # def course_handicap_for_game_type(golf_outing)
+    #   return golf_outing.course_handicap
+    # end
 
-    def handicap_allowance(user)
-      golf_outing = self.tournament_day.golf_outing_for_player(user)
-      return nil if golf_outing.blank? #did not play
+    # def handicap_allowance(user)
+    #   golf_outing = self.tournament_day.golf_outing_for_player(user)
+    #   return nil if golf_outing.blank? #did not play
 
-      course_handicap = self.course_handicap_for_game_type(golf_outing)
+    #   course_handicap = self.course_handicap_for_game_type(golf_outing)
 
-      ##
-      allowance = Rails.cache.fetch("golf_outing#{golf_outing.id}-#{golf_outing.updated_at.to_i}", expires_in: 15.minute, race_condition_ttl: 10) do
-        return nil if golf_outing.course_tee_box.blank?
+    #   ##
+    #   allowance = Rails.cache.fetch("golf_outing#{golf_outing.id}-#{golf_outing.updated_at.to_i}", expires_in: 15.minute, race_condition_ttl: 10) do
+    #     return nil if golf_outing.course_tee_box.blank?
 
-        Rails.logger.debug { "Course Handicap: #{course_handicap}" }
+    #     Rails.logger.debug { "Course Handicap: #{course_handicap}" }
 
-        if golf_outing.course_tee_box.tee_box_gender == "Men"
-          sorted_course_holes_by_handicap = self.tournament_day.course_holes.reorder("mens_handicap")
-        else
-          sorted_course_holes_by_handicap = self.tournament_day.course_holes.reorder("womens_handicap")
-        end
+    #     if golf_outing.course_tee_box.tee_box_gender == "Men"
+    #       sorted_course_holes_by_handicap = self.tournament_day.course_holes.reorder("mens_handicap")
+    #     else
+    #       sorted_course_holes_by_handicap = self.tournament_day.course_holes.reorder("womens_handicap")
+    #     end
 
-        if !course_handicap.blank?
-          allowance = []
-          while course_handicap > 0 do
-            sorted_course_holes_by_handicap.each do |hole|
-              existing_hole = nil
+    #     if !course_handicap.blank?
+    #       allowance = []
+    #       while course_handicap > 0 do
+    #         sorted_course_holes_by_handicap.each do |hole|
+    #           existing_hole = nil
 
-              allowance.each do |a|
-                if hole == a[:course_hole]
-                  existing_hole = a
-                end
-              end
+    #           allowance.each do |a|
+    #             if hole == a[:course_hole]
+    #               existing_hole = a
+    #             end
+    #           end
 
-              if existing_hole.blank?
-                existing_hole = {course_hole: hole, strokes: 0}
-                allowance << existing_hole
-              end
+    #           if existing_hole.blank?
+    #             existing_hole = {course_hole: hole, strokes: 0}
+    #             allowance << existing_hole
+    #           end
 
-              if course_handicap > 0
-                existing_hole[:strokes] = existing_hole[:strokes] + 1
-                course_handicap = course_handicap - 1
-              end
-            end
-          end
+    #           if course_handicap > 0
+    #             existing_hole[:strokes] = existing_hole[:strokes] + 1
+    #             course_handicap = course_handicap - 1
+    #           end
+    #         end
+    #       end
 
-          allowance
-        else
-          nil
-        end
-      end
+    #       allowance
+    #     else
+    #       nil
+    #     end
+    #   end
 
-      allowance
-    end
+    #   allowance
+    # end
 
     ##Ranking
 
