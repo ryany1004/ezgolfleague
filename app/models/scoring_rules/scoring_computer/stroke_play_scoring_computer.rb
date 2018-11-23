@@ -1,5 +1,5 @@
 module ScoringComputer
-	class StrokePlayScoringComputer < ScoringComputer
+	class StrokePlayScoringComputer < BaseScoringComputer
 		def generate_tournament_day_result(user:)
 			return nil if !@scoring_rule.users.include? user
 
@@ -43,7 +43,7 @@ module ScoringComputer
 				end
 			end
 
-	    user_par = self.tournament_day.user_par_for_played_holes(user)
+	    user_par = self.user_par_for_played_holes(user)
 	    par_related_net_score = net_score - user_par
 	    par_related_gross_score = gross_score - user_par
 
@@ -75,6 +75,25 @@ module ScoringComputer
 	    	nil
 	    end
 		end
+
+	  def user_par_for_played_holes(user)
+	    par = 0
+
+	    primary_scorecard = self.tournament_day.primary_scorecard_for_user(user)
+	    return 0 if primary_scorecard.blank?
+
+	    primary_scorecard.scores.each do |s|
+	      if s.strokes > 0
+	        par_adjustment = s.course_hole.par
+
+	        par = par + par_adjustment
+	      end
+	    end
+
+	    Rails.logger.debug { "User Par: #{par}" }
+
+	    par
+	  end
 
 		def front_nine_hole_numbers
 			[1, 2, 3, 4, 5, 6, 7, 8, 9]

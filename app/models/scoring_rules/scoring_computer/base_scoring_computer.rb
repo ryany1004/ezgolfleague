@@ -1,5 +1,5 @@
 module ScoringComputer
-	class ScoringComputer
+	class BaseScoringComputer
 		def initialize(scoring_rule)
 			@scoring_rule = scoring_rule
 		end
@@ -27,7 +27,7 @@ module ScoringComputer
 		end
 
 		def send_did_score_notification(scorecard:)
-			SendComplicationNotificationJob.perform_later(primary_scorecard)
+			SendComplicationNotificationJob.perform_later(scorecard)
 		end
 
 		def assign_payouts
@@ -52,7 +52,8 @@ module ScoringComputer
 
 	    total_score = 0
 
-	    scorecard.scores.each do |score|
+	    scorecard_with_holes = Scorecard.where(id: scorecard.id).includes(scores: :course_hole).first
+	    scorecard_with_holes.scores.each do |score|
 	      adjusted_score = scorecard.score_or_maximum_for_hole(strokes: score.strokes, course_handicap: scorecard.golf_outing.course_handicap, hole: score.course_hole)
 
 	      total_score = total_score + adjusted_score

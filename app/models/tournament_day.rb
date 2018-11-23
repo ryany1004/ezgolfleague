@@ -1,6 +1,5 @@
 class TournamentDay < ApplicationRecord
   include Moveable
-  include Scoreable
   include FindPlayers
   include Servable
 
@@ -11,6 +10,8 @@ class TournamentDay < ApplicationRecord
   include ::CourseHandicapTournamentDay
   include ::FlightTournamentDay
   include ::Autoschedule
+  include ::TournamentApiSupport
+  include ::TournamentScorecardSupport
 
   belongs_to :tournament, inverse_of: :tournament_days, touch: true, counter_cache: true
   belongs_to :course, inverse_of: :tournament_days
@@ -26,10 +27,9 @@ class TournamentDay < ApplicationRecord
   after_create :create_default_flight, if: :is_first_day?
 
   #TEAM - MOVE ALL OF THESE
-  delegate :player_score, :compute_player_score, :compute_stroke_play_player_score, :compute_adjusted_player_score, :player_points, :player_payouts, :flights_with_rankings, :related_scorecards_for_user, :assign_payouts_from_scores, to: :game_type
+  delegate :player_points, :player_payouts, :flights_with_rankings, :assign_payouts_from_scores, to: :game_type
   delegate :allow_teams, :show_teams?, :players_create_teams?, :show_team_scores_for_all_teammates?, to: :game_type
   delegate :scorecard_payload_for_scorecard, to: :game_type
-  #delegate :other_group_members, :user_is_in_group?, to: :game_type
   delegate :handicap_allowance, to: :game_type
   ##END MOVE
 
@@ -167,6 +167,18 @@ class TournamentDay < ApplicationRecord
     end
   end
 
+  def has_scores?
+    self.eager_groups.each do |group|
+      group.golf_outings.each do |golf_outing|
+        golf_outing.scorecard.scores.each do |score|
+          return true if score.strokes > 0
+        end
+      end
+    end
+
+    false
+  end
+
   def has_payouts?
     self.flights.each do |flight|
       return true if flight.payouts.count > 0
@@ -184,55 +196,6 @@ class TournamentDay < ApplicationRecord
   end
 
   #TODO: move, API support
-  def registered_user_ids
-    cache_key = "registereduserids-json#{self.id}-#{self.updated_at.to_i}"
-    user_ids = []
-
-    user_ids = Rails.cache.fetch(cache_key, expires_in: 5.minute, race_condition_ttl: 10) do
-      self.tournament.players_for_day(self).each do |player|
-        user_ids << player.id.to_s unless player.blank?
-      end
-
-      user_ids
-    end
-
-    user_ids
-  end
-
-  def paid_user_ids
-    cache_key = "paiduserids-json#{self.id}-#{self.updated_at.to_i}"
-    user_ids = []
-
-    user_ids = Rails.cache.fetch(cache_key, expires_in: 5.minute, race_condition_ttl: 10) do
-      self.tournament.players_for_day(self).each do |player|
-        user_ids << player.id.to_s if self.tournament.user_has_paid?(player)
-      end
-
-      user_ids
-    end
-
-    user_ids
-  end
-
-  def superuser_user_ids
-    user_ids = []
-
-    self.tournament.players_for_day(self).each do |player|
-      user_ids << player.id.to_s if player.is_super_user
-    end
-
-    user_ids
-  end
-
-  def league_admin_user_ids
-    user_ids = []
-
-    self.tournament.league.league_admins.each do |user|
-      user_ids << user.id.to_s
-    end
-
-    user_ids
-  end
 
   #date parsing
   def tournament_at=(date)
