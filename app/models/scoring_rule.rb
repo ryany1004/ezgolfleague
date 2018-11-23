@@ -1,6 +1,4 @@
 class ScoringRule < ApplicationRecord
-	include ::ScoringRuleScoring
-
 	belongs_to :tournament_day, touch: true, inverse_of: :scoring_rules
 	has_many :payouts, inverse_of: :scoring_rule, dependent: :destroy
 	has_many :payout_results, inverse_of: :scoring_rule, dependent: :destroy
@@ -13,11 +11,15 @@ class ScoringRule < ApplicationRecord
 	end
 
 	def name
-		"BASE_CLASS"
+		raise "Base Class Has No Name"
 	end
 
 	def tournament
 		tournament_day.tournament
+	end
+
+	def scoring_computer
+		raise "Base Class Has No Scoring Computer"
 	end
 
 	def ranked_results
@@ -29,7 +31,13 @@ class ScoringRule < ApplicationRecord
 	end
 
 	def can_be_played?
-		false
+	  return true if self.tournament_day.data_was_imported == true
+
+	  return false if self.tournament_day.tournament_groups.count == 0
+	  return false if self.tournament_day.flights.count == 0
+	  return false if self.tournament_day.course_holes.count == 0
+
+	  true
 	end
 
 	def can_be_finalized?
@@ -38,6 +46,10 @@ class ScoringRule < ApplicationRecord
 		else
 			true
 		end
+	end
+
+	def show_other_scorecards?
+		false
 	end
 
 	def points_for_user(user:)
@@ -69,7 +81,7 @@ class ScoringRule < ApplicationRecord
 	end
 
 	def users
-		self.tournament.players
+		self.tournament.players_for_day(self.tournament_day)
 	end
 end
 

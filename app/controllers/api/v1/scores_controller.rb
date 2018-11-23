@@ -14,14 +14,14 @@ class Api::V1::ScoresController < Api::V1::ApiBaseController
       scores_to_update = Hash.new
 
       scores.each do |update_score|
-        scores_to_update[update_score["scoreServerID"]] = {:strokes => update_score["score"], :date_scored => update_score["dateScored"]}
+        scores_to_update[update_score["scoreServerID"]] = {strokes: update_score["score"], date_scored: update_score["dateScored"]}
       end
 
       logger.debug { "Sending: #{scores_to_update}" }
 
       Updaters::ScorecardUpdating.update_scorecards_for_scores(scores_to_update, @scorecard, @scorecards_to_update, true)
 
-      render json: {:text => "Success"}
+      render json: {text: "Success"}
     else
       render text: "Score Updating Failure", status: :bad_request
     end
@@ -36,5 +36,4 @@ class Api::V1::ScoresController < Api::V1::ApiBaseController
     @other_scorecards = scorecard_info[:other_scorecards]
     @scorecards_to_update = scorecard_info[:scorecards_to_update]
   end
-
 end

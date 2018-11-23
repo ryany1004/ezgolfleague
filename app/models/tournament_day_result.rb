@@ -69,4 +69,8 @@ class TournamentDayResult < ApplicationRecord
   def thru
   	primary_scorecard.last_hole_played
   end
+
+  def to_s
+    "#{self.user&.complete_name} - Net: #{self.net_score} Gross: #{self.gross_score}"
+  end
 end

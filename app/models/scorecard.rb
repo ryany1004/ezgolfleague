@@ -67,15 +67,19 @@ class Scorecard < ApplicationRecord
   end
 
   def net_score
-    self.tournament_day.game_type.player_score(self.golf_outing.user, true)
+    self.tournament_day_results.first&.net_score
   end
 
   def front_nine_score(use_handicap = false)
-    self.tournament_day.game_type.player_score(self.golf_outing.user, use_handicap, [1, 2, 3, 4, 5, 6, 7, 8, 9])
+    if use_handicap
+      self.tournament_day_results.first&.front_nine_net_score
+    else
+      self.tournament_day_results.first&.front_nine_gross_score
+    end
   end
 
-  def back_nine_score(use_handicap = false)
-    self.tournament_day.game_type.player_score(self.golf_outing.user, use_handicap, [10, 11, 12, 13, 14, 15, 16, 17, 18])
+  def back_nine_score(use_handicap = true)
+    self.tournament_day_results.first&.back_nine_net_score
   end
 
   def flight_number

@@ -1,33 +1,34 @@
 class UpdateUserScorecardJob < ApplicationJob
   def perform(primary_scorecard, other_scorecards)
-    Rails.logger.info { "Re-Scoring User #{primary_scorecard.golf_outing.user.complete_name}" }
-    primary_scorecard.tournament_day.score_user(primary_scorecard.golf_outing.user)
+    primary_user = primary_scorecard.golf_outing.user
 
-    Rails.logger.info { "User Re-Scored, Updating After-Action" }
-    primary_scorecard.tournament_day.game_type.after_updating_scores_for_scorecard(primary_scorecard)
+    primary_scorecard.tournament_day.scoring_rules.each do |rule|
+      Rails.logger.debug { "Scoring #{rule.name} for #{primary_user.complete_name}" }
 
-    other_scorecards.each do |other_scorecard|
-      Rails.logger.info { "Updating Other Scorecard: #{other_scorecard.id}" }
+      scoring_computer = rule.scoring_computer
 
-      unless other_scorecard.golf_outing.blank?
-        primary_scorecard.tournament_day.score_user(other_scorecard.golf_outing.user)
-        primary_scorecard.tournament_day.game_type.after_updating_scores_for_scorecard(other_scorecard)
-      else
-        Rails.logger.info { "Err, Failed: Updating Other Scorecard: #{other_scorecard.id}" }
+      result = scoring_computer.generate_tournament_day_result(user: primary_user)
+      scoring_computer.after_updating_scores_for_scorecard(scorecard: primary_scorecard)
+
+      other_scorecards.each do |other_scorecard|
+        if other_scorecard.golf_outing.present?
+          other_user = other_scorecard.golf_outing.user
+
+          scoring_computer.generate_tournament_day_result(user: other_user)
+          scoring_computer.after_updating_scores_for_scorecard(scorecard: other_scorecard)
+        end
+      end
+
+      scoring_computer.rank_results
+
+      scoring_computer.send_did_score_notification(scorecard: primary_scorecard)
+
+      self.clear_caches(primary_scorecard)
+
+      if result.present?
+        Rails.logger.info { "Scoring: #{primary_scorecard.id}. User: #{primary_user.complete_name}. Result: #{result.to_s}" }
       end
     end
-
-    RankFlightsJob.perform_later(primary_scorecard.tournament_day)
-
-    SendComplicationNotificationJob.perform_later(primary_scorecard)
-
-    self.clear_caches(primary_scorecard)
-
-    unless primary_scorecard.tournament_day.tournament_day_results.where(:user_primary_scorecard_id => primary_scorecard.id).blank?
-      Rails.logger.info { "SCORE: Re-Scoring For Scorecard: #{primary_scorecard.id}. User: #{primary_scorecard.golf_outing.user.complete_name}. Net Score: #{primary_scorecard.tournament_day.tournament_day_results.where(:user_primary_scorecard_id => primary_scorecard.id).first.net_score}" }
-    end
-
-    Rails.logger.info { "UpdateUserScorecardJob Completed" }
   end
 
   def clear_caches(primary_scorecard)
