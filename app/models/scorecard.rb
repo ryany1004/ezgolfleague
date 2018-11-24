@@ -63,23 +63,23 @@ class Scorecard < ApplicationRecord
   end
 
   def gross_score
-    self.scores.map {|score| score.strokes}.sum
+    self.tournament_day_results.first ? self.tournament_day_results.first&.gross_score : 0
   end
 
   def net_score
-    self.tournament_day_results.first&.net_score
+    self.tournament_day_results.first ? self.tournament_day_results.first&.net_score : 0
   end
 
   def front_nine_score(use_handicap = false)
     if use_handicap
-      self.tournament_day_results.first&.front_nine_net_score
+      self.tournament_day_results.first ? self.tournament_day_results.first&.front_nine_net_score : 0
     else
-      self.tournament_day_results.first&.front_nine_gross_score
+      self.tournament_day_results.first ? self.tournament_day_results.first&.front_nine_gross_score : 0
     end
   end
 
   def back_nine_score(use_handicap = true)
-    self.tournament_day_results.first&.back_nine_net_score
+    self.tournament_day_results.first ? self.tournament_day_results.first&.back_nine_net_score : 0
   end
 
   def flight_number
@@ -93,7 +93,7 @@ class Scorecard < ApplicationRecord
   end
 
   def course_handicap
-    self.tournament_day.game_type.course_handicap_for_game_type(self.golf_outing).to_i
+    self.golf_outing.course_handicap.to_i
   end
 
   def has_empty_scores?

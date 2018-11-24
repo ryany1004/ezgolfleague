@@ -1,7 +1,7 @@
 <ol class="breadcrumb">
   <li><%= link_to "Tournaments", league_tournaments_path(current_user.selected_league) %></li>
   <li><%= link_to @tournament.name, edit_league_tournament_path(current_user.selected_league, @tournament) %></li>
-  <li><%= link_to "Scorecards", scorecards_path(tournament_id: @tournament) %></li>
+  <li><%= link_to "Scorecards", league_tournament_tournament_day_scorecards_path(@tournament.league, @tournament, @tournament_day) %></li>
   <li class="active"><%= @player.complete_name %></li>
 </ol>
 
@@ -18,7 +18,7 @@
         </div>
         <div id="collapse1" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="heading1">
           <div class="panel-body">
-            <%= render partial: '/shared/scorecards/edit', locals: {edit_url: scorecard_path, scorecard: @tournament_day.primary_scorecard_for_user(@player), split_holes: split_holes_for_course_tournament(@tournament_day), split_scores: split_scores_for_scorecard(@tournament_day.primary_scorecard_for_user(@player), @tournament_day.course_holes.count), tournament_day: @tournament_day, handicap_allowance: @handicap_allowance} %>
+            <%= render partial: '/shared/scorecards/edit', locals: {edit_url: league_tournament_tournament_day_scorecard_path, scorecard: @tournament_day.primary_scorecard_for_user(@player), split_holes: split_holes_for_course_tournament(@tournament_day), split_scores: split_scores_for_scorecard(@tournament_day.primary_scorecard_for_user(@player), @tournament_day.course_holes.count), tournament_day: @tournament_day, handicap_allowance: @handicap_allowance} %>
           </div>
         </div>
       </div>

@@ -1,7 +1,7 @@
 <ol class="breadcrumb">
   <li><%= link_to "Tournaments", league_tournaments_path(current_user.selected_league) %></li>
   <li><%= link_to @tournament.name, edit_league_tournament_path(current_user.selected_league, @tournament) %></li>
-  <li><%= link_to "Scorecards", scorecards_path(tournament_id: @tournament) %></li>
+  <li><%= link_to "Scorecards", league_tournament_tournament_day_scorecards_path(@tournament.league, @tournament, @tournament_day) %></li>
   <li class="active"><%= @scorecard.name %></li>
 </ol>
 
@@ -9,4 +9,4 @@
   <%= render partial: @scorecard_presenter.tournament_day.scorecard_display_partial, locals: {p: @scorecard_presenter, print_mode: false} %>
 <% end -%>
 
-<%= link_to 'Next Golfer >>', scorecard_path(@next_scorecard), class: 'btn btn-success' unless @next_scorecard.blank? %>
+<%= link_to 'Next Golfer >>', league_tournament_tournament_day_scorecard_path(@tournament.league, @tournament, @tournament_day, @next_scorecard), class: 'btn btn-success' unless @next_scorecard.blank? %>

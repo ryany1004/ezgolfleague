@@ -9,7 +9,7 @@
 <% if @tournament.tournament_days.count > 1 -%>
   <p>
   <% @tournament.tournament_days.each do |day| -%>
-    <%= link_to_unless day == @tournament_day, day.pretty_day, scorecards_path(tournament_id: @tournament, tournament_day: day) %>
+    <%= link_to_unless day == @tournament_day, day.pretty_day, league_tournament_tournament_day_scorecards_path(@tournament.league, @tournament, day) %>
     <% if day != @tournament.tournament_days.last -%>
       |
     <% end -%>
@@ -46,7 +46,7 @@
             <td>
       			  <% group.players_signed_up.each do |player| -%>
                 <% scorecard = @tournament_day.primary_scorecard_for_user(player) %>
-                <%= link_to "View", scorecard_path(scorecard) %> | <%= link_to "Edit", edit_scorecard_path(scorecard) %></br>
+                <%= link_to "View", league_tournament_tournament_day_scorecard_path(@tournament.league, @tournament, @tournament_day, scorecard) %> | <%= link_to "Edit", edit_league_tournament_tournament_day_scorecard_path(@tournament.league, @tournament, @tournament_day, scorecard) %></br>
               <% end -%>
             </td>
       		</tr>

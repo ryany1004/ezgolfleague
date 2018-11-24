@@ -32,10 +32,8 @@ class ScorecardsController < BaseController
   end
 
   def update
-    #handicap update
     @scorecard.update(scorecard_params)
 
-    #scores
     scores_to_update = Hash.new
 
     params[:scorecard][:scores_attributes].to_unsafe_h.keys.each do |key|
@@ -49,7 +47,7 @@ class ScorecardsController < BaseController
 
     Updaters::ScorecardUpdating.update_scorecards_for_scores(scores_to_update, @scorecard, @scorecards_to_update)
 
-    redirect_to edit_scorecard_path(@scorecard), flash: { alert: "The scorecard was successfully updated. NOTE: Net scores are calculated in the background and may not be immediately up to date." }
+    redirect_to edit_league_tournament_tournament_day_scorecard_path(@tournament.league, @tournament, @tournament_day, @scorecard), flash: { alert: "The scorecard was successfully updated. NOTE: Net scores are calculated in the background and may not be immediately up to date." }
   end
 
   def disqualify
@@ -60,7 +58,7 @@ class ScorecardsController < BaseController
     golf_outing = @tournament_day.golf_outing_for_player(@player)
     golf_outing.disqualify
 
-    redirect_to edit_scorecard_path(@scorecard), flash: { alert: "The scorecard disqualification was toggled." }
+    redirect_to edit_league_tournament_tournament_day_scorecard_path(@tournament_day.tournament.league, @tournament_day.tournament, @tournament_day, @scorecard), flash: { alert: "The scorecard disqualification was toggled." }
   end
 
   def fetch_eager_groups
@@ -68,7 +66,7 @@ class ScorecardsController < BaseController
   end
 
   def repair_scorecard
-    @scorecard.tournament_day.update_scores_for_scorecard(@scorecard) if !@scorecard.tournament_day.has_scores?
+    @scorecard.tournament_day.update_scores_for_scorecard(scorecard: @scorecard) if !@scorecard.tournament_day.has_scores?
   end
 
   def find_next_scorecard(tournament_day, groups, current_scorecard)

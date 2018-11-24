@@ -167,6 +167,10 @@ Rails.application.routes.draw do
         end
 
         resources :tournament_notifications
+
+        resources :scorecards, except: [:delete] do
+          patch 'disqualify'
+        end
       end
 
       resource :auto_scheduling, path: "autoschedule", only: [:update], controller: "tournaments/auto_scheduling" do
@@ -211,10 +215,6 @@ Rails.application.routes.draw do
     get 'print_scorecards', on: :collection
     get 'run_print_scorecards', on: :collection
     get 'print_display_scorecards', on: :collection
-  end
-
-  resources :scorecards, except: [:delete] do
-    patch 'disqualify'
   end
 
   resources :courses do
