@@ -20,7 +20,7 @@ describe "Testing Flight" do
   end
 
   it "can flight a player" do
-    tournament_day.add_player_to_group(tournament_group, user)
+    tournament_day.add_player_to_group(tournament_group: tournament_group, user: user)
     flight = tournament_day.flights.first
 
     expect(tournament_group.players_signed_up).to include(user)

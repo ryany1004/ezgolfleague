@@ -14,7 +14,7 @@ FactoryBot.define do
     	end
 
     	after(:create) do |user, evaluator|
-    		create_list(:mobile_device, evaluator.mobile_devices_count, user: user, device_type: evaluator.mobile_device_type)
+    	   create_list(:mobile_device, evaluator.mobile_devices_count, user: user, device_type: evaluator.mobile_device_type)
     	end
     end
   end

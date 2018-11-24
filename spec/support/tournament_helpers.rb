@@ -7,14 +7,16 @@ module TournamentHelpers
 
     tournament = create(:stroke_play_tournament, league: league)
     first_day = create(:tournament_day_with_flights, tournament: tournament)
+    scoring_rule = create(:individual_stroke_play_scoring_rule, tournament_day: first_day)
     group = create(:tournament_group, tournament_day: first_day)
 
-    first_day.add_player_to_group(group, golfer_one)
+    first_day.add_player_to_group(tournament_group: group, user: golfer_one)
 
     golfer_one_scorecard = first_day.primary_scorecard_for_user(golfer_one)
     self.populate_scorecard(golfer_one_scorecard, strokes)
 
-    first_day.score_users
+    scoring_computer = scoring_rule.scoring_computer
+    scoring_computer.generate_tournament_day_results
 
     tournament
   end
@@ -28,10 +30,11 @@ module TournamentHelpers
 
     tournament = create(:stroke_play_tournament, league: league)
     first_day = create(:tournament_day_with_flights, tournament: tournament)
+    scoring_rule = create(:individual_stroke_play_scoring_rule, tournament_day: first_day)
     group = create(:tournament_group, tournament_day: first_day)
 
-    first_day.add_player_to_group(group, golfer_one)
-    first_day.add_player_to_group(group, golfer_two)
+    first_day.add_player_to_group(tournament_group: group, user: golfer_one)
+    first_day.add_player_to_group(tournament_group: group, user: golfer_two)
 
     tournament
   end  
@@ -47,8 +50,8 @@ module TournamentHelpers
     first_day = create(:tournament_day_with_flights, tournament: tournament, game_type_id: 8)
     group = create(:tournament_group, tournament_day: first_day)
 
-    first_day.add_player_to_group(group, golfer_one)
-    first_day.add_player_to_group(group, golfer_two)
+    first_day.add_player_to_group(tournament_group: group, user: golfer_one)
+    first_day.add_player_to_group(tournament_group: group, user: golfer_two)
 
     golfer_team = group.golfer_teams.first
     golfer_team.users << golfer_one

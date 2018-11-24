@@ -9,10 +9,6 @@ describe "Individual Stroke Play" do
     expect(generic_stroke_play.display_name).to eq("Individual Stroke Play")
   end
 
-  it "#game_type_id" do
-    expect(generic_stroke_play.game_type_id).to eq(1)
-  end
-
   it "#other_group_members"
 
   it "#user_is_in_group?"
@@ -31,15 +27,15 @@ describe "Individual Stroke Play" do
     tournament = create_two_person_stroke_play_tournament
     golfer = tournament.players.first
 
-    expect(tournament.first_day.game_type.related_scorecards_for_user(golfer).count).to eq(1)
+    expect(tournament.first_day.scoring_rules.first.related_scorecards_for_user(golfer).count).to eq(1)
   end
 
   it "verify_results" do
     tournament = create_stroke_play_tournament(strokes: [1,1,6,4,6,3,5,6,5,7,6,5,3,6,6,5,3,10])
-    result = tournament.first_day.tournament_day_results.first
+    result = tournament.first_day.scoring_rules.first.tournament_day_results.first
 
-    expect(result.net_score).to eq(76)
     expect(result.gross_score).to eq(88)
+    expect(result.net_score).to eq(76)
     expect(result.back_nine_net_score).to eq(45)
     expect(result.front_nine_net_score).to eq(31)
     expect(result.front_nine_gross_score).to eq(37)
