@@ -7,7 +7,7 @@ class CreateScoringRules < ActiveRecord::Migration[5.1]
 
     add_index :scoring_rules, [:type]
     
-		add_reference :scoring_rules, :tournament_day, foreign_key: true
-		add_reference :payout_results, :scoring_rule, foreign_key: true
+		add_reference :scoring_rules, :tournament_day, index: true
+		add_reference :payout_results, :scoring_rule, index: true
   end
 end

@@ -10,7 +10,7 @@ class Api::V1::ScorecardsController < Api::V1::ApiBaseController
 
       render nothing: true, status: 404
     else
-      payload = @tournament_day.scorecard_payload_for_scorecard(@scorecard)
+      payload = @scorecard.scorecard_payload
 
       respond_with(payload) do |format|
         format.json { render json: payload }

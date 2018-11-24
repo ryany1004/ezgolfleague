@@ -1,6 +1,10 @@
 module TournamentScorecardSupport
+  def scorecard_cache_prefix(user:)
+    "ScorecardIDToUserID#{self.id}-#{user.id}"
+  end
+
   def primary_scorecard_for_user(user)
-    cache_key = self.cache_key("ScorecardIDToUserID#{self.id}-#{user.id}")
+    cache_key = self.cache_key(self.scorecard_cache_prefix(user: user))
     scorecard_id = Rails.cache.fetch(cache_key)
 
     if scorecard_id.blank?
@@ -20,6 +24,12 @@ module TournamentScorecardSupport
     end
 
     nil
+  end
+
+  def delete_cached_primary_scorecard(user:)
+    cache_key = self.cache_key(self.scorecard_cache_prefix(user: user))
+
+    Rails.cache.delete(cache_key)
   end
 
   def user_can_edit_scorecard(user, scorecard)

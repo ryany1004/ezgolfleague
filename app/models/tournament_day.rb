@@ -29,7 +29,6 @@ class TournamentDay < ApplicationRecord
   #TEAM - MOVE ALL OF THESE
   delegate :player_points, :player_payouts, :flights_with_rankings, :assign_payouts_from_scores, to: :game_type
   delegate :allow_teams, :show_teams?, :players_create_teams?, :show_team_scores_for_all_teammates?, to: :game_type
-  delegate :scorecard_payload_for_scorecard, to: :game_type
   ##END MOVE
 
   validates :course, presence: true

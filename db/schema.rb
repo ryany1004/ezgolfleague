@@ -564,6 +564,4 @@ ActiveRecord::Schema.define(version: 20181118222137) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
-  add_foreign_key "payout_results", "scoring_rules"
-  add_foreign_key "scoring_rules", "tournament_days"
 end

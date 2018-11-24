@@ -30,12 +30,14 @@ class Scorecard < ApplicationRecord
     self.tournament_day.tournament.league
   end
 
+  def scorecard_payload
+    self.tournament_day.mandatory_scoring_rules.first.scorecard_api(scorecard: self)
+  end
+
   def clear_primary_scorecard_cache
     return if self.golf_outing.user.blank?
 
-    cache_key = self.golf_outing.tournament_group.tournament_day.scorecard_id_cache_key(self.golf_outing.user)
-
-    did_remove = Rails.cache.delete(cache_key)
+    did_remove = self.tournament_day.delete_cached_primary_scorecard(user: self.golf_outing.user)
 
     Rails.logger.debug { "Removed Cache Key: #{did_remove}" }
   end
