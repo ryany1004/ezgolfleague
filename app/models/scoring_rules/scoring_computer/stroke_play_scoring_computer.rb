@@ -21,26 +21,34 @@ module ScoringComputer
 
 			adjusted_score = self.compute_adjusted_user_score(user: user)
 
+			Rails.logger.debug { "Scoring #{scorecard.scores.count} scores." }
+
 			scorecard.scores.includes(:course_hole).each do |score|
 				gross_score += score.strokes
 				front_nine_gross_score += score.strokes if self.front_nine_hole_numbers.include? score.course_hole.hole_number
 
 				if handicap_allowance.present?
 					handicap_allowance.each do |h|
-						if h[:course_hole] == score.course_hole && h[:strokes] != 0 #we have handicap for this hole
-            	hole_adjusted_score = score.strokes - h[:strokes]
-            	
-            	if hole_adjusted_score > 0
-            		hole_net_score = hole_adjusted_score
-            	else
-            		hole_net_score = score.strokes
-            	end
+						if h[:course_hole] == score.course_hole
+							hole_net_score = score.strokes
+
+							if h[:strokes] != 0
+								hole_adjusted_score = score.strokes - h[:strokes]
+
+	            	if hole_adjusted_score > 0
+	            		hole_net_score = hole_adjusted_score
+	            	end
+							end
+
+            	Rails.logger.debug { "Hole #{score.course_hole.hole_number} - Hole Net Score: #{hole_net_score}. Hole adjusted score: #{hole_adjusted_score}. Strokes: #{score.strokes}" }
 
             	net_score += hole_net_score
-            	front_nine_net_score += net_score if self.front_nine_hole_numbers.include? score.course_hole.hole_number
-            	back_nine_net_score += net_score if self.back_nine_hole_numbers.include? score.course_hole.hole_number
+            	front_nine_net_score += hole_net_score if self.front_nine_hole_numbers.include? score.course_hole.hole_number
+            	back_nine_net_score += hole_net_score if self.back_nine_hole_numbers.include? score.course_hole.hole_number
 						end
 					end
+				else
+					Rails.logger.debug { "No Handicap Allowance Present" }
 				end
 			end
 
