@@ -174,13 +174,5 @@ module GameTypes
 
       return scorecard
     end
-
-    ##Ranking
-
-    #this game type, highest is best so we sort differently
-    def sort_rank_players_in_flight!(flight_players)
-      flight_players.sort! { |x,y| y[:net_score] <=> x[:net_score] }
-    end
-
   end
 end

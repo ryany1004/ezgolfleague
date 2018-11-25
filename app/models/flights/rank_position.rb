@@ -12,7 +12,7 @@ module Flights
     	if flight.tournament_day.game_type_id == 1
         rank_computer.sort_individual_stroke_play
     	elsif flight.tournament_day.game_type_id == 3
-    		sort_param = "net_score"
+    		sort_param = "net_score DESC"
 
     		rank_computer.sort_by_parameter(sort_param)
       elsif flight.tournament_day.game_type_id == 14
