@@ -68,7 +68,7 @@ module Flights
     # Sort
 
     def sort_by_parameter(parameter, descending = false)
-      parameter = paramter + " DESC" if descending
+      parameter = parameter + " DESC" if descending
 
     	self.sorted_results = tournament_day_results.reorder(parameter)
     end
