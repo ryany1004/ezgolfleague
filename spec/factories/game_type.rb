@@ -10,4 +10,7 @@ FactoryBot.define do
 
 	factory :scramble_game_type, class: GameTypes::Scramble do
 	end
+
+	factory :stableford_game_type, class: GameTypes::IndividualModifiedStableford do
+	end
 end

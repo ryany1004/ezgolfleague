@@ -9,6 +9,7 @@ module TournamentHelpers
     first_day = create(:tournament_day_with_flights, tournament: tournament)
     scoring_rule = create(:individual_stroke_play_scoring_rule, tournament_day: first_day)
     group = create(:tournament_group, tournament_day: first_day)
+    payout = create(:payout, scoring_rule: scoring_rule, flight: first_day.flights.last)
 
     first_day.add_player_to_group(tournament_group: group, user: golfer_one)
 
@@ -17,6 +18,7 @@ module TournamentHelpers
 
     scoring_computer = scoring_rule.scoring_computer
     scoring_computer.generate_tournament_day_results
+    scoring_computer.assign_payouts
 
     tournament
   end

@@ -1,7 +1,5 @@
 require 'rails_helper'
 
-#ActiveRecord::Base.logger = Logger.new(STDOUT) if defined?(ActiveRecord::Base)
-
 describe "Individual Stroke Play" do
   let(:generic_stroke_play) { build(:individual_stroke_play_game_type) }
 
@@ -42,5 +40,13 @@ describe "Individual Stroke Play" do
     expect(result.par_related_net_score).to eq(5)
     expect(result.par_related_gross_score).to eq(17)
     expect(result.adjusted_score).to eq(85)
+  end
+
+  it "verify_payouts" do
+    tournament = create_stroke_play_tournament(strokes: [1,1,6,4,6,3,5,6,5,7,6,5,3,6,6,5,3,10])
+    result = tournament.first_day.scoring_rules.first.payout_results.first
+    player = tournament.players.first
+
+    expect(result.user).to eq(player)
   end
 end

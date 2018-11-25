@@ -113,7 +113,72 @@ module ScoringComputer
 		end
 
 		def assign_payouts
+			@scoring_rule.payout_results.destroy_all
 
+			payout_count = @scoring_rule.payouts.count
+			Rails.logger.debug { "Payouts: #{payout_count}" }
+      return if payout_count == 0
+
+      eligible_users = self.users_eligible_for_payouts
+      ranked_flights = self.ranked_flights
+
+      ranked_flights.each do |flight|
+        flight.payouts.each_with_index do |payout, i|
+          if payout.payout_results.count == 0
+            result = flight.tournament_day_results[i]
+
+            if result.present? and eligible_users.include? result.user.id
+              player = result.user
+
+              Rails.logger.debug { "Assigning #{player.complete_name} to Payout #{payout.id}. Result ID: #{result.id}" }
+
+              PayoutResult.create(payout: payout, user: player, scoring_rule: @scoring_rule, flight: flight, amount: payout.amount, points: payout.points)
+            end
+          else
+            Rails.logger.debug { "Payout Already Has Results: #{payout.payout_results.map(&:id)}" }
+          end
+        end
+      end
 		end
+
+    def users_eligible_for_payouts
+      tournament = self.tournament_day.tournament
+      eligible_player_list = []
+
+      if tournament.tournament_days.count == 1
+        eligible_player_list = tournament.qualified_players.map(&:id)
+      else #only players that play all days can win
+        tournament.qualified_players.each do |player|
+          player_played_all_days = true
+
+          tournament.tournament_days.each do |day|
+            player_played_all_days = false if !tournament.includes_player?(player, day)
+          end
+
+          eligible_player_list << player.id if player_played_all_days
+        end
+      end
+
+      eligible_player_list
+    end
+
+    def flights_with_rankings
+    	self.tournament_day.flights.includes(:users, :tournament_day_results, :payout_results)
+    end
+
+    def ranked_flights
+    	tournament = self.tournament_day.tournament
+    	if tournament.tournament_days.count > 1
+        rankings = []
+
+        tournament.tournament_days.each do |day|
+          rankings << day.flights_with_rankings
+        end
+
+        ranked_flights = tournament.combine_rankings(rankings)
+    	else
+    		flights_with_rankings
+    	end
+    end
 	end
 end

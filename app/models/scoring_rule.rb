@@ -38,6 +38,7 @@ class ScoringRule < ApplicationRecord
 		1
 	end
 
+	#Some scoring rules, like former contests, apply to the whole field, while some, like former game types, apply by flight.
 	def flight_based_payouts?
 		true
 	end

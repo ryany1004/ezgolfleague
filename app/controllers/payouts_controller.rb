@@ -16,6 +16,7 @@ class PayoutsController < BaseController
 
   def create
     @payout = Payout.new(payout_params)
+    @payout.scoring_rule = @scoring_rule
 
     if @payout.save
       if params[:commit] == "Save & Continue"
@@ -48,19 +49,7 @@ class PayoutsController < BaseController
   private
 
   def set_stage
-    if params[:tournament_day_id].blank?
-      if @tournament.tournament_days.count > 1
-        @stage_name = "scoring_rules#{@tournament.first_day.id}"
-      else
-        @stage_name = "scoring_rules"
-      end
-    else
-      if @tournament.tournament_days.count > 1
-        @stage_name = "scoring_rules#{@tournament_day.id}"
-      else
-        @stage_name = "scoring_rules"
-      end
-    end
+    @stage_name = "scoring_rules#{@tournament_day.id}"
   end
 
   def payout_params
