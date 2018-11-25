@@ -38,6 +38,10 @@ class ScoringRule < ApplicationRecord
 		1
 	end
 
+	def flight_based_payouts?
+		true
+	end
+
 	def can_be_played?
 	  return true if self.tournament_day.data_was_imported == true
 
