@@ -14,7 +14,7 @@ module Flights
     	elsif flight.tournament_day.game_type_id == 3
     		sort_param = "net_score"
 
-    		rank_computer.sort_by_parameter(sort_param)
+    		rank_computer.sort_by_parameter(sort_param, true)
       elsif flight.tournament_day.game_type_id == 14
         rank_computer.combine_team_score_results
         rank_computer.sort_individual_stroke_play
@@ -67,7 +67,9 @@ module Flights
 
     # Sort
 
-    def sort_by_parameter(parameter)
+    def sort_by_parameter(parameter, descending = false)
+      parameter = parameter + " DESC" if descending
+
     	self.sorted_results = tournament_day_results.reorder(parameter)
     end
 
