@@ -9,10 +9,6 @@ describe "Scramble" do
     expect(generic_scramble.display_name).to eq("Scramble")
   end
 
-  it "#game_type_id" do
-    expect(generic_scramble.game_type_id).to eq(6)
-  end
-
   it "#show_other_scorecards?"
 
   it "#allow_teams" do
@@ -41,7 +37,7 @@ describe "Scramble" do
 
   it "verify_results" do
     tournament = create_two_person_scramble_tournament(strokes: [1,1,6,4,6,3,5,6,5,7,6,5,3,6,6,5,3,10])
-    result = tournament.first_day.tournament_day_results.first
+    result = tournament.first_day.scoring_rules.first.tournament_day_results.first
 
     expect(result.net_score).to eq(63)
     expect(result.gross_score).to eq(88)

@@ -7,6 +7,10 @@ module StrokePlayScoringRuleSetup
    	"ShouldUseBackNineForTies-T-#{self.tournament_day.id}-#{self.id}"
   end
 
+  def legacy_use_back_nine_key
+    "ShouldUseBackNineForTies-T-#{self.tournament_day.id}-1"
+  end
+
   def save_setup_details(game_type_options)
     should_use_back_nine_for_ties = 0
     should_use_back_nine_for_ties = 1 if game_type_options['use_back_9_to_handle_ties'] == 'true'
