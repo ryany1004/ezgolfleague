@@ -30,7 +30,7 @@
         <% else -%>
           <li <%= tournament_class_for_stage(stage, "basic_details") %> ><%= link_to 'Basic Details', edit_league_tournament_path(tournament.league, tournament) %></li>
           <li <%= tournament_class_for_stage(stage, "days") %> ><%= link_to 'Days', league_tournament_tournament_days_path(tournament.league, tournament) %></li>
-          <li <%= tournament_class_for_stage(stage, "hole_information") %> ><%= link_to 'Holes', league_tournament_manage_holes_path(tournament.league, tournament) %></li>
+          <li <%= tournament_class_for_stage(stage, "hole_information") %> ><%= link_to 'Holes', edit_league_tournament_course_holes_path(tournament.league, tournament) %></li>
           <li <%= tournament_class_for_stage(stage, "notifications") %>><%= link_to 'Notifications', league_tournament_tournament_day_tournament_notifications_path(tournament.league, tournament, tournament.tournament_days.first) %></li>
         <% end -%>
       <% end -%>
@@ -43,8 +43,8 @@
         <h4><%= day.pretty_day %></h4>
         <ul class="pagination">
           <li <%= tournament_class_for_stage(stage, "scoring_rules") %>><%= link_to 'Game Types', league_tournament_tournament_day_scoring_rules_path(tournament.league, tournament, day) %></li>
-          <li <%= tournament_class_for_stage(stage, "tee_times#{day.id}") %>><%= link_to 'Tee Times', league_tournament_tournament_groups_path(tournament.league, tournament, tournament_day: day) %></li>
-          <li <%= tournament_class_for_stage(stage, "flights#{day.id}") %>><%= link_to 'Flights', league_tournament_flights_path(tournament.league, tournament, tournament_day: day) %></li>
+          <li <%= tournament_class_for_stage(stage, "tee_times#{day.id}") %>><%= link_to 'Tee Times', league_tournament_tournament_day_tournament_groups_path(tournament.league, tournament, day) %></li>
+          <li <%= tournament_class_for_stage(stage, "flights#{day.id}") %>><%= link_to 'Flights', league_tournament_tournament_day_flights_path(tournament.league, tournament, day) %></li>
           <li <%= tournament_class_for_stage(stage, "contests#{day.id}") %>><%= link_to 'Contests', league_tournament_contests_path(tournament.league, tournament, tournament_day: day) %></li>
           <li <%= tournament_class_for_stage(stage, "players#{day.id}") %>><%= link_to 'Players', league_tournament_day_players_path(tournament.league, tournament, day) %></li>
         </ul>

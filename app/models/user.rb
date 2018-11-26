@@ -27,6 +27,7 @@ class User < ApplicationRecord
   has_and_belongs_to_many :golfer_teams, inverse_of: :users
   has_and_belongs_to_many :contests, inverse_of: :users
   has_and_belongs_to_many :league_season_scoring_groups, inverse_of: :users
+  has_and_belongs_to_many :scoring_rules, inverse_of: :users
 
   validates :email, presence: true, uniqueness: true
   validates :first_name, presence: true

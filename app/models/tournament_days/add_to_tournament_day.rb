@@ -14,6 +14,8 @@ module AddToTournamentDay
 
     self.create_scores_for_scorecard(scorecard: scorecard)
 
+    self.add_user_to_mandatory_scoring_rules(user: user)
+
     self.add_user_to_free_contests(user: user)
 
     self.create_payment(user: user, paying_with_credit_card: paying_with_credit_card) if self == self.tournament.first_day
@@ -42,6 +44,12 @@ module AddToTournamentDay
       scorecard.scores.destroy_all
 
       self.create_scores_for_scorecard(scorecard: scorecard)
+    end
+  end
+
+  def add_user_to_mandatory_scoring_rules(user:)
+    self.mandatory_scoring_rules.each do |rule|
+      rule.users << user
     end
   end
 

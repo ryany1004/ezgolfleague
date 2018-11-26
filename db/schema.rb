@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181118222137) do
+ActiveRecord::Schema.define(version: 20181126002747) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -432,6 +432,12 @@ ActiveRecord::Schema.define(version: 20181118222137) do
     t.decimal "dues_amount", default: "0.0"
     t.index ["tournament_day_id"], name: "index_scoring_rules_on_tournament_day_id"
     t.index ["type"], name: "index_scoring_rules_on_type"
+  end
+
+  create_table "scoring_rules_users", id: false, force: :cascade do |t|
+    t.bigint "scoring_rule_id", null: false
+    t.bigint "user_id", null: false
+    t.index ["scoring_rule_id", "user_id"], name: "index_scoring_rules_users_on_scoring_rule_id_and_user_id"
   end
 
   create_table "subscription_credits", id: :serial, force: :cascade do |t|

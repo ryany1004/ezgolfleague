@@ -119,7 +119,7 @@ module ScoringComputer
 			Rails.logger.debug { "Payouts: #{payout_count}" }
       return if payout_count == 0
 
-      eligible_users = self.users_eligible_for_payouts
+      eligible_users = @scoring_rule.users_eligible_for_payouts
       ranked_flights = self.ranked_flights
 
       ranked_flights.each do |flight|
@@ -140,27 +140,6 @@ module ScoringComputer
         end
       end
 		end
-
-    def users_eligible_for_payouts
-      tournament = self.tournament_day.tournament
-      eligible_player_list = []
-
-      if tournament.tournament_days.count == 1
-        eligible_player_list = tournament.qualified_players.map(&:id)
-      else #only players that play all days can win
-        tournament.qualified_players.each do |player|
-          player_played_all_days = true
-
-          tournament.tournament_days.each do |day|
-            player_played_all_days = false if !tournament.includes_player?(player, day)
-          end
-
-          eligible_player_list << player.id if player_played_all_days
-        end
-      end
-
-      eligible_player_list
-    end
 
     def flights_with_rankings
     	self.tournament_day.flights.includes(:users, :tournament_day_results, :payout_results)

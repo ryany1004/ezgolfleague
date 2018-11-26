@@ -300,79 +300,79 @@ module GameTypes
       end
     end
 
-    def flights_with_rankings
-      self.tournament_day.flights.includes(:users, :tournament_day_results, :payout_results)
-    end
+    # def flights_with_rankings
+    #   self.tournament_day.flights.includes(:users, :tournament_day_results, :payout_results)
+    # end
 
     ##Payouts
 
-    def eligible_players_for_payouts
-      Rails.logger.debug { "eligible_players_for_payouts" }
+    # def eligible_players_for_payouts
+    #   Rails.logger.debug { "eligible_players_for_payouts" }
 
-      eligible_player_list = []
-      if self.tournament.tournament_days.count == 1
-        eligible_player_list = self.tournament.qualified_players.map(&:id)
-      else #only players that play all days can win
-        self.tournament.qualified_players.each do |player|
-          player_played_all_days = true
+    #   eligible_player_list = []
+    #   if self.tournament.tournament_days.count == 1
+    #     eligible_player_list = self.tournament.qualified_players.map(&:id)
+    #   else #only players that play all days can win
+    #     self.tournament.qualified_players.each do |player|
+    #       player_played_all_days = true
 
-          self.tournament.tournament_days.each do |day|
-            player_played_all_days = false if self.tournament.includes_player?(player, day) == false
-          end
+    #       self.tournament.tournament_days.each do |day|
+    #         player_played_all_days = false if self.tournament.includes_player?(player, day) == false
+    #       end
 
-          eligible_player_list << player.id if player_played_all_days == true
-        end
-      end
+    #       eligible_player_list << player.id if player_played_all_days == true
+    #     end
+    #   end
 
-      Rails.logger.debug { "Completed eligible_players_for_payouts" }
+    #   Rails.logger.debug { "Completed eligible_players_for_payouts" }
 
-      eligible_player_list
-    end
+    #   eligible_player_list
+    # end
 
-    def assign_payouts_from_scores
-      self.tournament_day.payout_results.destroy_all
+    # def assign_payouts_from_scores
+    #   self.tournament_day.payout_results.destroy_all
 
-      payout_count = 0
-      self.tournament_day.flights.each do |flight|
-        payout_count += flight.payouts.count
-      end
+    #   payout_count = 0
+    #   self.tournament_day.flights.each do |flight|
+    #     payout_count += flight.payouts.count
+    #   end
 
-      Rails.logger.info { "Payouts: #{payout_count}" }
+    #   Rails.logger.info { "Payouts: #{payout_count}" }
 
-      return if payout_count == 0
+    #   return if payout_count == 0
 
-      if self.tournament.tournament_days.count > 1 && self.tournament_day == self.tournament.last_day
-        eligible_player_list = self.eligible_players_for_payouts
+    #   if self.tournament.tournament_days.count > 1 && self.tournament_day == self.tournament.last_day
+    #     eligible_player_list = self.eligible_players_for_payouts
 
-        rankings = []
-        self.tournament.tournament_days.each do |day|
-          rankings << day.flights_with_rankings
-        end
+    #     rankings = []
+    #     self.tournament.tournament_days.each do |day|
+    #       rankings << day.flights_with_rankings
+    #     end
 
-        ranked_flights = self.tournament.combine_rankings(rankings)
-      else
-        eligible_player_list = self.tournament.players.map(&:id)
+    #     ranked_flights = self.tournament.combine_rankings(rankings)
+    #   else
+    #     eligible_player_list = self.tournament.players.map(&:id)
 
-        ranked_flights = self.flights_with_rankings
-      end
+    #     ranked_flights = self.flights_with_rankings
+    #   end
 
-      ranked_flights.each do |flight|
-        flight.payouts.each_with_index do |payout, i|
-          if payout.payout_results.count == 0
-            result = flight.tournament_day_results[i]
-            if result.present? and eligible_player_list.include? result.user.id
-              player = result.user
+    #   ranked_flights.each do |flight|
+    #     flight.payouts.each_with_index do |payout, i|
+    #       if payout.payout_results.count == 0
+    #         result = flight.tournament_day_results[i]
+    #         if result.present? and eligible_player_list.include? result.user.id
+    #           player = result.user
 
-              Rails.logger.info { "Assigning #{player.complete_name} to Payout #{payout.id}. Result ID: #{result.id}" }
+    #           Rails.logger.info { "Assigning #{player.complete_name} to Payout #{payout.id}. Result ID: #{result.id}" }
 
-              PayoutResult.create(payout: payout, user: player, flight: flight, tournament_day: flight.tournament_day, amount: payout.amount, points: payout.points)
-            end
-          else
-            Rails.logger.info { "Payout Already Has Results: #{payout.payout_results.map(&:id)}" }
-          end
-        end
-      end
-    end
+    #           PayoutResult.create(payout: payout, user: player, flight: flight, tournament_day: flight.tournament_day, amount: payout.amount, points: payout.points)
+    #         end
+    #       else
+    #         Rails.logger.info { "Payout Already Has Results: #{payout.payout_results.map(&:id)}" }
+    #       end
+    #     end
+    #   end
+    # end
 
   end
 end

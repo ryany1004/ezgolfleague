@@ -17,9 +17,16 @@ namespace :scoring_rules do
 
   		raise "No Scoring Rule" if rule.blank?
 
+      #add the users
+      d.tournament.players_for_day(d).each do |user|
+        rule.users << user
+      end
+
   		d.scoring_rules = [rule]
   		d.game_type_id = nil
   		d.save
+
+      #convert contests
   	end
   end
 end

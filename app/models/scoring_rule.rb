@@ -3,6 +3,7 @@ class ScoringRule < ApplicationRecord
 	has_many :payouts, inverse_of: :scoring_rule, dependent: :destroy
 	has_many :payout_results, inverse_of: :scoring_rule, dependent: :destroy
 	has_many :tournament_day_results, -> { order(:flight_id, :sort_rank) }, inverse_of: :scoring_rule, dependent: :destroy
+	has_and_belongs_to_many :users, inverse_of: :scoring_rules
 
 	attr_accessor :selected_class_name
 
@@ -11,7 +12,11 @@ class ScoringRule < ApplicationRecord
 	end
 
 	def name
-		raise "Base Class Has No Name"
+		raise "A Base Class Has No Name"
+	end
+
+	def description
+		raise "N/A"
 	end
 
 	def tournament
@@ -93,8 +98,8 @@ class ScoringRule < ApplicationRecord
 		tournament_day.flights.map(&:payouts).flatten
 	end
 
-	def users
-		self.tournament.players_for_day(self.tournament_day)
+	def users_eligible_for_payouts
+		self.users
 	end
 end
 

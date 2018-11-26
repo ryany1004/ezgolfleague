@@ -19,6 +19,8 @@ module RemoveFromTournamentDay
 
       self.remove_from_teams(tournament_group: tournament_group, user: user) if remove_from_teams
 
+      self.remove_from_scoring_rules(user: user)
+
       self.remove_from_contests(user: user)
 
       self.refund_user(user: user) if self == self.tournament.first_day
@@ -28,6 +30,12 @@ module RemoveFromTournamentDay
   def deflight_user(user:)
 		flight = self.flight_for_player(user)
   	flight&.users&.delete(user)
+  end
+
+  def remove_from_scoring_rules(user:)
+    self.scoring_rules.each do |rule|
+      rule.users.destroy(user)
+    end
   end
 
   #TEAM: REMOVE/CHANGE
