@@ -8,7 +8,7 @@ class Api::V1::TournamentsController < Api::V1::ApiBaseController
       @tournaments = []
     else
       cache_key = self.user_tournaments_cache_key
-      @tournaments = Rails.cache.fetch(cache_key, expires_in: 24.hours, race_condition_ttl: 10) do
+      @tournaments = Rails.cache.fetch(cache_key, expires_in: 8.hours, race_condition_ttl: 10) do
         logger.info { "Fetching Tournaments - Not Cached for #{cache_key}" }
 
         todays_tournaments = Tournament.all_today(@current_user.leagues)
@@ -87,9 +87,11 @@ class Api::V1::TournamentsController < Api::V1::ApiBaseController
   end
 
   def user_tournaments_cache_key
-    max_updated_at = Tournament.all_upcoming(@current_user.leagues, nil).maximum(:updated_at).try(:utc).try(:to_s, :number)
+    max_updated_at_upcoming = Tournament.all_upcoming(@current_user.leagues, nil).maximum(:updated_at).try(:utc).try(:to_s, :number)
+    max_updated_at_past = Tournament.all_past(@current_user.leagues, nil).maximum(:updated_at).try(:utc).try(:to_s, :number)
+    max_updated_at_today = Tournament.all_today(@current_user.leagues).maximum(:updated_at).try(:utc).try(:to_s, :number)
 
-    return "APITournaments-#{@current_user.id}-#{max_updated_at}"
+    return "APITournaments-#{@current_user.id}-#{max_updated_at_upcoming}-#{max_updated_at_past}-#{max_updated_at_today}"
   end
 
   def format_tournament_group_tee_time(tournament_group)
