@@ -18,7 +18,6 @@ class TournamentDay < ApplicationRecord
   has_many :tournament_groups, -> { order(:tee_time_at) }, inverse_of: :tournament_day, dependent: :destroy
   has_many :flights, -> { order(:flight_number) }, inverse_of: :tournament_day, dependent: :destroy
   has_many :contests, -> { order(:name) }, inverse_of: :tournament_day, dependent: :destroy
-  has_many :golfer_teams, inverse_of: :tournament_day, dependent: :destroy #TEAM: REMOVE
   has_many :scoring_rules, inverse_of: :tournament_day, dependent: :destroy
   has_and_belongs_to_many :course_holes, -> { order(:hole_number) }
 
@@ -189,6 +188,10 @@ class TournamentDay < ApplicationRecord
     end
 
     false
+  end
+
+  def daily_teams
+    self.tournament_groups.collect(&:daily_teams).flatten!
   end
 
   def mandatory_scoring_rules

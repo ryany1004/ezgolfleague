@@ -77,7 +77,7 @@ class TournamentsController < BaseController
   def options
     tournament_group = TournamentGroup.find(params[:tournament_group_id])
 
-    @golfer_teams = tournament_group.golfer_teams
+    @daily_teams = tournament_group.daily_teams
   end
 
   def touch_tournament

@@ -1,15 +1,14 @@
-class GolferTeam < ApplicationRecord
+class DailyTeam < ApplicationRecord
   include Servable
 
-  belongs_to :tournament_day, touch: true
   belongs_to :tournament_group, touch: true
   has_and_belongs_to_many :users
-  has_many :golfer_teams, class_name: "GolferTeam", foreign_key: "parent_team_id"
-  belongs_to :parent_team, class_name: "GolferTeam", touch: true
+  has_many :daily_teams, class_name: "DailyTeam", foreign_key: "parent_team_id"
+  belongs_to :parent_team, class_name: "DailyTeam", touch: true
 
   validate :players_are_valid, on: :update
   def players_are_valid
-    other_teams = self.tournament_day.golfer_teams
+    other_teams = self.tournament_day.daily_teams
 
     self.users.each do |u|
       other_teams.each do |other_team|
@@ -49,5 +48,3 @@ class GolferTeam < ApplicationRecord
   end
 
 end
-
-#TEAM: REMOVE

@@ -1,3 +1,9 @@
+module ScoringRuleTeamType
+  NONE = 1
+  LEAGUE = 2
+  DAILY = 3
+end
+
 class ScoringRule < ApplicationRecord
 	belongs_to :tournament_day, touch: true, inverse_of: :scoring_rules
 	has_many :payouts, inverse_of: :scoring_rule, dependent: :destroy
@@ -6,6 +12,8 @@ class ScoringRule < ApplicationRecord
 	has_and_belongs_to_many :users, inverse_of: :scoring_rules
 
 	attr_accessor :selected_class_name
+
+	after_create :create_daily_teams
 
 	def form_class
 		becomes(ScoringRule)
@@ -37,6 +45,10 @@ class ScoringRule < ApplicationRecord
 
 	def ranked_results
 		#base class does nothing
+	end
+
+	def team_type
+		ScoringRuleTeamType::NONE
 	end
 
 	def users_per_team
@@ -101,6 +113,20 @@ class ScoringRule < ApplicationRecord
 	def users_eligible_for_payouts
 		self.users
 	end
+
+  def create_daily_teams
+  	if self.team_type == ScoringRuleTeamType::DAILY
+  		self.tournament_day.tournament_groups.each do |group|
+  			team_number = 1
+  			number_of_teams_to_create = group.max_number_of_players / self.users_per_team
+
+  			number_of_teams_to_create.times do
+  				DailyTeam.create(tournament_group: group, team_number: team_number)
+
+  				team_number += 1
+  			end
+  		end
+  	end
 end
 
 class ScoringRuleOption

@@ -60,8 +60,8 @@
             </td>
             <td id="team-select">
               <% if @tournament_day.show_teams? %>
-                <%= f.input "golfer_team_ids[#{i}]", label: false, collection: tournament_group.golfer_teams, label_method: :team_number_label, value_method: :id, tournament_group: tournament_group, selected: tournament_group.golfer_team_for_user_or_index(tournament_group.user_for_index(i), i).try(:id), include_blank: false, multiple: true, input_html: { class: 'chosen-select' } %>
-                <!-- <span id="teamed-with">Team: <%= tournament_group.golfer_team_for_user_or_index(tournament_group.user_for_index(i), i).try(:name) %></span> -->
+                <%= f.input "daily_team_ids[#{i}]", label: false, collection: tournament_group.daily_teams, label_method: :team_number_label, value_method: :id, tournament_group: tournament_group, selected: tournament_group.daily_team_for_user_or_index(tournament_group.user_for_index(i), i).try(:id), include_blank: false, multiple: true, input_html: { class: 'chosen-select' } %>
+                <!-- <span id="teamed-with">Team: <%= tournament_group.daily_team_for_user_or_index(tournament_group.user_for_index(i), i).try(:name) %></span> -->
               <% else %>
                 &nbsp;
               <% end %>

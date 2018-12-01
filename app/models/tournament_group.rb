@@ -3,11 +3,9 @@ class TournamentGroup < ApplicationRecord
 
   belongs_to :tournament_day, inverse_of: :tournament_groups, touch: true
   has_many :golf_outings, -> { order(:created_at) }, inverse_of: :tournament_group, dependent: :destroy
-  has_many :golfer_teams, -> { order(:created_at) }, inverse_of: :tournament_group, dependent: :destroy
+  has_many :daily_teams, -> { order(:created_at) }, inverse_of: :tournament_group, dependent: :destroy
 
   paginates_per 50
-
-  after_create :create_golfer_teams
 
   validates :tee_time_at, presence: true
   validates :max_number_of_players, :inclusion => 0..10
@@ -20,24 +18,6 @@ class TournamentGroup < ApplicationRecord
 
     if tee_time_at.at_end_of_day > tournament_day.tournament_at.at_end_of_day
       errors.add(:tee_time_at, "can't be on a different day than the tournament")
-    end
-  end
-
-  def create_golfer_teams
-    if self.tournament_day.tournament.display_teams?
-      Rails.logger.info { "create_golfer_teams" }
-
-      number_of_teams_to_create = self.max_number_of_players / self.tournament_day.game_type.number_of_players_per_team
-
-      team_number = 1
-
-      number_of_teams_to_create.times do
-        GolferTeam.create(tournament_day: self.tournament_day, tournament_group: self, team_number: team_number)
-
-        team_number += 1
-      end
-    else
-      Rails.logger.info { "NOT create_golfer_teams" }
     end
   end
 
@@ -59,11 +39,11 @@ class TournamentGroup < ApplicationRecord
     end
   end
 
-  def golfer_team_for_user_or_index(user, index)
+  def daily_team_for_user_or_index(user, index)
     if user.blank? #show in order
       exploded_teams = []
 
-      self.golfer_teams.each do |g|
+      self.daily_teams.each do |g|
         g.max_players.times do |t|
           exploded_teams << g
         end
@@ -75,7 +55,7 @@ class TournamentGroup < ApplicationRecord
         nil
       end
     else #find the team this user is signed up for
-      self.tournament_day.golfer_team_for_player(user)
+      self.tournament_day.daily_team_for_player(user)
     end
   end
 

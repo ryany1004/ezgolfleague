@@ -1,10 +1,10 @@
 module Play::TournamentsHelper
-  def team_name(tournament_group, index)
-    return "" if tournament_group.tournament_day.tournament.display_teams? == false
+  def team_name(scoring_rule, tournament_group, index)
+    return "" if scoring_rule.team_type == ScoringRuleTeamType::NONE
 
     slots = []
 
-    tournament_group.golfer_teams.each_with_index do |t, i|
+    tournament_group.daily_teams.each_with_index do |t, i|
       slot = []
 
       t.max_players.times do

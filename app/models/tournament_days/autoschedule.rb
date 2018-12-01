@@ -47,7 +47,7 @@ module Autoschedule
       end
 
       if self.tournament.display_teams?
-        group.golfer_teams.each do |t|
+        group.daily_teams.each do |t|
           t.max_players.times do
             team_slots << t
           end

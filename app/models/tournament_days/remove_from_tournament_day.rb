@@ -17,7 +17,7 @@ module RemoveFromTournamentDay
 
       self.deflight_user(user: user)
 
-      self.remove_from_teams(tournament_group: tournament_group, user: user) if remove_from_teams
+      self.remove_from_daily_teams(tournament_group: tournament_group, user: user) if remove_from_teams
 
       self.remove_from_scoring_rules(user: user)
 
@@ -38,11 +38,10 @@ module RemoveFromTournamentDay
     end
   end
 
-  #TEAM: REMOVE/CHANGE
-  def remove_from_teams(tournament_group:, user:)
-	  Rails.logger.debug { "Removing Player from Teams" }
+  def remove_from_daily_teams(tournament_group:, user:)
+	  Rails.logger.debug { "Removing Player from Daily Teams" }
 
-	  tournament_group.golfer_teams.each do |team|
+	  tournament_group.daily_teams.each do |team|
 	    if team.users.include? user
 	      team.users.destroy(user)
 	    end

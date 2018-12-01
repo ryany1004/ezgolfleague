@@ -18,11 +18,11 @@ module ContestScoreable
   end
 
   def all_team_members_are_contestants?
-    self.tournament_day.golfer_teams.includes(:golfer_teams, :users).each do |team|
+    self.tournament_day.daily_teams.includes(:daily_teams, :users).each do |team|
       team_participation = []
 
       if team.users.count > 0 #empty teams do not count
-        team.users.includes(:golfer_teams).each do |teammate|
+        team.users.includes(:daily_teams).each do |teammate|
           if self.users.include? teammate
             team_participation << true
           else
@@ -173,7 +173,7 @@ module ContestScoreable
                 if self.is_team_contest? #teams can only have ONE GROSS BIRDIE SKIN PER HOLE
                   teammates_have_birdie_skin_for_hole = false
 
-                  team = self.tournament_day.golfer_team_for_player(user)
+                  team = self.tournament_day.daily_team_for_player(user)
                   unless team.blank?
                     team.users.each do |teammate|
                       teammates_have_birdie_skin_for_hole = true if gross_birdie_skins.include? teammate

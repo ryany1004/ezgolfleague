@@ -23,6 +23,15 @@ class ScoringRulesController < BaseController
   		@scoring_rule.save_setup_details(params[:scoring_rule_options][@scoring_rule.id.to_s])
   	end
 
+    #handle daily teams if the rule requires
+    if @scoring_rule.team_type == ScoringRuleTeamType::DAILY
+      if @tournament_day.daily_teams.count == 0
+        @scoring_rule.create_daily_teams
+      end
+    else
+      @tournament_day.daily_teams.destroy_all
+    end
+
   	@scoring_rule.tournament_day_results.destroy_all #removed cached results as gametype influences scores
 
   	redirect_to league_tournament_tournament_day_scoring_rules_path(@tournament.league, @tournament, @tournament_day)

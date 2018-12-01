@@ -57,9 +57,9 @@ module TournamentHelpers
     first_day.add_player_to_group(tournament_group: group, user: golfer_one)
     first_day.add_player_to_group(tournament_group: group, user: golfer_two)
 
-    golfer_team = group.golfer_teams.first
-    golfer_team.users << golfer_one
-    golfer_team.users << golfer_two
+    daily_team = group.daily_teams.first
+    daily_team.users << golfer_one
+    daily_team.users << golfer_two
 
     golfer_one_scorecard = first_day.primary_scorecard_for_user(golfer_one)
     self.populate_scorecard(golfer_one_scorecard, strokes)

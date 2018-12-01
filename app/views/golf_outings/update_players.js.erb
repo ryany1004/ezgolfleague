@@ -8,7 +8,7 @@ selectedGolfers = [];
     <% end %>
   <% end %>
 
-  selectedGolfers.push({name: "<%= player.complete_name %>", id: "<%= player.id %>", disqualifyButton: disqualifyButton, removeButton: removeButton, teamName: "<%= @tournament_group.tournament_day.golfer_team_for_player(player).try(:name) %>", tournamentGroupID: <%= @tournament_group.id %>});
+  selectedGolfers.push({name: "<%= player.complete_name %>", id: "<%= player.id %>", disqualifyButton: disqualifyButton, removeButton: removeButton, teamName: "<%= @tournament_group.tournament_day.daily_team_for_player(player).try(:name) %>", tournamentGroupID: <%= @tournament_group.id %>});
 <% end %>
 
 var elementsUpdated = removeSelectedGolfersFromDropdowns(selectedGolfers);

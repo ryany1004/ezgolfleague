@@ -25,10 +25,10 @@ module TournamentsHelper
     end
   end
 
-  def team_name_for_player(player, tournament_day)
-    return "N/A" if tournament_day.tournament.display_teams? == false
+  def team_name_for_player(player, scoring_rule)
+    return "N/A" if scoring_rule.team_type != ScoringRuleTeamType::DAILY
 
-    team = tournament_day.golfer_team_for_player(player)
+    team = scoring_rule.tournament_day.daily_team_for_player(player)
 
     if team.blank?
       return "-"

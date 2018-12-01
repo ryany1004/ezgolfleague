@@ -150,10 +150,10 @@ module ApplicationHelper
     scorecard.cache_key
   end
 
-  def team_member_names(golfer_team, show_available_text = true)
+  def team_member_names(daily_team, show_available_text = true)
     members = []
 
-    golfer_team.users.each do |user|
+    daily_team.users.each do |user|
       members << user
     end
 
@@ -164,7 +164,7 @@ module ApplicationHelper
     end
 
     if show_available_text == true
-      if golfer_team.max_players == golfer_team.users.count
+      if daily_team.max_players == daily_team.users.count
         names = "#{names}<strong>Team Full</strong><br/>"
       else
         names = "#{names}<strong>Space Available</strong><br/>"

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181126002747) do
+ActiveRecord::Schema.define(version: 20181201194818) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -118,6 +118,25 @@ ActiveRecord::Schema.define(version: 20181126002747) do
     t.index ["name"], name: "index_courses_on_name"
   end
 
+  create_table "daily_teams", id: :serial, force: :cascade do |t|
+    t.integer "max_players", default: 2
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.boolean "are_opponents", default: false
+    t.integer "parent_team_id"
+    t.integer "tournament_group_id"
+    t.string "team_number"
+    t.index ["parent_team_id"], name: "index_daily_teams_on_parent_team_id"
+    t.index ["tournament_group_id"], name: "index_golfer_teams_tournament_group_id"
+  end
+
+  create_table "daily_teams_users", id: false, force: :cascade do |t|
+    t.integer "daily_team_id"
+    t.integer "user_id"
+    t.index ["daily_team_id"], name: "index_daily_teams_users_on_daily_team_id"
+    t.index ["user_id"], name: "index_daily_teams_users_on_user_id"
+  end
+
   create_table "delayed_jobs", id: :serial, force: :cascade do |t|
     t.integer "priority", default: 0, null: false
     t.integer "attempts", default: 0, null: false
@@ -161,7 +180,7 @@ ActiveRecord::Schema.define(version: 20181126002747) do
   create_table "game_type_metadata", id: :serial, force: :cascade do |t|
     t.integer "course_hole_id"
     t.integer "scorecard_id"
-    t.integer "golfer_team_id"
+    t.integer "daily_team_id"
     t.string "search_key"
     t.string "string_value"
     t.integer "integer_value"
@@ -169,7 +188,7 @@ ActiveRecord::Schema.define(version: 20181126002747) do
     t.datetime "updated_at", null: false
     t.float "float_value"
     t.index ["course_hole_id"], name: "index_game_type_metadata_on_course_hole_id"
-    t.index ["golfer_team_id"], name: "index_game_type_metadata_on_golfer_team_id"
+    t.index ["daily_team_id"], name: "index_game_type_metadata_on_daily_team_id"
     t.index ["scorecard_id", "search_key"], name: "scorecard_search_key_index"
     t.index ["scorecard_id"], name: "index_game_type_metadata_on_scorecard_id"
     t.index ["search_key"], name: "index_game_type_metadata_on_search_key"
@@ -193,27 +212,6 @@ ActiveRecord::Schema.define(version: 20181126002747) do
     t.index ["is_confirmed"], name: "index_golf_outings_on_is_confirmed"
     t.index ["tournament_group_id"], name: "index_golf_outings_on_tournament_group_id"
     t.index ["user_id"], name: "index_golf_outings_on_user_id"
-  end
-
-  create_table "golfer_teams", id: :serial, force: :cascade do |t|
-    t.integer "max_players", default: 2
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.boolean "are_opponents", default: false
-    t.integer "parent_team_id"
-    t.integer "tournament_day_id"
-    t.integer "tournament_group_id"
-    t.string "team_number"
-    t.index ["parent_team_id"], name: "index_golfer_teams_on_parent_team_id"
-    t.index ["tournament_day_id"], name: "index_golfer_teams_on_tournament_day_id"
-    t.index ["tournament_group_id"], name: "index_golfer_teams_tournament_group_id"
-  end
-
-  create_table "golfer_teams_users", id: false, force: :cascade do |t|
-    t.integer "golfer_team_id"
-    t.integer "user_id"
-    t.index ["golfer_team_id"], name: "index_golfer_teams_users_on_golfer_team_id"
-    t.index ["user_id"], name: "index_golfer_teams_users_on_user_id"
   end
 
   create_table "league_memberships", id: :serial, force: :cascade do |t|

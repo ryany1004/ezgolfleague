@@ -9,8 +9,8 @@ module FindPlayers
     nil
   end
 
-  def golfer_team_for_player(user)
-    self.golfer_teams.includes(:users).each do |t|
+  def daily_team_for_player(user)
+    self.daily_teams.includes(:users).each do |t|
       return t if t.users.include? user
     end
 

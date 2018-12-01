@@ -42,7 +42,7 @@ module TournamentScorecardSupport
     return true if scorecard.designated_editor == user
 
     #check if they are on a team together
-    team = scorecard.tournament_day.golfer_team_for_player(user)
+    team = scorecard.tournament_day.daily_team_for_player(user)
     unless team.blank?
       team.users.each do |u|
         return true if u == user and team.users.include? scorecard.golf_outing.user

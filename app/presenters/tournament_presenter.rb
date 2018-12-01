@@ -109,8 +109,8 @@ class TournamentPresenter
     self.tournament_day.blank? ? false : self.tournament_day.can_be_played?
   end
 
-  def day_has_golfer_teams?
-    self.tournament_day.blank? ? false : self.tournament_day.golfer_teams.count > 0
+  def day_has_daily_teams?
+    self.tournament_day.blank? ? false : self.tournament_day.daily_teams.count > 0
   end
 
   def day_has_scores?
@@ -174,13 +174,13 @@ class TournamentPresenter
   def tournament_players
     return [] if self.tournament_day.blank?
 
-    if self.day_has_golfer_teams?
+    if self.day_has_daily_teams?
       teams = []
 
-      self.tournament_day.golfer_teams.each do |golfer_team|
-        group = golfer_team.users.blank? ? nil : self.tournament_day.tournament_group_for_player(golfer_team.users.first)
+      self.tournament_day.daily_teams.each do |daily_team|
+        group = daily_team.users.blank? ? nil : self.tournament_day.tournament_group_for_player(daily_team.users.first)
 
-        teams << {name_data: golfer_team, group: group, id: nil} unless group.blank?
+        teams << {name_data: daily_team, group: group, id: nil} unless group.blank?
       end
 
       teams

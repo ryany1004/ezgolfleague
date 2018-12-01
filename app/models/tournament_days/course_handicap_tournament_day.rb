@@ -29,9 +29,8 @@ module CourseHandicapTournamentDay
     player_course_handicap
   end
 
-  #TEAM: UPDATE
-  def team_course_handicap_for_user(user:)
-    team = self.golfer_team_for_player(user)
+  def daily_team_course_handicap_for_user(user:)
+    team = self.daily_team_for_player(user)
 
     unless team.blank?
       highest_handicap = 0
@@ -56,7 +55,7 @@ module CourseHandicapTournamentDay
 
   def usable_handicap_for_user(user:, flight:)
     player_course_handicap = self.player_course_handicap_for_user(user: user, flight: flight)
-    team_course_handicap = self.team_course_handicap_for_user(user: user)
+    team_course_handicap = self.daily_team_course_handicap_for_user(user: user)
 
     Rails.logger.info { "Flighting - Player HCP: #{player_course_handicap} Team HCP: #{team_course_handicap} - #{user.complete_name}. Checking against Flight #{flight.flight_number}" }
 
