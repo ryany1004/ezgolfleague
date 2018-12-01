@@ -4,7 +4,7 @@ class SubscriptionCredit < ApplicationRecord
   validates :amount, presence: true
 
   def self.cost_per_golfer
-    5
+    10
   end
   
 end
