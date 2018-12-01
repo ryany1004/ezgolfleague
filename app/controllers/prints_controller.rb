@@ -6,7 +6,11 @@ class PrintsController < BaseController
 
     @tournament.players_for_day(@tournament_day).each do |player|
       primary_scorecard = @tournament_day.primary_scorecard_for_user(player)
-      other_scorecards = @tournament_day.related_scorecards_for_user(player, true)
+
+      other_scorecards = []
+      @tournament_day.scoring_rules.each do |rule|
+        other_scorecards += rule.related_scorecards_for_user(player, true)
+      end
 
       if other_scorecards.count < 4
         number_to_create = (4 - other_scorecards.count) - 1

@@ -30,7 +30,10 @@ class Play::ScorecardsController < Play::BaseController
     if scorecard.designated_editor == current_user && tournament.is_past? == false && tournament_day.game_type.allow_teams != GameTypes::TEAMS_DISALLOWED #in the past, non-team tournament
       logger.info { "Updating Other Scorecards at Finalization" }
 
-      other_scorecards = tournament_day.related_scorecards_for_user(scorecard.golf_outing.user)
+      other_scorecards = []
+      tournament_day.scoring_rules.each do |rule|
+        other_scorecards += rule.related_scorecards_for_user(scorecard.golf_outing.user)
+      end
 
       other_scorecards.each do |other_scorecard|
         other_scorecard.is_confirmed = true
