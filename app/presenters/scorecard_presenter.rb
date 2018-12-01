@@ -34,56 +34,56 @@ class ScorecardPresenter
   end
 
   def tee_time
-    return self.primary_scorecard.golf_outing.tournament_group.tee_time_at
+    @tee_time ||= self.primary_scorecard.golf_outing.tournament_group.tee_time_at
   end
 
   def tee_names
-    return self.primary_scorecard&.golf_outing&.course_tee_box&.name
+    @tee_names ||= self.primary_scorecard&.golf_outing&.course_tee_box&.name
   end
 
   def user_can_edit_any_scorecard?
     can_edit_any = false
 
     self.all_scorecards.each do |scorecard|
-      return true if self.primary_scorecard.tournament_day.user_can_edit_scorecard(self.current_user, scorecard) == true
+      return self.primary_scorecard.tournament_day.user_can_edit_scorecard(self.current_user, scorecard)
     end
 
-    return can_edit_any
+    @user_can_edit_any_scorecard ||= can_edit_any
   end
 
   def user_can_edit_scorecard?(scorecard)
-    return self.primary_scorecard.tournament_day.user_can_edit_scorecard(self.current_user, scorecard)
+    self.primary_scorecard.tournament_day.user_can_edit_scorecard(self.current_user, scorecard)
   end
 
   def user_can_become_designated_scorer?(user)
-    return self.tournament_day.user_can_become_designated_scorer(user, self.primary_scorecard)
+    self.tournament_day.user_can_become_designated_scorer(user, self.primary_scorecard)
   end
 
   def designated_scorer
-    return self.primary_scorecard.designated_editor
+    @designated_scorer ||= self.primary_scorecard.designated_editor
   end
 
   def includes_extra_scoring_column?
-    return self.primary_scorecard.includes_extra_scoring_column?
+    @includes_extra_scoring_column ||= self.primary_scorecard.includes_extra_scoring_column?
   end
 
   def sliced_scores
-    return self.primary_scorecard.scores.each_slice(self.primary_scorecard.tournament_day.course_holes.count / 2).to_a
+    @sliced_scores ||= self.primary_scorecard.scores.includes(course_hole: [:course_hole_tee_boxes]).each_slice(self.primary_scorecard.tournament_day.course_holes.count / 2).to_a
   end
 
   def scorecard_total_par
-    return self.primary_scorecard.tournament_day.course_holes.map {|hole| hole.par }.sum
+    @scorecard_total_par ||= self.primary_scorecard.tournament_day.course_holes.map {|hole| hole.par }.sum
   end
 
   def scorecard_score_cell_partial
-    return self.primary_scorecard.tournament_day.game_type.scorecard_score_cell_partial
+    @scorecard_score_cell_partial ||= self.primary_scorecard.tournament_day.game_type.scorecard_score_cell_partial
   end
 
   def scorecard_post_embed_partial
-    return self.primary_scorecard.tournament_day.game_type.scorecard_post_embed_partial
+    @scorecard_post_embed_partial ||= self.primary_scorecard.tournament_day.game_type.scorecard_post_embed_partial
   end
 
   def show_finalization?
-    return self.primary_scorecard.has_empty_scores? == false && self.primary_scorecard.tournament_day.user_can_edit_scorecard(self.current_user, self.primary_scorecard) == true && self.primary_scorecard.tournament_day.tournament.is_finalized == false
+    @show_finalization ||= (self.primary_scorecard.has_empty_scores? == false && self.primary_scorecard.tournament_day.user_can_edit_scorecard(self.current_user, self.primary_scorecard) == true && self.primary_scorecard.tournament_day.tournament.is_finalized == false)
   end
 end
