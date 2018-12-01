@@ -115,18 +115,19 @@ class ScoringRule < ApplicationRecord
 	end
 
   def create_daily_teams
-  	if self.team_type == ScoringRuleTeamType::DAILY
-  		self.tournament_day.tournament_groups.each do |group|
-  			team_number = 1
-  			number_of_teams_to_create = group.max_number_of_players / self.users_per_team
+		if self.team_type == ScoringRuleTeamType::DAILY
+			self.tournament_day.tournament_groups.each do |group|
+				team_number = 1
+				number_of_teams_to_create = group.max_number_of_players / self.users_per_team
 
-  			number_of_teams_to_create.times do
-  				DailyTeam.create(tournament_group: group, team_number: team_number)
+				number_of_teams_to_create.times do
+					DailyTeam.create(tournament_group: group, team_number: team_number)
 
-  				team_number += 1
-  			end
-  		end
-  	end
+					team_number += 1
+				end
+			end
+		end
+	end
 end
 
 class ScoringRuleOption
