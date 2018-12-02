@@ -276,21 +276,22 @@ class Tournament < ApplicationRecord
   end
 
   def run_finalize(should_email = true)
-    tournament_days = self.tournament_days.includes(payout_results: [:flight, :user, :payout], tournament_day_results: [:user, :primary_scorecard], tournament_groups: [golf_outings: [:user, scorecard: :scores]])
+    tournament_days = self.tournament_days.includes(scoring_rules: [payout_results: [:flight, :user, :payout], tournament_day_results: [:user, :primary_scorecard]], tournament_groups: [golf_outings: [:user, scorecard: :scores]])
 
     Rails.logger.info { "Finalize: Starting" }
 
     tournament_days.each do |day|
       Rails.logger.info { "Finalize #{day.id}: Re-Scoring Users" }
-      day.score_users
+      day.score_all_rules
 
       Rails.logger.info { "Finalize #{day.id}: Assigning Payouts" }
-      day.assign_payouts_from_scores
+      day.assign_payouts_all_rules
 
-      Rails.logger.info { "Finalize #{day.id}: Scoring Contests" }
-      day.contests.each do |contest|
-        contest.score_contest
-      end
+      #TODO: CONTESTS ARE BROKEN
+      # Rails.logger.info { "Finalize #{day.id}: Scoring Contests" }
+      # day.contests.each do |contest|
+      #   contest.score_contest
+      # end
 
       Rails.logger.info { "Finalize #{day.id}: All Done!" }
 

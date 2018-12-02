@@ -21,7 +21,7 @@ module ScoringComputer
 
 			adjusted_score = self.compute_adjusted_user_score(user: user)
 
-			Rails.logger.debug { "Scoring #{scorecard.scores.count} scores." }
+			Rails.logger.debug { "Scoring #{scorecard.scores.count} scores for #{user.complete_name}." }
 
 			scorecard.scores.includes(:course_hole).each do |score|
 				gross_score += score.strokes
@@ -49,6 +49,8 @@ module ScoringComputer
 					end
 				else
 					Rails.logger.debug { "No Handicap Allowance Present" }
+
+					net_score = gross_score
 				end
 			end
 
@@ -56,12 +58,13 @@ module ScoringComputer
 	    par_related_net_score = net_score - user_par
 	    par_related_gross_score = gross_score - user_par
 
-	    result_name = Users::ResultName.result_name_for_user(user, self)
+	    result_name = Users::ResultName.result_name_for_user(user, self.tournament_day)
 
 	    if gross_score > 0
 	    	TournamentDayResult.transaction do
 	    		@scoring_rule.tournament_day_results.where(user: user).destroy_all
-	    	
+	    		flight.tournament_day_results.where(user: user).destroy_all #TODO: Remove in future - needed for legacy tournaments
+
 	    		result = @scoring_rule.tournament_day_results.create(
 	    			user: user,
 	    			name: result_name,
@@ -75,6 +78,8 @@ module ScoringComputer
 	    			back_nine_net_score: back_nine_net_score,
 	    			par_related_net_score: par_related_net_score,
 	    			par_related_gross_score: par_related_gross_score)
+
+	    		Rails.logger.debug { "Writing tournament day result #{result}" }
 
 	    		result
 	    	end
@@ -124,13 +129,21 @@ module ScoringComputer
 
       ranked_flights.each do |flight|
         flight.payouts.each_with_index do |payout, i|
+
+###
+flight.tournament_day_results.each do |result|
+	Rails.logger.debug { "#{result}" }
+end
+###
+
+
           if payout.payout_results.count == 0
             result = flight.tournament_day_results[i]
 
             if result.present? and eligible_users.include? result.user.id
               player = result.user
 
-              Rails.logger.debug { "Assigning #{player.complete_name} to Payout #{payout.id}. Result ID: #{result.id}" }
+              Rails.logger.debug { "Assigning #{player.complete_name}. Result [#{result}] Payout [#{payout}]" }
 
               PayoutResult.create(payout: payout, user: player, scoring_rule: @scoring_rule, flight: flight, amount: payout.amount, points: payout.points)
             end

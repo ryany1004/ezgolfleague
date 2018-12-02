@@ -16,45 +16,7 @@
       <div class="panel-heading">
         <h3 class="panel-title">Tournament Payouts</h3>
       </div>
-      <table class="table table-striped">
-        <thead>
-          <tr>
-            <th>Day</th>
-            <th><%= flight_or_group(@tournament) %></th>
-            <th>Name</th>
-            <th>Amount</th>
-            <th>Points</th>
-            <th>Score</th>
-            <th>Course Handicap</th>
-          </tr>
-        </thead>
-        <tbody>
-          <% @tournament_days.each do |day| -%>
-            <% day.payout_results.order(:flight_id).order(amount: :desc).each do |payout_result| -%>
-              <tr>
-                <td><%= day.tournament_at.to_s(:short) %></td>
-                <td><%= payout_result.flight.display_name %></td>
-                <td><%= payout_result.user.complete_name unless payout_result.user.blank? %></td>
-                <td><%= number_to_currency(payout_result.amount) %></td>
-                <td><%= payout_result.points.to_i %></td>
-                <td><%= day.player_score(payout_result.user) unless payout_result.user.blank? %></td>
-                <td><%= day.golf_outing_for_player(payout_result.user).course_handicap.to_i unless payout_result.user.blank? || day.golf_outing_for_player(payout_result.user).blank? %></td>
-              </tr>
-            <% end -%>
-          <% end -%>
-        </tbody>
-        <tfoot>
-          <tr>
-            <th>&nbsp;</th>
-            <th>&nbsp;</th>
-            <th>&nbsp;</th>
-            <th>&nbsp;</th>
-            <th>&nbsp;</th>
-            <th>&nbsp;</th>
-            <th><%= link_to 'Post Results', league_tournament_confirm_finalization_path(@tournament.league, @tournament), method: :patch, class: 'btn btn-danger' %></th>
-          </tr>
-        </tfoot>
-      </table>
+      <%= render partial: "tournament_day", collection: @tournament_days %>
     </div>
   </div>
 
@@ -108,18 +70,23 @@
           </tr>
         </thead>
         <tbody>
-          <% day.tournament_day_results.each do |result| %>
-            <tr>
-              <td><%= result.flight&.display_name %></td>
-              <td><%= result.user&.complete_name %><% if result.primary_scorecard != nil && !result.primary_scorecard&.is_confirmed? -%> (Unconfirmed by Player)<% end -%><%- if result.primary_scorecard&.golf_outing&.disqualified %> (Disqualified)<%- end %></td>
-              <td><%= result.net_score %></td>
-              <td><%= result.gross_score %></td>
-              <td><%= link_to "Edit Scorecard", edit_scorecard_path(result.primary_scorecard) unless result.primary_scorecard.blank? %></td>
-            </tr>
-          <% end -%>
+          <% day.scoring_rules.each do |rule| %>
+            <% rule.tournament_day_results.each do |result| %>
+              <tr>
+                <td><%= result.flight&.display_name %></td>
+                <td><%= result.user&.complete_name %><% if result.primary_scorecard != nil && !result.primary_scorecard&.is_confirmed? -%> (Unconfirmed by Player)<% end -%><%- if result.primary_scorecard&.golf_outing&.disqualified %> (Disqualified)<%- end %></td>
+                <td><%= result.net_score %></td>
+                <td><%= result.gross_score %></td>
+                <td><%= link_to "Edit Scorecard", edit_league_tournament_tournament_day_scorecard_path(day.tournament.league, day.tournament, day, result.primary_scorecard) unless result.primary_scorecard.blank? %></td>
+              </tr>
+            <% end %>
+          <% end %>
         </tbody>
       </table>
     </div>
   <% end -%>
 </div>
+
+<br/><br/>
+<%= link_to 'Post Results', league_tournament_finalization_path(@tournament.league, @tournament), method: :patch, class: 'btn btn-danger' %>
 <% end -%>

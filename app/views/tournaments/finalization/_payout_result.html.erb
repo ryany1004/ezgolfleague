@@ -1,0 +1,9 @@
+<tr>
+  <td><%= payout_result.scoring_rule.tournament_day.tournament_at.to_s(:short) %></td>
+  <td><%= payout_result.display_name %></td>
+  <td><%= payout_result.user.complete_name unless payout_result.user.blank? %></td>
+  <td><%= number_to_currency(payout_result.amount) %></td>
+  <td><%= payout_result.points.to_i %></td>
+  <td><%= payout_result.tournament_day_result %></td>
+  <td><%= payout_result.scoring_rule.tournament_day.golf_outing_for_player(payout_result.user).course_handicap.to_i unless payout_result.user.blank? %></td>
+</tr>

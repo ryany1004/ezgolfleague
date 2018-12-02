@@ -22,7 +22,7 @@ class PayoutsController < BaseController
       if params[:commit] == "Save & Continue"
         redirect_to league_tournament_contests_path(@tournament.league, @tournament, tournament_day: @tournament_day), flash: { success: "The payout was successfully created." }
       else
-        redirect_to new_league_tournament_payout_path(@tournament.league, @tournament, tournament_day: @payout.flight.tournament_day), flash: { success: "The payout was successfully created." }
+        redirect_to new_league_tournament_tournament_day_scoring_rule_payout_path(@tournament.league, @tournament, @tournament_day, @scoring_rule), flash: { success: "The payout was successfully created." }
       end
     else
       render :new
@@ -34,7 +34,7 @@ class PayoutsController < BaseController
 
   def update
     if @payout.update(payout_params)
-      redirect_to league_tournament_payouts_path(@tournament.league, @tournament, tournament_day: @payout.flight.tournament_day), flash: { success: "The payout was successfully updated." }
+      redirect_to league_tournament_tournament_day_scoring_rule_payouts_path(@tournament.league, @tournament, @tournament_day, @scoring_rule), flash: { success: "The payout was successfully updated." }
     else
       render :edit
     end
@@ -43,7 +43,7 @@ class PayoutsController < BaseController
   def destroy
     @payout.destroy
 
-    redirect_to league_tournament_payouts_path(@tournament.league, @tournament, tournament_day: @payout.flight.tournament_day), flash: { success: "The payout was successfully deleted." }
+    redirect_to league_tournament_tournament_day_scoring_rule_payouts_path(@tournament.league, @tournament, @tournament_day, @scoring_rule), flash: { success: "The payout was successfully deleted." }
   end
 
   private
@@ -61,15 +61,7 @@ class PayoutsController < BaseController
   end
 
   def fetch_payouts
-    if @flight.blank?
-      @payouts = []
-
-      @tournament_day.flights.each do |f|
-        @payouts += f.payouts
-      end
-    else
-      @payouts = @flight.payouts
-    end
+    @payouts = @scoring_rule.payouts.order(:flight_id).order(amount: :desc).order(points: :desc)
   end
 
   def fetch_payout

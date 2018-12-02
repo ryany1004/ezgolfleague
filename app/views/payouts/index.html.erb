@@ -28,10 +28,10 @@
     	<tbody>
     	<% @payouts.each do |payout| %>
     		<tr>
-          <td><%= link_to payout.flight.display_name, edit_league_tournament_tournament_day_scoring_rule_payout_path(@tournament.league, @tournament, @tournament_day, payout.scoring_rule, payout) %></td>
+          <td><%= link_to payout.flight.display_name, edit_league_tournament_tournament_day_scoring_rule_payout_path(@tournament.league, @tournament, @tournament_day, @scoring_rule, payout) %></td>
     			<td><%= number_to_currency(payout.amount) %></td>
     			<td><%= payout.points.to_i %></td>
-          <td><%= link_to "Edit", edit_league_tournament_tournament_day_scoring_rule_payout_path(@tournament.league, @tournament, @tournament_day, payout.scoring_rule, payout) %> | <%= link_to 'Delete', league_tournament_tournament_day_scoring_rule_payout_path(@tournament.league, @tournament, @tournament_day, payout.scoring_rule, payout), data: { confirm: 'Are you sure you want to delete this payout?' }, method: :delete %></td>
+          <td><%= link_to "Edit", edit_league_tournament_tournament_day_scoring_rule_payout_path(@tournament.league, @tournament, @tournament_day, @scoring_rule, payout) %> | <%= link_to 'Delete', league_tournament_tournament_day_scoring_rule_payout_path(@tournament.league, @tournament, @tournament_day, @scoring_rule, payout), data: { confirm: 'Are you sure you want to delete this payout?' }, method: :delete %></td>
     		</tr>
     	<% end %>
     	</tbody>

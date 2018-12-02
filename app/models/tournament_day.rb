@@ -198,6 +198,19 @@ class TournamentDay < ApplicationRecord
     self.scoring_rules.where(is_opt_in: false)
   end
 
+  def score_all_rules
+    self.scoring_rules.each do |rule|
+      rule.score
+      rule.rank
+    end
+  end
+
+  def assign_payouts_all_rules
+    self.scoring_rules.each do |rule|
+      rule.assign_payouts
+    end
+  end
+
   def handicap_allowance(user:)
     handicap_computer = self.mandatory_scoring_rules.first.handicap_computer
 

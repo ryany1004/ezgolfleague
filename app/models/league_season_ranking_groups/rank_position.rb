@@ -39,11 +39,13 @@ module LeagueSeasonRankingGroups
 	      	ranking = group.league_season_rankings.where(user: p).first
 	      	ranking = LeagueSeasonRanking.create(user: p, league_season_ranking_group: group) if ranking.blank?
 
-	        t.tournament_days.includes(:tournament_day_results).each do |day|
-	          day.tournament_day_results.where(user: p).limit(1).each do |result|
-	            ranking.points += result.points unless result.points.blank?
-	            ranking.payouts += result.payouts unless result.payouts.blank?
-	          end
+	        t.tournament_days.includes(:scoring_rules).each do |day|
+	        	day.scoring_rules.includes(:tournament_day_results).each do |rule|
+		          rule.tournament_day_results.where(user: p).limit(1).each do |result|
+		            ranking.points += result.points unless result.points.blank?
+		            ranking.payouts += result.payouts unless result.payouts.blank?
+		          end
+	        	end
 	        end
 
 	        ranking.save

@@ -172,7 +172,7 @@ class Contest < ApplicationRecord
       winners = []
 
       if self.should_sum_winners? && self.is_team_contest?
-        self.tournament_day.daily_teams.each do |team|
+        self.tournament_day.daily_teams&.each do |team|
           team_contest_results = ContestResult.where(contest: self).where(winner: team.users)
 
           amount = team_contest_results.to_a.sum(&:payout_amount)

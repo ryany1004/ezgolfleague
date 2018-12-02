@@ -7,7 +7,7 @@ end
 class ScoringRule < ApplicationRecord
 	belongs_to :tournament_day, touch: true, inverse_of: :scoring_rules
 	has_many :payouts, inverse_of: :scoring_rule, dependent: :destroy
-	has_many :payout_results, inverse_of: :scoring_rule, dependent: :destroy
+	has_many :payout_results, -> { order(:flight_id, amount: :desc) }, inverse_of: :scoring_rule, dependent: :destroy
 	has_many :tournament_day_results, -> { order(:flight_id, :sort_rank) }, inverse_of: :scoring_rule, dependent: :destroy
 	has_and_belongs_to_many :users, inverse_of: :scoring_rules
 
@@ -80,6 +80,18 @@ class ScoringRule < ApplicationRecord
 
 	def show_other_scorecards?
 		false
+	end
+
+	def score
+    self.scoring_computer.generate_tournament_day_results
+	end
+
+	def rank
+		self.scoring_computer.rank_results
+	end
+
+	def assign_payouts
+		self.scoring_computer.assign_payouts
 	end
 
 	def points_for_user(user:)
