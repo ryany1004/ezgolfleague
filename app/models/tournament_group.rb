@@ -10,6 +10,8 @@ class TournamentGroup < ApplicationRecord
   validates :tee_time_at, presence: true
   validates :max_number_of_players, :inclusion => 0..10
 
+  after_create :create_daily_teams
+
   validate :date_is_valid
   def date_is_valid
     if tee_time_at.at_beginning_of_day < tournament_day.tournament_at.at_beginning_of_day
@@ -29,6 +31,24 @@ class TournamentGroup < ApplicationRecord
     end
 
     players
+  end
+
+  def create_daily_teams
+    if self.tournament_day.needs_daily_teams?
+      Rails.logger.debug { "create_daily_teams" }
+
+      number_of_teams_to_create = self.max_number_of_players / self.tournament_day.users_per_daily_teams
+
+      team_number = 1
+
+      number_of_teams_to_create.times do
+        DailyTeam.create(tournament_group: self, team_number: team_number)
+
+        team_number += 1
+      end
+    else
+      Rails.logger.info { "NOT create_daily_teams" }
+    end
   end
 
   def golfer_outing_for_index(index)

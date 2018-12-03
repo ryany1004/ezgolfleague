@@ -27,7 +27,7 @@ class TournamentDaysController < BaseController
       self.update_tournament_date
 
       if params[:commit] == "Save & Continue"
-        redirect_to league_tournament_manage_holes_path(@tournament.league, @tournament), flash: { success: "The day was successfully created." }
+        redirect_to edit_league_tournament_course_holes_path(@tournament.league, @tournament), flash: { success: "The day was successfully created." }
       else
         redirect_to new_league_tournament_tournament_day_path(@tournament.league, @tournament), flash: { success: "The day was successfully created." }
       end

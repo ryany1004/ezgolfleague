@@ -10,7 +10,7 @@ module FindPlayers
   end
 
   def daily_team_for_player(user)
-    self.daily_teams.includes(:users).each do |t|
+    self.daily_teams.each do |t|
       return t if t.users.include? user
     end
 

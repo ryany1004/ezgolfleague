@@ -1,10 +1,12 @@
 module ScoringComputer
 	class StrokePlayScoringComputer < BaseScoringComputer
-		def generate_tournament_day_result(user:)
+		def generate_tournament_day_result(user:, scorecard: nil, destroy_previous_results: true)
 			return nil if !@scoring_rule.users.include? user
 
-			scorecard = self.tournament_day.primary_scorecard_for_user(user)
-			return nil if scorecard.blank?
+			if scorecard.blank?
+				scorecard = self.tournament_day.primary_scorecard_for_user(user)
+				return nil if scorecard.blank?
+			end
 
 			handicap_computer = @scoring_rule.handicap_computer
 			handicap_allowance = handicap_computer.handicap_allowance(user: user)
@@ -23,7 +25,13 @@ module ScoringComputer
 
 			Rails.logger.debug { "Scoring #{scorecard.scores.count} scores for #{user.complete_name}." }
 
-			scorecard.scores.includes(:course_hole).each do |score|
+			if scorecard.scores.respond_to?(:includes)
+				scores = scorecard.scores.includes(:course_hole)
+			else
+				scores = scorecard.scores
+			end
+
+			scores.each do |score|
 				gross_score += score.strokes
 				front_nine_gross_score += score.strokes if self.front_nine_hole_numbers.include? score.course_hole.hole_number
 
@@ -62,8 +70,10 @@ module ScoringComputer
 
 	    if gross_score > 0
 	    	TournamentDayResult.transaction do
-	    		@scoring_rule.tournament_day_results.where(user: user).destroy_all
-	    		flight.tournament_day_results.where(user: user).destroy_all #TODO: Remove in future - needed for legacy tournaments
+	    		if destroy_previous_results
+	    			@scoring_rule.tournament_day_results.where(user: user).destroy_all
+	    			flight.tournament_day_results.where(user: user).destroy_all #TODO: Remove in future - needed for legacy tournaments
+	    		end
 
 	    		result = @scoring_rule.tournament_day_results.create(
 	    			user: user,
@@ -109,14 +119,6 @@ module ScoringComputer
 	    par
 	  end
 
-		def front_nine_hole_numbers
-			[1, 2, 3, 4, 5, 6, 7, 8, 9]
-		end
-
-		def back_nine_hole_numbers
-			[10, 11, 12, 13, 14, 15, 16, 17, 18]
-		end
-
 		def assign_payouts
 			@scoring_rule.payout_results.destroy_all
 
@@ -129,14 +131,6 @@ module ScoringComputer
 
       ranked_flights.each do |flight|
         flight.payouts.each_with_index do |payout, i|
-
-###
-flight.tournament_day_results.each do |result|
-	Rails.logger.debug { "#{result}" }
-end
-###
-
-
           if payout.payout_results.count == 0
             result = flight.tournament_day_results[i]
 
@@ -153,24 +147,5 @@ end
         end
       end
 		end
-
-    def flights_with_rankings
-    	self.tournament_day.flights.includes(:users, :tournament_day_results, :payout_results)
-    end
-
-    def ranked_flights
-    	tournament = self.tournament_day.tournament
-    	if tournament.tournament_days.count > 1
-        rankings = []
-
-        tournament.tournament_days.each do |day|
-          rankings << day.flights_with_rankings
-        end
-
-        ranked_flights = tournament.combine_rankings(rankings)
-    	else
-    		flights_with_rankings
-    	end
-    end
 	end
 end

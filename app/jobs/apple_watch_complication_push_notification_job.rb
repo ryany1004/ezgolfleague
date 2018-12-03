@@ -1,4 +1,4 @@
-class AppleWatchComplicationPushNotificationJob < ApplicationJob
+class AppleWatchComplicationPushNotificationJob < IosPushNotificationJob
   def perform(device, body, content_available = false, extra_data = nil)
     begin  
       if device.environment_name == "debug"

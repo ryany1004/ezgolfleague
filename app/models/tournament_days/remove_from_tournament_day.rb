@@ -2,7 +2,8 @@ module RemoveFromTournamentDay
   def remove_player_from_group(tournament_group:, user:, remove_from_teams: false)
     Tournament.transaction do
       tournament_group.golf_outings.each do |outing|
-        Rails.cache.write(tournament_group.tournament_day.scorecard_id_cache_key(outing.user), nil)
+        cache_key = self.cache_key(self.scorecard_cache_prefix(user: user))
+        Rails.cache.write(cache_key, nil)
 
         if user.id == outing.scorecard.designated_editor_id
           outing.scorecard.designated_editor_id = nil

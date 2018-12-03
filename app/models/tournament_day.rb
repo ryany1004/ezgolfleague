@@ -25,10 +25,10 @@ class TournamentDay < ApplicationRecord
 
   after_create :create_default_flight, if: :is_first_day?
 
-  #TEAM - MOVE ALL OF THESE
-  delegate :player_points, :player_payouts, :flights_with_rankings, :assign_payouts_from_scores, to: :game_type
-  delegate :allow_teams, :show_teams?, :players_create_teams?, :show_team_scores_for_all_teammates?, to: :game_type
-  ##END MOVE
+  # #TEAM - MOVE ALL OF THESE
+  # delegate :player_points, :player_payouts, :flights_with_rankings, :assign_payouts_from_scores, to: :game_type
+  # delegate :allow_teams, :show_teams?, :players_create_teams?, :show_team_scores_for_all_teammates?, to: :game_type
+  # ##END MOVE
 
   validates :course, presence: true
   validates :tournament_at, presence: true
@@ -152,6 +152,10 @@ class TournamentDay < ApplicationRecord
     TournamentGroup.includes(golf_outings: [:user, course_tee_box: :course_hole_tee_boxes, scorecard: [{scores: :course_hole}]]).where(tournament_day: self)
   end
 
+  def flights_with_rankings
+    self.flights.includes(:users, :tournament_day_results, :payout_results)
+  end
+
   #TODO: MOVE
   def scorecard_display_partial
     if self.course_holes.count <= 9
@@ -190,8 +194,27 @@ class TournamentDay < ApplicationRecord
     false
   end
 
+  def needs_daily_teams?
+    self.users_per_daily_teams > 0
+  end
+
+  def users_per_daily_teams
+    users_per = 0
+
+    self.scoring_rules.each do |rule|
+      users_per = rule.users_per_daily_team if rule.users_per_daily_team > 1
+    end
+
+    users_per
+  end
+
   def daily_teams
-    self.tournament_groups.collect(&:daily_teams).flatten!
+    flattened_teams = self.tournament_groups.collect(&:daily_teams).flatten!
+    if flattened_teams.present?
+      flattened_teams
+    else
+      []
+    end
   end
 
   def mandatory_scoring_rules

@@ -65,5 +65,32 @@ module ScoringComputer
 
 	    total_score
 	  end
+
+		def front_nine_hole_numbers
+			[1, 2, 3, 4, 5, 6, 7, 8, 9]
+		end
+
+		def back_nine_hole_numbers
+			[10, 11, 12, 13, 14, 15, 16, 17, 18]
+		end
+
+    def flights_with_rankings
+    	self.tournament_day.flights_with_rankings
+    end
+
+    def ranked_flights
+    	tournament = self.tournament_day.tournament
+    	if tournament.tournament_days.count > 1
+        rankings = []
+
+        tournament.tournament_days.each do |day|
+          rankings << day.flights_with_rankings
+        end
+
+        ranked_flights = tournament.combine_rankings(rankings)
+    	else
+    		flights_with_rankings
+    	end
+    end
 	end
 end

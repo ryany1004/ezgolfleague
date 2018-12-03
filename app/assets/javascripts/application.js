@@ -24,6 +24,11 @@
 //= require chosen-jquery
 //= require chosen_scaffold
 
+function trackUserEvent(eventName) {
+  mixpanel.track(eventName);
+  amplitude.getInstance().logEvent(eventName);
+}
+
 /*menu handler*/
 $(function(){
   function stripTrailingSlash(str) {

@@ -31,7 +31,6 @@
           <li <%= tournament_class_for_stage(stage, "basic_details") %> ><%= link_to 'Basic Details', edit_league_tournament_path(tournament.league, tournament) %></li>
           <li <%= tournament_class_for_stage(stage, "days") %> ><%= link_to 'Days', league_tournament_tournament_days_path(tournament.league, tournament) %></li>
           <li <%= tournament_class_for_stage(stage, "hole_information") %> ><%= link_to 'Holes', edit_league_tournament_course_holes_path(tournament.league, tournament) %></li>
-          <li <%= tournament_class_for_stage(stage, "notifications") %>><%= link_to 'Notifications', league_tournament_tournament_day_tournament_notifications_path(tournament.league, tournament, tournament.tournament_days.first) %></li>
         <% end -%>
       <% end -%>
     </ul>

@@ -8,8 +8,7 @@ class ScoringRulesController < BaseController
   end
 
   def create
-  	scoring_rule = params[:scoring_rule][:selected_class_name].constantize.create
-  	@tournament_day.scoring_rules << scoring_rule
+  	scoring_rule = params[:scoring_rule][:selected_class_name].constantize.create(tournament_day: @tournament_day)
 
   	redirect_to edit_league_tournament_tournament_day_scoring_rule_path(@tournament.league, @tournament, @tournament_day, scoring_rule)
   end
@@ -24,9 +23,9 @@ class ScoringRulesController < BaseController
   	end
 
     #handle daily teams if the rule requires
-    if @scoring_rule.team_type == ScoringRuleTeamType::DAILY
-      if @tournament_day.daily_teams.count == 0
-        @scoring_rule.create_daily_teams
+    if @scoring_rule.team_type == ScoringRuleTeamType::DAILY && @tournament_day.daily_teams.count == 0
+      @tournament_day.tournament_groups.each do |group|
+        group.create_daily_teams
       end
     else
       @tournament_day.daily_teams.destroy_all

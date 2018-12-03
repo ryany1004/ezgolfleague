@@ -13,8 +13,6 @@ class ScoringRule < ApplicationRecord
 
 	attr_accessor :selected_class_name
 
-	after_create :create_daily_teams
-
 	def form_class
 		becomes(ScoringRule)
 	end
@@ -51,7 +49,7 @@ class ScoringRule < ApplicationRecord
 		ScoringRuleTeamType::NONE
 	end
 
-	def users_per_team
+	def users_per_daily_team
 		1
 	end
 
@@ -125,21 +123,6 @@ class ScoringRule < ApplicationRecord
 	def users_eligible_for_payouts
 		self.users
 	end
-
-  def create_daily_teams
-		if self.team_type == ScoringRuleTeamType::DAILY
-			self.tournament_day.tournament_groups.each do |group|
-				team_number = 1
-				number_of_teams_to_create = group.max_number_of_players / self.users_per_team
-
-				number_of_teams_to_create.times do
-					DailyTeam.create(tournament_group: group, team_number: team_number)
-
-					team_number += 1
-				end
-			end
-		end
-	end
 end
 
 class ScoringRuleOption
@@ -156,7 +139,8 @@ class ScoringRuleOption
 
 	def self.scoring_rule_options
 		[
-			ScoringRuleOption.option(name: "Individual Stroke Play", class_name: "StrokePlayScoringRule")
+			ScoringRuleOption.option(name: "Individual Stroke Play", class_name: "StrokePlayScoringRule"),
+			ScoringRuleOption.option(name: "Two Man Best Ball", class_name: "TwoManBestBallScoringRule")
 		]
 	end
 end
