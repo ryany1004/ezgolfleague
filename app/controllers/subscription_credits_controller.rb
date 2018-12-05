@@ -24,13 +24,17 @@ class SubscriptionCreditsController < BaseController
     active_status = params[:is_active]
     unless active_status.blank?
       active_status.keys.each do |membership_id|
-      membership = @league.league_memberships.where(id: membership_id).first
+        membership = @league.league_memberships.where(id: membership_id).first
 
-      unless membership.blank?
-         membership.state = MembershipStates::ACTIVE_FOR_BILLING
-         membership.save
-       end
+        if membership.present?
+          membership.state = MembershipStates::ACTIVE_FOR_BILLING
+          membership.save
+        else
+          Rails.logger.info { "No membership was found for #{membership_id}" }
+        end
       end
+    else
+      Rails.logger.info { "No is_active param was present." }
     end
 
     active_after_update = @league.league_memberships.active.count
@@ -53,7 +57,7 @@ class SubscriptionCreditsController < BaseController
         redirect_to current_league_subscription_credits_path(@league), :flash => { :error => "There was an error processing your payment." }
       end
     else
-      redirect_to current_league_subscription_credits_path(@league), :flash => { :success => "The memberships were successfully updated." }
+      redirect_to current_league_subscription_credits_path(@league), :flash => { :success => "The memberships were successfully updated. Your account was not charged." }
     end
   end
 
