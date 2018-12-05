@@ -30,9 +30,9 @@ class SubscriptionCreditsController < BaseController
 
         if membership.present?
           membership.state = MembershipStates::ACTIVE_FOR_BILLING
-          membership.save
+          membership.save!
 
-          Rails.logger.info { "Updating Member to Active: #{membership.user.complete_name}" }
+          Rails.logger.info { "Updating Member to Active: #{membership.user.complete_name} #{membership.state}" }
         else
           Rails.logger.info { "No membership was found for #{membership_id}" }
         end

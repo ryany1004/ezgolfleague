@@ -1,7 +1,4 @@
 class LeagueMembership < ApplicationRecord
-  acts_as_paranoid
-  validates_as_paranoid
-  
   scope :active, -> { where("state = ?", MembershipStates::ACTIVE_FOR_BILLING) }
 
   belongs_to :league, touch: true
@@ -9,7 +6,7 @@ class LeagueMembership < ApplicationRecord
 
   validates :league, presence: true
   validates :user, presence: true
-  validates_uniqueness_of_without_deleted :league, uniqueness: { scope: :user }
+  validates :league, uniqueness: { scope: :user }
 
   paginates_per 50
 
