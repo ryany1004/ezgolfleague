@@ -3,8 +3,9 @@ module ScoringComputer
 		def generate_tournament_day_result(user:, scorecard: nil, destroy_previous_results: true)
 			return nil if !@scoring_rule.users.include? user
 
+			user_scorecard = self.tournament_day.primary_scorecard_for_user(user)
 			if scorecard.blank?
-				scorecard = self.tournament_day.primary_scorecard_for_user(user)
+				scorecard = user_scorecard
 				return nil if scorecard.blank?
 			end
 
@@ -78,7 +79,7 @@ module ScoringComputer
 	    		result = @scoring_rule.tournament_day_results.create(
 	    			user: user,
 	    			name: result_name,
-	    			primary_scorecard: scorecard,
+	    			primary_scorecard: user_scorecard,
 	    			flight: flight,
 	    			gross_score: gross_score,
 	    			net_score: net_score,
