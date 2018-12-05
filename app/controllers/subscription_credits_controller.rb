@@ -41,8 +41,7 @@ class SubscriptionCreditsController < BaseController
       Rails.logger.info { "No is_active param was present." }
     end
 
-    active_after_update = @league.league_memberships.active.count
-
+    active_after_update = @league.league_memberships.reload.active.count
     active_delta = active_after_update - active_before_update
 
     if active_delta > 0
@@ -61,7 +60,7 @@ class SubscriptionCreditsController < BaseController
         redirect_to current_league_subscription_credits_path(@league), :flash => { :error => "There was an error processing your payment." }
       end
     else
-      Rails.logger.info { "Active Delta #{active_delta}" }
+      Rails.logger.info { "Active Delta #{active_delta}. Active After Update: #{active_after_update}" }
 
       redirect_to current_league_subscription_credits_path(@league), :flash => { :success => "The memberships were successfully updated. Your account was not charged." }
     end
