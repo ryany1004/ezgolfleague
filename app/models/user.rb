@@ -31,6 +31,7 @@ class User < ApplicationRecord
   validates :email, presence: true, uniqueness: true
   validates :first_name, presence: true
   validates :last_name, presence: true
+  validates :time_zone, presence: true
 
   attr_accessor :should_invite, :agreed_to_terms, :account_to_merge_to
 

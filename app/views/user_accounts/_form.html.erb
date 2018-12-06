@@ -16,7 +16,7 @@
 
 	  <%= f.input :last_name, :label => 'Last Name', required: true %>
 
-    <%= f.input :time_zone, :label => 'Time Zone', required: true, collection: ActiveSupport::TimeZone.us_zones, value_method: :name %>
+    <%= f.input :time_zone, :label => 'Time Zone', required: true, collection: ActiveSupport::TimeZone.us_zones, value_method: :name, include_blank: false %>
 
     <% if @user_account.new_record? -%>
       <%= f.input :should_invite, :label => 'Send Invitation via Email', as: :boolean %>
