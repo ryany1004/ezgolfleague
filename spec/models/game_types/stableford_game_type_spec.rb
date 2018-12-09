@@ -1,37 +1,33 @@
 require 'rails_helper'
 
-#ActiveRecord::Base.logger = Logger.new(STDOUT) if defined?(ActiveRecord::Base)
-
 describe "Stableford" do
-  let(:generic_stableford) { build(:stableford_game_type) }
+  let(:generic_stableford) { build(:individual_modified_stableford_scoring_rule) }
 
   it "#display_name" do
-    expect(generic_stableford.display_name).to eq("Individual Modified Stableford")
+    expect(generic_stableford.name).to eq("Stableford")
   end
 
-  it "#game_type_id" do
-    expect(generic_stableford.game_type_id).to eq(3)
+  it "#setup_partial" do
+    expect(generic_stableford.setup_partial).to eq("shared/game_type_setup/individual_stableford")
   end
 
-  it "#show_other_scorecards?"
+  it "#can_be_played?" do
+    tournament = create_stableford_tournament(strokes: [1,3,5,1,2,5,1,2,6,1,2,6,1,4,2,4,1,5])
 
-  it "#allow_teams" do
-    expect(generic_stableford.allow_teams).to eq(GameTypes::TEAMS_DISALLOWED)
+    expect(tournament.first_day.can_be_played?).to eq(true)
   end
 
-  it "#other_group_members"
+  it "verify_results" do
+    tournament = create_stableford_tournament(strokes: [1,3,5,1,2,5,1,2,6,1,2,6,1,4,2,4,1,5])
+    result = tournament.first_day.scoring_rules.first.tournament_day_results.first
 
-  it "#user_is_in_group?"
-
-  it "#setup_partial"
-
-  it "#can_be_played?"
-
-  it "#related_scorecards_for_user"
-
-  it "#compute_player_score"
-
-  it "verify_results"
-
-  it "verify_reverse_sorting"
+    expect(result.gross_score).to eq(63)
+    expect(result.net_score).to eq(57)
+    expect(result.back_nine_net_score).to eq(38)
+    expect(result.front_nine_net_score).to eq(19)
+    expect(result.front_nine_gross_score).to eq(22)
+    expect(result.par_related_net_score).to eq(-14)
+    expect(result.par_related_gross_score).to eq(-8)
+    expect(result.adjusted_score).to eq(52)
+  end
 end

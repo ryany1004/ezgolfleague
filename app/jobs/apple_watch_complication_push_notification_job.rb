@@ -10,7 +10,7 @@ class AppleWatchComplicationPushNotificationJob < IosPushNotificationJob
       notification = Apnotic::Notification.new(device.device_identifier)
       notification.topic = "com.ezgolfleague.GolfApp.complication"
       notification.content_available = 1
-      notification.custom_payload = {data: content}
+      notification.custom_payload = {data: extra_data}
 
       response = pusher.push(notification)
 

@@ -28,7 +28,9 @@ class ScoringRulesController < BaseController
         group.create_daily_teams
       end
     else
-      @tournament_day.daily_teams.destroy_all
+      @tournament_day.daily_teams.each do |t|
+        t.destroy
+      end
     end
 
   	@scoring_rule.tournament_day_results.destroy_all #removed cached results as gametype influences scores

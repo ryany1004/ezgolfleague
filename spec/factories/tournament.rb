@@ -8,5 +8,9 @@ FactoryBot.define do
     factory :stroke_play_tournament do
     	name { "Stroke Play" }
     end
+
+    factory :stableford_tournament do
+    	name { "Stableford" }
+    end
   end
 end

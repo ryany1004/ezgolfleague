@@ -11,8 +11,6 @@ namespace :scoring_rules do
         rule = MatchPlayScoringRule.create
       when 3
         rule = StablefordScoringRule.create
-
-        raise "Needs Metadata Transform"
       end
 
   		raise "No Scoring Rule" if rule.blank?

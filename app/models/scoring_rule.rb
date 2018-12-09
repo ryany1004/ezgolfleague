@@ -80,6 +80,10 @@ class ScoringRule < ApplicationRecord
 		false
 	end
 
+	def leaderboard_partial_name
+		nil
+	end
+
 	def score
     self.scoring_computer.generate_tournament_day_results
 	end
@@ -140,6 +144,7 @@ class ScoringRuleOption
 	def self.scoring_rule_options
 		[
 			ScoringRuleOption.option(name: "Individual Stroke Play", class_name: "StrokePlayScoringRule"),
+			ScoringRuleOption.option(name: "Individual Modified Stableford", class_name: "StablefordScoringRule"),
 			ScoringRuleOption.option(name: "Two Man Best Ball", class_name: "TwoManBestBallScoringRule")
 		]
 	end

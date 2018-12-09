@@ -76,7 +76,28 @@ module TournamentHelpers
   def create_match_play_tournament
   end
 
-  def create_stableford_tournament
+  def create_stableford_tournament(strokes:)
+    golfer_one = create(:user, first_name: "Primary", last_name: "Golfer", email: "golfer_one@test.com")
+
+    league = create(:league)
+    league_season = create(:league_season, league: league)
+
+    tournament = create(:stableford_tournament, league: league)
+    first_day = create(:tournament_day_with_flights, tournament: tournament)
+    scoring_rule = create(:individual_modified_stableford_scoring_rule, tournament_day: first_day)
+    group = create(:tournament_group, tournament_day: first_day)
+    payout = create(:payout, scoring_rule: scoring_rule, flight: first_day.flights.last)
+
+    first_day.add_player_to_group(tournament_group: group, user: golfer_one)
+
+    golfer_one_scorecard = first_day.primary_scorecard_for_user(golfer_one)
+    self.populate_scorecard(golfer_one_scorecard, strokes)
+
+    scoring_computer = scoring_rule.scoring_computer
+    scoring_computer.generate_tournament_day_results
+    scoring_computer.assign_payouts
+
+    tournament
   end
 
   def populate_scorecard(scorecard, strokes)
