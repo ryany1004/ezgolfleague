@@ -34,11 +34,11 @@ class ScorecardPresenter
   end
 
   def tee_time
-    return self.primary_scorecard.golf_outing.tournament_group.tee_time_at
+    self.primary_scorecard.golf_outing.tournament_group.tee_time_at
   end
 
   def tee_names
-    return self.primary_scorecard&.golf_outing&.course_tee_box&.name
+    self.primary_scorecard&.golf_outing&.course_tee_box&.name
   end
 
   def user_can_edit_any_scorecard?
@@ -48,39 +48,51 @@ class ScorecardPresenter
       return true if self.primary_scorecard.tournament_day.user_can_edit_scorecard(self.current_user, scorecard) == true
     end
 
-    return can_edit_any
+    can_edit_any
   end
 
   def user_can_edit_scorecard?(scorecard)
-    return self.primary_scorecard.tournament_day.user_can_edit_scorecard(self.current_user, scorecard)
+    self.primary_scorecard.tournament_day.user_can_edit_scorecard(self.current_user, scorecard)
   end
 
   def user_can_become_designated_scorer?(user)
-    return self.tournament_day.user_can_become_designated_scorer(user, self.primary_scorecard)
+    self.tournament_day.user_can_become_designated_scorer(user, self.primary_scorecard)
   end
 
   def designated_scorer
-    return self.primary_scorecard.designated_editor
+    self.primary_scorecard.designated_editor
   end
 
   def includes_extra_scoring_column?
-    return self.primary_scorecard.includes_extra_scoring_column?
+    self.primary_scorecard.includes_extra_scoring_column?
   end
 
   def sliced_scores
-    return self.primary_scorecard.scores.each_slice(self.primary_scorecard.tournament_day.course_holes.count / 2).to_a
+    self.primary_scorecard.scores.each_slice(self.primary_scorecard.tournament_day.course_holes.count / 2).to_a
   end
 
   def scorecard_total_par
-    return self.primary_scorecard.tournament_day.course_holes.map {|hole| hole.par }.sum
+    self.primary_scorecard.tournament_day.course_holes.map {|hole| hole.par }.sum
   end
 
-  def scorecard_score_cell_partial
-    return self.primary_scorecard.tournament_day.game_type.scorecard_score_cell_partial
+  def scorecard_score_cell_partials
+    partials = []
+
+    self.primary_scorecard.tournament_day.scoring_rules.each do |rule|
+      partials << {rule: rule, partial: rule.scorecard_score_cell_partial}
+    end
+
+    partials
   end
 
-  def scorecard_post_embed_partial
-    return self.primary_scorecard.tournament_day.game_type.scorecard_post_embed_partial
+  def scorecard_post_embed_partials
+    partials = []
+
+    self.primary_scorecard.tournament_day.scoring_rules.each do |rule|
+      partials << {rule: rule, partial: rule.scorecard_post_embed_partial}
+    end
+
+    partials
   end
 
   def show_finalization?

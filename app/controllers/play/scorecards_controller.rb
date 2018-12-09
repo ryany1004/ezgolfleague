@@ -40,7 +40,7 @@ class Play::ScorecardsController < Play::BaseController
         other_scorecard.save
 
         scorecard.tournament_day.score_user(other_scorecard.golf_outing.user) unless other_scorecard.golf_outing.blank?
-        scorecard.tournament_day.game_type.after_updating_scores_for_scorecard(other_scorecard)
+        scorecard.tournament_day.game_type.after_updating_scores_for_scorecard(scorecard: other_scorecard)
       end
     end
 

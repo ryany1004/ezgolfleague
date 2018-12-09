@@ -97,7 +97,8 @@ module Playable
 
     self.tournament_days.each do |day|
       day.scoring_rules.each do |rule|
-        total_score += rule.user_score(user: user)
+        result = rule.result_for_user(user: user)
+        total_score += result.net_score unless result.blank?
       end
     end
 
@@ -114,9 +115,11 @@ module Playable
     end
 
     #TODO: remove when contests are re-factored
-    self.tournament_day.contests.each do |c|
-      c.combined_contest_results.each do |r|
-        total_points = total_points + r.points if r.winner == user
+    self.tournament_days.each do |day|
+      day.contests.each do |c|
+        c.combined_contest_results.each do |r|
+          total_points = total_points + r.points if r.winner == user
+        end
       end
     end
 

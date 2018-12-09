@@ -53,6 +53,10 @@ class ScoringRule < ApplicationRecord
 		1
 	end
 
+	def override_scorecard_name(scorecard:)
+		nil
+	end
+
 	#Some scoring rules, like former contests, apply to the whole field, while some, like former game types, apply by flight.
 	def flight_based_payouts?
 		true
@@ -94,6 +98,10 @@ class ScoringRule < ApplicationRecord
 
 	def assign_payouts
 		self.scoring_computer.assign_payouts
+	end
+
+	def result_for_user(user:)
+		self.tournament_day_results.where(user: user).first
 	end
 
 	def points_for_user(user:)
@@ -145,7 +153,9 @@ class ScoringRuleOption
 		[
 			ScoringRuleOption.option(name: "Individual Stroke Play", class_name: "StrokePlayScoringRule"),
 			ScoringRuleOption.option(name: "Individual Modified Stableford", class_name: "StablefordScoringRule"),
-			ScoringRuleOption.option(name: "Two Man Best Ball", class_name: "TwoManBestBallScoringRule")
+			ScoringRuleOption.option(name: "Two Man Best Ball", class_name: "TwoManBestBallScoringRule"),
+			ScoringRuleOption.option(name: "Two Man Scramble", class_name: "TwoManScrambleScoringRule"),
+			ScoringRuleOption.option(name: "Four Man Scramble", class_name: "FourManScrambleScoringRule")
 		]
 	end
 end

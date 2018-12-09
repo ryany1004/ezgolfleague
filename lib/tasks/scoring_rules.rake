@@ -11,6 +11,10 @@ namespace :scoring_rules do
         rule = MatchPlayScoringRule.create
       when 3
         rule = StablefordScoringRule.create
+      when 7
+        rule = TwoManScrambleScoringRule.create
+      when 8
+        rule = FourManScrambleScoringRule.create
       end
 
   		raise "No Scoring Rule" if rule.blank?

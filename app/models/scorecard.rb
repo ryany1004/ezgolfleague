@@ -151,13 +151,13 @@ class Scorecard < ApplicationRecord
   end
 
   def name(shorten_for_print = false)
-    override_name = self.tournament_day.game_type.override_scorecard_name_for_scorecard(self)
+    self.tournament_day.scoring_rules.each do |rule|
+      overridden_name = rule.override_scorecard_name(scorecard: self)
 
-    unless override_name.blank?
-      override_name
-    else
-      self.golf_outing.user.short_name
+      return overridden_name if overridden_name.present?
     end
+
+    return self.golf_outing.user.short_name
   end
 
   def individual_name

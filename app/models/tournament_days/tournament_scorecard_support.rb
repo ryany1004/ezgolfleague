@@ -56,7 +56,9 @@ module TournamentScorecardSupport
     return false if !scorecard.designated_editor.blank?
 
     group = scorecard.golf_outing.tournament_group
-    return true if self.user_is_in_group?(user, group)
+    self.scoring_rules.each do |rule|
+      return true if rule.other_group_members(user: user).include? user
+    end
 
     false
   end

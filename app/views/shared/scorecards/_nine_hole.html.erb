@@ -43,9 +43,8 @@
                 </br><em><%= score.associated_text %></em>
               <% end -%>
 
-              <% unless p.scorecard_score_cell_partial.blank? -%>
-							</br><%= render partial: p.scorecard_score_cell_partial, locals: {score: score, scorecards: p.all_scorecards} %>
-              <% end -%>
+              <% p.scorecard_score_cell_partials.each do |partial| %>
+                </br><%= render partial: partial[:partial], locals: {scoring_rule: partial[:rule], score: score, scorecards: p.all_scorecards} %>
             </td>
           <% end -%>
         <% end -%>
@@ -124,9 +123,9 @@
 </table>
 
 <!-- Game Type Support -->
-<% unless p.scorecard_post_embed_partial.blank? -%>
-  <%= render partial: p.scorecard_post_embed_partial, locals: {scorecards: p.all_scorecards, course_holes: p.course_holes} %>
-<% end -%>
+<% p.scorecard_post_embed_partials.each do |partial| %>
+  <%= render partial: partial[:partial], locals: {scoring_rule: partial[:rule], scorecards: p.all_scorecards, course_holes: p.course_holes} %>
+<% end %>
 
 <!-- Finalize Buttons -->
 <% if p.show_finalization? -%>
