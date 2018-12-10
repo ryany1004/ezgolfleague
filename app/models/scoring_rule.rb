@@ -4,6 +4,16 @@ module ScoringRuleTeamType
   DAILY = 3
 end
 
+module ScoringRulePayoutType
+	PREDETERMINED = 1
+	POT = 2
+end
+
+module ScoringRulePayoutAssignmentType
+	CALCULATED = 1
+	MANUAL = 2
+end
+
 class ScoringRule < ApplicationRecord
 	belongs_to :tournament_day, touch: true, inverse_of: :scoring_rules
 	has_many :payouts, inverse_of: :scoring_rule, dependent: :destroy
@@ -55,6 +65,14 @@ class ScoringRule < ApplicationRecord
 
 	def override_scorecard_name(scorecard:)
 		nil
+	end
+
+	def payout_type
+		ScoringRulePayoutType::PREDETERMINED
+	end
+
+	def payout_assignment_type
+		ScoringRulePayoutAssignmentType::CALCULATED
 	end
 
 	#Some scoring rules, like former contests, apply to the whole field, while some, like former game types, apply by flight.
