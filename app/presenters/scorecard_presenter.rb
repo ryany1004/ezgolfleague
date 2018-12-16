@@ -79,7 +79,7 @@ class ScorecardPresenter
     partials = []
 
     self.primary_scorecard.tournament_day.scoring_rules.each do |rule|
-      partials << {rule: rule, partial: rule.scorecard_score_cell_partial}
+      partials << {rule: rule, partial: rule.scorecard_score_cell_partial} if rule.respond_to?(:scorecard_score_cell_partial) && rule.scorecard_score_cell_partial.present?
     end
 
     partials
@@ -89,7 +89,7 @@ class ScorecardPresenter
     partials = []
 
     self.primary_scorecard.tournament_day.scoring_rules.each do |rule|
-      partials << {rule: rule, partial: rule.scorecard_post_embed_partial}
+      partials << {rule: rule, partial: rule.scorecard_post_embed_partial} if rule.respond_to?(:scorecard_score_cell_partial) && rule.scorecard_score_cell_partial.present?
     end
 
     partials
