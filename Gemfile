@@ -46,6 +46,7 @@ gem 'bootsnap', require: false
 group :development do
   gem 'web-console'
   gem 'listen'
+  gem 'rubocop'
 end
 
 group :development, :test do

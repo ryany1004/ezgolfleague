@@ -4,39 +4,39 @@ class Contest < ApplicationRecord
 
   belongs_to :tournament_day, inverse_of: :contests, touch: true
 
-  #handle single winner contests
-  belongs_to :overall_winner, class_name: "ContestResult", foreign_key: "overall_winner_contest_result_id", dependent: :destroy
+  # handle single winner contests
+  belongs_to :overall_winner, class_name: 'ContestResult', foreign_key: 'overall_winner_contest_result_id', dependent: :destroy
 
   has_many :payments, inverse_of: :contest
   has_many :contest_results, inverse_of: :contest
 
-  #handle multiple hole contests
+  # handle multiple hole contests
   has_many :contest_holes, dependent: :destroy
   has_many :course_holes, through: :contest_holes
 
-  has_and_belongs_to_many :users #contestants
+  has_and_belongs_to_many :users # contestants
 
   validates :dues_amount, numericality: { greater_than_or_equal_to: 0 }
 
   def human_type
-    if self.contest_type == 0
-      "Custom: Overall Winner"
+    if self.contest_type.zero?
+      'Custom: Overall Winner'
     elsif self.contest_type == 1
-      "Custom: By Hole"
+      'Custom: By Hole'
     elsif self.contest_type == 2
-      "Net Skins"
+      'Net Skins'
     elsif self.contest_type == 3
-      "Gross Skins"
+      'Gross Skins'
     elsif self.contest_type == 4
-      "Net Low"
+      'Net Low'
     elsif self.contest_type == 5
-      "Gross Low"
+      'Gross Low'
     elsif self.contest_type == 6
-      "Net Low Tournament Total"
+      'Net Low Tournament Total'
     elsif self.contest_type == 7
-      "Gross Low Tournament Total"
+      'Gross Low Tournament Total'
     elsif self.contest_type == 8
-      "Net Skins + Gross Skins"
+      'Net Skins + Gross Skins'
     end
   end
 
@@ -45,19 +45,19 @@ class Contest < ApplicationRecord
   end
 
   def is_team_scored?
-    if self.contest_type == 2 or self.contest_type == 3 or self.contest_type == 8
+    if self.contest_type == 2 || self.contest_type == 3 || self.contest_type == 8
       true
     else
       false
     end
   end
 
-  ##
-
   def dues_for_user(user, include_credit_card_fees = false)
-    membership = user.league_memberships.where("league_id = ?", self.tournament_day.tournament.league.id).first
+    membership = user.league_memberships.where('league_id = ?', self.tournament_day.tournament.league.id).first
 
-    unless membership.blank?
+    if membership.blank?
+      0
+    else
       dues_amount = self.dues_amount
 
       credit_card_fees = 0
@@ -66,8 +66,6 @@ class Contest < ApplicationRecord
       total = dues_amount + credit_card_fees
 
       total
-    else
-      0
     end
   end
 
@@ -75,7 +73,7 @@ class Contest < ApplicationRecord
     membership = user.league_memberships.where("league_id = ?", self.tournament_day.tournament.league.id).first
 
     cost_lines = [
-      {name: "#{self.name} Fees", price: self.dues_amount.to_f, server_id: self.id.to_s}
+      { name: "#{self.name} Fees", price: self.dues_amount.to_f, server_id: self.id.to_s }
     ]
 
     if include_credit_card_fees == true

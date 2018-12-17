@@ -2,9 +2,9 @@ class LeagueSeason < ApplicationRecord
   belongs_to :league, touch: true, inverse_of: :league_seasons
 
   has_many :payments, inverse_of: :league_season
-  has_many :subscription_credits, ->{ order 'created_at DESC' }
-  has_many :league_season_scoring_groups, ->{ order 'name' }, inverse_of: :league_season, dependent: :destroy
-  has_many :league_season_ranking_groups, ->{ order 'name' }, inverse_of: :league_season, dependent: :destroy
+  has_many :subscription_credits, -> { order 'created_at DESC' }
+  has_many :league_season_scoring_groups, -> { order 'name' }, inverse_of: :league_season, dependent: :destroy
+  has_many :league_season_ranking_groups, -> { order 'name' }, inverse_of: :league_season, dependent: :destroy
 
   validates :name, :starts_at, :ends_at, :league, presence: true
 
@@ -73,31 +73,25 @@ class LeagueSeason < ApplicationRecord
         user_is_in_any_group = true if g.users.include? u
       end
 
-      if !user_is_in_any_group
-        users_not_in_groups << u
-      end
+      users_not_in_groups << u unless user_is_in_any_group
     end
 
     users_not_in_groups
   end
 
-  #date parsing
+  # date parsing
   def starts_at=(date)
-    begin
-      parsed = DateTime.strptime("#{date} 12:01 AM #{Time.zone.now.formatted_offset}", JAVASCRIPT_DATETIME_PICKER_FORMAT)
-      super parsed
-    rescue
-      write_attribute(:starts_at, date)
-    end
+    parsed = DateTime.strptime("#{date} 12:01 AM #{Time.zone.now.formatted_offset}", JAVASCRIPT_DATETIME_PICKER_FORMAT)
+    super parsed
+  rescue
+    write_attribute(:starts_at, date)
   end
 
   def ends_at=(date)
-    begin
-      parsed = DateTime.strptime("#{date} 11:59 PM #{Time.zone.now.formatted_offset}", JAVASCRIPT_DATETIME_PICKER_FORMAT)
-      super parsed
-    rescue
-      write_attribute(:ends_at, date)
-    end
+    parsed = DateTime.strptime("#{date} 11:59 PM #{Time.zone.now.formatted_offset}", JAVASCRIPT_DATETIME_PICKER_FORMAT)
+    super parsed
+  rescue
+    write_attribute(:ends_at, date)
   end
 
   def complete_name
@@ -105,17 +99,16 @@ class LeagueSeason < ApplicationRecord
   end
 
   def user_has_paid?(user)
-    if self.dues_amount == 0
+    if self.dues_amount.zero?
       true
     else
-      payments = self.payments.where(user: user).where("payment_amount > 0").where("payment_type = ?", "#{user.complete_name} League Dues")
+      payments = self.payments.where(user: user).where('payment_amount > 0').where('payment_type = ?', "#{user.complete_name} League Dues")
 
-      if payments.length > 0
+      if !payments.length.empty?
         true
       else
         false
       end
     end
   end
-
 end

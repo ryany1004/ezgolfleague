@@ -123,24 +123,24 @@ class ScoringRule < ApplicationRecord
 	end
 
 	def points_for_user(user:)
-	  return nil if !self.users.include? user
+	  return 0 unless self.users.include? user
 
 	  points = 0
 
 	  self.payout_results.each do |p|
-	    points = points + p.points if p.user == user && p.points
+	    points += p.points if p.user == user && p.points
 	  end
 
 	  points
 	end
 
 	def payouts_for_user(user:)
-	  return nil if !self.users.include? user
+	  return 0 unless self.users.include? user
 
 	  payouts = 0
 
 	  self.payout_results.each do |p|
-	    payouts = payouts + p.payout_amount if p.user == user && p.payout_amount
+	    payouts += p.payout_amount if p.user == user && p.payout_amount
 	  end
 
 	  payouts
@@ -169,11 +169,11 @@ class ScoringRuleOption
 
 	def self.scoring_rule_options
 		[
-			ScoringRuleOption.option(name: "Individual Stroke Play", class_name: "StrokePlayScoringRule"),
-			ScoringRuleOption.option(name: "Individual Modified Stableford", class_name: "StablefordScoringRule"),
-			ScoringRuleOption.option(name: "Two Man Best Ball", class_name: "TwoManBestBallScoringRule"),
-			ScoringRuleOption.option(name: "Two Man Scramble", class_name: "TwoManScrambleScoringRule"),
-			ScoringRuleOption.option(name: "Four Man Scramble", class_name: "FourManScrambleScoringRule")
+			ScoringRuleOption.option(name: 'Individual Stroke Play', class_name: 'StrokePlayScoringRule'),
+			ScoringRuleOption.option(name: 'Individual Modified Stableford', class_name: 'StablefordScoringRule'),
+			ScoringRuleOption.option(name: 'Two Man Best Ball', class_name: 'TwoManBestBallScoringRule'),
+			ScoringRuleOption.option(name: 'Two Man Scramble', class_name: 'TwoManScrambleScoringRule'),
+			ScoringRuleOption.option(name: 'Four Man Scramble', class_name: 'FourManScrambleScoringRule')
 		]
 	end
 end
