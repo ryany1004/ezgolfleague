@@ -23,7 +23,7 @@ module Users
 
 	    return nil if self.handicap_index.blank? or course_tee_box.blank? or golf_outing.blank? #this will fail if the user is not flighted
 
-	    if golf_outing.tournament_group.tournament_day.course_holes.count == 9
+	    if golf_outing.tournament_group.tournament_day.scorecard_base_scoring_rule.course_holes.count == 9
 	      self.nine_hole_handicap(golf_outing.tournament_group.tournament_day.course, course_tee_box)
 	    else
 	      self.standard_handicap(golf_outing.tournament_group.tournament_day.course, course_tee_box)

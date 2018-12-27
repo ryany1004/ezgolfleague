@@ -17,20 +17,12 @@ class TournamentDaysController < BaseController
     @tournament_day.tournament = @tournament
     @tournament_day.game_type_id = 1
 
-    @tournament_day.course.course_holes.each do |ch|
-      @tournament_day.course_holes << ch
-    end
-
     @tournament_day.skip_date_validation = current_user.is_super_user
 
     if @tournament_day.save
       self.update_tournament_date
 
-      if params[:commit] == "Save & Continue"
-        redirect_to edit_league_tournament_course_holes_path(@tournament.league, @tournament), flash: { success: "The day was successfully created." }
-      else
-        redirect_to new_league_tournament_tournament_day_path(@tournament.league, @tournament), flash: { success: "The day was successfully created." }
-      end
+      redirect_to new_league_tournament_tournament_day_path(@tournament.league, @tournament), flash: { success: "The day was successfully created." }
     else
       initialize_form
 

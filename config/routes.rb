@@ -164,6 +164,8 @@ Rails.application.routes.draw do
           get 'options', on: :collection
 
           resources :payouts
+
+          resource :course_holes, path: "course-holes", only: [:edit, :update], controller: "scoring_rules/course_holes"
         end
 
         resources :tournament_notifications
@@ -171,15 +173,13 @@ Rails.application.routes.draw do
         resources :scorecards, except: [:delete] do
           patch 'disqualify'
         end
-      end
+      end      
 
       resource :auto_scheduling, path: "autoschedule", only: [:update], controller: "tournaments/auto_scheduling" do
         patch 'run_auto_scheduling'
       end
 
       resource :finalization, path: "finalize", only: [:show, :update], controller: "tournaments/finalization"
-
-      resource :course_holes, path: "course-holes", only: [:edit, :update], controller: "tournaments/course_holes"
 
       #UPDATE/FIX
       get 'tournament_days/:tournament_day_id/players' => 'golf_outings#players', as: :day_players

@@ -10,11 +10,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181201204652) do
+ActiveRecord::Schema.define(version: 2018_12_24_003950) do
 
   # These are extensions that must be enabled in order to support this database
-  enable_extension "plpgsql"
   enable_extension "pg_stat_statements"
+  enable_extension "plpgsql"
 
   create_table "contest_holes", force: :cascade do |t|
     t.integer "contest_id"
@@ -357,6 +357,8 @@ ActiveRecord::Schema.define(version: 20181201204652) do
     t.datetime "updated_at", null: false
     t.datetime "deleted_at"
     t.bigint "scoring_rule_id"
+    t.bigint "scoring_rule_course_hole_id"
+    t.string "detail"
     t.index ["deleted_at"], name: "index_payout_results_on_deleted_at"
     t.index ["flight_id"], name: "index_payout_results_on_flight_id"
     t.index ["payout_id"], name: "index_payout_results_on_payout_id"
@@ -397,10 +399,26 @@ ActiveRecord::Schema.define(version: 20181201204652) do
     t.integer "sort_order", default: 0
     t.boolean "has_notified", default: false
     t.datetime "deleted_at"
+    t.integer "net_strokes", default: 0
     t.index ["course_hole_id"], name: "index_scores_on_course_hole_id"
     t.index ["deleted_at"], name: "index_scores_on_deleted_at"
     t.index ["scorecard_id"], name: "index_scores_on_scorecard_id"
     t.index ["sort_order"], name: "index_scores_on_sort_order"
+  end
+
+  create_table "scoring_rule_course_holes", force: :cascade do |t|
+    t.bigint "course_hole_id"
+    t.bigint "scoring_rule_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "scoring_rule_participations", force: :cascade do |t|
+    t.bigint "user_id"
+    t.bigint "scoring_rule_id"
+    t.decimal "dues_paid", default: "0.0"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "scoring_rules", force: :cascade do |t|

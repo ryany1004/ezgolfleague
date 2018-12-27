@@ -10,6 +10,10 @@ class ScoringRulesController < BaseController
   def create
   	scoring_rule = params[:scoring_rule][:selected_class_name].constantize.create(tournament_day: @tournament_day)
 
+    @tournament_day.course.course_holes.each do |ch|
+      scoring_rule.course_holes << ch
+    end
+
   	redirect_to edit_league_tournament_tournament_day_scoring_rule_path(@tournament.league, @tournament, @tournament_day, scoring_rule)
   end
 

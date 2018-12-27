@@ -59,7 +59,7 @@ module ScoringRuleScorecards
         return
       end
 
-      self.scoring_rule.tournament_day.course_holes.each_with_index do |hole, i|
+      self.scoring_rule.tournament_day.scorecard_base_scoring_rule.course_holes.each_with_index do |hole, i|
         if self.course_hole_number_suppression_list.include? hole.hole_number
           score = DerivedScorecardScore.new
           score.strokes = 0

@@ -6,21 +6,13 @@ module Flights
     def self.compute_rank(flight)
     	rank_computer = self.new
     	rank_computer.flight = flight
+      scoring_computer = self.scoring_rule.scoring_computer
 
-      sort_param = "par_related_net_score"
+      reorder_param = scoring_computer.rank_results_sort_reorder_param
+      sort_descending = scoring_computer.rank_results_sort_descending
 
-    	if flight.tournament_day.game_type_id == 1
-        rank_computer.sort_individual_stroke_play
-    	elsif flight.tournament_day.game_type_id == 3
-    		sort_param = "net_score"
-
-    		rank_computer.sort_by_parameter(sort_param, true)
-      elsif flight.tournament_day.game_type_id == 14
-        rank_computer.combine_team_score_results
-        rank_computer.sort_individual_stroke_play
-    	else
-    		rank_computer.sort_by_parameter(sort_param)
-    	end
+      rank_computer.combine_team_score_results if scoring_computer.rank_should_combine_daily_team_results?
+      rank_computer.sort_by_parameter(reorder_param, sort_descending)
 
     	rank_computer.default_compute_rank(sort_param)
     end
@@ -73,36 +65,6 @@ module Flights
     	self.sorted_results = tournament_day_results.reorder(parameter)
     end
 
-     def sort_individual_stroke_play
-      if game_type.use_back_9_to_break_ties?
-        Rails.logger.info { "Tie-breaking is enabled" }
-
-        if game_type.tournament_day.course_holes.count == 9 #if a 9-hole tournament, compare score by score
-          Rails.logger.info { "9-Hole Tie-Breaking" }
-
-          par_related_net_scores = tournament_day_results.map{ |x| x.par_related_net_score }
-
-          if par_related_net_scores.uniq.length != par_related_net_scores.length
-            Rails.logger.info { "We have tied players, using net_scores" }
-
-            self.sorted_results = self.tournament_day_results.reorder("par_related_net_score, net_score")
-          else
-            Rails.logger.info { "No tied players..." }
-
-            self.sorted_results = self.tournament_day_results.reorder("par_related_net_score, back_nine_net_score")
-          end
-        else
-          Rails.logger.info { "18-Hole Tie-Breaking" }
-
-          self.sorted_results = self.tournament_day_results.reorder("par_related_net_score, back_nine_net_score")
-        end
-      else
-        Rails.logger.info { "Tie-breaking is disabled" }
-
-        self.sort_by_parameter("par_related_net_score")
-      end
-    end
-
     # Rank
 
     def default_compute_rank(sort_parameter)
@@ -148,8 +110,8 @@ module Flights
 
     private
 
-    def game_type
-    	flight.tournament_day.game_type
+    def scoring_rule
+    	flight.tournament_day.scorecard_base_scoring_rule
     end
 
 	end

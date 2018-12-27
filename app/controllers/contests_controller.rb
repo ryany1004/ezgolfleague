@@ -33,7 +33,7 @@ class ContestsController < BaseController
           success_message = "The contest was successfully created. Please specify the dues for each player entering."
 
           if @contest.is_by_hole? == true
-            @tournament_day.course_holes.each do |hole|
+            @tournament_day.scorecard_base_scoring_rule.each do |hole|
               @contest.course_holes << hole
             end
 

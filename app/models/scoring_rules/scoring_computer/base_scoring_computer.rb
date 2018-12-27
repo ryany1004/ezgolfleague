@@ -22,6 +22,19 @@ module ScoringComputer
 			results
 		end
 
+		def rank_results_sort_reorder_param
+			"par_related_net_score"
+		end
+
+		def rank_results_sort_descending
+			false
+		end
+
+		#some daily team types like two man stroke play return true to combine ranks
+		def rank_should_combine_daily_team_results?
+			false
+		end
+
 		def rank_results
 			RankFlightsJob.perform_now(@scoring_rule.tournament_day)
 		end

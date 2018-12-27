@@ -12,6 +12,7 @@
   <thead>
     <tr>
       <th>Name</th>
+      <th>Course Holes</th>
       <th>Payouts</th>
       <% if user_is_league_admin(current_user, @tournament.league) -%>
       <th><%= link_to 'Add Game Type', new_league_tournament_tournament_day_scoring_rule_path(@tournament.league, @tournament, @tournament_day), class: 'btn btn-primary' %></th>
@@ -24,6 +25,9 @@
   <% @scoring_rules.each do |scoring_rule| %>
     <tr>
       <td><%= link_to scoring_rule.name, edit_league_tournament_tournament_day_scoring_rule_path(@tournament.league, @tournament, @tournament_day, scoring_rule) %></td>
+      <td>
+        <%= link_to "Setup", edit_league_tournament_tournament_day_scoring_rule_course_holes_path(@tournament.league, @tournament, @tournament_day, scoring_rule) %>
+      </td>
       <td>
         <% if scoring_rule.payout_type == ScoringRulePayoutType::PREDETERMINED %>
           <%= link_to "Setup (#{scoring_rule.payouts.count})", league_tournament_tournament_day_scoring_rule_payouts_path(@tournament.league, @tournament, @tournament_day, scoring_rule) %>
@@ -41,6 +45,7 @@
   </tbody>
   <tfoot>
     <tr>
+      <th>&nbsp;</th>
       <th>&nbsp;</th>
       <th>&nbsp;</th>
       <% if user_is_league_admin(current_user, @tournament.league) -%>

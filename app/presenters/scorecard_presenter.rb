@@ -26,7 +26,7 @@ class ScorecardPresenter
 
     self.user = self.primary_scorecard.golf_outing.user
     self.flight = self.primary_scorecard.tournament_day.flight_for_player(self.user)
-    self.course_holes = self.primary_scorecard.tournament_day.course_holes
+    self.course_holes = self.primary_scorecard.tournament_day.scorecard_base_scoring_rule.course_holes
     self.number_of_holes = self.course_holes.count
     self.score_count = self.primary_scorecard.scores.count
     self.tournament_day = self.primary_scorecard.golf_outing.tournament_group.tournament_day
@@ -68,11 +68,11 @@ class ScorecardPresenter
   end
 
   def sliced_scores
-    self.primary_scorecard.scores.each_slice(self.primary_scorecard.tournament_day.course_holes.count / 2).to_a
+    self.primary_scorecard.scores.each_slice(self.primary_scorecard.tournament_day.scorecard_base_scoring_rule.course_holes.count / 2).to_a
   end
 
   def scorecard_total_par
-    self.primary_scorecard.tournament_day.course_holes.map {|hole| hole.par }.sum
+    self.primary_scorecard.tournament_day.scorecard_base_scoring_rule.course_holes.map {|hole| hole.par }.sum
   end
 
   def scorecard_score_cell_partials

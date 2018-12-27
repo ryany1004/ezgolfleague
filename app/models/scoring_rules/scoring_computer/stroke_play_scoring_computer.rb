@@ -1,5 +1,46 @@
 module ScoringComputer
 	class StrokePlayScoringComputer < BaseScoringComputer
+
+		def rank_results_sort_reorder_param
+			"net_score"
+		end
+
+		def rank_results_sort_descending
+			true
+		end
+
+		def rank_results_sort_reorder_param
+      if @scoring_rule.use_back_9_to_break_ties?
+        Rails.logger.info { "Tie-breaking is enabled" }
+
+        if @scoring_rule.tournament_day.scorecard_base_scoring_rule.course_holes.count == 9 #if a 9-hole tournament, compare score by score
+          Rails.logger.info { "9-Hole Tie-Breaking" }
+
+          par_related_net_scores = scoring_rule.tournament_day_results.map{ |x| x.par_related_net_score }
+
+          if par_related_net_scores.uniq.length != par_related_net_scores.length
+            Rails.logger.info { "We have tied players, using net_scores" }
+
+            reorder_param = "par_related_net_score, net_score"
+          else
+            Rails.logger.info { "No tied players..." }
+
+            reorder_param = "par_related_net_score, back_nine_net_score"
+          end
+        else
+          Rails.logger.info { "18-Hole Tie-Breaking" }
+
+          reorder_param = "par_related_net_score, back_nine_net_score"
+        end
+      else
+        Rails.logger.info { "Tie-breaking is disabled" }
+
+        reorder_param = "par_related_net_score"
+      end
+
+      reorder_param
+		end
+
 		def generate_tournament_day_result(user:, scorecard: nil, destroy_previous_results: true)
 			return nil if !@scoring_rule.users.include? user
 
@@ -33,6 +74,8 @@ module ScoringComputer
 			end
 
 			scores.each do |score|
+				score.net_strokes = score.strokes
+				
 				gross_score += score.strokes
 				front_nine_gross_score += score.strokes if self.front_nine_hole_numbers.include? score.course_hole.hole_number
 
@@ -51,6 +94,10 @@ module ScoringComputer
 
             	Rails.logger.debug { "Hole #{score.course_hole.hole_number} - Hole Net Score: #{hole_net_score}. Hole adjusted score: #{hole_adjusted_score}. Strokes: #{score.strokes}" }
 
+            	#store net strokes
+            	score.net_strokes = hole_net_score
+
+            	#update stats
             	net_score += hole_net_score
             	front_nine_net_score += hole_net_score if self.front_nine_hole_numbers.include? score.course_hole.hole_number
             	back_nine_net_score += hole_net_score if self.back_nine_hole_numbers.include? score.course_hole.hole_number
@@ -61,6 +108,8 @@ module ScoringComputer
 
 					net_score = gross_score
 				end
+
+				score.save
 			end
 
 	    user_par = self.user_par_for_played_holes(user)

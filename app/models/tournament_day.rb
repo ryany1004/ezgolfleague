@@ -19,7 +19,10 @@ class TournamentDay < ApplicationRecord
   has_many :flights, -> { order(:flight_number) }, inverse_of: :tournament_day, dependent: :destroy
   has_many :contests, -> { order(:name) }, inverse_of: :tournament_day, dependent: :destroy
   has_many :scoring_rules, inverse_of: :tournament_day, dependent: :destroy
-  has_and_belongs_to_many :course_holes, -> { order(:hole_number) }
+  
+  has_and_belongs_to_many :legacy_course_holes, -> { order(:hole_number) }, class_name: "CourseHole", foreign_key: "course_hole_id" # TODO: REMOVE AFTER MIGRATION
+
+  accepts_nested_attributes_for :scoring_rules
 
   attr_accessor :skip_date_validation
 
@@ -210,6 +213,10 @@ class TournamentDay < ApplicationRecord
     else
       []
     end
+  end
+
+  def scorecard_base_scoring_rule
+    self.mandatory_scoring_rules.left_joins(:scoring_rule_course_holes).group(:id).order('COUNT(scoring_rule_course_holes.id) DESC').limit(1).first
   end
 
   def mandatory_scoring_rules

@@ -20,9 +20,9 @@ module HandicapComputer
         Rails.logger.debug { "Course Handicap: #{course_handicap}" }
 
         if golf_outing.course_tee_box.tee_box_gender == "Men"
-          sorted_course_holes_by_handicap = self.tournament_day.course_holes.reorder("mens_handicap")
+          sorted_course_holes_by_handicap = self.tournament_day.scorecard_base_scoring_rule.course_holes.reorder("mens_handicap")
         else
-          sorted_course_holes_by_handicap = self.tournament_day.course_holes.reorder("womens_handicap")
+          sorted_course_holes_by_handicap = self.tournament_day.scorecard_base_scoring_rule.course_holes.reorder("womens_handicap")
         end
 
         if !course_handicap.blank?

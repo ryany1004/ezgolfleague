@@ -19,9 +19,16 @@ namespace :scoring_rules do
 
   		raise "No Scoring Rule" if rule.blank?
 
+      #add the course holes
+      d.course_holes.each do |hole|
+        rule.scoring_rule_contest_holes.create(course_hole: hole)
+      end
+
       #add the users
       d.tournament.players_for_day(d).each do |user|
         rule.users << user
+
+        rule.scoring_rule_participations.create(user: user, dues_paid: dues_amount)
       end
 
   		d.scoring_rules = [rule]
@@ -29,6 +36,7 @@ namespace :scoring_rules do
   		d.save
 
       #convert contests
-  	end
+  	   #move the results
+    end
   end
 end

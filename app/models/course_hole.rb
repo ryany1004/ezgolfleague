@@ -1,7 +1,6 @@
 class CourseHole < ApplicationRecord
   belongs_to :course, inverse_of: :course_holes, touch: true
-  has_and_belongs_to_many :tournament_days
-
+  has_many :scoring_rule_course_holes
   has_many :course_hole_tee_boxes, -> { order("yardage desc") }, dependent: :destroy, inverse_of: :course_hole
   accepts_nested_attributes_for :course_hole_tee_boxes
 

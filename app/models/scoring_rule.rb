@@ -19,7 +19,12 @@ class ScoringRule < ApplicationRecord
 	has_many :payouts, inverse_of: :scoring_rule, dependent: :destroy
 	has_many :payout_results, -> { order(:flight_id, amount: :desc) }, inverse_of: :scoring_rule, dependent: :destroy
 	has_many :tournament_day_results, -> { order(:flight_id, :sort_rank) }, inverse_of: :scoring_rule, dependent: :destroy
-	has_and_belongs_to_many :users, inverse_of: :scoring_rules
+	has_many :scoring_rule_participations, dependent: :destroy, inverse_of: :scoring_rule
+	has_many :users, through: :scoring_rule_participations
+	has_many :scoring_rule_course_holes
+	has_many :course_holes, -> { order(:hole_number) }, through: :scoring_rule_course_holes
+
+	accepts_nested_attributes_for :course_holes
 
 	attr_accessor :selected_class_name
 
@@ -40,7 +45,7 @@ class ScoringRule < ApplicationRecord
 	end
 
 	def scoring_computer
-		raise "Base Class Has No Scoring Computer"
+		raise "A Base Class Has No Scoring Computer"
 	end
 
 	def handicap_computer
@@ -48,7 +53,7 @@ class ScoringRule < ApplicationRecord
 	end
 
 	def scorecard_api
-		raise "Base Class Has No Scorecard API"
+		raise "A Base Class Has No Scorecard API"
 	end
 
 	def ranked_results
@@ -85,7 +90,7 @@ class ScoringRule < ApplicationRecord
 
 	  return false if self.tournament_day.tournament_groups.count == 0
 	  return false if self.tournament_day.flights.count == 0
-	  return false if self.tournament_day.course_holes.count == 0
+	  return false if self.tournament_day.scorecard_base_scoring_rule.count == 0
 
 	  true
 	end
@@ -173,7 +178,10 @@ class ScoringRuleOption
 			ScoringRuleOption.option(name: 'Individual Modified Stableford', class_name: 'StablefordScoringRule'),
 			ScoringRuleOption.option(name: 'Two Man Best Ball', class_name: 'TwoManBestBallScoringRule'),
 			ScoringRuleOption.option(name: 'Two Man Scramble', class_name: 'TwoManScrambleScoringRule'),
-			ScoringRuleOption.option(name: 'Four Man Scramble', class_name: 'FourManScrambleScoringRule')
+			ScoringRuleOption.option(name: 'Four Man Scramble', class_name: 'FourManScrambleScoringRule'),
+			ScoringRuleOption.option(name: 'Four Man Scramble', class_name: 'FourManScrambleScoringRule'),
+			ScoringRuleOption.option(name: 'Gross Skins', class_name: 'GrossSkinsScoringRule'),
+			ScoringRuleOption.option(name: 'Net Skins', class_name: 'NetSkinsScoringRule'),
 		]
 	end
 end

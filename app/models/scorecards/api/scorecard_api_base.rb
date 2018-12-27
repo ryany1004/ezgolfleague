@@ -41,7 +41,7 @@ module Scorecards
 
       def hole_row
         hole_info = []
-        self.tournament_day.course_holes.each do |course_hole|
+        self.tournament_day.scorecard_base_scoring_rule.course_holes.each do |course_hole|
           hole_info << [course_hole.hole_number.to_s]
         end
         hole_info << ["Out/In"]
@@ -82,7 +82,7 @@ module Scorecards
 
       def handicap_row(allowance)
         handicap_info = []
-        self.tournament_day.course_holes.each do |course_hole|
+        self.tournament_day.scorecard_base_scoring_rule.course_holes.each do |course_hole|
           if allowance.blank?
             handicap_info << [""]
           else

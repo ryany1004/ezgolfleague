@@ -17,7 +17,7 @@ class PrintsController < BaseController
 
         number_to_create.times do
           extra_scorecard = GameTypes::EmptyLineScorecard.new
-          extra_scorecard.scores_for_course_holes(@tournament_day.course_holes)
+          extra_scorecard.scores_for_course_holes(@tournament_day.scorecard_base_scoring_rule)
 
           other_scorecards << extra_scorecard
         end
