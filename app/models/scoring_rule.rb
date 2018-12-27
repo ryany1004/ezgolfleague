@@ -103,6 +103,10 @@ class ScoringRule < ApplicationRecord
 		end
 	end
 
+	def calculate_each_entry?
+		true
+	end
+
 	def show_other_scorecards?
 		false
 	end

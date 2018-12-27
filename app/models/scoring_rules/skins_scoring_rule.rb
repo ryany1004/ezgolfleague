@@ -14,4 +14,8 @@ class SkinsScoringRule < ScoringRule
 	def scoring_computer
 		ScoringComputer::SkinsScoringComputer.new(self)
 	end
+
+	def calculate_each_entry?
+		false
+	end
 end
