@@ -11,50 +11,57 @@
 <% else -%>
 
 <div class="row">
-  <div class="col-md-12">
-    <div class="panel panel-default">
-      <div class="panel-heading">
-        <h3 class="panel-title">Tournament Payouts</h3>
+  <% @tournament_days.each do |day| %>
+    <% day.scoring_rules.each do |rule| %>
+      <div class="col-md-12">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h3 class="panel-title"><%= day.pretty_day(true) %> <%= rule.name %></h3>
+          </div>
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th>Day</th>
+                <th><%= flight_or_group(@tournament) %></th>
+                <th>Name</th>
+                <th>Amount</th>
+                <th>Points</th>
+                <th>Score</th>
+                <th>Course Handicap</th>
+                <th>&nbsp;</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% rule.payout_results.each do |payout_result| %>
+                <tr>
+                  <td><%= payout_result.scoring_rule.tournament_day.tournament_at.to_s(:short) %></td>
+                  <td><%= payout_result.display_name %></td>
+                  <td><%= payout_result.user.complete_name unless payout_result.user.blank? %></td>
+                  <td><%= number_to_currency(payout_result.amount) %></td>
+                  <td><%= payout_result.points.to_i %></td>
+                  <td><%= payout_result.tournament_day_result&.net_score %></td>
+                  <td><%= payout_result.scoring_rule.tournament_day.golf_outing_for_player(payout_result.user).course_handicap.to_i unless payout_result.user.blank? %></td>
+                  <td><%= payout_result.detail %></td>
+                </tr>
+              <% end %>
+            </tbody>
+            <tfoot>
+              <tr>
+                <th>&nbsp;</th>
+                <th>&nbsp;</th>
+                <th>&nbsp;</th>
+                <th>&nbsp;</th>
+                <th>&nbsp;</th>
+                <th>&nbsp;</th>
+                <th>&nbsp;</th>
+                <th>&nbsp;</th>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
       </div>
-      <%= render partial: "tournament_day", collection: @tournament_days %>
-    </div>
-  </div>
-
-  <div class="col-md-12">
-    <div class="panel panel-default">
-      <div class="panel-heading">
-        <h3 class="panel-title">Contest Results</h3>
-      </div>
-      <table class="table table-striped">
-        <thead>
-          <tr>
-            <th>Day</th>
-            <th>Contest</th>
-            <th>Winner(s)</th>
-            <th>Amount</th>
-            <th>Points</th>
-            <th>Details</th>
-            <th>&nbsp;</th>
-          </tr>
-        </thead>
-        <tbody>
-          <% @tournament_days.each do |day| %>
-            <% day.contests.each do |c| %>
-            <tr>
-              <td><%= day.tournament_at.to_s(:short) %></td>
-              <td><%= c.name %></td>
-              <td><%= format_winners(c.winners) %></td>
-              <td><%= format_payout(c.winners) %></td>
-              <td><%= format_points(c.winners) %></td>
-              <td><%= format_results(c.winners) %></td>
-              <td><% if c.manual_results_entry? -%><%= link_to "Edit Results", league_tournament_contest_contest_results_path(@tournament.league, @tournament, c, tournament_day: day), target: :new %><% else %>&nbsp;<% end -%></td>
-            </tr>
-            <% end %>
-          <% end =%>
-        </tbody>
-      </table>
-    </div>
-  </div>
+    <% end %>
+  <% end %>
 
   <% @tournament_days.each do |day| -%>
     <div class="col-md-12">

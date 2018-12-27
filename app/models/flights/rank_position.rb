@@ -6,7 +6,9 @@ module Flights
     def self.compute_rank(flight)
     	rank_computer = self.new
     	rank_computer.flight = flight
-      scoring_computer = self.scoring_rule.scoring_computer
+
+      scoring_rule = flight.tournament_day.scorecard_base_scoring_rule
+      scoring_computer = scoring_rule.scoring_computer
 
       reorder_param = scoring_computer.rank_results_sort_reorder_param
       sort_descending = scoring_computer.rank_results_sort_descending
@@ -14,7 +16,7 @@ module Flights
       rank_computer.combine_team_score_results if scoring_computer.rank_should_combine_daily_team_results?
       rank_computer.sort_by_parameter(reorder_param, sort_descending)
 
-    	rank_computer.default_compute_rank(sort_param)
+    	rank_computer.default_compute_rank(reorder_param)
     end
 
     def tournament_day_results
@@ -107,12 +109,5 @@ module Flights
         result.save
       end
     end
-
-    private
-
-    def scoring_rule
-    	flight.tournament_day.scorecard_base_scoring_rule
-    end
-
 	end
 end

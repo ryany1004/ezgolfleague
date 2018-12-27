@@ -213,6 +213,7 @@ class Tournament < ApplicationRecord
     distinct_courses
   end
 
+  # TODO: REMOVE
   def paid_contests
     contests = []
 
@@ -223,6 +224,26 @@ class Tournament < ApplicationRecord
     end
 
     contests
+  end
+
+  def mandatory_scoring_rules
+    rules = []
+
+    self.tournament_days.each do |td|
+      rules += td.mandatory_scoring_rules
+    end
+
+    rules
+  end
+
+  def optional_scoring_rules
+    rules = []
+
+    self.tournament_days.each do |td|
+      rules += td.optional_scoring_rules
+    end
+
+    rules
   end
 
   def is_paid?

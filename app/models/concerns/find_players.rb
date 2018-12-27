@@ -66,6 +66,17 @@ module FindPlayers
     end
   end
 
+  def optional_scoring_rules_for_user(user:)
+    scoring_rules = []
+
+    self.tournament.optional_scoring_rules.each do |r|
+      scoring_rules << r if r.users.include? user
+    end
+
+    scoring_rules
+  end
+
+  # TODO:  REMOVE
   def paid_contests_for_player(user)
     player_contests = []
 

@@ -223,6 +223,10 @@ class TournamentDay < ApplicationRecord
     self.scoring_rules.where(is_opt_in: false)
   end
 
+  def optional_scoring_rules
+    self.scoring_rules.where(is_opt_in: true)
+  end
+
   def score_all_rules
     self.scoring_rules.each do |rule|
       rule.score
@@ -242,6 +246,7 @@ class TournamentDay < ApplicationRecord
     handicap_computer.handicap_allowance(user: user)
   end
 
+  # TODO: REMOVE
   def paid_contests
     self.contests.where("dues_amount > 0")
   end

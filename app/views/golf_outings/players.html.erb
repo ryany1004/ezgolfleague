@@ -18,6 +18,13 @@
   </div>
   <div class="panel-body">
     <p>Choose players for each slot per tee-group to register them for this tournament. Players may already appear if they registered themselves.</p>
+
+    <p>Players will be added to the following game types automatically:</p>
+    <ul>
+      <% @tournament.mandatory_scoring_rules.each do |rule| %>
+        <li><%= rule.name %></li>
+      <% end %> 
+    </ul>
   </div>
 
   <% @tournament_groups.each do |tournament_group| %>
@@ -65,9 +72,9 @@
                 &nbsp;
               <% end %>
             </td>
-            <td id="paid-contests">
-              <% if @tournament.paid_contests.count > 0 -%>
-                <%= f.input "contest_signups[#{i}]", label: "Paid Contests for Player", collection: @tournament.paid_contests, label_method: :name, value_method: :id, as: :check_boxes, multiple: true, checked: @tournament_day.paid_contests_for_player(tournament_group.user_for_index(i)).collect { |obj| obj.id }, input_html: { class: "contest-checkbox" } %>
+            <td id="optional-scoring-rules">
+              <% if @tournament.optional_scoring_rules.count > 0 -%>
+                <%= f.input "optional_scoring_rule_signups[#{i}]", label: "Other Games", collection: @tournament.optional_scoring_rules, label_method: :name, value_method: :id, as: :check_boxes, multiple: true, checked: @tournament_day.optional_scoring_rules_for_user(user: tournament_group.user_for_index(i)).collect { |obj| obj.id }, input_html: { class: "optional-scoring-rule-checkbox" } %>
               <% end -%>
             </td>
             <td id="action-buttons">
@@ -102,7 +109,7 @@
   </div>
 
   <script>
-    function submitContests(form) {
+    function submitOptionalScoringRules(form) {
       form.trigger('submit.rails');
 
       $("#save-indicator").fadeIn(400).delay(1600).fadeOut(400);
@@ -126,10 +133,10 @@
       });
 
       //Contests
-      $("#paid-contests .contest-checkbox").change(function() {
-        var contestForm = $(this.form);
+      $("#optional-scoring-rules .optional-scoring-rule-checkbox").change(function() {
+        var ruleForm = $(this.form);
 
-        setTimeout(function(){ self.submitContests(contestForm) }, 2000); //include a slight delay in case there are multiple contests and they click quickly
+        setTimeout(function(){ self.submitOptionalScoringRules(ruleForm) }, 2000); //include a slight delay in case there are multiple contests and they click quickly
       });
 
       var selectedGolfers = [];

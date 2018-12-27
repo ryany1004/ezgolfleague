@@ -11,7 +11,7 @@ module ScoringComputer
 			per_skin = self.value_per_skin(skins: skins)
 
 			skins.each do |s|
-				scoring_rule_hole = @scoring_rule.scoring_rule_course_holes.where(course_hole: s[:hole].first)
+				scoring_rule_hole = @scoring_rule.scoring_rule_course_holes.where(course_hole: s[:hole]).first
 
 				s[:winners].each do |winner|
 					detail = "#{s[:hole].hole_number}"
@@ -22,7 +22,8 @@ module ScoringComputer
 						amount: per_skin,
 						scoring_rule_course_hole: scoring_rule_hole,
 						detail: detail,
-						points: 0)
+						points: 0
+					)
 				end
 			end
 		end
@@ -54,15 +55,15 @@ module ScoringComputer
 		def user_scores(use_gross_scores:)
 			scores = {}
 
-			self.users_eligible_for_payouts.each do |user|
+			@scoring_rule.users_eligible_for_payouts.each do |user|
 				user_scorecard = self.tournament_day.primary_scorecard_for_user(user)
 				next if user_scorecard.blank?
 			
 				@scoring_rule.course_holes.each do |hole|
 					if use_gross_scores
-						strokes = user_scorecard.scores.find_by_course_hole(hole).strokes
+						strokes = user_scorecard.scores.where(course_hole: hole).first.strokes
 					else
-						strokes = user_scorecard.scores.find_by_course_hole(hole).net_strokes
+						strokes = user_scorecard.scores.where(course_hole: hole).first.net_strokes
 					end
 
 					scores[self.user_score_key(user: user, hole: hole)] = strokes
@@ -74,12 +75,13 @@ module ScoringComputer
 
 		def users_with_skins(use_gross_scores:)
 			winners = []
+			hole_scores = self.user_scores(use_gross_scores: use_gross_scores)
 
 			@scoring_rule.course_holes.each do |hole|
 				users_with_skins = []
 				user_scores = []
 
-				self.users_eligible_for_payouts.each do |user|
+				@scoring_rule.users_eligible_for_payouts.each do |user|
 					user_scorecard = self.tournament_day.primary_scorecard_for_user(user)
 					next if user_scorecard.blank?
 
