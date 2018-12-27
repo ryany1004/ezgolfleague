@@ -72,6 +72,10 @@ class ScoringRule < ApplicationRecord
 		nil
 	end
 
+	def optional_by_default
+		false
+	end
+
 	def payout_type
 		ScoringRulePayoutType::PREDETERMINED
 	end
@@ -90,7 +94,7 @@ class ScoringRule < ApplicationRecord
 
 	  return false if self.tournament_day.tournament_groups.count == 0
 	  return false if self.tournament_day.flights.count == 0
-	  return false if self.tournament_day.scorecard_base_scoring_rule.count == 0
+	  return false if self.tournament_day.scorecard_base_scoring_rule.blank?
 
 	  true
 	end
@@ -160,7 +164,7 @@ class ScoringRule < ApplicationRecord
 	end
 
 	def users_eligible_for_payouts
-		self.users
+		self.users.where(scoring_rule_participations: { disqualified: false })
 	end
 end
 
@@ -186,6 +190,7 @@ class ScoringRuleOption
 			ScoringRuleOption.option(name: 'Four Man Scramble', class_name: 'FourManScrambleScoringRule'),
 			ScoringRuleOption.option(name: 'Gross Skins', class_name: 'GrossSkinsScoringRule'),
 			ScoringRuleOption.option(name: 'Net Skins', class_name: 'NetSkinsScoringRule'),
+			ScoringRuleOption.option(name: 'Net Skins + Gross Birdies', class_name: 'TotalSkinsScoringRule'),
 		]
 	end
 end

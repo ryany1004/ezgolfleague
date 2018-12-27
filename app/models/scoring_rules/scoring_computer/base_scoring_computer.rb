@@ -8,6 +8,10 @@ module ScoringComputer
 			@scoring_rule.tournament_day
 		end
 
+		def can_be_scored?
+			true
+		end
+
 		def generate_tournament_day_result(user:)
 			raise "Base class not implemented"
 		end

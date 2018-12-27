@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_12_24_003950) do
+ActiveRecord::Schema.define(version: 2018_12_27_192541) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -419,6 +419,7 @@ ActiveRecord::Schema.define(version: 2018_12_24_003950) do
     t.decimal "dues_paid", default: "0.0"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "disqualified", default: false
   end
 
   create_table "scoring_rules", force: :cascade do |t|

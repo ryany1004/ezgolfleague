@@ -40,6 +40,15 @@ class GolfOuting < ApplicationRecord
     self.disqualified = !self.disqualified
     self.save
 
+    # handle scoring rules
+    self.tournament_group.tournament_day.scoring_rules.each do |rule|
+      rule.scoring_rule_participations.where(user: self.user).each do |p|
+        p.disqualified = !p.disqualified
+        p.save
+      end
+    end
+
+    # handle daily teams
     daily_team = self.tournament_group.tournament_day.daily_team_for_player(self.user)
     unless daily_team.blank?
       daily_team.users.each do |u|

@@ -8,7 +8,9 @@ class ScoringRulesController < BaseController
   end
 
   def create
-  	scoring_rule = params[:scoring_rule][:selected_class_name].constantize.create(tournament_day: @tournament_day)
+  	scoring_rule = params[:scoring_rule][:selected_class_name].constantize.new(tournament_day: @tournament_day)
+    scoring_rule.is_opt_in = scoring_rule.optional_by_default
+    scoring_rule.save
 
     @tournament_day.course.course_holes.each do |ch|
       scoring_rule.course_holes << ch

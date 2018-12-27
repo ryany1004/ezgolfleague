@@ -17,11 +17,13 @@ module TournamentsHelper
     end
   end
 
-  def split_holes_for_course_tournament(tournament)
-    if tournament.course_holes.count <= 9
-      return tournament.course_holes.each_slice(tournament.course_holes.count).to_a
+  def split_holes_for_course_tournament_day(tournament_day)
+    course_holes = tournament_day.scorecard_base_scoring_rule.course_holes
+
+    if course_holes.count <= 9
+      return course_holes.each_slice(course_holes.count).to_a
     else
-      return tournament.course_holes.each_slice(tournament.course_holes.count / 2).to_a
+      return course_holes.each_slice(course_holes.count / 2).to_a
     end
   end
 

@@ -184,7 +184,7 @@ module ScoringComputer
           if payout.payout_results.count == 0
             result = flight.tournament_day_results[i]
 
-            if result.present? and eligible_users.include? result.user.id
+            if result.present? and eligible_users.include? result.user
               player = result.user
 
               Rails.logger.debug { "Assigning #{player.complete_name}. Result [#{result}] Payout [#{payout}]" }

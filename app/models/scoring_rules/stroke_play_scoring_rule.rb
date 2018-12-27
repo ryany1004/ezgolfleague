@@ -18,11 +18,12 @@ class StrokePlayScoringRule < ScoringRule
 		true
 	end
 
+	# TODO: this doesn't use the superclass version - should it?
   def users_eligible_for_payouts
     eligible_player_list = []
 
     if self.tournament.tournament_days.count == 1
-      eligible_player_list = self.tournament.qualified_players.map(&:id)
+      eligible_player_list = self.tournament.qualified_players
     else #only players that play all days can win
       self.tournament.qualified_players.each do |player|
         player_played_all_days = true
@@ -31,7 +32,7 @@ class StrokePlayScoringRule < ScoringRule
           player_played_all_days = false if !self.tournament.includes_player?(player, day)
         end
 
-        eligible_player_list << player.id if player_played_all_days
+        eligible_player_list << player if player_played_all_days
       end
     end
 
