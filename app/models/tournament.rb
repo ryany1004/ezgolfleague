@@ -308,12 +308,6 @@ class Tournament < ApplicationRecord
       Rails.logger.info { "Finalize #{day.id}: Assigning Payouts" }
       day.assign_payouts_all_rules
 
-      #TODO: CONTESTS ARE BROKEN
-      # Rails.logger.info { "Finalize #{day.id}: Scoring Contests" }
-      # day.contests.each do |contest|
-      #   contest.score_contest
-      # end
-
       Rails.logger.info { "Finalize #{day.id}: All Done!" }
 
       day.touch

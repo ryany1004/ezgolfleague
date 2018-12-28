@@ -76,7 +76,7 @@ class TournamentDay < ApplicationRecord
 
   def can_be_finalized?
     self.scoring_rules.each do |r|
-      if r.can_be_finalized? == false
+      if !r.can_be_finalized?
         return false
       end
     end

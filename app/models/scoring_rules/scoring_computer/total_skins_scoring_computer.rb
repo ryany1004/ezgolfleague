@@ -10,8 +10,8 @@ module ScoringComputer
 
 			per_skin = self.value_per_skin(skins: merged_winners)
 
-			skins.each do |s|
-				scoring_rule_hole = @scoring_rule.scoring_rule_course_holes.where(course_hole: s[:hole].first)
+			merged_winners.each do |s|
+				scoring_rule_hole = @scoring_rule.scoring_rule_course_holes.where(course_hole: s[:hole]).first
 
 				s[:winners].each do |winner|
 					detail = "#{s[:hole].hole_number}"
@@ -37,7 +37,7 @@ module ScoringComputer
 			net_winners.each do |w|
 				all_winners.each do |all_winner|
 					w[:winners].each do |w2|
-						all_winners[:winners] << w2 if w[:hole] == all_winner[:hole]
+						all_winner[:winners] << w2 if w[:hole] == all_winner[:hole]
 					end
 				end
 			end
@@ -54,7 +54,7 @@ module ScoringComputer
 
 				gross_birdie_score = (hole.par - 1)
 
-				self.users_eligible_for_payouts.each do |user|
+				@scoring_rule.users_eligible_for_payouts.each do |user|
 					user_scorecard = self.tournament_day.primary_scorecard_for_user(user)
 					next if user_scorecard.blank?
 
@@ -73,7 +73,7 @@ module ScoringComputer
 							end
 
 							if !teammates_have_birdie_skin_for_hole
-								Rails.logger.debug { "Skins: Team #{daily_team.id} for User #{user.id} DOES NOT Have Pre-Existing Birdies - Ok to Add"
+								Rails.logger.debug { "Skins: Team #{daily_team.id} for User #{user.id} DOES NOT Have Pre-Existing Birdies - Ok to Add" }
 							
 								users_with_gross_birdie_skins << user
 
