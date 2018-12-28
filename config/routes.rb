@@ -165,6 +165,8 @@ Rails.application.routes.draw do
 
           resources :payouts
 
+          resources :payout_results, controller: "scoring_rules/payout_results"
+
           resource :course_holes, path: "course-holes", only: [:edit, :update], controller: "scoring_rules/course_holes"
         end
 

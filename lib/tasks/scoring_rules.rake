@@ -35,8 +35,44 @@ namespace :scoring_rules do
   		d.game_type_id = nil
   		d.save
 
-      #convert contests
-  	   #move the results
+      contests = Contest.where(tournament_day_id: d.id)
+      contests.each do |c|
+        case c.contest_type
+        when 0
+          contest_rule = ManualScoringRule.create
+        when 1
+          contest_rule = ManualScoringRule.create
+        when 2
+          contest_rule = NetSkinsScoringRule.create
+        when 3
+          contest_rule = GrossSkinsScoringRule.create
+        when 4
+          contest_rule = NetLowScoringRule.create
+        when 5
+          contest_rule = GrossLowScoringRule.create
+        when 6
+          contest_rule = NetLowScoringRule.create
+        when 7
+          contest_rule = GrossLowScoringRule.create
+        when 8
+          contest_rule = TotalSkinsScoringRule.create
+        end
+
+        #convert results
+        c.contest_results.each do |r|
+          hole = nil
+          if r.contest_hole
+            scoring_rule_course_hole = contest_rule.scoring_rule_course_holes.where(course_hole: r.contest_hole.course_hole).first
+            if scoring_rule_course_hole.blank?
+              contest_rule.course_holes << r.contest_hole.course_hole
+            end
+
+            hole = contest_rule.scoring_rule_course_holes.where(course_hole: r.contest_hole.course_hole).first
+          end
+
+          contest_rule.payout_results.create(user: r.winner, amount: r.payout_amount, points: r.points, detail: r.result_value, scoring_rule_course_hole: hole)
+        end
+      end
     end
   end
 end

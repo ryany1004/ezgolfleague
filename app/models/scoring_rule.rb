@@ -193,6 +193,7 @@ class ScoringRuleOption
 			ScoringRuleOption.option(name: 'Net Skins + Gross Birdies', class_name: 'TotalSkinsScoringRule'),
 			ScoringRuleOption.option(name: 'Net Low', class_name: 'NetLowScoringRule'),
 			ScoringRuleOption.option(name: 'Gross Low', class_name: 'GrossLowScoringRule'),
+			ScoringRuleOption.option(name: 'Custom', class_name: 'ManualScoringRule'),
 		]
 	end
 end
