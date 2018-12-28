@@ -95,16 +95,16 @@ class ScoringRule < ApplicationRecord
 	  return false if self.tournament_day.tournament_groups.count == 0
 	  return false if self.tournament_day.flights.count == 0
 	  return false if self.tournament_day.scorecard_base_scoring_rule.blank?
-
+	  
 	  true
 	end
 
 	def can_be_finalized?
-		if self.flight_payouts.count == 0 || self.users.count == 0 || !self.tournament_day.has_scores?
-			false
-		else
-			true
-		end
+		return false if self.flight_payouts.count == 0
+		return false if !self.tournament_day.has_scores?
+		return false if self.users.count == 0 && self.payout_assignment_type != ScoringRulePayoutAssignmentType::MANUAL
+
+		true
 	end
 
 	def calculate_each_entry?
