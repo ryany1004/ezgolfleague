@@ -20,7 +20,7 @@ module FetchingTools
         end
       end
 
-      {scorecard: scorecard, tournament_day: tournament_day, tournament: tournament, other_scorecards: other_scorecards, scorecards_to_update: scorecards_to_update}
+      { scorecard: scorecard, tournament_day: tournament_day, tournament: tournament, other_scorecards: other_scorecards, scorecards_to_update: scorecards_to_update }
     end
   end
 end

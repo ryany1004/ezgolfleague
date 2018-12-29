@@ -171,11 +171,11 @@ class ScoringRule < ApplicationRecord
 	end
 
 	def flight_payouts
-		tournament_day.flights.map(&:payouts).flatten
+		@flight_payouts ||= tournament_day.flights.map(&:payouts).flatten
 	end
 
 	def users_eligible_for_payouts
-		self.users.where(scoring_rule_participations: { disqualified: false })
+		@users_eligible_for_payouts ||= self.users.where(scoring_rule_participations: { disqualified: false })
 	end
 end
 
