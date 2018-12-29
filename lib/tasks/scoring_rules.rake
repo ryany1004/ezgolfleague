@@ -19,6 +19,22 @@ namespace :scoring_rules do
 
   		raise "No Scoring Rule" if rule.blank?
 
+      #move results
+      d.flights.each do |flight|
+        flight.tournament_day_results.each do |r|
+          r.scoring_rule = rule
+          r.save
+        end
+      end
+
+      #move payments
+      if d == d.tournament.first_day
+        d.tournament.payments.each do |p|
+          p.scoring_rule = rule
+          p.save
+        end
+      end
+
       #add the course holes
       d.course_holes.each do |hole|
         rule.scoring_rule_contest_holes.create(course_hole: hole)
@@ -63,6 +79,12 @@ namespace :scoring_rules do
         #users
         c.users.each do |user|
           contest_rule.users << user
+        end
+
+        #move payments
+        Payment.where(contest_id: c.id).each do |c|
+          c.scoring_rule = contest_rule
+          c.save
         end
 
         #convert results

@@ -1,2 +1,0 @@
-module Play::ContestsHelper
-end

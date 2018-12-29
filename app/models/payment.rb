@@ -4,29 +4,35 @@ class Payment < ApplicationRecord
   acts_as_paranoid
   
   belongs_to :user, inverse_of: :payments
-  belongs_to :tournament, inverse_of: :payments, touch: true
-  belongs_to :league_season, inverse_of: :payments, touch: true
-  belongs_to :contest, inverse_of: :payments, touch: true
+
+  belongs_to :tournament, inverse_of: :payments, touch: true, optional: true #TODO: REMOVE AFTER MIGRATION
+  belongs_to :contest, inverse_of: :payments, touch: true, optional: true #TODO: REMOVE AFTER MIGRATION
+  
+  belongs_to :scoring_rule, inverse_of: :payments, optional: true, touch: true
+  belongs_to :league_season, inverse_of: :payments, optional: true, touch: true
 
   has_many :credits, class_name: "Payment", foreign_key: "payment_id", inverse_of: :original_payment
-  belongs_to :original_payment, class_name: "Payment", foreign_key: "payment_id", inverse_of: :credits
+  belongs_to :original_payment, class_name: "Payment", foreign_key: "payment_id", inverse_of: :credits, optional: true
 
   validates :user, presence: true
   validates :payment_amount, presence: true
 
-  validate :has_tournament_or_league
-  def has_tournament_or_league
-    if tournament.blank? && league_season.blank? && contest.blank?
-      errors.add(:tournament_id, "can't all be blank")
+  validate :has_scoring_rule_or_league
+  def has_scoring_rule_or_league
+    if scoring_rule.blank? && league_season.blank?
+      errors.add(:scoring_rule_id, "can't all be blank")
       errors.add(:league_season_id, "can't all be blank")
-      errors.add(:contest_id, "can't all be blank")
     end
   end
 
   paginates_per 50
 
+  def tournament
+    self.scoring_rule.tournament_day.tournament
+  end
+
   def generated_description
-    if !self.tournament.blank?
+    if !self.scoring_rule.blank?
       if self.payment_amount < 0.0
         "Dues for #{self.tournament.name}"
       else
@@ -37,12 +43,6 @@ class Payment < ApplicationRecord
         "Dues for #{self.league_season.league.name} #{self.league_season.name}"
       else
         "Payment for #{self.league_season.league.name} #{self.league_season.name}"
-      end
-    elsif !self.contest.blank?
-      if self.payment_amount < 0.0
-        "Dues for #{self.contest.name} (#{self.contest.tournament_day.tournament.name})"
-      else
-        "Payment for #{self.contest.name} (#{self.contest.tournament_day.tournament.name})"
       end
     else
       self.payment_type

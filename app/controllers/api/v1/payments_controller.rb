@@ -9,7 +9,7 @@ class Api::V1::PaymentsController < Api::V1::ApiBaseController
     stripe_token = payment_details["stripeToken"]
     payment_amount = payment_details["totalPaymentAmount"].to_f
     tournament_id = payment_details["tournamentID"]
-    contest_ids = payment_details["contestIDs"]
+    contest_ids = payment_details["contestIDs"] #TODO: Update
 
     tournament = Tournament.where(id: tournament_id).first
 

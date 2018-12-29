@@ -34,7 +34,7 @@ Rails.application.routes.draw do
       put 'confirm'
 
       resources :tournament_days, only: [:index] do
-        resources :contests, only: [:index]
+        resources :scoring_rules, only: [:index]
       end
     end
 

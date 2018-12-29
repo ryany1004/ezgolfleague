@@ -13,14 +13,14 @@ class Tournament < ApplicationRecord
 
   belongs_to :league, inverse_of: :tournaments
   has_many :tournament_days, -> { order(:tournament_at) }, inverse_of: :tournament, dependent: :destroy
-  has_many :payments, inverse_of: :tournament
+  has_many :payments, inverse_of: :tournament #TODO: REMOVE AFTER MIGRATION
   has_many :notification_templates, dependent: :destroy
 
   accepts_nested_attributes_for :tournament_days
 
   attr_accessor :another_member_id
   attr_accessor :skip_date_validation
-  attr_accessor :contests_to_enter
+  # attr_accessor :contests_to_enter # TODO: update 
 
   validates :name, presence: true
   validates :league, presence: true

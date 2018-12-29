@@ -17,7 +17,6 @@ class TournamentDay < ApplicationRecord
   belongs_to :course, inverse_of: :tournament_days
   has_many :tournament_groups, -> { order(:tee_time_at) }, inverse_of: :tournament_day, dependent: :destroy
   has_many :flights, -> { order(:flight_number) }, inverse_of: :tournament_day, dependent: :destroy
-  has_many :contests, -> { order(:name) }, inverse_of: :tournament_day, dependent: :destroy # TODO: REMOVE AFTER MIGRATION
   has_many :scoring_rules, -> { order(:type) }, inverse_of: :tournament_day, dependent: :destroy
   
   has_and_belongs_to_many :legacy_course_holes, -> { order(:hole_number) }, class_name: "CourseHole", foreign_key: "course_hole_id" # TODO: REMOVE AFTER MIGRATION
@@ -244,11 +243,6 @@ class TournamentDay < ApplicationRecord
     handicap_computer = self.mandatory_scoring_rules.first.handicap_computer
 
     handicap_computer.handicap_allowance(user: user)
-  end
-
-  # TODO: REMOVE
-  def paid_contests
-    self.contests.where("dues_amount > 0")
   end
 
   #date parsing

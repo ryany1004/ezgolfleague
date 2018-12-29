@@ -80,17 +80,19 @@ class Play::TournamentsController < Play::BaseController
         @tournament.first_day.add_player_to_group(tournament_group: tournament_group, user: other_user, paying_with_credit_card: false, confirmed: false, registered_by: current_user.complete_name)
       end
 
-      #contests
-      contest_ids = []
-      if !params[:tournament].blank? && !params[:tournament][:contests_to_enter].blank? #&& params[:tournament][:contests_to_enter][0] != "" #TODO: Fix this total hack
-        params[:tournament][:contests_to_enter].each do |contest_id|
-          unless contest_id.blank?
-            contest = Contest.find(contest_id)
+      # TODO: update for game types
 
-            contest.add_user(current_user)
-          end
-        end
-      end
+      # #contests
+      # contest_ids = []
+      # if !params[:tournament].blank? && !params[:tournament][:contests_to_enter].blank? #&& params[:tournament][:contests_to_enter][0] != "" #TODO: Fix this total hack
+      #   params[:tournament][:contests_to_enter].each do |contest_id|
+      #     unless contest_id.blank?
+      #       contest = Contest.find(contest_id)
+
+      #       contest.add_user(current_user)
+      #     end
+      #   end
+      # end
 
       #payment
       if paying_now == true

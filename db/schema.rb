@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_12_27_192541) do
+ActiveRecord::Schema.define(version: 2018_12_29_190456) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -341,6 +341,7 @@ ActiveRecord::Schema.define(version: 2018_12_27_192541) do
     t.bigint "league_season_id"
     t.bigint "payment_id"
     t.datetime "deleted_at"
+    t.bigint "scoring_rule_id"
     t.index ["deleted_at"], name: "index_payments_on_deleted_at"
     t.index ["league_season_id"], name: "index_payments_on_league_season_id"
     t.index ["tournament_id"], name: "index_payments_on_tournament_id"

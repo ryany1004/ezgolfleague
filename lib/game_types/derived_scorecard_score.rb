@@ -14,5 +14,9 @@ module GameTypes
       return nil
     end
     
+    def save
+      #this is a no-op
+    end
+
   end
 end

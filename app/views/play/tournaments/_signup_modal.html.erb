@@ -26,12 +26,7 @@
               </div>
               <% end -%>
 
-              <% if tournament.paid_contests.count > 0 -%>
-              <div class="well">
-                <p><em>Would you like to participate in any additional contests? This will increase your dues.</em></p>
-                <%= f.input :contests_to_enter, collection: tournament.paid_contests, label_method: :name_with_cost, value_method: :id, as: :check_boxes %>
-              </div>
-              <% end -%>
+              <!-- TODO: update for game types -->
             </div>
           </div>
         </div>

@@ -19,11 +19,11 @@ class PayoutsController < BaseController
     @payout.scoring_rule = @scoring_rule
 
     if @payout.save
-      if params[:commit] == "Save & Continue"
-        redirect_to league_tournament_contests_path(@tournament.league, @tournament, tournament_day: @tournament_day), flash: { success: "The payout was successfully created." }
-      else
+      # if params[:commit] == "Save & Continue"
+      #   redirect_to league_tournament_contests_path(@tournament.league, @tournament, tournament_day: @tournament_day), flash: { success: "The payout was successfully created." }
+      # else
         redirect_to new_league_tournament_tournament_day_scoring_rule_payout_path(@tournament.league, @tournament, @tournament_day, @scoring_rule), flash: { success: "The payout was successfully created." }
-      end
+      # end
     else
       render :new
     end

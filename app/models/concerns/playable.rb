@@ -114,15 +114,6 @@ module Playable
       end
     end
 
-    #TODO: remove when contests are re-factored
-    self.tournament_days.each do |day|
-      day.contests.each do |c|
-        c.combined_contest_results.each do |r|
-          total_points = total_points + r.points if r.winner == user
-        end
-      end
-    end
-
     total_points
   end
 

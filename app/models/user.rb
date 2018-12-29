@@ -27,7 +27,6 @@ class User < ApplicationRecord
   belongs_to :parent_user, class_name: "User", foreign_key: "parent_id", inverse_of: :child_users
   has_and_belongs_to_many :flights, inverse_of: :users
   has_and_belongs_to_many :daily_teams, inverse_of: :users
-  has_and_belongs_to_many :contests, inverse_of: :users
   has_and_belongs_to_many :league_season_scoring_groups, inverse_of: :users
   
   validates :email, presence: true, uniqueness: true
@@ -158,11 +157,6 @@ class User < ApplicationRecord
       end
       self.daily_teams.clear
 
-      self.contests.each do |c|
-        user.contests << c
-      end
-      self.contests.clear
-
       user.save
 
       self.save
@@ -246,28 +240,16 @@ class User < ApplicationRecord
         league_season_ids << l.id
       end
 
-      tournament_payments = []
+      scoring_rule_payments = []
       unless league_season_ids.blank?
         league_payments = self.payments.where("league_season_id IN (?)", league_season_ids)
-        tournament_payments = self.payments.joins(:tournament).where(tournaments: {league_id: league.id})
-      end
 
-      contest_ids = []
-      self.selected_league.tournaments.each do |t|
-        t.tournament_days.each do |d|
-          d.contests.each do |c|
-            contest_ids << c
-          end
+        self.payments.each do |p|
+          scoring_rule_payments << p if league_season_ids.include? p.scoring_rule&.tournament_day&.tournament&.league&.league_seasons&.pluck(:id)
         end
       end
 
-      unless contest_ids.blank?
-        contest_payments = self.payments.where("contest_id IN (?)", contest_ids)
-
-        return league_payments + tournament_payments + contest_payments
-      else
-        return league_payments + tournament_payments
-      end
+      return league_payments + scoring_rule_payments
     end
 
     total_payments

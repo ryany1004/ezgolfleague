@@ -1,3 +1,5 @@
+#TODO: REMOVE AFTER MIGRATION
+
 class Contest < ApplicationRecord
   # include ContestScoreable
   include Servable

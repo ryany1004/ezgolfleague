@@ -17,15 +17,9 @@ class TournamentDayResult < ApplicationRecord
     return 0 if flight.blank?
 
     total_points = 0
-    
-    flight.payout_results.where(user: user).where("points > 0").each do |payout_result|
-      total_points += payout_result.points
-    end
 
-    tournament_day.contests.each do |c|
-      c.contest_results.where(winner: user).where("points > 0").each do |payout_result|
-        total_points += payout_result.points
-      end
+    self.scoring_rule.payout_results.where(user: user).where("points > 0").each do |payout_result|
+      total_points += payout_result.points
     end
 
     total_points
@@ -36,15 +30,9 @@ class TournamentDayResult < ApplicationRecord
 
     total_payouts = 0
 
-    flight.payout_results.where(user: user).each do |payout_result|
+    self.scoring_rule.payout_results.where(user: user).each do |payout_result|
       total_payouts += payout_result.amount
     end
-
-    tournament_day.contests.each do |c|
-      c.contest_results.where(winner: user).each do |payout_result|
-        total_payouts += payout_result.payout_amount
-      end
-    end   
 
     total_payouts
   end
@@ -53,10 +41,8 @@ class TournamentDayResult < ApplicationRecord
   	primary_scorecard.scores.map(&:strokes)
   end
 
-  #TODO: this should be refactored, calc's handicaps each time
   def net_scores
-  	handicaps = tournament_day.handicap_allowance(user: user)
-    primary_scorecard.net_scores(handicap_allowance: handicaps)
+    primary_scorecard.scores.map(&:net_strokes)
   end
 
   def scorecard_url

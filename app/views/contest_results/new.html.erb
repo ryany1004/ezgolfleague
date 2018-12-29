@@ -1,8 +1,0 @@
-<ol class="breadcrumb">
-  <li><%= link_to "Tournaments", league_tournaments_path(current_user.selected_league) %></li>
-  <li><%= link_to @tournament.name, edit_league_tournament_path(current_user.selected_league, @tournament) %></li>
-  <li><%= link_to @contest.name, league_tournament_contests_path(current_user.selected_league, @tournament, @contest) %></li>
-  <li class="active">New Results</li>
-</ol>
-
-<%= render 'form' %>

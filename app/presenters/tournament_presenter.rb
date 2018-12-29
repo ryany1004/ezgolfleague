@@ -37,6 +37,10 @@ class TournamentPresenter
     self.tournament.is_finalized
   end
 
+  def scoring_rules
+    self.tournament_day.scoring_rules
+  end
+
   def date_and_times
     dates = ""
 
@@ -151,14 +155,14 @@ class TournamentPresenter
     self.tournament_day.player_score(self.user)
   end
 
-  def user_can_register_for_contests?
+  def user_can_register_for_scoring_rules?
     return false if self.tournament_day.blank?
 
-    self.tournament.is_past? == false && self.tournament_day.contests.count > 0 && self.tournament.includes_player?(self.user, self.tournament_day) && self.tournament_day.can_be_played?
+    self.tournament.is_past? == false && self.tournament_day.scoring_rules.count > 0 && self.tournament.includes_player?(self.user, self.tournament_day) && self.tournament_day.can_be_played?
   end
 
-  def contest_signup_link
-    Rails.application.routes.url_helpers.play_tournament_tournament_day_contests_path(self.tournament, self.tournament_day)
+  def scoring_rule_signup_link
+    Rails.application.routes.url_helpers.play_tournament_tournament_day_scoring_rules_path(self.tournament, self.tournament_day)
   end
 
   ##
@@ -211,60 +215,6 @@ class TournamentPresenter
     else
       return self.day_flights
     end
-  end
-
-  def payouts
-    flights_with_payouts = []
-
-    if self.tournament_day == nil
-      self.tournament.tournament_days.each do |d|
-        d.flights.each do |f|
-          payouts = []
-
-          f.payout_results.each do |p|
-            username = p.user.blank? ? "" : p.user.complete_name
-            user_id = p.user.blank? ? nil : p.user.id
-
-            payouts << {flight_number: f.flight_number.to_i, flight_name: f.display_name, name: username, amount: p.amount, points: p.points.to_i, user_id: user_id}
-          end
-
-          flights_with_payouts << {payouts: payouts} unless payouts.blank?
-        end
-      end
-    else
-      self.tournament_day.flights.each do |f|
-        payouts = []
-
-        f.payout_results.each do |p|
-          username = p.user.blank? ? "" : p.user.complete_name
-          user_id = p.user.blank? ? nil : p.user.id
-
-          payouts << {flight_number: f.flight_number.to_i, flight_name: f.display_name, name: username, amount: p.amount, points: p.points.to_i, user_id: user_id}
-        end
-
-        flights_with_payouts << {payouts: payouts}
-      end
-    end
-
-    flights_with_payouts
-  end
-
-  def contests
-    items = []
-
-    if self.tournament_day == nil
-      self.tournament.tournament_days.each do |d|
-        d.contests.order(:name).each do |c|
-          items << {name: c.name, winners: c.winners} if c.winners && c.winners.count > 0
-        end
-      end
-    else
-      self.tournament_day.contests.order(:name).each do |c|
-        items << {name: c.name, winners: c.winners} if c.winners && c.winners.count > 0
-      end
-    end
-
-    items
   end
 
   def day_cache_key(prefix)

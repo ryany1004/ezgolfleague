@@ -1,0 +1,44 @@
+<script>
+  mixpanel.track("Display Tournament Optional Scoring Rules");
+  amplitude.getInstance().logEvent("Display Tournament Optional Scoring Rules");
+</script>
+
+<ol class="breadcrumb">
+  <li><%= link_to "My Dashboard", play_dashboard_index_path %></li>
+  <li><%= link_to @tournament.name, play_tournament_path(@tournament) %></li>
+  <li class="active"><%= @tournament_day.pretty_day(true) %>Tournament Game Types</li>
+</ol>
+
+<div class="row">
+  <div class="col-md-12">
+    <div class="panel panel-default panel-success">
+      <div class="panel-heading">
+        <h3 class="panel-title"><%= @tournament_day.pretty_day(true) %>Tournament Game Types</h3>
+      </div>
+      <table class="table table-striped">
+      	<thead>
+      		<tr>
+            <th>Name</th>
+            <th>Number of Players</th>
+      			<th>Dues</th>
+            <th></th>
+      		</tr>
+      	</thead>
+        <tbody>
+          <% @scoring_rules.each do |rule| -%>
+            <tr>
+              <td><%= rule.name %></td>
+              <td><%= rule.users.count %></td>
+              <td><%= number_to_currency(rule.dues_amount) %></td>
+              <% if !(rule.users.include? current_user) -%>
+              <td><%= link_to "Sign Up & Pay Dues", new_play_payment_path(:payment_type => "scoring_rule_dues", :scoring_rule_id => rule.id), class: 'btn btn-primary' %></td>
+              <% else -%>
+              <td>Signed Up</td>
+              <% end -%>
+            </tr>
+          <% end -%>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
