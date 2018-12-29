@@ -58,6 +58,13 @@ namespace :scoring_rules do
           contest_rule = TotalSkinsScoringRule.create
         end
 
+        d.scoring_rules << contest_rule
+
+        #users
+        c.users.each do |user|
+          contest_rule.users << user
+        end
+
         #convert results
         c.contest_results.each do |r|
           hole = nil
