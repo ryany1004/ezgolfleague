@@ -12,7 +12,9 @@ module Tournaments
 
 	      @tournament_days = @tournament.tournament_days.includes(scoring_rules: [payout_results: [:flight, :user, :payout], tournament_day_results: [:user, :primary_scorecard]], tournament_groups: [golf_outings: [:user, scorecard: :scores]])
 	    else
-	      redirect_to league_tournament_tournament_day_flights_path(@tournament.league, @tournament, @tournament.tournament_days.first), flash: { error: "This tournament cannot be finalized. Verify all flights and payouts exist and if this is a team tournament that all team-members are correctly registered in all scoring rules. Only tournaments with scores can be finalized." }
+	    	finalization_blockers = @tournament.finalization_blockers
+
+	      redirect_to league_tournament_tournament_day_flights_path(@tournament.league, @tournament, @tournament.tournament_days.first), flash: { error: "This tournament cannot be finalized. #{finalization_blockers.join(" ")}" }
 	    end
 	  end
 

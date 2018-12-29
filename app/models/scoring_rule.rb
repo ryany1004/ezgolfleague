@@ -108,6 +108,16 @@ class ScoringRule < ApplicationRecord
 		true
 	end
 
+	def finalization_blockers
+		blockers = []
+
+		blockers << "#{self.name}: There are no payouts associated with flights." if self.flight_payouts.count == 0
+		blockers << "#{self.name}: This tournament day has no scores." if !self.tournament_day.has_scores?
+		blockers << "#{self.name}: There are no users for this game type." if self.users.count == 0 && self.payout_assignment_type != ScoringRulePayoutAssignmentType::MANUAL
+
+		blockers
+	end
+
 	def calculate_each_entry?
 		true
 	end

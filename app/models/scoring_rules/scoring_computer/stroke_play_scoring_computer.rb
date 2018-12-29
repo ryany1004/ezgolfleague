@@ -170,6 +170,8 @@ module ScoringComputer
 	  end
 
 		def assign_payouts
+			Rails.logger.debug { "assign_payouts #{self.class}" }
+
 			@scoring_rule.payout_results.destroy_all
 
 			payout_count = @scoring_rule.payouts.count
@@ -180,14 +182,14 @@ module ScoringComputer
       ranked_flights = self.ranked_flights
 
       ranked_flights.each do |flight|
-        flight.payouts.each_with_index do |payout, i|
+        flight.payouts.where(scoring_rule: @scoring_rule).each_with_index do |payout, i|
           if payout.payout_results.count == 0
             result = flight.tournament_day_results[i]
 
             if result.present? and eligible_users.include? result.user
               player = result.user
 
-              Rails.logger.debug { "Assigning #{player.complete_name}. Result [#{result}] Payout [#{payout}]" }
+              Rails.logger.debug { "Assigning #{player.complete_name}. Result [#{result}] Payout [#{payout}] Scoring Rule [#{@scoring_rule.name} #{@scoring_rule.id}]" }
 
               PayoutResult.create(payout: payout, user: player, scoring_rule: @scoring_rule, flight: flight, amount: payout.amount, points: payout.points)
             end

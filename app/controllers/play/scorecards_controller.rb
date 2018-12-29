@@ -56,7 +56,7 @@ class Play::ScorecardsController < Play::BaseController
 
     @tournament_day = @scorecard.golf_outing.tournament_group.tournament_day
 
-    @tournament_day.other_group_members(current_user).each do |user|
+    @tournament_day.scorecard_base_scoring_rule.other_group_members(current_user).each do |user|
       scorecard = @tournament_day.primary_scorecard_for_user(user)
 
       scorecard.designated_editor = current_user

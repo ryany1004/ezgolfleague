@@ -40,7 +40,7 @@ class TournamentDay < ApplicationRecord
     end
   end
 
-  #TEAM: REMOVE
+  # TODO TEAM: REMOVE
   def game_type
     if self.game_type_id == 1
       new_game_type = GameTypes::IndividualStrokePlay.new
@@ -81,6 +81,16 @@ class TournamentDay < ApplicationRecord
     end
 
     true
+  end
+
+  def finalization_blockers
+    blockers = []
+
+    self.scoring_rules.each do |r|
+      blockers += r.finalization_blockers
+    end
+
+    blockers
   end
 
   def can_be_played?
@@ -155,7 +165,7 @@ class TournamentDay < ApplicationRecord
 
   #TODO: MOVE
   def scorecard_display_partial
-    if self.course_holes.count <= 9
+    if self.scorecard_base_scoring_rule.course_holes.count <= 9
       '/shared/scorecards/nine_hole'
     else
       '/shared/scorecards/standard'
@@ -163,7 +173,7 @@ class TournamentDay < ApplicationRecord
   end
 
   def scorecard_print_partial
-    if self.course_holes.count <= 9
+    if self.scorecard_base_scoring_rule.course_holes.count <= 9
       '/shared/scorecards/nine_hole_print'
     else
       '/shared/scorecards/print'

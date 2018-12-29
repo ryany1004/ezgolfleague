@@ -213,19 +213,6 @@ class Tournament < ApplicationRecord
     distinct_courses
   end
 
-  # TODO: REMOVE
-  def paid_contests
-    contests = []
-
-    self.tournament_days.each do |td|
-      td.contests.each do |c|
-        contests << c if c.dues_amount > 0
-      end
-    end
-
-    contests
-  end
-
   def mandatory_scoring_rules
     rules = []
 
@@ -294,6 +281,16 @@ class Tournament < ApplicationRecord
     return false if self.last_day.blank?
 
     self.last_day.can_be_finalized?
+  end
+
+  def finalization_blockers
+    blockers = []
+
+    self.tournament_days.each do |d|
+      blockers += d.finalization_blockers
+    end
+
+    blockers
   end
 
   def run_finalize(should_email = true)
