@@ -1,56 +1,701 @@
-<script>
-  mixpanel.identify();
-  mixpanel.track("Admin: Display Tournament List");
-
-  amplitude.getInstance().setUserId('<%= current_user.id %>');
-  amplitude.getInstance().logEvent("Admin: Display Tournament List");
-</script>
-
-<div class="row">
-  <% if current_user.selected_league.alert_missing_next_season? || !current_user.selected_league.exempt_from_subscription %>
-    <div class="col-md-12">
-      <div class="panel panel-default">
-        <div class="panel-heading">
-          <h3 class="panel-title">Important Information</h3>
+<div class="banner-img tournaments-banner-img"></div>
+<!-- /.banner-img -->
+<div class="container">
+  <div class="dashboard-header ttt-header">
+    <div class="row">
+      <div class="col-md-8">
+        <h2>Tournaments</h2>
+<!--         <p class="mid-ttt-para text-uppercase"><strong>17</strong>tournaments</p>
+        <p class="text-uppercase"><strong>9</strong>tournaments this season</p> -->
+      </div>
+      <!-- /.col-md-8 --> 
+      <div class="col-md-4 text-right">
+        <%= link_to "Create Tournament", new_league_tournament_path(current_user.selected_league), class: 'btn btn-primary' %>
+      </div>
+      <!-- /.col-md-6 --> 
+    </div>
+    <!-- /.row -->         
+  </div>
+  <!-- /.dashboard-header --> 
+  <div class="container">
+    <div class="row search-view-list">
+      <div class="col-md-6">
+        <div class="left-search">
+          <h2>Tournaments</h2>
+          <input class="form-control" type="text" placeholder="Search...">
         </div>
-        <div class="panel-body">
-          <% if current_user.selected_league.alert_missing_next_season? %>
-            <p>Please be sure to create your next season so that your golfers can pay dues and you can create your tournaments.</p>
-            <p><%= link_to "Manage Your Seasons", league_league_seasons_path(current_user.selected_league), class: 'btn btn-primary' %></p>
-            <br/>
-          <% end %>
-
-          <% if !current_user.selected_league.exempt_from_subscription && current_user.is_any_league_admin? %>
-            <% if !current_user.selected_league.has_active_subscription? %>
-              <p>You currently have <%= current_user.selected_league.free_tournaments_remaining %> free tournaments remaining.</p>
-            <% end %>
-
-            <p><%= link_to "View Your Subscription", current_league_subscription_credits_path(current_user.selected_league), class: 'btn btn-primary' %></p>
-          <% end %>
+      </div>
+      <div class="col-md-6">
+        <div class="section-sort text-right">
+          <h2>Sort</h2>
+          <select class="custom-select">
+            <option selected>Latest</option>
+            <option value="1">One</option>
+            <option value="2">Two</option>
+            <option value="3">Three</option>
+          </select>
+          <div class="btn-group" role="group">
+            <button type="button" class="btn btn-light view-list-1 active"></button>
+            <button type="button" class="btn btn-light view-list-2"></button>                
+            <button type="button" class="btn btn-light view-list-3"></button>
+          </div>
         </div>
       </div>
     </div>
-  <% end %>
-
-  <% unless @unconfigured_tournaments.blank? -%>
-    <%= render partial: 'index_table', locals: {tournaments: @unconfigured_tournaments, title: "Setup In Process", show_create: false} %>
-  <% end -%>
-
-  <% unless @upcoming_tournaments.blank? -%>
-    <%= render partial: 'index_table', locals: {tournaments: @upcoming_tournaments, title: "Upcoming Tournaments", show_create: @can_create_tournaments} %>
-  <% end -%>
-
-  <% unless @past_tournaments.blank? -%>
-    <%= render partial: 'index_table', locals: {tournaments: @past_tournaments, title: "Past Tournaments", show_create: @can_create_tournaments} %>
-  <% end -%>
-
-  <% if @can_create_tournaments && @upcoming_tournaments.blank? -%>
-    <% if @past_tournaments.blank? -%>
-      <h4>You don't have any tournaments yet.</h4>
-      <%= link_to 'Create Tournament', new_league_tournament_path(current_user.selected_league), class: 'btn btn-primary' %>
-    <% end -%>
-  <% end -%>
-
-  <%= link_to_prev_page @past_tournaments, '← Previous Page', class: 'btn btn-default' %>
-  <%= link_to_next_page @past_tournaments, 'Next Page →', class: 'btn btn-default' %>
+    <section class="upcoming">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="heading-style">
+            <h2 class="text-uppercase">upcoming</h2>
+          </div>
+        </div>
+      </div>
+      <!-- /.row -->
+      <div class="tournaments-card-slider-list">
+        <div class="row">
+          <% @upcoming_tournaments.each do |tournament| %>
+            <% cache [@upcoming_tournaments] do %>
+              <%= render partial: 'tournament_card', locals: { tournament: tournament } %>
+            <% end %>
+          <% end %>
+        </div>
+        <!-- /.row -->
+      </div>
+      <!-- /.tournaments-card-slider-list -->
+    </section>
+    <!-- /.upcoming -->
+    <section class="upcoming">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="heading-style">
+            <h2 class="text-uppercase">completed</h2>
+          </div>
+        </div>
+      </div>
+      <!-- /.row -->
+      <div class="tournaments-card-slider-list">
+        <div class="row mb-5">
+          <div class="col-md-4">
+            <div class="tournaments-card-slider">
+              <div class="owl-carousel owl-theme">
+                <div class="item">
+                  <a href="#">
+                    <div class="tournaments-card-slider-top">
+                      <div class="overlay"></div>
+                      <p class="text-uppercase para-1">december 18th, 2018</p>
+                      <p class="text-uppercase para-2">brunswick golf club</p>
+                      <h2>Late Summer Tournament</h2>
+                      <img src="silder/1.jpg" alt="">
+                    </div>
+                  </a>
+                </div>
+                <!-- /.item -->
+                <div class="item">
+                  <a href="#">
+                    <div class="tournaments-card-slider-top">
+                      <div class="overlay"></div>
+                      <p class="text-uppercase para-1">december 18th, 2018</p>
+                      <p class="text-uppercase para-2">brunswick golf club</p>
+                      <h2>Late Summer Tournament</h2>
+                      <img src="silder/2.jpg" alt="">
+                    </div>
+                  </a>
+                </div>
+                <!-- /.item -->
+                <div class="item">
+                  <a href="#">
+                    <div class="tournaments-card-slider-top">
+                      <div class="overlay"></div>
+                      <p class="text-uppercase para-1">december 18th, 2018</p>
+                      <p class="text-uppercase para-2">brunswick golf club</p>
+                      <h2>Late Summer Tournament</h2>
+                      <img src="silder/3.jpg" alt="">
+                    </div>
+                  </a>
+                </div>
+                <!-- /.item -->
+                <div class="item">
+                  <a href="#">
+                    <div class="tournaments-card-slider-top">
+                      <div class="overlay"></div>
+                      <p class="text-uppercase para-1">december 18th, 2018</p>
+                      <p class="text-uppercase para-2">brunswick golf club</p>
+                      <h2>Late Summer Tournament</h2>
+                      <img src="silder/4.jpg" alt="">
+                    </div>
+                  </a>
+                </div>
+                <!-- /.item -->
+                <div class="item">
+                  <a href="#">
+                    <div class="tournaments-card-slider-top">
+                      <div class="overlay"></div>
+                      <p class="text-uppercase para-1">december 18th, 2018</p>
+                      <p class="text-uppercase para-2">brunswick golf club</p>
+                      <h2>Late Summer Tournament</h2>
+                      <img src="silder/5.jpg" alt="">
+                    </div>
+                  </a>
+                </div>
+                <!-- /.item -->
+                <div class="item">
+                  <a href="#">
+                    <div class="tournaments-card-slider-top">
+                      <div class="overlay"></div>
+                      <p class="text-uppercase para-1">december 18th, 2018</p>
+                      <p class="text-uppercase para-2">brunswick golf club</p>
+                      <h2>Late Summer Tournament</h2>
+                      <img src="silder/6.jpg" alt="">
+                    </div>
+                  </a>
+                </div>
+                <!-- /.item -->                        
+              </div>
+              <!-- /.owl-carousel -->
+              <div class="regis-open">
+                <p class="text-uppercase text-right">registration open</p>
+              </div>
+              <div class="tournaments-card-footer">
+                <div class="row">
+                  <div class="col-md-7">
+                    <span class="number-text">6</span>
+                    <p class="text-uppercase">golfers registered & paid</p>
+                  </div>
+                  <div class="col-md-5">
+                    <ul class="profile-img-list list-inline">
+                      <li class="list-inline-item"><img src="images/players/1.png" alt=""></li>
+                      <li class="list-inline-item"><img src="images/players/2.png" alt=""></li>
+                      <li class="list-inline-item"><img src="images/players/3.png" alt=""></li>
+                      <li class="list-inline-item"><img src="images/players/4.png" alt=""></li>
+                      <li class="list-inline-item"><img src="images/players/5.png" alt=""></li>
+                      <li class="list-inline-item"><span>+1</span></li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- /.tournaments-card-slider -->
+          </div>
+          <!-- /.col-md-4 -->
+          <div class="col-md-4">
+            <div class="tournaments-card-slider">
+              <div class="owl-carousel owl-theme">
+                <div class="item">
+                  <a href="#">
+                    <div class="tournaments-card-slider-top">
+                      <div class="overlay"></div>
+                      <p class="text-uppercase para-1">december 18th, 2018</p>
+                      <p class="text-uppercase para-2">brunswick golf club</p>
+                      <h2>Spring Invitational Tournaments</h2>
+                      <img src="silder/1.jpg" alt="">
+                    </div>
+                  </a>
+                </div>
+                <!-- /.item -->
+                <div class="item">
+                  <a href="#">
+                    <div class="tournaments-card-slider-top">
+                      <div class="overlay"></div>
+                      <p class="text-uppercase para-1">december 18th, 2018</p>
+                      <p class="text-uppercase para-2">brunswick golf club</p>
+                      <h2>Spring Invitational Tournaments</h2>
+                      <img src="silder/2.jpg" alt="">
+                    </div>
+                  </a>
+                </div>
+                <!-- /.item -->
+                <div class="item">
+                  <a href="#">
+                    <div class="tournaments-card-slider-top">
+                      <div class="overlay"></div>
+                      <p class="text-uppercase para-1">december 18th, 2018</p>
+                      <p class="text-uppercase para-2">brunswick golf club</p>
+                      <h2>Spring Invitational Tournaments</h2>
+                      <img src="silder/3.jpg" alt="">
+                    </div>
+                  </a>
+                </div>
+                <!-- /.item -->
+                <div class="item">
+                  <a href="#">
+                    <div class="tournaments-card-slider-top">
+                      <div class="overlay"></div>
+                      <p class="text-uppercase para-1">december 18th, 2018</p>
+                      <p class="text-uppercase para-2">brunswick golf club</p>
+                      <h2>Spring Invitational Tournaments</h2>
+                      <img src="silder/4.jpg" alt="">
+                    </div>
+                  </a>
+                </div>
+                <!-- /.item -->
+                <div class="item">
+                  <a href="#">
+                    <div class="tournaments-card-slider-top">
+                      <div class="overlay"></div>
+                      <p class="text-uppercase para-1">december 18th, 2018</p>
+                      <p class="text-uppercase para-2">brunswick golf club</p>
+                      <h2>Spring Invitational Tournaments</h2>
+                      <img src="silder/5.jpg" alt="">
+                    </div>
+                  </a>
+                </div>
+                <!-- /.item -->
+                <div class="item">
+                  <a href="#">
+                    <div class="tournaments-card-slider-top">
+                      <div class="overlay"></div>
+                      <p class="text-uppercase para-1">december 18th, 2018</p>
+                      <p class="text-uppercase para-2">brunswick golf club</p>
+                      <h2>Spring Invitational Tournaments</h2>
+                      <img src="silder/6.jpg" alt="">
+                    </div>
+                  </a>
+                </div>
+                <!-- /.item -->                        
+              </div>
+              <!-- /.owl-carousel -->
+              <div class="regis-open">
+                <p class="text-uppercase text-right">registration open</p>
+              </div>
+              <div class="tournaments-card-footer">
+                <div class="row">
+                  <div class="col-md-7">
+                    <span class="number-text">6</span>
+                    <p class="text-uppercase">golfers registered & paid</p>
+                  </div>
+                  <div class="col-md-5">
+                    <ul class="profile-img-list list-inline">
+                      <li class="list-inline-item"><img src="images/players/1.png" alt=""></li>
+                      <li class="list-inline-item"><img src="images/players/2.png" alt=""></li>
+                      <li class="list-inline-item"><img src="images/players/3.png" alt=""></li>
+                      <li class="list-inline-item"><img src="images/players/4.png" alt=""></li>
+                      <li class="list-inline-item"><img src="images/players/5.png" alt=""></li>
+                      <li class="list-inline-item"><span>+1</span></li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- /.tournaments-card-slider -->
+          </div>
+          <!-- /.col-md-4 -->
+          <div class="col-md-4">
+            <div class="tournaments-card-slider">
+              <div class="owl-carousel owl-theme">
+                <div class="item">
+                  <a href="#">
+                    <div class="tournaments-card-slider-top">
+                      <div class="overlay"></div>
+                      <p class="text-uppercase para-1">december 18th, 2018</p>
+                      <p class="text-uppercase para-2">brunswick golf club</p>
+                      <h2>February Tournament</h2>
+                      <img src="silder/1.jpg" alt="">
+                    </div>
+                  </a>
+                </div>
+                <!-- /.item -->
+                <div class="item">
+                  <a href="#">
+                    <div class="tournaments-card-slider-top">
+                      <div class="overlay"></div>
+                      <p class="text-uppercase para-1">december 18th, 2018</p>
+                      <p class="text-uppercase para-2">brunswick golf club</p>
+                      <h2>February Tournament</h2>
+                      <img src="silder/2.jpg" alt="">
+                    </div>
+                  </a>
+                </div>
+                <!-- /.item -->
+                <div class="item">
+                  <a href="#">
+                    <div class="tournaments-card-slider-top">
+                      <div class="overlay"></div>
+                      <p class="text-uppercase para-1">december 18th, 2018</p>
+                      <p class="text-uppercase para-2">brunswick golf club</p>
+                      <h2>February Tournament</h2>
+                      <img src="silder/4.jpg" alt="">
+                    </div>
+                  </a>
+                </div>
+                <!-- /.item -->
+                <div class="item">
+                  <a href="#">
+                    <div class="tournaments-card-slider-top">
+                      <div class="overlay"></div>
+                      <p class="text-uppercase para-1">december 18th, 2018</p>
+                      <p class="text-uppercase para-2">brunswick golf club</p>
+                      <h2>February Tournament</h2>
+                      <img src="silder/5.jpg" alt="">
+                    </div>
+                  </a>
+                </div>
+                <!-- /.item -->
+                <div class="item">
+                  <a href="#">
+                    <div class="tournaments-card-slider-top">
+                      <div class="overlay"></div>
+                      <p class="text-uppercase para-1">december 18th, 2018</p>
+                      <p class="text-uppercase para-2">brunswick golf club</p>
+                      <h2>February Tournament</h2>
+                      <img src="silder/6.jpg" alt="">
+                    </div>
+                  </a>
+                </div>
+                <!-- /.item -->
+                <div class="item">
+                  <a href="#">
+                    <div class="tournaments-card-slider-top">
+                      <div class="overlay"></div>
+                      <p class="text-uppercase para-1">december 18th, 2018</p>
+                      <p class="text-uppercase para-2">brunswick golf club</p>
+                      <h2>February Tournament</h2>
+                      <img src="silder/6.jpg" alt="">
+                    </div>
+                  </a>
+                </div>
+                <!-- /.item -->                        
+              </div>
+              <!-- /.owl-carousel -->
+              <div class="regis-open">
+                <p class="text-uppercase text-right">registration open</p>
+              </div>
+              <div class="tournaments-card-footer">
+                <div class="row">
+                  <div class="col-md-7">
+                    <span class="number-text">6</span>
+                    <p class="text-uppercase">golfers registered & paid</p>
+                  </div>
+                  <div class="col-md-5">
+                    <ul class="profile-img-list list-inline">
+                      <li class="list-inline-item"><img src="images/players/1.png" alt=""></li>
+                      <li class="list-inline-item"><img src="images/players/2.png" alt=""></li>
+                      <li class="list-inline-item"><img src="images/players/3.png" alt=""></li>
+                      <li class="list-inline-item"><img src="images/players/4.png" alt=""></li>
+                      <li class="list-inline-item"><img src="images/players/5.png" alt=""></li>
+                      <li class="list-inline-item"><span>+1</span></li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- /.tournaments-card-slider -->
+          </div>
+          <!-- /.col-md-4 -->
+        </div>
+        <!-- /.row -->
+        <div class="row mb-5">
+          <div class="col-md-4">
+            <div class="tournaments-card-slider">
+              <div class="owl-carousel owl-theme">
+                <div class="item">
+                  <a href="#">
+                    <div class="tournaments-card-slider-top">
+                      <div class="overlay"></div>
+                      <p class="text-uppercase para-1">december 18th, 2018</p>
+                      <p class="text-uppercase para-2">brunswick golf club</p>
+                      <h2>Late Summer Tournament</h2>
+                      <img src="silder/1.jpg" alt="">
+                    </div>
+                  </a>
+                </div>
+                <!-- /.item -->
+                <div class="item">
+                  <a href="#">
+                    <div class="tournaments-card-slider-top">
+                      <div class="overlay"></div>
+                      <p class="text-uppercase para-1">december 18th, 2018</p>
+                      <p class="text-uppercase para-2">brunswick golf club</p>
+                      <h2>Late Summer Tournament</h2>
+                      <img src="silder/2.jpg" alt="">
+                    </div>
+                  </a>
+                </div>
+                <!-- /.item -->
+                <div class="item">
+                  <a href="#">
+                    <div class="tournaments-card-slider-top">
+                      <div class="overlay"></div>
+                      <p class="text-uppercase para-1">december 18th, 2018</p>
+                      <p class="text-uppercase para-2">brunswick golf club</p>
+                      <h2>Late Summer Tournament</h2>
+                      <img src="silder/3.jpg" alt="">
+                    </div>
+                  </a>
+                </div>
+                <!-- /.item -->
+                <div class="item">
+                  <a href="#">
+                    <div class="tournaments-card-slider-top">
+                      <div class="overlay"></div>
+                      <p class="text-uppercase para-1">december 18th, 2018</p>
+                      <p class="text-uppercase para-2">brunswick golf club</p>
+                      <h2>Late Summer Tournament</h2>
+                      <img src="silder/4.jpg" alt="">
+                    </div>
+                  </a>
+                </div>
+                <!-- /.item -->
+                <div class="item">
+                  <a href="#">
+                    <div class="tournaments-card-slider-top">
+                      <div class="overlay"></div>
+                      <p class="text-uppercase para-1">december 18th, 2018</p>
+                      <p class="text-uppercase para-2">brunswick golf club</p>
+                      <h2>Late Summer Tournament</h2>
+                      <img src="silder/5.jpg" alt="">
+                    </div>
+                  </a>
+                </div>
+                <!-- /.item -->
+                <div class="item">
+                  <a href="#">
+                    <div class="tournaments-card-slider-top">
+                      <div class="overlay"></div>
+                      <p class="text-uppercase para-1">december 18th, 2018</p>
+                      <p class="text-uppercase para-2">brunswick golf club</p>
+                      <h2>Late Summer Tournament</h2>
+                      <img src="silder/6.jpg" alt="">
+                    </div>
+                  </a>
+                </div>
+                <!-- /.item -->                        
+              </div>
+              <!-- /.owl-carousel -->
+              <div class="regis-open">
+                <p class="text-uppercase text-right">registration open</p>
+              </div>
+              <div class="tournaments-card-footer">
+                <div class="row">
+                  <div class="col-md-7">
+                    <span class="number-text">6</span>
+                    <p class="text-uppercase">golfers registered & paid</p>
+                  </div>
+                  <div class="col-md-5">
+                    <ul class="profile-img-list list-inline">
+                      <li class="list-inline-item"><img src="images/players/1.png" alt=""></li>
+                      <li class="list-inline-item"><img src="images/players/2.png" alt=""></li>
+                      <li class="list-inline-item"><img src="images/players/3.png" alt=""></li>
+                      <li class="list-inline-item"><img src="images/players/4.png" alt=""></li>
+                      <li class="list-inline-item"><img src="images/players/5.png" alt=""></li>
+                      <li class="list-inline-item"><span>+1</span></li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- /.tournaments-card-slider -->
+          </div>
+          <!-- /.col-md-4 -->
+          <div class="col-md-4">
+            <div class="tournaments-card-slider">
+              <div class="owl-carousel owl-theme">
+                <div class="item">
+                  <a href="#">
+                    <div class="tournaments-card-slider-top">
+                      <div class="overlay"></div>
+                      <p class="text-uppercase para-1">december 18th, 2018</p>
+                      <p class="text-uppercase para-2">brunswick golf club</p>
+                      <h2>Spring Invitational Tournaments</h2>
+                      <img src="silder/1.jpg" alt="">
+                    </div>
+                  </a>
+                </div>
+                <!-- /.item -->
+                <div class="item">
+                  <a href="#">
+                    <div class="tournaments-card-slider-top">
+                      <div class="overlay"></div>
+                      <p class="text-uppercase para-1">december 18th, 2018</p>
+                      <p class="text-uppercase para-2">brunswick golf club</p>
+                      <h2>Spring Invitational Tournaments</h2>
+                      <img src="silder/2.jpg" alt="">
+                    </div>
+                  </a>
+                </div>
+                <!-- /.item -->
+                <div class="item">
+                  <a href="#">
+                    <div class="tournaments-card-slider-top">
+                      <div class="overlay"></div>
+                      <p class="text-uppercase para-1">december 18th, 2018</p>
+                      <p class="text-uppercase para-2">brunswick golf club</p>
+                      <h2>Spring Invitational Tournaments</h2>
+                      <img src="silder/3.jpg" alt="">
+                    </div>
+                  </a>
+                </div>
+                <!-- /.item -->
+                <div class="item">
+                  <a href="#">
+                    <div class="tournaments-card-slider-top">
+                      <div class="overlay"></div>
+                      <p class="text-uppercase para-1">december 18th, 2018</p>
+                      <p class="text-uppercase para-2">brunswick golf club</p>
+                      <h2>Spring Invitational Tournaments</h2>
+                      <img src="silder/4.jpg" alt="">
+                    </div>
+                  </a>
+                </div>
+                <!-- /.item -->
+                <div class="item">
+                  <a href="#">
+                    <div class="tournaments-card-slider-top">
+                      <div class="overlay"></div>
+                      <p class="text-uppercase para-1">december 18th, 2018</p>
+                      <p class="text-uppercase para-2">brunswick golf club</p>
+                      <h2>Spring Invitational Tournaments</h2>
+                      <img src="silder/5.jpg" alt="">
+                    </div>
+                  </a>
+                </div>
+                <!-- /.item -->
+                <div class="item">
+                  <a href="#">
+                    <div class="tournaments-card-slider-top">
+                      <div class="overlay"></div>
+                      <p class="text-uppercase para-1">december 18th, 2018</p>
+                      <p class="text-uppercase para-2">brunswick golf club</p>
+                      <h2>Spring Invitational Tournaments</h2>
+                      <img src="silder/6.jpg" alt="">
+                    </div>
+                  </a>
+                </div>
+                <!-- /.item -->                        
+              </div>
+              <!-- /.owl-carousel -->
+              <div class="regis-open">
+                <p class="text-uppercase text-right">registration open</p>
+              </div>
+              <div class="tournaments-card-footer">
+                <div class="row">
+                  <div class="col-md-7">
+                    <span class="number-text">6</span>
+                    <p class="text-uppercase">golfers registered & paid</p>
+                  </div>
+                  <div class="col-md-5">
+                    <ul class="profile-img-list list-inline">
+                      <li class="list-inline-item"><img src="images/players/1.png" alt=""></li>
+                      <li class="list-inline-item"><img src="images/players/2.png" alt=""></li>
+                      <li class="list-inline-item"><img src="images/players/3.png" alt=""></li>
+                      <li class="list-inline-item"><img src="images/players/4.png" alt=""></li>
+                      <li class="list-inline-item"><img src="images/players/5.png" alt=""></li>
+                      <li class="list-inline-item"><span>+1</span></li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- /.tournaments-card-slider -->
+          </div>
+          <!-- /.col-md-4 -->
+          <div class="col-md-4">
+            <div class="tournaments-card-slider">
+              <div class="owl-carousel owl-theme">
+                <div class="item">
+                  <a href="#">
+                    <div class="tournaments-card-slider-top">
+                      <div class="overlay"></div>
+                      <p class="text-uppercase para-1">december 18th, 2018</p>
+                      <p class="text-uppercase para-2">brunswick golf club</p>
+                      <h2>February Tournament</h2>
+                      <img src="silder/1.jpg" alt="">
+                    </div>
+                  </a>
+                </div>
+                <!-- /.item -->
+                <div class="item">
+                  <a href="#">
+                    <div class="tournaments-card-slider-top">
+                      <div class="overlay"></div>
+                      <p class="text-uppercase para-1">december 18th, 2018</p>
+                      <p class="text-uppercase para-2">brunswick golf club</p>
+                      <h2>February Tournament</h2>
+                      <img src="silder/2.jpg" alt="">
+                    </div>
+                  </a>
+                </div>
+                <!-- /.item -->
+                <div class="item">
+                  <a href="#">
+                    <div class="tournaments-card-slider-top">
+                      <div class="overlay"></div>
+                      <p class="text-uppercase para-1">december 18th, 2018</p>
+                      <p class="text-uppercase para-2">brunswick golf club</p>
+                      <h2>February Tournament</h2>
+                      <img src="silder/4.jpg" alt="">
+                    </div>
+                  </a>
+                </div>
+                <!-- /.item -->
+                <div class="item">
+                  <a href="#">
+                    <div class="tournaments-card-slider-top">
+                      <div class="overlay"></div>
+                      <p class="text-uppercase para-1">december 18th, 2018</p>
+                      <p class="text-uppercase para-2">brunswick golf club</p>
+                      <h2>February Tournament</h2>
+                      <img src="silder/5.jpg" alt="">
+                    </div>
+                  </a>
+                </div>
+                <!-- /.item -->
+                <div class="item">
+                  <a href="#">
+                    <div class="tournaments-card-slider-top">
+                      <div class="overlay"></div>
+                      <p class="text-uppercase para-1">december 18th, 2018</p>
+                      <p class="text-uppercase para-2">brunswick golf club</p>
+                      <h2>February Tournament</h2>
+                      <img src="silder/6.jpg" alt="">
+                    </div>
+                  </a>
+                </div>
+                <!-- /.item -->
+                <div class="item">
+                  <a href="#">
+                    <div class="tournaments-card-slider-top">
+                      <div class="overlay"></div>
+                      <p class="text-uppercase para-1">december 18th, 2018</p>
+                      <p class="text-uppercase para-2">brunswick golf club</p>
+                      <h2>February Tournament</h2>
+                      <img src="silder/6.jpg" alt="">
+                    </div>
+                  </a>
+                </div>
+                <!-- /.item -->                        
+              </div>
+              <!-- /.owl-carousel -->
+              <div class="regis-open">
+                <p class="text-uppercase text-right">registration open</p>
+              </div>
+              <div class="tournaments-card-footer">
+                <div class="row">
+                  <div class="col-md-7">
+                    <span class="number-text">6</span>
+                    <p class="text-uppercase">golfers registered & paid</p>
+                  </div>
+                  <div class="col-md-5">
+                    <ul class="profile-img-list list-inline">
+                      <li class="list-inline-item"><img src="images/players/1.png" alt=""></li>
+                      <li class="list-inline-item"><img src="images/players/2.png" alt=""></li>
+                      <li class="list-inline-item"><img src="images/players/3.png" alt=""></li>
+                      <li class="list-inline-item"><img src="images/players/4.png" alt=""></li>
+                      <li class="list-inline-item"><img src="images/players/5.png" alt=""></li>
+                      <li class="list-inline-item"><span>+1</span></li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- /.tournaments-card-slider -->
+          </div>
+          <!-- /.col-md-4 -->
+        </div>
+        <!-- /.row -->
+        
+      </div>
+      <!-- /.tournaments-card-slider-list -->
+    </section>
+    <!-- /.upcoming -->
+  </div>
 </div>

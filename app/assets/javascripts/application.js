@@ -24,6 +24,8 @@
 //= require chosen-jquery
 //= require chosen_scaffold
 
+//= require jquery.mCustomScrollbar.concat.min.js
+
 function trackUserEvent(eventName) {
   mixpanel.track(eventName);
   amplitude.getInstance().logEvent(eventName);

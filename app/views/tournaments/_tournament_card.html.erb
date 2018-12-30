@@ -1,0 +1,42 @@
+<div class="col-md-4">
+  <div class="tournaments-card-slider">
+    <!-- <div class="owl-carousel owl-theme"> -->
+      <div class="item">
+        <a href="#">
+          <div class="tournaments-card-slider-top">
+            <div class="overlay"></div>
+            <p class="text-uppercase para-1"><%= tournament.tournament_starts_at.to_s(:standard) %></p>
+            <p class="text-uppercase para-2"><%= tournament.first_day.course.name %></p>
+            <h2><%= tournament.name %></h2>
+            <%= image_tag "course_backgrounds/#{rand(6)}.jpg" %>
+          </div>
+        </a>
+      </div>
+      <!-- /.item --> 
+    <!-- </div> -->
+    <!-- /.owl-carousel -->
+    <div class="regis-open">
+      <p class="text-uppercase text-right">registration open</p>
+    </div>
+    <div class="tournaments-card-footer">
+      <div class="row">
+        <div class="col-md-7">
+          <span class="number-text">6</span>
+          <p class="text-uppercase">golfers registered & paid</p>
+        </div>
+        <div class="col-md-5">
+          <ul class="profile-img-list list-inline">
+            <li class="list-inline-item"><img src="images/players/1.png" alt=""></li>
+            <li class="list-inline-item"><img src="images/players/2.png" alt=""></li>
+            <li class="list-inline-item"><img src="images/players/3.png" alt=""></li>
+            <li class="list-inline-item"><img src="images/players/4.png" alt=""></li>
+            <li class="list-inline-item"><img src="images/players/5.png" alt=""></li>
+            <li class="list-inline-item"><span>+1</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- /.tournaments-card-slider -->
+</div>
+<!-- /.col-md-4 -->

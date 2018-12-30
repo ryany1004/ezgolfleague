@@ -1,2 +1,0 @@
-module SubscriptionCreditsHelper
-end

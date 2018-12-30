@@ -21,6 +21,16 @@ module Playable
     players
   end
 
+  def paid_players
+    paid_players = []
+
+    self.players.each do |p|
+      paid_players << p if self.user_has_paid?(p)
+    end
+
+    paid_players
+  end
+
   def qualified_players
     players = []
 

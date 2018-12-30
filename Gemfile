@@ -13,7 +13,7 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 gem 'devise',           '~> 4.2'
 gem 'devise_invitable', '~> 1.7.0'
 gem 'pretender'
-gem 'bootstrap-sass', '~> 3.3.4'
+gem 'bootstrap', '~> 4.2.1'
 gem 'paperclip', '~> 5.0.0'
 gem 'aws-sdk', '~> 2.3'
 gem 'kaminari'

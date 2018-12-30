@@ -1,0 +1,8 @@
+<script type="text/javascript" src="https://js.stripe.com/v2/"></script>
+<script type="text/javascript">
+  <% if !current_user.blank? && !current_user.selected_league.blank? && !current_user.selected_league.stripe_publishable_key.blank? %>
+    Stripe.setPublishableKey('<%= current_user.selected_league.stripe_publishable_key %>');
+  <% else %>
+    Stripe.setPublishableKey('<%= STRIPE_PUBLISHABLE_KEY %>');
+  <% end %>
+</script>

@@ -14,10 +14,10 @@
  *= require_self
  */
 
-@import "bootstrap-sprockets";
 @import "bootstrap";
 @import "bootstrap-datetimepicker";
-
+@import "ezgl";
+@import "jquery.mCustomScrollbar.min";
 @import "chosen";
 
 #printable-scorecard-table table, #printable-scorecard-table td, #printable-scorecard-table tr, #printable-scorecard-table th {

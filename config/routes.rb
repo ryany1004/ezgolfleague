@@ -7,7 +7,7 @@ Rails.application.routes.draw do
 
   devise_for :users
 
-  root to: 'tournaments#index', constraints: -> (r) { r.env["warden"].authenticate? && r.env['warden'].user.is_any_league_admin? }, as: :league_admin_root
+  root to: 'dashboard#index', constraints: -> (r) { r.env["warden"].authenticate? && r.env['warden'].user.is_any_league_admin? }, as: :league_admin_root
   root to: 'play/dashboard#index'
 
   get 'apple-app-site-association', to: 'api/v1/tournaments#app_association'
@@ -116,6 +116,8 @@ Rails.application.routes.draw do
   end
 
   #this is for admin
+  resources :dashboard, only: [:index]
+
   resources :leagues do
     patch 'update_from_ghin'
     patch 'update_league_standings'
