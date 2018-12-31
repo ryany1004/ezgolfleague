@@ -115,6 +115,8 @@ class User < ApplicationRecord
     response = DRIP_CLIENT.create_or_update_subscriber(self.email, options)
 
     puts response
+
+    response
   end
 
   ##
