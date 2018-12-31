@@ -1,6 +1,5 @@
 <script>
-  mixpanel.track("Display Tournament Contests");
-  amplitude.getInstance().logEvent("Display Tournament Contests");
+  ezglTrackAnalyticsEvent("Viewed tournament contests", { tournament_day_id: "<%= @tournament_day.id %>" });
 </script>
 
 <ol class="breadcrumb">

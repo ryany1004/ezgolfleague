@@ -53,3 +53,11 @@ jQuery.fn.extend({
         });
     }
 });
+
+function ezglTrackAnalyticsEvent(eventName, eventProperties = null) {
+  mixpanel.track(eventName);
+  
+  amplitude.getInstance().logEvent(eventProperties);
+
+  _dcq.push(["track", eventName, eventProperties]);
+}

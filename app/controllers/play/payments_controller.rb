@@ -130,6 +130,7 @@ class Play::PaymentsController < Play::BaseController
   end
 
   def thank_you
+    @payment = Payment.where(user: current_user).last
   end
 
   def error

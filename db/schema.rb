@@ -449,7 +449,9 @@ ActiveRecord::Schema.define(version: 20181007183456) do
     t.string "name"
     t.boolean "aggregated_result", default: false
     t.integer "sort_rank"
+    t.index ["aggregated_result"], name: "index_tournament_day_results_on_aggregated_result"
     t.index ["flight_id"], name: "index_tournament_day_results_on_flight_id"
+    t.index ["sort_rank"], name: "index_tournament_day_results_on_sort_rank"
     t.index ["tournament_day_id"], name: "index_tournament_day_results_on_tournament_day_id"
     t.index ["user_id"], name: "index_tournament_day_results_on_user_id"
     t.index ["user_primary_scorecard_id"], name: "index_tournament_day_results_on_user_primary_scorecard_id"

@@ -1,6 +1,5 @@
 <script>
-  mixpanel.track("Admin: Contest Result Index");
-  amplitude.getInstance().logEvent("Admin: Contest Result Index");
+  ezglTrackAnalyticsEvent("Viewed the list of contest results", { contest_name: "<%= @contest.name %>" });
 </script>
 
 <ol class="breadcrumb">

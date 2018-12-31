@@ -87,6 +87,19 @@ class User < ApplicationRecord
     "http://162.245.224.193/Widgets/HandicapLookupResults.aspx?entry=1&ghinno=#{self.ghin_number}&css=default&dynamic=&small=0&mode=&tab=0"
   end
 
+  def drip_tags
+    tags = []
+
+    tags << "Golfer"
+    tags << "League Admin" if self.is_any_league_admin?
+
+    self.leagues.each do |l|
+      tags << l.name
+    end
+
+    tags.to_json
+  end
+
   ##
 
   def can_edit_user?(user)
