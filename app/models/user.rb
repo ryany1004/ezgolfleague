@@ -92,12 +92,29 @@ class User < ApplicationRecord
 
     tags << "Golfer"
     tags << "League Admin" if self.is_any_league_admin?
+    tags << "Mobile User" if self.mobile_devices.count > 0
+    tags << "iOS User" if self.has_ios_devices?
+    tags << "Android User" if self.has_android_devices?
 
     self.leagues.each do |l|
       tags << l.name
     end
 
-    tags.to_json
+    tags
+  end
+
+  def send_to_drip
+    options = {
+      tags: self.drip_tags,
+      custom_fields: {
+        first_name: self.first_name,
+        last_name: self.last_name,
+      }
+    }
+
+    response = DRIP_CLIENT.create_or_update_subscriber(self.email, options)
+
+    puts response
   end
 
   ##
