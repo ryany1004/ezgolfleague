@@ -57,7 +57,7 @@ jQuery.fn.extend({
 function ezglTrackAnalyticsEvent(eventName, eventProperties = null) {
   mixpanel.track(eventName);
   
-  amplitude.getInstance().logEvent(eventProperties);
+  amplitude.getInstance().logEvent(eventName);
 
   _dcq.push(["track", eventName, eventProperties]);
 }
