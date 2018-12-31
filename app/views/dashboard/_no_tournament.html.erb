@@ -1,0 +1,30 @@
+<div class="col-md-8">
+    <div class="view-tournament-card h-100">
+        <div class="upcoming-tournaments-body text-center">
+            <h2>You have no upcoming tournaments.</h2>
+            <button type="button" class="btn btn-primary">Create Tournament</button>
+            <%= button_to "Create Tournament", new_league_tournament_path(tournament.league), class: "btn btn-primary" %>
+        </div><!-- /.upcoming-tournaments-body -->
+        <div class="upcoming-tournaments-med">
+          <div class="row">
+            <div class="col-md-6">
+                <p>previous tournament</p>
+            </div><!-- /.col-md-6 -->
+            <div class="col-md-6 text-right">
+                <p><a href="#">view all</a></p>
+            </div><!-- /.col-md-6 -->
+          </div><!-- /.row -->
+        </div><!-- /.upcoming-tournaments-med -->  
+        <div class="upcoming-tournaments-footer">
+            <div class="row">
+              <div class="col-md-8">
+                <h2><%= tournament.name %></h2>
+                <p class="text-uppercase"><%= tournament.first_day.tournament_at.to_s(:long) %></p>
+              </div><!-- /.col-md-6 -->
+              <div class="col-md-4 text-right">
+                <%= link_to "View Tournament", league_tournament_path(tournament.league), class: "btn btn-outline-dark" %>
+              </div><!-- /.col-md-6 -->
+            </div><!-- /.row -->
+        </div><!-- /.upcoming-tournaments-footer -->                            
+    </div><!-- /.view-tournament-card -->
+</div><!-- /.col-md-8 -->

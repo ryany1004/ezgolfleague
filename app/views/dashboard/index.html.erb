@@ -71,81 +71,11 @@
                   </div><!-- /.ppp-content -->
               </div><!-- /.view-league-card -->
             </div><!-- /.col-md-4 -->
-            <div class="col-md-8">
-                <div class="view-tournament-card h-100">
-                    <div class="view-tournament-card-header">
-                      <div class="row">
-                        <div class="col-md-8 vtch-left-content">
-                            <h2><%= @next_tournament.name %></h2>
-                            <p class="text-uppercase"><%= @next_tournament.first_day.tournament_at.to_s(:long) %> <% if registration_is_open?(@next_tournament) %><a href="#">registration open</a><% end %></p>
-                        </div><!-- /.col-md-8 -->
-                        <div class="col-md-4 text-right">
-                          <%= link_to "View Tournament", league_tournament_path(@next_tournament.league, @next_tournament), class: "btn btn-primary" %>
-                        </div><!-- /.col-md-8 -->
-                      </div><!-- /.row -->
-                    </div><!-- /.view-tournament-card-header -->
-                    <div class="player-box">
-                       <div class="row">
-                          <div class="col-md-6">
-                            <h2>Players</h2>
-                          </div><!-- /.col-md-6 -->
-                          <div class="col-md-6">
-                            <ul class="list-inline player-list text-uppercase">
-                              <li class="list-inline-item"><%= @next_tournament.players.count %><span>registered</span></li>
-                              <li class="list-inline-item"><%= @next_tournament.paid_players.count %><span>paid</span></li>
-                            </ul>
-                          </div><!-- /.col-md-6 -->
-                        </div><!-- /.row -->
-                    </div><!-- /.player-box -->
-                    <div class="player-list-header">
-                        <div class="row text-uppercase">
-                          <div class="col-md-6">
-                            player
-                          </div>
-                          <div class="col">
-                            tee time
-                          </div>
-                          <div class="col">
-                            dues paid
-                          </div>
-                          <div class="col">
-                            contests
-                          </div>
-                        </div>
-                    </div>
-                    <div class="player-list-content mCustomScrollbar" data-mcs-theme="dark">
-                      <% @next_tournament.first_day.tournament_groups.each do |group| %>
-                        <% group.golf_outings.each do |outing| %>
-                          <div class="player-list-col">
-                            <div class="row">
-                              <div class="col-md-6">
-                                <div class="media">
-                                  <%= image_tag outing.user.avatar.url(:thumb) %>
-                                  <div class="media-body">
-                                    <h2><%= outing.user.complete_name %></h2>
-                                  </div>
-                                </div>                              
-                              </div>
-                              <div class="col time-col">
-                                 <%= group.tee_time_at.to_s(:time_only) %> 
-                              </div>
-                              <div class="col paid-col">
-                                <% if @next_tournament.user_has_paid?(outing.user) %>
-                                  <span class="color-1"></span>Paid
-                                <% else %>
-                                  <span class="color-2"></span>Paid
-                                <% end %>
-                              </div>
-                              <div class="col contests-co">
-                                ???
-                              </div>
-                            </div><!-- /.row -->
-                          </div><!-- /.player-list-col --> 
-                        <% end %>
-                      <% end %>
-                    </div><!-- /.player-list-content -->                  
-                </div><!-- /.view-tournament-card -->
-            </div><!-- /.col-md-8 -->
+            <% if @next_tournament.present? %>
+              <%= render partial: 'tournament', locals: { tournament: @next_tournament } %>
+            <% else %>
+              <%= render partial: 'no_tournament', locals: { tournament: @previous_tournament } %>
+            <% end %>
         </div><!-- /.row -->
     </div><!-- /.dashboard-content -->
   </div>

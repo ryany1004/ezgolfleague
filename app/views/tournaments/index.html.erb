@@ -42,6 +42,8 @@
         </div>
       </div>
     </div>
+
+    <% if @upcoming_tournaments.count > 0 %>
     <section class="upcoming">
       <div class="row">
         <div class="col-md-12">
@@ -50,19 +52,21 @@
           </div>
         </div>
       </div>
-      <!-- /.row -->
       <div class="tournaments-card-slider-list">
-        <div class="row">
-          <% @upcoming_tournaments.each do |tournament| %>
-            <% cache [@upcoming_tournaments] do %>
-              <%= render partial: 'tournament_card', locals: { tournament: tournament } %>
+        <% @upcoming_tournaments.each_slice(3).each do |slice| %>
+          <div class="row mb-5">
+            <% slice.each do |tournament| %>
+              <% cache [slice] do %>
+                <%= render partial: 'tournament_card', locals: { tournament: tournament } %>
+              <% end %>
             <% end %>
-          <% end %>
-        </div>
-        <!-- /.row -->
+          </div>
+        <% end %>
       </div>
       <!-- /.tournaments-card-slider-list -->
     </section>
+    <% end %>
+
     <!-- /.upcoming -->
     <section class="upcoming">
       <div class="row">
@@ -696,6 +700,10 @@
       </div>
       <!-- /.tournaments-card-slider-list -->
     </section>
+
+    <%= link_to_prev_page @past_tournaments, '← Previous Page', class: 'btn btn-default' %>
+    <%= link_to_next_page @past_tournaments, 'Next Page →', class: 'btn btn-default' %>
+
     <!-- /.upcoming -->
   </div>
 </div>
