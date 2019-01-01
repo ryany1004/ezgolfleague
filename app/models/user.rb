@@ -119,6 +119,10 @@ class User < ApplicationRecord
     response
   end
 
+  def delete_from_drip
+    response = DRIP_CLIENT.unsubscribe(self.email)
+  end
+
   ##
 
   def can_edit_user?(user)
