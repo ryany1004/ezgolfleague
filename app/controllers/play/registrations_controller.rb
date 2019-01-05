@@ -98,9 +98,12 @@ class Play::RegistrationsController < Play::BaseController
   def invite_golfers
     @league = League.find(params[:golfers][:league_id])
 
-    params[:golfers][:golfers_to_invite].split("\n").each do |g|
+    golfers_to_invite = params[:golfers][:golfers_to_invite].split("\n")
+    golfers_to_invite.each do |g|
       UserMailer.invite(g, @league).deliver_later
     end
+
+    response = DRIP_CLIENT.track_event(current_user.email, "League admin invited golfers during registration", { number_of_golfers: golfers_to_invite.count, league_name: @league.name })
 
     redirect_to setup_completed_play_registrations_path
   end
