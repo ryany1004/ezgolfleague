@@ -381,6 +381,7 @@ GEM
     sassc (2.0.0)
       ffi (~> 1.9.6)
       rake
+    scout_apm (2.1.31)
     sdoc (0.4.2)
       json (~> 1.7, >= 1.7.7)
       rdoc (~> 4.0)
@@ -484,6 +485,7 @@ DEPENDENCIES
   rollbar
   rspec-rails (= 3.5.0.beta3)
   sass-rails (~> 5.0)
+  scout_apm
   sdoc (~> 0.4.0)
   simple_form
   spring
