@@ -73,6 +73,8 @@
 
 <% unless params[:details_amount].blank? %>
 <script>
+  ezglTrackAnalyticsEvent("Completed a subscription purchase", { league_name: "<%= @league.name %>", value: <%= params[:details_amount].to_i * 1000 %> });
+
   ga('ec:addProduct', {               // Provide product details in an productFieldObject.
   'id': 'EZGL001',                   // Product ID (string).
   'name': 'Tournament Credits', // Product name (string).
@@ -93,8 +95,6 @@
   value: <%= params[:details_amount] %>,
   currency: 'USD'
   });
-
-  ezglTrackAnalyticsEvent("Completed a subscription purchase", { value: <%= params[:details_amount].to_i * 1000 %> });
 </script>
 <% end %>
 
