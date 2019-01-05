@@ -58,5 +58,4 @@ class GolfOuting < ApplicationRecord
       end
     end
   end
-
 end
