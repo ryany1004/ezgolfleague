@@ -1,5 +1,7 @@
 class IosPushNotificationJob < ApplicationJob
   def perform(device, body, content_available = false, extra_data = nil)
+    return if Rails.env.development?
+    
     begin
       if device.environment_name == "debug"
         pusher = self.pusher(true)
