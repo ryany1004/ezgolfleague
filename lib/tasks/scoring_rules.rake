@@ -2,6 +2,8 @@ namespace :scoring_rules do
   desc 'Convert Game Type to Scoring Rules'
   task convert_game_type_to_scoring_rules: :environment do
   	TournamentDay.all.each do |d|
+      next if d.game_type_id.blank?
+
       case d.game_type_id
       when 1
         rule = StrokePlayScoringRule.create(is_opt_in: false, tournament_day: d)
@@ -17,6 +19,12 @@ namespace :scoring_rules do
         rule = FourManScrambleScoringRule.create(is_opt_in: false, tournament_day: d)
       when 10
         rule = TwoManBestBallScoringRule.create(is_opt_in: false, tournament_day: d)
+      when 12
+        next #TODO: TwoManComboScrambleBestBall
+      when 13
+        next #TODO: OneTwoThreeBestBallsOfFour
+      when 14
+        next #TODO: TwoManIndividualStrokePlay
       end
 
   		raise "No Scoring Rule: #{d.game_type_id}" if rule.blank?
