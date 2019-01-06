@@ -10,6 +10,10 @@ class StrokePlayScoringRule < ScoringRule
 		"Traditional stroke play for individual players."
 	end
 
+	def legacy_game_type_id
+		1
+	end
+
 	def scoring_computer
 		ScoringComputer::StrokePlayScoringComputer.new(self)
 	end

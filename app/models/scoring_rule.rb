@@ -15,6 +15,8 @@ module ScoringRulePayoutAssignmentType
 end
 
 class ScoringRule < ApplicationRecord
+	include Servable
+	
 	belongs_to :tournament_day, touch: true, inverse_of: :scoring_rules
 	has_many :payments, inverse_of: :scoring_rule
 	has_many :payouts, inverse_of: :scoring_rule, dependent: :destroy
@@ -43,6 +45,10 @@ class ScoringRule < ApplicationRecord
 
 	def tournament
 		tournament_day.tournament
+	end
+
+	def legacy_game_type_id
+		0
 	end
 
 	def scoring_computer
