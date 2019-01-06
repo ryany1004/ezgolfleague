@@ -410,6 +410,7 @@ GEM
     sassc (2.0.0)
       ffi (~> 1.9.6)
       rake
+    scout_apm (2.4.21)
     sdoc (0.4.2)
       json (~> 1.7, >= 1.7.7)
       rdoc (~> 4.0)
@@ -516,6 +517,7 @@ DEPENDENCIES
   rspec-rails (= 3.5.0)
   rubocop
   sass-rails (~> 5.0)
+  scout_apm
   sdoc (~> 0.4.0)
   simple_form
   spring

@@ -13,7 +13,7 @@ common: &defaults
 
   # name: Application name in APM Web UI
   # - Default: the application names comes from the Rails or Sinatra class name
-  # name:
+  # name: "EZ Golf League"
 
   # monitor: Enable Scout APM or not
   # - Default: none
@@ -22,10 +22,14 @@ common: &defaults
 
 production:
   <<: *defaults
+  name: "EZ Golf League - Production"
 
 development:
-  <<: *defaults
-  monitor: false
+  name: "EZ Golf League - Development"
+  key: 6CxKzjoE6ANGLoxkJ63Q
+  log_level: debug
+  monitor: true
+  dev_trace: true
 
 test:
   <<: *defaults
@@ -33,3 +37,4 @@ test:
 
 staging:
   <<: *defaults
+  monitor: false

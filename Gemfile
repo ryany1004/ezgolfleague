@@ -42,6 +42,7 @@ gem "capistrano-resque", "~> 0.2.2", require: false
 gem 'rollbar'
 gem 'acts_as_paranoid', '~> 0.6.0'
 gem 'bootsnap', require: false
+gem 'scout_apm'
 
 group :development do
   gem 'web-console'

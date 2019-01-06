@@ -9,7 +9,7 @@ module Notifications
 	  end
 
 	  def send_notification(user, body, extra_data = nil)
-	    pusher = IosPushNotification.pusher
+	    pusher = ::IosPushNotificationJob.pusher
 
 	    user.ios_devices.each do |device|
 	    	IosPushNotificationJob.perform_later(device, body, false, extra_data)
