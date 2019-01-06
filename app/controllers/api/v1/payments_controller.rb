@@ -9,7 +9,7 @@ class Api::V1::PaymentsController < Api::V1::ApiBaseController
     stripe_token = payment_details["stripeToken"]
     payment_amount = payment_details["totalPaymentAmount"].to_f
     tournament_id = payment_details["tournamentID"]
-    contest_ids = payment_details["contestIDs"] #TODO: Update
+    optional_scoring_rule_ids = payment_details["contestIDs"] #TODO: Update
 
     tournament = Tournament.where(id: tournament_id).first
 
@@ -30,15 +30,16 @@ class Api::V1::PaymentsController < Api::V1::ApiBaseController
 
         logger.info { "Charged #{@current_user.complete_name} Card w/ Stripe for #{payment_amount}" }
 
-        self.create_payment(tournament.dues_for_user(@current_user, true), tournament.name, charge.id, tournament, nil)
+        self.create_payment(amount: tournament.dues_for_user(@current_user, true), charge_description: tournament.name, charge_identifier: charge.id, scoring_rule: tournament.mandatory_scoring_rules.first)
 
-        contest_ids.each do |contest_id|
-          contest = Contest.where(id: contest_id.to_i).first
+        optional_scoring_rule_ids.each do |rule_id|
+          scoring_rule = ScoringRule.where(id: rule_id.to_i).first
 
-          unless contest.blank?
-            self.create_payment(contest.dues_for_user(@current_user, true), contest.name, charge.id, nil, contest)
+          if scoring_rule.present?
+            amount = scoring_rule.dues_for_user(user: @current_user, include_credit_card_fees: true)
+            self.create_payment(amount: amount, charge_description: scoring_rule.name, charge_identifier: charge.id, scoring_rule: scoring_rule)
 
-            contest.add_user(@current_user)
+            scoring_rule.users << @current_user
           end
         end
 
@@ -53,12 +54,15 @@ class Api::V1::PaymentsController < Api::V1::ApiBaseController
     end
   end
 
-  def create_payment(amount, charge_description, charge_identifier, tournament, contest)
-    p = Payment.new(payment_amount: amount, user: @current_user, payment_type: charge_description, payment_source: PAYMENT_METHOD_CREDIT_CARD)
-    p.transaction_id = charge_identifier
-    p.tournament = tournament unless tournament.blank?
-    p.contest = contest unless contest.blank?
-    p.save
+  def create_payment(amount:, charge_description:, charge_identifier:, scoring_rule:)
+    Payment.create(
+      scoring_rule: scoring_rule,
+      payment_amount: amount,
+      user: @current_user,
+      payment_type: charge_description,
+      payment_source: PAYMENT_METHOD_CREDIT_CARD,
+      transaction_id: charge_identifier,
+    )
   end
 
 end

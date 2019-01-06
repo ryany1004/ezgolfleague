@@ -22,8 +22,6 @@ class League < ApplicationRecord
   attr_encrypted :stripe_production_publishable_key, key: ENCRYPYTED_ATTRIBUTES_KEY, algorithm: 'aes-256-cbc', mode: :single_iv_and_salt, insecure_mode: true
 
   def stripe_publishable_key
-    return nil if Rails.env.development?
-
     if self.stripe_test_mode
       self.stripe_test_publishable_key
     else
@@ -32,8 +30,6 @@ class League < ApplicationRecord
   end
 
   def stripe_secret_key
-    return nil if Rails.env.development?
-
     if self.stripe_test_mode
       self.stripe_test_secret_key
     else

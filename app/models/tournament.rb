@@ -145,7 +145,7 @@ class Tournament < ApplicationRecord
   def dues_for_user(user, include_credit_card_fees = false)
     membership = user.league_memberships.where("league_id = ?", self.league.id).first
 
-    unless membership.blank?
+    if membership.present?
       dues_amount = self.mandatory_dues_amount
 
       credit_card_fees = 0
@@ -159,13 +159,13 @@ class Tournament < ApplicationRecord
     end
   end
 
-  #TODO: Team
-  def total_for_user_with_contest_fees(user, include_credit_card_fees = true)
+  #def total_for_user_with_contest_fees(user, include_credit_card_fees = true) #TODO REMOVE
+  def total_for_user_with_optional_fees(user:, include_credit_card_fees: true)
     dues_amount = self.mandatory_dues_amount
 
-    self.paid_contests.each do |c|
-      if c.users.include? user
-        dues_amount += c.dues_amount
+    self.optional_scoring_rules_with_dues.each do |r|
+      if r.users.include? user
+        dues_amount += r.dues_amount
       end
     end
 
@@ -176,25 +176,25 @@ class Tournament < ApplicationRecord
     total
   end
 
-  #TODO: Team
-  def cost_breakdown_for_user(user, include_unpaid_contests = true, include_credit_card_fees = true)
+  # def cost_breakdown_for_user(user, include_unpaid_contests = true, include_credit_card_fees = true) #TODO REMOVE
+  def cost_breakdown_for_user(user:, include_unpaid_optional_rules: true, include_credit_card_fees: true)
     dues_total = self.mandatory_dues_amount
 
     cost_lines = [
-      {name: "#{self.name} Fees", price: self.dues_amount.to_f, server_id: self.id.to_s}
+      {name: "#{self.name} Fees", price: self.mandatory_dues_amount.to_f, server_id: self.id.to_s}
     ]
 
-    if include_unpaid_contests == true
-      self.paid_contests.each do |c|
-        if c.users.include? user
-          cost_lines += c.cost_breakdown_for_user(user, false)
+    if include_unpaid_optional_rules
+      self.optional_scoring_rules_with_dues.each do |r|
+        if r.users.include? user
+          cost_lines += r.cost_breakdown_for_user(user: user, include_credit_card_fees: false)
 
-          dues_total += c.dues_amount
+          dues_total += r.dues_amount
         end
       end
     end
 
-    if include_credit_card_fees == true
+    if include_credit_card_fees
       cost_lines << {name: "Credit Card Fees", price: Stripe::StripeFees.fees_for_transaction_amount(dues_total)}
     end
 
@@ -214,23 +214,15 @@ class Tournament < ApplicationRecord
   end
 
   def mandatory_scoring_rules
-    rules = []
-
-    self.tournament_days.each do |td|
-      rules += td.mandatory_scoring_rules
-    end
-
-    rules
+    self.tournament_days.map(&:mandatory_scoring_rules).flatten
   end
 
   def optional_scoring_rules
-    rules = []
+    self.tournament_days.map(&:optional_scoring_rules).flatten
+  end
 
-    self.tournament_days.each do |td|
-      rules += td.optional_scoring_rules
-    end
-
-    rules
+  def optional_scoring_rules_with_dues
+    self.optional_scoring_rules.map { |r| r.dues_amount > 0 }
   end
 
   def is_paid?

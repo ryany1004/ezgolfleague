@@ -62,28 +62,30 @@ class Api::V1::TournamentDaysController < Api::V1::ApiBaseController
   end
 
   def register_contests
-    contests = ActiveSupport::JSON.decode(request.body.read)
+    self.register_optional_games
+  end
 
-    contests.each do |c_info|
-      contest = Contest.find(c_info)
+  def register_optional_games
+    payload = ActiveSupport::JSON.decode(request.body.read)
 
-      contest.add_user(@current_user)
+    payload.each do |p|
+      scoring_rule = @tournament_day.scoring_rules.find(p)
+
+      scoring_rule.users << @current_user
     end
 
     render json: { success: true }
   end
 
   def payment_details
-    tournament_cost_details = @tournament.cost_breakdown_for_user(@current_user, false, false)
+    tournament_cost_details = @tournament.cost_breakdown_for_user(user: @current_user, include_unpaid_optional_rules: false, include_credit_card_fees: false)
 
-    contest_cost_details = []
-    @tournament_day.tournament.tournament_days.each do |td|
-      td.contests.each do |c|
-        contest_cost_details += c.cost_breakdown_for_user(@current_user, false) if c.dues_amount > 0
-      end
+    optional_rules_cost_details = []
+    @tournament.optional_scoring_rules_with_dues.each do |r|
+      optional_rules_cost_details += r.cost_breakdown_for_user(user: @current_user, include_credit_card_fees: false)
     end
 
-    cost_details = {:tournament => tournament_cost_details, :contests => contest_cost_details}
+    cost_details = {:tournament => tournament_cost_details, :contests => optional_rules_cost_details}
 
     respond_with(cost_details) do |format|
       format.json { render json: cost_details }

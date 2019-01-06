@@ -186,6 +186,35 @@ class ScoringRule < ApplicationRecord
 	def users_eligible_for_payouts
 		@users_eligible_for_payouts ||= self.users.where(scoring_rule_participations: { disqualified: false })
 	end
+
+  def cost_breakdown_for_user(user:, include_credit_card_fees: true)
+    cost_lines = [
+      { name: "#{self.name} Fees", price: self.dues_amount.to_f, server_id: self.id.to_s }
+    ]
+
+    if include_credit_card_fees == true
+      cost_lines << {name: "Credit Card Fees", price: Stripe::StripeFees.fees_for_transaction_amount(self.dues_amount)}
+    end
+
+    cost_lines
+  end
+
+  def dues_for_user(user:, include_credit_card_fees: false)
+    membership = user.league_memberships.where('league_id = ?', self.tournament_day.tournament.league.id).first
+
+    if membership.blank?
+      0
+    else
+      dues_amount = self.dues_amount
+
+      credit_card_fees = 0
+      credit_card_fees = Stripe::StripeFees.fees_for_transaction_amount(dues_amount) if include_credit_card_fees
+
+      total = dues_amount + credit_card_fees
+
+      total
+    end
+  end
 end
 
 class ScoringRuleOption
