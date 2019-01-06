@@ -54,7 +54,11 @@ class Play::RegistrationsController < Play::BaseController
   def request_information
     league = League.find(params[:league_id])
 
-    LeagueMailer.league_interest(current_user, league).deliver_later unless league.blank?
+    if league.present?
+      email_addresses = nil
+      email_addresses = league.dues_payment_receipt_email_addresses.split(",") unless league.dues_payment_receipt_email_addresses.blank?
+      RecordEventJob.perform_later(email_addresses, "A user expressed league interest", { league_name: league.name, user: { first_name: current_user.first_name, last_name: current_user.last_name, email: current_user.email, phone_number: current_user.phone_number, ghin_number: current_user.ghin_number } }) unless email_addresses.blank?
+    end
 
     render :thanks
   end

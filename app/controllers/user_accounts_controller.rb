@@ -205,8 +205,6 @@ class UserAccountsController < BaseController
           existing_membership = existing_user.league_memberships.where("league_id = ?", league.id)
           if existing_membership.blank?
             LeagueMembership.create(league: league, user: existing_user, is_admin: is_admin, state: MembershipStates::ADDED)
-          else
-            LeagueMailer.renew_dues(existing_user, league).deliver_later if league.league_seasons.last.user_has_paid?(existing_user) == false
           end
         end
       end
