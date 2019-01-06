@@ -39,6 +39,10 @@ class ScoringRule < ApplicationRecord
 		raise "A Base Class Has No Name"
 	end
 
+  def name_with_cost
+    "#{self.name} ($#{self.dues_amount.to_i})"
+  end
+
 	def description
 		raise "N/A"
 	end

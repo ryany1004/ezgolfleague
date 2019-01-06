@@ -5,7 +5,7 @@ module RemoveFromTournamentDay
         cache_key = self.cache_key(self.scorecard_cache_prefix(user: user))
         Rails.cache.write(cache_key, nil)
 
-        if user.id == outing.scorecard.designated_editor_id
+        if user.id == outing.scorecard&.designated_editor_id
           outing.scorecard.designated_editor_id = nil
           outing.scorecard.save
         end
@@ -21,8 +21,6 @@ module RemoveFromTournamentDay
       self.remove_from_daily_teams(tournament_group: tournament_group, user: user) if remove_from_teams
 
       self.remove_from_scoring_rules(user: user)
-
-      self.remove_from_contests(user: user)
 
       self.refund_user(user: user) if self == self.tournament.first_day
     end
@@ -45,15 +43,6 @@ module RemoveFromTournamentDay
 	  tournament_group.daily_teams.each do |team|
 	    if team.users.include? user
 	      team.users.destroy(user)
-	    end
-	  end
-  end
-
-  #TEAM: REMOVE/CHANGE
-  def remove_from_contests(user:)
-	  self.tournament.tournament_days.each do |d|
-	    d.contests.each do |c|
-	      c.remove_user(user)
 	    end
 	  end
   end
