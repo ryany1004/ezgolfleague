@@ -95,7 +95,7 @@ class TournamentDay < ApplicationRecord
 
   def can_be_played?
     self.scoring_rules.each do |r|
-      if r.can_be_played? == false
+      if !r.can_be_played?
         return false
       end
     end

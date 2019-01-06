@@ -5,6 +5,8 @@ class Api::V1::TournamentsController < Api::V1::ApiBaseController
 
   def index
     if @current_user.leagues.blank?
+      logger.debug { "Current User Has No Leagues" }
+
       @tournaments = []
     else
       cache_key = self.user_tournaments_cache_key

@@ -4,20 +4,22 @@ namespace :scoring_rules do
   	TournamentDay.all.each do |d|
       case d.game_type_id
       when 1
-        rule = StrokePlayScoringRule.create
+        rule = StrokePlayScoringRule.create(is_opt_in: false, tournament_day: d)
 
         GameTypeMetadatum.all.where(search_key: rule.legacy_use_back_nine_key).update_all(search_key: rule.use_back_nine_key)
       when 2
-        rule = MatchPlayScoringRule.create
+        rule = MatchPlayScoringRule.create(is_opt_in: false, tournament_day: d)
       when 3
-        rule = StablefordScoringRule.create
+        rule = StablefordScoringRule.create(is_opt_in: false, tournament_day: d)
       when 7
-        rule = TwoManScrambleScoringRule.create
+        rule = TwoManScrambleScoringRule.create(is_opt_in: false, tournament_day: d)
       when 8
-        rule = FourManScrambleScoringRule.create
+        rule = FourManScrambleScoringRule.create(is_opt_in: false, tournament_day: d)
+      when 10
+        rule = TwoManBestBallScoringRule.create(is_opt_in: false, tournament_day: d)
       end
 
-  		raise "No Scoring Rule" if rule.blank?
+  		raise "No Scoring Rule: #{d.game_type_id}" if rule.blank?
 
       #move results
       d.flights.each do |flight|
@@ -36,8 +38,8 @@ namespace :scoring_rules do
       end
 
       #add the course holes
-      d.course_holes.each do |hole|
-        rule.scoring_rule_contest_holes.create(course_hole: hole)
+      d.legacy_course_holes.each do |hole|
+        rule.scoring_rule_course_holes.create(course_hole: hole)
       end
 
       #add the users
@@ -47,7 +49,6 @@ namespace :scoring_rules do
         rule.scoring_rule_participations.create(user: user, dues_paid: dues_amount)
       end
 
-  		d.scoring_rules = [rule]
   		d.game_type_id = nil
   		d.save
 
