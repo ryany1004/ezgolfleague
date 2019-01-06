@@ -215,6 +215,16 @@ class ScoringRule < ApplicationRecord
       total
     end
   end
+
+  def legacy_contest_winners
+  	winners = []
+
+  	self.payout_results.each do |r|
+  		winners << { contest_name: self.name, name: r.user.complete_name, result_value: r.detail, amount: r.amount, points: r.points, user: r.user }
+  	end
+
+  	winners
+  end
 end
 
 class ScoringRuleOption

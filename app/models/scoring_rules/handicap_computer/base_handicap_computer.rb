@@ -25,7 +25,7 @@ module HandicapComputer
           sorted_course_holes_by_handicap = self.tournament_day.scorecard_base_scoring_rule.course_holes.reorder("womens_handicap")
         end
 
-        if !course_handicap.blank?
+        if sorted_course_holes_by_handicap.count > 0 && !course_handicap.blank?
           allowance = []
           while course_handicap > 0 do
             sorted_course_holes_by_handicap.each do |hole|

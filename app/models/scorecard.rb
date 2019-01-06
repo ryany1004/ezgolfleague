@@ -31,7 +31,7 @@ class Scorecard < ApplicationRecord
   end
 
   def scorecard_payload
-    self.tournament_day.mandatory_scoring_rules.first.scorecard_api(scorecard: self)
+    self.tournament_day.scorecard_base_scoring_rule.scorecard_api(scorecard: self)
   end
 
   def clear_primary_scorecard_cache

@@ -222,7 +222,7 @@ class Tournament < ApplicationRecord
   end
 
   def optional_scoring_rules_with_dues
-    self.optional_scoring_rules.map { |r| r.dues_amount > 0 }
+    self.tournament_days.map(&:optional_scoring_rules_with_dues).flatten
   end
 
   def is_paid?

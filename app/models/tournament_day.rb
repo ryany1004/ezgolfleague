@@ -19,7 +19,7 @@ class TournamentDay < ApplicationRecord
   has_many :flights, -> { order(:flight_number) }, inverse_of: :tournament_day, dependent: :destroy
   has_many :scoring_rules, -> { order(:type) }, inverse_of: :tournament_day, dependent: :destroy
   
-  has_and_belongs_to_many :legacy_course_holes, -> { order(:hole_number) }, class_name: "CourseHole", foreign_key: "course_hole_id" # TODO: REMOVE AFTER MIGRATION
+  has_and_belongs_to_many :legacy_course_holes, -> { order(:hole_number) }, class_name: "CourseHole", join_table: "course_holes_tournament_days" # TODO: REMOVE AFTER MIGRATION
 
   accepts_nested_attributes_for :scoring_rules
 
@@ -225,15 +225,19 @@ class TournamentDay < ApplicationRecord
   end
 
   def scorecard_base_scoring_rule
-    self.mandatory_scoring_rules.left_joins(:scoring_rule_course_holes).group(:id).order('COUNT(scoring_rule_course_holes.id) DESC').limit(1).first
+    @scorecard_base_scoring_rule ||= self.mandatory_scoring_rules.left_joins(:scoring_rule_course_holes).group(:id).order('COUNT(scoring_rule_course_holes.id) DESC').limit(1).first
   end
 
   def mandatory_scoring_rules
-    self.scoring_rules.where(is_opt_in: false)
+    self.scoring_rules.where(is_opt_in: false).order(:type)
   end
 
   def optional_scoring_rules
-    self.scoring_rules.where(is_opt_in: true)
+    self.scoring_rules.where(is_opt_in: true).order(:type)
+  end
+
+  def optional_scoring_rules_with_dues
+    self.optional_scoring_rules.map { |r| r.dues_amount > 0 }
   end
 
   def score_all_rules

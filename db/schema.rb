@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_12_29_190456) do
+ActiveRecord::Schema.define(version: 2019_01_06_214451) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -412,6 +412,9 @@ ActiveRecord::Schema.define(version: 2018_12_29_190456) do
     t.bigint "scoring_rule_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["course_hole_id", "scoring_rule_id"], name: "scoring_holes_index"
+    t.index ["course_hole_id"], name: "index_scoring_rule_course_holes_on_course_hole_id"
+    t.index ["scoring_rule_id"], name: "index_scoring_rule_course_holes_on_scoring_rule_id"
   end
 
   create_table "scoring_rule_participations", force: :cascade do |t|
@@ -421,6 +424,9 @@ ActiveRecord::Schema.define(version: 2018_12_29_190456) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "disqualified", default: false
+    t.index ["scoring_rule_id"], name: "index_scoring_rule_participations_on_scoring_rule_id"
+    t.index ["user_id", "scoring_rule_id"], name: "scoring_participations_index"
+    t.index ["user_id"], name: "index_scoring_rule_participations_on_user_id"
   end
 
   create_table "scoring_rules", force: :cascade do |t|

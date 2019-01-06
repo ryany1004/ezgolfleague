@@ -30,7 +30,8 @@ class Api::V1::PaymentsController < Api::V1::ApiBaseController
 
         logger.info { "Charged #{@current_user.complete_name} Card w/ Stripe for #{payment_amount}" }
 
-        self.create_payment(amount: tournament.dues_for_user(@current_user, true), charge_description: tournament.name, charge_identifier: charge.id, scoring_rule: tournament.mandatory_scoring_rules.first)
+        amount = tournament.dues_for_user(@current_user, true)
+        self.create_payment(amount: amount, charge_description: tournament.name, charge_identifier: charge.id, scoring_rule: tournament.mandatory_scoring_rules.first)
 
         optional_scoring_rule_ids.each do |rule_id|
           scoring_rule = ScoringRule.where(id: rule_id.to_i).first

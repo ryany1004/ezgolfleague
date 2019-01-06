@@ -44,8 +44,8 @@ class StrokePlayScoringRule < ScoringRule
   end
 
 	def scorecard_api(scorecard:)
-    handicap_allowance = self.handicap_allowance(scorecard.golf_outing.user)
+    handicap_allowance = self.handicap_computer.handicap_allowance(user: scorecard.golf_outing.user)
 
-		Scorecards::Api::ScorecardAPIBase.new(scorecard.tournament_day, scorecard, handicap_allowance)
+		Scorecards::Api::ScorecardAPIBase.new(scorecard.tournament_day, scorecard, handicap_allowance).scorecard_representation
 	end
 end

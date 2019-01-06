@@ -54,13 +54,13 @@ class Api::V1::TournamentsController < Api::V1::ApiBaseController
           end
         end        
 
-        #contests
-        contests = []
-        tournament_presenter.contests.each do |contest|
-          contests << { name: contest[:name], winners: contest[:winners] }
+        #optional_scoring_rules_with_dues
+        optional_scoring_rules_with_dues = []
+        tournament_presenter.optional_scoring_rules_with_dues.each do |rule|
+          optional_scoring_rules_with_dues << { name: rule[:name], winners: rule[:winners] }
         end
 
-        @tournament_results << { payouts: payouts, rankings: rankings, contests: contests }
+        @tournament_results << { payouts: payouts, rankings: rankings, contests: optional_scoring_rules_with_dues }
       end
 
       @tournament_results

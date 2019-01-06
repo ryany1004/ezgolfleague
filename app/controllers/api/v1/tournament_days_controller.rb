@@ -13,7 +13,7 @@ class Api::V1::TournamentDaysController < Api::V1::ApiBaseController
   end
 
   def leaderboard
-    @leaderboard = Rails.cache.fetch(@tournament_day.relation_cache_key(@tournament_day.tournament_day_results, "leaderboard-json"), expires_in: 24.hours, race_condition_ttl: 10) do
+    @leaderboard = Rails.cache.fetch(@tournament_day.relation_cache_key(@tournament_day.scorecard_base_scoring_rule.tournament_day_results, "leaderboard-json"), expires_in: 24.hours, race_condition_ttl: 10) do
       logger.info { "Fetching Leaderboard - Not Cached" }
 
       self.fetch_leaderboard
