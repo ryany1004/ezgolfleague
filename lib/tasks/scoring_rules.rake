@@ -46,7 +46,7 @@ namespace :scoring_rules do
       d.tournament.players_for_day(d).each do |user|
         rule.users << user
 
-        rule.scoring_rule_participations.create(user: user, dues_paid: dues_amount)
+        rule.scoring_rule_participations.create(user: user, dues_paid: rule.dues_amount)
       end
 
   		d.game_type_id = nil
