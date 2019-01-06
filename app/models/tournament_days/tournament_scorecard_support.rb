@@ -57,7 +57,7 @@ module TournamentScorecardSupport
 
     group = scorecard.golf_outing.tournament_group
     self.scoring_rules.each do |rule|
-      return true if rule.other_group_members(user: user).include? user
+      return true if rule.respond_to?(:other_group_members) && rule.other_group_members(user: user).include?(user)
     end
 
     false

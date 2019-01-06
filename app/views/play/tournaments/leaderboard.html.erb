@@ -9,7 +9,7 @@
   <li class="active"><%= @tournament_day.pretty_day(true) %>Tournament Rankings</li>
 </ol>
 
-<%= render partial: @tournament_day.game_type.leaderboard_partial_name, locals: { tournament_day: @tournament_day, combined_flights_with_rankings: @combined_flights_with_rankings, current_day_flight: @current_day_flight, day_flights_with_rankings: @day_flights_with_rankings } %>
+<%= render partial: @tournament_day.scorecard_base_scoring_rule.leaderboard_partial_name, locals: { tournament_day: @tournament_day, combined_flights_with_rankings: @combined_flights_with_rankings, current_day_flight: @current_day_flight, day_flights_with_rankings: @day_flights_with_rankings } %>
 
 <% unless @user_scorecard.blank? -%>
 <div class="row">

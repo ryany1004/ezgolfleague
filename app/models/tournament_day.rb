@@ -40,39 +40,6 @@ class TournamentDay < ApplicationRecord
     end
   end
 
-  # TODO TEAM: REMOVE
-  def game_type
-    if self.game_type_id == 1
-      new_game_type = GameTypes::IndividualStrokePlay.new
-    elsif self.game_type_id == 2
-      new_game_type = GameTypes::IndividualMatchPlay.new
-    elsif self.game_type_id == 3
-      new_game_type = GameTypes::IndividualModifiedStableford.new
-    elsif self.game_type_id == 5
-      new_game_type = GameTypes::TwoManShamble.new
-    elsif self.game_type_id == 7
-      new_game_type = GameTypes::TwoManScramble.new
-    elsif self.game_type_id == 8
-      new_game_type = GameTypes::FourManScramble.new
-    elsif self.game_type_id == 10
-      new_game_type = GameTypes::TwoManBestBall.new
-    elsif self.game_type_id == 11
-      new_game_type = GameTypes::TwoBestBallsOfFour.new
-    elsif self.game_type_id == 12
-      new_game_type = GameTypes::TwoManComboScrambleBestBall.new
-    elsif self.game_type_id == 13
-      new_game_type = GameTypes::OneTwoThreeBestBallsOfFour.new
-    elsif self.game_type_id == 14
-      new_game_type = GameTypes::TwoManIndividualStrokePlay.new
-    else
-      new_game_type = GameTypes::IndividualStrokePlay.new ##### REMOVE
-    end
-
-    new_game_type&.tournament_day = self
-
-    new_game_type
-  end
-
   def can_be_finalized?
     self.scoring_rules.each do |r|
       if !r.can_be_finalized?

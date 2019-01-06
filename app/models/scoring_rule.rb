@@ -135,8 +135,16 @@ class ScoringRule < ApplicationRecord
 		false
 	end
 
+  def includes_extra_scoring_column?
+    return false
+  end
+
+  def associated_text_for_score(score)
+    return nil
+  end
+
 	def leaderboard_partial_name
-		nil
+		'standard_leaderboard'
 	end
 
 	def score

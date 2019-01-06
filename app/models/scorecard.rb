@@ -100,7 +100,7 @@ class Scorecard < ApplicationRecord
 
   def has_empty_scores?
     self.scores.each do |s|
-      true if s.strokes == 0 or s.strokes.blank?
+      return true if s.strokes == 0 or s.strokes.blank?
     end
 
     false
@@ -157,7 +157,7 @@ class Scorecard < ApplicationRecord
       return overridden_name if overridden_name.present?
     end
 
-    return self.golf_outing.user.short_name
+    self.golf_outing.user.short_name
   end
 
   def individual_name
@@ -179,7 +179,7 @@ class Scorecard < ApplicationRecord
   end
 
   def includes_extra_scoring_column?
-    self.tournament_day.game_type.includes_extra_scoring_column?
+    self.tournament_day.scorecard_base_scoring_rule.includes_extra_scoring_column?
   end
 
   def extra_scoring_column_data

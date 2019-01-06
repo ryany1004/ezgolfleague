@@ -27,7 +27,7 @@ class Play::ScorecardsController < Play::BaseController
     tournament_day = scorecard.golf_outing.tournament_group.tournament_day
     tournament = tournament_day.tournament
 
-    if scorecard.designated_editor == current_user && tournament.is_past? == false && tournament_day.game_type.allow_teams != GameTypes::TEAMS_DISALLOWED #in the past, non-team tournament
+    if scorecard.designated_editor == current_user && tournament.is_past? == false
       logger.info { "Updating Other Scorecards at Finalization" }
 
       other_scorecards = []
@@ -40,7 +40,6 @@ class Play::ScorecardsController < Play::BaseController
         other_scorecard.save
 
         scorecard.tournament_day.score_user(other_scorecard.golf_outing.user) unless other_scorecard.golf_outing.blank?
-        scorecard.tournament_day.game_type.after_updating_scores_for_scorecard(scorecard: other_scorecard)
       end
     end
 

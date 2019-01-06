@@ -15,7 +15,6 @@ class TournamentDaysController < BaseController
   def create
     @tournament_day = TournamentDay.new(tournament_day_params)
     @tournament_day.tournament = @tournament
-    @tournament_day.game_type_id = 1
 
     @tournament_day.skip_date_validation = current_user.is_super_user
 
