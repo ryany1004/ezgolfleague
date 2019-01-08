@@ -38,6 +38,8 @@ class User < ApplicationRecord
   before_update :clear_current_league
   before_update :reset_session, if: :encrypted_password_changed?
 
+  after_create :send_to_drip
+
   accepts_nested_attributes_for :league_memberships
 
   paginates_per 50
