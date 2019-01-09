@@ -18,8 +18,6 @@ class Play::RegistrationsController < Play::BaseController
     if @user_account.save
       GhinUpdateJob.perform_later([@user_account.id]) unless @user_account.ghin_number.blank?
 
-      UserMailer.welcome(@user_account).deliver_later
-
       sign_in(@user_account, scope: :user)
 
       redirect_to leagues_play_registrations_path, :flash => { :success => "Your account was created." }
