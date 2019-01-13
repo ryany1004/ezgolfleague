@@ -20,7 +20,7 @@ class ScoringRule < ApplicationRecord
 	belongs_to :tournament_day, touch: true, inverse_of: :scoring_rules
 	has_many :payments, inverse_of: :scoring_rule
 	has_many :payouts, inverse_of: :scoring_rule, dependent: :destroy
-	has_many :payout_results, -> { order(:flight_id, amount: :desc) }, inverse_of: :scoring_rule, dependent: :destroy
+	has_many :payout_results, -> { order(:flight_id, amount: :desc, points: :desc) }, inverse_of: :scoring_rule, dependent: :destroy
 	has_many :tournament_day_results, -> { order(:flight_id, :sort_rank) }, inverse_of: :scoring_rule, dependent: :destroy
 	has_many :scoring_rule_participations, dependent: :destroy, inverse_of: :scoring_rule
 	has_many :users, through: :scoring_rule_participations
@@ -192,7 +192,7 @@ class ScoringRule < ApplicationRecord
 	end
 
 	def users_eligible_for_payouts
-		@users_eligible_for_payouts ||= self.users.where(scoring_rule_participations: { disqualified: false })
+		@users_eligible_for_payouts ||= self.users.where(scoring_rule_participations: { disqualified: false }).uniq
 	end
 
   def cost_breakdown_for_user(user:, include_credit_card_fees: true)

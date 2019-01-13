@@ -27,6 +27,7 @@
                 <th>Amount</th>
                 <th>Points</th>
                 <th>Score</th>
+                <th>Par Net</th>
                 <th>Course Handicap</th>
                 <th>&nbsp;</th>
               </tr>
@@ -40,6 +41,7 @@
                   <td><%= number_to_currency(payout_result.amount) %></td>
                   <td><%= payout_result.points.to_i %></td>
                   <td><%= payout_result.tournament_day_result&.net_score %></td>
+                  <td><%= payout_result.tournament_day_result&.par_related_net_score %></td>
                   <td><%= payout_result.scoring_rule.tournament_day.golf_outing_for_player(payout_result.user).course_handicap.to_i unless payout_result.user.blank? %></td>
                   <td><%= payout_result.detail %></td>
                 </tr>
@@ -47,6 +49,7 @@
             </tbody>
             <tfoot>
               <tr>
+                <th>&nbsp;</th>
                 <th>&nbsp;</th>
                 <th>&nbsp;</th>
                 <th>&nbsp;</th>
@@ -65,13 +68,14 @@
 
   <% @tournament_days.each do |day| -%>
     <div class="col-md-12">
-      <h3><%= day.pretty_day(true) %>Results</h3>
+      <h3><%= day.pretty_day(true) %> Results</h3>
       <table class="table table-striped">
         <thead>
           <tr>
             <th><%= flight_or_group(@tournament) %></th>
             <th>Player</th>
             <th>Net</th>
+            <th>Par Net</th>
             <th>Gross</th>
             <th>&nbsp;</th>
           </tr>
@@ -83,6 +87,7 @@
                 <td><%= result.flight&.display_name %></td>
                 <td><%= result.user&.complete_name %><% if result.primary_scorecard != nil && !result.primary_scorecard&.is_confirmed? -%> (Unconfirmed by Player)<% end -%><%- if result.primary_scorecard&.golf_outing&.disqualified %> (Disqualified)<%- end %></td>
                 <td><%= result.net_score %></td>
+                <td><%= result.par_related_net_score %></td>
                 <td><%= result.gross_score %></td>
                 <td><%= link_to "Edit Scorecard", edit_league_tournament_tournament_day_scorecard_path(day.tournament.league, day.tournament, day, result.primary_scorecard) unless result.primary_scorecard.blank? %></td>
               </tr>

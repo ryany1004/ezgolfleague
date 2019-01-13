@@ -192,7 +192,7 @@ class TournamentDay < ApplicationRecord
   end
 
   def scorecard_base_scoring_rule
-    @scorecard_base_scoring_rule ||= self.mandatory_scoring_rules.left_joins(:scoring_rule_course_holes).group(:id).order('COUNT(scoring_rule_course_holes.id) DESC').limit(1).first
+    @scorecard_base_scoring_rule ||= self.mandatory_scoring_rules.reorder('scoring_rule_course_holes_count DESC').limit(1).first
   end
 
   def mandatory_scoring_rules

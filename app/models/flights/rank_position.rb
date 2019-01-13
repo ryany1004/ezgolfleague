@@ -63,8 +63,9 @@ module Flights
 
     def sort_by_parameter(parameter, descending = false)
       parameter = parameter + " DESC" if descending
+      results = tournament_day_results.reorder(parameter)
 
-    	self.sorted_results = tournament_day_results.reorder(parameter)
+    	self.sorted_results = results
     end
 
     # Rank
@@ -74,6 +75,8 @@ module Flights
       last_score = 0
       quantity_at_rank = 0
 
+      sortable_key = sort_parameter.split(", ").first
+
       Rails.logger.debug { "Ranking #{self.sorted_results.count} results" }
 
       self.sorted_results.each_with_index do |result, i|
@@ -81,7 +84,7 @@ module Flights
         #unless last_score are the same, then rank does not change
         #when last_score then does differ, need to move the rank up the number of slots
 
-        if result.send(sort_parameter) != last_score
+        if result.send(sortable_key) != last_score
           rank = last_rank + 1
 
           if quantity_at_rank != 0
@@ -91,7 +94,7 @@ module Flights
           end
 
           last_rank = rank
-          last_score = result.send(sort_parameter)
+          last_score = result.send(sortable_key)
         else
           if last_rank == 0
             rank = 1
@@ -102,7 +105,7 @@ module Flights
           quantity_at_rank = quantity_at_rank + 1
         end
 
-        Rails.logger.debug { "Rank of #{rank} for #{result.name}. Net score: #{result.net_score}. Back Nine Net Score (if applicable): #{result.back_nine_net_score}. Param: #{sort_parameter}: #{result.send(sort_parameter)}" }
+        Rails.logger.debug { "Rank of #{rank} for #{result.name}. Net score: #{result.net_score}. Back Nine Net Score (if applicable): #{result.back_nine_net_score}. Param: #{sort_parameter}: #{result.send(sortable_key)}" }
 
         result.sort_rank = i
         result.rank = rank

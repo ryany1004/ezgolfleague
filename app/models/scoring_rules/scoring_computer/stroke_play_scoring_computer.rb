@@ -1,14 +1,5 @@
 module ScoringComputer
 	class StrokePlayScoringComputer < BaseScoringComputer
-
-		def rank_results_sort_reorder_param
-			"net_score"
-		end
-
-		def rank_results_sort_descending
-			true
-		end
-
 		def rank_results_sort_reorder_param
       if @scoring_rule.use_back_9_to_break_ties?
         Rails.logger.info { "Tie-breaking is enabled" }
@@ -52,7 +43,7 @@ module ScoringComputer
 
 			handicap_computer = @scoring_rule.handicap_computer
 			handicap_allowance = handicap_computer.handicap_allowance(user: user)
-			Rails.logger.debug { "Handicap Allowance: #{handicap_allowance}" }
+			Rails.logger.debug { "Handicap Allowance for User #{user.complete_name}: #{handicap_allowance}" }
 
 			flight = self.tournament_day.flight_for_player(user)
     	flight = self.tournament_day.assign_player_to_flight(user) if flight.blank?

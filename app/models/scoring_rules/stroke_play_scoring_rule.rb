@@ -40,7 +40,7 @@ class StrokePlayScoringRule < ScoringRule
       end
     end
 
-    eligible_player_list
+    eligible_player_list.uniq
   end
 
 	def scorecard_api(scorecard:)

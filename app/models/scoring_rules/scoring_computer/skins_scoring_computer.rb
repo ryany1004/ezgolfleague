@@ -93,7 +93,7 @@ module ScoringComputer
 
 				user_scores.sort! { |x,y| x[:score] <=> y[:score] }
 
-				if !user_scores.empty?
+				if user_scores.present?
 					if user_scores.count == 1
 						users_with_skins << user_scores[0][:user]
 
@@ -109,7 +109,7 @@ module ScoringComputer
 					end
 				end
 
-				winners << { hole: hole, winners: users_with_skins }
+				winners << { hole: hole, winners: users_with_skins } unless users_with_skins.blank?
 			end
 
 			winners

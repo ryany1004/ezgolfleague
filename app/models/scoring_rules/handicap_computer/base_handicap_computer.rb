@@ -17,7 +17,7 @@ module HandicapComputer
       allowance = Rails.cache.fetch("golf_outing#{golf_outing.id}-#{golf_outing.updated_at.to_i}", expires_in: 15.minute, race_condition_ttl: 10) do
         return nil if golf_outing.course_tee_box.blank?
 
-        Rails.logger.debug { "Course Handicap: #{course_handicap}" }
+        Rails.logger.debug { "BaseHandicapComputer Course Handicap: #{course_handicap}" }
 
         if golf_outing.course_tee_box.tee_box_gender == "Men"
           sorted_course_holes_by_handicap = self.tournament_day.scorecard_base_scoring_rule.course_holes.reorder("mens_handicap")

@@ -37,6 +37,18 @@ namespace :scoring_rules do
         end
       end
 
+      #move payouts
+      d.flights.each do |flight|
+        Payout.where(flight_id: flight.id).each do |payout|
+          rule.payouts << payout
+
+          payout.payout_results.each do |result|
+            result.scoring_rule = rule
+            result.save
+          end
+        end
+      end
+
       #move payments
       if d == d.tournament.first_day
         d.tournament.payments.each do |p|
@@ -85,9 +97,24 @@ namespace :scoring_rules do
 
         d.scoring_rules << contest_rule
 
-        #users
+        #add explicit users
         c.users.each do |user|
           contest_rule.users << user
+        end
+
+        #add the contest holes
+        c.contest_holes.each do |hole|
+          contest_rule.scoring_rule_course_holes.create(course_hole: hole.course_hole)
+        end
+
+        #opt-in
+        if c.dues_amount > 0 || c.is_opt_in
+          contest_rule.is_opt_in = true
+          contest_rule.save
+        else
+          d.tournament.players_for_day(d).each do |user| #add all users to this contest
+            contest_rule.users << user
+          end
         end
 
         #move payments

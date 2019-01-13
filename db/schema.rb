@@ -436,6 +436,7 @@ ActiveRecord::Schema.define(version: 2019_01_06_214451) do
     t.bigint "tournament_day_id"
     t.boolean "is_opt_in", default: false
     t.decimal "dues_amount", default: "0.0"
+    t.integer "scoring_rule_course_holes_count", default: 0
     t.index ["tournament_day_id"], name: "index_scoring_rules_on_tournament_day_id"
     t.index ["type"], name: "index_scoring_rules_on_type"
   end
