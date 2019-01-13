@@ -35,9 +35,9 @@ class FlightsController < BaseController
       self.update_player_flight_membership
 
       if params[:commit] == "Save & Continue"
-        redirect_to league_tournament_payouts_path(@tournament.league, @tournament, tournament_day: @tournament_day), flash: { success: "The flight was successfully created." }
+        redirect_to league_tournament_tournament_day_tournament_notifications_path(@tournament.league, @tournament, @tournament_day), flash: { success: "The flight was successfully created." }
       else
-        redirect_to new_league_tournament_flight_path(@tournament.league, @tournament, tournament_day: @tournament_day), flash: { success: "The flight was successfully created." }
+        redirect_to new_league_tournament_tournament_day_flight_path(@tournament.league, @tournament, @tournament_day), flash: { success: "The flight was successfully created." }
       end
     else
       render :new
@@ -51,7 +51,7 @@ class FlightsController < BaseController
     if @flight.update(flight_params)
       self.update_player_flight_membership
 
-      redirect_to league_tournament_flights_path(@tournament.league, @tournament, tournament_day: @tournament_day), flash: { success: "The flight was successfully updated." }
+      redirect_to league_tournament_tournament_day_flights_path(@tournament.league, @tournament, @tournament_day), flash: { success: "The flight was successfully updated." }
     else
       render :edit
     end
@@ -60,17 +60,17 @@ class FlightsController < BaseController
   def destroy
     @flight.destroy
 
-    redirect_to league_tournament_flights_path(@tournament.league, @tournament, tournament_day: @tournament_day), flash: { success: "The flight was successfully deleted." }
+    redirect_to league_tournament_tournament_day_flights_path(@tournament.league, @tournament, @tournament_day), flash: { success: "The flight was successfully deleted." }
   end
 
   def reflight_players
     self.update_player_flight_membership
 
-    redirect_to league_tournament_flights_path(@tournament.league, @tournament, tournament_day: @tournament_day), flash: { success: "The players were re-flighted." }
+    redirect_to league_tournament_tournament_day_flights_path(@tournament.league, @tournament, @tournament_day), flash: { success: "The players were re-flighted." }
   end
 
   def update_player_flight_membership
-    @tournament_day.assign_players_to_flights
+    @tournament_day.assign_users_to_flights
   end
 
   private

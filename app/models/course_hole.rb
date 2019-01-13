@@ -35,5 +35,4 @@ class CourseHole < ApplicationRecord
 
     yardage
   end
-
 end

@@ -17,9 +17,8 @@
           <h2>&nbsp;</h2>
         <% end -%>
 
-        <%= render partial: @tournament_day.scorecard_print_partial, locals: {p: print_card[:p], print_mode: true} %>
+        <%= render partial: @tournament_day.scorecard_print_partial, locals: {p: print_card[:p], print_mode: true}, cached: true %>
       <% end -%>
-
     </div>
   </body>
 </html>

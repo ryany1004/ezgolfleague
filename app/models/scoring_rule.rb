@@ -15,10 +15,12 @@ module ScoringRulePayoutAssignmentType
 end
 
 class ScoringRule < ApplicationRecord
+	include Servable
+	
 	belongs_to :tournament_day, touch: true, inverse_of: :scoring_rules
 	has_many :payments, inverse_of: :scoring_rule
 	has_many :payouts, inverse_of: :scoring_rule, dependent: :destroy
-	has_many :payout_results, -> { order(:flight_id, amount: :desc) }, inverse_of: :scoring_rule, dependent: :destroy
+	has_many :payout_results, -> { order(:flight_id, amount: :desc, points: :desc) }, inverse_of: :scoring_rule, dependent: :destroy
 	has_many :tournament_day_results, -> { order(:flight_id, :sort_rank) }, inverse_of: :scoring_rule, dependent: :destroy
 	has_many :scoring_rule_participations, dependent: :destroy, inverse_of: :scoring_rule
 	has_many :users, through: :scoring_rule_participations
@@ -37,12 +39,20 @@ class ScoringRule < ApplicationRecord
 		raise "A Base Class Has No Name"
 	end
 
+  def name_with_cost
+    "#{self.name} ($#{self.dues_amount.to_i})"
+  end
+
 	def description
 		raise "N/A"
 	end
 
 	def tournament
 		tournament_day.tournament
+	end
+
+	def legacy_game_type_id
+		0
 	end
 
 	def scoring_computer
@@ -92,11 +102,10 @@ class ScoringRule < ApplicationRecord
 
 	def can_be_played?
 	  return true if self.tournament_day.data_was_imported == true
-
 	  return false if self.tournament_day.tournament_groups.count == 0
 	  return false if self.tournament_day.flights.count == 0
 	  return false if self.tournament_day.scorecard_base_scoring_rule.blank?
-	  
+
 	  true
 	end
 
@@ -126,8 +135,16 @@ class ScoringRule < ApplicationRecord
 		false
 	end
 
+  def includes_extra_scoring_column?
+    return false
+  end
+
+  def associated_text_for_score(score)
+    return nil
+  end
+
 	def leaderboard_partial_name
-		nil
+		'standard_leaderboard'
 	end
 
 	def score
@@ -175,8 +192,47 @@ class ScoringRule < ApplicationRecord
 	end
 
 	def users_eligible_for_payouts
-		@users_eligible_for_payouts ||= self.users.where(scoring_rule_participations: { disqualified: false })
+		@users_eligible_for_payouts ||= self.users.where(scoring_rule_participations: { disqualified: false }).uniq
 	end
+
+  def cost_breakdown_for_user(user:, include_credit_card_fees: true)
+    cost_lines = [
+      { name: "#{self.name} Fees", price: self.dues_amount.to_f, server_id: self.id.to_s }
+    ]
+
+    if include_credit_card_fees == true
+      cost_lines << {name: "Credit Card Fees", price: Stripe::StripeFees.fees_for_transaction_amount(self.dues_amount)}
+    end
+
+    cost_lines
+  end
+
+  def dues_for_user(user:, include_credit_card_fees: false)
+    membership = user.league_memberships.where('league_id = ?', self.tournament_day.tournament.league.id).first
+
+    if membership.blank?
+      0
+    else
+      dues_amount = self.dues_amount
+
+      credit_card_fees = 0
+      credit_card_fees = Stripe::StripeFees.fees_for_transaction_amount(dues_amount) if include_credit_card_fees
+
+      total = dues_amount + credit_card_fees
+
+      total
+    end
+  end
+
+  def legacy_contest_winners
+  	winners = []
+
+  	self.payout_results.each do |r|
+  		winners << { contest_name: self.name, name: r.user.complete_name, result_value: r.detail, amount: r.amount, points: r.points, user: r.user }
+  	end
+
+  	winners
+  end
 end
 
 class ScoringRuleOption

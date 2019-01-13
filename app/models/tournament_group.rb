@@ -3,6 +3,7 @@ class TournamentGroup < ApplicationRecord
 
   belongs_to :tournament_day, inverse_of: :tournament_groups, touch: true
   has_many :golf_outings, -> { order(:created_at) }, inverse_of: :tournament_group, dependent: :destroy
+  has_many :users, ->{ order 'last_name, first_name' }, through: :golf_outings
   has_many :daily_teams, -> { order(:created_at) }, inverse_of: :tournament_group, dependent: :destroy
 
   paginates_per 50
@@ -24,13 +25,7 @@ class TournamentGroup < ApplicationRecord
   end
 
   def players_signed_up
-    players = []
-
-    self.golf_outings.includes(:user).each do |g|
-      players << g.user unless g.user.blank?
-    end
-
-    players
+    self.users
   end
 
   def create_daily_teams

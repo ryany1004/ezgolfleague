@@ -33,20 +33,17 @@ module ScoringComputer
 			@scoring_rule.users_eligible_for_payouts.each do |user|
 				user_scorecard = self.tournament_day.primary_scorecard_for_user(user)
 				next if user_scorecard.blank?
-			
-				score = 0
 
-				@scoring_rule.course_holes.each do |hole|
+				strokes = 0
+				user_scorecard.scores.each do |score|
 					if use_gross_scores
-						strokes = user_scorecard.scores.where(course_hole: hole).first.strokes
+						strokes += score.strokes
 					else
-						strokes = user_scorecard.scores.where(course_hole: hole).first.net_strokes
+						strokes += score.net_strokes
 					end
-
-					score += strokes
 				end
 
-				scores << { user: user, score: score }
+				scores << { user: user, score: strokes } if strokes > 0
 			end
 
 			scores

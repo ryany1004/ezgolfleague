@@ -11,7 +11,7 @@ class Scorecard < ApplicationRecord
   has_many :scores, -> { order("sort_order") }, inverse_of: :scorecard, dependent: :destroy
   has_many :game_type_metadatum, inverse_of: :scorecard, dependent: :destroy
   has_many :tournament_day_results, inverse_of: :primary_scorecard, dependent: :destroy, foreign_key: "user_primary_scorecard_id"
-  belongs_to :designated_editor, class_name: "User", foreign_key: "designated_editor_id"
+  belongs_to :designated_editor, class_name: "User", foreign_key: "designated_editor_id", optional: true
 
   after_save :set_course_handicap
   before_destroy :clear_primary_scorecard_cache
@@ -31,7 +31,7 @@ class Scorecard < ApplicationRecord
   end
 
   def scorecard_payload
-    self.tournament_day.mandatory_scoring_rules.first.scorecard_api(scorecard: self)
+    self.tournament_day.scorecard_base_scoring_rule.scorecard_api(scorecard: self)
   end
 
   def clear_primary_scorecard_cache
@@ -100,7 +100,7 @@ class Scorecard < ApplicationRecord
 
   def has_empty_scores?
     self.scores.each do |s|
-      true if s.strokes == 0 or s.strokes.blank?
+      return true if s.strokes == 0 or s.strokes.blank?
     end
 
     false
@@ -157,7 +157,7 @@ class Scorecard < ApplicationRecord
       return overridden_name if overridden_name.present?
     end
 
-    return self.golf_outing.user.short_name
+    self.golf_outing.user.short_name
   end
 
   def individual_name
@@ -179,7 +179,7 @@ class Scorecard < ApplicationRecord
   end
 
   def includes_extra_scoring_column?
-    self.tournament_day.game_type.includes_extra_scoring_column?
+    self.tournament_day.scorecard_base_scoring_rule.includes_extra_scoring_column?
   end
 
   def extra_scoring_column_data

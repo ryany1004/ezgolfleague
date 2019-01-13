@@ -13,7 +13,7 @@ module StrokePlayScorecardSupport
     other_members = []
 
     group = self.tournament_day.tournament_group_for_player(user)
-    group.golf_outings.each do |outing|
+    group&.golf_outings&.each do |outing|
       other_members << outing.user if outing.user != user
     end
 

@@ -1,6 +1,5 @@
 <script>
-  mixpanel.track("Display Pay League Dues Registration");
-  amplitude.getInstance().logEvent("Display Pay League Dues Registration");
+  ezglTrackAnalyticsEvent("Viewed pay league dues");
 </script>
 
 <script type="text/javascript">
@@ -44,6 +43,8 @@ fbq('track', 'CompleteRegistration', {
   currency: 'USD',
   content_name: 'Create User'
 });
+
+ezglTrackAnalyticsEvent("Paid league dues during registration", { league_id: <%= @league.id %>, league_name: <%= @league.name %>, value: <%= @payment_amount.to_i * 1000 %> });
 </script>
 
 <div class="row">

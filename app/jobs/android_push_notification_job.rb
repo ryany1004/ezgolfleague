@@ -1,5 +1,7 @@
 class AndroidPushNotificationJob < ApplicationJob
   def perform(user, body, extra_data = nil)
+    return if Rails.env.development?
+
     firebase = FCM.new(FIREBASE_API_KEY)
 
     user.android_devices.each do |device|

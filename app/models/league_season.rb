@@ -104,7 +104,7 @@ class LeagueSeason < ApplicationRecord
     else
       payments = self.payments.where(user: user).where('payment_amount > 0').where('payment_type = ?', "#{user.complete_name} League Dues")
 
-      if !payments.length.empty?
+      if !payments.empty?
         true
       else
         false

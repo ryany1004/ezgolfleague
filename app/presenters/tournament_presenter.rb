@@ -175,6 +175,58 @@ class TournamentPresenter
     end
   end
 
+  def payouts
+    flights_with_payouts = []
+
+    if self.tournament_day == nil
+      self.tournament.tournament_days.each do |d|
+        d.flights.each do |f|
+          payouts = []
+
+          f.payout_results.each do |p|
+            username = p.user.blank? ? "" : p.user.complete_name
+            user_id = p.user.blank? ? nil : p.user.id
+
+            payouts << {flight_number: f.flight_number.to_i, flight_name: f.display_name, name: username, amount: p.amount, points: p.points.to_i, user_id: user_id}
+          end
+
+          flights_with_payouts << {payouts: payouts} unless payouts.blank?
+        end
+      end
+    else
+      self.tournament_day.flights.each do |f|
+        payouts = []
+
+        f.payout_results.each do |p|
+          username = p.user.blank? ? "" : p.user.complete_name
+          user_id = p.user.blank? ? nil : p.user.id
+
+          payouts << {flight_number: f.flight_number.to_i, flight_name: f.display_name, name: username, amount: p.amount, points: p.points.to_i, user_id: user_id}
+        end
+
+        flights_with_payouts << {payouts: payouts}
+      end
+    end
+
+    flights_with_payouts
+  end
+
+  def optional_scoring_rules_with_dues
+    items = []
+
+    if self.tournament_day == nil
+      self.tournament.optional_scoring_rules_with_dues.each do |r|
+        items << {name: r.name, winners: r.legacy_contest_winners} if r.legacy_contest_winners && !r.legacy_contest_winners.empty?
+      end
+    else
+      self.tournament_day.optional_scoring_rules_with_dues.each do |r|
+        items << {name: r.name, winners: r.legacy_contest_winners} if r.legacy_contest_winners && !r.legacy_contest_winners.empty?
+      end
+    end
+
+    items
+  end
+
   def tournament_players
     return [] if self.tournament_day.blank?
 

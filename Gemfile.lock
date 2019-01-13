@@ -16,9 +16,9 @@ GIT
 
 GIT
   remote: https://github.com/stripe/stripe-ruby
-  revision: e2c352de07377c11c442ee52a9d99390bd837adf
+  revision: 7f55cf3a9c649ed633d7c646cd421ba7877b12b0
   specs:
-    stripe (4.4.0)
+    stripe (4.5.0)
       faraday (~> 0.13)
       net-http-persistent (~> 3.0)
 
@@ -71,6 +71,8 @@ GEM
       activesupport (>= 4.2, < 6.0)
     addressable (2.5.2)
       public_suffix (>= 2.0.2, < 4.0)
+    airbrussh (1.3.1)
+      sshkit (>= 1.6.1, != 1.7.0)
     apnotic (1.4.1)
       connection_pool (~> 2.0)
       net-http2 (>= 0.18, < 2)
@@ -78,35 +80,34 @@ GEM
     ast (2.4.0)
     attr_encrypted (3.0.3)
       encryptor (~> 3.0.0)
-    autoprefixer-rails (9.4.3)
+    autoprefixer-rails (9.4.5)
       execjs
-    aws-sdk (2.11.197)
-      aws-sdk-resources (= 2.11.197)
-    aws-sdk-core (2.11.197)
+    aws-sdk (2.11.204)
+      aws-sdk-resources (= 2.11.204)
+    aws-sdk-core (2.11.204)
       aws-sigv4 (~> 1.0)
       jmespath (~> 1.0)
-    aws-sdk-resources (2.11.197)
-      aws-sdk-core (= 2.11.197)
+    aws-sdk-resources (2.11.204)
+      aws-sdk-core (= 2.11.204)
     aws-sigv4 (1.0.3)
     bcrypt (3.1.12)
     benchmark-ips (2.7.2)
     bindex (0.5.0)
     bootsnap (1.3.2)
       msgpack (~> 1.0)
-    bootstrap (4.2.1)
-      autoprefixer-rails (>= 9.1.0)
-      popper_js (>= 1.14.3, < 2)
-      sassc-rails (>= 2.0.0)
+    bootstrap-sass (3.3.7)
+      autoprefixer-rails (>= 5.2.1)
+      sass (>= 3.3.4)
     builder (3.2.3)
     bullet (5.9.0)
       activesupport (>= 3.0.0)
       uniform_notifier (~> 1.11)
     byebug (10.0.2)
-    capistrano (3.3.5)
-      capistrano-stats (~> 1.1.0)
+    capistrano (3.9.0)
+      airbrussh (>= 1.0.0)
       i18n
       rake (>= 10.0.0)
-      sshkit (~> 1.3)
+      sshkit (>= 1.9.0)
     capistrano-bundler (1.1.4)
       capistrano (~> 3.1)
       sshkit (~> 1.2)
@@ -117,10 +118,9 @@ GEM
       capistrano
       resque
       resque-scheduler
-    capistrano-stats (1.1.1)
-    capistrano3-delayed-job (1.7.5)
+    capistrano3-delayed-job (1.7.6)
       capistrano (~> 3.0, >= 3.0.0)
-      daemons (~> 1.2.4)
+      daemons (~> 1.3)
     capybara (2.7.1)
       addressable
       mime-types (>= 1.16)
@@ -146,7 +146,7 @@ GEM
     concurrent-ruby (1.1.4)
     connection_pool (2.2.2)
     crass (1.0.4)
-    daemons (1.2.6)
+    daemons (1.3.1)
     dalli (2.7.9)
     derailed (0.1.0)
       derailed_benchmarks
@@ -168,6 +168,7 @@ GEM
       actionmailer (>= 4.1.0)
       devise (>= 4.0.0)
     diff-lcs (1.3)
+    drip-ruby (3.2.0)
     encryptor (3.0.0)
     erubi (1.8.0)
     et-orbi (1.1.6)
@@ -191,16 +192,16 @@ GEM
       raabro (~> 1.1)
     geocoder (1.5.0)
     get_process_mem (0.2.3)
-    globalid (0.4.1)
+    globalid (0.4.2)
       activesupport (>= 4.2.0)
     heapy (0.1.4)
     http-2 (0.9.0)
     httparty (0.16.3)
       mime-types (~> 3.0)
       multi_xml (>= 0.5.2)
-    i18n (1.3.0)
+    i18n (1.5.1)
       concurrent-ruby (~> 1.0)
-    jaro_winkler (1.5.1)
+    jaro_winkler (1.5.2)
     jbuilder (2.8.0)
       activesupport (>= 4.2.0)
       multi_json (>= 1.2)
@@ -255,7 +256,7 @@ GEM
     mini_portile2 (2.4.0)
     minitest (5.11.3)
     mono_logger (1.1.0)
-    msgpack (1.2.4)
+    msgpack (1.2.6)
     multi_json (1.13.1)
     multi_xml (0.6.0)
     multipart-post (2.0.0)
@@ -268,7 +269,7 @@ GEM
       net-ssh (>= 2.6.5)
     net-ssh (5.1.0)
     nio4r (2.3.1)
-    nokogiri (1.9.1)
+    nokogiri (1.10.0)
       mini_portile2 (~> 2.4.0)
     orm_adapter (0.5.0)
     paperclip (5.0.0)
@@ -280,8 +281,7 @@ GEM
     parallel (1.12.1)
     parser (2.5.3.0)
       ast (~> 2.4.0)
-    pg (1.1.3)
-    popper_js (1.14.5)
+    pg (1.1.4)
     powerpack (0.1.2)
     pretender (0.3.3)
       actionpack (>= 4.2)
@@ -386,7 +386,7 @@ GEM
       rspec-mocks (~> 3.5.0)
       rspec-support (~> 3.5.0)
     rspec-support (3.5.0)
-    rubocop (0.61.1)
+    rubocop (0.62.0)
       jaro_winkler (~> 1.5.1)
       parallel (~> 1.10)
       parser (>= 2.5, != 2.5.1.1)
@@ -398,7 +398,7 @@ GEM
     ruby_dep (1.5.0)
     rufus-scheduler (3.5.2)
       fugit (~> 1.1, >= 1.1.5)
-    sass (3.7.2)
+    sass (3.7.3)
       sass-listen (~> 4.0.0)
     sass-listen (4.0.0)
       rb-fsevent (~> 0.9, >= 0.9.4)
@@ -412,12 +412,7 @@ GEM
     sassc (2.0.0)
       ffi (~> 1.9.6)
       rake
-    sassc-rails (2.1.0)
-      railties (>= 4.0.0)
-      sassc (>= 2.0)
-      sprockets (> 3.0)
-      sprockets-rails
-      tilt
+    scout_apm (2.4.21)
     sdoc (0.4.2)
       json (~> 1.7, >= 1.7.7)
       rdoc (~> 4.0)
@@ -481,10 +476,10 @@ DEPENDENCIES
   attr_encrypted (~> 3.0.0)
   aws-sdk (~> 2.3)
   bootsnap
-  bootstrap (~> 4.2.1)
+  bootstrap-sass (~> 3.3.4)
   bullet
   byebug
-  capistrano (= 3.3.5)
+  capistrano (= 3.9.0)
   capistrano-bundler (~> 1.1.3)
   capistrano-rails (~> 1.1)
   capistrano-resque (~> 0.2.2)
@@ -498,6 +493,7 @@ DEPENDENCIES
   derailed
   devise (~> 4.2)
   devise_invitable (~> 1.7.0)
+  drip-ruby
   factory_bot_rails
   fcm
   flamegraph
@@ -524,6 +520,7 @@ DEPENDENCIES
   rspec-rails (= 3.5.0)
   rubocop
   sass-rails (~> 5.0)
+  scout_apm
   sdoc (~> 0.4.0)
   simple_form
   spring

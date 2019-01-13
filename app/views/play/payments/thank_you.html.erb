@@ -1,6 +1,5 @@
 <script>
-  mixpanel.track("User Completed Payment");
-  amplitude.getInstance().logEvent("User Completed Payment");
+  ezglTrackAnalyticsEvent("Completed a new payment", { payment_id: <%= @payment.id %>, value: <%= @payment.payment_amount.to_i * 1000 %> } );
 </script>
 
 <ol class="breadcrumb">

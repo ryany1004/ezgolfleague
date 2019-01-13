@@ -1,10 +1,12 @@
 class IosPushNotificationJob < ApplicationJob
   def perform(device, body, content_available = false, extra_data = nil)
+    return if Rails.env.development?
+    
     begin
       if device.environment_name == "debug"
-        pusher = self.pusher(true)
+        pusher = IosPushNotificationJob.pusher(true)
       else
-        pusher = self.pusher
+        pusher = IosPushNotificationJob.pusher
       end
 
       notification = Apnotic::Notification.new(device.device_identifier)
@@ -30,7 +32,7 @@ class IosPushNotificationJob < ApplicationJob
     end
   end
 
-  def pusher(use_debug = false)
+  def self.pusher(use_debug = false)
     certificate_file = "#{Rails.root}/config/apns_cert.pem"
     passphrase = "golf"
 

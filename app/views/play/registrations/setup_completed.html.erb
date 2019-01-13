@@ -1,6 +1,5 @@
 <script>
-  mixpanel.track("User Account Setup Complete");
-  amplitude.getInstance().logEvent("User Account Setup Complete");
+  ezglTrackAnalyticsEvent("Completed user setup", { value: <%= params[:details_amount].to_i * 1000 %> });
 </script>
 
 <% unless params[:details_amount].blank? %>

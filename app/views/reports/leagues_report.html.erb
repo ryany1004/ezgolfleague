@@ -7,6 +7,7 @@
   			<th>Name</th>
         <th>Email Address</th>
         <th>Type</th>
+        <th>Created</th>
   		</tr>
   	</thead>
   	<tbody>
@@ -15,6 +16,7 @@
           <td><%= link_to league.name, edit_league_path(league) %></td>
           <td><%= league.contact_email %></td>
           <td><%= league.league_type %></td>
+          <td><%= league.created_at.to_s(:date_and_time) %></td>
         </tr>
       <% end -%>
   	</tbody>

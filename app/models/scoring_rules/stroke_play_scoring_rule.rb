@@ -10,6 +10,10 @@ class StrokePlayScoringRule < ScoringRule
 		"Traditional stroke play for individual players."
 	end
 
+	def legacy_game_type_id
+		1
+	end
+
 	def scoring_computer
 		ScoringComputer::StrokePlayScoringComputer.new(self)
 	end
@@ -36,12 +40,12 @@ class StrokePlayScoringRule < ScoringRule
       end
     end
 
-    eligible_player_list
+    eligible_player_list.uniq
   end
 
 	def scorecard_api(scorecard:)
-    handicap_allowance = self.handicap_allowance(scorecard.golf_outing.user)
+    handicap_allowance = self.handicap_computer.handicap_allowance(user: scorecard.golf_outing.user)
 
-		Scorecards::Api::ScorecardAPIBase.new(scorecard.tournament_day, scorecard, handicap_allowance)
+		Scorecards::Api::ScorecardAPIBase.new(scorecard.tournament_day, scorecard, handicap_allowance).scorecard_representation
 	end
 end

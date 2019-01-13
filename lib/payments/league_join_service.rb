@@ -23,7 +23,12 @@ module Payments
 
       user.leagues << league
 
-      LeagueMailer.league_dues_payment_confirmation(user, league_season).deliver_later unless league.dues_payment_receipt_email_addresses.blank?
+      if league.dues_payment_receipt_email_addresses.present?
+        email_addresses = nil
+        email_addresses = league.dues_payment_receipt_email_addresses.split(",")
+
+        RecordEventJob.perform_later(email_addresses, "A user paid league dues", { league_name: league_season.league.name, season_name: league_season.complete_name, dues_paid: league_season.league.dues_for_user(user, true), user: { complete_name: user.complete_name, email: user.email, phone_number: user.phone_number} }) unless email_addresses.blank?
+      end
     end
 
     def self.payment_amount(league)

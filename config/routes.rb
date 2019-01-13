@@ -105,6 +105,7 @@ Rails.application.routes.draw do
           get 'payment_details'
 
           post 'register_contests'
+          post 'register_optional_games'
 
           get 'tournament_groups'
           get 'leaderboard'

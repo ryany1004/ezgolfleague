@@ -28,4 +28,10 @@ class BestBallScoringRule < StrokePlayScoringRule
 
     return scorecard
   end
+
+	def scorecard_api(scorecard:)
+    handicap_allowance = self.handicap_computer.handicap_allowance(user: scorecard.golf_outing.user)
+
+		Scorecards::Api::ScorecardAPIBestBall.new(scorecard.tournament_day, scorecard, handicap_allowance).scorecard_representation
+	end
 end

@@ -85,8 +85,13 @@ class Play::PaymentsController < Play::BaseController
 
         Payment.create(payment_amount: (amount * -1.0), user: current_user, payment_type: charge_description, league_season: league_season)
 
-        LeagueMailer.league_dues_payment_confirmation(current_user, league_season).deliver_later unless league.dues_payment_receipt_email_addresses.blank?
-        
+        if league.dues_payment_receipt_email_addresses.present?
+          email_addresses = nil
+          email_addresses = league.dues_payment_receipt_email_addresses.split(",")
+
+          RecordEventJob.perform_later(email_addresses, "A user paid league dues", { league_name: league_season.league.name, season_name: league_season.complete_name, dues_paid: league_season.league.dues_for_user(user, true), user: { complete_name: current_user.complete_name, email: current_user.email, phone_number: current_user.phone_number} }) unless email_addresses.blank?
+        end
+
         self.create_payment(amount, charge_description, charge.id, nil, nil, league_season) #league dues
       else
         unless tournament.blank?
@@ -130,6 +135,7 @@ class Play::PaymentsController < Play::BaseController
   end
 
   def thank_you
+    @payment = Payment.where(user: current_user).last
   end
 
   def error

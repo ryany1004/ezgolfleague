@@ -1,6 +1,5 @@
 <script>
-  mixpanel.track("Admin: Display Current Subscription");
-  amplitude.getInstance().logEvent("Admin: Display Current Subscription");
+  ezglTrackAnalyticsEvent("Viewed subscription details");
 </script>
 
 <script>
@@ -45,7 +44,7 @@
   });
 
   function costPerGolfer() {
-    return 5;
+    return <%= SubscriptionCredit.cost_per_golfer %>;
   }
 
   function stripeResponseHandler(status, response) {
@@ -74,6 +73,8 @@
 
 <% unless params[:details_amount].blank? %>
 <script>
+  ezglTrackAnalyticsEvent("Completed a subscription purchase", { league_name: "<%= @league.name %>", value: <%= params[:details_amount].to_i * 1000 %> });
+
   ga('ec:addProduct', {               // Provide product details in an productFieldObject.
   'id': 'EZGL001',                   // Product ID (string).
   'name': 'Tournament Credits', // Product name (string).
@@ -94,9 +95,6 @@
   value: <%= params[:details_amount] %>,
   currency: 'USD'
   });
-
-  mixpanel.track("Admin: Subscription Purchase Completed");
-  amplitude.getInstance().logEvent("Admin: Subscription Purchase Completed");
 </script>
 <% end %>
 
@@ -358,7 +356,7 @@
     $("#purchase_credits_button").prop('disabled', false);
 
     var cost = 0;
-    var costPerGolfer = 5;
+    var costPerGolfer = <%= SubscriptionCredit.cost_per_golfer %>;
 
     cost = golfers * costPerGolfer;
 

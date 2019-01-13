@@ -1,6 +1,10 @@
 module FlightTournamentDay
   def assign_users_to_flights(should_destroy_results: true)
-    self.tournament_day_results.destroy_all if should_destroy_results
+    if should_destroy_results
+      self.scoring_rules.each do |r|
+        r.tournament_day_results.where("flight_id IS NOT NULL").destroy_all
+      end
+    end
 
     self.reload
 

@@ -1,6 +1,5 @@
-module GameTypes
-  class EmptyLineScorecard < GameTypes::DerivedScorecard
-
+module ScoringRuleScorecards
+  class EmptyLineScorecard < ScoringRuleScorecards::BaseScorecard
     def scores_for_course_holes(course_holes)
       course_holes.each_with_index do |hole, i|
         score = DerivedScorecardScore.new
@@ -14,6 +13,5 @@ module GameTypes
     def name(shorten_for_print = false)
       return "<br/><br/><br/>".html_safe
     end
-
   end
 end

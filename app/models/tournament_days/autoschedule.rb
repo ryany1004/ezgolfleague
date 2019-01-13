@@ -3,7 +3,7 @@ module Autoschedule
     previous_day = self.tournament.previous_day_for_day(self)
     return if previous_day.blank?
 
-    self.tournament.tournament_days.first.assign_players_to_flights(false)
+    self.tournament.tournament_days.first.assign_users_to_flights(should_destroy_results: false)
 
     Rails.logger.info { "Completed Auto-Schedule Flighting" }
 

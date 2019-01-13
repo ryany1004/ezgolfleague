@@ -9,7 +9,7 @@ class Score < ApplicationRecord
   validates :strokes, inclusion: 0..30
 
   def associated_text
-    self.scorecard.tournament_day.game_type.associated_text_for_score(self)
+    self.scorecard.tournament_day.scorecard_base_scoring_rule.associated_text_for_score(self)
   end
 
   def course_hole_number

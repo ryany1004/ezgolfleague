@@ -1,5 +1,5 @@
 <script>
-  trackUserEvent("Admin: Tournament Player Signup");
+  ezglTrackAnalyticsEvent("Viewed player tournament signup", { tournament_id: "<%= @tournament.id %>", tournament: "<%= @tournament.name %>" });
 </script>
 
 <ol class="breadcrumb">

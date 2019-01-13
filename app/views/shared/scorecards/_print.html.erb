@@ -1,145 +1,147 @@
-<p><strong>Tee-Time: <%= p.tee_time.to_s(:date_and_time) %> | Tees: <%= p.tee_names %></strong></p>
+<% cache p do %>
+  <p><strong>Tee-Time: <%= p.tee_time.to_s(:date_and_time) %> | Tees: <%= p.tee_names %></strong></p>
 
-<table class="table table-striped table-bordered print-friendly" id="printable-scorecard-table">
-	<thead>
-		<tr>
-      <th width="2%">flt</th>
-      <th width="7%">hole<br/>yards</th>
-      <% p.sliced_scores.each_with_index do |split, j| %>
-        <% split.each do |score| -%>
-        <th width="<%= 75 / p.score_count %>%"><%= score.course_hole.hole_number %><br/><%= score.course_hole.yards_for_flight(p.flight) %></th>
-        <% end -%>
-        <th width="4%">
-          <% if j == 0 -%>
-            out
-          <% else -%>
-            out<br/>in
-          <% end -%>
-        </th>
-      <% end -%>
-
-      <th width="3%">hdcp</th>
-
-      <% if p.includes_extra_scoring_column? -%>
-        <th width="5%">&nbsp;</th>
-      <% end -%>
-
-      <th width="7%">gross</th>
-		</tr>
-	</thead>
-	<tbody>
-    <% p.all_scorecards.each do |scorecard| -%>
+  <table class="table table-striped table-bordered print-friendly" id="printable-scorecard-table">
+    <thead>
       <tr>
-        <td><%= scorecard.flight_number %></td>
-        <% if scorecard.should_highlight? -%>
-          <td><em><%= scorecard.name(print_mode) %></em></td>
-        <% else -%>
-          <td><%= scorecard.name(print_mode) %></td>
-        <% end -%>
-        <% scorecard.scores.each_slice(p.number_of_holes / 2).to_a.each_with_index do |split, j| %>
+        <th width="2%">flt</th>
+        <th width="7%">hole<br/>yards</th>
+        <% p.sliced_scores.each_with_index do |split, j| %>
           <% split.each do |score| -%>
-            <td>
-              <%= link_to_unless !p.user_can_edit_scorecard?(scorecard), "#{scorecard_score_helper(score, print_mode)}", "#", {"data-toggle" => "modal", "data-target" => "#Group#{score.course_hole.id}"} %>
-							<br/>
-              <% if handicap_allowance_strokes_for_hole(handicap_allowance_for_scorecard(scorecard), score.course_hole) > 0 -%>
-                <!-- Pips -->
-                <br/><%= print_handicap_allowance_strokes_for_hole(handicap_allowance_for_scorecard(scorecard), score.course_hole) %>
-              <% else %>
-                <!-- No Pips -->
-                <br/>&nbsp;
-              <% end -%>
+          <th width="<%= 75 / p.score_count %>%"><%= score.course_hole.hole_number %><br/><%= score.course_hole.yards_for_flight(p.flight) %></th>
+          <% end -%>
+          <th width="4%">
+            <% if j == 0 -%>
+              out
+            <% else -%>
+              out<br/>in
+            <% end -%>
+          </th>
+        <% end -%>
 
-              <% unless score.associated_text.blank? -%>
-                </br><em><%= score.associated_text %></em>
+        <th width="3%">hdcp</th>
+
+        <% if p.includes_extra_scoring_column? -%>
+          <th width="5%">&nbsp;</th>
+        <% end -%>
+
+        <th width="7%">gross</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% p.all_scorecards.each do |scorecard| -%>
+        <tr>
+          <td><%= scorecard.flight_number %></td>
+          <% if scorecard.should_highlight? -%>
+            <td><em><%= scorecard.name(print_mode) %></em></td>
+          <% else -%>
+            <td><%= scorecard.name(print_mode) %></td>
+          <% end -%>
+          <% scorecard.scores.each_slice(p.number_of_holes / 2).to_a.each_with_index do |split, j| %>
+            <% split.each do |score| -%>
+              <td>
+                <%= link_to_unless !p.user_can_edit_scorecard?(scorecard), "#{scorecard_score_helper(score, print_mode)}", "#", {"data-toggle" => "modal", "data-target" => "#Group#{score.course_hole.id}"} %>
+                <br/>
+                <% if handicap_allowance_strokes_for_hole(handicap_allowance_for_scorecard(scorecard), score.course_hole) > 0 -%>
+                  <!-- Pips -->
+                  <br/><%= print_handicap_allowance_strokes_for_hole(handicap_allowance_for_scorecard(scorecard), score.course_hole) %>
+                <% else %>
+                  <!-- No Pips -->
+                  <br/>&nbsp;
+                <% end -%>
+
+                <% unless score.associated_text.blank? -%>
+                  </br><em><%= score.associated_text %></em>
+                <% end -%>
+              </td>
+            <% end -%>
+            <td>
+              <% if scorecard.should_subtotal? -%>
+                <strong>
+                  <% if j == 0 -%>
+                    <%= score_print_helper(scorecard.front_nine_score, print_mode) %> <%= front_nine_handicap_for_scorecard(scorecard, print_mode) %>
+                  <% else -%>
+                    <%= score_print_helper(scorecard.front_nine_score, print_mode) %> <%= front_nine_handicap_for_scorecard(scorecard, print_mode) %><br/><%= score_print_helper(scorecard.back_nine_score, print_mode) %> <%= back_nine_handicap_for_scorecard(scorecard, print_mode) %>
+                  <% end -%>
+                </strong>
+              <% else -%>
+                &nbsp;
               <% end -%>
             </td>
           <% end -%>
+
+          <td><%= scorecard.course_handicap %></td>
+
+          <% if p.includes_extra_scoring_column? -%>
+            <td><strong><%= scorecard.extra_scoring_column_data %></strong></td>
+          <% end -%>
+
           <td>
-            <% if scorecard.should_subtotal? -%>
-              <strong>
-                <% if j == 0 -%>
-                  <%= score_print_helper(scorecard.front_nine_score, print_mode) %> <%= front_nine_handicap_for_scorecard(scorecard, print_mode) %>
-                <% else -%>
-                  <%= score_print_helper(scorecard.front_nine_score, print_mode) %> <%= front_nine_handicap_for_scorecard(scorecard, print_mode) %><br/><%= score_print_helper(scorecard.back_nine_score, print_mode) %> <%= back_nine_handicap_for_scorecard(scorecard, print_mode) %>
-                <% end -%>
-              </strong>
+            <% if scorecard.should_total? -%>
+              <strong><%= score_print_helper(scorecard.scores.map {|score| score.strokes}.sum, print_mode) %></strong>
+              <% if scorecard.net_score > 0-%>
+              <span class="label label-success">
+                <%= score_print_helper(scorecard.net_score, print_mode) %>
+              </span>
+              <% end -%>
             <% else -%>
               &nbsp;
             <% end -%>
           </td>
+        </tr>
+      <% end -%>
+    </tbody>
+    <tfoot>
+      <tr>
+        <th>&nbsp;</th>
+        <th>Par</th>
+        <% p.sliced_scores.each_with_index do |split, j| %>
+          <% split.each do |score| -%>
+            <th><%= score.course_hole.par %></th>
+          <% end -%>
+          <th>&nbsp;</th>
         <% end -%>
 
-        <td><%= scorecard.course_handicap %></td>
+        <th>&nbsp;</th>
 
         <% if p.includes_extra_scoring_column? -%>
-          <td><strong><%= scorecard.extra_scoring_column_data %></strong></td>
+          <th>&nbsp;</th>
         <% end -%>
 
-        <td>
-          <% if scorecard.should_total? -%>
-            <strong><%= score_print_helper(scorecard.scores.map {|score| score.strokes }.sum, print_mode) %></strong>
-            <% if scorecard.net_score > 0-%>
-            <span class="label label-success">
-              <%= score_print_helper(scorecard.net_score, print_mode) %>
-            </span>
-            <% end -%>
-          <% else -%>
-            &nbsp;
-          <% end -%>
-        </td>
+        <th><%= p.scorecard_total_par %></th>
       </tr>
-    <% end -%>
-	</tbody>
-  <tfoot>
-		<tr>
-      <th>&nbsp;</th>
-			<th>Par</th>
-      <% p.sliced_scores.each_with_index do |split, j| %>
-        <% split.each do |score| -%>
-          <th><%= score.course_hole.par %></th>
+      <tr>
+        <th>hdcp</th>
+        <th>Men</th>
+        <% p.sliced_scores.each_with_index do |split, j| %>
+          <% split.each do |score| -%>
+            <th><%= score.course_hole.mens_handicap %></th>
+          <% end -%>
+          <th>&nbsp;</th>
+        <% end -%>
+
+        <th>&nbsp;</th>
+
+        <% if p.includes_extra_scoring_column? -%>
+          <th>&nbsp;</th>
         <% end -%>
         <th>&nbsp;</th>
-      <% end -%>
+      </tr>
+    </tfoot>
+  </table>
 
-      <th>&nbsp;</th>
-
-      <% if p.includes_extra_scoring_column? -%>
-        <th>&nbsp;</th>
-      <% end -%>
-
-      <th><%= p.scorecard_total_par %></th>
-		</tr>
-		<tr>
-      <th>hdcp</th>
-			<th>Men</th>
-      <% p.sliced_scores.each_with_index do |split, j| %>
-        <% split.each do |score| -%>
-          <th><%= score.course_hole.mens_handicap %></th>
-        <% end -%>
-        <th>&nbsp;</th>
-      <% end -%>
-
-      <th>&nbsp;</th>
-
-      <% if p.includes_extra_scoring_column? -%>
-        <th>&nbsp;</th>
-      <% end -%>
-      <th>&nbsp;</th>
-		</tr>
-  </tfoot>
-</table>
-
-<table class="table table-striped table-condensed print-friendly">
-  <tbody>
-    <tr>
-      <td>Scorer</td>
-      <td>Attested</td>
-      <td>Date</td>
-    </tr>
-    <tr>
-      <td>&nbsp;</td>
-      <td>&nbsp;</td>
-      <td>&nbsp;</td>
-    </tr>
-  </tbody>
-</table>
+  <table class="table table-striped table-condensed print-friendly">
+    <tbody>
+      <tr>
+        <td>Scorer</td>
+        <td>Attested</td>
+        <td>Date</td>
+      </tr>
+      <tr>
+        <td>&nbsp;</td>
+        <td>&nbsp;</td>
+        <td>&nbsp;</td>
+      </tr>
+    </tbody>
+  </table>
+<% end %>

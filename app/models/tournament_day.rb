@@ -19,7 +19,7 @@ class TournamentDay < ApplicationRecord
   has_many :flights, -> { order(:flight_number) }, inverse_of: :tournament_day, dependent: :destroy
   has_many :scoring_rules, -> { order(:type) }, inverse_of: :tournament_day, dependent: :destroy
   
-  has_and_belongs_to_many :legacy_course_holes, -> { order(:hole_number) }, class_name: "CourseHole", foreign_key: "course_hole_id" # TODO: REMOVE AFTER MIGRATION
+  has_and_belongs_to_many :legacy_course_holes, -> { order(:hole_number) }, class_name: "CourseHole", join_table: "course_holes_tournament_days" # TODO: REMOVE AFTER MIGRATION
 
   accepts_nested_attributes_for :scoring_rules
 
@@ -38,39 +38,6 @@ class TournamentDay < ApplicationRecord
     if tournament_at.present? && tournament_at < now
       errors.add(:tournament_at, "can't be in the past")
     end
-  end
-
-  # TODO TEAM: REMOVE
-  def game_type
-    if self.game_type_id == 1
-      new_game_type = GameTypes::IndividualStrokePlay.new
-    elsif self.game_type_id == 2
-      new_game_type = GameTypes::IndividualMatchPlay.new
-    elsif self.game_type_id == 3
-      new_game_type = GameTypes::IndividualModifiedStableford.new
-    elsif self.game_type_id == 5
-      new_game_type = GameTypes::TwoManShamble.new
-    elsif self.game_type_id == 7
-      new_game_type = GameTypes::TwoManScramble.new
-    elsif self.game_type_id == 8
-      new_game_type = GameTypes::FourManScramble.new
-    elsif self.game_type_id == 10
-      new_game_type = GameTypes::TwoManBestBall.new
-    elsif self.game_type_id == 11
-      new_game_type = GameTypes::TwoBestBallsOfFour.new
-    elsif self.game_type_id == 12
-      new_game_type = GameTypes::TwoManComboScrambleBestBall.new
-    elsif self.game_type_id == 13
-      new_game_type = GameTypes::OneTwoThreeBestBallsOfFour.new
-    elsif self.game_type_id == 14
-      new_game_type = GameTypes::TwoManIndividualStrokePlay.new
-    else
-      new_game_type = GameTypes::IndividualStrokePlay.new ##### REMOVE
-    end
-
-    new_game_type&.tournament_day = self
-
-    new_game_type
   end
 
   def can_be_finalized?
@@ -95,7 +62,7 @@ class TournamentDay < ApplicationRecord
 
   def can_be_played?
     self.scoring_rules.each do |r|
-      if r.can_be_played? == false
+      if !r.can_be_played?
         return false
       end
     end
@@ -225,15 +192,19 @@ class TournamentDay < ApplicationRecord
   end
 
   def scorecard_base_scoring_rule
-    self.mandatory_scoring_rules.left_joins(:scoring_rule_course_holes).group(:id).order('COUNT(scoring_rule_course_holes.id) DESC').limit(1).first
+    @scorecard_base_scoring_rule ||= self.mandatory_scoring_rules.reorder('scoring_rule_course_holes_count DESC').limit(1).first
   end
 
   def mandatory_scoring_rules
-    self.scoring_rules.where(is_opt_in: false)
+    self.scoring_rules.where(is_opt_in: false).order(:type)
   end
 
   def optional_scoring_rules
-    self.scoring_rules.where(is_opt_in: true)
+    self.scoring_rules.where(is_opt_in: true).order(:type)
+  end
+
+  def optional_scoring_rules_with_dues
+    self.optional_scoring_rules.map { |r| r.dues_amount > 0 }
   end
 
   def score_all_rules

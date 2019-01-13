@@ -16,7 +16,7 @@ module AddToTournamentDay
 
     self.add_user_to_mandatory_scoring_rules(user: user)
 
-    self.add_user_to_free_contests(user: user)
+    self.add_user_to_free_optional_scoring_rules(user: user)
 
     self.create_payment(user: user, paying_with_credit_card: paying_with_credit_card) if self == self.tournament.first_day
 
@@ -53,11 +53,9 @@ module AddToTournamentDay
     end
   end
 
-  def add_user_to_free_contests(user:)
-    self.tournament.tournament_days.each do |d|
-      d.contests.each do |c|
-        c.add_user(user) if !c.is_opt_in
-      end
+  def add_user_to_free_optional_scoring_rules(user:)
+    self.optional_scoring_rules.where(dues_amount: 0).each do |rule|
+      rule.users << user
     end
   end
 
