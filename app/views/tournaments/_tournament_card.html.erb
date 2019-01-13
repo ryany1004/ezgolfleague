@@ -1,21 +1,24 @@
 <div class="col-md-4">
   <div class="tournaments-card-slider">
-    <!-- <div class="owl-carousel owl-theme"> -->
-      <div class="item">
-        <a href="#">
-          <div class="tournaments-card-slider-top">
-            <div class="overlay"></div>
-            <p class="text-uppercase para-1"><%= tournament.tournament_starts_at.to_s(:standard) %></p>
-            <p class="text-uppercase para-2"><%= truncate(tournament.first_day.course.name, length: 35) %></p>
-            <h2><%= truncate(tournament.name, length: 40) %></h2>
-            <%= image_tag "course_backgrounds/#{rand(6)}.jpg" %>
-          </div>
-        </a>
+    <a href="#">
+      <div class="tournaments-card-slider-top">
+        <div class="overlay"></div>
+        <p class="text-uppercase para-1"><%= tournament.tournament_starts_at.to_s(:standard) %></p>
+        <p class="text-uppercase para-2"><%= truncate(tournament.first_day.course.name, length: 35) %></p>
+        <h2><%= truncate(tournament.name, length: 40) %></h2>
+        <%= image_tag "course_backgrounds/#{rand(6)}.jpg", class: "img-fluid" %>
       </div>
-      <!-- /.item --> 
-    <!-- </div> -->
-    <!-- /.owl-carousel -->
+    </a>
     <div class="regis-open">
+
+      <ul class="list-inline pagi-style">
+        <li class="list-inline-item active"><a href="#">1</a></li>
+        <li class="list-inline-item"><a href="#">2</a></li>
+        <li class="list-inline-item"><a href="#">3</a></li>
+        <li class="list-inline-item"><a href="#">4</a></li>
+        <li class="list-inline-item"><a href="#">5</a></li>
+        <li class="list-inline-item"><a href="#">6</a></li>
+      </ul> 
       <p class="text-uppercase text-right">registration open</p>
     </div>
     <div class="tournaments-card-footer">

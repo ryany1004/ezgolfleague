@@ -4,7 +4,7 @@ class Payout < ApplicationRecord
   has_many :payout_results, inverse_of: :payout, dependent: :destroy
 
   validates :scoring_rule, presence: true
-  validates :flight, presence: true, unless: Proc.new { |a| !a.scoring_rule.flight_based_payouts? }
+  validates :flight, presence: true, unless: Proc.new { |a| !a.scoring_rule&.flight_based_payouts? }
 
   def to_s
     "#{id} - Flight #{flight&.id} #{amount} #{points}"
