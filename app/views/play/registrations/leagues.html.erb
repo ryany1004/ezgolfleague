@@ -1,11 +1,6 @@
 <script>
-  mixpanel.track("Show Existing Leagues");
-  mixpanel.track("Created User Account");
-  mixpanel.alias('<%= current_user.id %>');
-
-  amplitude.getInstance().setUserId('<%= current_user.id %>');
-  amplitude.getInstance().logEvent("Show Existing Leagues");
-  amplitude.getInstance().logEvent("Created User Account");
+  ezglTrackAnalyticsEvent("Created a new user account");
+  ezglTrackAnalyticsEvent("Viewed existing leagues during registration");
 </script>
 
 <ol class="breadcrumb">

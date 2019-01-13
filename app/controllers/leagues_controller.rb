@@ -76,9 +76,8 @@ class LeaguesController < BaseController
   def send_member_email
     @league = League.find(params[:league_id])
 
-    @league.users.each do |u|
-      LeagueMailer.league_message(u, @league, params[:league_send_member_email][:subject], params[:league_send_member_email][:contents]).deliver_later
-    end
+    email_addresses = @league.users.pluck(:email)
+    RecordEventJob.perform_later(email_addresses, "A league message was sent", { league_name: @league.name, message_subject: params[:league_send_member_email][:subject], message_contents: params[:league_send_member_email][:contents] })
 
     redirect_to leagues_path, flash: { success: "The message was sent." }
   end

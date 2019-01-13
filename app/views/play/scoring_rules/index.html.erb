@@ -1,6 +1,5 @@
 <script>
-  mixpanel.track("Display Tournament Optional Scoring Rules");
-  amplitude.getInstance().logEvent("Display Tournament Optional Scoring Rules");
+  ezglTrackAnalyticsEvent("Viewed tournament contests", { tournament_day_id: "<%= @tournament_day.id %>" });
 </script>
 
 <ol class="breadcrumb">

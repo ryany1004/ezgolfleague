@@ -1,6 +1,4 @@
 class LeagueMembership < ApplicationRecord
-  acts_as_paranoid
-  
   scope :active, -> { where("state = ?", MembershipStates::ACTIVE_FOR_BILLING) }
 
   belongs_to :league, touch: true

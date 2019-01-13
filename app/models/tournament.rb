@@ -307,8 +307,17 @@ class Tournament < ApplicationRecord
     #cache bust
     self.league.active_season.touch unless self.league.active_season.blank?
 
-    #email completion
-    LeagueMailer.tournament_finalized(self).deliver_later unless self.league.dues_payment_receipt_email_addresses.blank? || !should_email
+    self.send_finalize_event unless !should_email
+  end
+
+  def send_finalize_event
+    tournament_url = "https://app.ezgolfleague.com/leagues/<%= self.league.id %>/tournaments/<%= self.id %>/finalize?bypass_calc=true"
+    tournament_info = { tournament_name: self.name, league_name: self.league.name, tournament_url: tournament_url }
+
+    email_addresses = nil
+    email_addresses = self.league.dues_payment_receipt_email_addresses.split(",") unless self.league.dues_payment_receipt_email_addresses.blank?
+
+    RecordEventJob.perform_later(email_addresses, "A tournament was finalized", tournament_info) unless email_addresses.blank?
   end
 
   ##

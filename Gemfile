@@ -34,7 +34,7 @@ gem 'apnotic'
 gem 'geocoder'
 gem 'fcm'
 gem 'marginalia'
-gem 'capistrano', '3.3.5'
+gem 'capistrano', '3.9.0'
 gem 'capistrano3-delayed-job', '~> 1.0'
 gem 'capistrano-rails', '~> 1.1'
 gem 'capistrano-bundler', '~> 1.1.3'
@@ -43,6 +43,7 @@ gem 'rollbar'
 gem 'acts_as_paranoid', '~> 0.6.0'
 gem 'bootsnap', require: false
 gem 'scout_apm'
+gem 'drip-ruby', require: 'drip'
 
 group :development do
   gem 'web-console'

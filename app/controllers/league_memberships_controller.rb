@@ -58,7 +58,7 @@ class LeagueMembershipsController < BaseController
   private
 
   def membership_params
-    params.require(:league_membership).permit(:user, :user_id, :league, :is_admin, :league_dues_discount)
+    params.require(:league_membership).permit(:user, :user_id, :league, :league_id, :is_admin, :league_dues_discount)
   end
 
   def fetch_membership
@@ -71,7 +71,7 @@ class LeagueMembershipsController < BaseController
 
   def fetch_users
     if @league.users.count > 0
-      existing_user_ids = @league.users.map { |n| n.id }
+      existing_user_ids = @league&.users&.map { |n| n.id }
 
       @users = User.where("id NOT IN (?)", existing_user_ids).order(:last_name).order(:first_name).order(created_at: :desc)
     else

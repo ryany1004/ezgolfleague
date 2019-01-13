@@ -1,9 +1,5 @@
 <script>
-  mixpanel.track("Created League");
-  mixpanel.track("Display Invite Golfers");
-
-  amplitude.getInstance().logEvent("Created League");
-  amplitude.getInstance().logEvent("Display Invite Golfers");
+  ezglTrackAnalyticsEvent("Created a new league", { league_id: <%= @league.id %>, league_name: <%= @league.name %> });
 </script>
 
 <div id="container">

@@ -1,6 +1,5 @@
 <script>
-  mixpanel.track("Display Leaderboard");
-  amplitude.getInstance().logEvent("Display Leaderboard");
+  ezglTrackAnalyticsEvent("Viewed a leaderboard", { tournament_day_id: <%= @tournament_day.id %> });
 </script>
 
 <ol class="breadcrumb">

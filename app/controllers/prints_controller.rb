@@ -4,7 +4,8 @@ class PrintsController < BaseController
   def print_scorecards
     @print_cards = []
 
-    @tournament.players_for_day(@tournament_day).each do |player|
+    players_for_day = @tournament.players_for_day(@tournament_day)
+    players_for_day.each do |player|
       primary_scorecard = @tournament_day.primary_scorecard_for_user(player)
 
       other_scorecards = []

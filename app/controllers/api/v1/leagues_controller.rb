@@ -14,9 +14,13 @@ class Api::V1::LeaguesController < Api::V1::ApiBaseController
       league = @current_user.leagues.find(params[:id])
     end
 
-    league_season = league.active_season
-    league_season = league.league_seasons.last if league_season.blank?
+    if league.present?
+      league_season = league.active_season
+      league_season = league.league_seasons.last if league_season.blank?
 
-    @rankings = league_season.league_season_ranking_groups
+      @rankings = league_season.league_season_ranking_groups
+    else
+      render json: { success: false }, status: :bad_request
+    end
   end
 end

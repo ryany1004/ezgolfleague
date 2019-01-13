@@ -32,11 +32,14 @@ class User < ApplicationRecord
   validates :email, presence: true, uniqueness: true
   validates :first_name, presence: true
   validates :last_name, presence: true
+  validates :time_zone, presence: true
 
   attr_accessor :should_invite, :agreed_to_terms, :account_to_merge_to
 
   before_update :clear_current_league
   before_update :reset_session, if: :encrypted_password_changed?
+
+  after_create :send_to_drip
 
   accepts_nested_attributes_for :league_memberships
 
@@ -85,6 +88,42 @@ class User < ApplicationRecord
   def ghin_url
     #"http://widgets.ghin.com/HandicapLookupResults.aspx?entry=1&ghinno=#{self.ghin_number}&css=default&dynamic=&small=0&mode=&tab=0"
     "http://162.245.224.193/Widgets/HandicapLookupResults.aspx?entry=1&ghinno=#{self.ghin_number}&css=default&dynamic=&small=0&mode=&tab=0"
+  end
+
+  def drip_tags
+    tags = []
+
+    tags << "Golfer"
+    tags << "League Admin" if self.is_any_league_admin?
+    tags << "Mobile User" if self.mobile_devices.count > 0
+    tags << "iOS User" if self.has_ios_devices?
+    tags << "Android User" if self.has_android_devices?
+
+    self.leagues.each do |l|
+      tags << l.name
+    end
+
+    tags
+  end
+
+  def send_to_drip
+    options = {
+      tags: self.drip_tags,
+      custom_fields: {
+        first_name: self.first_name,
+        last_name: self.last_name,
+      }
+    }
+
+    response = DRIP_CLIENT.create_or_update_subscriber(self.email, options)
+
+    puts response
+
+    response
+  end
+
+  def delete_from_drip
+    response = DRIP_CLIENT.unsubscribe(self.email)
   end
 
   ##
