@@ -24,7 +24,7 @@ module ApplicationHelper
   end
 
   def current_season_name
-    current_user.selected_league.active_season.name
+    current_user.selected_league&.active_season&.name
   end
 
   def current_user_is_admin_for_user(user)

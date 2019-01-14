@@ -20,7 +20,6 @@ class Tournament < ApplicationRecord
 
   attr_accessor :another_member_id
   attr_accessor :skip_date_validation
-  # attr_accessor :contests_to_enter # TODO: update 
 
   validates :name, presence: true
   validates :league, presence: true

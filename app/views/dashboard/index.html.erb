@@ -49,19 +49,7 @@
                   </div><!-- /.ppp-header -->
                   <div class="ppp-content">
                     <% @ranking_groups.each do |group| %>
-                      <% group.displayable_league_season_rankings.each do |ranking| %>
-                        <div class="row">
-                          <div class="col-2">
-                              <p><%= ranking.rank %></p>
-                          </div><!-- /.col-3 -->
-                          <div class="col-8">
-                              <p><%= ranking.name %></p>
-                          </div><!-- /.col-3 -->
-                          <div class="col-2">
-                              <p><%= ranking.points.to_i %></p>
-                          </div><!-- /.col-3 -->
-                        </div><!-- /.row -->
-                      <% end %>
+                      <%= render partial: 'ranking_group', collection: group.displayable_league_season_rankings %>
                     <% end %>
                     <div class="row">
                       <div class="col-md-12">

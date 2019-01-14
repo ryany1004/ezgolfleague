@@ -22,7 +22,7 @@
   
 
   // Collapse Navbar
-  setTimeout(function(){
+  $(document).ready(function(){
     var navbarCollapse = function() {
       if ($("#mainNav").offset().top > 100) {
         $("#mainNav").addClass("navbar-shrink");
@@ -34,6 +34,5 @@
     navbarCollapse();
     // Collapse the navbar when page is scrolled
     $(window).scroll(navbarCollapse);
-  }, 100);
-
+  });
 })(jQuery); // End of use strict

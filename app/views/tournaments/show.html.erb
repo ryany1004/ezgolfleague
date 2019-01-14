@@ -1,0 +1,406 @@
+<div class="banner-img fall-classic-img"></div>
+    <!-- /.banner-img -->
+    <div class="container">
+      <div class="dashboard-header ttt-header fall-classic-header">
+        <div class="row">
+          <div class="col-md-8">
+            <h2><%= truncate(@tournament.name, length: 40) %></h2>
+            <a href="#tornament-info-popup" class="popup-with-zoom-anim"><%= image_tag('information.svg') %></a>
+            <ul class="header-list-para list-inline">
+              <li class="list-inline-item"><%= @tournament.tournament_starts_at.to_s(:standard) %></li>
+              <li class="list-inline-item"><%= truncate(@tournament.first_day.course.name, length: 35) %></li>
+              <li class="list-inline-item"><%= @tournament.first_day.scorecard_base_scoring_rule.course_holes.count %> Holes</li>
+            </ul>
+          </div>
+          <!-- /.col-md-8 --> 
+          <div class="col-md-4 text-right">
+            <div class="pm-list pm-list-1">
+              <p class="text-uppercase">players</p>
+              <h2><%= @tournament.players.count %></h2>
+            </div>
+            <div class="pm-list pm-list-2">
+              <p class="text-uppercase">money</p>
+              <h2>$XXX</h2>
+            </div>
+          </div>
+          <!-- /.col-md-6 --> 
+        </div>
+        <!-- /.row -->         
+      </div>
+      <!-- /.dashboard-header --> 
+      <div class="container p-0 mb-5">
+        <div class="row">
+          <div class="col-md-9">
+            <div class="raking-content-card teatime-content-card">
+              <div class="raking-content-header-card">
+                <ul class="nav nav-pills">
+                  <li class="nav-item">
+                    <a class="nav-link active" data-toggle="pill" href="#rankings-tab">Players</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" data-toggle="pill" href="#contests-tab">Tee Times</a>
+                  </li>
+                </ul>
+              </div>
+              <div class="tab-content">
+                <%= render partial: 'player_tab', locals: { tournament_day: @tournament.first_day } %>
+
+                <%= render partial: 'tee_time_tab', locals: { tournament_day: @tournament.first_day } %>
+              </div>
+            </div>
+          </div>
+          <!-- /.col-md-8 -->  
+          <div class="col-md-3">
+            <div class="sidebar-slider-card">
+              <h2 class="text-uppercase">registration closed</h2>
+              <p>Your tournament is live. Tournament starts in 5D:8H:4M</p>
+              <a href="#edit-tee-times" class="btn btn-primary popup-with-zoom-anim">Edit Tee Times</a>  
+              <!-- <a href="#" class="btn btn-success">Add Players</a> -->
+              <ul class="list-inline">
+                <li class="list-inline-item active"><a href="#">1</a></li>
+                <li class="list-inline-item active"><a href="#">2</a></li>
+                <li class="list-inline-item"><a href="#">3</a></li>
+                <li class="list-inline-item"><a href="#">4</a></li>
+                <li class="list-inline-item"><a href="#">5</a></li>
+                <li class="list-inline-item"><a href="#">6</a></li>
+              </ul>
+            </div>
+            <div class="list-group sidebar-list-group">
+              <a href="#" class="list-group-item list-group-item-action">
+              <%= image_tag('settings.png') %>Settings
+              </a>
+              <a href="#" class="list-group-item list-group-item-action">
+              <%= image_tag('print-button.png') %>Print Scrorecards
+              </a>
+              <a href="#" class="list-group-item list-group-item-action">
+              <%= image_tag('screen.png') %>Clubhouse View
+              </a>
+            </div>
+          </div>
+          <!-- /.col-md-4 -->         
+        </div>
+        <!-- /.row -->         
+      </div>
+      <!-- /.container -->
+    </div>
+    <!-- /.container --> 
+
+
+    <!-- dialog itself, mfp-hide class is required to make dialog hidden -->
+    <div id="edit-tee-times" class="zoom-anim-dialog mfp-hide">
+        <div class="edit-tee-times-header">
+          <div class="row">
+            <div class="col-md-8">
+                <h2>Tee Time Editor</h2>
+            </div>
+            <div class="col-md-4 text-right">
+                <button type="button" class="btn btn-success">Save</button>
+            </div>
+          </div>
+        </div>
+        <div class="edit-tee-times-content">
+            <div class="row no-gutters">
+                <div class="col-md-4">
+                  <div class="edit-tee-times-left-content mCustomScrollbar" data-mcs-theme="dark">
+                      <div class="edit-tee-times-left-content-style sortable" >
+                        <div class="media active">
+                          <img src="images/players/5.png" alt="" class="mCS_img_loaded">
+                          <div class="media-body">
+                            <h2>Jeremy Smith</h2>
+                          </div>
+                        </div>
+
+                        <div class="media">
+                          <img src="images/players/5.png" alt="" class="mCS_img_loaded">
+                          <div class="media-body">
+                            <h2>Bill Lewis</h2>
+                          </div>
+                        </div>
+
+                        <div class="media">
+                          <img src="images/players/5.png" alt="" class="mCS_img_loaded">
+                          <div class="media-body">
+                            <h2>George Bozeman</h2>
+                          </div>
+                        </div>
+
+                        <div class="media">
+                          <img src="images/players/5.png" alt="" class="mCS_img_loaded">
+                          <div class="media-body">
+                            <h2>Juan Hensley</h2>
+                          </div>
+                        </div>
+
+                        <div class="media">
+                          <img src="images/players/5.png" alt="" class="mCS_img_loaded">
+                          <div class="media-body">
+                            <h2>Christopher Jones</h2>
+                          </div>
+                        </div>
+
+                        <div class="media">
+                          <img src="images/players/5.png" alt="" class="mCS_img_loaded">
+                          <div class="media-body">
+                            <h2>Jeremy Smith</h2>
+                          </div>
+                        </div>
+
+                        <div class="media">
+                          <img src="images/players/5.png" alt="" class="mCS_img_loaded">
+                          <div class="media-body">
+                            <h2>Bill Lewis</h2>
+                          </div>
+                        </div>
+
+                        <div class="media">
+                          <img src="images/players/5.png" alt="" class="mCS_img_loaded">
+                          <div class="media-body">
+                            <h2>George Bozeman</h2>
+                          </div>
+                        </div>
+
+                        <div class="media">
+                          <img src="images/players/5.png" alt="" class="mCS_img_loaded">
+                          <div class="media-body">
+                            <h2>Juan Hensley</h2>
+                          </div>
+                        </div>
+                        
+                    </div>
+                  </div><!-- /.edit-tee-times-left-content -->
+                </div>
+                <div class="col-md-8">
+                    <div class="edit-tee-times-right-content mCustomScrollbar" data-mcs-theme="dark" id="sortable-groups">
+                      <div class="edit-tee-times-right-content-inner">
+                      <div class="heading-style">
+                        <h2 class="text-uppercase">group 1: 8am</h2>
+                      </div>
+                      <div class="row sortable">
+                            <div class="media">
+                            <img src="images/players/5.png" alt="">
+                            <div class="media-body">
+                              <h2>Jeremy Smith</h2>
+                            </div>
+                          </div>
+                        
+                        <!-- /.col-md-6 -->
+                           <div class="media">
+                            <img src="images/players/4.png" alt="">
+                            <div class="media-body">
+                              <h2>Mike Austin</h2>
+                            </div>
+                          </div>
+                       
+                        <!-- /.col-md-6 -->
+                      
+                     
+                          <div class="media">
+                            <img src="images/players/3.png" alt="">
+                            <div class="media-body">
+                              <h2>Kevin Johnson</h2>
+                            </div>
+                          </div>
+                    
+                        <!-- /.col-md-6 --> 
+                           <div class="media">
+                            <img src="images/players/1.png" alt="">
+                            <div class="media-body">
+                              <h2>Craig Inesta</h2>
+                            </div>
+                          </div>                         
+                         
+                        <!-- /.col-md-6 -->
+                      </div>
+                      <!-- /.row -->
+                      <div class="heading-style">
+                        <h2 class="text-uppercase">group 2: 8:10am</h2>
+                      </div>
+                      <div class="row sortable">
+                       <div class="media">
+                            <img src="images/players/7.png" alt="">
+                            <div class="media-body">
+                              <h2>Jack Rembrandt</h2>
+                            </div>
+                          </div>
+                       
+                        <!-- /.col-md-6 -->
+                         <div class="media">
+                            <img src="images/players/2.png" alt="">
+                            <div class="media-body">
+                              <h2>Peter McBride</h2>
+                            </div>
+                          </div>
+                     
+                        <!-- /.col-md-6 -->
+                     
+                       <div class="media">
+                            <img src="images/players/8.png" alt="">
+                            <div class="media-body">
+                              <h2>Vince Demora</h2>
+                            </div>
+                          </div>
+                      
+                       
+                        
+                        <!-- /.col-md-6 -->
+                      </div>
+                      <!-- /.row -->
+                      <div class="heading-style">
+                        <h2 class="text-uppercase">group 1: 8am</h2>
+                      </div>
+                      <div class="row sortable">
+                         <div class="media">
+                            <img src="images/players/5.png" alt="">
+                            <div class="media-body">
+                              <h2>Jeremy Smith</h2>
+                            </div>
+                          </div>
+                        
+                        <!-- /.col-md-6 -->
+                         <div class="media">
+                            <img src="images/players/4.png" alt="">
+                            <div class="media-body">
+                              <h2>Mike Austin</h2>
+                            </div>
+                          </div>
+                        
+                        <!-- /.col-md-6 -->
+                    
+                           <div class="media">
+                            <img src="images/players/3.png" alt="">
+                            <div class="media-body">
+                              <h2>Kevin Johnson</h2>
+                            </div>
+                          </div>
+                       
+                        <!-- /.col-md-6 -->
+                         <div class="media">
+                            <img src="images/players/1.png" alt="">
+                            <div class="media-body">
+                              <h2>Craig Inesta</h2>
+                            </div>
+                          </div>
+                        
+                        <!-- /.col-md-6 -->
+                      </div>
+                      <!-- /.row -->
+                      <div class="heading-style">
+                        <h2 class="text-uppercase">group 2: 8:10am</h2>
+                      </div>
+                      <div class="row sortable">
+                         <div class="media">
+                            <img src="images/players/7.png" alt="">
+                            <div class="media-body">
+                              <h2>Jack Rembrandt</h2>
+                            </div>
+                          </div>
+                       
+                        <!-- /.col-md-6 -->
+                        <div class="media">
+                            <img src="images/players/2.png" alt="">
+                            <div class="media-body">
+                              <h2>Peter McBride</h2>
+                            </div>
+                          </div>
+                       
+                        <!-- /.col-md-6 -->
+                      
+                        <div class="media">
+                            <img src="images/players/8.png" alt="">
+                            <div class="media-body">
+                              <h2>Vince Demora</h2>
+                            </div>
+                          </div>
+                        
+                        
+                       
+                        <!-- /.col-md-6 -->
+                      </div>
+                      <!-- /.row -->
+                      </div> 
+                    </div><!-- /.tee-times-panel-content -->
+                </div>
+            </div>
+        </div>    
+    </div>
+
+
+    <!-- dialog itself, mfp-hide class is required to make dialog hidden -->
+    <div id="tornament-info-popup" class="zoom-anim-dialog mfp-hide">
+        <div class="tornament-info-popup-header-top">
+          <div class="row">
+            <div class="col-md-12">
+              <h2>Tournament Info</h2>
+            </div>
+          </div>          
+        </div><!-- /.tornament-info-popup-header-top -->
+        <div class="tornament-info-popup-content-header">       
+          <div class="row">
+            <div class="col-md-12">
+                <h2>Fall Classic Tournament</h2>
+                <ul class="float-right list-inline">
+                  <li class="list-inline-item text-uppercase">course: brunswick golf course</li>
+                  <li class="list-inline-item text-uppercase">dates: december 18th, 2018</li>
+                </ul>
+            </div>
+          </div>
+        </div><!-- /.tornament-info-popup-content-header -->  
+        <div class="tornament-info-popup-content">
+          <div class="row">
+            <div class="col-md-5 border-right">
+              <div class="tornament-info-popup-content-box">
+                <h2>Players</h2>
+                <p>max: 20 players</p>
+                <p>signup: december 1st-10th, 2018</p>
+                <p>dues: $20/pp</p>
+              </div>  
+              <div class="tornament-info-popup-content-box mt-5">
+                <h2>Tournament Play</h2>
+                <p>holes: 18</p>
+                <p>flights: l: 68 h: 82 teenbox; blue</p>
+                <p>tee times: 8am start, 4ppl, 10min int.</p>
+              </div> 
+            </div>
+            <div class="col-md-7">
+              <div class="tornament-info-popup-content-right">
+                  <div class="tornament-info-popup-content-box">
+                    <h2>Game Types</h2>
+                    <p>skins - 4 flights, $200, 100pts</p>
+                    <p>-</p>
+                    <p>-</p>
+                    <p>-</p>
+                    <p>-</p>
+                    <p>-</p>
+                    <p>-</p>
+                    <p>-</p>
+                  </div>
+              </div>              
+            </div>
+          </div>
+        </div>      
+    </div>
+
+    <script>
+      $(document).ready(function(){
+      	 $( ".sortable" ).sortable({
+      	 	 connectWith: ".sortable",
+      	 	 zIndex: 9999999999999	
+      	 });
+
+        $('.popup-with-zoom-anim').magnificPopup({
+          type: 'inline',
+
+          fixedContentPos: false,
+          fixedBgPos: true,
+
+          overflowY: 'auto',
+
+          closeBtnInside: true,
+          preloader: false,
+          
+          midClick: true,
+          removalDelay: 300,
+          mainClass: 'my-mfp-zoom-in'
+        });
+    })
+    </script>

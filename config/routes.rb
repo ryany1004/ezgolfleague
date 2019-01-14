@@ -117,7 +117,9 @@ Rails.application.routes.draw do
   end
 
   #this is for admin
-  resources :dashboard, only: [:index]
+  resources :dashboard, only: [:index] do
+    put 'switch_leagues', on: :collection
+  end
 
   resources :leagues do
     patch 'update_from_ghin'

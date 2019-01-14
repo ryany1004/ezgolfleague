@@ -1,20 +1,13 @@
 class TournamentsController < BaseController
   helper Play::TournamentsHelper
 
-  before_action :fetch_tournament, only: [:edit, :update, :destroy, :signups, :manage_holes, :update_holes, :add_signup, :move_signup, :delete_signup, :debug, :confirm_finalization, :update_course_handicaps, :touch_tournament, :rescore_players, :confirmed_players, :disqualify_signup]
+  before_action :fetch_tournament, only: [:show, :edit, :update, :destroy, :signups, :manage_holes, :update_holes, :add_signup, :move_signup, :delete_signup, :debug, :confirm_finalization, :update_course_handicaps, :touch_tournament, :rescore_players, :confirmed_players, :disqualify_signup]
   before_action :initialize_form, only: [:new, :edit]
   before_action :set_stage
 
   def index
-    if current_user.is_super_user?
-      @upcoming_tournaments = Tournament.all_upcoming(nil).page(params[:page]).without_count
-      @past_tournaments = Tournament.all_past(nil).reorder(tournament_starts_at: :desc).page(params[:page]).without_count
-      @unconfigured_tournaments = Tournament.all_unconfigured(nil).page(params[:page]).without_count
-    else
-      @upcoming_tournaments = Tournament.all_upcoming(current_user.leagues_admin).page(params[:page]).without_count
-      @past_tournaments = Tournament.all_past(current_user.leagues_admin).reorder(tournament_starts_at: :desc).page(params[:page]).without_count
-      @unconfigured_tournaments = Tournament.all_unconfigured(current_user.leagues_admin).page(params[:page]).without_count
-    end
+    @upcoming_tournaments = Tournament.all_upcoming([current_user.current_league]).page(params[:page]).without_count
+    @past_tournaments = Tournament.all_past([current_user.current_league]).reorder(tournament_starts_at: :desc).page(params[:page]).without_count    
 
     if current_user.is_super_user? || current_user.selected_league&.has_active_subscription? || current_user.selected_league&.free_tournaments_remaining > 0
       @can_create_tournaments = true
@@ -52,7 +45,6 @@ class TournamentsController < BaseController
   end
 
   def show
-    redirect_to league_tournaments_path(current_user.selected_league)
   end
 
   def edit

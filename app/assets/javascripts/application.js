@@ -13,18 +13,17 @@
 //= require jquery
 //= require jquery-ui
 //= require jquery_ujs
-//= require_tree .
 
 //= require bootstrap-sprockets
-
 //= require moment
 //= require bootstrap-datetimepicker
 //= require pickers
-
 //= require chosen-jquery
 //= require chosen_scaffold
-
 //= require jquery.mCustomScrollbar.concat.min.js
+//= require jquery.magnific-popup.min.js
+
+//= require_tree .
 
 function trackUserEvent(eventName) {
   mixpanel.track(eventName);

@@ -19,9 +19,14 @@
 @import "ezgl";
 @import "jquery.mCustomScrollbar.min";
 @import "chosen";
+@import "magnific-popup";
 
 #printable-scorecard-table table, #printable-scorecard-table td, #printable-scorecard-table tr, #printable-scorecard-table th {
   border: 1px solid DarkGrey !important;
+}
+
+.img-circle {
+    border-radius: 50%;
 }
 
 @media print {

@@ -24,7 +24,7 @@ class User < ApplicationRecord
   has_many :scoring_rules, through: :scoring_rule_participations
   belongs_to :current_league, class_name: "League"
   has_many :child_users, ->{ order 'last_name' }, class_name: "User", foreign_key: "parent_id", inverse_of: :parent_user
-  belongs_to :parent_user, class_name: "User", foreign_key: "parent_id", inverse_of: :child_users
+  belongs_to :parent_user, class_name: "User", foreign_key: "parent_id", inverse_of: :child_users, optional: true
   has_and_belongs_to_many :flights, inverse_of: :users
   has_and_belongs_to_many :daily_teams, inverse_of: :users
   has_and_belongs_to_many :league_season_scoring_groups, inverse_of: :users

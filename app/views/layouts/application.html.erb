@@ -48,28 +48,47 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarCollapse">
               <ul class="navbar-nav mr-auto">
-                <li class="nav-item active">
+                <li class="nav-item <%= 'active' if request.path.include?('/dashboard') %>">
                   <a class="nav-link" href="/">Dashboard</a>
                 </li>
-                <li class="nav-item">
+                <li class="nav-item <%= 'active' if request.path.include?('/league/current') %>">
                   <%= link_to "League", leagues_path, class: 'nav-link' %>
                 </li>
-                <li class="nav-item">
+                <li class="nav-item <%= 'active' if request.path.include?('/tournaments') %>">
                   <%= link_to "Tournaments", league_tournaments_path(current_user.selected_league), class: 'nav-link' %>
                 </li>
-                <li class="nav-item">
+                <li class="nav-item <%= 'active' if request.path.include?('/golfers') %>">
                   <%= link_to "Golfers", user_accounts_path, class: 'nav-link' %>
                 </li>
               </ul>     
               <ul class="ml-auto list-inline  profile-dropdown">
                 <li class="list-inline-item dropdown">
-                  <a class="nav-link dropdown-toggle" href="#" id="dropdown08" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><%= image_tag current_user.avatar.url(:thumb) %></a>
+                  <a class="nav-link dropdown-toggle" href="#" id="dropdown08" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><%= image_tag current_user.avatar.url(:thumb), class: 'img-circle' %></a>
                   <div class="dropdown-menu" aria-labelledby="dropdown08">
                     <% if !current_user.has_all_exempt_leagues? && current_user.is_any_league_admin? %>
                      <%= link_to "Your Subscription", current_league_subscription_credits_path(current_user.selected_league), class: 'dropdown-item' %>
                     <% end %>
                     <%= link_to "Your User Profile", edit_current_user_accounts_path, class: 'dropdown-item' %>
                     <a class="dropdown-item" href='mailto:support@ezgolfleague.com?subject=I%20Need%20Help%20With%20EZ%20Golf%20League'>Email Support</a>
+                    <% if current_user.leagues.count > 1 -%>
+                      <div class="dropdown-divider"></div>
+                      <% current_user.leagues.each do |l| -%>
+                        <%= link_to l.name, switch_leagues_dashboard_index_path(league_id: l.id), method: :put, class: 'dropdown-item' %>
+                     <% end -%>
+                    <% end -%>
+                    <% if current_user.present? && current_user.is_super_user %>
+                      <div class="dropdown-divider"></div>
+                      <%= link_to "Courses Admin", courses_path, class: 'dropdown-item' %>
+                      <%= link_to "Reports", league_reports_path(current_user.selected_league), class: 'dropdown-item' %>
+                      <%= link_to "Leagues Admin", leagues_path, class: 'dropdown-item' %>
+                      <%= link_to "User Accounts Admin", user_accounts_path, class: 'dropdown-item' %>
+                      <%= link_to "Invite League Admin", setup_league_admin_invite_user_accounts_path, class: 'dropdown-item' %>
+                      <div class="dropdown-divider"></div>
+                      <% if user_signed_in? && current_user != true_user && true_user.is_super_user %>
+                      <%= link_to "Stop #{current_user.complete_name}", stop_impersonating_user_accounts_path, class: 'dropdown-item' %>
+                      <div class="dropdown-divider"></div>
+                      <% end %>
+                    <% end %>
                     <%= link_to "Sign Out", destroy_user_session_path, method: :delete, class: 'dropdown-item' %>
                   </div>
                 </li>
@@ -92,13 +111,6 @@
         &nbsp;&nbsp;
         <a href='https://play.google.com/store/apps/details?id=com.ezgolfleague.golfapp&hl=en'><%= image_tag 'google-play-badge.png', width: "200" %></a>
       </div>
-
-      <% if user_signed_in? && current_user != true_user && true_user.is_super_user %>
-        <br/><br/>
-        <strong>You (<%= true_user.complete_name %>) are signed in as <%= current_user.complete_name %>
-        <br/>
-        <%= link_to "Stop Impersonating", stop_impersonating_user_accounts_path %></strong>
-    <% end %>
     </footer>
 
     <% if user_signed_in? -%>

@@ -54,8 +54,9 @@ class League < ApplicationRecord
       l.encrypted_stripe_test_publishable_key = nil
       l.encrypted_stripe_production_publishable_key = nil
       l.stripe_token = nil
+      l.location = "anywhere"
 
-      l.save
+      l.save!
     end
   end
 

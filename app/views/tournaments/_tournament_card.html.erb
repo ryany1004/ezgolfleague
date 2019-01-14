@@ -1,6 +1,6 @@
 <div class="col-md-4">
   <div class="tournaments-card-slider">
-    <a href="#">
+    <%= link_to league_tournament_path(tournament.league, tournament) do %>
       <div class="tournaments-card-slider-top">
         <div class="overlay"></div>
         <p class="text-uppercase para-1"><%= tournament.tournament_starts_at.to_s(:standard) %></p>
@@ -8,7 +8,7 @@
         <h2><%= truncate(tournament.name, length: 40) %></h2>
         <%= image_tag "course_backgrounds/#{rand(6)}.jpg", class: "img-fluid" %>
       </div>
-    </a>
+    <% end %> 
     <div class="regis-open">
 
       <ul class="list-inline pagi-style">
@@ -18,25 +18,33 @@
         <li class="list-inline-item"><a href="#">4</a></li>
         <li class="list-inline-item"><a href="#">5</a></li>
         <li class="list-inline-item"><a href="#">6</a></li>
-      </ul> 
-      <p class="text-uppercase text-right">registration open</p>
+      </ul>
+      <p class="text-uppercase text-right">
+        <% if tournament.is_open_for_registration? %>
+          registration open
+        <% else %>
+          &nbsp;
+        <% end %>
+      </p>
     </div>
     <div class="tournaments-card-footer">
       <div class="row">
         <div class="col-md-7">
-          <span class="number-text">6</span>
-          <p class="text-uppercase">golfers registered & paid</p>
+          <span class="number-text"><%= tournament.players.count %></span>
+          <p class="text-uppercase">golfers registered</p>
         </div>
-        <div class="col-md-5">
-          <ul class="profile-img-list list-inline">
-            <li class="list-inline-item"><img src="images/players/1.png" alt=""></li>
-            <li class="list-inline-item"><img src="images/players/2.png" alt=""></li>
-            <li class="list-inline-item"><img src="images/players/3.png" alt=""></li>
-            <li class="list-inline-item"><img src="images/players/4.png" alt=""></li>
-            <li class="list-inline-item"><img src="images/players/5.png" alt=""></li>
-            <li class="list-inline-item"><span>+1</span></li>
-          </ul>
-        </div>
+        <% if tournament.players.count > 0 %>
+          <div class="col-md-5">
+            <ul class="profile-img-list list-inline">
+              <% tournament.players[0..4].each do |player| %>
+                <li class="list-inline-item"><%= image_tag player.avatar.url(:thumb) %></li>
+              <% end %>
+              <% if tournament.players.count > 5 %>
+                <li class="list-inline-item"><span>+<%= tournament.players.count - 5 %></span></li>
+              <% end %>
+            </ul>
+          </div>
+        <% end %>
       </div>
     </div>
   </div>

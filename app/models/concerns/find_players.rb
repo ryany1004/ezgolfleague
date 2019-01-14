@@ -75,16 +75,4 @@ module FindPlayers
 
     scoring_rules
   end
-
-  # TODO:  REMOVE
-  def paid_contests_for_player(user)
-    player_contests = []
-
-    self.tournament.paid_contests.each do |c|
-      player_contests << c if c.users.include?(user)
-    end
-
-    player_contests
-  end
-
 end

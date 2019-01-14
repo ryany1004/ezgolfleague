@@ -1,0 +1,43 @@
+<div class="tab-pane active" id="rankings-tab">
+  <table class="table teatime-content-card-table">
+    <thead>
+      <tr class="text-uppercase">
+        <th scope="col" class="pl-5 pr-0">player</th>
+        <th scope="col">tee time</th>
+        <th scope="col">dues paid</th>
+        <th scope="col">contests</th>
+        <th scope="col"></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% tournament_day.tournament.players_for_day(tournament_day).each do |player| %>
+        <tr>
+          <td class="pl-5 pr-0">
+            <div class="media">
+              <%= image_tag player.avatar.url(:thumb), class: 'img-circle' %>
+              <div class="media-body">
+                <h2><%= player.complete_name %></h2>
+              </div>
+            </div>
+          </td>
+          <td><%= tournament_day.tournament_group_for_player(player).tee_time_at.to_s(:time_only) %></td>
+          <td class="paid-td">
+            <% if tournament_day.tournament.user_has_paid?(player) %>
+            <span class="color-1"></span>Paid
+            <% else %>
+            <span class="color-2"></span>Unpaid
+            <% end %>
+          </td>
+          <td class="paid-td">XXXX</td>
+          <td class="pl-0">
+            <div class="dropdown players-edit-drop-down">
+              <button class="btn dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <%= image_tag('drop-down.svg') %>
+              </button>
+            </div>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

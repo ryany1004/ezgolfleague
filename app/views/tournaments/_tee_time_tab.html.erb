@@ -1,0 +1,27 @@
+<div class="tab-pane tab-pane-2 tee-times-panel fade" id="contests-tab">
+  <hr class="tee-times-panel-divider">
+  <div class="tee-times-panel-content">
+    <% tournament_day.tournament_groups.each_with_index do |group, i| %>
+      <div class="heading-style">
+        <h2 class="text-uppercase">group <%= i + 1 %>: <%= group.tee_time_at.to_s(:time_only) %></h2>
+      </div>
+
+      <% slices = group.golf_outings.each_slice(2) %>
+      <% slices.each do |slice| %>
+        <div class="row <%= 'row-last' if slice == slice.last %>">
+          <% slice.each do |outing| %>
+            <div class="col-md-6">
+              <div class="media">
+                <%= image_tag outing.user.avatar.url(:thumb), class: 'img-circle' %>
+                <div class="media-body">
+                  <h2><%= outing.user.complete_name %></h2>
+                </div>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      <% end %>
+    <% end %>
+  </div>
+  <!-- /.tee-times-panel-content -->                      
+</div>
