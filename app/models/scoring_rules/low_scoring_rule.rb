@@ -1,4 +1,6 @@
 class LowScoringRule < ScoringRule
+	include ::GenericScorecardSupport
+	
 	def name
 		"Low"
 	end

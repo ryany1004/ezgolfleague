@@ -1,4 +1,6 @@
 class ManualScoringRule < ScoringRule
+	include ::GenericScorecardSupport
+	
 	def name
 		"Custom"
 	end

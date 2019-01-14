@@ -1,4 +1,6 @@
 class SkinsScoringRule < ScoringRule
+	include ::GenericScorecardSupport
+
 	def name
 		"Skins"
 	end

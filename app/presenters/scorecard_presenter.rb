@@ -69,7 +69,7 @@ class ScorecardPresenter
 
   def sliced_scores
     self.primary_scorecard.scores.each_slice(self.primary_scorecard.tournament_day.scorecard_base_scoring_rule.course_holes.count / 2).to_a
-    @sliced_scores ||= self.primary_scorecard.scores.includes(course_hole: [:course_hole_tee_boxes]).each_slice(self.primary_scorecard.tournament_day.course_holes.count / 2).to_a
+    @sliced_scores ||= self.primary_scorecard.scores.includes(course_hole: [:course_hole_tee_boxes]).each_slice(self.primary_scorecard.tournament_day.scorecard_base_scoring_rule.course_holes.count / 2).to_a
   end
 
   def scorecard_total_par
