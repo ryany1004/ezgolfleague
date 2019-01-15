@@ -73,7 +73,7 @@ class ScorecardPresenter
   end
 
   def scorecard_total_par
-    self.primary_scorecard.tournament_day.scorecard_base_scoring_rule.course_holes.map {|hole| hole.par }.sum
+    @scorecard_total_par ||= self.primary_scorecard.tournament_day.scorecard_base_scoring_rule.course_holes.map { |hole| hole.par }.sum
   end
 
   def scorecard_score_cell_partials
@@ -94,7 +94,6 @@ class ScorecardPresenter
     end
 
     partials
-    @scorecard_total_par ||= self.primary_scorecard.tournament_day.scorecard_base_scoring_rule.course_holes.map {|hole| hole.par }.sum
   end
 
   def scorecard_score_cell_partial
