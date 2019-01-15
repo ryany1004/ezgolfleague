@@ -9,7 +9,7 @@
         <div class="modal-body">
           <div class="container-fluid">
             <div class="row">
-              <% if tournament.dues_amount == 0.0 -%>
+              <% if tournament.mandatory_dues_amount.zero? -%>
                 <p>Click below to register.</p>
               <% else %>
                 <% if tournament.allow_credit_card_payment == true -%>
