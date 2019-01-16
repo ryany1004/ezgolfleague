@@ -29,6 +29,10 @@ class LowScoringRule < ScoringRule
 		true
 	end
 
+	def show_course_holes?
+		false
+	end
+
 	# TODO: Move these to the base class somehow? Seems lame to have to define as nil if they are simply not supported
 	def setup_partial
 		nil

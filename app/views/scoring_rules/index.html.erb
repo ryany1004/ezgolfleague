@@ -26,7 +26,11 @@
     <tr>
       <td><%= link_to scoring_rule.name, edit_league_tournament_tournament_day_scoring_rule_path(@tournament.league, @tournament, @tournament_day, scoring_rule) %></td>
       <td>
-        <%= link_to "Setup Course Holes", edit_league_tournament_tournament_day_scoring_rule_course_holes_path(@tournament.league, @tournament, @tournament_day, scoring_rule) %>
+        <% if scoring_rule.show_course_holes? %>
+          <%= link_to "Setup Course Holes", edit_league_tournament_tournament_day_scoring_rule_course_holes_path(@tournament.league, @tournament, @tournament_day, scoring_rule) %>
+        <% else %>
+          N/A
+        <% end %>
       </td>
       <td>
         <% if scoring_rule.payout_type == ScoringRulePayoutType::PREDETERMINED && scoring_rule.payout_assignment_type == ScoringRulePayoutAssignmentType::CALCULATED %>

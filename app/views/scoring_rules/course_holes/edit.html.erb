@@ -16,7 +16,7 @@
   <% end %>
 
   <%= f.simple_fields_for :scoring_rules do |p| %>
-    <%= render partial: 'holes_form', locals: { tournament_day: @tournament_day, scoring_rule: p.object, p: p } %>
+    <%= render partial: 'holes_form', locals: { tournament_day: @tournament_day, scoring_rule: p.object, p: p } if p.object.show_course_holes? %>
   <% end -%>
 
   <div class="form-actions">

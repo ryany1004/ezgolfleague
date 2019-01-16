@@ -59,7 +59,7 @@ namespace :scoring_rules do
 
       #add the course holes
       d.legacy_course_holes.each do |hole|
-        rule.scoring_rule_course_holes.create(course_hole: hole)
+        rule.course_holes << hole
       end
 
       #add the users
@@ -104,7 +104,7 @@ namespace :scoring_rules do
 
         #add the contest holes
         c.contest_holes.each do |hole|
-          contest_rule.scoring_rule_course_holes.create(course_hole: hole.course_hole)
+          contest_rule.course_holes << hole.course_hole
         end
 
         #opt-in

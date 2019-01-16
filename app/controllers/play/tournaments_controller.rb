@@ -5,6 +5,7 @@ class Play::TournamentsController < Play::BaseController
 
   def show
     tournament = self.view_tournament_from_user_for_tournament_id(params[:id])
+    redirect_to root_path if tournament.blank?
 
     if tournament.tournament_days.count == 1
       tournament_day = tournament.tournament_days.first
