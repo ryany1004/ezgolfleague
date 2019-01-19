@@ -52,11 +52,10 @@ class TournamentMailer < ApplicationMailer
     @tournament = tournament
     league_season = @tournament.league_season
 
-    # TODO TEAM: update
-    total_cost = @tournament.dues_amount
+    total_cost = @tournament.mandatory_dues_amount
 
     @cost_lines = [
-      {name: "#{@tournament.name} Fees", price: @tournament.dues_amount}
+      {name: "#{@tournament.name} Fees", price: @tournament.mandatory_dues_amount}
     ]
 
     @tournament.tournament_days.each do |td|

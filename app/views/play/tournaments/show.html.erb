@@ -121,9 +121,9 @@
           Payout information will be available once the tournament has been finalized by the league administrator.
         </div>
         <% end -%>
-        <% if @tournament_presenter.tournament_day.optional_scoring_rules.count > 0 %>
+        <% if @tournament_presenter.tournament.is_open_for_registration? && @tournament_presenter.tournament_day.optional_scoring_rules.count > 0 %>
           <div class="panel-footer">
-            <%= link_to "Sign Up For Game Types", @tournament_presenter.scoring_rule_signup_link %>
+            <%= link_to "Sign Up For Game Type", @tournament_presenter.scoring_rule_signup_link %>
           </div>
         <% end %>
       </div>

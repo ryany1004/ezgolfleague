@@ -59,7 +59,7 @@ namespace :scoring_rules do
 
       #add the course holes
       d.legacy_course_holes.each do |hole|
-        rule.scoring_rule_course_holes.create(course_hole: hole)
+        rule.course_holes << hole
       end
 
       #add the users
@@ -104,7 +104,7 @@ namespace :scoring_rules do
 
         #add the contest holes
         c.contest_holes.each do |hole|
-          contest_rule.scoring_rule_course_holes.create(course_hole: hole.course_hole)
+          contest_rule.course_holes << hole.course_hole
         end
 
         #opt-in
@@ -136,6 +136,11 @@ namespace :scoring_rules do
           end
 
           contest_rule.payout_results.create(user: r.winner, amount: r.payout_amount, points: r.points, detail: r.result_value, scoring_rule_course_hole: hole)
+        end
+
+        #overall winner
+        if c.overall_winner.present?
+          contest_rule.payout_results.create(user: c.overall_winner.winner, amount: c.overall_winner.payout_amount, points: c.overall_winner.points, detail: c.overall_winner.result_value)
         end
       end
     end

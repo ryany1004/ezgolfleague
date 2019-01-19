@@ -1,4 +1,4 @@
-class GrossLowScoringRule < LowScoringRule
+class GrossLowScoringRule < LowScoringRule	
 	def name
 		"Gross Low"
 	end

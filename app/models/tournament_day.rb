@@ -221,7 +221,7 @@ class TournamentDay < ApplicationRecord
   end
 
   def handicap_allowance(user:)
-    handicap_computer = self.mandatory_scoring_rules.first.handicap_computer
+    handicap_computer = self.scorecard_base_scoring_rule.handicap_computer
 
     handicap_computer.handicap_allowance(user: user)
   end

@@ -135,6 +135,10 @@ class ScoringRule < ApplicationRecord
 		false
 	end
 
+	def show_course_holes?
+		true
+	end
+
   def includes_extra_scoring_column?
     return false
   end

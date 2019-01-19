@@ -25,7 +25,7 @@
     <tbody>
       <% group.players_signed_up.each_with_index do |player, i| -%>
       <tr>
-        <td><%= player.complete_name %> <%= team_name(group, i) %></td>
+        <td><%= player.complete_name %> <%= team_name(@tournament.first_day.scorecard_base_scoring_rule, group, i) %></td>
         <% if player == current_user -%>
         <td><%= link_to "Cancel Registration", play_tournament_remove_signup_path(@tournament), data: { confirm: 'Are you sure you want to cancel this registration?' }, method: :delete %></td>
         <% else -%>
@@ -35,7 +35,7 @@
       <% end %>
       <% (group.max_number_of_players - group.players_signed_up.count).abs.times.each_with_index do |item, i| -%>
       <tr>
-        <td>Time Available <%= team_name(group, i + group.players_signed_up.count) %></td>
+        <td>Time Available <%= team_name(@tournament.first_day.scorecard_base_scoring_rule, group, i + group.players_signed_up.count) %></td>
         <% if @tournament.includes_player?(current_user) == false -%>
         <td><button type="button" class="btn btn-primary btn" data-toggle="modal" data-target="#Group<%= group.id %>">Register Tee Time</button></td>
         </td>

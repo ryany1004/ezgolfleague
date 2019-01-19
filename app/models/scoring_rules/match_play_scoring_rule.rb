@@ -1,4 +1,6 @@
 class MatchPlayScoringRule < ScoringRule
+	include ::GenericScorecardSupport
+	
 	def name
 		"Match Play"
 	end

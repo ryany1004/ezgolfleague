@@ -1,4 +1,4 @@
-class NetLowScoringRule < LowScoringRule
+class NetLowScoringRule < LowScoringRule	
 	def name
 		"Net Low"
 	end
