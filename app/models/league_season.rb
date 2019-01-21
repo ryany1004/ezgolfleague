@@ -1,6 +1,12 @@
+module LeagueSeasonType
+  INDIVIDUAL = 0
+  TEAM = 1
+end
+
 class LeagueSeason < ApplicationRecord
   belongs_to :league, touch: true, inverse_of: :league_seasons
 
+  has_many :league_season_teams, dependent: :destroy
   has_many :payments, inverse_of: :league_season
   has_many :subscription_credits, -> { order 'created_at DESC' }
   has_many :league_season_scoring_groups, -> { order 'name' }, inverse_of: :league_season, dependent: :destroy
@@ -51,6 +57,14 @@ class LeagueSeason < ApplicationRecord
 
   def tournaments
     Tournament.tournaments_happening_at_some_point(self.starts_at, self.ends_at, [self.league], true)
+  end
+
+  def season_type
+    if self.season_type_raw == 1
+      LeagueSeasonType::TEAM
+    else
+      LeagueSeasonType::INDIVIDUAL
+    end
   end
 
   def paid_active_golfers

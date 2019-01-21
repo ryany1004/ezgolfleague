@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_01_06_214451) do
+ActiveRecord::Schema.define(version: 2019_01_20_185528) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -244,6 +244,24 @@ ActiveRecord::Schema.define(version: 2019_01_06_214451) do
     t.index ["league_season_scoring_group_id", "user_id"], name: "scoring_group_index"
   end
 
+  create_table "league_season_team_memberships", force: :cascade do |t|
+    t.bigint "league_season_team_id"
+    t.bigint "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["league_season_team_id"], name: "index_league_season_team_memberships_on_league_season_team_id"
+    t.index ["user_id"], name: "index_league_season_team_memberships_on_user_id"
+  end
+
+  create_table "league_season_teams", force: :cascade do |t|
+    t.bigint "league_season_id"
+    t.string "name"
+    t.integer "rank", default: 0
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["league_season_id"], name: "index_league_season_teams_on_league_season_id"
+  end
+
   create_table "league_seasons", force: :cascade do |t|
     t.bigint "league_id"
     t.string "name"
@@ -252,6 +270,7 @@ ActiveRecord::Schema.define(version: 2019_01_06_214451) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.decimal "dues_amount", default: "0.0"
+    t.integer "season_type_raw", default: 0
     t.index ["league_id"], name: "index_league_seasons_on_league_id"
   end
 

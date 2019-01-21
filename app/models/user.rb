@@ -22,6 +22,8 @@ class User < ApplicationRecord
   has_many :mobile_devices, dependent: :destroy
   has_many :scoring_rule_participations, inverse_of: :user
   has_many :scoring_rules, through: :scoring_rule_participations
+  has_many :league_season_team_memberships, inverse_of: :user
+  has_many :league_season_teams, through: :league_season_team_memberships
   belongs_to :current_league, class_name: "League"
   has_many :child_users, ->{ order 'last_name' }, class_name: "User", foreign_key: "parent_id", inverse_of: :parent_user
   belongs_to :parent_user, class_name: "User", foreign_key: "parent_id", inverse_of: :child_users, optional: true
