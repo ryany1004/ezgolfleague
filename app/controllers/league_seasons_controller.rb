@@ -53,7 +53,7 @@ class LeagueSeasonsController < BaseController
   private
 
   def season_params
-    params.require(:league_season).permit(:name, :starts_at, :ends_at, :league_id, :dues_amount)
+    params.require(:league_season).permit(:name, :starts_at, :ends_at, :league_id, :dues_amount, :season_type_raw)
   end
 
   def fetch_season

@@ -11,7 +11,7 @@
       <th>Name</th>
 			<th>Start Date</th>
       <th>End Date</th>
-      <th>Scoring Groups</th>
+      <th>&nbsp;</th>
       <th><%= link_to 'Create Season', new_league_league_season_path(@league), class: 'btn btn-primary' %></th>
 		</tr>
 	</thead>
@@ -23,7 +23,9 @@
 			<td><%= season.ends_at.to_s(:short) %></td>
 			<td>
 				<% if @league.allow_scoring_groups %>
-					<%= link_to "Configure", league_league_season_league_season_scoring_groups_path(@league, season) %>
+					<%= link_to "Scoring Group Setup", league_league_season_league_season_scoring_groups_path(@league, season) %>
+				<% elsif season.season_type_raw == LeagueSeasonType::TEAM %>
+					<%= link_to "Team Setup", league_league_season_league_season_teams_path(@league, season) %>
 				<% else %>
 					Not Enabled
 				<% end %>

@@ -21,6 +21,8 @@
       <%= f.hidden_field :ends_at %>
     <% end %>
 
+    <%= f.input :season_type_raw, label: 'Team Play', as: :boolean %>
+
     <%= f.input :dues_amount, label: 'Dues Amount ($)' %>
 
     <%= f.hidden_field :league_id, :value => @league.id %>

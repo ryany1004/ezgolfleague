@@ -93,6 +93,22 @@ class LeagueSeason < ApplicationRecord
     users_not_in_groups
   end
 
+  def users_not_in_teams
+    users_not_in_t = []
+
+    self.league.users.each do |u|
+      user_is_in_any_team = false
+
+      self.league_season_teams.each do |g|
+        user_is_in_any_team = true if g.users.include? u
+      end
+
+      users_not_in_t << u unless user_is_in_any_team
+    end
+
+    users_not_in_t
+  end
+
   # date parsing
   def starts_at=(date)
     parsed = DateTime.strptime("#{date} 12:01 AM #{Time.zone.now.formatted_offset}", JAVASCRIPT_DATETIME_PICKER_FORMAT)

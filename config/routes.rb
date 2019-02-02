@@ -133,6 +133,11 @@ Rails.application.routes.draw do
         post :update_player
         delete :delete_player
       end
+
+      resources :league_season_teams do
+        post :update_player
+        delete :delete_player
+      end
     end
 
     resources :league_memberships do
