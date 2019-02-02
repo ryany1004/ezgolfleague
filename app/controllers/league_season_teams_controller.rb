@@ -54,7 +54,7 @@ class LeagueSeasonTeamsController < BaseController
 
     @league_season_team.users.destroy(@user)
 
-    redirect_to edit_league_league_season_league_season_scoring_group_path(@league, @league_season, @league_season_team)
+    redirect_to edit_league_league_season_league_season_team_path(@league, @league_season, @league_season_team)
   end
 
   private
