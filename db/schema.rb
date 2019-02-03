@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_02_02_231830) do
+ActiveRecord::Schema.define(version: 2019_02_03_221803) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -254,11 +254,16 @@ ActiveRecord::Schema.define(version: 2019_02_02_231830) do
   end
 
   create_table "league_season_team_tournament_day_matchups", force: :cascade do |t|
-    t.bigint "tournament_group_id"
     t.bigint "league_season_team_a_id"
     t.bigint "league_season_team_b_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "tournament_day_id"
+    t.bigint "league_team_winner_id"
+    t.index ["league_season_team_a_id"], name: "league_season_team_a_id_index"
+    t.index ["league_season_team_a_id"], name: "league_season_team_b_id_index"
+    t.index ["league_team_winner_id"], name: "league_team_winner_id_index"
+    t.index ["tournament_day_id"], name: "tournament_day_index"
   end
 
   create_table "league_season_teams", force: :cascade do |t|
@@ -502,8 +507,10 @@ ActiveRecord::Schema.define(version: 2019_02_02_231830) do
     t.boolean "aggregated_result", default: false
     t.integer "sort_rank"
     t.bigint "scoring_rule_id"
+    t.bigint "league_season_team_id"
     t.index ["aggregated_result"], name: "index_tournament_day_results_on_aggregated_result"
     t.index ["flight_id"], name: "index_tournament_day_results_on_flight_id"
+    t.index ["league_season_team_id"], name: "index_tournament_day_results_on_league_season_team_id"
     t.index ["scoring_rule_id"], name: "index_tournament_day_results_on_scoring_rule_id"
     t.index ["sort_rank"], name: "index_tournament_day_results_on_sort_rank"
     t.index ["user_id"], name: "index_tournament_day_results_on_user_id"

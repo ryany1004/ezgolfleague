@@ -82,10 +82,12 @@
         </thead>
         <tbody>
           <% day.scoring_rules.each do |rule| %>
+            <!-- Rule: <%= rule.id %> >-->
             <% rule.tournament_day_results.each do |result| %>
+            <!-- Result: <%= result.id %> >-->
               <tr>
                 <td><%= result.flight&.display_name %></td>
-                <td><%= result.user&.complete_name %><% if result.primary_scorecard != nil && !result.primary_scorecard&.is_confirmed? -%> (Unconfirmed by Player)<% end -%><%- if result.primary_scorecard&.golf_outing&.disqualified %> (Disqualified)<%- end %></td>
+                <td><%= result.name %><% if result.primary_scorecard != nil && !result.primary_scorecard&.is_confirmed? -%> (Unconfirmed by Player)<% end -%><%- if result.primary_scorecard&.golf_outing&.disqualified %> (Disqualified)<%- end %></td>
                 <td><%= result.net_score %></td>
                 <td><%= result.par_related_net_score %></td>
                 <td><%= result.gross_score %></td>

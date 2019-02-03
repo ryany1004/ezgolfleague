@@ -21,6 +21,8 @@ class Tournament < ApplicationRecord
   attr_accessor :another_member_id
   attr_accessor :skip_date_validation
 
+  around_destroy :recalculate_standings_for_destroy
+
   validates :name, presence: true
   validates :league, presence: true
   validates :signup_opens_at, presence: true
@@ -68,6 +70,14 @@ class Tournament < ApplicationRecord
 
   paginates_per 20
 
+  def recalculate_standings_for_destroy
+    season = self.league_season
+
+    yield
+
+    RankLeagueSeasonJob.perform_later(season)
+  end
+
   def league_season
     return nil if !self.has_tournament_days?
 
@@ -78,6 +88,10 @@ class Tournament < ApplicationRecord
     end
 
     nil
+  end
+
+  def is_league_teams?
+    self.league_season.is_teams?
   end
 
   def season_name
@@ -119,15 +133,11 @@ class Tournament < ApplicationRecord
     self.notification_templates.where("tournament_notification_action = ?", "On Finalization")
   end
 
-  ##
-
   def notify_tournament_users(notification_string, extra_data)
     self.players.each do |u|
       u.send_mobile_notification(notification_string, { tournament_id: self.id })
     end
   end
-
-  ##
 
   def mandatory_dues_amount
     dues_amount = 0.0
@@ -214,6 +224,10 @@ class Tournament < ApplicationRecord
 
   def mandatory_scoring_rules
     self.tournament_days.map(&:mandatory_scoring_rules).flatten
+  end
+
+  def mandatory_individual_scoring_rules
+    self.tournament_days.map(&:mandatory_individual_scoring_rules).flatten
   end
 
   def mandatory_team_scoring_rules

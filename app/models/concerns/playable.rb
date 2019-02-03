@@ -50,9 +50,9 @@ module Playable
   def teams_for_day(day)
     teams = []
 
-    day.tournament_groups.each do |group|
-      teams << group.league_season_team_tournament_day_matchup.team_a if group.league_season_team_tournament_day_matchup.team_a.present?
-      teams << group.league_season_team_tournament_day_matchup.team_b if group.league_season_team_tournament_day_matchup.team_b.present?
+    day.league_season_team_tournament_day_matchups.each do |matchup|
+      teams << matchup.team_a if matchup.team_a.present?
+      teams << matchup.team_b if matchup.team_b.present?
     end
 
     teams

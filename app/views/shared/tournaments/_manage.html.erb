@@ -11,12 +11,8 @@
         <li class='disabled'><%= link_to 'Notifications', "#" %></li>
         <% if @tournament.league_season.is_teams? %>
           <li class='disabled'><%= link_to 'Teams', "#" %></li>
-          <% if @tournament.tournament_days.first.optional_scoring_rules_with_dues.count > 0 %>
-            <li class='disabled'><%= link_to 'Players', "#" %></li>
-          <% end %>
-        <% else %>
-          <li class='disabled'><%= link_to 'Players', "#" %></li>
         <% end %>
+        <li class='disabled'><%= link_to 'Players', "#" %></li>
         <li class='disabled'><%= link_to 'Calculate Results', "#" %></li>
       <% else -%>
         <% if @tournament.tournament_days.count == 1 -%>
@@ -29,12 +25,9 @@
           
           <% if @tournament.league_season.is_teams? %>
             <li <%= tournament_class_for_stage(stage, "teams#{tournament.tournament_days.first.id}") %>><%= link_to 'Teams', league_tournament_day_teams_path(tournament.league, tournament, tournament.tournament_days.first) %></li>
-            <% if @tournament.tournament_days.first.optional_scoring_rules_with_dues.count > 0 %>
-              <li <%= tournament_class_for_stage(stage, "players#{tournament.tournament_days.first.id}") %>><%= link_to 'Players', league_tournament_day_players_path(tournament.league, tournament, tournament.tournament_days.first) %></li>
-            <% end %>
-          <% else %>
-            <li <%= tournament_class_for_stage(stage, "players#{tournament.tournament_days.first.id}") %>><%= link_to 'Players', league_tournament_day_players_path(tournament.league, tournament, tournament.tournament_days.first) %></li>
           <% end %>
+
+          <li <%= tournament_class_for_stage(stage, "players#{tournament.tournament_days.first.id}") %>><%= link_to 'Players', league_tournament_day_players_path(tournament.league, tournament, tournament.tournament_days.first) %></li>
 
           <% if !@tournament.new_record? -%>
             <li <%= tournament_class_for_stage(stage, "finalize") %>><%= link_to 'Calculate Results', league_tournament_finalization_path(tournament.league, tournament) %></li>
@@ -58,12 +51,9 @@
 
           <% if @tournament.league_season.is_teams? %>
             <li <%= tournament_class_for_stage(stage, "teams#{day.id}") %>><%= link_to 'Teams', league_tournament_day_teams_path(tournament.league, tournament, day) %></li>
-            <% if @tournament.tournament_days.first.optional_scoring_rules_with_dues.count > 0 %>
-              <li <%= tournament_class_for_stage(stage, "players#{day.id}") %>><%= link_to 'Players', league_tournament_day_players_path(tournament.league, tournament, day) %></li>
-            <% end %>
-          <% else %>
-            <li <%= tournament_class_for_stage(stage, "players#{day.id}") %>><%= link_to 'Players', league_tournament_day_players_path(tournament.league, tournament, day) %></li>
           <% end %>
+
+          <li <%= tournament_class_for_stage(stage, "players#{day.id}") %>><%= link_to 'Players', league_tournament_day_players_path(tournament.league, tournament, day) %></li>
         </ul>
       </nav>
     <% end -%>

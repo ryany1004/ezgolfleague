@@ -12,10 +12,10 @@
 
 <div class="panel panel-default">
   <div class="panel-heading">
-    <h3 class="panel-title"><%= @tournament_day.pretty_day(true) %> Register Teams</h3>
+    <h3 class="panel-title"><%= @tournament_day.pretty_day(true) %> Setup Teams</h3>
   </div>
   <div class="panel-body">
-    <p>Choose teams for each slot per tee-group to register them for this tournament.</p>
+    <p>Specify which teams will be playing each other.</p>
 
     <p>Players will be added to the following team game types automatically:</p>
     <ul>
@@ -25,19 +25,12 @@
     </ul>
   </div>
 
-  <% @tournament_groups.each do |tournament_group| %>
-    <!-- TG: <%= tournament_group.id %> -->
-    <%= simple_form_for :team_submit, url: league_tournament_update_day_teams_path(@tournament.league, @tournament, @tournament_day, tournament_group), remote: true, html: { class: '.form-inline' } do |f| %>
-    <table class="table table-striped" id="<%= tournament_group.id %>">
-      <thead>
-        <tr>
-          <th>Tee-Group: <%= tournament_group.formatted_tee_time %></th>
-          <th>Actions</th>
-        </tr>
-      </thead>
+  <% @tournament_day.league_season_team_tournament_day_matchups.each do |matchup| %>
+    <%= simple_form_for :team_submit, url: league_tournament_update_day_teams_path(@tournament.league, @tournament, @tournament_day, matchup), remote: true, html: { class: '.form-inline' } do |f| %>
+    <table class="table table-striped" id="<%= matchup.id %>">
       <tbody>
-        <%= render partial: 'league_season_team', locals: { f: f, team_index: 0, tournament: @tournament, tournament_day: @tournament_day, tournament_group: tournament_group, all_teams: @all_teams, team: tournament_group.league_season_team_tournament_day_matchup.team_a } %>
-        <%= render partial: 'league_season_team', locals: { f: f, team_index: 1, tournament: @tournament, tournament_day: @tournament_day, tournament_group: tournament_group, all_teams: @all_teams, team: tournament_group.league_season_team_tournament_day_matchup.team_b } %>
+        <%= render partial: 'league_season_team', locals: { f: f, team_index: 0, tournament: @tournament, tournament_day: @tournament_day, matchup: matchup, all_teams: @all_teams, team: matchup.team_a } %>
+        <%= render partial: 'league_season_team', locals: { f: f, team_index: 1, tournament: @tournament, tournament_day: @tournament_day, matchup: matchup, all_teams: @all_teams, team: matchup.team_b } %>
       </tbody>
     </table>
     <% end %>

@@ -9,10 +9,11 @@
       </span>
       <span id="user-hidden"></span>
     <% end %>
+    <%= f.input "matchup_id", as: :hidden, input_html: { value: matchup.id } %>
   </td>
   <td id="action-buttons">
     <% if team.present? %>
-      <%= link_to "Remove", league_tournament_delete_day_teams_path(tournament.league, tournament, tournament_day, group_id: tournament_group.id, team_id: team.id), data: { confirm: 'Are you sure you want to remove this team? This will delete all scores related to the users on this team.' }, method: :delete, role: "button", class: "btn btn-danger btn-xs" %>
+      <%= link_to "Remove", league_tournament_delete_day_teams_path(tournament.league, tournament, tournament_day, matchup_id: matchup.id, team_id: team.id), data: { confirm: 'Are you sure you want to remove this team? This will delete all scores related to the users on this team.' }, method: :delete, role: "button", class: "btn btn-danger btn-xs" %>
     <% else %>
       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
     <% end %>

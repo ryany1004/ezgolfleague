@@ -2,14 +2,25 @@ class TournamentDayResult < ApplicationRecord
 	include Rails.application.routes.url_helpers
 
   belongs_to :scoring_rule, inverse_of: :tournament_day_results, touch: true
-  belongs_to :user, inverse_of: :tournament_day_results
-  belongs_to :primary_scorecard, class_name: "Scorecard", foreign_key: "user_primary_scorecard_id" #TEAM: does this need to be primary_scorecard(s) instead?
-  belongs_to :flight, inverse_of: :tournament_day_results, touch: true
+  belongs_to :user, inverse_of: :tournament_day_results, optional: true
+  belongs_to :league_season_team, inverse_of: :tournament_day_results, optional: true
+  belongs_to :primary_scorecard, class_name: "Scorecard", foreign_key: "user_primary_scorecard_id"
+  belongs_to :flight, inverse_of: :tournament_day_results, optional: true, touch: true
 
   validates :name, presence: true
 
   def tournament_day
     scoring_rule.tournament_day
+  end
+
+  def name
+    if self.user.present?
+      self.user.complete_name
+    elsif self.league_season_team.present?
+      self.league_season_team.name
+    else
+      "N/A"
+    end
   end
 
   #TODO: refactor, could store not compute
@@ -54,6 +65,6 @@ class TournamentDayResult < ApplicationRecord
   end
 
   def to_s
-    "#{self.user&.complete_name} - Net: #{self.net_score} Gross: #{self.gross_score}"
+    "#{self.name} - Net: #{self.net_score} Gross: #{self.gross_score}"
   end
 end

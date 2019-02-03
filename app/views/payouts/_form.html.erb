@@ -17,6 +17,10 @@
 	  <%= f.input :amount, label: 'Amount ($)', required: true %>
 
     <%= f.input :points, label: 'Points', required: true %>
+  
+    <% if @tournament.is_league_teams? %>
+      <p><em>For team tournaments, if a payout has just dollars or dollars AND points, it is awarded once based on the rank of each team in the final results. If a payout ONLY has points, the winning team in each matchup will receive that number of points.</em></p>
+    <% end %>
   </div>
 
   <div class="form-actions">

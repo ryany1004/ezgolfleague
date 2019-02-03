@@ -85,10 +85,10 @@ module ScoringComputer
 
             	Rails.logger.debug { "Hole #{score.course_hole.hole_number} - Hole Net Score: #{hole_net_score}. Hole adjusted score: #{hole_adjusted_score}. Strokes: #{score.strokes}" }
 
-            	#store net strokes
+            	# store net strokes
             	score.net_strokes = hole_net_score
 
-            	#update stats
+            	# update stats
             	net_score += hole_net_score
             	front_nine_net_score += hole_net_score if self.front_nine_hole_numbers.include? score.course_hole.hole_number
             	back_nine_net_score += hole_net_score if self.back_nine_hole_numbers.include? score.course_hole.hole_number
@@ -113,7 +113,8 @@ module ScoringComputer
 	    	TournamentDayResult.transaction do
 	    		if destroy_previous_results
 	    			@scoring_rule.tournament_day_results.where(user: user).destroy_all
-	    			flight.tournament_day_results.where(user: user).destroy_all #TODO: Remove in future - needed for legacy tournaments
+
+	    			flight&.tournament_day_results.where(user: user).destroy_all #TODO: Remove in future - needed for legacy tournaments
 	    		end
 
 	    		result = @scoring_rule.tournament_day_results.create(
