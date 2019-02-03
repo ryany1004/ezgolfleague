@@ -1,0 +1,15 @@
+selectedTeams = [];
+
+<% @teams_signed_up.each do |team| %>
+  <% @outing_index.each do |o| %>
+    <% if o[:id] == team.id %>
+      removeButton = "<a data-confirm='Are you sure you want to remove this registration? This will delete all scorecard information for this team for this tournament.' role='button' class='btn btn-danger btn-xs' rel='nofollow' data-method='delete' href='/leagues/<%= @league.id %>/tournaments/<%= @tournament.id %>/tournament_days/<%= @tournament_day.id %>/delete_team_signup?group_id=<%= @tournament_group.id %>&team_id=<%= team.id %>'>Remove</a>"
+    <% end %>
+  <% end %>
+
+  selectedTeams.push({name: "<%= team.name %>", id: "<%= team.id %>", removeButton: removeButton, tournamentGroupID: <%= @tournament_group.id %>});
+<% end %>
+
+var elementsUpdated = removeSelectedTeamsFromDropdowns(selectedTeams);
+
+placeButtonsForTeams(selectedTeams, elementsUpdated);

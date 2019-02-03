@@ -199,12 +199,16 @@ class TournamentDay < ApplicationRecord
     self.scoring_rules.where(is_opt_in: false).order(:type)
   end
 
+  def mandatory_team_scoring_rules
+    self.mandatory_scoring_rules.select { |r| r.team_type == ScoringRuleTeamType::LEAGUE }
+  end
+
   def optional_scoring_rules
     self.scoring_rules.where(is_opt_in: true).order(:type)
   end
 
   def optional_scoring_rules_with_dues
-    self.optional_scoring_rules.map { |r| r.dues_amount > 0 }
+    self.optional_scoring_rules.select { |r| r.dues_amount > 0 }
   end
 
   def score_all_rules

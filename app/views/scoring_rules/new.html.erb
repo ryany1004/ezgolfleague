@@ -18,7 +18,7 @@
 
   <h3>Basic Details</h3>
   <div class="well">
-    <%= f.input :selected_class_name, collection: ScoringRuleOption.scoring_rule_options, label: 'Game Type', label_method: :name, value_method: :class_name, include_blank: false %>
+    <%= f.input :selected_class_name, collection: ScoringRuleOption.scoring_rule_options(show_team_rules: @tournament.league_season.is_teams?), label: 'Game Type', label_method: :name, value_method: :class_name, include_blank: false %>
   </div>
 
   <div class="form-actions">

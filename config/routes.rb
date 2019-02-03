@@ -162,10 +162,6 @@ Rails.application.routes.draw do
           post 'batch_create', on: :collection
         end
 
-        resources :contests, only: [:create, :update] do
-          resources :contest_results, only: [:new, :create, :update]
-        end
-
         resources :scoring_rules do
           get 'options', on: :collection
 
@@ -189,21 +185,17 @@ Rails.application.routes.draw do
 
       resource :finalization, path: "finalize", only: [:show, :update], controller: "tournaments/finalization"
 
-      #UPDATE/FIX
+      # Individual Outings
       get 'tournament_days/:tournament_day_id/players' => 'golf_outings#players', as: :day_players
       post 'tournament_days/:tournament_day_id/:tournament_group_id/update_players' => 'golf_outings#update_players', as: :update_day_players
       patch 'tournament_days/:tournament_day_id/move_group' => 'golf_outings#move_group', as: :move_group_players
       patch 'tournament_days/:tournament_day_id/disqualify_signup' => 'golf_outings#disqualify_signup', as: :disqualify_day_players
       delete 'tournament_days/:tournament_day_id/delete_signup' => 'golf_outings#delete_signup', as: :delete_day_players
 
-      #TEAM: REMOVE
-      resources :contests do
-        resources :contest_results
-
-        get 'registrations'
-        delete 'remove_registration'
-        post 'add_registration'
-      end
+      # Team Outings
+      get 'tournament_days/:tournament_day_id/teams' => 'team_outings#teams', as: :day_teams
+      post 'tournament_days/:tournament_day_id/:tournament_group_id/update_teams' => 'team_outings#update_teams', as: :update_day_teams
+      delete 'tournament_days/:tournament_day_id/delete_team_signup' => 'team_outings#delete_team_signup', as: :delete_day_teams
 
       patch 'update_course_handicaps'
       patch 'touch_tournament'

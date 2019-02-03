@@ -67,6 +67,10 @@ class LeagueSeason < ApplicationRecord
     end
   end
 
+  def is_teams?
+    self.season_type_raw == LeagueSeasonType::TEAM
+  end
+
   def paid_active_golfers
     sum_paid = 0
 

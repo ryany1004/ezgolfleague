@@ -2,6 +2,7 @@ class TournamentGroup < ApplicationRecord
   include Servable
 
   belongs_to :tournament_day, inverse_of: :tournament_groups, touch: true
+  has_one :league_season_team_tournament_day_matchup, inverse_of: :tournament_group, dependent: :destroy
   has_many :golf_outings, -> { order(:created_at) }, inverse_of: :tournament_group, dependent: :destroy
   has_many :users, ->{ order 'last_name, first_name' }, through: :golf_outings
   has_many :daily_teams, -> { order(:created_at) }, inverse_of: :tournament_group, dependent: :destroy
@@ -12,6 +13,7 @@ class TournamentGroup < ApplicationRecord
   validates :max_number_of_players, :inclusion => 0..10
 
   after_create :create_daily_teams
+  after_create :create_season_tournament_matchup
 
   validate :date_is_valid
   def date_is_valid
@@ -43,6 +45,12 @@ class TournamentGroup < ApplicationRecord
       end
     else
       Rails.logger.info { "NOT create_daily_teams" }
+    end
+  end
+
+  def create_season_tournament_matchup
+    if self.tournament_day.tournament.league_season.is_teams?
+      LeagueSeasonTeamTournamentDayMatchup.create(tournament_group: self)
     end
   end
 
@@ -91,6 +99,31 @@ class TournamentGroup < ApplicationRecord
     else
       self.tournament_day.add_player_to_group(tournament_group: self, user: user)
     end
+  end
+
+  def add_league_season_team_to_group(league_season_team, slot_id)
+    matchup = self.league_season_team_tournament_day_matchup
+
+    if slot_id == "0"
+      matchup.team_a = league_season_team
+    elsif slot_id == "1"
+      matchup.team_b = league_season_team
+    end
+
+    matchup.save
+
+    league_season_team.users.each { |user| self.tournament_day.add_player_to_group(tournament_group: self, user: user) }
+  end
+
+  def remove_league_season_team_from_group(league_season_team, tournament_group)
+    matchup = self.league_season_team_tournament_day_matchup
+
+    matchup.team_a = nil if league_season_team == matchup.team_a
+    matchup.team_b = nil if league_season_team == matchup.team_b
+
+    matchup.save
+
+    league_season_team.users.each { |user| self.tournament_day.remove_player_from_group(tournament_group: self, user: user) }
   end
 
   def formatted_tee_time

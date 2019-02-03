@@ -43,16 +43,18 @@ class LeagueSeasonTeamsController < BaseController
 
   def update_player
     @user = @league.users.find(params[:add_player][:user_id])
-
     @league_season_team.users << @user
+
+    @league_season_team.update_team_name
 
     redirect_to edit_league_league_season_league_season_team_path(@league, @league_season, @league_season_team)
   end
 
   def delete_player
     @user = @league.users.find(params[:user])
-
     @league_season_team.users.destroy(@user)
+
+    @league_season_team.update_team_name
 
     redirect_to edit_league_league_season_league_season_team_path(@league, @league_season, @league_season_team)
   end

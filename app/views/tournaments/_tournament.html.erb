@@ -26,14 +26,21 @@
       </button>
       <ul class="dropdown-menu" role="menu">
         <% if tournament.tournament_days.count > 0 %>
-        <li><%= link_to "Signups", league_tournament_day_players_path(tournament.league, tournament, tournament.tournament_days.first) %></li>
+          <% if tournament.league_season&.is_teams? %>
+            <li><%= link_to "Team Signups", league_tournament_day_teams_path(tournament.league, tournament, tournament.tournament_days.first) %></li>
+
+            <% if tournament.tournament_days.first.optional_scoring_rules_with_dues.count > 0 %>
+              <li><%= link_to "Player Signups", league_tournament_day_players_path(tournament.league, tournament, tournament.tournament_days.first) %></li>
+            <% end %>
+          <% else %>
+            <li><%= link_to "Player Signups", league_tournament_day_players_path(tournament.league, tournament, tournament.tournament_days.first) %></li>
+          <% end %>
         <% end %>
         <li><%= link_to "Scorecards", league_tournament_tournament_day_scorecards_path(tournament.league, tournament, tournament.tournament_days.first) %></li>
         <li class="divider"></li>
         <li><%= link_to "Game Types & Payouts", league_tournament_tournament_day_scoring_rules_path(tournament.league, tournament, tournament.tournament_days.first) %></li>
         <li><%= link_to "Tee Times", league_tournament_tournament_day_tournament_groups_path(tournament.league, tournament, tournament.tournament_days.first) %></li>
         <li><%= link_to "Flights", league_tournament_tournament_day_flights_path(tournament.league, tournament, tournament.tournament_days.first) %></li>
-        <li><%= link_to "Contests", league_tournament_contests_path(tournament.league, tournament) %></li>
         <li><%= link_to 'Notifications', league_tournament_tournament_day_tournament_notifications_path(tournament.league, tournament, tournament.tournament_days.first) %></li>
         <% if tournament.tournament_days.count > 1 %>
         <li class="divider"></li>

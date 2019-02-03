@@ -79,6 +79,10 @@ class ScoringRule < ApplicationRecord
 		1
 	end
 
+	def users_per_league_team
+		1
+	end
+
 	def override_scorecard_name(scorecard:)
 		nil
 	end
@@ -251,8 +255,8 @@ class ScoringRuleOption
 		o
 	end
 
-	def self.scoring_rule_options
-		[
+	def self.scoring_rule_options(show_team_rules: false)
+		individual = [
 			ScoringRuleOption.option(name: 'Individual Stroke Play', class_name: 'StrokePlayScoringRule'),
 			ScoringRuleOption.option(name: 'Individual Modified Stableford', class_name: 'StablefordScoringRule'),
 			ScoringRuleOption.option(name: 'Two Man Best Ball', class_name: 'TwoManBestBallScoringRule'),
@@ -266,5 +270,15 @@ class ScoringRuleOption
 			ScoringRuleOption.option(name: 'Gross Low', class_name: 'GrossLowScoringRule'),
 			ScoringRuleOption.option(name: 'Custom', class_name: 'ManualScoringRule'),
 		]
+
+		team  = [
+			ScoringRuleOption.option(name: 'Team Stroke Play - Team Score is Sum of Individual Scores', class_name: 'TeamStrokePlayIndividualSumScoringRule'),
+		]
+
+		if show_team_rules
+			individual + team
+		else
+			individual
+		end
 	end
 end

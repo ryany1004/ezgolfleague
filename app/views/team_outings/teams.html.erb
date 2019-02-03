@@ -1,0 +1,90 @@
+<script>
+  ezglTrackAnalyticsEvent("Viewed team tournament signup", { tournament_id: "<%= @tournament.id %>", tournament: "<%= @tournament.name %>" });
+</script>
+
+<ol class="breadcrumb">
+  <li><%= link_to "Tournaments", league_tournaments_path(current_user.selected_league) %></li>
+  <li><%= link_to @tournament.name, edit_league_tournament_path(current_user.selected_league, @tournament) %></li>
+  <li class="active"><%= @tournament_day.pretty_day(true) %>Teams</li>
+</ol>
+
+<%= render partial: '/shared/tournaments/manage', locals: {tournament: @tournament, stage: @stage_name} %>
+
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h3 class="panel-title"><%= @tournament_day.pretty_day(true) %> Register Teams</h3>
+  </div>
+  <div class="panel-body">
+    <p>Choose teams for each slot per tee-group to register them for this tournament.</p>
+
+    <p>Players will be added to the following team game types automatically:</p>
+    <ul>
+      <% @tournament.mandatory_team_scoring_rules.each do |rule| %>
+        <li><%= rule.name %></li>
+      <% end %> 
+    </ul>
+  </div>
+
+  <% @tournament_groups.each do |tournament_group| %>
+    <!-- TG: <%= tournament_group.id %> -->
+    <%= simple_form_for :team_submit, url: league_tournament_update_day_teams_path(@tournament.league, @tournament, @tournament_day, tournament_group), remote: true, html: { class: '.form-inline' } do |f| %>
+    <table class="table table-striped" id="<%= tournament_group.id %>">
+      <thead>
+        <tr>
+          <th>Tee-Group: <%= tournament_group.formatted_tee_time %></th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <%= render partial: 'league_season_team', locals: { f: f, team_index: 0, tournament: @tournament, tournament_day: @tournament_day, tournament_group: tournament_group, all_teams: @all_teams, team: tournament_group.league_season_team_tournament_day_matchup.team_a } %>
+        <%= render partial: 'league_season_team', locals: { f: f, team_index: 1, tournament: @tournament, tournament_day: @tournament_day, tournament_group: tournament_group, all_teams: @all_teams, team: tournament_group.league_season_team_tournament_day_matchup.team_b } %>
+      </tbody>
+    </table>
+    <% end %>
+  <% end %>
+
+  <style>
+    .save-indicator {
+      position: fixed;
+      bottom: 10px;
+      right: 10px;
+      width: 100px;
+      height: 50px;
+      background-color: #00D400;
+      border-radius: 8px;
+    }
+  </style>
+
+  <div class="save-indicator" id="save-indicator">
+    <p style="text-align: center; line-height: 50px; color: white;"><strong>Saving...</strong></p>
+  </div>
+
+  <script>
+    function submitOptionalScoringRules(form) {
+      form.trigger('submit.rails');
+
+      $("#save-indicator").fadeIn(400).delay(1600).fadeOut(400);
+    }
+
+    $(document).ready(function() {
+      $("#save-indicator").fadeOut(0);
+
+      //Player
+      $("#user-select .chosen-select").chosen().change(function() {
+        $(this.form).trigger('submit.rails');
+
+        $("#save-indicator").fadeIn(400).delay(1600).fadeOut(400);
+      });
+
+      var selectedTeams = [];
+      <% @registered_teams.each do |p| %>
+        selectedTeams.push({name: "<%= p.name %>", id: "<%= p.id %>"});
+      <% end %>
+      removeSelectedGolfersFromDropdowns(selectedTeams);
+
+      $("#user-select .chosen-container").css({"width": "200px"});
+      $("#team-select .chosen-container").css({"width": "200px"});
+      $(".search-choice-close").remove();
+    });
+  </script>
+</div>

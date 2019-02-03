@@ -24,7 +24,7 @@
 			<td>
 				<% if @league.allow_scoring_groups %>
 					<%= link_to "Scoring Group Setup", league_league_season_league_season_scoring_groups_path(@league, season) %>
-				<% elsif season.season_type_raw == LeagueSeasonType::TEAM %>
+				<% elsif season.season_type == LeagueSeasonType::TEAM %>
 					<%= link_to "Team Setup", league_league_season_league_season_teams_path(@league, season) %>
 				<% else %>
 					&nbsp;

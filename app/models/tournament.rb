@@ -20,7 +20,6 @@ class Tournament < ApplicationRecord
 
   attr_accessor :another_member_id
   attr_accessor :skip_date_validation
-  # attr_accessor :contests_to_enter # TODO: update 
 
   validates :name, presence: true
   validates :league, presence: true
@@ -215,6 +214,10 @@ class Tournament < ApplicationRecord
 
   def mandatory_scoring_rules
     self.tournament_days.map(&:mandatory_scoring_rules).flatten
+  end
+
+  def mandatory_team_scoring_rules
+    self.tournament_days.map(&:mandatory_team_scoring_rules).flatten
   end
 
   def optional_scoring_rules
