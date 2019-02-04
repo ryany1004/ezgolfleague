@@ -55,49 +55,18 @@ module ScoringComputer
 			Rails.logger.debug { "Payouts: #{payout_count}" }
 			return if payout_count == 0
 
-			if @scoring_rule.payouts.first.apply_as_duplicates?
-				primary_payout = @scoring_rule.payouts.first
-
+			primary_payout = @scoring_rule.payouts.first
+			if primary_payout.apply_as_duplicates?
 				self.tournament_day.league_season_team_tournament_day_matchups.each do |matchup|
-					PayoutResult.create(scoring_rule: @scoring_rule, points: primary_payout.points)
+					PayoutResult.create(scoring_rule: @scoring_rule, league_season_team: matchup.winning_team, points: primary_payout.points)
 				end
-			else
-				#walk down the list
+			else # walk down the list
+				sorted_results = @scoring_rule.tournament_day_results.order(:par_related_net_score)
+
+				@scoring_rule.payouts.each_with_index do |p, i|
+					PayoutResult.create(scoring_rule: @scoring_rule, league_season_team: sorted_results[i].league_season_team, points: p.points, amount: p.amount)
+				end
 			end
 		end
-
 	end
 end
-
-
-
-		# def assign_payouts
-		# 	Rails.logger.debug { "assign_payouts #{self.class}" }
-
-		# 	@scoring_rule.payout_results.destroy_all
-
-		# 	payout_count = @scoring_rule.payouts.count
-		# 	Rails.logger.debug { "Payouts: #{payout_count}" }
-  #     return if payout_count == 0
-
-  #     eligible_users = @scoring_rule.users_eligible_for_payouts
-  #     ranked_flights = self.ranked_flights
-
-  #     ranked_flights.each do |flight|
-  #       flight.payouts.where(scoring_rule: @scoring_rule).each_with_index do |payout, i|
-  #         if payout.payout_results.count == 0
-  #           result = flight.tournament_day_results[i]
-
-  #           if result.present? and eligible_users.include? result.user
-  #             player = result.user
-
-  #             Rails.logger.debug { "Assigning #{player.complete_name}. Result [#{result}] Payout [#{payout}] Scoring Rule [#{@scoring_rule.name} #{@scoring_rule.id}]" }
-
-  #             PayoutResult.create(payout: payout, user: player, scoring_rule: @scoring_rule, flight: flight, amount: payout.amount, points: payout.points)
-  #           end
-  #         else
-  #           Rails.logger.debug { "Payout Already Has Results: #{payout.payout_results.map(&:id)}" }
-  #         end
-  #       end
-  #     end
-		# end

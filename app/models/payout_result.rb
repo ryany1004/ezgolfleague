@@ -3,7 +3,8 @@ class PayoutResult < ApplicationRecord
 	
   belongs_to :payout, inverse_of: :payout_results, optional: true, touch: true
   belongs_to :flight, inverse_of: :payout_results, optional: true, touch: true
-  belongs_to :user, inverse_of: :payout_results
+  belongs_to :user, inverse_of: :payout_results, optional: true
+  belongs_to :league_season_team, inverse_of: :payout_results, optional: true
   belongs_to :scoring_rule, inverse_of: :payout_results, touch: true
   belongs_to :scoring_rule_course_hole, optional: true
 
