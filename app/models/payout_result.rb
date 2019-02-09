@@ -27,6 +27,10 @@ class PayoutResult < ApplicationRecord
   end
 
   def tournament_day_result
-  	self.scoring_rule.tournament_day_results.where(user: user).first
+    if self.league_season_team.present?
+      self.scoring_rule.aggregate_tournament_day_results.where(league_season_team: league_season_team).first
+    else
+      self.scoring_rule.individual_tournament_day_results.where(user: user).first
+    end
   end
 end

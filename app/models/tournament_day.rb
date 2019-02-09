@@ -276,7 +276,7 @@ class TournamentDay < ApplicationRecord
   end
 
   def rank_day
-    RankFlightsJob.perform_later(tournament_day)
+    RankFlightsJob.perform_later(self)
   end
 
   def assign_payouts_all_rules

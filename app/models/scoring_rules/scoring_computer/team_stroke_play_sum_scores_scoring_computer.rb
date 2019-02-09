@@ -1,7 +1,7 @@
 module ScoringComputer
 	class TeamStrokePlaySumScoresScoringComputer < StrokePlayScoringComputer
 		def generate_tournament_day_results
-			@scoring_rule.tournament_day_results.where(aggregated_result: true).destroy_all
+			@scoring_rule.aggregate_tournament_day_results.destroy_all
 
 			individual_results = super
 
@@ -41,8 +41,6 @@ module ScoringComputer
   			par_related_net_score: team_member_results.sum(&:par_related_net_score),
   			par_related_gross_score: team_member_results.sum(&:par_related_gross_score))
 
-  		team_member_results.map { |m| m.destroy }
-
   		combined_team_result
 		end
 
@@ -61,7 +59,7 @@ module ScoringComputer
 					PayoutResult.create(scoring_rule: @scoring_rule, league_season_team: matchup.winning_team, points: primary_payout.points)
 				end
 			else # walk down the list
-				sorted_results = @scoring_rule.tournament_day_results.order(:par_related_net_score)
+				sorted_results = @scoring_rule.aggregate_tournament_day_results.reorder(:par_related_net_score)
 
 				@scoring_rule.payouts.each_with_index do |p, i|
 					PayoutResult.create(scoring_rule: @scoring_rule, league_season_team: sorted_results[i].league_season_team, points: p.points, amount: p.amount)

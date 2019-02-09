@@ -28,10 +28,10 @@ class LeagueSeasonTeamTournamentDayMatchup < ApplicationRecord
 	def tournament_day_results
 		r = []
 
-		team_a_result = self.tournament_day.scorecard_base_scoring_rule.tournament_day_results.where(league_season_team: self.team_a).first
+		team_a_result = self.tournament_day.scorecard_base_scoring_rule.aggregate_tournament_day_results.where(league_season_team: self.team_a).first
 		r << team_a_result if team_a_result.present?
 
-		team_b_result = self.tournament_day.scorecard_base_scoring_rule.tournament_day_results.where(league_season_team: self.team_b).first
+		team_b_result = self.tournament_day.scorecard_base_scoring_rule.aggregate_tournament_day_results.where(league_season_team: self.team_b).first
 		r << team_b_result if team_b_result.present?
 
 		r

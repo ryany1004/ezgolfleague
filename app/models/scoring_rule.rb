@@ -67,6 +67,14 @@ class ScoringRule < ApplicationRecord
 		raise "A Base Class Has No Scorecard API"
 	end
 
+	def individual_tournament_day_results
+		self.tournament_day_results.where(aggregated_result: false)
+	end
+
+	def aggregate_tournament_day_results
+		self.tournament_day_results.where(aggregated_result: true)
+	end
+
 	def ranked_results
 		#base class does nothing
 	end
