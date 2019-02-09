@@ -4,7 +4,7 @@ class TeamStrokePlayIndividualSumScoringRule < StrokePlayScoringRule
 	end
 
 	def description
-		"Team stroke play where each team score is the sum of individual scores."
+		"Team stroke play where each team score is the sum of individual scores of each player."
 	end
 
 	def team_type
