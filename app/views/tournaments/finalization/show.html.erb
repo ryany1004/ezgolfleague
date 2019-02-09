@@ -83,7 +83,7 @@
         <tbody>
           <% day.scoring_rules.each do |rule| %>
             <!-- Rule: <%= rule.id %> >-->
-            <% rule.tournament_day_results.each do |result| %>
+            <% rule.individual_tournament_day_results.each do |result| %>
             <!-- Result: <%= result.id %> >-->
               <tr>
                 <td><%= result.flight&.display_name %></td>

@@ -4,6 +4,7 @@ class LeagueSeasonTeam < ApplicationRecord
 	has_many :league_season_team_memberships
 	has_many :users, through: :league_season_team_memberships
 	has_many :payout_results, inverse_of: :league_season_team
+	has_many :league_season_rankings, dependent: :destroy
 
 	def update_team_name
 		self.name = ""

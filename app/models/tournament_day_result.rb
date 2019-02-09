@@ -23,13 +23,23 @@ class TournamentDayResult < ApplicationRecord
     end
   end
 
+  def payout_results_relation
+    relation = self.scoring_rule.payout_results
+
+    if self.user.present?
+      relation.where(user: user)
+    else
+      relation.where(league_season_team: league_season_team)
+    end
+  end
+
   #TODO: refactor, could store not compute
   def points
-    return 0 if flight.blank?
+    return 0 if self.user.present? && flight.blank?
 
     total_points = 0
 
-    self.scoring_rule.payout_results.where(user: user).where("points > 0").each do |payout_result|
+    self.payout_results_relation.where("points > 0").each do |payout_result|
       total_points += payout_result.points
     end
 
@@ -41,7 +51,7 @@ class TournamentDayResult < ApplicationRecord
 
     total_payouts = 0
 
-    self.scoring_rule.payout_results.where(user: user).each do |payout_result|
+    self.payout_results_relation.each do |payout_result|
       total_payouts += payout_result.amount
     end
 
