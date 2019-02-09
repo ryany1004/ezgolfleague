@@ -18,7 +18,7 @@ class TournamentDay < ApplicationRecord
   has_many :tournament_groups, -> { order(:tee_time_at) }, inverse_of: :tournament_day, dependent: :destroy
   has_many :flights, -> { order(:flight_number) }, inverse_of: :tournament_day, dependent: :destroy
   has_many :scoring_rules, -> { order(:type) }, inverse_of: :tournament_day, dependent: :destroy
-  has_many :league_season_team_tournament_day_matchups, inverse_of: :tournament_day, dependent: :destroy
+  has_many :league_season_team_tournament_day_matchups, -> { order(:created_at) }, inverse_of: :tournament_day, dependent: :destroy
 
   has_and_belongs_to_many :legacy_course_holes, -> { order(:hole_number) }, class_name: "CourseHole", join_table: "course_holes_tournament_days" # TODO: REMOVE AFTER MIGRATION
 
@@ -272,6 +272,14 @@ class TournamentDay < ApplicationRecord
     self.scoring_rules.each do |rule|
       rule.score
       rule.rank
+    end
+  end
+
+  def rank_day
+    if self.tournament.league_season.is_teams?
+      RankLeagueSeasonTeamsJob.perform_later(tournament_day)
+    else
+      RankFlightsJob.perform_later(tournament_day)
     end
   end
 

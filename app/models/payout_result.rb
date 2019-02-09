@@ -8,6 +8,16 @@ class PayoutResult < ApplicationRecord
   belongs_to :scoring_rule, inverse_of: :payout_results, touch: true
   belongs_to :scoring_rule_course_hole, optional: true
 
+  def name
+    if user.present?
+      user.complete_name
+    elsif league_season_team.present?
+      league_season_team.name
+    else
+      "N/A"
+    end
+  end
+
   def display_name
   	if self.flight.present?
   		self.flight.display_name

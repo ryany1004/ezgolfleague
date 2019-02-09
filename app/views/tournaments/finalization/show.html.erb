@@ -22,7 +22,7 @@
             <thead>
               <tr>
                 <th>Day</th>
-                <th><%= flight_or_group(@tournament) %></th>
+                <th>&nbsp;</th>
                 <th>Name</th>
                 <th>Amount</th>
                 <th>Points</th>
@@ -37,7 +37,7 @@
                 <tr>
                   <td><%= payout_result.scoring_rule.tournament_day.tournament_at.to_s(:short) %></td>
                   <td><%= payout_result.display_name %></td>
-                  <td><%= payout_result.user.complete_name unless payout_result.user.blank? %></td>
+                  <td><%= payout_result.name %></td>
                   <td><%= number_to_currency(payout_result.amount) %></td>
                   <td><%= payout_result.points.to_i %></td>
                   <td><%= payout_result.tournament_day_result&.net_score %></td>

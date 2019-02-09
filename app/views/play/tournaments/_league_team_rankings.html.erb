@@ -1,0 +1,46 @@
+<div class="col-md-6">
+  <div class="panel panel-default panel-success">
+    <div class="panel-heading">
+      <h3 class="panel-title"><%= @tournament_presenter.day_name %> Tournament Rankings</h3>
+    </div>
+    <% if @tournament_presenter.day_has_scores? %>
+      <table class="table table-striped">
+      	<thead>
+      		<tr>
+            <th>Name</th>
+            <th>Net</th>
+            <th>Gross</th>
+            <th>&nbsp;</th>
+      		</tr>
+      	</thead>
+        <tbody>
+          <% cache(@tournament_presenter.day_cache_key("league-season-teams-tournament-rankings")) do %>
+            <% @tournament_presenter.team_matchups.each_with_index do |matchup, i| %>
+              <% matchup.tournament_day_results.each do |result| %>
+                <tr>
+                  <td><%= result.name %> <% if league_season_result_is_winner?(result, matchup) %><em>(Winner)</em><% end %></td>
+                  <td><%= result.net_score %></td>
+                  <td><%= result.gross_score %></td>
+                  <td><%= link_to "Scorecard", result.scorecard_url %></td>
+                </tr>
+              <% end %>
+
+              <% if matchup != @tournament_presenter.team_matchups.last %>
+                <tr>
+                  <td>&nbsp;</td>
+                  <td>&nbsp;</td>
+                  <td>&nbsp;</td>
+                  <td>&nbsp;</td>
+                </tr>
+              <% end %>
+            <% end -%>
+          <% end -%>
+        </tbody>
+      </table>
+    <% else %>
+      <div class="panel-body">
+        Rankings will be available once the tournament is underway.
+      </div>
+    <% end %>
+  </div>
+</div>

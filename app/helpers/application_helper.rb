@@ -203,7 +203,9 @@ module ApplicationHelper
   end
 
   def flight_or_group(tournament)
-    if tournament.league.allow_scoring_groups
+    if tournament.is_league_teams?
+      "Team"
+    elsif tournament.league.allow_scoring_groups
       "Group"
     else
       "Flight"

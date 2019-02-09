@@ -100,17 +100,21 @@ class TournamentPresenter
   end
 
   def flight_or_group_name
-    if self.tournament.league.allow_scoring_groups
+    if self.tournament.is_league_teams?
+      "Team"
+    elsif self.tournament.league.allow_scoring_groups
       "Group"
     else
       "Flight"
     end
   end
 
-  ##
-
   def day_is_playable?
     self.tournament_day.blank? ? false : self.tournament_day.can_be_played?
+  end
+
+  def day_has_league_teams?
+    self.tournament.is_league_teams?
   end
 
   def day_has_daily_teams?
@@ -158,14 +162,12 @@ class TournamentPresenter
   def user_can_register_for_scoring_rules?
     return false if self.tournament_day.blank?
 
-    self.tournament.is_past? == false && self.tournament_day.scoring_rules.count > 0 && self.tournament.includes_player?(self.user, self.tournament_day) && self.tournament_day.can_be_played?
+    !self.finalized? && !self.tournament.is_past? && self.tournament_day.scoring_rules.count > 0 && self.tournament.includes_player?(self.user, self.tournament_day) && self.tournament_day.can_be_played?
   end
 
   def scoring_rule_signup_link
     Rails.application.routes.url_helpers.play_tournament_tournament_day_scoring_rules_path(self.tournament, self.tournament_day)
   end
-
-  ##
 
   def selected_day_has_payouts?
     if self.tournament_day == nil
@@ -230,43 +232,67 @@ class TournamentPresenter
   def tournament_players
     return [] if self.tournament_day.blank?
 
-    if self.day_has_daily_teams?
-      teams = []
-
-      self.tournament_day.daily_teams.each do |daily_team|
-        group = daily_team.users.blank? ? nil : self.tournament_day.tournament_group_for_player(daily_team.users.first)
-
-        teams << {name_data: daily_team, group: group, id: nil} unless group.blank?
-      end
-
-      teams
+    if self.day_has_league_teams?
+      self.league_teams_players
+    elsif self.day_has_daily_teams?
+      self.daily_teams_players
     else
-      groups = []
+      self.individual_players
+    end
+  end
 
-      self.tournament_day.tournament_groups.each_with_index do |tournament_group, i|
-        outings = []
+  def individual_players
+    groups = []
 
-        tournament_group.golf_outings.each do |golf_outing|
-          flight = tournament_day.flight_for_player(golf_outing.user).blank? ? nil : tournament_day.flight_for_player(golf_outing.user)
-          name = golf_outing.user.blank? ? "Error" : golf_outing.user.complete_name
-          user_id = golf_outing.user.blank? ? nil : golf_outing.user.id
+    self.tournament_day.tournament_groups.each_with_index do |tournament_group, i|
+      outings = []
 
-          outings << {name: name, id: user_id, handicap: golf_outing.course_handicap.to_i, flight: flight, scoring_group_name: flight.league_season_scoring_group&.name, group: tournament_group} unless flight.blank?
-        end
+      tournament_group.golf_outings.each do |golf_outing|
+        flight = tournament_day.flight_for_player(golf_outing.user).blank? ? nil : tournament_day.flight_for_player(golf_outing.user)
+        name = golf_outing.user.blank? ? "Error" : golf_outing.user.complete_name
+        user_id = golf_outing.user.blank? ? nil : golf_outing.user.id
 
-        groups << outings
+        outings << {name: name, id: user_id, handicap: golf_outing.course_handicap.to_i, flight: flight, scoring_group_name: flight.league_season_scoring_group&.name, group: tournament_group} unless flight.blank?
       end
 
-      groups
+      groups << outings
     end
+
+    groups
+  end
+
+  def league_teams_players
+    teams = []
+
+    self.tournament_day.league_season_team_tournament_day_matchups.each do |matchup|
+      teams << { name: matchup.name }
+    end
+
+    teams
+  end
+
+  def daily_teams_players
+    teams = []
+
+    self.tournament_day.daily_teams.each do |daily_team|
+      group = daily_team.users.blank? ? nil : self.tournament_day.tournament_group_for_player(daily_team.users.first)
+
+      teams << {name_data: daily_team, group: group, id: nil} unless group.blank?
+    end
+
+    teams
   end
 
   def flights_with_rankings
     if self.tournament_day == nil
-      return self.combined_flights
+      self.combined_flights
     else
-      return self.day_flights
+      self.day_flights
     end
+  end
+
+  def team_matchups
+    self.tournament_day.league_season_team_tournament_day_matchups
   end
 
   def day_cache_key(prefix)
