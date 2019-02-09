@@ -9,9 +9,6 @@
         <li class='disabled'><%= link_to 'Tee Times', "#" %></li>
         <li class='disabled'><%= link_to 'Flights', "#" %></li>
         <li class='disabled'><%= link_to 'Notifications', "#" %></li>
-        <% if @tournament.league_season.is_teams? %>
-          <li class='disabled'><%= link_to 'Teams', "#" %></li>
-        <% end %>
         <li class='disabled'><%= link_to 'Players', "#" %></li>
         <li class='disabled'><%= link_to 'Calculate Results', "#" %></li>
       <% else -%>
