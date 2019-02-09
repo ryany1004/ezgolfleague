@@ -89,7 +89,7 @@ class TournamentDay < ApplicationRecord
     end
 
     day_string = "Day #{day_index + 1}"
-    day_string = day_string + " " if add_space == true
+    day_string = day_string + " " if add_space
 
     day_string
   end
@@ -276,11 +276,7 @@ class TournamentDay < ApplicationRecord
   end
 
   def rank_day
-    if self.tournament.league_season.is_teams?
-      RankLeagueSeasonTeamsJob.perform_later(tournament_day)
-    else
-      RankFlightsJob.perform_later(tournament_day)
-    end
+    RankFlightsJob.perform_later(tournament_day)
   end
 
   def assign_payouts_all_rules
