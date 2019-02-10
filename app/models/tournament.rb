@@ -337,8 +337,6 @@ class Tournament < ApplicationRecord
     RecordEventJob.perform_later(email_addresses, "A tournament was finalized", tournament_info) unless email_addresses.blank?
   end
 
-  ##
-
   def is_past?
     return false if self.first_day.blank?
 
@@ -363,8 +361,6 @@ class Tournament < ApplicationRecord
     true
   end
 
-  ##
-
   def update_course_handicaps
     self.tournament_days.each do |day|
       day.tournament_groups.each do |group|
@@ -374,8 +370,6 @@ class Tournament < ApplicationRecord
       end
     end
   end
-
-  ##
 
   def user_has_paid?(user)
     tournament_balance = 0.0
@@ -391,10 +385,11 @@ class Tournament < ApplicationRecord
     end
   end
 
-  #date parsing
+  # date parsing
+  
   def signup_opens_at=(date)
-    begin
-      parsed = DateTime.strptime("#{date} #{Time.zone.now.formatted_offset}", JAVASCRIPT_DATETIME_PICKER_FORMAT)
+    begin      
+      parsed = EzglCalendar::CalendarUtils.datetime_for_picker_date(date)
       super parsed
     rescue
       write_attribute(:signup_opens_at, date)
@@ -403,10 +398,11 @@ class Tournament < ApplicationRecord
 
   def signup_closes_at=(date)
     begin
-      parsed = DateTime.strptime("#{date} #{Time.zone.now.formatted_offset}", JAVASCRIPT_DATETIME_PICKER_FORMAT)
+      parsed = EzglCalendar::CalendarUtils.datetime_for_picker_date(date)
       super parsed
     rescue
       write_attribute(:signup_closes_at, date)
     end
   end
+
 end

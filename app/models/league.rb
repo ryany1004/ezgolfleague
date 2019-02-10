@@ -230,10 +230,10 @@ class League < ApplicationRecord
     end
   end
 
-  #date parsing
+  # date parsing
   def start_date=(date)
     begin
-      parsed = Date.strptime("#{date}", JAVASCRIPT_DATE_PICKER_FORMAT)
+      parsed = EzglCalendar::CalendarUtils.date_for_picker_date(date)
       super parsed
     rescue
       write_attribute(:start_date, date)
