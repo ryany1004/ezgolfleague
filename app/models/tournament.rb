@@ -356,7 +356,7 @@ class Tournament < ApplicationRecord
   #date parsing
   def signup_opens_at=(date)
     begin
-      parsed = DateTime.strptime("#{date} #{Time.zone.now.formatted_offset}", JAVASCRIPT_DATETIME_PICKER_FORMAT)
+      parsed = EzglCalendar::CalendarUtils.datetime_for_picker_date(date)
       super parsed
     rescue
       write_attribute(:signup_opens_at, date)
@@ -365,7 +365,7 @@ class Tournament < ApplicationRecord
 
   def signup_closes_at=(date)
     begin
-      parsed = DateTime.strptime("#{date} #{Time.zone.now.formatted_offset}", JAVASCRIPT_DATETIME_PICKER_FORMAT)
+      parsed = EzglCalendar::CalendarUtils.datetime_for_picker_date(date)
       super parsed
     rescue
       write_attribute(:signup_closes_at, date)

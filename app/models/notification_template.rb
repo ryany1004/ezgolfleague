@@ -71,7 +71,7 @@ class NotificationTemplate < ApplicationRecord
   #date parsing
   def deliver_at=(date)
     begin
-      parsed = DateTime.strptime("#{date} #{Time.zone.now.formatted_offset}", JAVASCRIPT_DATETIME_PICKER_FORMAT)
+      parsed = EzglCalendar::CalendarUtils.datetime_for_picker_date(date)
       super parsed
     rescue
       write_attribute(:deliver_at, date)

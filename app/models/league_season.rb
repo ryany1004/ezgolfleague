@@ -81,10 +81,10 @@ class LeagueSeason < ApplicationRecord
     users_not_in_groups
   end
 
-  #date parsing
+  # date parsing
   def starts_at=(date)
     begin
-      parsed = DateTime.strptime("#{date} 12:01 AM #{Time.zone.now.formatted_offset}", JAVASCRIPT_DATETIME_PICKER_FORMAT)
+      parsed = EzglCalendar::CalendarUtils.datetime_for_picker_date("#{date} 12:01 AM")
       super parsed
     rescue
       write_attribute(:starts_at, date)
@@ -93,7 +93,7 @@ class LeagueSeason < ApplicationRecord
 
   def ends_at=(date)
     begin
-      parsed = DateTime.strptime("#{date} 11:59 PM #{Time.zone.now.formatted_offset}", JAVASCRIPT_DATETIME_PICKER_FORMAT)
+      parsed = EzglCalendar::CalendarUtils.datetime_for_picker_date("#{date} 11:59 PM")
       super parsed
     rescue
       write_attribute(:ends_at, date)
