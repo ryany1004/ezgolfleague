@@ -4,7 +4,8 @@ module ScoringRuleScorecards
     attr_accessor :running_score
     attr_accessor :opponent_running_score
     attr_accessor :unplayed_holes
-    
+    attr_accessor :holes_won
+
     def name(shorten_for_print = false)
       return "Match Play"
     end
@@ -18,6 +19,7 @@ module ScoringRuleScorecards
       self.unplayed_holes = self.scoring_rule.course_holes.count
       self.running_score = 0
       self.opponent_running_score = 0
+      self.holes_won = 0
 
       user1_handicap_allowance = self.scoring_rule.handicap_computer.handicap_allowance(user: user1)
       user2_handicap_allowance = self.scoring_rule.handicap_computer.handicap_allowance(user: user2)
@@ -58,6 +60,7 @@ module ScoringRuleScorecards
       self.unplayed_holes = self.unplayed_holes - 1
       self.running_score = 0
       self.opponent_running_score = 0
+      self.holes_won = 0
 
       holes.each do |hole|
         user1_score = scorecard1.scores.where(course_hole: hole).first
@@ -70,6 +73,8 @@ module ScoringRuleScorecards
           if user1_hole_score > user2_hole_score
             self.running_score = self.running_score - 1
             self.opponent_running_score = self.opponent_running_score + 1
+
+            self.holes_won += 1
           elsif user1_hole_score < user2_hole_score
             self.running_score = self.running_score + 1
             self.opponent_running_score = self.opponent_running_score - 1
@@ -77,7 +82,7 @@ module ScoringRuleScorecards
         end
       end
       
-      return self.running_score 
+      self.running_score 
     end
     
     def extra_scoring_column_data          
@@ -88,18 +93,18 @@ module ScoringRuleScorecards
       return nil if !match_has_ended
             
       if self.running_score == self.opponent_running_score
-        return "All Square"
+        "All Square"
       else
         if self.running_score > self.opponent_running_score
           if self.unplayed_holes == 0
-            return "W"
+            "W"
           else
             winning_string = "#{self.running_score} and #{self.unplayed_holes}"
           
-            return "W (#{winning_string})"
+            "W (#{winning_string})"
           end
         else
-          return "L"
+          "L"
         end
       end
     end

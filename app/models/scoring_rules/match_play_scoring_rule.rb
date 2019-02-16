@@ -6,7 +6,7 @@ class MatchPlayScoringRule < StrokePlayScoringRule
 	end
 
 	def description
-		"Player gets a point for each hole they win."
+		"Player gets a point for each hole they win. Payouts are allotted by most holes won."
 	end
 
 	def team_type
@@ -23,6 +23,14 @@ class MatchPlayScoringRule < StrokePlayScoringRule
 
 	def handicap_computer
 		HandicapComputer::MatchPlayHandicapComputer.new(self)
+	end
+
+	def scoring_computer
+		ScoringComputer::MatchPlayScoringComputer.new(self)
+	end
+
+	def flight_based_payouts?
+		false
 	end
 
   def includes_extra_scoring_column?

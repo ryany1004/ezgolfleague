@@ -1,5 +1,4 @@
 module ScoringComputer
-	
 	class DailyTeamScoringComputer < BaseScoringComputer
 		def can_be_scored?
 			if @scoring_rule.team_type == ScoringRuleTeamType::DAILY
@@ -31,5 +30,4 @@ module ScoringComputer
 
 		true
 	end
-
 end
