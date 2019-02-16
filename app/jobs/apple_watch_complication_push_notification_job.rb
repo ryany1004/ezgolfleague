@@ -2,9 +2,9 @@ class AppleWatchComplicationPushNotificationJob < IosPushNotificationJob
   def perform(device, body, content_available = false, extra_data = nil)
     begin  
       if device.environment_name == "debug"
-        pusher = self.pusher(true)
+        pusher = IosPushNotificationJob.pusher(true)
       else
-        pusher = self.pusher
+        pusher = IosPushNotificationJob.pusher
       end
 
       notification = Apnotic::Notification.new(device.device_identifier)

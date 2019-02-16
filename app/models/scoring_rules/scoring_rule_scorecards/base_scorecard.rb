@@ -17,11 +17,7 @@ module ScoringRuleScorecards
     end
 
     def tournament_day
-      unless self.daily_team.blank?
-        return self.daily_team.tournament_day
-      else
-        return self.scoring_rule.tournament_day
-      end
+      self.scoring_rule.tournament_day
     end
 
     def golf_outing
