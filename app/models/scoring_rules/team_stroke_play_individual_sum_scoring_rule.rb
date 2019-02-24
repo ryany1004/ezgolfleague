@@ -1,6 +1,6 @@
 class TeamStrokePlayIndividualSumScoringRule < StrokePlayScoringRule
 	def name
-		"Team Stroke Play"
+		"Team Stroke Play (Sum Scores)"
 	end
 
 	def description
