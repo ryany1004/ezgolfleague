@@ -14,7 +14,7 @@ module ScoringComputer
       users_with_holes_won = []
 
       eligible_users.each do |user|
-      	match_play_scorecard = @scoring_rule.match_play_scorecard_for_user_in_team(user, nil)
+      	match_play_scorecard = @scoring_rule.match_play_scorecard_for_user(user)
 
       	users_with_holes_won << { user: user, holes_won: match_play_scorecard.holes_won }
       end
@@ -37,6 +37,5 @@ module ScoringComputer
       	end
       end
 		end
-
 	end
 end

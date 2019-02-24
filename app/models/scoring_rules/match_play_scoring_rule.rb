@@ -41,12 +41,34 @@ class MatchPlayScoringRule < StrokePlayScoringRule
 		nil
 	end
 
-  def match_play_scorecard_for_user_in_team(user, daily_team)
+	def can_be_played?
+	  return false if self.tournament_day.tournament_groups.count == 0
+	  return false if self.tournament_day.scorecard_base_scoring_rule.blank?
+
+	  true
+	end
+
+	def can_be_finalized?
+		return false if !self.tournament_day.has_scores?
+		return false if self.users.count == 0 && self.payout_assignment_type != ScoringRulePayoutAssignmentType::MANUAL
+
+		true
+	end
+
+	def finalization_blockers
+		blockers = []
+
+		blockers << "#{self.name}: This tournament day has no scores." if !self.tournament_day.has_scores?
+		blockers << "#{self.name}: There are no users for this game type." if self.users.count == 0 && self.payout_assignment_type != ScoringRulePayoutAssignmentType::MANUAL
+
+		blockers
+	end
+
+  def match_play_scorecard_for_user(user)
     scorecard = ScoringRuleScorecards::MatchPlayScorecard.new
     scorecard.user = user
     scorecard.opponent = self.opponent_for_user(user)
     scorecard.scoring_rule = self
-    scorecard.daily_team = daily_team
     scorecard.calculate_scores
 
     return scorecard

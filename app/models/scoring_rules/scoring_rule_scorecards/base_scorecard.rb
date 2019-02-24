@@ -2,7 +2,6 @@ module ScoringRuleScorecards
   class BaseScorecard
 
     attr_accessor :user
-    attr_accessor :daily_team
     attr_accessor :scoring_rule
     attr_accessor :scores
 

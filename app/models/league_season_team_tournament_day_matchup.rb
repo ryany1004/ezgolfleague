@@ -36,4 +36,22 @@ class LeagueSeasonTeamTournamentDayMatchup < ApplicationRecord
 
 		r
 	end
+
+	def teams_are_balanced?
+		self.team_a.users.size == self.team_b.users.size
+	end
+
+	def pairings_by_handicap
+		raise "Unbalanced teams" if !self.teams_are_balanced?
+
+		pairings = []
+
+		self.team_a.users.each_with_index do |u, i|
+			user_b = self.team_b.users[i]
+
+			pairings << [u, user_b]
+		end
+
+		pairings
+	end
 end

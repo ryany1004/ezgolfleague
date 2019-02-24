@@ -83,11 +83,11 @@ class ScoringRule < ApplicationRecord
 		ScoringRuleTeamType::NONE
 	end
 
-	def users_per_daily_team
-		1
+	def teams_are_player_vs_player?
+		false # some team rules aggregate scores and some are individual vs individual on other team
 	end
 
-	def users_per_league_team
+	def users_per_daily_team
 		1
 	end
 
@@ -107,7 +107,7 @@ class ScoringRule < ApplicationRecord
 		ScoringRulePayoutAssignmentType::CALCULATED
 	end
 
-	#Some scoring rules, like former contests, apply to the whole field, while some, like former game types, apply by flight.
+	# Some scoring rules, like former contests, apply to the whole field, while some, like former game types, apply by flight.
 	def flight_based_payouts?
 		true
 	end
@@ -281,6 +281,7 @@ class ScoringRuleOption
 
 		team  = [
 			ScoringRuleOption.option(name: 'Team Stroke Play (Sum of Individual Scores)', class_name: 'TeamStrokePlayIndividualSumScoringRule'),
+			ScoringRuleOption.option(name: 'Team Match Play', class_name: 'TeamMatchPlayScoringRule'),
 		]
 
 		if show_team_rules

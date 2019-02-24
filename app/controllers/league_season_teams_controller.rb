@@ -28,7 +28,7 @@ class LeagueSeasonTeamsController < BaseController
   end
 
   def update
-    if @league_season_team.update(scoring_group_params)
+    if @league_season_team.update(team_params)
       redirect_to league_league_season_league_season_teams_path(@league, @league_season), flash: { success: "The team was successfully updated." }
     else
       render :edit

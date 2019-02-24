@@ -11,10 +11,6 @@ class TeamStrokePlayIndividualSumScoringRule < StrokePlayScoringRule
 		ScoringRuleTeamType::LEAGUE
 	end
 
-	def users_per_league_team
-		2
-	end
-
 	def flight_based_payouts?
 		false
 	end

@@ -1,7 +1,11 @@
 <tr>
   <td id="user-select" class="user-select">
     <% if team.present? %>
-      <%= team.name %>
+	      <% if tournament_day.scorecard_base_scoring_rule.teams_are_player_vs_player? %>
+	      	<%= team.name_with_matchup(matchup) %>
+	      <% else %>
+	      	<%= team.name %>
+	      <% end %>
       <%= f.input "team_id[#{team_index}]", as: :hidden, input_html: { value: team.id, class: "member-id" } %>
     <% else %>
       <span id="user-select-container">
