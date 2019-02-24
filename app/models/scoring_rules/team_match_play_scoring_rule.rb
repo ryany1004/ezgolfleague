@@ -4,7 +4,7 @@ class TeamMatchPlayScoringRule < MatchPlayScoringRule
 	end
 
 	def description
-		"Team match play where players are matched against a player on another team and get a point for each hole they win."
+		"Team match play where players are matched against a player on another team to compete hole-by-hole."
 	end
 
 	def team_type

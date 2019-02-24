@@ -55,8 +55,6 @@ class TournamentGroupsController < BaseController
     redirect_to league_tournament_tournament_day_tournament_groups_path(@tournament.league, @tournament, @tournament_day), flash: { success: "The tee time was successfully deleted." }
   end
 
-  #batch processing
-
   def batch_create
     unless params[:tournament_group].blank?
       starting_time = DateTime.strptime("#{params[:tournament_group][:starting_time]} #{Time.zone.now.formatted_offset}", JAVASCRIPT_DATETIME_PICKER_FORMAT)
@@ -69,11 +67,7 @@ class TournamentGroupsController < BaseController
       end
     end
 
-    if @tournament_day.can_be_played?
-      redirect_to league_tournaments_path(@tournament.league), flash: { success: "The tee times were successfully created." }
-    else
-      redirect_to league_tournament_tournament_day_flights_path(@tournament.league, @tournament, @tournament_day), flash: { success: "The tee times were successfully created." }
-    end
+    redirect_to league_tournament_tournament_day_flights_path(@tournament.league, @tournament, @tournament_day), flash: { success: "The tee times were successfully created." }
   end
 
   private
