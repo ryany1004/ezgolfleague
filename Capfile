@@ -20,7 +20,7 @@ require 'capistrano/deploy'
 require 'capistrano/bundler'
 require 'capistrano/rails/assets'
 require 'capistrano/rails/migrations'
-require "capistrano-resque"
+require 'capistrano/sidekiq'
 require 'rollbar/capistrano3'
 
 # Loads custom tasks from `lib/capistrano/tasks' if you have any defined.

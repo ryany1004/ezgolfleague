@@ -92,7 +92,7 @@ Rails.application.configure do
   config.enable_dependency_loading = true
 
   # Use a real queuing backend for Active Job (and separate queues per environment)
-  config.active_job.queue_adapter     = :resque
+  config.active_job.queue_adapter     = :sidekiq
   config.active_job.queue_name_prefix = "ezgolfleague_#{Rails.env}"
 
   ActionMailer::Base.smtp_settings = {

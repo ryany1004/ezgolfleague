@@ -1,4 +1,4 @@
-require 'resque/server'
+require 'sidekiq/web'
 
 Rails.application.routes.draw do
   if Rails.env.production?
@@ -14,7 +14,7 @@ Rails.application.routes.draw do
   get '.well-known/apple-app-site-association', to: 'api/v1/tournaments#app_association'
 
   authenticate :user, -> user { user.is_super_user } do
-    mount Resque::Server, at: '/jobs'
+    mount Sidekiq::Web => '/jobs'
   end
 
   #this is for playing tournaments
