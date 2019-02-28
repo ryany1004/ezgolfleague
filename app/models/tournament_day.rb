@@ -80,15 +80,18 @@ class TournamentDay < ApplicationRecord
   end
 
   def pretty_day(add_space = false)
-    return "Day 1" if self.tournament.tournament_days.count == 1
+    if self.tournament.tournament_days.count == 1
+    	day_string = "Day 1"
+    else
+	    day_index = 0
 
-    day_index = 0
+	    self.tournament.tournament_days.each_with_index do |d, i|
+	      day_index = i if d == self
+	    end
 
-    self.tournament.tournament_days.each_with_index do |d, i|
-      day_index = i if d == self
+	    day_string = "Day #{day_index + 1}"
     end
 
-    day_string = "Day #{day_index + 1}"
     day_string = day_string + " " if add_space
 
     day_string
