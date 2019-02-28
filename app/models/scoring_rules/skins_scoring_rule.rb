@@ -40,6 +40,10 @@ class SkinsScoringRule < ScoringRule
 		blockers
 	end
 
+	def results_description_column_name
+		"Holes"
+	end
+
 	def calculate_each_entry?
 		false
 	end

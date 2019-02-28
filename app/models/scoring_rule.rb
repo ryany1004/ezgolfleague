@@ -87,6 +87,10 @@ class ScoringRule < ApplicationRecord
 		false # some team rules aggregate scores and some are individual vs individual on other team
 	end
 
+	def results_description_column_name
+		nil
+	end
+
 	def users_per_daily_team
 		1
 	end
