@@ -40,7 +40,7 @@ module ScoringComputer
 		end
 
 		def rank_results
-			self.tournament_day.rank_day
+			RankFlightsJob.perform_now(self.tournament_day)
 		end
 
 		def send_did_score_notification(scorecard:)
