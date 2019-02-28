@@ -10,9 +10,9 @@
 	          <div class="well">
 	          	<p>Invite golfers to your new league by adding email addresses, one per line.</p>
 	          	<p>Each will receive an email invite to create an account and join.</p>
-	            <%= f.input :golfers_to_invite, as: :text, :input_html => {:cols => 5, :rows => 10 } %>
+	            <%= f.input :golfers_to_invite, as: :text, input_html: {:cols => 5, :rows => 10 } %>
 
-	            <%= f.input :league_id, :as => :hidden, input_html: {value: @league.id}  %>
+	            <%= f.input :league_id, as: :hidden, input_html: {value: @league.id}  %>
 	          </div>
 
 	          <div class="form-actions">
