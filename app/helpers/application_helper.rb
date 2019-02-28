@@ -211,5 +211,4 @@ module ApplicationHelper
       "Flight"
     end
   end
-
 end
