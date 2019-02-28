@@ -16,15 +16,15 @@ module ScoringComputer
       losers = []
 
       eligible_users.each do |user|
-      	next if winners.include?(user) || losers.include?(user) #this means we already handled this matchup
+      	next if winners.include?(user) || losers.include?(user) # this means we already handled this matchup
 
       	opponent = @scoring_rule.opponent_for_user(user)
       	next if opponent.blank?
 
-      	user_scorecard = @scoring_rule.tournament_day.primary_scorecard_for_user(user)
-      	opponent_scorecard = @scoring_rule.tournament_day.primary_scorecard_for_user(opponent)
+      	user_result = @scoring_rule.tournament_day_results.where(user: user).first
+      	opponent_result = @scoring_rule.tournament_day_results.where(user: opponent).first
 
-      	if user_scorecard.par_related_net_score < opponent_scorecard.par_related_net_score
+      	if user_result.par_related_net_score < opponent_result.par_related_net_score
       		winners << user
       		losers << opponent
       	else
