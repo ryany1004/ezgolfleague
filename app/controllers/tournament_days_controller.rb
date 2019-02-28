@@ -62,7 +62,7 @@ class TournamentDaysController < BaseController
   private
 
   def tournament_day_params
-    params.require(:tournament_day).permit(:course_id, :tournament_at, :enter_scores_until_finalized, :course_hole_ids => [])
+    params.require(:tournament_day).permit(:course_id, :tournament_at, :enter_scores_until_finalized, course_hole_ids: [])
   end
 
   def fetch_tournament_day

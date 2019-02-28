@@ -117,7 +117,7 @@ class TournamentsController < BaseController
   end
 
   def tournament_params
-    params.require(:tournament).permit(:name, :league_id, :allow_credit_card_payment, :signup_opens_at, :signup_closes_at, :max_players, :show_players_tee_times, :auto_schedule_for_multi_day, tournament_days_attributes: [:id, :course_hole_ids => []])
+    params.require(:tournament).permit(:name, :league_id, :allow_credit_card_payment, :signup_opens_at, :signup_closes_at, :max_players, :show_players_tee_times, :auto_schedule_for_multi_day, tournament_days_attributes: [:id, course_hole_ids: []])
   end
 
   def fetch_tournament

@@ -22,7 +22,7 @@ class Play::UserAccountController < Play::BaseController
 
     def change_password
       if @user_account.update(user_params)
-        sign_in(@user_account, :bypass => true)
+        sign_in(@user_account, bypass: true)
 
         redirect_to play_dashboard_index_path, flash: { success: "Your password was successfully updated." }
       else
@@ -33,7 +33,7 @@ class Play::UserAccountController < Play::BaseController
     private
 
     def user_params
-      params.require(:user).permit!
+      params.require(:user).permit! #TODO: Update
     end
 
     def fetch_user

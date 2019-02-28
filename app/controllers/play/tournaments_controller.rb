@@ -74,7 +74,7 @@ class Play::TournamentsController < Play::BaseController
 
       @tournament.first_day.add_player_to_group(tournament_group: tournament_group, user: current_user, paying_with_credit_card: paying_now, registered_by: current_user.complete_name)
 
-      #other associated signup
+      # other associated signup
       if !params[:tournament].blank? && !params[:tournament][:another_member_id].blank?
         other_user = User.find(params[:tournament][:another_member_id])
 
@@ -95,9 +95,9 @@ class Play::TournamentsController < Play::BaseController
       #   end
       # end
 
-      #payment
+      # payment
       if paying_now == true
-        redirect_to new_play_payment_path(:payment_type => "tournament_dues", :tournament_id => @tournament.id)
+        redirect_to new_play_payment_path(payment_type: "tournament_dues", tournament_id: @tournament.id)
       else
         TournamentMailer.tournament_player_paying_later(current_user, @tournament).deliver_later
 

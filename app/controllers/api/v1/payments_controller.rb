@@ -22,10 +22,10 @@ class Api::V1::PaymentsController < Api::V1::ApiBaseController
         payment_amount += credit_card_fees
 
         charge = Stripe::Charge.create(
-          :amount => (payment_amount * 100).to_i, # amount in cents
-          :currency => "usd",
-          :source => stripe_token,
-          :description => "#{@current_user.complete_name} Tournament: #{tournament.name}"
+          amount: (payment_amount * 100).to_i, # amount in cents
+          currency: "usd",
+          source: stripe_token,
+          description: "#{@current_user.complete_name} Tournament: #{tournament.name}"
         )
 
         logger.info { "Charged #{@current_user.complete_name} Card w/ Stripe for #{payment_amount}" }

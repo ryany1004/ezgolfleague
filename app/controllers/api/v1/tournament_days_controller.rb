@@ -85,7 +85,7 @@ class Api::V1::TournamentDaysController < Api::V1::ApiBaseController
       optional_rules_cost_details += r.cost_breakdown_for_user(user: @current_user, include_credit_card_fees: false)
     end
 
-    cost_details = {:tournament => tournament_cost_details, :contests => optional_rules_cost_details}
+    cost_details = { tournament: tournament_cost_details, contests: optional_rules_cost_details }
 
     respond_with(cost_details) do |format|
       format.json { render json: cost_details }
@@ -101,7 +101,7 @@ class Api::V1::TournamentDaysController < Api::V1::ApiBaseController
     day_flights_with_rankings = @tournament_day.flights_with_rankings
     combined_flights_with_rankings = FetchingTools::LeaderboardFetching.flights_with_rankings_could_be_combined(@tournament_day)
 
-    leaderboard = {:day_flights => day_flights_with_rankings, :combined_flights => combined_flights_with_rankings}
+    leaderboard = { day_flights: day_flights_with_rankings, combined_flights: combined_flights_with_rankings }
   end
 
 end

@@ -183,7 +183,7 @@ class UserAccountsController < BaseController
           m.save
         end
 
-        user = User.invite!({:email => @user_account.email}, current_user) do |u|
+        user = User.invite!({ email: @user_account.email }, current_user) do |u|
           u.skip_invitation = true
         end
 
