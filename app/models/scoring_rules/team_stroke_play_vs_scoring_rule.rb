@@ -11,6 +11,10 @@ class TeamStrokePlayVsScoringRule < StrokePlayScoringRule
 		true
 	end
 
+	def flight_based_payouts?
+		false
+	end
+
 	def scoring_computer
 		ScoringComputer::TeamStrokePlayVsScoringComputer.new(self)
 	end
