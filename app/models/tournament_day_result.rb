@@ -51,7 +51,7 @@ class TournamentDayResult < ApplicationRecord
 
     total_payouts = 0
 
-    self.payout_results_relation.each do |payout_result|
+    self.payout_results_relation.where("amount > 0").each do |payout_result|
       total_payouts += payout_result.amount
     end
 
