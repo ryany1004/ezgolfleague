@@ -7,6 +7,10 @@ class TeamStrokePlayVsScoringRule < StrokePlayScoringRule
 		"Team stroke play where each team member plays an opposing team member."
 	end
 
+	def team_type
+		ScoringRuleTeamType::LEAGUE
+	end
+
 	def teams_are_player_vs_player?
 		true
 	end
