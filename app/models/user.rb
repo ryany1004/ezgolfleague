@@ -25,7 +25,7 @@ class User < ApplicationRecord
   has_many :league_season_team_memberships, inverse_of: :user
   has_many :league_season_teams, through: :league_season_team_memberships
   has_many :league_season_rankings, dependent: :destroy
-  belongs_to :current_league, class_name: "League"
+  belongs_to :current_league, class_name: "League", optional: true
   has_many :child_users, ->{ order 'last_name' }, class_name: "User", foreign_key: "parent_id", inverse_of: :parent_user
   belongs_to :parent_user, class_name: "User", foreign_key: "parent_id", inverse_of: :child_users, optional: true
   has_and_belongs_to_many :flights, inverse_of: :users
