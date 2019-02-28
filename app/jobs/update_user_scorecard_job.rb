@@ -3,12 +3,11 @@ class UpdateUserScorecardJob < ApplicationJob
     primary_user = primary_scorecard.golf_outing.user
 
     primary_scorecard.tournament_day.scoring_rules.each do |rule|
-      return if !rule.calculate_each_entry?
+      next if !rule.calculate_each_entry?
 
       Rails.logger.debug { "Scoring #{rule.name} for #{primary_user.complete_name}" }
 
       scoring_computer = rule.scoring_computer
-
       result = scoring_computer.generate_tournament_day_result(user: primary_user)
       scoring_computer.after_updating_scores_for_scorecard(scorecard: primary_scorecard)
 
@@ -26,10 +25,8 @@ class UpdateUserScorecardJob < ApplicationJob
       scoring_computer.send_did_score_notification(scorecard: primary_scorecard)
 
       self.clear_caches(primary_scorecard)
-
-      if result.present?
-        Rails.logger.info { "Scoring: #{primary_scorecard.id}. User: #{primary_user.complete_name}. Result: #{result.to_s}" }
-      end
+      
+      Rails.logger.info { "Scoring: #{primary_scorecard.id}. User: #{primary_user.complete_name}. Result: #{result.to_s}" } if result.present?
     end
   end
 
