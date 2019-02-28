@@ -8,5 +8,4 @@ class ContestHole < ApplicationRecord
   def hole_number
     return self.course_hole.hole_number
   end
-
 end
