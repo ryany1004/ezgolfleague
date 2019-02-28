@@ -15,6 +15,20 @@ class TeamStrokePlayVsScoringRule < StrokePlayScoringRule
 		false
 	end
 
+	def can_be_played?
+	  return false if self.tournament_day.scorecard_base_scoring_rule.blank?
+
+	  true
+	end
+
+	def can_be_finalized?
+		return false if self.payouts.size.zero?
+		return false if !self.tournament_day.has_scores?
+		return false if self.users.count == 0
+
+		true
+	end
+
 	def scoring_computer
 		ScoringComputer::TeamStrokePlayVsScoringComputer.new(self)
 	end
