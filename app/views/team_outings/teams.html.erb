@@ -23,6 +23,10 @@
         <li><%= rule.name %></li>
       <% end %> 
     </ul>
+
+    <% if @tournament_day.scorecard_base_scoring_rule.teams_are_player_vs_player? %>
+    	<p><em>Some of the game types for this tournament are player vs. player so you will see the matchup between players designated by a letter, i.e. 'A'. The matchups are based on the player handicaps.</em></p>
+    <% end %>
   </div>
 
   <% @tournament_day.league_season_team_tournament_day_matchups.each do |matchup| %>

@@ -20,19 +20,29 @@ class LeagueSeasonTeam < ApplicationRecord
 		self.save
 	end
 
-	def name_with_matchup(matchup)
-		matchup_name = ""
-
-		positions = %w(A B C D E F)
+	def users_with_matchup_indicator
+		matchups = []
 
 		self.users.each_with_index do |u, i|
-			matchup_name << "#{positions[i]}) " + u.short_name
+			matchups << { user: u, matchup_indicator: self.position_indicator_for_index(i) }
+		end
 
-			if u != self.users.last
-				matchup_name << " "
+		matchups
+	end
+
+	def matchup_indicator_for_user(user)
+		self.users.each_with_index do |u, i|
+			if user == u
+				return self.position_indicator_for_index(i)
 			end
 		end
 
-		matchup_name
+		return nil
+	end
+
+	def position_indicator_for_index(index)
+		positions = %w(A B C D E F)
+
+		positions[index]
 	end
 end

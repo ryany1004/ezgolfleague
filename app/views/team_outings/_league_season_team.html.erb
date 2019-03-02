@@ -2,7 +2,9 @@
   <td id="user-select" class="user-select">
     <% if team.present? %>
 	      <% if tournament_day.scorecard_base_scoring_rule.teams_are_player_vs_player? %>
-	      	<%= team.name_with_matchup(matchup) %>
+	      	<% team.users_with_matchup_indicator.each do |u| %>
+	      		<span class="badge badge-secondary"><%= u[:matchup_indicator] %></span>&nbsp;<%= u[:user].short_name %>
+	      	<% end %>
 	      <% else %>
 	      	<%= team.name %>
 	      <% end %>

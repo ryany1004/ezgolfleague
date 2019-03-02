@@ -18,6 +18,7 @@ class Tournament < ApplicationRecord
 
   accepts_nested_attributes_for :tournament_days
 
+  attr_accessor :optional_game_types
   attr_accessor :another_member_id
   attr_accessor :skip_date_validation
 
@@ -321,8 +322,7 @@ class Tournament < ApplicationRecord
 
     RankLeagueSeasonJob.perform_later(self.league_season)
 
-    #cache bust
-    self.league.active_season.touch unless self.league.active_season.blank?
+    self.league.active_season.touch unless self.league.active_season.blank? #cache bust
 
     self.send_finalize_event unless !should_email
   end

@@ -26,7 +26,12 @@
               </div>
               <% end -%>
 
-              <!-- TODO: update for game types -->
+							<% if tournament.optional_scoring_rules_with_dues.count > 0 -%>
+								<div class="well">
+									<p><em>Would you like to participate in any additional game types? This will increase your dues.</em></p>
+									<%= f.input :optional_game_types, collection: tournament.optional_scoring_rules_with_dues, label_method: :name_with_cost, value_method: :id, as: :check_boxes %>
+								</div>
+							<% end -%>
             </div>
           </div>
         </div>
