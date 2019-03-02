@@ -6,19 +6,19 @@ namespace :scoring_rules do
 
       case d.game_type_id
       when 1
-        rule = StrokePlayScoringRule.create(is_opt_in: false, tournament_day: d)
+        rule = StrokePlayScoringRule.create(primary_rule: true, is_opt_in: false, tournament_day: d)
 
         GameTypeMetadatum.all.where(search_key: rule.legacy_use_back_nine_key).update_all(search_key: rule.use_back_nine_key)
       when 2
-        rule = MatchPlayScoringRule.create(is_opt_in: false, tournament_day: d)
+        rule = MatchPlayScoringRule.create(primary_rule: true, is_opt_in: false, tournament_day: d)
       when 3
-        rule = StablefordScoringRule.create(is_opt_in: false, tournament_day: d)
+        rule = StablefordScoringRule.create(primary_rule: true, is_opt_in: false, tournament_day: d)
       when 7
-        rule = TwoManScrambleScoringRule.create(is_opt_in: false, tournament_day: d)
+        rule = TwoManScrambleScoringRule.create(primary_rule: true, is_opt_in: false, tournament_day: d)
       when 8
-        rule = FourManScrambleScoringRule.create(is_opt_in: false, tournament_day: d)
+        rule = FourManScrambleScoringRule.create(primary_rule: true, is_opt_in: false, tournament_day: d)
       when 10
-        rule = TwoManBestBallScoringRule.create(is_opt_in: false, tournament_day: d)
+        rule = TwoManBestBallScoringRule.create(primary_rule: true, is_opt_in: false, tournament_day: d)
       when 12
         next #TODO: TwoManComboScrambleBestBall
       when 13

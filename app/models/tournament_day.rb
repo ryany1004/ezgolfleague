@@ -17,7 +17,7 @@ class TournamentDay < ApplicationRecord
   belongs_to :course, inverse_of: :tournament_days
   has_many :tournament_groups, -> { order(:tee_time_at) }, inverse_of: :tournament_day, dependent: :destroy
   has_many :flights, -> { order(:flight_number) }, inverse_of: :tournament_day, dependent: :destroy
-  has_many :scoring_rules, -> { order(:type) }, inverse_of: :tournament_day, dependent: :destroy
+  has_many :scoring_rules, -> { order(primary_rule: :desc) }, inverse_of: :tournament_day, dependent: :destroy
   has_many :league_season_team_tournament_day_matchups, -> { order(:created_at) }, inverse_of: :tournament_day, dependent: :destroy
 
   has_and_belongs_to_many :legacy_course_holes, -> { order(:hole_number) }, class_name: "CourseHole", join_table: "course_holes_tournament_days" # TODO: REMOVE AFTER MIGRATION
@@ -248,7 +248,7 @@ class TournamentDay < ApplicationRecord
   end
 
   def scorecard_base_scoring_rule
-    @scorecard_base_scoring_rule ||= self.mandatory_scoring_rules.reorder('scoring_rule_course_holes_count DESC').limit(1).first
+    self.scoring_rules.where(primary_rule: true).first
   end
 
   def mandatory_scoring_rules
