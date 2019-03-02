@@ -16,9 +16,9 @@ module HandicapComputer
         baseline_handicap = user_course_handicap - opponent_course_handicap
 
         if user_golf_outing.course_tee_box.tee_box_gender == "Men"
-          sorted_course_holes_by_handicap = self.tournament_day.course.course_holes.order("mens_handicap")
+          sorted_course_holes_by_handicap = self.tournament_day.course.course_holes.reorder("mens_handicap")
         else
-          sorted_course_holes_by_handicap = self.tournament_day.course.course_holes.order("womens_handicap")
+          sorted_course_holes_by_handicap = self.tournament_day.course.course_holes.reorder("womens_handicap")
         end
 
         while baseline_handicap > 0 do
@@ -38,7 +38,7 @@ module HandicapComputer
 
             if baseline_handicap > 0
               existing_hole[:strokes] = existing_hole[:strokes] + 1
-              baseline_handicap = baseline_handicap - 1
+              baseline_handicap -= 1
             end
           end
         end
