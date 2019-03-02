@@ -2,12 +2,12 @@ selectedTeams = [];
 
 <% @teams_signed_up.each do |team| %>
   <% @outing_index.each do |o| %>
-    <% if o[:id] == team.id %>
-      removeButton = "<a data-confirm='Are you sure you want to remove this registration? This will delete all scorecard information for this team for this tournament.' role='button' class='btn btn-danger btn-xs' rel='nofollow' data-method='delete' href='/leagues/<%= @league.id %>/tournaments/<%= @tournament.id %>/tournament_days/<%= @tournament_day.id %>/delete_team_signup?matchup_id=<%= @matchup.id %>&team_id=<%= team.id %>'>Remove</a>"
+    <% if o[:id] == team.id %>   
+      removeButton = "<%= escape_javascript link_to('Remove', league_tournament_delete_day_teams_path(@league, @tournament, @tournament_day, matchup_id: @matchup.id, team_id: team.id), method: :delete, role: 'button', class: 'btn btn-danger btn-xs', data: { confirm: 'Are you sure you want to remove this registration? This will delete all scorecard information for this team for this tournament.' }) %>";
     <% end %>
   <% end %>
 
-  selectedTeams.push({ name: "<%= team.name %>", id: "<%= team.id %>", removeButton: removeButton });
+  selectedTeams.push({ name: "<%= team.name %>", id: "<%= team.to_param %>", removeButton: removeButton });
 <% end %>
 
 var elementsUpdated = removeSelectedTeamsFromDropdowns(selectedTeams);
