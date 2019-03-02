@@ -42,7 +42,7 @@ class MatchPlayScoringRule < StrokePlayScoringRule
 	end
 
 	def can_be_played?
-	  return false if self.tournament_day.tournament_groups.count == 0
+	  return false if self.tournament_day.tournament_groups.count.zero?
 	  return false if self.tournament_day.scorecard_base_scoring_rule.blank?
 
 	  true
@@ -50,7 +50,7 @@ class MatchPlayScoringRule < StrokePlayScoringRule
 
 	def can_be_finalized?
 		return false if !self.tournament_day.has_scores?
-		return false if self.users.count == 0 && self.payout_assignment_type != ScoringRulePayoutAssignmentType::MANUAL
+		return false if self.users.count.zero? && self.payout_assignment_type != ScoringRulePayoutAssignmentType::MANUAL
 
 		true
 	end
@@ -59,7 +59,7 @@ class MatchPlayScoringRule < StrokePlayScoringRule
 		blockers = []
 
 		blockers << "#{self.name}: This tournament day has no scores." if !self.tournament_day.has_scores?
-		blockers << "#{self.name}: There are no users for this game type." if self.users.count == 0 && self.payout_assignment_type != ScoringRulePayoutAssignmentType::MANUAL
+		blockers << "#{self.name}: There are no users for this game type." if self.users.count.zero? && self.payout_assignment_type != ScoringRulePayoutAssignmentType::MANUAL
 
 		blockers
 	end
