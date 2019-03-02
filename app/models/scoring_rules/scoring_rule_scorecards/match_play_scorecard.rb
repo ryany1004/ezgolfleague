@@ -28,8 +28,8 @@ module ScoringRuleScorecards
       self.opponent_running_score = 0
       self.holes_won = 0
 
-      user1_handicap_allowance = self.scoring_rule.handicap_computer.handicap_allowance(user: user1)
-      user2_handicap_allowance = self.scoring_rule.handicap_computer.handicap_allowance(user: user2)
+      user1_handicap_allowance = self.scoring_rule.handicap_computer.match_play_handicap_allowance(user: user1)
+      user2_handicap_allowance = self.scoring_rule.handicap_computer.match_play_handicap_allowance(user: user2)
 
       self.scoring_rule.course_holes.each_with_index do |hole, i|
         score = DerivedScorecardScore.new
@@ -61,7 +61,7 @@ module ScoringRuleScorecards
         current_hole_strokes2 = score.strokes if score.course_hole == current_hole
       end
       
-      return 0 if current_hole_strokes1.zero? or current_hole_strokes2.zero? #hole has not been played
+      return 0 if current_hole_strokes1.zero? or current_hole_strokes2.zero? # hole has not been played
 
       # if we get this far, we have stuff to calc
       self.unplayed_holes -= 1

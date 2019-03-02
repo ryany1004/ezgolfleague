@@ -1,6 +1,6 @@
 module HandicapComputer
 	class MatchPlayHandicapComputer < BaseHandicapComputer
-    def handicap_allowance(user:)
+    def match_play_handicap_allowance(user:) # used in the match play scorecard only
       user_golf_outing = self.tournament_day.golf_outing_for_player(user)
       user_course_handicap = self.course_handicap_for_game_type(user_golf_outing)
 
