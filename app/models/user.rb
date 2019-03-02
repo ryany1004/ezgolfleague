@@ -62,8 +62,6 @@ class User < ApplicationRecord
     self.current_league = nil if !self.leagues.include?(self.current_league)
   end
 
-  ##
-
   def complete_name
     "#{self.first_name} #{self.last_name}"
   end
