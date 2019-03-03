@@ -7,6 +7,7 @@ gem 'sass-rails', '~> 5.0'
 gem 'uglifier', '>= 1.3.0'
 gem 'coffee-rails'
 gem 'jquery-rails'
+gem 'turbolinks'
 gem 'jquery-ui-rails'
 gem 'jbuilder'
 gem 'sdoc', '~> 0.4.0', group: :doc

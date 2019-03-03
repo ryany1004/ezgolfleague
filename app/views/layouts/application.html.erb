@@ -14,8 +14,8 @@
       <title><%= @page_title %> || EZ Golf League</title>
     <% end -%>
 
-    <%= stylesheet_link_tag    'application', media: 'all' %>
-    <%= javascript_include_tag 'application' %>
+    <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
+    <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
     <%= csrf_meta_tags %>
 
     <!-- Google Fonts -->
@@ -39,7 +39,7 @@
 
     <%= render partial: 'shared/analytics' %>
   </head>
-  <body "data-no-turbolink">
+  <body>
     <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark" id="mainNav">
         <div class="container">
             <a class="navbar-brand text-uppercase" href="/">ezgl</a>
