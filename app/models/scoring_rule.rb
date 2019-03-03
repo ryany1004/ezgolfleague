@@ -19,7 +19,7 @@ class ScoringRule < ApplicationRecord
 	
 	belongs_to :tournament_day, touch: true, inverse_of: :scoring_rules
 	has_many :payments, inverse_of: :scoring_rule
-	has_many :payouts, inverse_of: :scoring_rule, dependent: :destroy
+	has_many :payouts, -> { order(:sort_order, "amount DESC, points DESC") }, inverse_of: :scoring_rule, dependent: :destroy
 	has_many :payout_results, -> { order(:flight_id, amount: :desc, points: :desc) }, inverse_of: :scoring_rule, dependent: :destroy
 	has_many :tournament_day_results, -> { order(:flight_id, :sort_rank) }, inverse_of: :scoring_rule, dependent: :destroy
 	has_many :scoring_rule_participations, dependent: :destroy, inverse_of: :scoring_rule
@@ -85,6 +85,10 @@ class ScoringRule < ApplicationRecord
 
 	def teams_are_player_vs_player?
 		false # some team rules aggregate scores and some are individual vs individual on other team
+	end
+
+	def can_be_primary?
+		true
 	end
 
 	def results_description_column_name

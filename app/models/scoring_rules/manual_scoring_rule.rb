@@ -21,6 +21,10 @@ class ManualScoringRule < ScoringRule
 		ScoringRulePayoutAssignmentType::MANUAL
 	end
 
+	def can_be_primary?
+		false
+	end
+
 	def calculate_each_entry?
 		false
 	end

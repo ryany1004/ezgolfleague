@@ -21,6 +21,10 @@ class SkinsScoringRule < ScoringRule
 		ScoringRulePayoutType::POT
 	end
 
+	def can_be_primary?
+		false
+	end
+
 	def can_be_played?
 	  true
 	end
