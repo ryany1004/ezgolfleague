@@ -98,6 +98,16 @@ class User < ApplicationRecord
     tags << "iOS User" if self.has_ios_devices?
     tags << "Android User" if self.has_android_devices?
 
+  	has_team_leagues = false
+  	has_individual_leagues = false
+  	self.leagues_admin.each do |l|
+  		has_team_leagues = true if l.league_type == "Team Play"
+  		has_individual_leagues = true if l.league_type == "Individual Play"
+  	end
+
+  	tags << "Team League Admin" if has_team_leagues
+  	tags << "Individual League Admin" if has_individual_leagues
+
     self.leagues.each do |l|
       tags << l.name
     end
