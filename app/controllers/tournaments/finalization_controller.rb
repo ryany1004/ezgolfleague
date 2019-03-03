@@ -35,6 +35,8 @@ module Tournaments
 	        n.save
 	      end
 
+	      SendEventToDripJob.perform_later("Finalized a tournament", user: current_user, options: { tournament: { name: @tournament.name } })
+
 	      #bust the cache
 	      @tournament.tournament_days.each do |day|
 	        day.touch

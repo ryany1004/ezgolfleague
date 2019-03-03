@@ -39,9 +39,11 @@ class TournamentsController < BaseController
     if @tournament.save
       league = @tournament.league
       if !league.exempt_from_subscription && league.free_tournaments_remaining > 0
-        league.free_tournaments_remaining -= 1 #decrement the free tournaments
+        league.free_tournaments_remaining -= 1 # decrement the free tournaments
         league.save
       end
+
+      SendEventToDripJob.perform_later("Created a new tournament", user: current_user, options: { tournament: { name: @tournament.name } })
 
       redirect_to league_tournament_tournament_days_path(@tournament.league, @tournament), flash: { success: "The tournament was successfully created. Please update course information." }
     else

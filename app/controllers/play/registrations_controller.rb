@@ -105,7 +105,7 @@ class Play::RegistrationsController < Play::BaseController
       UserMailer.invite(g, @league).deliver_later
     end
 
-    response = DRIP_CLIENT.track_event(current_user.email, "League admin invited golfers during registration", { number_of_golfers: golfers_to_invite.count, league_name: @league.name })
+    SendEventToDripJob.perform_later("League admin invited golfers during registration", user: current_user, options: { number_of_golfers: golfers_to_invite.count, league_name: @league.name })
 
     redirect_to setup_completed_play_registrations_path
   end
