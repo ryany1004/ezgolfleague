@@ -23,7 +23,7 @@ class Play::ScorecardsController < Play::BaseController
 
     scorecard.tournament_day.score_user(scorecard.golf_outing.user)
 
-    #update team scorecards if that's a thing
+    # update team scorecards if that's a thing
     tournament_day = scorecard.golf_outing.tournament_group.tournament_day
     tournament = tournament_day.tournament
 
@@ -43,7 +43,7 @@ class Play::ScorecardsController < Play::BaseController
       end
     end
 
-    RankFlightsJob.perform_later(tournament_day)
+    tournament_day.rank_day
 
     redirect_to play_scorecard_path(scorecard), flash: { success: "The scorecard was successfully finalized." }
   end

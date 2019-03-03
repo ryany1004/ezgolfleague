@@ -21,7 +21,11 @@ class TournamentDaysController < BaseController
     if @tournament_day.save
       self.update_tournament_date
 
-      redirect_to new_league_tournament_tournament_day_path(@tournament.league, @tournament), flash: { success: "The day was successfully created." }
+      if params[:commit] == "Save & Continue"
+      	redirect_to league_tournament_tournament_day_scoring_rules_path(@tournament.league, @tournament, @tournament_day), flash: { success: "The day was successfully created." }
+      else
+      	redirect_to new_league_tournament_tournament_day_path(@tournament.league, @tournament), flash: { success: "The day was successfully created." }
+      end
     else
       initialize_form
 
@@ -58,7 +62,7 @@ class TournamentDaysController < BaseController
   private
 
   def tournament_day_params
-    params.require(:tournament_day).permit(:course_id, :tournament_at, :enter_scores_until_finalized, :course_hole_ids => [])
+    params.require(:tournament_day).permit(:course_id, :tournament_at, :enter_scores_until_finalized, course_hole_ids: [])
   end
 
   def fetch_tournament_day

@@ -17,14 +17,16 @@
     <h3 class="panel-title"><%= @tournament_day.pretty_day(true) %> Register Players</h3>
   </div>
   <div class="panel-body">
-    <p>Choose players for each slot per tee-group to register them for this tournament. Players may already appear if they registered themselves.</p>
+    <% if @tournament.mandatory_individual_scoring_rules.size > 0 %>
+      <p>Choose players for each slot per tee-group to register them for this tournament. Players may already appear if they registered themselves.</p>
 
-    <p>Players will be added to the following game types automatically:</p>
-    <ul>
-      <% @tournament.mandatory_scoring_rules.each do |rule| %>
-        <li><%= rule.name %></li>
-      <% end %> 
-    </ul>
+      <p>Players will be added to the following game types automatically:</p>
+      <ul>
+        <% @tournament.mandatory_individual_scoring_rules.each do |rule| %>
+          <li><%= rule.name %></li>
+        <% end %> 
+      </ul>
+    <% end %>
   </div>
 
   <% @tournament_groups.each do |tournament_group| %>
@@ -56,7 +58,7 @@
             <td id="user-select" class="user-select">
               <% if tournament_group.user_for_index(i).try(:id) %>
                 <%= tournament_group.user_for_index(i).try(:complete_name) %> <%= tournament_group.user_for_index(i)&.scoring_group_name_for_league_season(@tournament.league_season) %>
-                <%= f.input "member_id[#{i}]", :as => :hidden, :input_html => { :value => tournament_group.user_for_index(i).try(:id), class: "member-id" } %>
+                <%= f.input "member_id[#{i}]", as: :hidden, input_html: { :value => tournament_group.user_for_index(i).try(:id), class: "member-id" } %>
               <% else %>
                 <span id="user-select-container">
                   <%= f.input "member_id[#{i}]", label: false, collection: @all_league_members, label_method: :complete_name, value_method: :id, tournament_group: tournament_group, selected: tournament_group.user_for_index(i).try(:id), include_blank: true, multiple: true, input_html: { class: 'chosen-select' } %>
@@ -149,7 +151,6 @@
       $("#team-select .chosen-container").css({"width": "200px"});
       $(".search-choice-close").remove();
 
-      //handle sorting
       $("tbody.connectedSortable").sortable({
         connectWith: ".connectedSortable",
         appendTo: "parent",
@@ -173,7 +174,7 @@
 
           move_group_output = $.ajax({
             type:     "PATCH",
-            url:      "/leagues/<%= @league.id %>/tournaments/<%= @tournament.id %>/tournament_days/<%= @tournament_day.id %>/move_group.json",
+            url: 			"<%= escape_javascript url_for(league_tournament_move_group_players_path(@league, @tournament, @tournament_day)) %>",
             data:     { group },
             datatype: "json",
             async: true

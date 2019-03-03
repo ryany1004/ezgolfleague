@@ -36,21 +36,22 @@ module ApplicationHelper
       end
     end
 
-    return user_is_admin_of_any
+    user_is_admin_of_any
   end
 
   def tournament_paid(tournament, user)
     if tournament.user_has_paid?(user)
-      return ""
+      ""
     else
-      return "(Unpaid)"
+      "(Unpaid)"
     end
   end
 
   def is_editable?(tournament)
     return true if tournament.league.try(:membership_for_user, current_user).try(:is_admin)
     return true if current_user.is_super_user?
-    return false
+    
+    false
   end
 
   def bootstrap_class_for(flash_type)
@@ -109,7 +110,7 @@ module ApplicationHelper
       names = "#{names}#{m.complete_name}<br/>"
     end
 
-    return names.html_safe
+    names.html_safe
   end
 
   def handicap_allowance_strokes_for_hole(handicap_allowance, course_hole)
@@ -121,7 +122,7 @@ module ApplicationHelper
       end
     end
 
-    return 0
+    0
   end
 
   def print_handicap_allowance_strokes_for_hole(handicap_allowance, course_hole)
@@ -141,14 +142,14 @@ module ApplicationHelper
       end
     end
 
-    return pops
+    pops
   end
 
   def tournament_class_for_stage(stage, stage_option)
     if stage == stage_option
-      return "class=active"
+      "class=active"
     else
-      return ""
+      ""
     end
   end
 
@@ -179,16 +180,16 @@ module ApplicationHelper
       end
     end
 
-    return names.html_safe
+    names.html_safe
   end
 
   def handicap_allowance_for_scorecard(scorecard)
     if scorecard.golf_outing.blank?
-      return []
+      []
     else
       allowance = scorecard.tournament_day.handicap_allowance(user: scorecard.golf_outing.user)
 
-      return allowance
+      allowance
     end
   end
 
@@ -196,26 +197,27 @@ module ApplicationHelper
     net_score = score.strokes - handicap_allowance_strokes_for_hole(handicap_allowance_for_scorecard(score.scorecard), score.course_hole)
 
     if net_score < 0
-      return 0
+      0
     else
-      return net_score
+      net_score
     end
   end
 
   def score_print_helper(score, print_mode)
     if print_mode == true and score == 0
-      return ""
+      ""
     else
-      return score
+      score
     end
   end
 
   def flight_or_group(tournament)
-    if tournament.league.allow_scoring_groups
+    if tournament.is_league_teams?
+      "Team"
+    elsif tournament.league.allow_scoring_groups
       "Group"
     else
       "Flight"
     end
   end
-
 end

@@ -31,7 +31,10 @@
   <% end %>
 
   <div class="form-actions">
-     <%= f.button :submit, "Save", class: 'btn btn-default' %>
+  	<% if @scoring_rule.payout_type == ScoringRulePayoutType::PREDETERMINED %>
+			<%= f.button :submit, "Save & Setup Points/Payouts", class: 'btn btn-default' %>
+		<% end %>
+		<%= f.button :submit, "Save & Create Another Game Type", class: 'btn btn-default' %>
+		<%= f.button :submit, "Save & Continue", class: 'btn btn-primary' %>
   </div>
 <% end %>
-

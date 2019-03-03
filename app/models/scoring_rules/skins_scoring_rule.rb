@@ -21,6 +21,29 @@ class SkinsScoringRule < ScoringRule
 		ScoringRulePayoutType::POT
 	end
 
+	def can_be_played?
+	  true
+	end
+
+	def can_be_finalized?
+		return false if !self.tournament_day.has_scores?
+
+		true
+	end
+
+	def finalization_blockers
+		blockers = []
+
+		blockers << "#{self.name}: This tournament day has no scores." if !self.tournament_day.has_scores?
+		blockers << "#{self.name}: There are no users for this game type." if self.users.count == 0
+
+		blockers
+	end
+
+	def results_description_column_name
+		"Holes"
+	end
+
 	def calculate_each_entry?
 		false
 	end

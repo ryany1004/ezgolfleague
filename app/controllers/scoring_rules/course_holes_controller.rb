@@ -21,11 +21,11 @@ module ScoringRules
 	  end
 
     def scoring_rule_params
-      params.require(:scoring_rule).permit(:scoring_rule_course_hole_ids => [])
+      params.require(:scoring_rule).permit(scoring_rule_course_hole_ids: [])
     end
 
     def update_scores_for_course_holes(tournament_day:)
-      eager_groups = TournamentGroup.includes(golf_outings: [{scorecard: :scores}]).where(tournament_day: tournament_day)
+      eager_groups = TournamentGroup.includes(golf_outings: [{ scorecard: :scores }]).where(tournament_day: tournament_day)
       scorecard_base_scoring_rule = tournament_day.scorecard_base_scoring_rule
 
       eager_groups.each do |group|
@@ -47,7 +47,7 @@ module ScoringRules
     end
 
     def tournament_day_params
-      params.require(:tournament_day).permit(scoring_rules_attributes: [:id, :course_hole_ids => []])
+      params.require(:tournament_day).permit(scoring_rules_attributes: [:id, course_hole_ids: []])
     end
 
     def fetch_tournament

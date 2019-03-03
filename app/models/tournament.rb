@@ -18,8 +18,11 @@ class Tournament < ApplicationRecord
 
   accepts_nested_attributes_for :tournament_days
 
+  attr_accessor :optional_game_types
   attr_accessor :another_member_id
   attr_accessor :skip_date_validation
+
+  around_destroy :recalculate_standings_for_destroy
 
   validates :name, presence: true
   validates :league, presence: true
@@ -68,6 +71,14 @@ class Tournament < ApplicationRecord
 
   paginates_per 20
 
+  def recalculate_standings_for_destroy
+    season = self.league_season
+
+    yield
+
+    RankLeagueSeasonJob.perform_later(season)
+  end
+
   def league_season
     return nil if !self.has_tournament_days?
 
@@ -78,6 +89,10 @@ class Tournament < ApplicationRecord
     end
 
     nil
+  end
+
+  def is_league_teams?
+    self.league_season.is_teams?
   end
 
   def season_name
@@ -119,15 +134,11 @@ class Tournament < ApplicationRecord
     self.notification_templates.where("tournament_notification_action = ?", "On Finalization")
   end
 
-  ##
-
   def notify_tournament_users(notification_string, extra_data)
     self.players.each do |u|
       u.send_mobile_notification(notification_string, { tournament_id: self.id })
     end
   end
-
-  ##
 
   def mandatory_dues_amount
     dues_amount = 0.0
@@ -214,6 +225,14 @@ class Tournament < ApplicationRecord
 
   def mandatory_scoring_rules
     self.tournament_days.map(&:mandatory_scoring_rules).flatten
+  end
+
+  def mandatory_individual_scoring_rules
+    self.tournament_days.map(&:mandatory_individual_scoring_rules).flatten
+  end
+
+  def mandatory_team_scoring_rules
+    self.tournament_days.map(&:mandatory_team_scoring_rules).flatten
   end
 
   def optional_scoring_rules
@@ -303,8 +322,7 @@ class Tournament < ApplicationRecord
 
     RankLeagueSeasonJob.perform_later(self.league_season)
 
-    #cache bust
-    self.league.active_season.touch unless self.league.active_season.blank?
+    self.league.active_season.touch unless self.league.active_season.blank? #cache bust
 
     self.send_finalize_event unless !should_email
   end
@@ -318,8 +336,6 @@ class Tournament < ApplicationRecord
 
     RecordEventJob.perform_later(email_addresses, "A tournament was finalized", tournament_info) unless email_addresses.blank?
   end
-
-  ##
 
   def is_past?
     return false if self.first_day.blank?
@@ -345,8 +361,6 @@ class Tournament < ApplicationRecord
     true
   end
 
-  ##
-
   def update_course_handicaps
     self.tournament_days.each do |day|
       day.tournament_groups.each do |group|
@@ -356,8 +370,6 @@ class Tournament < ApplicationRecord
       end
     end
   end
-
-  ##
 
   def user_has_paid?(user)
     tournament_balance = 0.0
@@ -373,10 +385,11 @@ class Tournament < ApplicationRecord
     end
   end
 
-  #date parsing
+  # date parsing
+  
   def signup_opens_at=(date)
-    begin
-      parsed = DateTime.strptime("#{date} #{Time.zone.now.formatted_offset}", JAVASCRIPT_DATETIME_PICKER_FORMAT)
+    begin      
+      parsed = EzglCalendar::CalendarUtils.datetime_for_picker_date(date)
       super parsed
     rescue
       write_attribute(:signup_opens_at, date)
@@ -385,10 +398,11 @@ class Tournament < ApplicationRecord
 
   def signup_closes_at=(date)
     begin
-      parsed = DateTime.strptime("#{date} #{Time.zone.now.formatted_offset}", JAVASCRIPT_DATETIME_PICKER_FORMAT)
+      parsed = EzglCalendar::CalendarUtils.datetime_for_picker_date(date)
       super parsed
     rescue
       write_attribute(:signup_closes_at, date)
     end
   end
+
 end

@@ -44,11 +44,11 @@ fbq('track', 'CompleteRegistration', {
           <div class="well">
             <p>Please provide some additional information about your league:</p>
 
-            <%= f.input :start_date, label: 'When Does Your Season Start?', :as => :date_picker %>
+            <%= f.input :start_date, label: 'When Does Your Season Start?', as: :date_picker %>
 
             <%= f.input :league_type, collection: ["Individual Play", "Team Play", "Other"] %>
 
-            <%= f.input :more_comments, as: :text, :input_html => {:cols => 5, :rows => 10 } %>
+            <%= f.input :more_comments, as: :text, input_html: {:cols => 5, :rows => 10 } %>
           </div>
 
           <div class="form-actions">

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_01_06_214451) do
+ActiveRecord::Schema.define(version: 2019_03_02_221530) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -227,7 +227,9 @@ ActiveRecord::Schema.define(version: 2019_01_06_214451) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "rank", default: 0
+    t.bigint "league_season_team_id"
     t.index ["league_season_ranking_group_id"], name: "index_league_season_ranking_group_id"
+    t.index ["league_season_team_id"], name: "index_league_season_rankings_on_league_season_team_id"
     t.index ["user_id"], name: "index_league_season_ranking_group_user_id"
   end
 
@@ -244,6 +246,37 @@ ActiveRecord::Schema.define(version: 2019_01_06_214451) do
     t.index ["league_season_scoring_group_id", "user_id"], name: "scoring_group_index"
   end
 
+  create_table "league_season_team_memberships", force: :cascade do |t|
+    t.bigint "league_season_team_id"
+    t.bigint "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["league_season_team_id"], name: "index_league_season_team_memberships_on_league_season_team_id"
+    t.index ["user_id"], name: "index_league_season_team_memberships_on_user_id"
+  end
+
+  create_table "league_season_team_tournament_day_matchups", force: :cascade do |t|
+    t.bigint "league_season_team_a_id"
+    t.bigint "league_season_team_b_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "tournament_day_id"
+    t.bigint "league_team_winner_id"
+    t.index ["league_season_team_a_id"], name: "league_season_team_a_id_index"
+    t.index ["league_season_team_a_id"], name: "league_season_team_b_id_index"
+    t.index ["league_team_winner_id"], name: "league_team_winner_id_index"
+    t.index ["tournament_day_id"], name: "tournament_day_index"
+  end
+
+  create_table "league_season_teams", force: :cascade do |t|
+    t.bigint "league_season_id"
+    t.string "name"
+    t.integer "rank", default: 0
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["league_season_id"], name: "index_league_season_teams_on_league_season_id"
+  end
+
   create_table "league_seasons", force: :cascade do |t|
     t.bigint "league_id"
     t.string "name"
@@ -252,6 +285,7 @@ ActiveRecord::Schema.define(version: 2019_01_06_214451) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.decimal "dues_amount", default: "0.0"
+    t.integer "season_type_raw", default: 0
     t.index ["league_id"], name: "index_league_seasons_on_league_id"
   end
 
@@ -360,8 +394,10 @@ ActiveRecord::Schema.define(version: 2019_01_06_214451) do
     t.bigint "scoring_rule_id"
     t.bigint "scoring_rule_course_hole_id"
     t.string "detail"
+    t.bigint "league_season_team_id"
     t.index ["deleted_at"], name: "index_payout_results_on_deleted_at"
     t.index ["flight_id"], name: "index_payout_results_on_flight_id"
+    t.index ["league_season_team_id"], name: "index_payout_results_on_league_season_team_id"
     t.index ["payout_id"], name: "index_payout_results_on_payout_id"
     t.index ["scoring_rule_id"], name: "index_payout_results_on_scoring_rule_id"
     t.index ["user_id"], name: "index_payout_results_on_user_id"
@@ -437,6 +473,7 @@ ActiveRecord::Schema.define(version: 2019_01_06_214451) do
     t.boolean "is_opt_in", default: false
     t.decimal "dues_amount", default: "0.0"
     t.integer "scoring_rule_course_holes_count", default: 0
+    t.boolean "primary_rule", default: false
     t.index ["tournament_day_id"], name: "index_scoring_rules_on_tournament_day_id"
     t.index ["type"], name: "index_scoring_rules_on_type"
   end
@@ -475,8 +512,10 @@ ActiveRecord::Schema.define(version: 2019_01_06_214451) do
     t.boolean "aggregated_result", default: false
     t.integer "sort_rank"
     t.bigint "scoring_rule_id"
+    t.bigint "league_season_team_id"
     t.index ["aggregated_result"], name: "index_tournament_day_results_on_aggregated_result"
     t.index ["flight_id"], name: "index_tournament_day_results_on_flight_id"
+    t.index ["league_season_team_id"], name: "index_tournament_day_results_on_league_season_team_id"
     t.index ["scoring_rule_id"], name: "index_tournament_day_results_on_scoring_rule_id"
     t.index ["sort_rank"], name: "index_tournament_day_results_on_sort_rank"
     t.index ["user_id"], name: "index_tournament_day_results_on_user_id"

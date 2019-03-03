@@ -1,0 +1,21 @@
+<div class="col-md-6">
+  <div class="panel panel-default panel-success">
+    <div class="panel-heading">
+      <h3 class="panel-title"><%= name %> Tournament Teams</h3>
+    </div>
+    <table class="table table-striped">
+    	<thead>
+    		<tr>
+    			<th>Team Matchups</th>
+    		</tr>
+    	</thead>
+    	<tbody>
+        <% teams.each do |team| %>
+        <tr>
+          <td><%= team[:name] %></td>
+        </tr>
+        <% end %>
+    	</tbody>
+    </table>
+  </div>
+</div>

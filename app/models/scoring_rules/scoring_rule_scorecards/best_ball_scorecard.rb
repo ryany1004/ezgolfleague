@@ -2,6 +2,7 @@ module ScoringRuleScorecards
   class BestBallScorecard < ScoringRuleScorecards::BaseScorecard
     attr_accessor :should_use_handicap
     attr_accessor :handicap_indices
+    attr_accessor :daily_team
     attr_accessor :course_hole_number_suppression_list
 
     def initialize

@@ -17,8 +17,9 @@ class TournamentDay < ApplicationRecord
   belongs_to :course, inverse_of: :tournament_days
   has_many :tournament_groups, -> { order(:tee_time_at) }, inverse_of: :tournament_day, dependent: :destroy
   has_many :flights, -> { order(:flight_number) }, inverse_of: :tournament_day, dependent: :destroy
-  has_many :scoring_rules, -> { order(:type) }, inverse_of: :tournament_day, dependent: :destroy
-  
+  has_many :scoring_rules, -> { order(primary_rule: :desc) }, inverse_of: :tournament_day, dependent: :destroy
+  has_many :league_season_team_tournament_day_matchups, -> { order(:created_at) }, inverse_of: :tournament_day, dependent: :destroy
+
   has_and_belongs_to_many :legacy_course_holes, -> { order(:hole_number) }, class_name: "CourseHole", join_table: "course_holes_tournament_days" # TODO: REMOVE AFTER MIGRATION
 
   accepts_nested_attributes_for :scoring_rules
@@ -26,6 +27,7 @@ class TournamentDay < ApplicationRecord
   attr_accessor :skip_date_validation
 
   after_create :create_default_flight, if: :is_first_day?
+  after_create :create_league_season_team_matchups
 
   validates :course, presence: true
   validates :tournament_at, presence: true
@@ -78,16 +80,19 @@ class TournamentDay < ApplicationRecord
   end
 
   def pretty_day(add_space = false)
-    return "Day 1" if self.tournament.tournament_days.count == 1
+    if self.tournament.tournament_days.count == 1
+    	day_string = "Day 1"
+    else
+	    day_index = 0
 
-    day_index = 0
+	    self.tournament.tournament_days.each_with_index do |d, i|
+	      day_index = i if d == self
+	    end
 
-    self.tournament.tournament_days.each_with_index do |d, i|
-      day_index = i if d == self
+	    day_string = "Day #{day_index + 1}"
     end
 
-    day_string = "Day #{day_index + 1}"
-    day_string = day_string + " " if add_space == true
+    day_string = day_string + " " if add_space
 
     day_string
   end
@@ -191,12 +196,71 @@ class TournamentDay < ApplicationRecord
     end
   end
 
+  def create_league_season_team_matchups
+    if self.tournament.league_season.is_teams?
+      number_of_teams = self.tournament.league_season.league_season_teams.size
+      number_of_matchups = (number_of_teams.to_f / 2.0).ceil #round up
+
+      number_of_matchups.times.each_with_index do |item, i|
+        LeagueSeasonTeamTournamentDayMatchup.create(tournament_day: self)
+      end
+    end
+  end
+
+  def tournament_group_with_open_slots(required_slots)
+    self.tournament_groups.each do |group|
+      open_slots = group.max_number_of_players - group.golf_outings.count
+
+      if open_slots >= required_slots
+        return group
+      else
+        next
+      end
+    end
+  end
+
+  def add_league_season_team(league_season_team, matchup, slot_id)
+    if slot_id == "0"
+      matchup.team_a = league_season_team
+    elsif slot_id == "1"
+      matchup.team_b = league_season_team
+    end
+
+    matchup.save
+
+    group = self.tournament_group_with_open_slots(league_season_team.users.size)
+    raise "No groups available" if group.blank?
+
+    league_season_team.users.each { |user| self.add_player_to_group(tournament_group: group, user: user) }
+  end
+
+  def remove_league_season_team(matchup, league_season_team)
+    matchup.team_a = nil if league_season_team == matchup.team_a
+    matchup.team_b = nil if league_season_team == matchup.team_b
+    matchup.winning_team = nil
+    matchup.save
+
+    league_season_team.users.each do |user|
+      group = self.tournament_group_for_player(user)
+
+      self.remove_player_from_group(tournament_group: group, user: user)
+    end
+  end
+
   def scorecard_base_scoring_rule
-    @scorecard_base_scoring_rule ||= self.mandatory_scoring_rules.reorder('scoring_rule_course_holes_count DESC').limit(1).first
+    self.scoring_rules.where(primary_rule: true).first
   end
 
   def mandatory_scoring_rules
     self.scoring_rules.where(is_opt_in: false).order(:type)
+  end
+
+  def mandatory_individual_scoring_rules
+    self.mandatory_scoring_rules.select { |r| r.team_type != ScoringRuleTeamType::LEAGUE }
+  end
+
+  def mandatory_team_scoring_rules
+    self.mandatory_scoring_rules.select { |r| r.team_type == ScoringRuleTeamType::LEAGUE }
   end
 
   def optional_scoring_rules
@@ -204,7 +268,7 @@ class TournamentDay < ApplicationRecord
   end
 
   def optional_scoring_rules_with_dues
-    self.optional_scoring_rules.map { |r| r.dues_amount > 0 }
+    self.optional_scoring_rules.select { |r| r.dues_amount > 0 }
   end
 
   def score_all_rules
@@ -212,6 +276,10 @@ class TournamentDay < ApplicationRecord
       rule.score
       rule.rank
     end
+  end
+
+  def rank_day
+    RankFlightsJob.perform_later(self)
   end
 
   def assign_payouts_all_rules
@@ -229,7 +297,7 @@ class TournamentDay < ApplicationRecord
   #date parsing
   def tournament_at=(date)
     begin
-      parsed = DateTime.strptime("#{date} #{Time.zone.now.formatted_offset}", JAVASCRIPT_DATETIME_PICKER_FORMAT)
+      parsed = EzglCalendar::CalendarUtils.datetime_for_picker_date(date)
       super parsed
     rescue
       write_attribute(:tournament_at, date)

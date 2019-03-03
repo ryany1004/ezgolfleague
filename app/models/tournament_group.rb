@@ -9,7 +9,7 @@ class TournamentGroup < ApplicationRecord
   paginates_per 50
 
   validates :tee_time_at, presence: true
-  validates :max_number_of_players, :inclusion => 0..10
+  validates :max_number_of_players, inclusion: 0..10
 
   after_create :create_daily_teams
 
@@ -137,7 +137,7 @@ class TournamentGroup < ApplicationRecord
   #date parsing
   def tee_time_at=(date)
     begin
-      parsed = DateTime.strptime("#{date} #{Time.zone.now.formatted_offset}", JAVASCRIPT_DATETIME_PICKER_FORMAT)
+      parsed = EzglCalendar::CalendarUtils.datetime_for_picker_date(date)
       super parsed
     rescue
       write_attribute(:tee_time_at, date)

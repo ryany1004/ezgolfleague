@@ -6,6 +6,10 @@ class ScrambleScoringRule < StrokePlayScoringRule
 		"Scramble"
 	end
 
+	def description
+		"Each player hits a tee shot on each hole, but everyone plays from the spot of the best shot."
+	end
+
 	def team_type
 		ScoringRuleTeamType::DAILY
 	end

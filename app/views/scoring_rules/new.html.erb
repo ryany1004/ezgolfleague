@@ -18,7 +18,14 @@
 
   <h3>Basic Details</h3>
   <div class="well">
-    <%= f.input :selected_class_name, collection: ScoringRuleOption.scoring_rule_options, label: 'Game Type', label_method: :name, value_method: :class_name, include_blank: false %>
+    <%= f.input :selected_class_name, collection: ScoringRuleOption.scoring_rule_options(show_team_rules: @tournament.league_season.is_teams?), label: 'Game Type', label_method: :name, value_method: :class_name, include_blank: false, input_html: {onchange: "showScoringRuleDescription(this)"} %>
+  </div>
+  
+  <div class="well">
+    <% ScoringRuleOption.scoring_rule_options(show_team_rules: @tournament.league_season.is_teams?).each do |option| %>
+      <% rule_instance = option.class_name.constantize.new %>
+      <p><strong><%= option.name %></strong> - <%= rule_instance.description %></p>
+    <% end %>
   </div>
 
   <div class="form-actions">

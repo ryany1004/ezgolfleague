@@ -93,7 +93,7 @@
 
   <% if @user_account.new_record? == false && @editing_current_user != true -%>
     <% @user_account.league_memberships.each do |league_membership| %>
-      <h3><%= league_membership.league.name %> League Settings</h3>
+      <h3><%= league_membership.league&.name %> League Settings</h3>
       <div class="well">
         <%= f.simple_fields_for :league_memberships, league_membership do |l| %>
           <%= l.input :is_admin, label: "League Admin?" %>

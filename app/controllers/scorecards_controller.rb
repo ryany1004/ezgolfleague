@@ -40,7 +40,7 @@ class ScorecardsController < BaseController
       score_id = params[:scorecard][:scores_attributes][key]["id"]
       strokes = params[:scorecard][:scores_attributes][key]["strokes"]
 
-      scores_to_update[score_id] = {:strokes => strokes}
+      scores_to_update[score_id] = { strokes: strokes }
     end
 
     logger.debug { "Sending: #{scores_to_update}" }

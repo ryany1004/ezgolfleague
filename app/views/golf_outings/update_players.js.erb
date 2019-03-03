@@ -2,13 +2,13 @@ selectedGolfers = [];
 
 <% @players_signed_up.each do |player| %>
   <% @outing_index.each do |o| %>
-    <% if o[:id] == player.id %>
-      disqualifyButton = "<a role='button' class='btn btn-info btn-xs' rel='nofollow' data-method='path' href='/leagues/<%= @league.id %>/tournaments/<%= @tournament.id %>/tournament_days/<%= @tournament_day.id %>/disqualify_signup?user_id=<%= player.id %>'><%= o[:dqText] %></a>"
-      removeButton = "<a data-confirm='Are you sure you want to remove this registration? This will delete all scorecard information for this golfer for this tournament.' role='button' class='btn btn-danger btn-xs' rel='nofollow' data-method='delete' href='/leagues/<%= @league.id %>/tournaments/<%= @tournament.id %>/tournament_days/<%= @tournament_day.id %>/delete_signup?group_id=<%= @tournament_group.id %>&user_id=<%= player.id %>'>Remove</a>"
+    <% if o[:id] == player.id %>    
+      disqualifyButton = "<%= escape_javascript link_to(o[:dqText], league_tournament_disqualify_day_players_path(@league, @tournament, @tournament_day, user_id: player.id), method: :patch, role: 'button', class: 'btn btn-info btn-xs') %>"
+      removeButton = "<%= escape_javascript link_to('Remove', league_tournament_delete_day_players_path(@league, @tournament, @tournament_day, group_id: @tournament_group.id, user_id: player.id), method: :delete, role: 'button', class: 'btn btn-danger btn-xs', data: { confirm: 'Are you sure you want to remove this registration? This will delete all scorecard information for this golfer for this tournament.' }) %>";
     <% end %>
   <% end %>
 
-  selectedGolfers.push({name: "<%= player.complete_name %>", id: "<%= player.id %>", disqualifyButton: disqualifyButton, removeButton: removeButton, teamName: "<%= @tournament_group.tournament_day.daily_team_for_player(player).try(:name) %>", tournamentGroupID: <%= @tournament_group.id %>});
+  selectedGolfers.push({name: "<%= player.complete_name %>", id: "<%= player.to_param %>", disqualifyButton: disqualifyButton, removeButton: removeButton, teamName: "<%= @tournament_group.tournament_day.daily_team_for_player(player).try(:name) %>", tournamentGroupID: <%= @tournament_group.to_param %>});
 <% end %>
 
 var elementsUpdated = removeSelectedGolfersFromDropdowns(selectedGolfers);

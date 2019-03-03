@@ -22,7 +22,10 @@ class User < ApplicationRecord
   has_many :mobile_devices, dependent: :destroy
   has_many :scoring_rule_participations, inverse_of: :user
   has_many :scoring_rules, through: :scoring_rule_participations
-  belongs_to :current_league, class_name: "League"
+  has_many :league_season_team_memberships, inverse_of: :user
+  has_many :league_season_teams, through: :league_season_team_memberships
+  has_many :league_season_rankings, dependent: :destroy
+  belongs_to :current_league, class_name: "League", optional: true
   has_many :child_users, ->{ order 'last_name' }, class_name: "User", foreign_key: "parent_id", inverse_of: :parent_user
   belongs_to :parent_user, class_name: "User", foreign_key: "parent_id", inverse_of: :child_users, optional: true
   has_and_belongs_to_many :flights, inverse_of: :users
@@ -45,8 +48,8 @@ class User < ApplicationRecord
 
   paginates_per 50
 
-  has_attached_file :avatar, :styles => { :medium => "300x300#", :thumb => "100x100#" }, :default_url => "/images/:style/missing.png"
-  validates_attachment_content_type :avatar, :content_type => /\Aimage\/.*\Z/
+  has_attached_file :avatar, styles: { medium: "300x300#", thumb: "100x100#" }, default_url: "/images/:style/missing.png"
+  validates_attachment_content_type :avatar, content_type: /\Aimage\/.*\Z/
 
   #this is to work around a Devise bug
   def after_password_reset; end
@@ -58,8 +61,6 @@ class User < ApplicationRecord
   def clear_current_league
     self.current_league = nil if !self.leagues.include?(self.current_league)
   end
-
-  ##
 
   def complete_name
     "#{self.first_name} #{self.last_name}"

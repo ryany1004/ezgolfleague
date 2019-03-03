@@ -8,16 +8,16 @@ class Api::V1::SessionsController < Api::V1::ApiBaseController
     password = request.headers["ezgl-password"]
 
     if email.blank? or password.blank?
-      render json: {:message => "Error"}, status: :precondition_failed, content_type: 'application/json'
+      render json: { message: "Error"}, status: :precondition_failed, content_type: 'application/json'
     else
       user = User.where(email: email).first
 
       if user.blank? || !user.valid_password?(password)
-        render json: {:message => "#{email}"}, status: :unauthorized, content_type: 'application/json'
+        render json: { message: "#{email}"}, status: :unauthorized, content_type: 'application/json'
       else
         self.assign_user_session_token(user) if user.session_token.blank?
 
-        render json: {:user_token => user.session_token, :user_id => user.id.to_s}, content_type: 'application/json'
+        render json: { user_token: user.session_token, user_id: user.id.to_s}, content_type: 'application/json'
       end
     end
   end
@@ -30,7 +30,7 @@ class Api::V1::SessionsController < Api::V1::ApiBaseController
     end
 
     respond_to do |format|
-      format.json { render json: {:message => "Success"}, status: :ok, content_type: 'application/json' }
+      format.json { render json: { message: "Success"}, status: :ok, content_type: 'application/json' }
     end
   end
 

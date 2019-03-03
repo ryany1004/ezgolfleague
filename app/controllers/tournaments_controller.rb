@@ -96,7 +96,7 @@ class TournamentsController < BaseController
 
   def rescore_players
     @tournament.tournament_days.each do |d|
-      d.score_users
+      d.score_all_rules
     end
 
     redirect_to league_tournaments_path(current_user.selected_league), flash: { success: "The tournament's scores have been re-calculated." }
@@ -109,7 +109,7 @@ class TournamentsController < BaseController
   end
 
   def tournament_params
-    params.require(:tournament).permit(:name, :league_id, :allow_credit_card_payment, :signup_opens_at, :signup_closes_at, :max_players, :show_players_tee_times, :auto_schedule_for_multi_day, tournament_days_attributes: [:id, :course_hole_ids => []])
+    params.require(:tournament).permit(:name, :league_id, :allow_credit_card_payment, :signup_opens_at, :signup_closes_at, :max_players, :show_players_tee_times, :auto_schedule_for_multi_day, tournament_days_attributes: [:id, course_hole_ids: []])
   end
 
   def fetch_tournament

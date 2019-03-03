@@ -1,6 +1,12 @@
+module LeagueSeasonType
+  INDIVIDUAL = 0
+  TEAM = 1
+end
+
 class LeagueSeason < ApplicationRecord
   belongs_to :league, touch: true, inverse_of: :league_seasons
 
+  has_many :league_season_teams, dependent: :destroy
   has_many :payments, inverse_of: :league_season
   has_many :subscription_credits, -> { order 'created_at DESC' }
   has_many :league_season_scoring_groups, -> { order 'name' }, inverse_of: :league_season, dependent: :destroy
@@ -53,6 +59,18 @@ class LeagueSeason < ApplicationRecord
     Tournament.tournaments_happening_at_some_point(self.starts_at, self.ends_at, [self.league], true)
   end
 
+  def season_type
+    if self.season_type_raw == 1
+      LeagueSeasonType::TEAM
+    else
+      LeagueSeasonType::INDIVIDUAL
+    end
+  end
+
+  def is_teams?
+    self.season_type_raw == LeagueSeasonType::TEAM
+  end
+
   def paid_active_golfers
     sum_paid = 0
 
@@ -79,19 +97,20 @@ class LeagueSeason < ApplicationRecord
     users_not_in_groups
   end
 
-  # date parsing
-  def starts_at=(date)
-    parsed = DateTime.strptime("#{date} 12:01 AM #{Time.zone.now.formatted_offset}", JAVASCRIPT_DATETIME_PICKER_FORMAT)
-    super parsed
-  rescue
-    write_attribute(:starts_at, date)
-  end
+  def users_not_in_teams
+    users_not_in_t = []
 
-  def ends_at=(date)
-    parsed = DateTime.strptime("#{date} 11:59 PM #{Time.zone.now.formatted_offset}", JAVASCRIPT_DATETIME_PICKER_FORMAT)
-    super parsed
-  rescue
-    write_attribute(:ends_at, date)
+    self.league.users.each do |u|
+      user_is_in_any_team = false
+
+      self.league_season_teams.each do |g|
+        user_is_in_any_team = true if g.users.include? u
+      end
+
+      users_not_in_t << u unless user_is_in_any_team
+    end
+
+    users_not_in_t
   end
 
   def complete_name
@@ -110,5 +129,20 @@ class LeagueSeason < ApplicationRecord
         false
       end
     end
+  end
+
+  # date parsing
+  def starts_at=(date)
+    parsed = EzglCalendar::CalendarUtils.datetime_for_picker_date("#{date} 12:01 AM")
+    super parsed
+  rescue
+    write_attribute(:starts_at, date)
+  end
+
+  def ends_at=(date)
+    parsed = EzglCalendar::CalendarUtils.datetime_for_picker_date("#{date} 11:59 PM")
+    super parsed
+  rescue
+    write_attribute(:ends_at, date)
   end
 end

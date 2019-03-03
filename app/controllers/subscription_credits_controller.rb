@@ -6,7 +6,7 @@ class SubscriptionCreditsController < BaseController
   end
 
   def information
-    render :layout => 'golfer'
+    render layout: 'golfer'
   end
 
   def update_active
@@ -62,7 +62,7 @@ class SubscriptionCreditsController < BaseController
     else
       Rails.logger.info { "Active Delta #{active_delta}. Active After Update: #{active_after_update}" }
 
-      redirect_to current_league_subscription_credits_path(@league), :flash => { :success => "The memberships were successfully updated. Your account was not charged." }
+      redirect_to current_league_subscription_credits_path(@league), flash: { success: "The memberships were successfully updated. Your account was not charged." }
     end
   end
 
@@ -138,8 +138,8 @@ class SubscriptionCreditsController < BaseController
 
     if league.stripe_token.blank?
       stripe_customer = Stripe::Customer.create(
-        :description => "#{current_user.email} for league #{league.name}",
-        :source => token
+        description: "#{current_user.email} for league #{league.name}",
+        source: token
       )
 
       league.stripe_token = stripe_customer.id
@@ -147,7 +147,7 @@ class SubscriptionCreditsController < BaseController
     else
       stripe_customer = Stripe::Customer.retrieve(league.stripe_token)
 
-      stripe_customer.sources.create({:source => token})
+      stripe_customer.sources.create({ source: token })
     end
 
     unless stripe_customer.sources.data.blank?
@@ -171,10 +171,10 @@ class SubscriptionCreditsController < BaseController
     unless stripe_customer.blank?
       begin
         charge = Stripe::Charge.create(
-          :amount => payment_amount * 100,
-          :currency => "usd",
-          :customer => stripe_customer,
-          :description => description
+          amount: payment_amount * 100,
+          currency: "usd",
+          customer: stripe_customer,
+          description: description
         )
 
         charge

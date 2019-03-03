@@ -91,4 +91,8 @@ module Play::TournamentsHelper
     end
   end
 
+  def league_season_result_is_winner?(result, matchup)
+    result.league_season_team == matchup.winning_team
+  end
+
 end

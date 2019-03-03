@@ -10,7 +10,7 @@ module HandicapComputer
 
     def handicap_allowance(user:)
       golf_outing = self.tournament_day.golf_outing_for_player(user)
-      return nil if golf_outing.blank? #did not play
+      return nil if golf_outing.blank? # did not play
 
       course_handicap = self.course_handicap_for_game_type(golf_outing)
 

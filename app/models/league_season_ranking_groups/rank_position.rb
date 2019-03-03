@@ -30,8 +30,8 @@ module LeagueSeasonRankingGroups
 			end
 		end
 
-		def common_rank(group = nil, limit_to_players = nil)
-			self.league_season.tournaments.each do |t|
+		def create_individual_season_rankings(group, limit_to_players = nil)
+			self.league_season.tournaments.includes(:tournament_days).each do |t|
 				players = t.players
 				players = players.select { |item| limit_to_players.include? item } unless limit_to_players.blank?
 
@@ -39,9 +39,9 @@ module LeagueSeasonRankingGroups
 	      	ranking = group.league_season_rankings.where(user: p).first
 	      	ranking = LeagueSeasonRanking.create(user: p, league_season_ranking_group: group) if ranking.blank?
 
-	        t.tournament_days.includes(:scoring_rules).each do |day|
+	        t.tournament_days.includes(scoring_rules: [tournament_day_results: :user]).each do |day|
 	        	day.scoring_rules.includes(:tournament_day_results).each do |rule|
-		          rule.tournament_day_results.where(user: p).limit(1).each do |result|
+		          rule.individual_tournament_day_results.where(user: p).limit(1).each do |result|
 		            ranking.points += result.points unless result.points.blank?
 		            ranking.payouts += result.payouts unless result.payouts.blank?
 		          end
@@ -50,6 +50,43 @@ module LeagueSeasonRankingGroups
 
 	        ranking.save
 	      end
+			end
+		end
+
+		def create_team_season_rankings(group)
+			self.league_season.league_season_teams.each do |team|
+      	ranking = group.league_season_rankings.where(league_season_team: team).first
+      	ranking = LeagueSeasonRanking.create(league_season_team: team, league_season_ranking_group: group) if ranking.blank?
+
+				self.league_season.tournaments.includes(:tournament_days).each do |t|
+					t.tournament_days.includes(scoring_rules: [tournament_day_results: :league_season_team]).each do |day|
+						day.scoring_rules.includes(:tournament_day_results).each do |rule|
+							# add the team results
+							rule.aggregate_tournament_day_results.where(league_season_team: team).limit(1).each do |result|
+		            ranking.points += result.points unless result.points.blank?
+		            ranking.payouts += result.payouts unless result.payouts.blank?
+							end
+
+							# this is as team season so also add the individual results, if any
+							team.users.each do |p|
+			          rule.individual_tournament_day_results.where(user: p).limit(1).each do |result|
+			            ranking.points += result.points unless result.points.blank?
+			            ranking.payouts += result.payouts unless result.payouts.blank?
+			          end
+							end
+						end
+					end
+				end
+
+				ranking.save
+			end
+		end
+
+		def common_rank(group, limit_to_players = nil)
+			if self.league_season.is_teams?
+				self.create_team_season_rankings(group)
+			else
+				self.create_individual_season_rankings(group, limit_to_players)
 			end
 
 			#sort

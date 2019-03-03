@@ -13,7 +13,7 @@ module HandicapComputer
         end
       end
 
-      #apply percentage
+      # apply percentage
       percentage = @scoring_rule.current_handicap_percentage.to_f
       if percentage > 0.0
         percentage = percentage / 100.0

@@ -21,6 +21,18 @@ class League < ApplicationRecord
   attr_encrypted :stripe_test_publishable_key, key: ENCRYPYTED_ATTRIBUTES_KEY, algorithm: 'aes-256-cbc', mode: :single_iv_and_salt, insecure_mode: true
   attr_encrypted :stripe_production_publishable_key, key: ENCRYPYTED_ATTRIBUTES_KEY, algorithm: 'aes-256-cbc', mode: :single_iv_and_salt, insecure_mode: true
 
+  def self.clean_for_dev
+    League.all.each do |l|
+      l.encrypted_stripe_test_secret_key = nil
+      l.encrypted_stripe_production_secret_key = nil
+      l.encrypted_stripe_test_publishable_key = nil
+      l.encrypted_stripe_production_publishable_key = nil
+      l.stripe_token = nil
+
+      l.save
+    end
+  end
+
   def stripe_publishable_key
     if self.stripe_test_mode
       self.stripe_test_publishable_key
@@ -47,21 +59,6 @@ class League < ApplicationRecord
     end
   end
 
-  def self.clean_for_dev
-    League.all.each do |l|
-      l.encrypted_stripe_test_secret_key = nil
-      l.encrypted_stripe_production_secret_key = nil
-      l.encrypted_stripe_test_publishable_key = nil
-      l.encrypted_stripe_production_publishable_key = nil
-      l.stripe_token = nil
-      l.location = "anywhere"
-
-      l.save!
-    end
-  end
-
-  ##
-
   def user_is_admin(user)
     membership = self.league_memberships.where(user: user).first
     if membership.blank? || !membership.is_admin
@@ -82,8 +79,6 @@ class League < ApplicationRecord
     return users
   end
 
-  ##
-
   def notify_super_users
     title = "New League Created: #{self.name}"
 
@@ -98,8 +93,6 @@ class League < ApplicationRecord
       NotificationMailer.notification_message(u, 'support@ezgolfleague.com', title, body).deliver_later
     end
   end
-
-  ##
 
   def create_default_league_season
     if self.active_season.blank?
@@ -231,10 +224,10 @@ class League < ApplicationRecord
     end
   end
 
-  #date parsing
+  # date parsing
   def start_date=(date)
     begin
-      parsed = Date.strptime("#{date}", JAVASCRIPT_DATE_PICKER_FORMAT)
+      parsed = EzglCalendar::CalendarUtils.date_for_picker_date(date)
       super parsed
     rescue
       write_attribute(:start_date, date)

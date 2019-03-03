@@ -1,7 +1,11 @@
 <tr>
-  <td><strong><%= ranking.rank %></strong></td>
-  <% if current_user.id == ranking.user.id -%>
-  <td><strong><%= ranking.name %></strong></td>
+  <td>
+  	<strong><%= ranking.rank %></strong>
+  </td>
+  <% if ranking.user.present? && current_user.id == ranking.user.id -%>
+  	<td>
+  		<strong><%= ranking.name %></strong>
+  	</td>
   <% else -%>
   <td><%= ranking.name %></td>
   <% end -%>

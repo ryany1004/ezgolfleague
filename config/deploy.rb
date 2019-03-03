@@ -7,8 +7,31 @@ set :repo_url, "git@github.com:dopp10/ezgolfleague.git"
 set :stages, ["staging", "production"]
 set :default_stage, "production"
 
-set :resque_environment_task, true
-set :resque_log_file, "log/resque.log"
+set :sidekiq_processes, 2
+set :sidekiq_options_per_process, ["--queue high --queue ezgolfleague_production_mailers --queue rollbar", "--queue high --queue default"]
+set :init_system, :systemd
+set :service_unit_name, "sidekiq.service"
+
+Rake::Task["sidekiq:stop"].clear_actions
+Rake::Task["sidekiq:start"].clear_actions
+Rake::Task["sidekiq:restart"].clear_actions
+namespace :sidekiq do
+  task :stop do
+    on roles(:app) do
+      execute :sudo, :systemctl, :stop, :sidekiq
+    end
+  end
+  task :start do
+    on roles(:app) do
+      execute :sudo, :systemctl, :start, :sidekiq
+    end
+  end
+  task :restart do
+    on roles(:app) do
+      execute :sudo, :systemctl, :restart, :sidekiq
+    end
+  end
+end
 
 namespace :deploy do
   desc 'Restart application'
@@ -43,7 +66,6 @@ namespace :deploy do
 
   after :publishing, :restart
   after :publishing, :fix_permissions
-  after :finished, 'resque:restart'
   after :finished, :clear_memcached
 
   set :rollbar_token, '75d79ff8ca4643809de5616d7c6c2265'

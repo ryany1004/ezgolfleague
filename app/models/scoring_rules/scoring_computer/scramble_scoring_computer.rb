@@ -14,7 +14,7 @@ module ScoringComputer
           end
 
           # make sure the results get updated also
-          @scoring_rule.tournament_day_results.where(user: player).destroy_all
+          @scoring_rule.individual_tournament_day_results.where(user: player).destroy_all
         end
       end
     end

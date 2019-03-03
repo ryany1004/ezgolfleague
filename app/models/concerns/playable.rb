@@ -57,6 +57,17 @@ module Playable
     players
   end
 
+  def teams_for_day(day)
+    teams = []
+
+    day.league_season_team_tournament_day_matchups.each do |matchup|
+      teams << matchup.team_a if matchup.team_a.present?
+      teams << matchup.team_b if matchup.team_b.present?
+    end
+
+    teams
+  end
+
   def number_of_players
     return 0 if self.first_day.blank?
 

@@ -45,6 +45,7 @@
 
               <% p.scorecard_score_cell_partials.each do |partial| %>
                 </br><%= render partial: partial[:partial], locals: {scoring_rule: partial[:rule], score: score, scorecards: p.all_scorecards} %>
+              <% end -%>
             </td>
           <% end -%>
         <% end -%>

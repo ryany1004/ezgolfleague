@@ -67,12 +67,28 @@ class ScoringRule < ApplicationRecord
 		raise "A Base Class Has No Scorecard API"
 	end
 
+	def individual_tournament_day_results
+		self.tournament_day_results.where(aggregated_result: false)
+	end
+
+	def aggregate_tournament_day_results
+		self.tournament_day_results.where(aggregated_result: true)
+	end
+
 	def ranked_results
 		#base class does nothing
 	end
 
 	def team_type
 		ScoringRuleTeamType::NONE
+	end
+
+	def teams_are_player_vs_player?
+		false # some team rules aggregate scores and some are individual vs individual on other team
+	end
+
+	def results_description_column_name
+		nil
 	end
 
 	def users_per_daily_team
@@ -95,7 +111,7 @@ class ScoringRule < ApplicationRecord
 		ScoringRulePayoutAssignmentType::CALCULATED
 	end
 
-	#Some scoring rules, like former contests, apply to the whole field, while some, like former game types, apply by flight.
+	# Some scoring rules, like former contests, apply to the whole field, while some, like former game types, apply by flight.
 	def flight_based_payouts?
 		true
 	end
@@ -251,13 +267,13 @@ class ScoringRuleOption
 		o
 	end
 
-	def self.scoring_rule_options
-		[
+	def self.scoring_rule_options(show_team_rules: false)
+		individual = [
 			ScoringRuleOption.option(name: 'Individual Stroke Play', class_name: 'StrokePlayScoringRule'),
 			ScoringRuleOption.option(name: 'Individual Modified Stableford', class_name: 'StablefordScoringRule'),
+			ScoringRuleOption.option(name: 'Match Play', class_name: 'MatchPlayScoringRule'),
 			ScoringRuleOption.option(name: 'Two Man Best Ball', class_name: 'TwoManBestBallScoringRule'),
 			ScoringRuleOption.option(name: 'Two Man Scramble', class_name: 'TwoManScrambleScoringRule'),
-			ScoringRuleOption.option(name: 'Four Man Scramble', class_name: 'FourManScrambleScoringRule'),
 			ScoringRuleOption.option(name: 'Four Man Scramble', class_name: 'FourManScrambleScoringRule'),
 			ScoringRuleOption.option(name: 'Gross Skins', class_name: 'GrossSkinsScoringRule'),
 			ScoringRuleOption.option(name: 'Net Skins', class_name: 'NetSkinsScoringRule'),
@@ -266,5 +282,17 @@ class ScoringRuleOption
 			ScoringRuleOption.option(name: 'Gross Low', class_name: 'GrossLowScoringRule'),
 			ScoringRuleOption.option(name: 'Custom', class_name: 'ManualScoringRule'),
 		]
+
+		team  = [
+			ScoringRuleOption.option(name: 'Team Stroke Play (Sum of Individual Scores)', class_name: 'TeamStrokePlayIndividualSumScoringRule'),
+			ScoringRuleOption.option(name: 'Team Stroke Play (vs. Opposing Team Member)', class_name: 'TeamStrokePlayVsScoringRule'),
+			ScoringRuleOption.option(name: 'Team Match Play', class_name: 'TeamMatchPlayScoringRule'),
+		]
+
+		if show_team_rules
+			individual + team
+		else
+			individual
+		end
 	end
 end

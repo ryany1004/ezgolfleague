@@ -26,10 +26,36 @@ module ScoringComputer
 					)
 				end
 			end
+
+			self.combine_results(@scoring_rule.reload.payout_results)
 		end
 
 		def user_score_key(user:, hole:)
 			"#{hole.id}-#{user.id}"
+		end
+
+		def combine_results(results)
+			results.each do |r|
+				other_results = results.where(user: r.user).where("id != ?", r.id)
+				other_holes = results.where(user: r.user).pluck(:detail).compact.uniq
+
+				other_results.each do |o|
+					r.amount += o.amount if o.amount.present?
+					r.points += o.points if o.points.present?
+
+					o.points = 0
+					o.amount = 0
+					o.detail = nil
+					o.save
+				end
+				
+				other_holes = other_holes.sort_by { |x| x[/\d+/].to_i }
+
+				r.detail = other_holes.join(", ")
+				r.save
+			end
+
+			results.where(detail: nil).destroy_all
 		end
 
 		def value_per_skin(skins:)
@@ -75,6 +101,7 @@ module ScoringComputer
 
 		def users_with_skins(use_gross_scores:)
 			winners = []
+
 			hole_scores = self.user_scores(use_gross_scores: use_gross_scores)
 
 			@scoring_rule.course_holes.each do |hole|
@@ -109,7 +136,7 @@ module ScoringComputer
 					end
 				end
 
-				winners << { hole: hole, winners: users_with_skins } unless users_with_skins.blank?
+				winners << { hole: hole, winners: users_with_skins } if users_with_skins.present?
 			end
 
 			winners

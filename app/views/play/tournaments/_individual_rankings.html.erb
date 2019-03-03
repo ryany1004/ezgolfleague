@@ -1,0 +1,54 @@
+<div class="col-md-6">
+  <div class="panel panel-default panel-success">
+    <div class="panel-heading">
+      <h3 class="panel-title"><%= @tournament_presenter.day_name %> Tournament Rankings</h3>
+    </div>
+    <% if @tournament_presenter.day_has_scores? %>
+      <table class="table table-striped">
+      	<thead>
+      		<tr>
+            <th><%= @tournament_presenter.flight_or_group_name %></th>
+      			<th>Rank</th>
+            <th>Player</th>
+            <th>Net</th>
+            <th>Gross</th>
+            <th>Points</th>
+            <th>&nbsp;</th>
+      		</tr>
+      	</thead>
+        <tbody>
+          <% cache(@tournament_presenter.day_cache_key("individual-tournament-rankings")) do %>
+            <% @tournament_presenter.flights_with_rankings.each_with_index do |flight, x| %>
+              <% flight.tournament_day_results.each_with_index do |result, i| -%>
+              <tr>
+                <td><strong><%= result.flight.display_name %> <!-- <%= flight.id %> --></strong></td>
+                <td><strong><%= result.rank %></strong></td>
+                <td><%= result.name %> <!-- <%= result.id %> --></td>
+                <td><%= result.net_score %></td>
+                <td><%= result.gross_score %></td>
+                <td><%= result.points.to_i %></td>
+                <td><%= link_to "Scorecard", result.scorecard_url %></td>
+              </tr>
+              <% end -%>
+              <% if x < @tournament_presenter.flights_with_rankings.count - 1 -%>
+              <tr>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+              </tr>
+              <% end -%>
+            <% end -%>
+          <% end -%>
+        </tbody>
+      </table>
+    <% else %>
+      <div class="panel-body">
+        Rankings will be available once the tournament is underway.
+      </div>
+    <% end %>
+  </div>
+</div>

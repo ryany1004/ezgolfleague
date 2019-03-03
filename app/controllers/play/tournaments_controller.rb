@@ -37,8 +37,6 @@ class Play::TournamentsController < Play::BaseController
     @page_title = "#{@tournament.name} Leaderboard"
   end
 
-  ##
-
   def confirm
     @tournament = self.view_tournament_from_user_for_tournament_id(params[:tournament_id])
     @tournament.tournament_days.each do |td|
@@ -52,8 +50,6 @@ class Play::TournamentsController < Play::BaseController
 
     redirect_to play_dashboard_index_path, flash: { success: "You are confirmed for the tournament." }
   end
-
-  ##
 
   def signup
     if @tournament.show_players_tee_times == true
@@ -70,34 +66,30 @@ class Play::TournamentsController < Play::BaseController
       tournament_group = @tournament.first_day.tournament_groups.find(params[:group_id])
 
       paying_now = false
-      paying_now = true if !params[:pay_now].blank?
+      paying_now = true if params[:pay_now].present?
 
       @tournament.first_day.add_player_to_group(tournament_group: tournament_group, user: current_user, paying_with_credit_card: paying_now, registered_by: current_user.complete_name)
 
-      #other associated signup
-      if !params[:tournament].blank? && !params[:tournament][:another_member_id].blank?
+      # other associated signup
+      if params[:tournament].present? && params[:tournament][:another_member_id].present?
         other_user = User.find(params[:tournament][:another_member_id])
 
         @tournament.first_day.add_player_to_group(tournament_group: tournament_group, user: other_user, paying_with_credit_card: false, confirmed: false, registered_by: current_user.complete_name)
       end
 
-      # TODO: update for game types
+      # optional game types
+      if params[:tournament].present? && params[:tournament][:optional_game_types].present? #TODO: Fix this total hack
+        params[:tournament][:optional_game_types].each do |game_type_id|
+        	next if game_type_id.blank?
 
-      # #contests
-      # contest_ids = []
-      # if !params[:tournament].blank? && !params[:tournament][:contests_to_enter].blank? #&& params[:tournament][:contests_to_enter][0] != "" #TODO: Fix this total hack
-      #   params[:tournament][:contests_to_enter].each do |contest_id|
-      #     unless contest_id.blank?
-      #       contest = Contest.find(contest_id)
+	        scoring_rule = ScoringRule.find(game_type_id)
+	        scoring_rule.users << current_user
+        end
+      end
 
-      #       contest.add_user(current_user)
-      #     end
-      #   end
-      # end
-
-      #payment
+      # payment
       if paying_now == true
-        redirect_to new_play_payment_path(:payment_type => "tournament_dues", :tournament_id => @tournament.id)
+        redirect_to new_play_payment_path(payment_type: "tournament_dues", tournament_id: @tournament.id)
       else
         TournamentMailer.tournament_player_paying_later(current_user, @tournament).deliver_later
 
@@ -110,7 +102,7 @@ class Play::TournamentsController < Play::BaseController
     @tournament.tournament_days.each do |day|
       day.tournament_groups.each do |tg|
         tg.golf_outings.each do |outing|
-          day.remove_player_from_group(tg, current_user) if outing.user == current_user
+          day.remove_player_from_group(tournament_group: tg, user: current_user) if outing.user == current_user
         end
       end
     end

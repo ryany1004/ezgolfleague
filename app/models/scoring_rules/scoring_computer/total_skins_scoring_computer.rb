@@ -25,6 +25,8 @@ module ScoringComputer
 						points: 0)
 				end
 			end
+
+			self.combine_results(@scoring_rule.reload.payout_results)
 		end
 
 		def merge_winners(gross_winners:, net_winners:)

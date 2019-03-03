@@ -17,6 +17,27 @@ module FindPlayers
     nil
   end
 
+  def league_season_team_for_player(user)
+  	self.league_season_team_tournament_day_matchups.each do |m|
+  		return m.team_a if m.team_a.users.include? user
+  		return m.team_b if m.team_b.users.include? user
+  	end
+
+  	nil
+  end
+
+  def league_season_team_matchup_for_player(user)
+  	self.league_season_team_tournament_day_matchups.each do |m|
+  		m.teams.each do |t|
+  			t.users.each do |u|
+  				return m if u == user
+  			end
+  		end
+  	end
+
+  	nil
+  end
+
   def tournament_group_for_player(user)
     self.tournament_groups.includes(golf_outings: [:user]).each do |group|
       group.golf_outings.each do |outing|

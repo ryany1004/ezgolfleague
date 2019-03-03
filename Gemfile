@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-ruby '2.3.4'
+ruby '2.5.3'
 
 gem 'rails', '5.2.2'
 gem 'sass-rails', '~> 5.0'
@@ -26,10 +26,7 @@ gem 'nokogiri'
 gem 'attr_encrypted', '~> 3.0.0'
 gem 'stripe', git: 'https://github.com/stripe/stripe-ruby'
 gem 'redis-rails'
-gem 'resque'
-gem 'resque-scheduler'
-gem 'resque-retry'
-gem 'resque-web', require: 'resque_web'
+gem 'sidekiq'
 gem 'daemons'
 gem 'apnotic'
 gem 'geocoder'
@@ -50,6 +47,7 @@ group :development do
   gem 'web-console'
   gem 'listen'
   gem 'rubocop'
+  gem 'capistrano-sidekiq', github: 'seuros/capistrano-sidekiq'
 end
 
 group :development, :test do

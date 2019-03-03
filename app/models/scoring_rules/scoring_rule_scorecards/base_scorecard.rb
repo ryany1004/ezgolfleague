@@ -2,7 +2,6 @@ module ScoringRuleScorecards
   class BaseScorecard
 
     attr_accessor :user
-    attr_accessor :daily_team
     attr_accessor :scoring_rule
     attr_accessor :scores
 
@@ -17,11 +16,7 @@ module ScoringRuleScorecards
     end
 
     def tournament_day
-      unless self.daily_team.blank?
-        return self.daily_team.tournament_day
-      else
-        return self.scoring_rule.tournament_day
-      end
+      self.scoring_rule.tournament_day
     end
 
     def golf_outing

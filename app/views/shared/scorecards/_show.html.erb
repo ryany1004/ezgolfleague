@@ -11,7 +11,7 @@
 	<tbody>
 		<tr>
       <td><%= tournament_day.flight_for_player(scorecard.golf_outing.user)&.flight_number %></td>
-      <td><%= scorecard.scores.map {|score| score.strokes }.sum %></td>
+      <td><%= scorecard.gross_score %></td>
       <td><%= scorecard.net_score %></td>
       <td><%= tournament_day.scorecard_base_scoring_rule.course_holes.map {|hole| hole.par }.sum %></td>
       <td><%= scorecard.golf_outing.course_handicap %></td>
