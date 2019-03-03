@@ -42,7 +42,7 @@ class User < ApplicationRecord
   before_update :clear_current_league
   before_update :reset_session, if: :encrypted_password_changed?
 
-  after_create :send_to_drip
+  after_save :send_to_drip
 
   accepts_nested_attributes_for :league_memberships
 
@@ -100,6 +100,16 @@ class User < ApplicationRecord
     tags << "iOS User" if self.has_ios_devices?
     tags << "Android User" if self.has_android_devices?
 
+  	has_team_leagues = false
+  	has_individual_leagues = false
+  	self.leagues_admin.each do |l|
+  		has_team_leagues = true if l.league_type == "Team Play"
+  		has_individual_leagues = true if l.league_type == "Individual Play"
+  	end
+
+  	tags << "Team League Admin" if has_team_leagues
+  	tags << "Individual League Admin" if has_individual_leagues
+
     self.leagues.each do |l|
       tags << l.name
     end
@@ -108,19 +118,7 @@ class User < ApplicationRecord
   end
 
   def send_to_drip
-    options = {
-      tags: self.drip_tags,
-      custom_fields: {
-        first_name: self.first_name,
-        last_name: self.last_name,
-      }
-    }
-
-    response = DRIP_CLIENT.create_or_update_subscriber(self.email, options)
-
-    puts response
-
-    response
+  	SendUserToDripJob.perform_later(self)
   end
 
   def delete_from_drip
