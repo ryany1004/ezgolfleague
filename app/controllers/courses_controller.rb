@@ -7,11 +7,23 @@ class CoursesController < BaseController
 
     @courses = Course.order(:name).page params[:page]
 
-    unless params[:search].blank?
+    if params[:search].present?
       search_string = "%#{params[:search].downcase}%"
 
       @courses = @courses.where("lower(name) LIKE ? OR lower(city) LIKE ?", search_string, search_string)
     end
+  end
+
+  def list
+  	@courses = Course.all.order(:name)
+
+    if params[:search].present?
+      search_string = "%#{params[:search].downcase}%"
+
+      @courses = @courses.where("lower(name) LIKE ? OR lower(city) LIKE ?", search_string, search_string)
+    end
+
+  	render json: @courses.to_json
   end
 
   def new

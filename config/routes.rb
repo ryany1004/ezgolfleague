@@ -17,7 +17,7 @@ Rails.application.routes.draw do
     mount Sidekiq::Web => '/jobs'
   end
 
-  #this is for playing tournaments
+  # this is for playing tournaments
   namespace :play do
     resources :payments, only: [:index, :new, :create] do
       get 'thank_you', on: :collection
@@ -68,7 +68,7 @@ Rails.application.routes.draw do
     end
   end
 
-  #API
+  # API
   namespace "api" do
     namespace "v1" do
       get 'current_day_leaderboard' => 'scorecards#current_day_leaderboard'
@@ -216,6 +216,8 @@ Rails.application.routes.draw do
   end
 
   resources :courses do
+  	get 'list', on: :collection
+
     resources :course_tee_boxes
 
     resources :course_holes do

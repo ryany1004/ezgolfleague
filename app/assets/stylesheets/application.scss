@@ -18,6 +18,9 @@
 @import "bootstrap";
 @import "bootstrap-datetimepicker";
 
+@import 'selectize';
+@import 'selectize.bootstrap3';
+
 @import "chosen";
 
 #printable-scorecard-table table, #printable-scorecard-table td, #printable-scorecard-table tr, #printable-scorecard-table th {

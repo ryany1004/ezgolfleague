@@ -401,6 +401,7 @@ GEM
     sdoc (0.4.2)
       json (~> 1.7, >= 1.7.7)
       rdoc (~> 4.0)
+    selectize-rails (0.12.6)
     sidekiq (5.2.5)
       connection_pool (~> 2.2, >= 2.2.2)
       rack (>= 1.5.0)
@@ -504,6 +505,7 @@ DEPENDENCIES
   sass-rails (~> 5.0)
   scout_apm
   sdoc (~> 0.4.0)
+  selectize-rails
   sidekiq
   simple_form
   spring

@@ -21,6 +21,8 @@
 //= require bootstrap-datetimepicker
 //= require pickers
 
+//= require selectize
+
 //= require chosen-jquery
 //= require chosen_scaffold
 

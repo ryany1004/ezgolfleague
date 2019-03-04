@@ -16,7 +16,35 @@
         <p><em>A tournament day's course cannot be changed after players have signed up - remove the players or create a new tournament day to select a different course.</em></p>
       <% else %>
         <p><strong>Select a course:</strong></p>
-        <%= f.input :course_id, collection: @courses, label: false, label_method: :complete_name, input_html: { class: 'chosen-select' } %>
+
+        <%= f.input :course_id, collection: [], label: false, label_method: :complete_name %>
+
+        <script>
+					$('#tournament_day_course_id').selectize({
+					    valueField: 'id',
+					    labelField: 'name',
+					    searchField: 'name',
+					    create: false,
+							render: {
+							     option: function (item, escape) {
+							         return '<div>' + escape(item.name) + ' - ' + escape(item.city) + ', ' + escape(item.us_state) + '</div>';
+							     }
+							},
+					    load: function(query, callback) {
+					        if (!query.length) return callback();
+					        $.ajax({
+					            url: '<%= url_for list_courses_path %>?search=' + encodeURIComponent(query),
+					            type: 'GET',
+					            error: function() {
+					            	callback();
+					            },
+					            success: function(res) {
+					            	callback(res);
+					            }
+					        });
+					    }
+					});
+        </script>
 
         <p>Don't see your course? We're adding courses all the time. <a href='mailto:support@ezgolfleague.com?subject=New%20Course'>Drop us a line</a> to let us know what you're missing.</p>
       <% end %>

@@ -41,6 +41,7 @@ gem 'acts_as_paranoid', '~> 0.6.0'
 gem 'bootsnap', require: false
 gem 'scout_apm'
 gem 'drip-ruby', require: 'drip'
+gem 'selectize-rails'
 
 group :development do
   gem 'web-console'
