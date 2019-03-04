@@ -293,10 +293,15 @@ class ScoringRuleOption
 			ScoringRuleOption.option(name: 'Team Match Play', class_name: 'TeamMatchPlayScoringRule'),
 		]
 
+		# if show_team_rules
+		# 	individual + team
+		# else
+		# 	individual
+		# end
 		if show_team_rules
-			individual + team
+			[['Individual Game Types', individual], ['Team Game Types', team]]
 		else
-			individual
+			[['Individual Game Types', individual]]
 		end
 	end
 end
