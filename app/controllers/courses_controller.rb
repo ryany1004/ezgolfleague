@@ -10,7 +10,7 @@ class CoursesController < BaseController
     if params[:search].present?
       search_string = "%#{params[:search].downcase}%"
 
-      @courses = @courses.where("lower(name) LIKE ? OR lower(city) LIKE ?", search_string, search_string)
+      @courses = @courses.where("lower(name) LIKE ? OR lower(city) LIKE ? OR lower(us_state) LIKE ?", search_string, search_string, search_string)
     end
   end
 
@@ -20,7 +20,7 @@ class CoursesController < BaseController
     if params[:search].present?
       search_string = "%#{params[:search].downcase}%"
 
-      @courses = @courses.where("lower(name) LIKE ? OR lower(city) LIKE ?", search_string, search_string)
+      @courses = @courses.where("lower(name) LIKE ? OR lower(city) LIKE ? OR lower(us_state) LIKE ?", search_string, search_string, search_string)
     end
 
   	render json: @courses.to_json
