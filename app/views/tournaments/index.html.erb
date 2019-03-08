@@ -17,20 +17,20 @@
 </script>
 
 <div class="row">
-  <% if current_user.selected_league.alert_missing_next_season? || !current_user.selected_league.exempt_from_subscription %>
+  <% if current_user.selected_league&.alert_missing_next_season? || !current_user.selected_league&.exempt_from_subscription %>
     <div class="col-md-12">
       <div class="panel panel-default">
         <div class="panel-heading">
           <h3 class="panel-title">Important Information</h3>
         </div>
         <div class="panel-body">
-          <% if current_user.selected_league.alert_missing_next_season? %>
+          <% if current_user.selected_league&.alert_missing_next_season? %>
             <p>Please be sure to create your next season so that your golfers can pay dues and you can create your tournaments.</p>
             <p><%= link_to "Manage Your Seasons", league_league_seasons_path(current_user.selected_league), class: 'btn btn-primary' %></p>
             <br/>
           <% end %>
 
-          <% if !current_user.selected_league.exempt_from_subscription && current_user.is_any_league_admin? %>
+          <% if !current_user.selected_league&.exempt_from_subscription && current_user.is_any_league_admin? %>
             <% if !current_user.selected_league.has_active_subscription? %>
               <p>You currently have <%= current_user.selected_league.free_tournaments_remaining %> free tournaments remaining.</p>
             <% end %>

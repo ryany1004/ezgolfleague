@@ -46,8 +46,6 @@ class ScoringRulesController < BaseController
 
   	if params[:commit] == "Save & Continue"
   		redirect_to league_tournament_tournament_day_tournament_groups_path(@tournament.league, @tournament, @tournament_day)
-  	elsif params[:commit] == "Save & Setup Points/Payouts"
-  		redirect_to league_tournament_tournament_day_scoring_rule_payouts_path(@tournament.league, @tournament, @tournament_day, @scoring_rule)
   	else
   		redirect_to league_tournament_tournament_day_scoring_rules_path(@tournament.league, @tournament, @tournament_day)
   	end
