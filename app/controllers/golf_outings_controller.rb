@@ -17,9 +17,9 @@ class GolfOutingsController < BaseController
     @outing_index = []
     @players_signed_up.each do |p|
       golf_outing = @tournament_day.golf_outing_for_player(p)
-      disqualificationText = golf_outing.disqualification_description
+      disqualification_text = golf_outing&.disqualification_description
 
-      @outing_index << {id: p.id, dqText: disqualificationText}
+      @outing_index << { id: p.id, dqText: disqualification_text }
     end
   end
 
