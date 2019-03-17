@@ -134,7 +134,7 @@ class TournamentGroup < ApplicationRecord
     end
   end
 
-  #date parsing
+  # date parsing
   def tee_time_at=(date)
     begin
       parsed = EzglCalendar::CalendarUtils.datetime_for_picker_date(date)

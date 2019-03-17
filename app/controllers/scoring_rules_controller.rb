@@ -60,7 +60,7 @@ class ScoringRulesController < BaseController
   private
 
   def scoring_rule_params
-    params.require(:scoring_rule).permit(:dues_amount, :is_opt_in)
+    params.require(:scoring_rule).permit(:custom_name, :dues_amount, :is_opt_in)
   end
   
   def scoring_rule_class_for_name(name)

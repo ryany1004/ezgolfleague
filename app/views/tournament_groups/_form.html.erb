@@ -10,7 +10,7 @@
 
   <h3>Basic Details</h3>
   <div class="well">
-	  <%= f.input :tee_time_at, label: 'Date & Time', as: :datetime_picker, required: true %>
+	  <%= f.input :tee_time_at, label: 'Date & Time', as: :datetime_picker, required: true, input_html: { value: @tournament_group.tee_time_at.to_s(:date_and_time) } %>
 
     <%= f.input :max_number_of_players, label: "Max Players for Tee Time" %>
   </div>

@@ -2,7 +2,15 @@ class ManualScoringRule < ScoringRule
 	include ::GenericScorecardSupport
 	
 	def name
-		"Custom"
+		if self.custom_name.present?
+			self.custom_name
+		else
+			"Custom"
+		end
+	end
+
+	def allows_custom_name?
+		true
 	end
 
 	def description

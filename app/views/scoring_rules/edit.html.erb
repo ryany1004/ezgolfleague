@@ -17,6 +17,10 @@
   <legend><%= @tournament_day.pretty_day(true) %>Game Type Details</legend>
 
   <div class="well">
+  	<% if @scoring_rule.allows_custom_name? %>
+  		<%= f.input :custom_name, label: 'Custom Game Type Name (i.e. Closest to the Pin)' %>
+  	<% end %>
+
     <%= f.input :dues_amount, label: 'Dues Amount ($)' %>
 
     <%= f.input :is_opt_in, label: 'Game type is optional?', as: :boolean %>
