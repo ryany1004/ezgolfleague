@@ -15,15 +15,15 @@
         <p><strong><%= @tournament_day.course.name %></strong></p>
         <p><em>A tournament day's course cannot be changed after players have signed up - remove the players or create a new tournament day to select a different course.</em></p>
       <% else %>
-        <p><strong>Select a course:</strong></p>
-
-        <%= f.input :course_id, collection: [], label: false, label_method: :complete_name %>
+        <%= f.input :course_id, collection: [] %>
 
         <script>
-					$('#tournament_day_course_id').selectize({
+					var $course_selector = $('#tournament_day_course_id').selectize({
 					    valueField: 'id',
 					    labelField: 'name',
 					    searchField: 'name',
+					    maxItems: '1',
+					    placeholder: 'Start typing to search/filter for a course by name or location',
 					    create: false,
 							render: {
 							     option: function (item, escape) {

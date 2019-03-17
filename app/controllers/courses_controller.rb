@@ -15,7 +15,7 @@ class CoursesController < BaseController
   end
 
   def list
-  	@courses = Course.all.order(:name)
+  	@courses = Course.all.order(:name).limit(100)
 
     if params[:search].present?
       search_string = "%#{params[:search].downcase}%"
