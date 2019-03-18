@@ -45,7 +45,7 @@ class SubscriptionCreditsController < BaseController
     active_delta = active_after_update - active_before_update
 
     if active_delta > 0
-      per_golfer_cost = SubscriptionCredit.cost_per_golfer
+      per_golfer_cost = SubscriptionCredit.cost_per_golfer(league: @league)
       payment_amount = per_golfer_cost * active_delta
 
       charge = charge_customer(@league, payment_amount, "Add active golfers for #{current_user.email} for league #{@league.name}.")
@@ -128,7 +128,7 @@ class SubscriptionCreditsController < BaseController
   end
 
   def calc_payment_amount(number_of_golfers)
-    number_of_golfers * SubscriptionCredit.cost_per_golfer
+    number_of_golfers * SubscriptionCredit.cost_per_golfer(league: @league)
   end
 
   def create_or_update_stripe_customer(league, token)
