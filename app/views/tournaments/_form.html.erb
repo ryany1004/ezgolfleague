@@ -24,7 +24,7 @@
     <div class="well">
       <%= f.input :signup_opens_at, label: 'Signup Opening Date', as: :datetime_picker, required: true, input_html: { value: @tournament.signup_opens_at.to_s(:date_and_time) } %>
 
-      <%= f.input :signup_closes_at, label: 'Signup Closing Date', as: :datetime_picker, required: true, input_html: { value: @tournament.signup_closes_at.to_s(:date_and_time) } %>
+      <%= f.input :signup_closes_at, label: 'Signup Closing Date', as: :datetime_picker, required: true, input_html: { value: @tournament.signup_closes_at&.to_s(:date_and_time) } %>
 
       <%= f.input :max_players, label: 'Maximum Number of Players', required: true %>
 
