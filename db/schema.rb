@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_03_17_234542) do
+ActiveRecord::Schema.define(version: 2019_03_18_225819) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -320,6 +320,7 @@ ActiveRecord::Schema.define(version: 2019_03_17_234542) do
     t.text "more_comments"
     t.boolean "allow_scoring_groups", default: false
     t.boolean "calculate_handicaps_from_past_rounds", default: false
+    t.decimal "override_golfer_price"
   end
 
   create_table "mobile_devices", force: :cascade do |t|

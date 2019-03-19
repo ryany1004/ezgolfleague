@@ -9,19 +9,16 @@ class LeagueSeasonTeamsController < BaseController
     @page_title = "Season Teams"
   end
 
-  def new
-    @league_season_team = LeagueSeasonTeam.new
-  end
+  # def new
+  #   @league_season_team = LeagueSeasonTeam.new
+  # end
 
   def create
-    @league_season_team = LeagueSeasonTeam.new(team_params)
+    @league_season_team = LeagueSeasonTeam.new(name: "New Team")
     @league_season_team.league_season = @league_season
+    @league_season_team.save
 
-    if @league_season_team.save
-      redirect_to league_league_season_league_season_teams_path(@league, @league_season), flash: { success: "The team was successfully created." }
-    else
-      render :new
-    end
+    redirect_to edit_league_league_season_league_season_team_path(@league, @league_season, @league_season_team), flash: { success: "The team was successfully created." }
   end
 
   def edit
