@@ -90,8 +90,12 @@ class TournamentsController < BaseController
     @tournament.tournament_days.each do |day|
       day.touch
 
-      day.tournament_day_results.each do |result|
-        result.touch
+      day.scoring_rules.each do |rule|
+      	rule.touch
+
+      	rule.tournament_day_results.each do |result|
+      		result.touch
+      	end
       end
     end
 
