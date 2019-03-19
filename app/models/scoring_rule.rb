@@ -294,7 +294,7 @@ class ScoringRuleOption
 		team  = [
 			ScoringRuleOption.option(name: 'Team Stroke Play (Sum of Individual Scores)', class_name: 'TeamStrokePlayIndividualSumScoringRule'),
 			ScoringRuleOption.option(name: 'Team Stroke Play (vs. Opposing Team Member)', class_name: 'TeamStrokePlayVsScoringRule'),
-			ScoringRuleOption.option(name: 'Team Match Play', class_name: 'TeamMatchPlayScoringRule'),
+			ScoringRuleOption.option(name: 'Team Match Play (vs. Opposing Team Member)', class_name: 'TeamMatchPlayVsScoringRule'),
 		]
 
 		# if show_team_rules

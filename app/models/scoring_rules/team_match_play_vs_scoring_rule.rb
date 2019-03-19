@@ -1,6 +1,6 @@
-class TeamMatchPlayScoringRule < MatchPlayScoringRule
+class TeamMatchPlayVsScoringRule < MatchPlayScoringRule
 	def name
-		"Team Match Play"
+		"Team Match Play (vs. Opposing Player)"
 	end
 
 	def description
@@ -20,7 +20,7 @@ class TeamMatchPlayScoringRule < MatchPlayScoringRule
 	end
 
 	def scoring_computer
-		ScoringComputer::TeamMatchPlayScoringComputer.new(self)
+		ScoringComputer::TeamMatchPlayVsScoringComputer.new(self)
 	end
 
   def opponent_for_user(user)
