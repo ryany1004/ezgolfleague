@@ -15,7 +15,7 @@
     <%= f.input :body, label: 'Body Text (Email Only)' %>
 
     <% if @notification_template.tournament_notification_action.blank? %>
-      <%= f.input :deliver_at, label: 'Delivery Date', required: true, as: :datetime_picker %>
+      <%= f.input :deliver_at, label: 'Delivery Date', required: true, as: :datetime_picker, input_html: { value: @notification_template.deliver_at.to_s(:date_and_time) } %>
     <% else %>
       <p>This notification will be sent: <%= @notification_template.tournament_notification_action %></p>
     <% end %>
