@@ -41,6 +41,10 @@ class ManualScoringRule < ScoringRule
 		true
 	end
 
+	def can_be_finalized?
+		true
+	end
+
 	# TODO: Move these to the base class somehow? Seems lame to have to define as nil if they are simply not supported
 	def setup_partial
 		nil
