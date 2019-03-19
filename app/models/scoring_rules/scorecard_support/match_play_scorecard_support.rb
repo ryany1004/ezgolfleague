@@ -52,6 +52,23 @@ module MatchPlayScorecardSupport
 	    end
     end
 
+    # add the other people from the group
+    group = self.tournament_day.tournament_group_for_player(user)
+    group&.golf_outings&.each do |outing|
+    	card = self.tournament_day.primary_scorecard_for_user(outing.user)
+     	if !self.scorecards_includes_scorecard?(scorecards: other_scorecards, scorecard: card)
+    		other_scorecards << card
+    	end
+    end
+
     other_scorecards
+	end
+
+	def scorecards_includes_scorecard?(scorecards:, scorecard:)
+		scorecards.each do |s|
+			return true if s.user == scorecard.user
+		end
+
+		false
 	end
 end
