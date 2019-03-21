@@ -166,7 +166,11 @@
         </table>
         <% else -%>
           <div class="panel-body">
-            No contests setup.
+          	<% if @tournament_presenter.finalized? %>
+          		No contests setup.
+          	<% else %>
+          		Contest information will be available after the tournament has been finalized.
+          	<% end %>
           </div>
         <% end -%>
       <% end -%>
