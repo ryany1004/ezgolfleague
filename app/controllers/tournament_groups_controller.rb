@@ -34,7 +34,7 @@ class TournamentGroupsController < BaseController
       if params[:commit] == "Save & Continue"
         redirect_to league_tournament_tournament_day_flights_path(@tournament.league, @tournament, @tournament_day), flash: { success: "The tee time was successfully created." }
       else
-        redirect_to new_league_tournament_tournament_group_path(@tournament.league, @tournament, tournament_day: @tournament_day), flash: { success: "The tee time was successfully created." }
+        redirect_to new_league_tournament_tournament_day_tournament_group_path(@tournament.league, @tournament, @tournament_day), flash: { success: "The tee time was successfully created." }
       end
     else
       render :new
@@ -43,7 +43,7 @@ class TournamentGroupsController < BaseController
 
   def update
     if @tournament_group.update(tournament_group_params)
-      redirect_to league_tournament_tournament_groups_path(@tournament.league, @tournament, tournament_day: @tournament_day), flash: { success: "The tee time was successfully updated." }
+      redirect_to league_tournament_tournament_day_tournament_groups_path(@tournament.league, @tournament, @tournament_day), flash: { success: "The tee time was successfully updated." }
     else
       render :edit
     end
