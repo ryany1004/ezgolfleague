@@ -13,7 +13,6 @@ class Tournament < ApplicationRecord
 
   belongs_to :league, inverse_of: :tournaments
   has_many :tournament_days, -> { order(:tournament_at) }, inverse_of: :tournament, dependent: :destroy
-  has_many :payments, inverse_of: :tournament #TODO: REMOVE AFTER MIGRATION
   has_many :notification_templates, dependent: :destroy
 
   accepts_nested_attributes_for :tournament_days
@@ -171,7 +170,6 @@ class Tournament < ApplicationRecord
     end
   end
 
-  #def total_for_user_with_contest_fees(user, include_credit_card_fees = true) #TODO REMOVE
   def total_for_user_with_optional_fees(user:, include_credit_card_fees: true)
     dues_amount = self.mandatory_dues_amount
 
@@ -188,7 +186,6 @@ class Tournament < ApplicationRecord
     total
   end
 
-  # def cost_breakdown_for_user(user, include_unpaid_contests = true, include_credit_card_fees = true) #TODO REMOVE
   def cost_breakdown_for_user(user:, include_unpaid_optional_rules: true, include_credit_card_fees: true)
     dues_total = self.mandatory_dues_amount
 

@@ -10,49 +10,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_03_19_224216) do
+ActiveRecord::Schema.define(version: 2019_03_22_152038) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
   enable_extension "plpgsql"
-
-  create_table "contest_holes", force: :cascade do |t|
-    t.integer "contest_id"
-    t.bigint "course_hole_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["contest_id"], name: "index_contest_holes_on_contest_id"
-    t.index ["course_hole_id"], name: "index_contest_holes_on_course_hole_id"
-  end
-
-  create_table "contest_results", force: :cascade do |t|
-    t.bigint "contest_id"
-    t.bigint "contest_hole_id"
-    t.bigint "winner_id"
-    t.string "result_value"
-    t.decimal "payout_amount"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.integer "points", default: 0
-    t.index ["contest_hole_id"], name: "index_contest_results_on_contest_hole_id"
-    t.index ["contest_id"], name: "index_contest_results_on_contest_id"
-    t.index ["winner_id"], name: "index_contest_results_on_winner_id"
-  end
-
-  create_table "contests", force: :cascade do |t|
-    t.string "name"
-    t.integer "contest_type"
-    t.bigint "overall_winner_contest_result_id"
-    t.decimal "overall_winner_payout_amount"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.bigint "tournament_day_id"
-    t.decimal "dues_amount", default: "0.0"
-    t.integer "overall_winner_points", default: 0
-    t.boolean "is_opt_in", default: false
-    t.index ["overall_winner_contest_result_id"], name: "index_contests_on_overall_winner_contest_result_id"
-    t.index ["tournament_day_id"], name: "index_contests_on_tournament_day_id"
-  end
 
   create_table "contests_users", id: false, force: :cascade do |t|
     t.bigint "contest_id"
