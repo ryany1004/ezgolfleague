@@ -1,4 +1,4 @@
-$(document).on('ready page:change', function() {
+$(document).on('turbolinks:load', function() {
   $('.datetimepicker').datetimepicker({
     // put here your custom picker options, that should be applied for all pickers
 
