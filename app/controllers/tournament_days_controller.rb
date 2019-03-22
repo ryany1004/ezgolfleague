@@ -34,6 +34,7 @@ class TournamentDaysController < BaseController
   end
 
   def edit
+  	@selected_course = [@tournament_day.course]
   end
 
   def update
@@ -79,6 +80,7 @@ class TournamentDaysController < BaseController
 
   def initialize_form
     @courses = Course.all.order(:name)
+    @selected_course = []
   end
 
 end

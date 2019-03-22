@@ -15,7 +15,7 @@
         <p><strong><%= @tournament_day.course.name %></strong></p>
         <p><em>A tournament day's course cannot be changed after players have signed up - remove the players or create a new tournament day to select a different course.</em></p>
       <% else %>
-        <%= f.input :course_id, collection: [] %>
+        <%= f.input :course_id, collection: @selected_course %>
 
         <script>
 					var $course_selector = $('#tournament_day_course_id').selectize({
