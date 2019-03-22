@@ -249,7 +249,9 @@ class TournamentDay < ApplicationRecord
   end
 
   def scorecard_base_scoring_rule
-    self.scoring_rules.where(primary_rule: true).first
+  	@scorecard_base_scoring_rule ||= self.mandatory_scoring_rules.reorder('scoring_rule_course_holes_count DESC').limit(1).first
+  	#TODO: Flip after migration
+    #self.scoring_rules.where(primary_rule: true).first
   end
 
   def mandatory_scoring_rules

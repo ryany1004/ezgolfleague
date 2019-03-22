@@ -476,6 +476,7 @@ ActiveRecord::Schema.define(version: 2019_03_19_224216) do
     t.integer "scoring_rule_course_holes_count", default: 0
     t.boolean "primary_rule", default: false
     t.string "custom_name"
+    t.index ["primary_rule"], name: "index_scoring_rules_on_primary_rule"
     t.index ["tournament_day_id"], name: "index_scoring_rules_on_tournament_day_id"
     t.index ["type"], name: "index_scoring_rules_on_type"
   end
