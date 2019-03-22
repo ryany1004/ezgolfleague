@@ -374,8 +374,10 @@ class Tournament < ApplicationRecord
   def user_has_paid?(user)
     tournament_balance = 0.0
 
-    self.payments.where(user: user).each do |p|
-      tournament_balance = tournament_balance + p.payment_amount if p.payment_amount > 0 #add the payments
+    self.scoring_rules.each do |rule|
+	    rule.payments.where(user: user).each do |p|
+	      tournament_balance = tournament_balance + p.payment_amount if p.payment_amount > 0 #add the payments
+	    end
     end
 
     if tournament_balance > 0 && tournament_balance >= self.dues_for_user(user)
