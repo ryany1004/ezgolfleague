@@ -147,7 +147,11 @@ class SubscriptionCreditsController < BaseController
     else
       stripe_customer = Stripe::Customer.retrieve(league.stripe_token)
 
-      stripe_customer.sources.create({ source: token })
+      card = stripe_customer.sources.create({:source => token})
+      card.save
+
+      stripe_customer.default_source = card.id
+      stripe_customer.save
     end
 
     unless stripe_customer.sources.data.blank?

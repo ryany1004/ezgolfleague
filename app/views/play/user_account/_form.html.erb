@@ -21,7 +21,12 @@
 
   <h3>GHIN Number</h3>
   <div class="well">
-    <%= f.input :ghin_number, label: 'GHIN System Number' %>
+		<p>We offer several options for handicapping: pulling from GHIN, automatic based on past performance or manual handicap index. You can also override the handicap index with a manual course handicap - you can enter that below.</p>
+
+		<%= f.input :ghin_number, :label => 'GHIN System Number' %>
+
+		<%= f.input :handicap_index, label: '18-Hole Handicap Index' %>
+		<p>Handicaps will automatically be converted for 9-hole tournaments.</p>
   </div>
 
   <h3>Avatar</h3>

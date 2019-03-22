@@ -192,7 +192,7 @@ class TournamentPresenter
             payouts << {flight_number: f.flight_number.to_i, flight_name: f.display_name, name: username, amount: p.amount, points: p.points.to_i, user_id: user_id}
           end
 
-          flights_with_payouts << {payouts: payouts} unless payouts.blank?
+          flights_with_payouts << { payouts: payouts } unless payouts.blank?
         end
       end
     else
