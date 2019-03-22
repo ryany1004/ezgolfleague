@@ -246,7 +246,7 @@ class Tournament < ApplicationRecord
     if self.league.exempt_from_subscription
       true
     else
-      false #TODO: update
+      false # TODO: Update this to check for subscription or remove this and use other methods.
     end
   end
 
