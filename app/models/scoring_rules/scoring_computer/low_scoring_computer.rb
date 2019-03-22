@@ -49,11 +49,11 @@ module ScoringComputer
 			scores
 		end
 
-		def sorted_results(scores: scores)
+		def sorted_results(scores:)
 			scores.sort! { |x,y| x[:score] <=> y[:score] }
 		end
 
-		def total_value(scores: scores)
+		def total_value(scores:)
 			(@scoring_rule.users_eligible_for_payouts.count * @scoring_rule.dues_amount).floor
 		end
 
