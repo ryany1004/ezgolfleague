@@ -4,7 +4,7 @@ class Api::V1::SessionsController < Api::V1::ApiBaseController
   respond_to :json
 
   def create
-    email = request.headers["ezgl-email"]
+    email = request.headers["ezgl-email"].strip.downcase
     password = request.headers["ezgl-password"]
 
     if email.blank? or password.blank?
