@@ -42,7 +42,6 @@ gem 'bootsnap', require: false
 gem 'scout_apm'
 gem 'drip-ruby', require: 'drip'
 gem 'selectize-rails'
-gem 'turbolinks'
 
 group :development do
   gem 'web-console'
