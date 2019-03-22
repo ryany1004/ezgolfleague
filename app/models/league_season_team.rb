@@ -41,7 +41,7 @@ class LeagueSeasonTeam < ApplicationRecord
 	end
 
 	def position_indicator_for_index(index)
-		positions = %w(A B C D E F)
+		positions = %w(A B C D E F G H)
 
 		positions[index]
 	end

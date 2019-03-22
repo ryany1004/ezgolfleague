@@ -295,13 +295,9 @@ class ScoringRuleOption
 			ScoringRuleOption.option(name: 'Team Stroke Play (Sum of Individual Scores)', class_name: 'TeamStrokePlayIndividualSumScoringRule'),
 			ScoringRuleOption.option(name: 'Team Stroke Play (vs. Opposing Team Member)', class_name: 'TeamStrokePlayVsScoringRule'),
 			ScoringRuleOption.option(name: 'Team Match Play (vs. Opposing Team Member)', class_name: 'TeamMatchPlayVsScoringRule'),
+			ScoringRuleOption.option(name: 'Team Match Play (Bset Ball)', class_name: 'TeamMatchPlayBestBallScoringRule'),
 		]
 
-		# if show_team_rules
-		# 	individual + team
-		# else
-		# 	individual
-		# end
 		if show_team_rules
 			[['Individual Game Types', individual], ['Team Game Types', team]]
 		else
