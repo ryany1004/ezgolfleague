@@ -109,8 +109,27 @@ class LeagueSeason < ApplicationRecord
 
       users_not_in_t << u unless user_is_in_any_team
     end
-
+    
     users_not_in_t
+  end
+
+  # date parsing
+  def starts_at=(date)
+    begin
+      parsed = EzglCalendar::CalendarUtils.datetime_for_picker_date("#{date} 12:01 AM")
+      super parsed
+    rescue
+      write_attribute(:starts_at, date)
+    end
+  end
+
+  def ends_at=(date)
+    begin
+      parsed = EzglCalendar::CalendarUtils.datetime_for_picker_date("#{date} 11:59 PM")
+      super parsed
+    rescue
+      write_attribute(:ends_at, date)
+    end
   end
 
   def complete_name

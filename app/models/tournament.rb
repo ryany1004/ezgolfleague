@@ -390,7 +390,7 @@ class Tournament < ApplicationRecord
   # date parsing
   
   def signup_opens_at=(date)
-    begin      
+    begin
       parsed = EzglCalendar::CalendarUtils.datetime_for_picker_date(date)
       super parsed
     rescue
