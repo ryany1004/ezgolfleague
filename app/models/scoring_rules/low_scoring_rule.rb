@@ -18,7 +18,7 @@ class LowScoringRule < ScoringRule
 	end
 
 	def payout_type
-		ScoringRulePayoutType::POT
+		ScoringRulePayoutType::PREDETERMINED
 	end
 
 	def can_be_primary?
