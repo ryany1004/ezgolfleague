@@ -30,7 +30,7 @@ module AddToTournamentDay
   def create_payment(user:, paying_with_credit_card:)
   	payment_amount = self.tournament.dues_for_user(user, paying_with_credit_card) * -1.0
 
-  	Payment.create(tournament: self.tournament, payment_amount: payment_amount, user: user, payment_source: "Tournament Dues")
+  	Payment.create(scoring_rule: self.scorecard_base_scoring_rule, payment_amount: payment_amount, user: user, payment_source: "Tournament Dues")
   end
 
   def create_scores_for_scorecard(scorecard:)

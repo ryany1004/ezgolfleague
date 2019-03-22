@@ -48,13 +48,13 @@ module RemoveFromTournamentDay
   end
 
   def refund_user(user:)
-	  previous_payments = Payment.where(user: user, tournament: self.tournament).where("payment_amount < 0")
+  	previous_payments = Payment.where(user: user).where(scoring_rule: self.scorecard_base_scoring_rule).where("payment_amount < 0")
 	  previous_unrefunded_payments = previous_payments.select{|item| item.credits.count == 0}
 	  total_unrefunded_payment_amount = previous_unrefunded_payments.map(&:payment_amount).sum
 
 	  Rails.logger.debug { "Unrefunded Amount: #{total_unrefunded_payment_amount} From # of Transactions: #{previous_unrefunded_payments.count}" }
 
-	  refund = Payment.create(tournament: self.tournament, payment_amount: total_unrefunded_payment_amount * -1.0, user: user, payment_source: "Tournament Dues Credit")
+	  refund = Payment.create(scoring_rule: self.scorecard_base_scoring_rule, payment_amount: total_unrefunded_payment_amount * -1.0, user: user, payment_source: "Tournament Dues Credit")
 
 	  previous_unrefunded_payments.each do |p|
 	    p.credits << refund
