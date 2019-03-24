@@ -5,7 +5,12 @@ module ScoringRuleScorecards
     attr_accessor :course_hole
     attr_accessor :scorecard
     
-    ##Model Stuff
+    def initialize
+      self.strokes = 0
+      self.net_strokes = 0
+    end
+
+    # Model Stuff
     
     def id
       return -1

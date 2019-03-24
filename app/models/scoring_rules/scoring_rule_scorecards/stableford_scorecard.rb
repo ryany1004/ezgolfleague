@@ -11,7 +11,8 @@ module ScoringRuleScorecards
 
       self.tournament_day.scorecard_base_scoring_rule.course_holes.each do |hole|
         score = DerivedScorecardScore.new
-        score.strokes = self.score_for_hole(user, handicap_allowance, hole)
+        score.strokes = self.score_for_hole(user, [], hole)
+        score.net_strokes = self.score_for_hole(user, handicap_allowance, hole)
         score.course_hole = hole
         new_scores << score
       end
