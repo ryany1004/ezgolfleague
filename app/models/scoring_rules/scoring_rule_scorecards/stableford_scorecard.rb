@@ -55,7 +55,7 @@ module ScoringRuleScorecards
     def is_double_eagle?(hole, strokes)
       par = hole.par
 
-      if strokes == par - 3
+      if strokes <= par - 3
       	true
       else
       	false
