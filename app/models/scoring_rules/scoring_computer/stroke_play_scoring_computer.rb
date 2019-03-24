@@ -114,7 +114,7 @@ module ScoringComputer
 	    		if destroy_previous_results
 	    			@scoring_rule.individual_tournament_day_results.where(user: user).destroy_all
 
-	    			flight&.tournament_day_results.where(user: user).destroy_all #TODO: Remove in future - needed for legacy tournaments
+	    			flight&.tournament_day_results.where(user: user).destroy_all # TODO: Remove in future - needed for legacy tournaments
 	    		end
 
 	    		result = @scoring_rule.tournament_day_results.create(

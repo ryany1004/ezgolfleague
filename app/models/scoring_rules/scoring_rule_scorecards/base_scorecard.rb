@@ -9,7 +9,7 @@ module ScoringRuleScorecards
       self.scores = []
     end
 
-    ##Model Stuff
+    # Model Stuff
 
     def id
       return -1
