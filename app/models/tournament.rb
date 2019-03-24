@@ -65,7 +65,7 @@ class Tournament < ApplicationRecord
     	seasons = self.league.league_seasons.where("ends_at >= ?", self.signup_closes_at)
 
       if seasons.blank?
-        errors.add(:signup_closes_at, "can't be outside your configured league seasons. Please create a league season in Leagues > Actions (Manage Seasons) that includes this date.")
+        errors.add(:signup_closes_at, "can't be outside your configured league seasons.")
       end
     end
   end
