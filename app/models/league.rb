@@ -23,13 +23,14 @@ class League < ApplicationRecord
 
   def self.clean_for_dev
     League.all.each do |l|
+    	l.location = 'x' if l.location.blank?
       l.encrypted_stripe_test_secret_key = nil
       l.encrypted_stripe_production_secret_key = nil
       l.encrypted_stripe_test_publishable_key = nil
       l.encrypted_stripe_production_publishable_key = nil
       l.stripe_token = nil
 
-      l.save
+      l.save!
     end
   end
 

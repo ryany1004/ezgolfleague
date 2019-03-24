@@ -31,7 +31,12 @@ module ScoringComputer
 	    			flight: flight,
 	    			gross_score: gross_score,
 	    			net_score: net_score,
-	    			par_related_net_score: net_score)
+	    			adjusted_score: 0,
+	    			front_nine_gross_score: 0,
+	    			front_nine_net_score: 0,
+	    			back_nine_net_score: 0,
+	    			par_related_net_score: net_score,
+	    			par_related_gross_score: gross_score)
 
 	    		Rails.logger.debug { "Writing tournament day result #{result}" }
 
