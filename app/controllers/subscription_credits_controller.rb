@@ -175,7 +175,7 @@ class SubscriptionCreditsController < BaseController
     unless stripe_customer.blank?
       begin
         charge = Stripe::Charge.create(
-          amount: payment_amount * 100,
+          amount: payment_amount.to_i * 100,
           currency: "usd",
           customer: stripe_customer,
           description: description
