@@ -21,30 +21,6 @@ class Play::ScorecardsController < Play::BaseController
     scorecard.is_confirmed = true
     scorecard.save
 
-    scorecard.tournament_day.score_user(scorecard.golf_outing.user)
-
-    # update team scorecards if that's a thing
-    tournament_day = scorecard.golf_outing.tournament_group.tournament_day
-    tournament = tournament_day.tournament
-
-    if scorecard.designated_editor == current_user && tournament.is_past? == false
-      logger.info { "Updating Other Scorecards at Finalization" }
-
-      other_scorecards = []
-      tournament_day.scoring_rules.each do |rule|
-        other_scorecards += rule.related_scorecards_for_user(scorecard.golf_outing.user)
-      end
-
-      other_scorecards.each do |other_scorecard|
-        other_scorecard.is_confirmed = true
-        other_scorecard.save
-
-        scorecard.tournament_day.score_user(other_scorecard.golf_outing.user) unless other_scorecard.golf_outing.blank?
-      end
-    end
-
-    tournament_day.rank_day
-
     redirect_to play_scorecard_path(scorecard), flash: { success: "The scorecard was successfully finalized." }
   end
 
