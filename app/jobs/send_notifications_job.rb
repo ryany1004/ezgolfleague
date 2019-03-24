@@ -6,6 +6,8 @@ class SendNotificationsJob < ApplicationJob
       t.has_been_delivered = true
       t.save
 
+      next if t.sent_to_all? # helps prevent situations with 'runaway' notifications that are somehow getting sent again and again
+
       t.recipients.each do |r|
         Notification.create(notification_template: t, user: r, title: t.title, body: t.body)
 

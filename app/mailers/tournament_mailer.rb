@@ -1,5 +1,4 @@
 class TournamentMailer < ApplicationMailer
-
   def signup_open(tournament, user)
     @tournament = tournament
     @user = user
@@ -83,5 +82,4 @@ class TournamentMailer < ApplicationMailer
 
     mail(to: @user.email, subject: 'EZGolfLeague - Your Tournament is Coming Up')
   end
-
 end
