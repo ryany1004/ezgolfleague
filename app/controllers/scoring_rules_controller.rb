@@ -30,12 +30,14 @@ class ScoringRulesController < BaseController
   		@scoring_rule.save_setup_details(params[:scoring_rule_options][@scoring_rule.id.to_s])
   	end
 
-    #if mandatory, add users
+    # if mandatory, add users
     if (!@scoring_rule.is_opt_in && @scoring_rule.users.empty?) && @tournament_day.scorecard_base_scoring_rule.users.count > 0
-      @scoring_rule.users += @tournament_day.scorecard_base_scoring_rule.users
+      @tournament_day.scorecard_base_scoring_rule.users.each do |u|
+      	@scoring_rule.users << u unless @scoring_rule.users.include? u
+      end
     end
 
-    #handle daily teams if the rule requires
+    # handle daily teams if the rule requires
     if @scoring_rule.team_type == ScoringRuleTeamType::DAILY && @tournament_day.daily_teams.count == 0
       @tournament_day.tournament_groups.each do |group|
         group.create_daily_teams

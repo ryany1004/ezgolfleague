@@ -4,4 +4,5 @@ class ScoringRuleParticipation < ApplicationRecord
 
 	validates :scoring_rule, presence: true
   validates :user, presence: true
+  validates :user_id, uniqueness: { scope: :scoring_rule_id } # a user can't be in a given scoring rule twice
 end
