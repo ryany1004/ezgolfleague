@@ -61,14 +61,14 @@ class TournamentDay < ApplicationRecord
   end
 
   def can_be_played?
+  	return false if self.mandatory_scoring_rules.count.zero?
+  	return false if self.scorecard_base_scoring_rule.blank?
+
     self.scoring_rules.each do |r|
       if !r.can_be_played?
         return false
       end
     end
-
-    #has at least one non-optional rule
-    return false if self.mandatory_scoring_rules.count == 0
 
     true
   end
