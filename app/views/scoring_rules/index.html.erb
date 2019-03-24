@@ -8,6 +8,15 @@
 
 <h4><%= @page_title %></h4>
 
+<% if @scoring_rules.count.zero? %>
+	<div class="container">
+  <div class="row">
+  	<h4>Game types are required and determine how the tournament is scored and displayed. Add at least one game type here.</h4>
+  </div>
+  <div class="col-xs-12" style="height:20px;"></div>
+</div>
+<% end %>
+
 <div class="container">
   <div class="row">
     <div class="col-md-10">&nbsp;</div>
