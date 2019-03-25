@@ -17,7 +17,6 @@ class User < ApplicationRecord
   has_many :payout_results, inverse_of: :user, dependent: :destroy
   has_many :golf_outings, inverse_of: :user, dependent: :destroy
   has_many :payments, ->{ order 'created_at DESC' }, inverse_of: :user, dependent: :destroy
-  has_many :tournament_day_results, inverse_of: :tournament_day, dependent: :destroy
   has_many :notifications, dependent: :destroy
   has_many :mobile_devices, dependent: :destroy
   has_many :scoring_rule_participations, inverse_of: :user
@@ -161,6 +160,10 @@ class User < ApplicationRecord
       end
       self.league_memberships.clear
 
+      self.league_season_teams.each do |t|
+      	user.league_season_teams << t
+      end
+
       self.golf_outings.each do |g|
         user.golf_outings << g
       end
@@ -173,8 +176,8 @@ class User < ApplicationRecord
         user.payments << p
       end
 
-      self.tournament_day_results.each do |t|
-        user.tournament_day_results << t
+      self.scoring_rules.each do |r|
+	      user.scoring_rules << r
       end
 
       self.child_users.each do |u|
