@@ -8,6 +8,8 @@ module ScoringRules
     before_action :fetch_payout_result, only: [:edit, :update, :destroy]
     before_action :set_stage
     
+    after_action :recalculate_league_season, only: [:create, :update, :destroy]
+    
     def index
       @page_title = "Results"
     end
@@ -70,6 +72,10 @@ module ScoringRules
       @tournament_day = @tournament.tournament_days.find(params[:tournament_day_id])
     end
     
+    def recalculate_league_season
+    	RankLeagueSeasonJob.perform_later(@tournament.league_season) if @tournament.league_season.present?
+    end
+
     def set_stage
       @stage_name = "payout_results"
     end
