@@ -113,9 +113,9 @@ module ScoringComputer
 					next if user_scorecard.blank?
 
 					strokes = hole_scores[self.user_score_key(user: user, hole: hole)]
-					next if strokes.blank?
+					next if strokes.blank? || (strokes.zero? && use_gross_scores) # strokes can be zero but only if net as handicap might take it down to zero or below
 
-					user_scores << {user: user, score: strokes}
+					user_scores << { user: user, score: strokes }
 				end
 
 				user_scores.sort! { |x,y| x[:score] <=> y[:score] }
@@ -124,14 +124,14 @@ module ScoringComputer
 					if user_scores.count == 1
 						users_with_skins << user_scores[0][:user]
 
-						Rails.logger.info { "#{self.class}: User #{user_scores[0][:user].complete_name} got a regular skin for hole #{hole.hole_number}" }
+						Rails.logger.info { "#{@scoring_rule.class}: User #{user_scores[0][:user].complete_name} got a regular skin for hole #{hole.hole_number}" }
 					else
 						if user_scores[0][:score] == user_scores[1][:score] #if there is a tie, they do not count
-							Rails.logger.info { "#{self.class}: There was a tie - no skin awarded. #{user_scores[0][:user].complete_name} and #{user_scores[1][:user].complete_name} for hole #{hole.hole_number}" }
+							Rails.logger.info { "#{@scoring_rule.class}: There was a tie - no skin awarded. #{user_scores[0][:user].complete_name} and #{user_scores[1][:user].complete_name} for hole #{hole.hole_number}" }
 						else
 							users_with_skins << user_scores[0][:user]
 
-							Rails.logger.info { "#{self.class}: User #{user_scores[0][:user].complete_name} got a regular skin for hole #{hole.hole_number}" }
+							Rails.logger.info { "#{@scoring_rule.class}: User #{user_scores[0][:user].complete_name} got a regular skin for hole #{hole.hole_number}" }
 						end
 					end
 				end
