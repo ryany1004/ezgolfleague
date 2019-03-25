@@ -35,7 +35,7 @@ class Play::RegistrationsController < Play::BaseController
   def join_league
     @league = League.find(params[:league_id])
 
-    if @league.dues_amount == 0.0
+    if @league.encrypted_stripe_production_publishable_key.blank? || @league.dues_amount.zero?
       current_user.leagues << @league
 
       redirect_to setup_completed_play_registrations_path
