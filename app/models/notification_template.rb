@@ -61,7 +61,7 @@ class NotificationTemplate < ApplicationRecord
   end
 
   def sent_to_all?
-  	self.notifications.coount >= self.recipients.count
+  	self.notifications.count >= self.recipients.count
   end
 
   def recipient_text

@@ -75,7 +75,7 @@ class TournamentsController < BaseController
 
     @tournament.destroy
 
-    RankLeagueSeasonJob.perform_later(league_season) if league_season.present?
+	  RankLeagueSeasonJob.perform_later(league_season) if league_season.present?
 
     redirect_to league_tournaments_path(current_user.selected_league), flash: { success: "The tournament was successfully deleted." }
   end
