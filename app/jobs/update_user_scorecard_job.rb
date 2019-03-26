@@ -25,6 +25,8 @@ class UpdateUserScorecardJob < ApplicationJob
       scoring_computer.send_did_score_notification(scorecard: primary_scorecard)
 
       self.clear_caches(primary_scorecard)
+
+      CalculateNetScoresJob.perform_later(primary_scorecard) # this ensures we always have a net score posted
       
       Rails.logger.info { "Scoring: #{primary_scorecard.id}. User: #{primary_user.complete_name}. Result: #{result.to_s}" } if result.present?
     end
