@@ -19,6 +19,7 @@ class User < ApplicationRecord
   has_many :payments, ->{ order 'created_at DESC' }, inverse_of: :user, dependent: :destroy
   has_many :notifications, dependent: :destroy
   has_many :mobile_devices, dependent: :destroy
+  has_many :tournament_day_results, inverse_of: :tournament_day, dependent: :destroy
   has_many :scoring_rule_participations, inverse_of: :user
   has_many :scoring_rules, through: :scoring_rule_participations
   has_many :league_season_team_memberships, inverse_of: :user
