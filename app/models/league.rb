@@ -100,7 +100,12 @@ class League < ApplicationRecord
       start_date = Date.civil(Time.now.year, 1, 1)
       end_date = Date.civil(Time.now.year, -1, -1)
 
-      LeagueSeason.create(name: "#{ Time.now.year }", starts_at: start_date, ends_at: end_date, league: self)
+      s = LeagueSeason.create(name: "#{ Time.now.year }", starts_at: start_date, ends_at: end_date, league: self)
+
+      if self.league_type == "Team Play"
+      	s.season_type_raw = LeagueSeasonType::TEAM
+      	s.save
+      end
     end
   end
 
