@@ -62,7 +62,7 @@ class LeaguesController < BaseController
   def update_league_standings
     @league = League.find(params[:league_id])
 
-    @league.league_seasons.each do |s|
+    @league.league_seasons.order("created_at DESC").each do |s|
       RankLeagueSeasonJob.perform_later(s)
     end
 
