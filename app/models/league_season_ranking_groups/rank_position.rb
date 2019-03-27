@@ -39,11 +39,13 @@ module LeagueSeasonRankingGroups
 	      	ranking = group.league_season_rankings.where(user: p).first
 	      	ranking = LeagueSeasonRanking.create(user: p, league_season_ranking_group: group) if ranking.blank?
 
-	        t.tournament_days.includes(scoring_rules: [tournament_day_results: :user]).each do |day|
-	        	day.scoring_rules.includes(:tournament_day_results).each do |rule|
+	        t.tournament_days.includes(scoring_rules: [payout_results: :user]).each do |day|
+	        	day.scoring_rules.includes(:payout_results).each do |rule|
 		          rule.payout_results.where(user: p).each do |result|
+		          	Rails.logger.debug { "Adding #{result.points} points and #{result.amount} amount from rule #{rule.id} #{rule.name} on day #{day.id} to #{p.complete_name}" }
+
 		            ranking.points += result.points unless result.points.blank?
-		            ranking.amount += result.amount unless result.amount.blank?
+		            ranking.payouts += result.amount unless result.amount.blank?
 		          end
 	        	end
 	        end
@@ -59,8 +61,8 @@ module LeagueSeasonRankingGroups
       	ranking = LeagueSeasonRanking.create(league_season_team: team, league_season_ranking_group: group) if ranking.blank?
 
 				self.league_season.tournaments.includes(:tournament_days).each do |t|
-					t.tournament_days.includes(scoring_rules: [tournament_day_results: :league_season_team]).each do |day|
-						day.scoring_rules.includes(:tournament_day_results).each do |rule|
+					t.tournament_days.includes(scoring_rules: [payout_results: :league_season_team]).each do |day|
+						day.scoring_rules.includes(:payout_results).each do |rule|
 							# add the team results
 		          rule.payout_results.where(league_season_team: team).each do |result|
 		            ranking.points += result.points unless result.points.blank?
@@ -70,7 +72,7 @@ module LeagueSeasonRankingGroups
 		          # this is a team season so also add the individual results, if any
 		          rule.payout_results.where(user: p).each do |result|
 		            ranking.points += result.points unless result.points.blank?
-		            ranking.amount += result.amount unless result.amount.blank?
+		            ranking.payouts += result.amount unless result.amount.blank?
 		          end
 						end
 					end
