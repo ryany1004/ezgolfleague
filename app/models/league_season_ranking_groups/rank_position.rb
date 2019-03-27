@@ -41,9 +41,9 @@ module LeagueSeasonRankingGroups
 
 	        t.tournament_days.includes(scoring_rules: [tournament_day_results: :user]).each do |day|
 	        	day.scoring_rules.includes(:tournament_day_results).each do |rule|
-		          rule.individual_tournament_day_results.where(user: p).limit(1).each do |result|
+		          rule.payout_results.where(user: p).each do |result|
 		            ranking.points += result.points unless result.points.blank?
-		            ranking.payouts += result.payouts unless result.payouts.blank?
+		            ranking.amount += result.amount unless result.amount.blank?
 		          end
 	        	end
 	        end
@@ -62,18 +62,16 @@ module LeagueSeasonRankingGroups
 					t.tournament_days.includes(scoring_rules: [tournament_day_results: :league_season_team]).each do |day|
 						day.scoring_rules.includes(:tournament_day_results).each do |rule|
 							# add the team results
-							rule.aggregate_tournament_day_results.where(league_season_team: team).limit(1).each do |result|
+		          rule.payout_results.where(league_season_team: team).each do |result|
 		            ranking.points += result.points unless result.points.blank?
-		            ranking.payouts += result.payouts unless result.payouts.blank?
-							end
+		            ranking.amount += result.amount unless result.amount.blank?
+		          end
 
-							# this is as team season so also add the individual results, if any
-							team.users.each do |p|
-			          rule.individual_tournament_day_results.where(user: p).limit(1).each do |result|
-			            ranking.points += result.points unless result.points.blank?
-			            ranking.payouts += result.payouts unless result.payouts.blank?
-			          end
-							end
+		          # this is a team season so also add the individual results, if any
+		          rule.payout_results.where(user: p).each do |result|
+		            ranking.points += result.points unless result.points.blank?
+		            ranking.amount += result.amount unless result.amount.blank?
+		          end
 						end
 					end
 				end
