@@ -226,7 +226,8 @@ class UserAccountsController < BaseController
   end
 
   def initialize_form
-    @us_states = US_STATES
+    @us_states = GEO_STATES
+    @countries = COUNTRIES
 
     if current_user.is_super_user?
       @leagues = League.all.order(:name)

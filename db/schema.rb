@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_03_22_152038) do
+ActiveRecord::Schema.define(version: 2019_03_27_172349) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -77,6 +77,7 @@ ActiveRecord::Schema.define(version: 2019_03_22_152038) do
     t.float "longitude"
     t.string "import_tag"
     t.string "website_url"
+    t.string "country"
     t.index ["name"], name: "index_courses_on_name"
   end
 
@@ -573,6 +574,7 @@ ActiveRecord::Schema.define(version: 2019_03_22_152038) do
     t.bigint "parent_id"
     t.boolean "is_blocked", default: false
     t.datetime "deleted_at"
+    t.string "country"
     t.index ["deleted_at"], name: "index_users_on_deleted_at"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["invitation_token"], name: "index_users_on_invitation_token", unique: true

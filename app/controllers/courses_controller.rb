@@ -65,7 +65,7 @@ class CoursesController < BaseController
   private
 
   def course_params
-    params.require(:course).permit(:name, :street_address_1, :street_address_2, :city, :us_state, :postal_code, :phone_number)
+    params.require(:course).permit(:name, :street_address_1, :street_address_2, :city, :us_state, :postal_code, :country, :phone_number)
   end
 
   def fetch_course
@@ -73,7 +73,8 @@ class CoursesController < BaseController
   end
 
   def initialize_form
-    @us_states = US_STATES
+    @us_states = GEO_STATES
+    @countries = COUNTRIES
   end
 
 end
