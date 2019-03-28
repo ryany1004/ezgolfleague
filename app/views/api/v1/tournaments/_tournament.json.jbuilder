@@ -18,7 +18,7 @@ json.cache! ['v1', tournament] do
 	json.tournament_days tournament.tournament_days do |day|
 		json.server_id										day.server_id
 		json.tournament_at								day.tournament_at
-		json.game_type_id									day.mandatory_scoring_rules.first.legacy_game_type_id
+		json.game_type_id									day.legacy_game_type_id
 		json.can_be_played?								day.can_be_played?
 		json.registered_user_ids					day.registered_user_ids
 		json.paid_user_ids								day.paid_user_ids

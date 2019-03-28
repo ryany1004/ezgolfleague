@@ -269,6 +269,14 @@ class TournamentDay < ApplicationRecord
     self.optional_scoring_rules.select { |r| r.dues_amount > 0 }
   end
 
+  def legacy_game_type_id
+  	if self.mandatory_scoring_rules.first.present?
+  		self.mandatory_scoring_rules.first.legacy_game_type_id
+  	else
+  		-1
+  	end
+  end
+
   def score_all_rules
     self.scoring_rules.each do |rule|
       rule.score
