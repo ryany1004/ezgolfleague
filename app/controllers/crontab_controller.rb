@@ -25,6 +25,8 @@ class CrontabController < ApplicationController
 
     tournaments.each do |t|
       t.league.users.each do |u|
+      	Rails.logger.info { "Sending closing reminder to #{u.complete_name} #{u.id} for #{t.name}" }
+
         TournamentMailer.signup_closing(t, u).deliver_later
       end
     end
