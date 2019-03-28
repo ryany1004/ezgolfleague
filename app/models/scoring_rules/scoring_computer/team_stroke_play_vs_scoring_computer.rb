@@ -1,6 +1,5 @@
 module ScoringComputer
 	class TeamStrokePlayVsScoringComputer < StrokePlayScoringComputer
-
 		def assign_payouts
 			Rails.logger.debug { "assign_payouts #{self.class}" }
 
@@ -23,6 +22,14 @@ module ScoringComputer
 
       	user_result = @scoring_rule.tournament_day_results.where(user: user).first
       	opponent_result = @scoring_rule.tournament_day_results.where(user: opponent).first
+      	
+      	if user_result.blank? || opponent_result.blank?
+      		if Rails.env.development?
+      			raise "User #{user.complete_name} result: #{user_result} or #{opponent.complete_name} result: #{opponent_result} missing."
+      		else
+      			next
+      		end
+      	end
 
       	if user_result.par_related_net_score < opponent_result.par_related_net_score
       		winners << user
@@ -40,6 +47,5 @@ module ScoringComputer
 				end
 			end
 		end
-
 	end
 end
