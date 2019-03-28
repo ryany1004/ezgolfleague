@@ -106,6 +106,12 @@ class Scorecard < ApplicationRecord
     false
   end
 
+  def delete_empty_scores!
+  	self.scores.each do |s|
+  		s.delete if s.strokes == 0 or s.strokes.blank?
+  	end
+  end
+
   def last_hole_played
     self.scores.each_with_index do |score, i|
       if score == self.scores.last and score.strokes > 0
