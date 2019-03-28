@@ -118,11 +118,11 @@ class User < ApplicationRecord
   end
 
   def send_to_drip
-  	SendUserToDripJob.perform_later(self)
+  	SendUserToDripJob.perform_later(self) if Rails.env.production?
   end
 
   def delete_from_drip
-    response = DRIP_CLIENT.unsubscribe(self.email)
+    response = DRIP_CLIENT.unsubscribe(self.email) if Rails.env.production?
   end
 
   ##
