@@ -181,6 +181,10 @@ class User < ApplicationRecord
 	      user.scoring_rules << r
       end
 
+      self.league_season_rankings.each do |r|
+      	user.league_season_rankings << r
+      end
+
 			self.tournament_day_results.each do |t|
 				user.tournament_day_results << t
 			end
