@@ -30,7 +30,7 @@ class Play::PaymentsController < Play::BaseController
     if params[:tournament_id] != nil
       tournament = self.view_tournament_from_user_for_tournament_id(params[:tournament_id])
 
-      amount = tournament.total_for_user_with_contest_fees(current_user, true)
+      amount = tournament.total_for_user_with_optional_fees(user: current_user)
       api_key = tournament.league.stripe_secret_key
       charge_description = "#{current_user.complete_name} Tournament: #{tournament.name}"
     elsif params[:league_id] != nil
