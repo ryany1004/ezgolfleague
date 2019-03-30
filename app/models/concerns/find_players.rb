@@ -77,6 +77,10 @@ module FindPlayers
     nil
   end
 
+  def league_season_team_matchup_for_team(team)
+		self.league_season_team_tournament_day_matchups.where("league_season_team_a_id = ? OR league_season_team_b_id = ?", team, team).first
+  end
+
   def player_is_confirmed?(user)
     outing = self.golf_outing_for_player(user)
 

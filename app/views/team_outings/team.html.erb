@@ -1,0 +1,31 @@
+<ol class="breadcrumb">
+  <li><%= link_to "Tournaments", league_tournaments_path(current_user.selected_league) %></li>
+  <li><%= link_to @tournament.name, edit_league_tournament_path(current_user.selected_league, @tournament) %></li>
+  <li><%= link_to "Team Setup", league_tournament_day_teams_path(current_user.selected_league, @tournament, @tournament_day) %></li>
+  <li class="active">Configure Players</li>
+</ol>
+
+<legend><%= @league_season_team.name %></legend>
+
+<br/>
+
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h3 class="panel-title">Players</h3>
+
+    <p>NOTE: An equal number of players must be playing on each team for game types that are matchups.</p>
+  </div>
+
+  <table class="table table-striped">
+    <tbody>
+    <% @league_season_team.users.each do |user| %>
+      <tr>
+        <td><%= user_playing_status_indicator(@tournament_day, @league_season_team, user) %></td>
+        <td><%= link_to 'Toggle Playing Status', league_tournament_update_day_team_path(@league, @tournament, @tournament_day, @league_season_team, user), method: :patch %></td>
+      </tr>
+    <% end %>
+    </tbody>
+  </table>
+</div>
+
+<%= link_to "Back to Team Setup", league_tournament_day_teams_path(current_user.selected_league, @tournament, @tournament_day), class: 'btn btn-default' %>

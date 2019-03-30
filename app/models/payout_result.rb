@@ -33,9 +33,10 @@ class PayoutResult < ApplicationRecord
   	return nil if !self.scoring_rule.teams_are_player_vs_player?
 
   	team = self.scoring_rule.tournament_day.league_season_team_for_player(self.user)
+  	matchup = self.scoring_rule.tournament_day.league_season_team_matchup_for_team(team)
 
-  	if team.present?
-  		team.matchup_indicator_for_user(self.user)
+  	if matchup.present?
+  		matchup.matchup_indicator_for_user(self.user)
   	else
   		nil
   	end
