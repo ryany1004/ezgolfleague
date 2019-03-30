@@ -13,14 +13,16 @@ module Notifications
 				notification_string = Notifications::NotificationStrings.birdie(complete_name, score.course_hole_number)
 			end
 
-			Rails.logger.info { "Score Notification String: (#{complete_name}, #{score.id}, #{strokes}, #{par}) #{notification_string}" }
-
 			metadata = {}
 			if include_metadata == true
 				metadata = { tournament_id: tournament.id }
 			end
 
-			tournament.notify_tournament_users(notification_string, metadata) unless notification_string.blank?
+			if notification_string.present?
+				Rails.logger.info { "Score Notification String: (#{complete_name}, #{score.id}, #{strokes}, #{par}) #{notification_string}" }
+
+				tournament.notify_tournament_users(notification_string, metadata)
+			end
 		end
 	end
 end

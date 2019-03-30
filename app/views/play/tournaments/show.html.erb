@@ -120,6 +120,13 @@
         <div class="panel-body">
           Payout information will be available once the tournament has been finalized by the league administrator.
         </div>
+          <div class="panel-body">
+          	<% if @tournament_presenter.finalized? %>
+          		No contests setup.
+          	<% else %>
+          		Contest information will be available after the tournament has been finalized.
+          	<% end %>
+          </div>
         <% end -%>
         <% if @tournament_presenter.user_can_register_for_scoring_rules? %>
           <div class="panel-footer">

@@ -1,22 +1,4 @@
-<%= simple_form_for ([@league, @league_season, @league_season_team]) do |f| %>
-  <% if notification = f.error_notification %>
-    <div class="alert alert-error fade in">
-      <a class="close" data-dismiss="alert" href="#">&times;</a>
-      <%= notification %>
-    </div>
-  <% end %>
-
-  <legend>Team Details</legend>
-
-  <h3>Basic Details</h3>
-  <div class="well">
-    <%= f.input :name, required: true %>
-  </div>
-
-  <div class="form-actions">
-    <%= f.button :submit, "Update Team", class: 'btn btn-default' %>
-  </div>
-<% end %>
+<legend><%= @league_season_team.name %></legend>
 
 <% if !@league_season_team.new_record? %>
   <br/>

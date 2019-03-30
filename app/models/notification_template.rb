@@ -1,6 +1,6 @@
 class NotificationTemplate < ApplicationRecord
-  belongs_to :league
-  belongs_to :tournament, touch: true
+  belongs_to :league, optional: true
+  belongs_to :tournament, touch: true, optional: true
 
   has_many :notifications
 
@@ -52,12 +52,16 @@ class NotificationTemplate < ApplicationRecord
       end
     end
 
-    #add parents
+    # add parents
     recipient_list.each do |u|
       recipient_list << u.parent_user if !u.parent_user.blank? && !recipient_list.include?(u.parent_user)
     end
 
     recipient_list
+  end
+
+  def sent_to_all?
+  	self.notifications.count >= self.recipients.count
   end
 
   def recipient_text

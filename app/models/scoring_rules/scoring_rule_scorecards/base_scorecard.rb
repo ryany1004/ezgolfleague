@@ -9,7 +9,7 @@ module ScoringRuleScorecards
       self.scores = []
     end
 
-    ##Model Stuff
+    # Model Stuff
 
     def id
       return -1
@@ -58,7 +58,7 @@ module ScoringRuleScorecards
     end
 
     def net_score
-      return 0
+      return self.scores.map {|score| score.net_strokes }.sum
     end
 
     def front_nine_score(use_handicap = false)

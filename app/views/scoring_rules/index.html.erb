@@ -8,76 +8,23 @@
 
 <h4><%= @page_title %></h4>
 
-<div class="col-md-12">
-  <div class="panel panel-default">
-    <div class="panel-heading">
-      <h3 class="panel-title">Game Types</h3>
-    </div>
-    <div class="panel-body">
-    	The primary game type determines how scorecards appear and how handicaps are displayed.
-    </div>
-		<table class="table table-striped">
-		  <thead>
-		    <tr>
-		    	<th>Primary Type</th>
-		      <th>Name</th>
-		      <th>&nbsp;</th>
-		      <th>&nbsp;</th>
-		      <% if user_is_league_admin(current_user, @tournament.league) -%>
-		      <th><%= link_to 'Add Game Type', new_league_tournament_tournament_day_scoring_rule_path(@tournament.league, @tournament, @tournament_day), class: 'btn btn-primary' %></th>
-		      <% else -%>
-		      <th>&nbsp;</th>
-		      <% end -%>
-		    </tr>
-		  </thead>
-		  <tbody>
-		  <% @scoring_rules.each do |scoring_rule| %>
-		    <tr>
-		    	<td>
-				    <% if scoring_rule.primary_rule %>
-				      <strong>Primary</strong>
-				    <% else %>
-				      <%= link_to "Make Primary", league_tournament_tournament_day_scoring_rule_set_primary_path(@tournament.league, @tournament, @tournament_day, scoring_rule), data: { method: :put } %>
-				    <% end %>
-		    	</td>
-		      <td><%= link_to scoring_rule.name, edit_league_tournament_tournament_day_scoring_rule_path(@tournament.league, @tournament, @tournament_day, scoring_rule) %></td>
-		      <td>
-		        <% if scoring_rule.show_course_holes? %>
-		          <%= link_to "Setup Course Holes", edit_league_tournament_tournament_day_scoring_rule_course_holes_path(@tournament.league, @tournament, @tournament_day, scoring_rule) %>
-		        <% else %>
-		          N/A
-		        <% end %>
-		      </td>
-		      <td>
-		        <% if scoring_rule.payout_type == ScoringRulePayoutType::PREDETERMINED && scoring_rule.payout_assignment_type == ScoringRulePayoutAssignmentType::CALCULATED %>
-		          <%= link_to "Configure Payouts (#{scoring_rule.payouts.count})", league_tournament_tournament_day_scoring_rule_payouts_path(@tournament.league, @tournament, @tournament_day, scoring_rule) %>
-		        <% elsif scoring_rule.payout_assignment_type == ScoringRulePayoutAssignmentType::MANUAL %>
-		          Manually Entered
-		        <% else %>
-		          Winners Split Pot
-		        <% end %>
-		        </td>
-		      <% if user_is_league_admin(current_user, @tournament.league) %>
-		      <td><%= link_to "Results", league_tournament_tournament_day_scoring_rule_payout_results_path(@tournament.league, @tournament, @tournament_day, scoring_rule) %> | <%= link_to "Edit", edit_league_tournament_tournament_day_scoring_rule_path(@tournament.league, @tournament, @tournament_day, scoring_rule) %> | <%= link_to 'Delete', league_tournament_tournament_day_scoring_rule_path(@tournament.league, @tournament, @tournament_day, scoring_rule), data: { confirm: 'Are you sure you want to delete this game type? That will also destroy any assigned results.' }, method: :delete %></td>
-		      <% else -%>
-		      <td>&nbsp;</td>
-		      <% end -%>
-		    </tr>
-		  <% end %>
-		  </tbody>
-		  <tfoot>
-		    <tr>
-		    	<th>&nbsp;</th>
-		      <th>&nbsp;</th>
-		      <th>&nbsp;</th>
-		      <th>&nbsp;</th>
-		      <% if user_is_league_admin(current_user, @tournament.league) -%>
-		      <th><%= link_to 'Add Game Type', new_league_tournament_tournament_day_scoring_rule_path(@tournament.league, @tournament, @tournament_day), class: 'btn btn-primary' %></th>
-		      <% else -%>
-		      <th>&nbsp;</th>
-		      <% end -%>
-		    </tr>
-		  </tfoot>
-		</table>
+<% if @scoring_rules.count.zero? %>
+	<div class="container">
+  <div class="row">
+  	<h4>Game types are required and determine how the tournament is scored and displayed. Add at least one game type here.</h4>
   </div>
+  <div class="col-xs-12" style="height:20px;"></div>
 </div>
+<% end %>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-10">&nbsp;</div>
+    <div class="col-md-2">
+      <%= link_to 'Add a Game Type', new_league_tournament_tournament_day_scoring_rule_path(@tournament.league, @tournament, @tournament_day), class: 'btn btn-primary' %>
+    </div>
+  </div>
+  <div class="col-xs-12" style="height:20px;"></div>
+</div>
+
+<%= render partial: "scoring_rule", collection: @scoring_rules %>

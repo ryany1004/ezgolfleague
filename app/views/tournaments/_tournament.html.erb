@@ -17,7 +17,12 @@
   <td><%= tournament.players.count %> / <%= tournament.max_players %></td>
   <td>
     <% tournament.tournament_days.each do |day| -%>
-      <%= human_boolean(day.can_be_played?) %><br/>
+    	<% if !day.can_be_played? %>
+    		<span class="badge badge-danger">No</span>
+    	<% else %>
+    		Yes
+    	<% end %>
+    	<br/>
     <% end -%>
   </td>
   <td>

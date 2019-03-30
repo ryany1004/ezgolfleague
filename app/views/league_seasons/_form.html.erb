@@ -21,9 +21,16 @@
       <%= f.hidden_field :ends_at %>
     <% end %>
 
-    <%= f.input :season_type_raw, label: 'Team Play', as: :boolean %>
-
     <%= f.input :dues_amount, label: 'Dues Amount ($)' %>
+
+    <% if @league_season.new_record? && !@league.allow_scoring_groups -%>
+    	<p>Activating team play allows you to create season-long teams who earn points and payouts over the course of the season.</p>
+    	<%= f.input :season_type_raw, label: 'Team Play for Season', as: :boolean %>
+    <% elsif @league_season.season_type_raw == 1 %>
+    	<p>
+    		<strong>This season is configured for team play.</strong>
+    	</p>
+    <% end %>
 
     <%= f.hidden_field :league_id, :value => @league.id %>
   </div>

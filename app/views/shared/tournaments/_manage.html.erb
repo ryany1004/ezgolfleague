@@ -30,7 +30,7 @@
           	<% end %>
           <% end %>
 
-        	<% if tournament_day.tournament_groups.count.zero? %>
+        	<% if tournament_day.scoring_rules.count.zero? || tournament_day.tournament_groups.count.zero? %>
         		<li class='disabled'><%= link_to 'Players', "#" %></li>
         	<% else %>
         		<li <%= tournament_class_for_stage(stage, "players#{tournament_day.id}") %>><%= link_to 'Players', league_tournament_day_players_path(tournament.league, tournament, tournament_day) %></li>

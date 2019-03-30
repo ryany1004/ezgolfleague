@@ -8,7 +8,7 @@
         <div class="panel-body">
           <p>Day Last Modified: <%= d.updated_at %></p>
           <p>Groups API Cache Key: <%= d.cache_key("groups") %></p>
-          <p>Leaderyboard API Cache Key: <%= d.relation_cache_key(d.tournament_day_results, "leaderboard-json") %></p>
+          <p>Leaderyboard API Cache Key: <%= d.relation_cache_key(d.scorecard_base_scoring_rule.individual_tournament_day_results, "leaderboard-json") %></p>
 
           <p><strong>Players</strong></p>
           <table class="table table-striped">
@@ -47,7 +47,7 @@
                 <th>Par Net</th>
               </tr>
             </thead>
-            <% d.tournament_day_results.each do |r| %>
+            <% d.scorecard_base_scoring_rule.individual_tournament_day_results.each do |r| %>
             <tr>
               <td><%= r.user.complete_name %></td>
               <td><%= r.rank %></td>
@@ -61,8 +61,8 @@
             </tr>
             <% end %>
           </table>
-          <% if d.tournament_day_results.count != @tournament.players_for_day(d).count %>
-            <p style="color:red">RESULTS COUNT <%= d.tournament_day_results.count %> DOES NOT MATCH PLAYER COUNT <%= @tournament.players_for_day(d).count %></p>
+          <% if d.scorecard_base_scoring_rule.individual_tournament_day_results.count != @tournament.players_for_day(d).count %>
+            <p style="color:red">RESULTS COUNT <%= d.scorecard_base_scoring_rule.individual_tournament_day_results.count %> DOES NOT MATCH PLAYER COUNT <%= @tournament.players_for_day(d).count %></p>
           <% end %>
         </div>
       </div>

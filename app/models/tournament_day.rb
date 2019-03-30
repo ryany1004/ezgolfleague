@@ -20,8 +20,6 @@ class TournamentDay < ApplicationRecord
   has_many :scoring_rules, -> { order(primary_rule: :desc) }, inverse_of: :tournament_day, dependent: :destroy
   has_many :league_season_team_tournament_day_matchups, -> { order(:created_at) }, inverse_of: :tournament_day, dependent: :destroy
 
-  has_and_belongs_to_many :legacy_course_holes, -> { order(:hole_number) }, class_name: "CourseHole", join_table: "course_holes_tournament_days" # TODO: REMOVE AFTER MIGRATION
-
   accepts_nested_attributes_for :scoring_rules
 
   attr_accessor :skip_date_validation
@@ -63,14 +61,14 @@ class TournamentDay < ApplicationRecord
   end
 
   def can_be_played?
+  	return false if self.mandatory_scoring_rules.count.zero?
+  	return false if self.scorecard_base_scoring_rule.blank?
+
     self.scoring_rules.each do |r|
       if !r.can_be_played?
         return false
       end
     end
-
-    #has at least one non-optional rule
-    return false if self.mandatory_scoring_rules.count == 0
 
     true
   end
@@ -269,6 +267,14 @@ class TournamentDay < ApplicationRecord
 
   def optional_scoring_rules_with_dues
     self.optional_scoring_rules.select { |r| r.dues_amount > 0 }
+  end
+
+  def legacy_game_type_id
+  	if self.mandatory_scoring_rules.first.present?
+  		self.mandatory_scoring_rules.first.legacy_game_type_id
+  	else
+  		-1
+  	end
   end
 
   def score_all_rules

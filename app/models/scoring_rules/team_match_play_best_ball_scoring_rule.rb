@@ -1,10 +1,10 @@
-class TeamMatchPlayScoringRule < MatchPlayScoringRule
+class TeamMatchPlayBestBallScoringRule < MatchPlayScoringRule
 	def name
-		"Team Match Play"
+		"Team Match Play (Best Ball)"
 	end
 
 	def description
-		"Team match play where players are matched against a player on another team to compete hole-by-hole."
+		"Team match play each hole is determined by the team's best ball."
 	end
 
 	def team_type
@@ -20,7 +20,7 @@ class TeamMatchPlayScoringRule < MatchPlayScoringRule
 	end
 
 	def scoring_computer
-		ScoringComputer::TeamMatchPlayScoringComputer.new(self)
+		ScoringComputer::TeamMatchPlayBestBallScoringComputer.new(self)
 	end
 
   def opponent_for_user(user)

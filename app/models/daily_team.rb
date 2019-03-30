@@ -20,7 +20,7 @@ class DailyTeam < ApplicationRecord
   end
 
   def team_number_label
-    "Team ##{self.team_number} For Group"
+    "Pairing ##{self.team_number} For Group"
   end
 
   def name

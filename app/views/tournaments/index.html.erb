@@ -1,3 +1,21 @@
+<script>
+  mixpanel.identify();
+  amplitude.getInstance().setUserId('<%= current_user.id %>');
+
+  ezglTrackAnalyticsEvent("Viewed the list of tournaments");
+
+  _dcq.push(["identify", {
+    email: "<%= current_user.email %>",
+    first_name: "<%= current_user.first_name %>",
+    last_name: "<%= current_user.last_name %>",
+    tags: <%= current_user.drip_tags.to_json.html_safe %>,
+    success: function(response) {
+    // Call a method with the response object
+    // Success callback is optional
+    }
+  }]);
+</script>
+
 <div class="banner-img tournaments-banner-img"></div>
 <!-- /.banner-img -->
 <div class="container">

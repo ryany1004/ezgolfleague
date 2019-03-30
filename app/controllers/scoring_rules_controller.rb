@@ -30,12 +30,14 @@ class ScoringRulesController < BaseController
   		@scoring_rule.save_setup_details(params[:scoring_rule_options][@scoring_rule.id.to_s])
   	end
 
-    #if mandatory, add users
+    # if mandatory, add users
     if (!@scoring_rule.is_opt_in && @scoring_rule.users.empty?) && @tournament_day.scorecard_base_scoring_rule.users.count > 0
-      @scoring_rule.users += @tournament_day.scorecard_base_scoring_rule.users
+      @tournament_day.scorecard_base_scoring_rule.users.each do |u|
+      	@scoring_rule.users << u unless @scoring_rule.users.include? u
+      end
     end
 
-    #handle daily teams if the rule requires
+    # handle daily teams if the rule requires
     if @scoring_rule.team_type == ScoringRuleTeamType::DAILY && @tournament_day.daily_teams.count == 0
       @tournament_day.tournament_groups.each do |group|
         group.create_daily_teams
@@ -46,8 +48,6 @@ class ScoringRulesController < BaseController
 
   	if params[:commit] == "Save & Continue"
   		redirect_to league_tournament_tournament_day_tournament_groups_path(@tournament.league, @tournament, @tournament_day)
-  	elsif params[:commit] == "Save & Setup Points/Payouts"
-  		redirect_to league_tournament_tournament_day_scoring_rule_payouts_path(@tournament.league, @tournament, @tournament_day, @scoring_rule)
   	else
   		redirect_to league_tournament_tournament_day_scoring_rules_path(@tournament.league, @tournament, @tournament_day)
   	end
@@ -59,21 +59,10 @@ class ScoringRulesController < BaseController
     redirect_to league_tournament_tournament_day_scoring_rules_path(@tournament.league, @tournament, @tournament_day)
   end
 
-  def set_primary
-  	@scoring_rule = @tournament_day.scoring_rules.find(params[:scoring_rule_id])
-
-  	@tournament_day.scoring_rules.update_all(primary_rule: false)
-
-  	@scoring_rule.primary_rule = true
-  	@scoring_rule.save
-
-  	redirect_to league_tournament_tournament_day_scoring_rules_path(@tournament.league, @tournament, @tournament_day)
-  end
-
   private
 
   def scoring_rule_params
-    params.require(:scoring_rule).permit(:dues_amount, :is_opt_in)
+    params.require(:scoring_rule).permit(:custom_name, :dues_amount, :is_opt_in)
   end
   
   def scoring_rule_class_for_name(name)

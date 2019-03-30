@@ -44,7 +44,7 @@
   });
 
   function costPerGolfer() {
-    return <%= SubscriptionCredit.cost_per_golfer %>;
+    return <%= SubscriptionCredit.cost_per_golfer(league: @league) %>;
   }
 
   function stripeResponseHandler(status, response) {
@@ -356,7 +356,7 @@
     $("#purchase_credits_button").prop('disabled', false);
 
     var cost = 0;
-    var costPerGolfer = <%= SubscriptionCredit.cost_per_golfer %>;
+    var costPerGolfer = <%= SubscriptionCredit.cost_per_golfer(league: @league) %>;
 
     cost = golfers * costPerGolfer;
 

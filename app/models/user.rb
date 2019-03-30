@@ -17,9 +17,9 @@ class User < ApplicationRecord
   has_many :payout_results, inverse_of: :user, dependent: :destroy
   has_many :golf_outings, inverse_of: :user, dependent: :destroy
   has_many :payments, ->{ order 'created_at DESC' }, inverse_of: :user, dependent: :destroy
-  has_many :tournament_day_results, inverse_of: :tournament_day, dependent: :destroy
   has_many :notifications, dependent: :destroy
   has_many :mobile_devices, dependent: :destroy
+  has_many :tournament_day_results, inverse_of: :user, dependent: :destroy
   has_many :scoring_rule_participations, inverse_of: :user
   has_many :scoring_rules, through: :scoring_rule_participations
   has_many :league_season_team_memberships, inverse_of: :user
@@ -42,7 +42,7 @@ class User < ApplicationRecord
   before_update :clear_current_league
   before_update :reset_session, if: :encrypted_password_changed?
 
-  after_create :send_to_drip
+  after_commit :send_to_drip
 
   accepts_nested_attributes_for :league_memberships
 
@@ -100,6 +100,16 @@ class User < ApplicationRecord
     tags << "iOS User" if self.has_ios_devices?
     tags << "Android User" if self.has_android_devices?
 
+  	has_team_leagues = false
+  	has_individual_leagues = false
+  	self.leagues_admin.each do |l|
+  		has_team_leagues = true if l.league_type == "Team Play"
+  		has_individual_leagues = true if l.league_type == "Individual Play"
+  	end
+
+  	tags << "Team League Admin" if has_team_leagues
+  	tags << "Individual League Admin" if has_individual_leagues
+
     self.leagues.each do |l|
       tags << l.name
     end
@@ -108,23 +118,11 @@ class User < ApplicationRecord
   end
 
   def send_to_drip
-    options = {
-      tags: self.drip_tags,
-      custom_fields: {
-        first_name: self.first_name,
-        last_name: self.last_name,
-      }
-    }
-
-    response = DRIP_CLIENT.create_or_update_subscriber(self.email, options)
-
-    puts response
-
-    response
+  	SendUserToDripJob.perform_later(self) if Rails.env.production?
   end
 
   def delete_from_drip
-    response = DRIP_CLIENT.unsubscribe(self.email)
+    response = DRIP_CLIENT.unsubscribe(self.email) if Rails.env.production?
   end
 
   ##
@@ -163,6 +161,10 @@ class User < ApplicationRecord
       end
       self.league_memberships.clear
 
+      self.league_season_teams.each do |t|
+      	user.league_season_teams << t
+      end
+
       self.golf_outings.each do |g|
         user.golf_outings << g
       end
@@ -175,9 +177,17 @@ class User < ApplicationRecord
         user.payments << p
       end
 
-      self.tournament_day_results.each do |t|
-        user.tournament_day_results << t
+      self.scoring_rules.each do |r|
+	      user.scoring_rules << r
       end
+
+      self.league_season_rankings.each do |r|
+      	user.league_season_rankings << r
+      end
+
+			self.tournament_day_results.each do |t|
+				user.tournament_day_results << t
+			end
 
       self.child_users.each do |u|
         user.child_users << u

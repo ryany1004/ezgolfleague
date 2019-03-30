@@ -5,8 +5,12 @@ class SubscriptionCredit < ApplicationRecord
 
   after_create :send_to_drip
 
-  def self.cost_per_golfer
-    10
+  def self.cost_per_golfer(league: nil)
+    if league.present? && league.override_golfer_price.present?
+    	league.override_golfer_price
+    else
+    	10
+    end
   end
 
   def send_to_drip
@@ -33,7 +37,7 @@ class SubscriptionCredit < ApplicationRecord
     item = {
       upstream_id: self.id,
       name: "Subscription Credits",
-      price: SubscriptionCredit.cost_per_golfer * 100,
+      price: SubscriptionCredit.cost_per_golfer(league: self.league_season.league) * 100,
       amount: self.amount.to_i * 100,
       quantity: self.golfer_count,
     }

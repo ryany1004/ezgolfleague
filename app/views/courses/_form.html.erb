@@ -23,7 +23,9 @@
     
 	  <%= f.input :us_state, label: 'State', collection: @us_states %>
 
-	  <%= f.input :postal_code, label: 'Zip Code' %>
+	  <%= f.input :postal_code, label: 'Zip/Postal Code' %>
+
+	  <%= f.input :country, label: 'Country', collection: @countries %>
     
     <%= f.input :phone_number, label: 'Phone Number' %>
   </div>

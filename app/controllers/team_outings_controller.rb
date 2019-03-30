@@ -35,7 +35,23 @@ class TeamOutingsController < BaseController
     redirect_to league_tournament_day_teams_path(@tournament.league, @tournament, @tournament_day), flash: { success: "The team was successfully deleted." }
   end
 
+  def team
+  	@league_season_team = league_season_team
+  end
+
+  def toggle_player
+  	player = @league.users.find(params[:player_id])
+  	matchup = @tournament_day.league_season_team_matchup_for_team(league_season_team)
+  	matchup.toggle_user(player)
+
+  	redirect_to league_tournament_day_team_path(@league, @tournament, @tournament_day, league_season_team)
+  end
+
   private
+
+  def league_season_team
+  	@league_season_team ||= @tournament.league_season.league_season_teams.find(params[:team_id])
+  end
 
   def set_stage
     @stage_name = "teams#{@tournament_day.id}"

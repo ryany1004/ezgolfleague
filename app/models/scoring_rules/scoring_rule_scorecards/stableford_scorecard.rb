@@ -11,7 +11,8 @@ module ScoringRuleScorecards
 
       self.tournament_day.scorecard_base_scoring_rule.course_holes.each do |hole|
         score = DerivedScorecardScore.new
-        score.strokes = self.score_for_hole(user, handicap_allowance, hole)
+        score.strokes = self.score_for_hole(user, [], hole)
+        score.net_strokes = self.score_for_hole(user, handicap_allowance, hole)
         score.course_hole = hole
         new_scores << score
       end
@@ -55,14 +56,10 @@ module ScoringRuleScorecards
     def is_double_eagle?(hole, strokes)
       par = hole.par
 
-      if par == 4 && strokes == 1
-        return true
-      elsif par == 5 && strokes == 2
-        return true
-      elsif par == 6 && strokes == 3
-        return true
+      if strokes <= par - 3
+      	true
       else
-        return false
+      	false
       end
     end
 
@@ -70,9 +67,9 @@ module ScoringRuleScorecards
       par = hole.par
 
       if strokes == par - 2
-        return true
+        true
       else
-        return false
+        false
       end
     end
 
@@ -80,9 +77,9 @@ module ScoringRuleScorecards
       par = hole.par
 
       if strokes == par - 1
-        return true
+        true
       else
-        return false
+        false
       end
     end
 
@@ -90,9 +87,9 @@ module ScoringRuleScorecards
       par = hole.par
 
       if par == strokes
-        return true
+        true
       else
-        return false
+        false
       end
     end
 
@@ -100,9 +97,9 @@ module ScoringRuleScorecards
       par = hole.par
 
       if strokes == par + 1
-        return true
+        true
       else
-        return false
+        false
       end
     end
 
@@ -110,9 +107,9 @@ module ScoringRuleScorecards
       par = hole.par
 
       if strokes > par + 1
-        return true
+        true
       else
-        return false
+        false
       end
     end
   end

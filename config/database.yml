@@ -17,9 +17,11 @@ staging:
   host: localhost
   database: ezgolfleague_staging
   username: postgres
+  pool: 20
 
 production:
   adapter: postgresql
   host: localhost
   database: ezgolfleague_production
   username: postgres
+  pool: 20

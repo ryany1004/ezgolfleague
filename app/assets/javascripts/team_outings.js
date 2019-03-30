@@ -38,6 +38,6 @@ function placeButtonsForTeams(selectedTeams, elementsUpdated) {
     var team = selectedTeams[i];
     var element = $(elementsUpdated[i]);
 
-    element.children("#action-buttons").html(team["removeButton"]);
+    element.children("#action-buttons").html(team["specifyPlayersButton"] + "&nbsp;" + team["removeButton"]);
   }
 }

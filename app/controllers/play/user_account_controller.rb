@@ -41,7 +41,8 @@ class Play::UserAccountController < Play::BaseController
     end
 
     def initialize_form
-      @us_states = US_STATES
+      @us_states = GEO_STATES
+      @countries = COUNTRIES
     end
 
 end

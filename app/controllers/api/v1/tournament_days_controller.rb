@@ -71,7 +71,7 @@ class Api::V1::TournamentDaysController < Api::V1::ApiBaseController
     payload.each do |p|
       scoring_rule = @tournament_day.scoring_rules.find(p)
 
-      scoring_rule.users << @current_user
+      scoring_rule.users << @current_user unless scoring_rule.users.include? @current_user
     end
 
     render json: { success: true }

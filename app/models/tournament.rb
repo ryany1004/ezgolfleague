@@ -13,7 +13,6 @@ class Tournament < ApplicationRecord
 
   belongs_to :league, inverse_of: :tournaments
   has_many :tournament_days, -> { order(:tournament_at) }, inverse_of: :tournament, dependent: :destroy
-  has_many :payments, inverse_of: :tournament #TODO: REMOVE AFTER MIGRATION
   has_many :notification_templates, dependent: :destroy
 
   accepts_nested_attributes_for :tournament_days
@@ -63,8 +62,10 @@ class Tournament < ApplicationRecord
     if self.signup_closes_at.blank?
       errors.add(:signup_closes_at, "must be present.")
     else
-      if self.signup_closes_at > self.league.league_seasons.last.ends_at
-        errors.add(:signup_closes_at, "can't be after your last season ends. Please create a league season in Leagues > Actions (Manage Seasons) that includes this date.")
+    	seasons = self.league.league_seasons.where("ends_at >= ?", self.signup_closes_at)
+
+      if seasons.blank?
+        errors.add(:signup_closes_at, "can't be outside your configured league seasons.")
       end
     end
   end
@@ -169,7 +170,6 @@ class Tournament < ApplicationRecord
     end
   end
 
-  #def total_for_user_with_contest_fees(user, include_credit_card_fees = true) #TODO REMOVE
   def total_for_user_with_optional_fees(user:, include_credit_card_fees: true)
     dues_amount = self.mandatory_dues_amount
 
@@ -186,7 +186,6 @@ class Tournament < ApplicationRecord
     total
   end
 
-  # def cost_breakdown_for_user(user, include_unpaid_contests = true, include_credit_card_fees = true) #TODO REMOVE
   def cost_breakdown_for_user(user:, include_unpaid_optional_rules: true, include_credit_card_fees: true)
     dues_total = self.mandatory_dues_amount
 
@@ -247,7 +246,7 @@ class Tournament < ApplicationRecord
     if self.league.exempt_from_subscription
       true
     else
-      false #TODO: update
+      false # TODO: Update this to check for subscription or remove this and use other methods.
     end
   end
 
@@ -289,6 +288,7 @@ class Tournament < ApplicationRecord
 
   def can_be_finalized?
     return false if self.last_day.blank?
+    return false if self.last_day.scoring_rules.count == 0
 
     self.last_day.can_be_finalized?
   end
@@ -374,8 +374,12 @@ class Tournament < ApplicationRecord
   def user_has_paid?(user)
     tournament_balance = 0.0
 
-    self.payments.where(user: user).each do |p|
-      tournament_balance = tournament_balance + p.payment_amount if p.payment_amount > 0 #add the payments
+    self.tournament_days.each do |day|
+	    day.scoring_rules.each do |rule|
+		    rule.payments.where(user: user).each do |p|
+		      tournament_balance = tournament_balance + p.payment_amount if p.payment_amount > 0 #add the payments
+		    end
+	    end
     end
 
     if tournament_balance > 0 && tournament_balance >= self.dues_for_user(user)
@@ -388,7 +392,7 @@ class Tournament < ApplicationRecord
   # date parsing
   
   def signup_opens_at=(date)
-    begin      
+    begin
       parsed = EzglCalendar::CalendarUtils.datetime_for_picker_date(date)
       super parsed
     rescue

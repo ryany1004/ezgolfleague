@@ -109,7 +109,9 @@ namespace :scoring_rules do
 
         #opt-in
         if c.dues_amount > 0 || c.is_opt_in
+          contest_rule.dues_amount = c.dues_amount
           contest_rule.is_opt_in = true
+          
           contest_rule.save
         else
           d.tournament.players_for_day(d).each do |user| #add all users to this contest

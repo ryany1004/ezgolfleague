@@ -23,11 +23,8 @@ class NotificationTemplatesController < BaseController
   end
 
   def create
-    @notification_template = NotificationTemplate.new(notification_template_params)
-
-    if @notification_template.league.blank?
-      @notification_template.league = @notification_template.tournament.league
-    end
+    @notification_template = NotificationTemplate.new(notification_template_params)    
+    @notification_template.league = @notification_template.tournament.league if @notification_template.league.blank?
 
     if @notification_template.save
       SendNotificationsJob.perform_later

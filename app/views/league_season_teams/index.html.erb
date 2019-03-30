@@ -11,7 +11,7 @@
 		<tr>
       <th>Name</th>
 			<th>Players</th>
-      <th><%= link_to 'Create Team', new_league_league_season_league_season_team_path(@league, @league_season), class: 'btn btn-primary' %></th>
+      <th><%= link_to 'Create Team', league_league_season_league_season_teams_path(@league, @league_season), method: :post, class: 'btn btn-primary' %></th>
 		</tr>
 	</thead>
 	<tbody>
@@ -27,7 +27,7 @@
 		<tr>
 			<th>&nbsp;</th>
 			<th>&nbsp;</th>
-      <th><%= link_to 'Create Team', new_league_league_season_league_season_team_path(@league, @league_season), class: 'btn btn-primary' %></th>
+      <th><%= link_to 'Create Team', league_league_season_league_season_teams_path(@league, @league_season), method: :post, class: 'btn btn-primary' %></th>
 		</tr>
   </tfoot>
 </table>

@@ -5,9 +5,6 @@ class Payment < ApplicationRecord
   
   belongs_to :user, inverse_of: :payments
 
-  belongs_to :tournament, inverse_of: :payments, touch: true, optional: true #TODO: REMOVE AFTER MIGRATION
-  belongs_to :contest, inverse_of: :payments, touch: true, optional: true #TODO: REMOVE AFTER MIGRATION
-  
   belongs_to :scoring_rule, inverse_of: :payments, optional: true, touch: true
   belongs_to :league_season, inverse_of: :payments, optional: true, touch: true
 

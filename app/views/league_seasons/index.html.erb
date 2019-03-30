@@ -22,10 +22,10 @@
 			<td><%= season.starts_at.to_s(:short) %></td>
 			<td><%= season.ends_at.to_s(:short) %></td>
 			<td>
-				<% if @league.allow_scoring_groups %>
-					<%= link_to "Scoring Group Setup", league_league_season_league_season_scoring_groups_path(@league, season) %>
-				<% elsif season.season_type == LeagueSeasonType::TEAM %>
+				<% if season.season_type == LeagueSeasonType::TEAM %>
 					<%= link_to "Team Setup", league_league_season_league_season_teams_path(@league, season) %>
+				<% elsif @league.allow_scoring_groups %>
+					<%= link_to "Scoring Group Setup", league_league_season_league_season_scoring_groups_path(@league, season) %>
 				<% else %>
 					&nbsp;
 				<% end %>

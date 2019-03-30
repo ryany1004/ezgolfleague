@@ -26,15 +26,17 @@ class TournamentsController < BaseController
 
   def create
     @tournament = Tournament.new(tournament_params)
-    @tournament.auto_schedule_for_multi_day = 0 #default
+    @tournament.auto_schedule_for_multi_day = 0 # default
     @tournament.skip_date_validation = current_user.is_super_user
 
     if @tournament.save
       league = @tournament.league
       if !league.exempt_from_subscription && league.free_tournaments_remaining > 0
-        league.free_tournaments_remaining -= 1 #decrement the free tournaments
+        league.free_tournaments_remaining -= 1 # decrement the free tournaments
         league.save
       end
+
+      SendEventToDripJob.perform_later("Created a new tournament", user: current_user, options: { tournament: { name: @tournament.name } })
 
       redirect_to league_tournament_tournament_days_path(@tournament.league, @tournament), flash: { success: "The tournament was successfully created. Please update course information." }
     else
@@ -61,7 +63,11 @@ class TournamentsController < BaseController
   end
 
   def destroy
+  	league_season = @tournament.league_season
+
     @tournament.destroy
+
+	  RankLeagueSeasonJob.perform_later(league_season) if league_season.present?
 
     redirect_to league_tournaments_path(current_user.selected_league), flash: { success: "The tournament was successfully deleted." }
   end
@@ -80,8 +86,12 @@ class TournamentsController < BaseController
     @tournament.tournament_days.each do |day|
       day.touch
 
-      day.tournament_day_results.each do |result|
-        result.touch
+      day.scoring_rules.each do |rule|
+      	rule.touch
+
+      	rule.tournament_day_results.each do |result|
+      		result.touch
+      	end
       end
     end
 

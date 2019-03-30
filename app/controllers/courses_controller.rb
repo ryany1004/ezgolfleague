@@ -7,11 +7,23 @@ class CoursesController < BaseController
 
     @courses = Course.order(:name).page params[:page]
 
-    unless params[:search].blank?
+    if params[:search].present?
       search_string = "%#{params[:search].downcase}%"
 
-      @courses = @courses.where("lower(name) LIKE ? OR lower(city) LIKE ?", search_string, search_string)
+      @courses = @courses.where("lower(name) LIKE ? OR lower(city) LIKE ? OR lower(us_state) LIKE ?", search_string, search_string, search_string)
     end
+  end
+
+  def list
+  	@courses = Course.all.order(:name).limit(100)
+
+    if params[:search].present?
+      search_string = "%#{params[:search].downcase}%"
+
+      @courses = @courses.where("lower(name) LIKE ? OR lower(city) LIKE ? OR lower(us_state) LIKE ?", search_string, search_string, search_string)
+    end
+
+  	render json: @courses.to_json
   end
 
   def new
@@ -53,7 +65,7 @@ class CoursesController < BaseController
   private
 
   def course_params
-    params.require(:course).permit(:name, :street_address_1, :street_address_2, :city, :us_state, :postal_code, :phone_number)
+    params.require(:course).permit(:name, :street_address_1, :street_address_2, :city, :us_state, :postal_code, :country, :phone_number)
   end
 
   def fetch_course
@@ -61,7 +73,8 @@ class CoursesController < BaseController
   end
 
   def initialize_form
-    @us_states = US_STATES
+    @us_states = GEO_STATES
+    @countries = COUNTRIES
   end
 
 end

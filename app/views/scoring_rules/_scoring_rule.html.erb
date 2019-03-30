@@ -1,0 +1,61 @@
+<div class="well">
+	<h4><%= scoring_rule.name %></h4>
+	<p><%= scoring_rule.description %></p>
+	<p>
+		<% if scoring_rule.primary_rule %>
+			<p><em>This is the primary game type for this tournament - it will define how scorecards and handicaps display.</em></p>
+		<% end %>
+
+		<%= link_to 'Choose Holes to Play', edit_league_tournament_tournament_day_scoring_rule_course_holes_path(@tournament.league, @tournament, @tournament_day, scoring_rule), class: 'btn btn-sm', role: 'button' %>
+
+		<%= link_to 'Edit Game Type', edit_league_tournament_tournament_day_scoring_rule_path(@tournament.league, @tournament, @tournament_day, scoring_rule), class: 'btn btn-sm', role: 'button' %>
+
+		<%= link_to 'Remove Game Type', league_tournament_tournament_day_scoring_rule_path(@tournament.league, @tournament, @tournament_day, scoring_rule), class: 'btn btn-sm', role: 'button', data: { confirm: 'Are you sure you want to remove this game type? That will also destroy any assigned results.' }, method: :delete %>
+	</p>
+
+	<div class="panel panel-default">
+	  <div class="panel-heading">
+	    <h3 class="panel-title">Payouts</h3>
+	  </div>
+	  <div class="panel-body">
+	  	<% if scoring_rule.payout_type == ScoringRulePayoutType::PREDETERMINED && scoring_rule.payout_assignment_type == ScoringRulePayoutAssignmentType::CALCULATED %>
+	      <% if @tournament.is_league_teams? %>
+	        <p>For team tournaments, if a payout has just dollars or dollars AND points, it is awarded once based on the rank of each team in the final results. If a payout ONLY has points, the winning team in each matchup will receive that number of points.</p>
+	      <% else %>
+	        <p>Payouts are assigned to players sorted by the amount/points won - higher values going to higher placing players.</p>
+	      <% end %>
+	  	<% elsif scoring_rule.payout_assignment_type == ScoringRulePayoutAssignmentType::MANUAL %>
+	  		<p>Manually Entered</p>
+		  <% else %>
+		  	<p>Winners Split Pot</p>
+		  <% end %>
+
+		  <% if user_is_league_admin(current_user, @tournament.league) %>
+  			<%= link_to 'Manage Results', league_tournament_tournament_day_scoring_rule_payout_results_path(@tournament.league, @tournament, @tournament_day, scoring_rule), class: 'btn btn-sm', role: 'button' %>
+  		<% end %>
+	  </div>
+	  
+	  <% if scoring_rule.payout_type == ScoringRulePayoutType::PREDETERMINED && scoring_rule.payout_assignment_type == ScoringRulePayoutAssignmentType::CALCULATED %>
+	  	<table class="table table-striped">
+	    	<thead>
+	    		<tr>
+	          <th>Flight</th>
+	    			<th>Amount</th>
+	          <th>Points</th>
+          	<th><%= link_to 'Add Payout', new_league_tournament_tournament_day_scoring_rule_payout_path(current_user.selected_league, @tournament, @tournament_day, scoring_rule), class: 'btn btn-primary', id: "payout_button_1" %></th>
+	    		</tr>
+	    	</thead>
+	    	<tbody>
+	    	<% scoring_rule.payouts.each do |payout| %>
+	    		<tr>
+	          <td><%= link_to payout.flight.display_name, edit_league_tournament_tournament_day_scoring_rule_payout_path(@tournament.league, @tournament, @tournament_day, scoring_rule, payout) if payout.flight.present? %></td>
+	    			<td><%= number_to_currency(payout.amount) %></td>
+	    			<td><%= payout.points.to_i %></td>
+	          <td><%= link_to "Edit", edit_league_tournament_tournament_day_scoring_rule_payout_path(@tournament.league, @tournament, @tournament_day, scoring_rule, payout) %> | <%= link_to 'Delete', league_tournament_tournament_day_scoring_rule_payout_path(@tournament.league, @tournament, @tournament_day, scoring_rule, payout), data: { confirm: 'Are you sure you want to delete this payout?' }, method: :delete %></td>
+	    		</tr>
+	    	<% end %>
+	    	</tbody>
+	  	</table>
+	  <% end %>
+	</div>
+</div>

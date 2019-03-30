@@ -35,7 +35,7 @@ class Play::RegistrationsController < Play::BaseController
   def join_league
     @league = League.find(params[:league_id])
 
-    if @league.dues_amount == 0.0
+    if @league.encrypted_stripe_production_publishable_key.blank? || @league.dues_amount.zero?
       current_user.leagues << @league
 
       redirect_to setup_completed_play_registrations_path
@@ -105,7 +105,7 @@ class Play::RegistrationsController < Play::BaseController
       UserMailer.invite(g, @league).deliver_later
     end
 
-    response = DRIP_CLIENT.track_event(current_user.email, "League admin invited golfers during registration", { number_of_golfers: golfers_to_invite.count, league_name: @league.name })
+    SendEventToDripJob.perform_later("League admin invited golfers during registration", user: current_user, options: { number_of_golfers: golfers_to_invite.count, league_name: @league.name })
 
     redirect_to setup_completed_play_registrations_path
   end

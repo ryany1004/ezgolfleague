@@ -39,7 +39,7 @@
                 <tr>
                   <td><%= payout_result.scoring_rule.tournament_day.tournament_at.to_s(:short) %></td>
                   <td><%= payout_result.display_name %></td>
-                  <td><%= payout_result.name %> <% if payout_result.team_matchup_designator %>&nbsp;<span class="badge badge-secondary"><%= payout_result.team_matchup_designator %></span><% end %></td>
+                  <td><% if payout_result.team_matchup_designator %><span class="badge badge-secondary"><%= payout_result.team_matchup_designator %></span>&nbsp;<% end %><%= payout_result.name %></td>
                   <td><%= number_to_currency(payout_result.amount) %></td>
                   <td><%= payout_result.points.to_i %></td>
                   <td><%= payout_result.net_score %></td>

@@ -45,7 +45,7 @@ class SubscriptionCreditsController < BaseController
     active_delta = active_after_update - active_before_update
 
     if active_delta > 0
-      per_golfer_cost = SubscriptionCredit.cost_per_golfer
+      per_golfer_cost = SubscriptionCredit.cost_per_golfer(league: @league)
       payment_amount = per_golfer_cost * active_delta
 
       charge = charge_customer(@league, payment_amount, "Add active golfers for #{current_user.email} for league #{@league.name}.")
@@ -128,7 +128,7 @@ class SubscriptionCreditsController < BaseController
   end
 
   def calc_payment_amount(number_of_golfers)
-    number_of_golfers * SubscriptionCredit.cost_per_golfer
+    number_of_golfers * SubscriptionCredit.cost_per_golfer(league: @league)
   end
 
   def create_or_update_stripe_customer(league, token)
@@ -147,7 +147,11 @@ class SubscriptionCreditsController < BaseController
     else
       stripe_customer = Stripe::Customer.retrieve(league.stripe_token)
 
-      stripe_customer.sources.create({ source: token })
+      card = stripe_customer.sources.create({:source => token})
+      card.save
+
+      stripe_customer.default_source = card.id
+      stripe_customer.save
     end
 
     unless stripe_customer.sources.data.blank?
@@ -171,7 +175,7 @@ class SubscriptionCreditsController < BaseController
     unless stripe_customer.blank?
       begin
         charge = Stripe::Charge.create(
-          amount: payment_amount * 100,
+          amount: payment_amount.to_i * 100,
           currency: "usd",
           customer: stripe_customer,
           description: description

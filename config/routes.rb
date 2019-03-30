@@ -17,7 +17,7 @@ Rails.application.routes.draw do
     mount Sidekiq::Web => '/jobs'
   end
 
-  #this is for playing tournaments
+  # this is for playing tournaments
   namespace :play do
     resources :payments, only: [:index, :new, :create] do
       get 'thank_you', on: :collection
@@ -68,7 +68,7 @@ Rails.application.routes.draw do
     end
   end
 
-  #API
+  # API
   namespace "api" do
     namespace "v1" do
       get 'current_day_leaderboard' => 'scorecards#current_day_leaderboard'
@@ -169,9 +169,7 @@ Rails.application.routes.draw do
         resources :scoring_rules do
           get 'options', on: :collection
 
-          put 'set_primary'
-
-          resources :payouts
+          resources :payouts, only: [:new, :create, :edit, :update, :destroy]
           resources :payout_results, controller: "scoring_rules/payout_results"
           resource :course_holes, path: "course-holes", only: [:edit, :update], controller: "scoring_rules/course_holes"
         end
@@ -200,6 +198,8 @@ Rails.application.routes.draw do
       get 'tournament_days/:tournament_day_id/teams' => 'team_outings#teams', as: :day_teams
       post 'tournament_days/:tournament_day_id/:tournament_group_id/update_teams' => 'team_outings#update_teams', as: :update_day_teams
       delete 'tournament_days/:tournament_day_id/delete_team_signup' => 'team_outings#delete_team_signup', as: :delete_day_teams
+      get 'tournament_days/:tournament_day_id/teams/:team_id' => 'team_outings#team', as: :day_team
+      patch 'tournament_days/:tournament_day_id/teams/:team_id/toggle_player/:player_id' => 'team_outings#toggle_player', as: :update_day_team
 
       patch 'update_course_handicaps'
       patch 'touch_tournament'
@@ -222,6 +222,8 @@ Rails.application.routes.draw do
   end
 
   resources :courses do
+  	get 'list', on: :collection
+
     resources :course_tee_boxes
 
     resources :course_holes do

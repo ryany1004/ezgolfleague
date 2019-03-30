@@ -62,7 +62,7 @@ class LeaguesController < BaseController
   def update_league_standings
     @league = League.find(params[:league_id])
 
-    @league.league_seasons.each do |s|
+    @league.league_seasons.order("created_at DESC").each do |s|
       RankLeagueSeasonJob.perform_later(s)
     end
 
@@ -85,7 +85,7 @@ class LeaguesController < BaseController
   private
 
   def league_params
-    params.require(:league).permit(:name, :display_balances_to_players, :allow_scoring_groups, :required_container_frame_url, :free_tournaments_remaining, :show_in_search, :league_description, :contact_name, :contact_phone, :contact_email, :location, :stripe_production_secret_key, :stripe_production_publishable_key, :stripe_test_secret_key, :stripe_test_publishable_key, :stripe_test_mode, :dues_payment_receipt_email_addresses, :apple_pay_merchant_id, :supports_apple_pay, :exempt_from_subscription)
+    params.require(:league).permit(:name, :display_balances_to_players, :override_golfer_price, :allow_scoring_groups, :required_container_frame_url, :free_tournaments_remaining, :show_in_search, :league_description, :contact_name, :contact_phone, :contact_email, :location, :stripe_production_secret_key, :stripe_production_publishable_key, :stripe_test_secret_key, :stripe_test_publishable_key, :stripe_test_mode, :dues_payment_receipt_email_addresses, :apple_pay_merchant_id, :supports_apple_pay, :exempt_from_subscription)
   end
 
   def fetch_league

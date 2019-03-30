@@ -1,10 +1,11 @@
 # US_STATES = ['AL', 'AL', 'AZ', 'AR', 'CA', 'CO', 'CT', 'DE', 'DC', 'FL', 'GA', 'HI', 'ID', 'IL', 'IN', 'IA', 'KS', 'KY', 'LA', 'ME', 'MD', 'MA', 'MI', 'MN', 'MS', 'MO', 'MT', 'NE', 'NV', 'NH', 'NJ', 'NM', 'NY', 'NC', 'ND', 'OH', 'OK', 'OR', 'PA', 'PR', 'RI', 'SC', 'SD', 'TN', 'TX', 'UT', 'VT', 'VA', 'WA', 'WV', 'WI', 'WY']
 
-US_STATES = [
+GEO_STATES = [
       ['Alabama', 'AL'],
       ['Alaska', 'AK'],
       ['Arizona', 'AZ'],
       ['Arkansas', 'AR'],
+      ['British Columbia', 'BC'],
       ['California', 'CA'],
       ['Colorado', 'CO'],
       ['Connecticut', 'CT'],
@@ -38,9 +39,11 @@ US_STATES = [
       ['North Dakota', 'ND'],
       ['Ohio', 'OH'],
       ['Oklahoma', 'OK'],
+      ['Ontario', 'ON'],
       ['Oregon', 'OR'],
       ['Pennsylvania', 'PA'],
       ['Puerto Rico', 'PR'],
+      ['Quebec', 'QC'],
       ['Rhode Island', 'RI'],
       ['South Carolina', 'SC'],
       ['South Dakota', 'SD'],
@@ -54,3 +57,8 @@ US_STATES = [
       ['Wisconsin', 'WI'],
       ['Wyoming', 'WY']
     ]
+
+ COUNTRIES = [
+	['Canada', 'Canada'],
+	['United States', 'United States'],
+ ]

@@ -104,10 +104,6 @@
         <% unless @tournament.blank? -%>
           <input type="hidden" name="tournament_id" value="<%= @tournament.id %>" />
         <% end -%>
-
-        <% unless @contest.blank? -%>
-          <input type="hidden" name="contest_id" value="<%= @contest.id %>" />
-        <% end -%>
       <% end %>
     </div>
   </div>

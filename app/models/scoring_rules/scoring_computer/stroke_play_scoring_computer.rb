@@ -7,7 +7,7 @@ module ScoringComputer
         if @scoring_rule.tournament_day.scorecard_base_scoring_rule.course_holes.count == 9 #if a 9-hole tournament, compare score by score
           Rails.logger.info { "9-Hole Tie-Breaking" }
 
-          par_related_net_scores = scoring_rule.individual_tournament_day_results.map{ |x| x.par_related_net_score }
+          par_related_net_scores = scoring_rule.individual_tournament_day_results.map { |x| x.par_related_net_score }
 
           if par_related_net_scores.uniq.length != par_related_net_scores.length
             Rails.logger.info { "We have tied players, using net_scores" }
@@ -46,7 +46,7 @@ module ScoringComputer
 			Rails.logger.debug { "Handicap Allowance for User #{user.complete_name}: #{handicap_allowance}" }
 
 			flight = self.tournament_day.flight_for_player(user)
-    	flight = self.tournament_day.assign_player_to_flight(user) if flight.blank?
+    	flight = self.tournament_day.assign_user_to_flight(user: user) if flight.blank?
 
 			gross_score = 0
 			net_score = 0
@@ -111,11 +111,7 @@ module ScoringComputer
 
 	    if gross_score > 0
 	    	TournamentDayResult.transaction do
-	    		if destroy_previous_results
-	    			@scoring_rule.individual_tournament_day_results.where(user: user).destroy_all
-
-	    			flight&.tournament_day_results.where(user: user).destroy_all #TODO: Remove in future - needed for legacy tournaments
-	    		end
+	    		@scoring_rule.individual_tournament_day_results.where(user: user).destroy_all if destroy_previous_results
 
 	    		result = @scoring_rule.tournament_day_results.create(
 	    			user: user,

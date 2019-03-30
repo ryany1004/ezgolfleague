@@ -1,5 +1,5 @@
 module ScoringComputer
-	class TeamMatchPlayScoringComputer < MatchPlayScoringComputer
+	class TeamMatchPlayVsScoringComputer < MatchPlayScoringComputer
 		def assign_payouts
 			Rails.logger.debug { "assign_payouts #{self.class}" }
 
