@@ -1,5 +1,19 @@
 <legend><%= @league_season_team.name %></legend>
 
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h3 class="panel-title">Team</h3>
+  </div>
+
+  <div class="well">
+    <%= simple_form_for ([@league, @league_season, @league_season_team]) do |f| %>
+      <%= f.input :name, label: "Team Name" %>
+
+      <%= f.button :submit, "Save", class: 'btn btn-default' %>
+    <% end %>
+  </div>
+</div>
+
 <% if !@league_season_team.new_record? %>
   <br/>
 
@@ -11,8 +25,6 @@
     <div class="well">
       <%= simple_form_for :add_player, url: league_league_season_league_season_team_update_player_path(@league, @league_season, @league_season_team) do |f| %>
         <%= f.input "user_id", label: false, collection: @players, label_method: :complete_name, value_method: :id, input_html: { class: 'chosen-select' } %>
-
-        <%= f.input :name, label: "Team Name" %>
 
         <%= f.button :submit, "Add", class: 'btn btn-default' %>
       <% end %>
