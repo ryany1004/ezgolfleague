@@ -97,11 +97,11 @@ class LeagueSeasonTeamTournamentDayMatchup < ApplicationRecord
 	end
 
 	def team_a_users
-		self.build_excluded_user_filter(self.team_a.users)
+		self.team_a.present? ? self.build_excluded_user_filter(self.team_a.users) : []
 	end
 
 	def team_b_users
-		self.build_excluded_user_filter(self.team_b.users)
+		self.team_b.present? ? self.build_excluded_user_filter(self.team_b.users) : []
 	end
 
 	def build_excluded_user_filter(relation)
