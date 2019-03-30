@@ -215,6 +215,8 @@ class TournamentDay < ApplicationRecord
         next
       end
     end
+
+    return nil
   end
 
   def add_league_season_team(league_season_team, matchup, slot_id)
@@ -226,10 +228,12 @@ class TournamentDay < ApplicationRecord
 
     matchup.save
 
-    group = self.tournament_group_with_open_slots(league_season_team.users.size)
-    raise "No groups available" if group.blank?
+    league_season_team.users.each { |user|
+	    group = self.tournament_group_with_open_slots(1)
+	    raise "No groups available" if group.blank?
 
-    league_season_team.users.each { |user| self.add_player_to_group(tournament_group: group, user: user) }
+    	self.add_player_to_group(tournament_group: group, user: user)
+    }
   end
 
   def remove_league_season_team(matchup, league_season_team)

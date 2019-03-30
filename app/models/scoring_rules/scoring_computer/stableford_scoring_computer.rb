@@ -15,11 +15,7 @@ module ScoringComputer
 	    	flight = self.tournament_day.assign_user_to_flight(user: user) if flight.blank?
 
 	    	TournamentDayResult.transaction do
-	    		if destroy_previous_results
-	    			@scoring_rule.individual_tournament_day_results.where(user: user).destroy_all
-
-	    			flight&.tournament_day_results.where(user: user).destroy_all # TODO: Remove in future - needed for legacy tournaments
-	    		end
+	    		@scoring_rule.individual_tournament_day_results.where(user: user).destroy_all if destroy_previous_results
 
 	    		gross_score = scorecard.gross_score
 	    		net_score = scorecard.net_score

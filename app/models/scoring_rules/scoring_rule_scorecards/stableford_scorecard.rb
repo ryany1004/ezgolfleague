@@ -24,8 +24,11 @@ module ScoringRuleScorecards
       scorecard = self.tournament_day.primary_scorecard_for_user(user)
       return 0 if scorecard.blank?
 
+      score = scorecard&.scores.where(course_hole: hole).first
+      return 0 if score.strokes.blank? || score.strokes == 0
+
       strokes = 0
-      strokes = scorecard&.scores.where(course_hole: hole).first&.strokes
+      strokes = score&.strokes
 
       handicap_allowance.each do |h|
         if h[:course_hole] == hole
