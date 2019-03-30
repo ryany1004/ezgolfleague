@@ -9,10 +9,6 @@ class LeagueSeasonTeamsController < BaseController
     @page_title = "Season Teams"
   end
 
-  # def new
-  #   @league_season_team = LeagueSeasonTeam.new
-  # end
-
   def create
     @league_season_team = LeagueSeasonTeam.new(name: "New Team")
     @league_season_team.league_season = @league_season
@@ -42,7 +38,7 @@ class LeagueSeasonTeamsController < BaseController
     @user = @league.users.find(params[:add_player][:user_id])
     @league_season_team.users << @user
 
-    @league_season_team.update_team_name
+    @league_season_team.update_team_name if @league_season_team.should_update_team_name?
 
     redirect_to edit_league_league_season_league_season_team_path(@league, @league_season, @league_season_team)
   end
@@ -51,7 +47,7 @@ class LeagueSeasonTeamsController < BaseController
     @user = @league.users.find(params[:user])
     @league_season_team.users.destroy(@user)
 
-    @league_season_team.update_team_name
+    @league_season_team.update_team_name if @league_season_team.should_update_team_name?
 
     redirect_to edit_league_league_season_league_season_team_path(@league, @league_season, @league_season_team)
   end
