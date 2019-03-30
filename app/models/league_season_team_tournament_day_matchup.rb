@@ -121,7 +121,7 @@ class LeagueSeasonTeamTournamentDayMatchup < ApplicationRecord
 			self.exclude_user(user)
 
       group = self.tournament_day.tournament_group_for_player(user)
-      self.tournament_day.remove_player_from_group(tournament_group: group, user: user)
+      self.tournament_day.remove_player_from_group(tournament_group: group, user: user) if group.present?
 		else
 			self.include_user(user)
 
