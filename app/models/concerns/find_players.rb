@@ -2,11 +2,7 @@ module FindPlayers
   extend ActiveSupport::Concern
 
   def flight_for_player(user)
-    self.flights.includes(:users).each do |f|
-      return f if f.users.include? user
-    end
-
-    nil
+    self.flights.joins(:users).where(users: { id: user.id }).first
   end
 
   def daily_team_for_player(user)
