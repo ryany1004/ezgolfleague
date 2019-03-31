@@ -6,11 +6,7 @@ module FindPlayers
   end
 
   def daily_team_for_player(user)
-    self.daily_teams.each do |t|
-      return t if t.users.include? user
-    end
-
-    nil
+    self.daily_teams.joins(:users).where(users: { id: user.id }).first
   end
 
   def league_season_team_for_player(user)
@@ -35,13 +31,7 @@ module FindPlayers
   end
 
   def tournament_group_for_player(user)
-    self.tournament_groups.includes(golf_outings: [:user]).each do |group|
-      group.golf_outings.each do |outing|
-        return group if outing.user == user
-      end
-    end
-
-    nil
+    self.tournament_groups.joins(golf_outings: :user).where(golf_outings: { user: user }).first
   end
 
   def other_tournament_group_members(user)
