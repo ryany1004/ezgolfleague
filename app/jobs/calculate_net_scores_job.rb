@@ -4,6 +4,7 @@ class CalculateNetScoresJob < ApplicationJob
 
   	handicap_computer = stroke_play.handicap_computer
 		handicap_allowance = handicap_computer.handicap_allowance(user: scorecard.user)
+		return if handicap_allowance.blank?
 
 		scorecard.scores.includes(:course_hole).each do |score|
 			score.net_strokes = score.strokes
