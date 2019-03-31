@@ -6,7 +6,11 @@ module FindPlayers
   end
 
   def daily_team_for_player(user)
-    self.daily_teams.joins(:users).where(users: { id: user.id }).first
+    self.daily_teams.each do |t|
+      return t if t.users.include? user
+    end
+
+    nil
   end
 
   def league_season_team_for_player(user)
