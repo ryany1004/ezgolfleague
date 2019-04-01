@@ -20,13 +20,17 @@ module ScoringComputer
       	opponent = @scoring_rule.opponent_for_user(user)
       	next if opponent.blank?
 
-      	user_match_play_scorecard = @scoring_rule.match_play_scorecard_for_user(user)
-      	if user_match_play_scorecard.scorecard_result == ::ScoringRuleScorecards::MatchPlayScorecardResult::WON #in this case, we are good
+      	if !eligible_users.include?(opponent) # opponent was disqualified, user wins
       		winners << user
-      		losers << opponent
       	else
-      		winners << opponent
-      		losers << user
+	      	user_match_play_scorecard = @scoring_rule.match_play_scorecard_for_user(user)
+	      	if user_match_play_scorecard.scorecard_result == ::ScoringRuleScorecards::MatchPlayScorecardResult::WON #in this case, we are good
+	      		winners << user
+	      		losers << opponent
+	      	else
+	      		winners << opponent
+	      		losers << user
+	      	end
       	end
       end
 
