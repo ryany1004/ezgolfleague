@@ -27,7 +27,7 @@
           <% @report.results.each do |result| %>
             <tr>
               <td><%= result.flight&.flight_number %></td>
-              <td><%= link_to result.user&.complete_name, scorecard_path(result.primary_scorecard) unless result.primary_scorecard.blank? %></td>
+              <td><%= link_to result.user&.complete_name, league_tournament_tournament_day_scorecard_path(@tournament.league, @tournament, result.tournament_day, result.primary_scorecard) unless result.primary_scorecard.blank? %></td>
               <td><%= result.adjusted_score %></td>
               <td><%= result.gross_score %></td>
             </tr>
