@@ -10,8 +10,9 @@ class ScoringRulesController < BaseController
   def create
   	scoring_rule = params[:scoring_rule][:selected_class_name].constantize.new(tournament_day: @tournament_day)
     scoring_rule.is_opt_in = scoring_rule.optional_by_default
-    scoring_rule.primary_rule = true if @tournament_day.scoring_rules.count.zero?
     scoring_rule.save
+
+    self.update_primary_scoring_rule
 
     #default course holes
     @tournament_day.course.course_holes.each do |ch|
@@ -22,8 +23,6 @@ class ScoringRulesController < BaseController
   end
 
   def update
-    @scoring_rule.update(scoring_rule_params)
-
     if params[:scoring_rule_options].blank? || params[:scoring_rule_options][@scoring_rule.id.to_s].blank?
       @scoring_rule.remove_game_type_options
     else
@@ -46,6 +45,8 @@ class ScoringRulesController < BaseController
 
   	@scoring_rule.tournament_day_results.destroy_all #removed cached results as gametype influences scores
 
+  	self.update_primary_scoring_rule
+
   	if params[:commit] == "Save & Continue"
   		redirect_to league_tournament_tournament_day_tournament_groups_path(@tournament.league, @tournament, @tournament_day)
   	else
@@ -56,10 +57,20 @@ class ScoringRulesController < BaseController
 	def destroy
     @scoring_rule.destroy
 
+    self.update_primary_scoring_rule
+
     redirect_to league_tournament_tournament_day_scoring_rules_path(@tournament.league, @tournament, @tournament_day)
   end
 
   private
+
+  def update_primary_scoring_rule
+  	if @tournament_day.scorecard_base_scoring_rule.blank? && @tournament_day.scoring_rules.first.present?
+  		r = @tournament_day.scoring_rules.first
+  		r.primary_rule = true
+  		r.save
+  	end
+  end
 
   def scoring_rule_params
     params.require(:scoring_rule).permit(:custom_name, :dues_amount, :is_opt_in)
