@@ -62,6 +62,14 @@ class ScoringRulesController < BaseController
     redirect_to league_tournament_tournament_day_scoring_rules_path(@tournament.league, @tournament, @tournament_day)
   end
 
+  def set_primary
+		@scoring_rule = @tournament_day.scoring_rules.find(params[:scoring_rule_id])
+  	@scoring_rule.primary_rule = true
+  	@scoring_rule.save
+
+  	redirect_to league_tournament_tournament_day_scoring_rules_path(@tournament.league, @tournament, @tournament_day)
+  end
+
   def update_primary_scoring_rule
   	if @tournament_day.scorecard_base_scoring_rule.blank? && @tournament_day.scoring_rules.first.present?
   		r = @tournament_day.scoring_rules.first
