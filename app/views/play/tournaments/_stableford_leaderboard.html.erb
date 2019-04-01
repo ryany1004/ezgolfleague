@@ -17,7 +17,7 @@
         <tbody>
           <% combined_flights_with_rankings.each_with_index do |flight, x| %>
             <% current_day_flight = day_flights_with_rankings[x] -%>
-            <% flight.tournament_day_results.each_with_index do |result, i| -%>
+            <% flight.scorecard_base_scoring_rule_tournament_day_results.each_with_index do |result, i| -%>
             <% current_day_player = current_day_flight.tournament_day_results[i] %>
             <tr>
               <td><strong><%= flight[:flight_number] %></strong></td>

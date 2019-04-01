@@ -76,6 +76,10 @@ class Flight < ApplicationRecord
     self.id
   end
 
+  def scorecard_base_scoring_rule_tournament_day_results
+  	self.tournament_day_results.joins(:scoring_rule).where(scoring_rules: { primary_rule: true })
+  end
+
   def players
     self.tournament_day_results.where("rank > 0")
   end
