@@ -70,6 +70,10 @@ class User < ApplicationRecord
     complete_name + " (#{self.email})"
   end
 
+  def group_cache_key
+  	self.time_zone
+  end
+
   def scoring_group_name_for_league_season(league_season)
     if league_season.league.allow_scoring_groups
       league_season.league_season_scoring_groups.each do |group|
