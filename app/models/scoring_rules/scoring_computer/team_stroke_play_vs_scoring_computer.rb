@@ -25,9 +25,9 @@ module ScoringComputer
     		else
 	      	user_result = @scoring_rule.tournament_day_results.where(user: user).first
 	      	opponent_result = @scoring_rule.tournament_day_results.where(user: opponent).first
-	      	next if user_result.blank? || opponent_result.blank?
+	      	next if user_result.blank? && opponent_result.blank?
 
-	      	if user_result.par_related_net_score < opponent_result.par_related_net_score
+	      	if opponent_result.blank? || user_result.par_related_net_score < opponent_result.par_related_net_score
 	      		winners << user
 	      		losers << opponent
 	      	else
