@@ -67,7 +67,7 @@ class ScoringRule < ApplicationRecord
 		HandicapComputer::BaseHandicapComputer.new(self)
 	end
 
-	def scorecard_api
+	def scorecard_api(scorecard:)
 		raise "A Base Class Has No Scorecard API"
 	end
 
