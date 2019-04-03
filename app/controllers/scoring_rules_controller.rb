@@ -23,6 +23,9 @@ class ScoringRulesController < BaseController
   end
 
   def update
+  	@scoring_rule.update(scoring_rule_params)
+  	@scoring_rule.tournament_day_results.destroy_all # removed cached results as gametype influences scores
+
     if params[:scoring_rule_options].blank? || params[:scoring_rule_options][@scoring_rule.id.to_s].blank?
       @scoring_rule.remove_game_type_options
     else
@@ -43,9 +46,7 @@ class ScoringRulesController < BaseController
       end
     end
 
-  	@scoring_rule.tournament_day_results.destroy_all #removed cached results as gametype influences scores
-
-  	self.update_primary_scoring_rule
+    self.update_primary_scoring_rule
 
   	if params[:commit] == "Save & Continue"
   		redirect_to league_tournament_tournament_day_tournament_groups_path(@tournament.league, @tournament, @tournament_day)

@@ -87,6 +87,7 @@ class League < ApplicationRecord
     body += self.name + "\n\n"
     body += "Season Starts: #{self.start_date}\n\n"
     body += "League Type: #{self.league_type}\n\n"
+    body += "Estimated Players: #{self.league_estimated_players}\n\n"
     body += "Comments: #{self.more_comments}\n\n"
     body += "https://app.ezgolfleague.com/leagues/#{self.id}/edit"
 
