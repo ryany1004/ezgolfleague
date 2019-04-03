@@ -72,7 +72,13 @@ class LeagueSeasonTeamTournamentDayMatchup < ApplicationRecord
 	end
 
 	def matchup_indicator_for_user(user)
-		self.users.each_with_index do |u, i|
+		if self.team_a.users.include? user
+			users = self.team_a.users
+		else
+			users = self.team_b.users
+		end
+
+		users.each_with_index do |u, i|
 			if user == u
 				return self.position_indicator_for_index(i)
 			end

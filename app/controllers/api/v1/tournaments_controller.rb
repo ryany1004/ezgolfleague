@@ -95,13 +95,4 @@ class Api::V1::TournamentsController < Api::V1::ApiBaseController
 
     return "APITournaments-#{@current_user.id}-#{max_updated_at_upcoming}-#{max_updated_at_past}-#{max_updated_at_today}"
   end
-
-  def format_tournament_group_tee_time(tournament_group)
-    if tournament_group.tournament_day.tournament.show_players_tee_times == true
-      return tournament_group.tee_time_at.to_s(:time_only)
-    else
-      return tournament_group.time_description
-    end
-  end
-
 end

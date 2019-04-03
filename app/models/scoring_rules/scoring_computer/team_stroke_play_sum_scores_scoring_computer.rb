@@ -25,7 +25,7 @@ module ScoringComputer
 				team_member_results << individual_results.select { |r| r.user == u }.first
 			end
 
-			user_scorecard = self.tournament_day.primary_scorecard_for_user(league_season_team.users.first) #TODO: this seems wrong
+			user_scorecard = self.tournament_day.primary_scorecard_for_user(league_season_team.users.first) # TODO: this seems wrong
 
   		combined_team_result = @scoring_rule.tournament_day_results.create(
   			aggregated_result: true,

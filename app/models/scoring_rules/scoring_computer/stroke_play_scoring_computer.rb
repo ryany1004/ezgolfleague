@@ -109,10 +109,10 @@ module ScoringComputer
 
 	    result_name = Users::ResultName.result_name_for_user(user, self.tournament_day)
 
+	    @scoring_rule.individual_tournament_day_results.where(user: user).destroy_all if destroy_previous_results
+
 	    if gross_score > 0
 	    	TournamentDayResult.transaction do
-	    		@scoring_rule.individual_tournament_day_results.where(user: user).destroy_all if destroy_previous_results
-
 	    		result = @scoring_rule.tournament_day_results.create(
 	    			user: user,
 	    			name: result_name,

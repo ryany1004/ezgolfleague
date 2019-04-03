@@ -94,7 +94,7 @@ class TournamentGroup < ApplicationRecord
   end
 
   def formatted_tee_time
-    if self.tournament_day.tournament.show_players_tee_times == true
+    if self.tournament_day.tournament.show_players_tee_times
       self.tee_time_at.to_s(:time_only)
     else
       "#{self.tee_time_at.to_s(:time_only)} - #{self.time_description}"
@@ -119,7 +119,7 @@ class TournamentGroup < ApplicationRecord
   end
 
   def api_time_description
-    if self.tournament_day.tournament.show_players_tee_times == true
+    if self.tournament_day.tournament.show_players_tee_times
       self.tee_time_at.to_s(:time_only)
     else
       self.time_description

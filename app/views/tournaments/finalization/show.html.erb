@@ -83,20 +83,17 @@
           </tr>
         </thead>
         <tbody>
-          <% day.scoring_rules.each do |rule| %>
-            <!-- Rule: <%= rule.id %> >-->
-            <% rule.individual_tournament_day_results.each do |result| %>
-            <!-- Result: <%= result.id %> >-->
-              <tr>
-                <td><%= result.flight&.display_name %></td>
-                <td><%= result.name %><% if result.primary_scorecard != nil && !result.primary_scorecard&.is_confirmed? -%> (Unconfirmed by Player)<% end -%><%- if result.primary_scorecard&.golf_outing&.disqualified %> (Disqualified)<%- end %></td>
-                <td><%= result.net_score %></td>
-                <td><%= result.par_related_net_score %></td>
-                <td><%= result.gross_score %></td>
-                <td><%= link_to "Edit Scorecard", edit_league_tournament_tournament_day_scorecard_path(day.tournament.league, day.tournament, day, result.primary_scorecard) unless result.primary_scorecard.blank? %></td>
-              </tr>
-            <% end %>
-          <% end %>
+          <% day.scorecard_base_scoring_rule.individual_tournament_day_results.each do |result| %>
+          <!-- Result: <%= result.id %> >-->
+            <tr>
+              <td><%= result.flight&.display_name %></td>
+              <td><%= result.name %><% if result.primary_scorecard != nil && !result.primary_scorecard&.is_confirmed? -%> (Unconfirmed by Player)<% end -%><%- if result.primary_scorecard&.golf_outing&.disqualified %> (Disqualified)<%- end %></td>
+              <td><%= result.net_score %></td>
+              <td><%= result.par_related_net_score %></td>
+              <td><%= result.gross_score %></td>
+              <td><%= link_to "Edit Scorecard", edit_league_tournament_tournament_day_scorecard_path(day.tournament.league, day.tournament, day, result.primary_scorecard) unless result.primary_scorecard.blank? %></td>
+            </tr>
+        	<% end %>
         </tbody>
       </table>
     </div>
