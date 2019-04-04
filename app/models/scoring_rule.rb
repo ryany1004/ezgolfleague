@@ -68,7 +68,10 @@ class ScoringRule < ApplicationRecord
 	end
 
 	def scorecard_api(scorecard:)
-		raise "A Base Class Has No Scorecard API"
+		return nil if scorecard.blank?
+
+    handicap_allowance = self.handicap_computer.handicap_allowance(user: scorecard.golf_outing.user)
+		Scorecards::Api::ScorecardAPIBase.new(scorecard.tournament_day, scorecard, handicap_allowance).scorecard_representation
 	end
 
 	def individual_tournament_day_results
