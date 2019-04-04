@@ -85,7 +85,7 @@ class Play::RegistrationsController < Play::BaseController
     if @league.save
       LeagueMembership.create(league: @league, user: current_user, is_admin: true)
 
-      redirect_to add_golfers_play_registrations_path(league: @league), flash: { success: flash_message }
+      redirect_to add_golfers_play_registrations_path(league: @league)
     else
       render :new_league
     end
