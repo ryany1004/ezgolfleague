@@ -2,49 +2,40 @@
   ezglTrackAnalyticsEvent("Displayed Login Screen");
 </script>
 
-<div id="container" style="padding-top: 20px;">
+<div id="container">
   <div class="row">
-    <div class="col-md-4">&nbsp;</div>
-    <div class="col-md-4">
+    <div class="col-md-4"></div>
+    <div class="col-md-4 onboarding__panel">
+      <div class="onboarding__panel-header">
+        <%= image_tag("ezgl-icon-white.png", height: 25) %>
+      </div>
       <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
-      <div class="panel panel-default">
+      <div class="panel panel-default p-5">
         <div class="panel-heading">
-          <h3 class="panel-title">Sign In</h3>
+          <h3 class="panel-title pb-3">Log In</h3>
         </div>
         <div class="panel-body">
           <div class="field">
-            <%= f.label :email %><br />
-            <%= f.email_field :email, autofocus: true, style: 'width: 100%' %>
+            <%= f.email_field :email, placeholder: "Enter your email address...", autofocus: true, class: 'onboarding__input' %>
           </div>
 
           <div class="field">
-            <%= f.label :password %><br />
-            <%= f.password_field :password, autocomplete: "off", style: 'width: 100%' %>
-          </div>
-
-          <% if devise_mapping.rememberable? -%>
-            <div class="field">
-              <%= f.check_box :remember_me %>
-              <%= f.label :remember_me %>
-            </div>
-          <% end -%>
-
-          <div class="actions">
-            <%= f.submit "Sign in" %>
+            <%= f.password_field :password, placeholder: "Enter your password", autocomplete: "off", class: 'onboarding__input' %>
           </div>
 
           <%= render "devise/shared/links" %>
+
+          <div class="actions">
+            <%= f.submit "Log in", class: 'btn__ezgl-secondary' %>
+          </div>
+
         </div>
       </div>
       <% end %>
-      <hr>
-      <div class="text-center">
-        <strong><p>New to EZ Golf League? Create an account for free.</p></strong>
-        <%= link_to "Create Your FREE EZ Golf League Account", new_play_registration_path, class: 'btn btn-primary' %>
+      <div class="onboarding__bottom-text">
+        <p>Don't have an account? <%= link_to "Sign up", new_play_registration_path, class: '' %></p>
       </div>
     </div>
-    <div class="col-md-4">&nbsp;</div>
+    <div class="col-md-4"></div>
   </div>
 </div>
-
-<div class="col-xs-12" style="height:200px;"></div>

@@ -28,7 +28,7 @@
 }
 
 .img-circle {
-    border-radius: 50%;
+	border-radius: 50%;
 }
 
 @media print {
@@ -37,7 +37,7 @@
   }
 
   body {
-    font: 14px Arial, Helvetica, "Lucida Grande", serif;
+    font-family: 'Roboto', sans-serif !important;
     margin: 0;
     padding: 0;
     line-height: 1em;

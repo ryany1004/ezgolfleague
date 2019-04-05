@@ -1,0 +1,111 @@
+@import "color-palette";
+
+.onboarding {
+  background-image: image-url('course_backgrounds/bg-full.jpg'); 
+  background-size: cover;
+  background-position: center right;
+  height: 100vh;
+  padding: 0;
+  display: flex;
+  width: 100%;
+  align-items: center;
+
+  #container {
+    width: 100%;
+
+    .row {
+      margin: 0;
+    }
+  }
+
+  .onboarding__panel {
+    background: ezgl-color('background', 'light');
+    border-radius: 4px;
+    padding: 0;
+
+    .onboarding__panel-header {
+      background: ezgl-color('primary', 'base');
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 10px 0;
+      border-radius: 4px 4px 0 0;
+
+      .onboarding__backlink {
+        position: absolute;
+        color: ezgl-color('background', 'light');
+        left: 16px;
+        font-size: 12px;
+
+        &:hover {
+          color: ezgl-color('background', 'base');
+        }
+      }
+    }
+
+    .panel {
+
+      .panel-title {
+        text-align: center;
+      }
+
+      .panel-subtitle {
+        text-align: center;
+        font-size: 14px;
+        color: ezgl-color('accent', 'base');
+      }
+
+      .panel-body {
+        width: 100%;
+        max-width: 350px;
+        margin: 0 auto;
+        font-size: 14px;
+      }
+
+      .onboarding__input {
+        border: 2px solid ezgl-color('background', 'base');
+        padding: 12px 16px;
+        width: 100%;
+        font-style: italic;
+      }
+
+      input[type="email"] {
+        margin-bottom: 16px;
+      } 
+
+      input[type="password"] {
+        margin-bottom: 8px;
+      } 
+
+      .forgot-password {
+        color: ezgl-color('accent', 'light');
+        text-decoration: underline;
+        font-size: 12px;
+
+        &:hover {
+          color: ezgl-color('accent', 'base');
+        }
+      }
+
+      .actions {
+        text-align: center;
+        padding-top: 36px;
+      }
+    }
+
+    .onboarding__bottom-text p {
+      color: ezgl-color('accent', 'base');
+      font-size: 12px;
+      padding-bottom: 36px;
+      text-align: center;
+
+      a {
+        color: ezgl-color('primary', 'dark');
+
+        &:hover {
+          color: ezgl-color('primary', 'light');
+        }
+      }
+    }
+  }
+}
