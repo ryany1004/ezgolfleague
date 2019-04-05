@@ -168,6 +168,7 @@ Rails.application.routes.draw do
 
         resources :scoring_rules do
           get 'options', on: :collection
+          patch 'set_primary'
 
           resources :payouts, only: [:new, :create, :edit, :update, :destroy]
           resources :payout_results, controller: "scoring_rules/payout_results"

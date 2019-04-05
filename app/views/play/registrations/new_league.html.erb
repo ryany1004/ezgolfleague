@@ -48,6 +48,8 @@ fbq('track', 'CompleteRegistration', {
 
             <%= f.input :league_type, collection: ["Individual Play", "Team Play", "Other"] %>
 
+            <%= f.input :league_estimated_players, label: "Estimated Number of Players", collection: ["Don't Know", "1-10", "10-20", "20-40", "40-60", "60-100", "100+"] %>
+
             <%= f.input :more_comments, as: :text, input_html: {:cols => 5, :rows => 10 } %>
           </div>
 
