@@ -10,7 +10,9 @@ class PrintsController < BaseController
 
       other_scorecards = []
       @tournament_day.scoring_rules.each do |rule|
-        other_scorecards += rule.related_scorecards_for_user(player, true)
+      	rule.related_scorecards_for_user(player, true).each do |other_card|
+      		other_scorecards << other_card if !other_scorecards.map(&:user).include? other_card.user
+      	end
       end
 
       if other_scorecards.count < 4
@@ -43,8 +45,6 @@ class PrintsController < BaseController
   end
 
   def printable_cards_includes_player?(printable_cards, player)
-    Rails.logger.info { "PrintScorecardsJob: printable_cards_includes_player entered" }
-
     printable_cards.each do |card|
       return true if card[:p].primary_scorecard.golf_outing.user == player
 
