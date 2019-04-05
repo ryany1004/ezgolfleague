@@ -23,14 +23,10 @@ class Api::V1::SessionsController < Api::V1::ApiBaseController
   end
 
   def register_device
-    existing_device = @current_user.mobile_devices.where(device_identifier: params[:device_identifier]).first
+    @device = @current_user.mobile_devices.where(device_identifier: params[:device_identifier]).first
 
-    if existing_device.blank?
-      MobileDevice.create(user: @current_user, device_identifier: params[:device_identifier], device_type: params[:device_type], environment_name: params[:environment_name])
-    end
-
-    respond_to do |format|
-      format.json { render json: { message: "Success"}, status: :ok, content_type: 'application/json' }
+    if @device.blank?
+      @device = MobileDevice.create(user: @current_user, device_identifier: params[:device_identifier], device_type: params[:device_type], environment_name: params[:environment_name])
     end
   end
 
@@ -47,13 +43,6 @@ class Api::V1::SessionsController < Api::V1::ApiBaseController
 
       @current_user.avatar = File.open(temp_file_path)
       @current_user.save
-
-      #NOTE: bust the cache for associated tournaments
-      @current_user.tournaments.each do |t|
-        t.tournament_days.each do |d|
-          d.touch
-        end
-      end
 
       render plain: "Success", status: :ok
     end

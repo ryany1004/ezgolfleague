@@ -33,8 +33,8 @@ class ScoringRulesController < BaseController
   	end
 
     # if mandatory, add users
-    if (!@scoring_rule.is_opt_in && @scoring_rule.users.empty?) && @tournament_day.scorecard_base_scoring_rule.users.count > 0
-      @tournament_day.scorecard_base_scoring_rule.users.each do |u|
+    if (!@scoring_rule.is_opt_in && @scoring_rule.users.empty?) && @tournament_day.tournament.players_for_day(@tournament_day).count > 0
+      @tournament_day.tournament.players_for_day(@tournament_day).each do |u|
       	@scoring_rule.users << u unless @scoring_rule.users.include? u
       end
     end
@@ -56,9 +56,13 @@ class ScoringRulesController < BaseController
   end
   
 	def destroy
-    @scoring_rule.destroy
+		if @scoring_rule.primary_rule
+			new_primary = @tournament_day.scoring_rules.where.not(id: @scoring_rule).first
+			new_primary.primary_rule = true
+			new_primary.save
+		end
 
-    self.update_primary_scoring_rule
+    @scoring_rule.destroy
 
     redirect_to league_tournament_tournament_day_scoring_rules_path(@tournament.league, @tournament, @tournament_day)
   end
