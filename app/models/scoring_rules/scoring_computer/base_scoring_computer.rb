@@ -12,7 +12,7 @@ module ScoringComputer
 			true
 		end
 
-		def generate_tournament_day_result(user:)
+		def generate_tournament_day_result(user:, scorecard: nil)
 			raise "Base class not implemented"
 		end
 
