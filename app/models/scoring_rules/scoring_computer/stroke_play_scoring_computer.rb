@@ -32,7 +32,7 @@ module ScoringComputer
       reorder_param
 		end
 
-		def generate_tournament_day_result(user:, scorecard: nil, destroy_previous_results: true)
+		def generate_tournament_day_result(user:, scorecard: nil)
 			return nil if !@scoring_rule.users.include? user
 
 			user_scorecard = self.tournament_day.primary_scorecard_for_user(user)
@@ -108,34 +108,38 @@ module ScoringComputer
 	    par_related_gross_score = gross_score - user_par
 
 	    result_name = Users::ResultName.result_name_for_user(user, self.tournament_day)
-
-	    @scoring_rule.individual_tournament_day_results.where(user: user).destroy_all if destroy_previous_results
-
+	    
 	    if gross_score > 0
-	    	TournamentDayResult.transaction do
-	    		result = @scoring_rule.tournament_day_results.create(
-	    			user: user,
-	    			name: result_name,
-	    			primary_scorecard: user_scorecard,
-	    			flight: flight,
-	    			gross_score: gross_score,
-	    			net_score: net_score,
-	    			adjusted_score: adjusted_score,
-	    			front_nine_gross_score: front_nine_gross_score,
-	    			front_nine_net_score: front_nine_net_score,
-	    			back_nine_net_score: back_nine_net_score,
-	    			par_related_net_score: par_related_net_score,
-	    			par_related_gross_score: par_related_gross_score)
+	    	result = @scoring_rule.tournament_day_results.find_or_create_by(user: user) #TODO: create_or_find_by
 
-	    		Rails.logger.debug { "Writing tournament day result #{result}" }
+	    	result.name = result_name
+	    	result.primary_scorecard = user_scorecard
+	    	result.flight = flight
+	    	result.gross_score = gross_score
+	    	result.net_score = net_score
+	    	result.adjusted_score = adjusted_score
+	    	result.front_nine_gross_score = front_nine_gross_score
+	    	result.front_nine_net_score = front_nine_net_score
+	    	result.back_nine_net_score = back_nine_net_score
+	    	result.par_related_net_score = par_related_net_score
+	    	result.par_related_gross_score = par_related_gross_score
 
-	    		result
-	    	end
+	    	result.save
+
+    		Rails.logger.debug { "Writing tournament day result #{result}" }
+
+    		result
 	    else
 	    	Rails.logger.debug { "Gross Score was #{gross_score}. Returning nil for tournament day result." }
 
+	    	self.destroy_user_results(user)
+
 	    	nil
 	    end
+		end
+
+		def destroy_user_results(user)
+			@scoring_rule.individual_tournament_day_results.where(user: user).destroy_all
 		end
 
 	  def user_par_for_played_holes(user)
@@ -158,7 +162,7 @@ module ScoringComputer
 	  end
 
 		def assign_payouts
-			Rails.logger.debug { "assign_payouts #{self.class}" }
+			Rails.logger.debug { "assign_payouts #{self.class} for rule #{@scoring_rule.id}" }
 
 			@scoring_rule.payout_results.destroy_all
 
@@ -172,7 +176,7 @@ module ScoringComputer
       ranked_flights.each do |flight|
         flight.payouts.where(scoring_rule: @scoring_rule).each_with_index do |payout, i|
           if payout.payout_results.count == 0
-            result = flight.tournament_day_results[i]
+            result = flight.tournament_day_results.where(scoring_rule: @scoring_rule)[i]
 
             if result.present? and eligible_users.include? result.user
               player = result.user

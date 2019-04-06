@@ -1,11 +1,11 @@
 module ScoringComputer
 	class BestBallScoringComputer < StrokePlayScoringComputer
-		def generate_tournament_day_result(user:, scorecard: nil, destroy_previous_results: true)
+		def generate_tournament_day_result(user:, scorecard: nil)
       team = self.tournament_day.daily_team_for_player(user)
       daily_team_scorecard = @scoring_rule.best_ball_scorecard_for_user_in_team(user, team, true)
       return nil if daily_team_scorecard.blank? || daily_team_scorecard.scores.blank?
 
-      super(user: user, scorecard: daily_team_scorecard, destroy_previous_results: true)
+      super(user: user, scorecard: daily_team_scorecard)
 		end
 
 		def assign_payouts

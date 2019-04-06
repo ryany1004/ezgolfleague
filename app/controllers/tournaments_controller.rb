@@ -106,7 +106,7 @@ class TournamentsController < BaseController
 
   def rescore_players
     @tournament.tournament_days.each do |d|
-      d.score_all_rules
+      d.score_all_rules(delete_first: true)
     end
 
     redirect_to league_tournaments_path(current_user.selected_league), flash: { success: "The tournament's scores have been re-calculated." }

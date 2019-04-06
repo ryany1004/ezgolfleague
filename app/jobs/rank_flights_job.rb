@@ -1,10 +1,10 @@
 class RankFlightsJob < ApplicationJob
   def perform(tournament_day)
-    tournament_day.flights.each do |f|
-    	Flight.transaction do 
-    		Rails.logger.info { "RankFlightsJob #{f.id}" }
+    tournament_day.scoring_rules.each do |rule|
+    	tournament_day.flights.each do |flight|
+    		Rails.logger.info { "RankFlightsJob #{flight.id} #{rule.id}" }
 
-    		Flights::RankPosition.compute_rank(f)
+    		Flights::RankPosition.compute_rank(flight: flight, scoring_rule: rule)
     	end
     end
   end
