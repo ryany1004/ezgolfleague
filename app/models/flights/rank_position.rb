@@ -7,8 +7,8 @@ module Flights
     def self.compute_rank(flight:, scoring_rule:)
     	rank_computer = self.new
     	rank_computer.flight = flight
+    	rank_computer.scoring_rule = scoring_rule
 
-      scoring_rule = flight.tournament_day.scorecard_base_scoring_rule
       scoring_computer = scoring_rule.scoring_computer
 
       reorder_param = scoring_computer.rank_results_sort_reorder_param
