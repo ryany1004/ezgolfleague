@@ -25,22 +25,20 @@ module ScoringComputer
 
 			user_scorecard = self.tournament_day.primary_scorecard_for_user(league_season_team.users.first) # TODO: this seems wrong
 
-			TournamentDayResult.transaction do
-				combined_team_result = @scoring_rule.tournament_day_results.find_or_create_by(aggregated_result: true, league_season_team: league_season_team)
+			combined_team_result = @scoring_rule.tournament_day_results.find_or_create_by(aggregated_result: true, league_season_team: league_season_team)
 
-				combined_team_result.name = league_season_team.name
-				combined_team_result.primary_scorecard = user_scorecard
-				combined_team_result.gross_score = team_member_results.sum(&:gross_score)
-				combined_team_result.net_score = team_member_results.sum(&:net_score)
-				combined_team_result.adjusted_score = team_member_results.sum(&:adjusted_score)
-				combined_team_result.front_nine_gross_score = team_member_results.sum(&:front_nine_gross_score)
-				combined_team_result.front_nine_net_score = team_member_results.sum(&:front_nine_net_score)
-				combined_team_result.back_nine_net_score = team_member_results.sum(&:back_nine_net_score)
-				combined_team_result.par_related_net_score = team_member_results.sum(&:par_related_net_score)
-				combined_team_result.par_related_gross_score = team_member_results.sum(&:par_related_gross_score)
+			combined_team_result.name = league_season_team.name
+			combined_team_result.primary_scorecard = user_scorecard
+			combined_team_result.gross_score = team_member_results.sum(&:gross_score)
+			combined_team_result.net_score = team_member_results.sum(&:net_score)
+			combined_team_result.adjusted_score = team_member_results.sum(&:adjusted_score)
+			combined_team_result.front_nine_gross_score = team_member_results.sum(&:front_nine_gross_score)
+			combined_team_result.front_nine_net_score = team_member_results.sum(&:front_nine_net_score)
+			combined_team_result.back_nine_net_score = team_member_results.sum(&:back_nine_net_score)
+			combined_team_result.par_related_net_score = team_member_results.sum(&:par_related_net_score)
+			combined_team_result.par_related_gross_score = team_member_results.sum(&:par_related_gross_score)
 
-				combined_team_result.save
-			end
+			combined_team_result.save
 
   		combined_team_result
 		end
