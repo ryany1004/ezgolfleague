@@ -111,7 +111,7 @@ module ScoringComputer
 	    
 	    if gross_score > 0
 	    	result = @scoring_rule.tournament_day_results.find_or_create_by(user: user) #TODO: create_or_find_by
-	    	
+
 	    	result.name = result_name
 	    	result.primary_scorecard = user_scorecard
 	    	result.flight = flight
@@ -162,7 +162,7 @@ module ScoringComputer
 	  end
 
 		def assign_payouts
-			Rails.logger.debug { "assign_payouts #{self.class}" }
+			Rails.logger.debug { "assign_payouts #{self.class} for rule #{@scoring_rule.id}" }
 
 			@scoring_rule.payout_results.destroy_all
 
@@ -176,7 +176,7 @@ module ScoringComputer
       ranked_flights.each do |flight|
         flight.payouts.where(scoring_rule: @scoring_rule).each_with_index do |payout, i|
           if payout.payout_results.count == 0
-            result = flight.tournament_day_results[i]
+            result = flight.tournament_day_results.where(scoring_rule: @scoring_rule)[i]
 
             if result.present? and eligible_users.include? result.user
               player = result.user
