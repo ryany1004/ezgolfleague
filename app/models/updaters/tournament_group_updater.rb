@@ -66,7 +66,7 @@ module Updaters
 
             rules_to_add = rules_should_be_enrolled - rules_enrolled
             rules_to_add.each do |r|
-              r.users << user
+              r.users << user unless r.users.include? user
             end
 
             rules_enrolled = tournament_group.tournament_day.optional_scoring_rules_for_user(user: user)

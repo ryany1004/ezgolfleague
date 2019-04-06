@@ -49,13 +49,13 @@ module AddToTournamentDay
 
   def add_user_to_mandatory_scoring_rules(user:)
     self.mandatory_scoring_rules.each do |rule|
-      rule.users << user
+      rule.users << user unless rule.users.include? user
     end
   end
 
   def add_user_to_free_optional_scoring_rules(user:)
     self.optional_scoring_rules.where(dues_amount: 0).each do |rule|
-      rule.users << user
+      rule.users << user unless rule.users.include? user
     end
   end
 
