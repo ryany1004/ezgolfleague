@@ -1,9 +1,10 @@
 module Flights
 	class RankPosition
 		attr_accessor :flight
+		attr_accessor :scoring_rule
     attr_accessor :sorted_results
 
-    def self.compute_rank(flight)
+    def self.compute_rank(flight:, scoring_rule:)
     	rank_computer = self.new
     	rank_computer.flight = flight
 
@@ -20,7 +21,7 @@ module Flights
     end
 
     def tournament_day_results
-      flight.tournament_day_results
+      flight.tournament_day_results.where(scoring_rule: scoring_rule)
     end
 
     def combine_team_score_results
@@ -30,7 +31,7 @@ module Flights
       self.flight.users.each do |u|
         team = self.flight.tournament_day.daily_team_for_player(u)
         unless team.blank? || computed_teams.include?(team)
-          team.users.each do |team_user| #must re-score users first
+          team.users.each do |team_user| # must re-score users first
             self.flight.tournament_day.score_user(team_user)
           end
 
