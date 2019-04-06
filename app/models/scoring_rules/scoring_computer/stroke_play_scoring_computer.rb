@@ -126,11 +126,11 @@ module ScoringComputer
 		    	result.par_related_gross_score = par_related_gross_score
 
 		    	result.save
+
+	    		Rails.logger.debug { "Writing tournament day result #{result}" }
+
+	    		result
 		    end
-
-    		Rails.logger.debug { "Writing tournament day result #{result}" }
-
-    		result
 	    else
 	    	Rails.logger.debug { "Gross Score was #{gross_score}. Returning nil for tournament day result." }
 
