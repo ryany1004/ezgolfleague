@@ -106,7 +106,7 @@ module Flights
           quantity_at_rank = quantity_at_rank + 1
         end
 
-        Rails.logger.info { "Rank of #{rank} for #{result.name}. Net score: #{result.net_score}. Back Nine Net Score (if applicable): #{result.back_nine_net_score}. Param: #{sort_parameter}: #{result.send(sortable_key)}" }
+        Rails.logger.debug { "Rank of #{rank} for #{result.name}. Net score: #{result.net_score}. Back Nine Net Score (if applicable): #{result.back_nine_net_score}. Param: #{sort_parameter}: #{result.send(sortable_key)}" }
 
         result.lock!
         result.sort_rank = i
