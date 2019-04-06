@@ -5,3 +5,4 @@ set :stage, :production
 set :rails_env, :production
 set :branch, 'master'
 set :sidekiq_log => File.join(shared_path, 'log', 'sidekiq.log')
+set :keep_releases, 10
