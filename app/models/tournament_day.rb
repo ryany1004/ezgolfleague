@@ -287,11 +287,7 @@ class TournamentDay < ApplicationRecord
       rule.rank
     end
   end
-
-  def rank_day
-    RankFlightsJob.perform_later(self)
-  end
-
+  
   def assign_payouts_all_rules
     self.scoring_rules.each do |rule|
       rule.assign_payouts
