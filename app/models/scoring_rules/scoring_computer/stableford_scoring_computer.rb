@@ -17,7 +17,7 @@ module ScoringComputer
     		gross_score = scorecard.gross_score
     		net_score = scorecard.net_score
 
-	    	result = @scoring_rule.tournament_day_results.find_or_create_by(user: user)
+	    	result = @scoring_rule.tournament_day_results.find_or_create_by(user: user) #TODO: create_or_find_by
 	    	
 	    	result.name = result_name
 	    	result.primary_scorecard = self.tournament_day.primary_scorecard_for_user(user)
