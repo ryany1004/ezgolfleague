@@ -9,7 +9,7 @@ module Flights
     	rank_computer.flight = flight
     	rank_computer.scoring_rule = scoring_rule
 
-      scoring_computer = scoring_rule.scoring_computer
+      scoring_computer = rank_computer.scoring_rule.scoring_computer
 
       reorder_param = scoring_computer.rank_results_sort_reorder_param
       sort_descending = scoring_computer.rank_results_sort_descending
