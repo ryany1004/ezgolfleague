@@ -27,6 +27,7 @@ module ScoringComputer
 	    	result.adjusted_score = 0
 	    	result.front_nine_gross_score = 0
 	    	result.front_nine_net_score = 0
+	    	result.back_nine_gross_score = 0
 	    	result.back_nine_net_score = 0
 	    	result.par_related_net_score = net_score
 	    	result.par_related_gross_score = gross_score

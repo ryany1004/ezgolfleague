@@ -196,7 +196,7 @@ module ApplicationHelper
   end
 
   def score_print_helper(score, print_mode)
-    if print_mode == true and score == 0
+    if print_mode && score.zero?
       ""
     else
       score
@@ -204,9 +204,7 @@ module ApplicationHelper
   end
 
   def flight_or_group(tournament)
-    if tournament.is_league_teams?
-      "Team"
-    elsif tournament.league.allow_scoring_groups
+    if tournament.league.allow_scoring_groups
       "Group"
     else
       "Flight"

@@ -34,6 +34,7 @@ module ScoringComputer
 			combined_team_result.adjusted_score = team_member_results.sum(&:adjusted_score)
 			combined_team_result.front_nine_gross_score = team_member_results.sum(&:front_nine_gross_score)
 			combined_team_result.front_nine_net_score = team_member_results.sum(&:front_nine_net_score)
+			combined_team_result.back_nine_gross_score = team_member_results.sum(&:back_nine_gross_score)
 			combined_team_result.back_nine_net_score = team_member_results.sum(&:back_nine_net_score)
 			combined_team_result.par_related_net_score = team_member_results.sum(&:par_related_net_score)
 			combined_team_result.par_related_gross_score = team_member_results.sum(&:par_related_gross_score)
