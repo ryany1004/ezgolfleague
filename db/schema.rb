@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_03_29_234242) do
+ActiveRecord::Schema.define(version: 2019_04_07_001828) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -285,6 +285,7 @@ ActiveRecord::Schema.define(version: 2019_03_29_234242) do
     t.boolean "allow_scoring_groups", default: false
     t.boolean "calculate_handicaps_from_past_rounds", default: false
     t.decimal "override_golfer_price"
+    t.string "league_estimated_players"
   end
 
   create_table "mobile_devices", force: :cascade do |t|
@@ -480,6 +481,7 @@ ActiveRecord::Schema.define(version: 2019_03_29_234242) do
     t.integer "sort_rank"
     t.bigint "scoring_rule_id"
     t.bigint "league_season_team_id"
+    t.integer "back_nine_gross_score", default: 0
     t.index ["aggregated_result"], name: "index_tournament_day_results_on_aggregated_result"
     t.index ["flight_id"], name: "index_tournament_day_results_on_flight_id"
     t.index ["league_season_team_id"], name: "index_tournament_day_results_on_league_season_team_id"

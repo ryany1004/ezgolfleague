@@ -7,7 +7,7 @@ json.cache! ['v1', tournament_group] do
 
 	json.golf_outings tournament_group.golf_outings do |golf_outing|
 		json.server_id							golf_outing.server_id
-		json.course_handicap				golf_outing.course_handicap
+		json.course_handicap				golf_outing.course_handicap.to_i
 		json.team_combined_name			golf_outing.team_combined_name
 
 		json.user do
