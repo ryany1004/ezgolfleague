@@ -3,83 +3,45 @@
   ezglTrackAnalyticsEvent("Viewed existing leagues during registration");
 </script>
 
-<ol class="breadcrumb">
-  <li>Create Your Free User Account</li>
-  <li class="active">Join or Create a League</li>
-</ol>
-
 <div id="container">
-  <div class="panel panel-success">
-    <div class="panel-heading">
-      <h3 class="panel-title">Create a New Golf League</h3>
-    </div>
-    <div class="panel-body">
-      <p>Are you a league administrator? Create a new league for you and your golfers to play tournaments together.</p>
-
-      <%= link_to "Create a New League", new_league_play_registrations_path, class: "btn btn-default", :role => "button" %>
-    </div>
-  </div>
-</div>
-
-<div class="row" style="padding-top: 20px;">
-  <div class="col-md-12">
-    <div class="panel panel-default panel-success">
-      <div class="panel-heading">
-        <h3 class="panel-title">Join an Existing League</h3>
+	<div class="row">
+    <div class="onboarding__panel registration">
+      <div class="onboarding__panel-side">
+        <%= image_tag("ezgl-icon-white.png", class: 'ezgl-icon') %>
+				<div class="panel-side-text">
+					<h3 class="panel-title pb-1">Choose a League</h3>
+					<p class="panel-subtitle pb-4">Choose your league or add your<br>own league and get started.</p>
+				</div>
       </div>
-      <div class="panel-body">
-        <p>Does your league already exist in our system? Select below to join an existing league.</p>
-        <table class="table table-striped">
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>Location</th>
-              <th>&nbsp;</th>
-            </tr>
-          </thead>
-          <tbody>
+      <div class="panel panel-default p-5">
+        <div class="panel-heading">
+          <h3 class="panel-title pb-4">Choose a League</h3>
+        </div>
+        <div class="panel-body registration">
+          <div class="league-selection">
             <% @leagues.each do |league| %>
               <% if !current_user.leagues.include? league %>
-                <tr>
-                  <td><%= league.name %></td>
-                  <td><%= league.location %></td>
-                  <td>
-                    <a class="btn btn-primary" data-toggle="collapse" href="#collapse<%= league.id %>" aria-expanded="false" aria-controls="collapse<%= league.id %>">Learn More</a> 
-                  </td>
-                </tr>
-                <tr class="collapse" id="collapse<%= league.id %>">
-                  <td colspan="3">
-                    <div class="card card-block">
-                      <p><%= league.league_description %></p>
-                      <p><strong>Administrator: </strong><%= league.contact_name %></p>
-
-                      <% Tournament.all_upcoming([league], nil).limit(1).each do |t| %>
-                        <hr>
-                        <p>
-                          <strong>Next Tournament</strong>
-                        </p>
-                        <p><%= t.name %></p>
-                        <p><%= t.tournament_days.first.tournament_at.to_s(:date_and_time) %> @ <%= t.tournament_days.first.course.name %></p>
-                      <% end %>
-                      <hr>
-
-                      <% if league.dues_amount == 0 %>
-                        <%= link_to "Join Now", join_league_play_registrations_path(league_id: league.id), type: "button", class: "btn btn-success" %>
-                      <% else %>
-                        <% unless league.encrypted_stripe_production_publishable_key.blank? -%>
-                          <%= link_to "Join Now via Credit Card - #{number_to_currency(league.dues_amount)}", join_league_play_registrations_path(league_id: league.id), type: "button", class: "btn btn-success" %>
-                        <% end -%>
-                      <% end %>
-
-                      <%= link_to "Request Additional Information", request_information_play_registrations_path(league_id: league.id), type: "button", class: "btn btn-default", method: :put %>
-                    </div>
-                  </td>
-                </tr>
+                <div>
+                  <p><%= league.name %></p>
+                  <p><%= league.location %></p>
+                  <% if league.dues_amount == 0 %>
+                    <%= link_to "Join Now", join_league_play_registrations_path(league_id: league.id), class: "btn__ezgl-secondary" %>
+                  <% else %>
+                    <% unless league.encrypted_stripe_production_publishable_key.blank? -%>
+                      <%= link_to "Join Now via Credit Card - #{number_to_currency(league.dues_amount)}", join_league_play_registrations_path(league_id: league.id), class: "btn__ezgl-secondary" %>
+                    <% end -%>
+                  <% end %>
+                </div>
               <% end -%>
             <% end -%>
-          </tbody>
-        </table>
+          </div>
+          <hr>
+          <div>
+            <p>Want to add your own league?</p>
+            <%= link_to "Create a New League", new_league_play_registrations_path, class: "btn__ezgl-secondary" %>
+          </div>
+        </div>
       </div>
     </div>
-  </div>
+	</div>
 </div>
