@@ -2,30 +2,25 @@
   ezglTrackAnalyticsEvent("Viewed user creation form");
 </script>
 
-<ol class="breadcrumb">
-  <li class="active">Create Your Free User Account</li>
-</ol>
-
 <div id="container">
 	<div class="row">
-    	<div class="col-md-8">
-    		<%= render 'form' %>
-	    </div>
-    	<div class="col-md-4">
-    		<div class="panel panel-default">
-		      <div class="panel-heading">
-		        <h3 class="panel-title">Get Setup in 3 Easy Steps</h3>
-		      </div>
-		      <div class="panel-body">
-		      	<ol>
-		      		<li>Create Your Free User Account</li>
-		      		<li>Find or Create a League</li>
-		      		<li>Setup Complete</li>
-		      	</ol>
-		      </div>
-		    </div>
-    	</div>
+    <div class="onboarding__panel registration">
+      <div class="onboarding__panel-side">
+        <%= image_tag("ezgl-icon-white.png", class: 'ezgl-icon') %>
+				<div class="panel-side-text">
+					<h3 class="panel-title pb-1">Welcome!</h3>
+					<p class="panel-subtitle pb-4">Sign up for EZGolfLeague.<br>Join a league or add your own.</p>
+				</div>
+      </div>
+      <div class="panel panel-default p-5">
+        <div class="panel-heading">
+          <h3 class="panel-title pb-4">Create Account</h3>
+        </div>
+        <div class="panel-body registration">
+					<%= render 'form' %>
+        </div>
+      </div>
+    </div>
 	</div>
 </div>
-
 

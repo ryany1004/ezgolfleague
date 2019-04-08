@@ -1,14 +1,25 @@
 @import "color-palette";
 
-.onboarding {
+.full-screen {
+  display: flex;
   background-image: image-url('course_backgrounds/bg-full.jpg'); 
   background-size: cover;
   background-position: center right;
-  height: 100vh;
+  min-height: 100vh;
   padding: 0;
-  display: flex;
   width: 100%;
   align-items: center;
+
+  .alert {
+    position: absolute;
+    top: 0;
+    right: 0;
+  }
+
+  .container {
+    flex-shrink: 0;
+    max-width: 100%;
+  }
 
   #container {
     width: 100%;
@@ -24,8 +35,8 @@
     padding: 0;
 
     .onboarding__panel-header {
-      background: ezgl-color('primary', 'base');
       display: flex;
+      background: ezgl-color('primary', 'base');
       justify-content: center;
       align-items: center;
       padding: 10px 0;
@@ -47,6 +58,7 @@
 
       .panel-title {
         text-align: center;
+        font-weight: 400;
       }
 
       .panel-subtitle {
@@ -60,6 +72,10 @@
         max-width: 350px;
         margin: 0 auto;
         font-size: 14px;
+
+        &.registration {
+          max-width: 700px;
+        }
       }
 
       .onboarding__input {
@@ -67,15 +83,41 @@
         padding: 12px 16px;
         width: 100%;
         font-style: italic;
+        height: 50px;
+        border-radius: 3px;
+
+        &.upload-photo {
+          width: 150px;
+          text-align: center;
+          font-size: 1rem;
+          color: ezgl-color('accent', 'base');
+          cursor: pointer;
+          transition: .3s all;
+
+          &:hover {
+            color: ezgl-color('accent', 'dark');
+          }
+        }
       }
 
-      input[type="email"] {
-        margin-bottom: 16px;
-      } 
+      .upload-photo-container {
+        width: 100%;
+        margin-left: 12px;
+        display: flex;
+        align-items: center;
+        margin-bottom: 1rem;
+      }
 
-      input[type="password"] {
-        margin-bottom: 8px;
-      } 
+      #upload-photo-img img {
+        height: 40px;
+        width: auto;
+        border-radius: 50%;
+        margin-left: 12px; 
+      }
+
+      .label_hidden {
+        display: none;
+      }
 
       .forgot-password {
         color: ezgl-color('accent', 'light');
@@ -93,6 +135,61 @@
       }
     }
 
+    .registration-form-container {
+      display: flex;
+      flex-wrap: wrap;
+
+      label {
+        display: none !important;
+      }
+
+      .form-side-label {
+        color: ezgl-color('accent', 'base');
+        width: 15%;
+        text-align: right;
+        margin-right: 12px;
+      }
+
+
+      .file {
+        display: none;
+      }
+
+      .form-flex-group {
+        display: flex;
+        position: relative;
+        width: 100%;
+        align-items: center;
+
+        .form-group {
+          width: 100%;
+          margin-left: 12px;
+        }
+
+        .form-flex-right {
+          width: 35%;
+          display: flex;
+          justify-content: flex-end;
+        }
+
+        &.form-actions {
+          margin-top: 48px;
+
+          p {
+            color: ezgl-color('accent', 'base');
+            width: 75%;
+            text-align: right;
+            margin: 0;
+
+            a {
+              color: ezgl-color('accent', 'base');
+              text-decoration: underline;
+            }
+          }
+        }
+      }
+    }
+
     .onboarding__bottom-text p {
       color: ezgl-color('accent', 'base');
       font-size: 12px;
@@ -105,6 +202,47 @@
         &:hover {
           color: ezgl-color('primary', 'light');
         }
+      }
+    }
+
+    &.registration {
+      display: flex;
+      width: 100%;
+      max-width: 1200px;
+      margin: 36px auto;
+  
+      .onboarding__panel-side {
+        display: flex;
+        background: ezgl-color('primary', 'base');
+        justify-content: center;
+        align-items: center;
+        position: relative;
+        border-radius: 3px 0 0 3px;
+        width: 33%;
+        
+        .ezgl-icon {
+          position: absolute;
+          height: 30px;
+          top: 24px;
+          left: 24px;
+        }
+  
+        .panel-side-text {
+          color: ezgl-color('background', 'light');
+          text-align: center;
+
+          .panel-title {
+            font-weight: 600;
+          }
+  
+          .panel-subtitle {
+            font-weight: 100;
+          }
+        }
+      }
+  
+      .panel-default {
+        width: 77%;
       }
     }
   }

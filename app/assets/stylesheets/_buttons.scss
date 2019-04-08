@@ -9,6 +9,7 @@
 	padding: 14px 40px;
 	line-height: normal;
 	font-size: 18px;
+	border: none;
 }
 
 .btn-primary:hover {
@@ -18,20 +19,21 @@
 }
 
 .btn__ezgl-secondary {
-	color: ezgl-color('background', 'light');
-	background-color: ezgl-color('primary', 'base');
-	border-color: ezgl-color('primary', 'base');
-	border-radius: 3px;
-	font-weight: 600;
-	padding: 8px 36px;
-	line-height: normal;
-	font-size: 16px;
-	cursor: pointer;
-	transition: .3s all;
+	color: ezgl-color('background', 'light') !important;
+	background-color: ezgl-color('primary', 'base') !important;
+	border-radius: 3px !important;
+	font-weight: 600 !important;
+	padding: 8px 36px !important;
+	line-height: normal !important;
+	font-size: 16px !important;
+	cursor: pointer !important;
+	border: none !important;
+	transition: .3s all !important;
+	font-weight: 400 !important;
 
 	&:hover {
-		background-color: ezgl-color('primary', 'light');
-		border-color: ezgl-color('primary', 'light');	
+		background-color: ezgl-color('primary', 'light') !important;
+		border-color: ezgl-color('primary', 'light') !important;
 	}
 }
 
