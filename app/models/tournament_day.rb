@@ -281,17 +281,15 @@ class TournamentDay < ApplicationRecord
   	end
   end
 
-  def score_all_rules
+  def score_all_rules(delete_first: false)
     self.scoring_rules.each do |rule|
+    	rule.tournament_day_results.delete_all if delete_first
+
       rule.score
       rule.rank
     end
   end
-
-  def rank_day
-    RankFlightsJob.perform_later(self)
-  end
-
+  
   def assign_payouts_all_rules
     self.scoring_rules.each do |rule|
       rule.assign_payouts

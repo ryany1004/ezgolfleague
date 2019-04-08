@@ -26,6 +26,8 @@ class Api::V1::SessionsController < Api::V1::ApiBaseController
     @device = @current_user.mobile_devices.where(device_identifier: params[:device_identifier]).first
 
     if @device.blank?
+    	MobileDevice.where(device_identifier: params[:device_identifier]).destroy_all
+
       @device = MobileDevice.create(user: @current_user, device_identifier: params[:device_identifier], device_type: params[:device_type], environment_name: params[:environment_name])
     end
   end
