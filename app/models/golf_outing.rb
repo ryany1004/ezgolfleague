@@ -36,6 +36,14 @@ class GolfOuting < ApplicationRecord
     end
   end
 
+  def api_course_handicap
+  	if self.course_handicap.present?
+  		self.course_handicap.to_i
+  	else
+  		return 0
+  	end
+  end
+
   def disqualify
     self.disqualified = !self.disqualified
     self.save
