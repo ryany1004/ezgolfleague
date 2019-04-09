@@ -10,63 +10,80 @@ fbq('track', 'CompleteRegistration', {
 });
 </script>
 
-<ol class="breadcrumb">
-  <li>Create Your Free User Account</li>
-  <li>Join or Create a League</li>
-  <li class="active">Create a New League</li>
-</ol>
-
 <div id="container">
-  <div class="row">
-      <div class="col-md-8">
-        <%= simple_form_for @league, url: create_league_play_registrations_path do |f| %>
-          <% if notification = f.error_notification %>
-            <div class="alert alert-error fade in">
-              <a class="close" data-dismiss="alert" href="#">&times;</a>
-              <%= notification %>
+	<div class="row">
+    <div class="onboarding__panel registration">
+      <div class="onboarding__panel-side">
+        <%= image_tag("ezgl-icon-white.png", class: 'ezgl-icon') %>
+				<div class="panel-side-text">
+					<h3 class="panel-title pb-1">Add Your League</h3>
+					<p class="panel-subtitle pb-4">Your first two tournaments are<br>free. <a href="https://ezgolfleague.com/plans/" target="_blank">Learn More</a></p>
+				</div>
+      </div>
+      <div class="panel panel-default p-5">
+        <div class="panel-heading">
+          <h3 class="panel-title pb-4">Add Your League</h3>
+        </div>
+        <div class="panel-body registration">
+          <%= simple_form_for @league, url: create_league_play_registrations_path, :defaults => { :input_html => { :class => "onboarding__input", :label => false }} do |f| %>
+            <% if notification = f.error_notification %>
+              <div class="alert alert-error fade in">
+                <a class="close" data-dismiss="alert" href="#">&times;</a>
+                <%= notification %>
+              </div>
+            <% end %>
+
+            <div class="registration-form-container">
+              <div class="registration-full-name form-flex-group">
+                <div class="form-side-label">
+                  <p>League</p>
+                </div>
+
+                <%= f.input :name, placeholder: 'Enter your league name...', required: true %>
+              </div>
+
+              <div class="form-flex-group">
+                <div class="form-side-label">
+                  <p>Location</p>
+                </div>
+
+                <%= f.input :location, placeholder: 'Los Angeles, Southern California, etc.', required: true %>
+              </div>
+
+              <div class="form-flex-group">
+                <div class="form-side-label">
+                  <p>Admin Name</p>
+                </div>
+
+                <%= f.input :contact_name, placeholder: 'Full Name of League Admin', required: true %>
+              </div>
+
+              <div class="form-flex-group">
+                <div class="form-side-label">
+                  <p>Email</p>
+                </div>
+
+                <div class="form-flex-group">
+                  <%= f.input :contact_email, placeholder: 'Admin Email' %>
+
+                  <div class="form-side-label pl-5">
+                    <p>Phone</p>
+                  </div>
+
+                  <%= f.input :contact_phone, placeholder: 'Admin Phone' %>
+                </div>
+              </div>
+
+              <div class="form-actions form-flex-group">
+                <p>Joining an existing league? <%= link_to  "Click here", leagues_play_registrations_path %></p>
+                <div class="form-flex-right">
+                  <%= f.button :submit, "Next", class: 'btn__ezgl-secondary' %>
+                </div>
+              </div>
             </div>
           <% end %>
-
-          <h3>Basic Details</h3>
-          <div class="well">
-            <%= f.input :name, label: 'League Name', required: true %>
-          </div>
-
-          <div class="well">
-            <%= f.input :league_description, label: 'Description', :hint => 'Some basic information about your league that helps others when they join.' %>
-            <%= f.input :location, label: 'Where Do You Play?', :hint => 'i.e. Los Angeles, Southern California, or your normal course', required: true %>
-            <%= f.input :contact_name, label: 'Contact Name', required: true %>
-            <%= f.input :contact_phone, label: 'Contact Phone', required: true %>
-            <%= f.input :contact_email, label: 'Contact Email', required: true %>
-            <%= f.input :show_in_search, label: 'Appears in League Search (Other Players Can Join Your League)?' %>
-          </div>
-
-          <div class="well">
-            <p>Please provide some additional information about your league:</p>
-
-            <%= f.input :start_date, label: 'When Does Your Season Start?', as: :date_picker %>
-
-            <%= f.input :league_type, collection: ["Individual Play", "Team Play", "Other"] %>
-
-            <%= f.input :league_estimated_players, label: "Estimated Number of Players", collection: ["Don't Know", "1-10", "10-20", "20-40", "40-60", "60-100", "100+"] %>
-
-            <%= f.input :more_comments, as: :text, input_html: {:cols => 5, :rows => 10 } %>
-          </div>
-
-          <div class="form-actions">
-            <%= f.button :submit, class: 'btn btn-default' %>
-          </div>
-        <% end %>
-      </div>
-      <div class="col-md-4">
-        <div class="panel panel-default">
-          <div class="panel-heading">
-            <h3 class="panel-title">Create a League</h3>
-          </div>
-          <div class="panel-body">
-            <p>Create a new league that you can administer and have your friends join.</p>
-          </div>
         </div>
       </div>
-  </div>
+    </div>
+	</div>
 </div>

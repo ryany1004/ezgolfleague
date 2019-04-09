@@ -75,6 +75,15 @@
 
         &.registration {
           max-width: 700px;
+
+          .create-league {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            height: 150px;
+          }
         }
       }
 
@@ -150,7 +159,7 @@
 
       .form-side-label {
         color: ezgl-color('accent', 'base');
-        width: 15%;
+        width: 18%;
         text-align: right;
         margin-right: 12px;
       }
@@ -183,7 +192,8 @@
           p {
             color: ezgl-color('accent', 'base');
             width: 75%;
-            text-align: right;
+            text-align: left;
+            padding-left: 36px;
             margin: 0;
 
             a {
@@ -242,6 +252,11 @@
   
           .panel-subtitle {
             font-weight: 100;
+
+            a {
+              color: ezgl-color('background', 'light');
+              text-decoration: underline;
+            }
           }
         }
       }
