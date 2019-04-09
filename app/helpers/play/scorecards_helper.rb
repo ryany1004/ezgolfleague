@@ -3,7 +3,7 @@ module Play::ScorecardsHelper
   def front_nine_handicap_for_scorecard(scorecard, print_mode)
     handicap_score = scorecard.front_nine_score(true)
     non_handicap_score = scorecard.front_nine_score(false)
-    
+
     return "" if print_mode == true and handicap_score == 0
     
     if scorecard.can_display_handicap? && handicap_score != non_handicap_score

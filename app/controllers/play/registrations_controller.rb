@@ -32,6 +32,18 @@ class Play::RegistrationsController < Play::BaseController
     @leagues = League.where(show_in_search: true).order(:name)
   end
 
+  def leagues_list
+  	@leagues = League.where(show_in_search: true).order(:name).limit(100)
+
+    if params[:search].present?
+      search_string = "%#{params[:search].downcase}%"
+
+      @leagues = @leagues.where("lower(name) LIKE ? OR lower(location) LIKE ?", search_string, search_string)
+    end
+
+  	render json: @leagues.to_json
+  end
+
   def join_league
     @league = League.find(params[:league_id])
 

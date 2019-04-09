@@ -29,6 +29,9 @@ class ScoringRule < ApplicationRecord
 
 	accepts_nested_attributes_for :course_holes
 
+  validates :dues_amount, presence: true
+  validates :dues_amount, numericality: { greater_than_or_equal_to: 0 }
+
 	attr_accessor :selected_class_name
 
 	def form_class

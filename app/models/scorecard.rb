@@ -80,8 +80,12 @@ class Scorecard < ApplicationRecord
     end
   end
 
-  def back_nine_score(use_handicap = true)
-    self.tournament_day_results.first ? self.tournament_day_results.first&.back_nine_net_score : 0
+  def back_nine_score(use_handicap = false)
+    if use_handicap
+      self.tournament_day_results.first ? self.tournament_day_results.first&.back_nine_net_score : 0
+    else
+      self.tournament_day_results.first ? self.tournament_day_results.first&.back_nine_gross_score : 0
+    end
   end
 
   def flight_number

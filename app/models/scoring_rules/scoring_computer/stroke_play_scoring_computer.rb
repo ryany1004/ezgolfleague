@@ -7,7 +7,7 @@ module ScoringComputer
         if @scoring_rule.tournament_day.scorecard_base_scoring_rule.course_holes.count == 9 #if a 9-hole tournament, compare score by score
           Rails.logger.info { "9-Hole Tie-Breaking" }
 
-          par_related_net_scores = scoring_rule.individual_tournament_day_results.map { |x| x.par_related_net_score }
+          par_related_net_scores = @scoring_rule.individual_tournament_day_results.map { |x| x.par_related_net_score }
 
           if par_related_net_scores.uniq.length != par_related_net_scores.length
             Rails.logger.info { "We have tied players, using net_scores" }
@@ -52,6 +52,7 @@ module ScoringComputer
 			net_score = 0
 			front_nine_net_score = 0
 			front_nine_gross_score = 0
+			back_nine_gross_score = 0
 			back_nine_net_score = 0
 
 			adjusted_score = self.compute_adjusted_user_score(user: user)
@@ -69,6 +70,7 @@ module ScoringComputer
 				
 				gross_score += score.strokes
 				front_nine_gross_score += score.strokes if self.front_nine_hole_numbers.include? score.course_hole.hole_number
+				back_nine_gross_score += score.strokes if self.back_nine_hole_numbers.include? score.course_hole.hole_number
 
 				if handicap_allowance.present?
 					handicap_allowance.each do |h|
@@ -90,6 +92,7 @@ module ScoringComputer
 
             	# update stats
             	net_score += hole_net_score
+
             	front_nine_net_score += hole_net_score if self.front_nine_hole_numbers.include? score.course_hole.hole_number
             	back_nine_net_score += hole_net_score if self.back_nine_hole_numbers.include? score.course_hole.hole_number
 						end
@@ -120,6 +123,7 @@ module ScoringComputer
 	    	result.adjusted_score = adjusted_score
 	    	result.front_nine_gross_score = front_nine_gross_score
 	    	result.front_nine_net_score = front_nine_net_score
+	    	result.back_nine_gross_score = back_nine_gross_score
 	    	result.back_nine_net_score = back_nine_net_score
 	    	result.par_related_net_score = par_related_net_score
 	    	result.par_related_gross_score = par_related_gross_score
