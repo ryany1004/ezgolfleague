@@ -34,7 +34,7 @@ class MatchPlayScoringRule < StrokePlayScoringRule
 	end
 
   def includes_extra_scoring_column?
-    return true
+    true
   end
 
 	def setup_partial
