@@ -15,7 +15,7 @@ module ScoringComputer
       losers = []
 
       eligible_users.each do |user|
-      	next if winners.include?(user) || losers.include?(user) #this means we already handled this matchup
+      	next if winners.include?(user) || losers.include?(user) # this means we already handled this matchup
 
       	opponent = @scoring_rule.opponent_for_user(user)
       	next if opponent.blank?
