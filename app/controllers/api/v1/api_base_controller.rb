@@ -12,7 +12,7 @@ class Api::V1::ApiBaseController < ApplicationController
 
       response.headers["ezgl-login-error"] = "Login Error"
 
-      render text: "Unauthorized access", status: :unauthorized and return
+      render plain: "Not Authorized".to_json, content_type: 'application/json', status: :unauthorized and return
     else
       @current_user = User.where("session_token = ?", session_token).first
 
@@ -21,7 +21,7 @@ class Api::V1::ApiBaseController < ApplicationController
 
         response.headers["ezgl-login-error"] = "Login Error"
 
-        render text: "No such session", status: :unauthorized and return
+        render plain: "No Session".to_json, content_type: 'application/json', status: :unauthorized and return
       else
         bypass_sign_in(@current_user)
 
