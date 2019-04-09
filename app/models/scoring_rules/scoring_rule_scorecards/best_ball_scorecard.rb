@@ -2,7 +2,8 @@ module ScoringRuleScorecards
   class BestBallScorecard < ScoringRuleScorecards::BaseScorecard
     attr_accessor :should_use_handicap
     attr_accessor :handicap_indices
-    attr_accessor :daily_team
+    attr_accessor :users_to_compare
+    attr_accessor :team
     attr_accessor :course_hole_number_suppression_list
 
     def initialize
@@ -54,8 +55,8 @@ module ScoringRuleScorecards
     def calculate_scores
       new_scores = []
 
-      if daily_team.blank?
-        Rails.logger.debug { "Calculate Scores - No Team" }
+      if users_to_compare.blank?
+        Rails.logger.debug { "calculate_scores - Users to Compare" }
 
         return
       end
@@ -73,7 +74,7 @@ module ScoringRuleScorecards
           score.scorecard = self
 
           comparable_scores = []
-          self.daily_team.users.each do |user|
+          self.users_to_compare.each do |user|
             scorecard = self.scoring_rule.tournament_day.primary_scorecard_for_user(user)
 
             unless scorecard.blank? || scorecard.scores.blank?
