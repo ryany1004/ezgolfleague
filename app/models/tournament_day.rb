@@ -198,6 +198,7 @@ class TournamentDay < ApplicationRecord
     if self.tournament.league_season.is_teams?
       number_of_teams = self.tournament.league_season.league_season_teams.size
       number_of_matchups = (number_of_teams.to_f / 2.0).ceil #round up
+      number_of_matchups -= self.league_season_team_tournament_day_matchups.count
 
       number_of_matchups.times.each_with_index do |item, i|
         LeagueSeasonTeamTournamentDayMatchup.create(tournament_day: self)
