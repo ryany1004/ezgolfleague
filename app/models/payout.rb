@@ -5,6 +5,7 @@ class Payout < ApplicationRecord
 
   validates :scoring_rule, presence: true
   validates :flight, presence: true, unless: Proc.new { |a| !a.scoring_rule.flight_based_payouts? }
+  validates :amount, presence: true
 
   def to_s
     "#{id} - Flight #{flight&.id} #{amount} #{points}"

@@ -37,6 +37,10 @@ class MatchPlayScoringRule < StrokePlayScoringRule
     true
   end
 
+	def results_description_column_name
+		"Details"
+	end
+
 	def setup_partial
 		nil
 	end

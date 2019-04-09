@@ -1,5 +1,15 @@
 module ScoringComputer
 	class TeamMatchPlayBestBallScoringComputer < MatchPlayScoringComputer
+		attr_accessor :winners
+		attr_accessor :ties
+
+		def initialize(scoring_rule)
+			super(scoring_rule)
+
+			self.winners = []
+			self.ties = []
+		end
+
 		def generate_tournament_day_results
 			individual_results = super
 
@@ -13,9 +23,17 @@ module ScoringComputer
 		    match_play_scorecard.scoring_rule = @scoring_rule
 		    match_play_scorecard.calculate_scores
 
-				# determine winner
-				matchup.winning_team = match_play_scorecard.winning_team
-				matchup.save
+				if match_play_scorecard.scorecard_result == ::ScoringRuleScorecards::MatchPlayScorecardResult::WON
+					winners << { team: matchup.team_a, details: match_play_scorecard.extra_scoring_column_data }
+
+					matchup.winning_team = matchup.team_a
+					matchup.save
+				elsif match_play_scorecard.scorecard_result == ::ScoringRuleScorecards::MatchPlayScorecardResult::LOST
+					# do nothing
+				elsif match_play_scorecard.scorecard_result == ::ScoringRuleScorecards::MatchPlayScorecardResult::TIED
+					ties << { team: matchup.team_a, details: match_play_scorecard.extra_scoring_column_data }
+					ties << { team: matchup.team_b, details: match_play_scorecard.extra_scoring_column_data }
+				end
 			end
 		end
 
@@ -39,22 +57,27 @@ module ScoringComputer
 			Rails.logger.debug { "Payouts: #{payout_count}" }
       return if payout_count == 0
 
-      matchups = self.tournament_day.league_season_team_tournament_day_matchups
-
       # assign payouts
-      @scoring_rule.payouts.each_with_index do |payout, i|
-      	if payout.payout_results.count.zero? && matchups.count > i
-      		winning_team = matchups[i].winning_team
+			primary_payout = @scoring_rule.payouts.first
+			if primary_payout.apply_as_duplicates?
+				# winners
+				self.winners.each do |u|
+					winning_team = u[:team]
+					details = u[:details]
 
-      		if winning_team.present?
-      			Rails.logger.debug { "Assigning #{winning_team.name}. Payout [#{payout}] Scoring Rule [#{@scoring_rule.name} #{@scoring_rule.id}]" }
+					PayoutResult.create(league_season_team: winning_team, scoring_rule: @scoring_rule, points: primary_payout.points, detail: details)
+				end
 
-      			PayoutResult.create(payout: payout, league_season_team: winning_team, scoring_rule: @scoring_rule, amount: payout.amount, points: payout.points)
-      		end
-      	else
-      		Rails.logger.debug { "Payout Already Has Results: #{payout.payout_results.map(&:id)}" }
-      	end
-      end
+				# ties
+				self.ties.each do |u|
+					winning_team = u[:team]
+					details = u[:details]
+
+					PayoutResult.create(league_season_team: winning_team, scoring_rule: @scoring_rule, points: primary_payout.points / 2, detail: details)
+				end
+			else
+				raise "#{self.class} trying to be used with non splittable payouts."
+			end
 		end
 
 	end
