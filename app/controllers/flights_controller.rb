@@ -5,6 +5,8 @@ class FlightsController < BaseController
   before_action :fetch_flight, only: [:edit, :update, :destroy]
   before_action :set_stage
 
+  after_action :update_player_flight_membership, only: [:reflight_players, :create, :update, :destroy]
+
   def index
     @page_title = "Flights for #{@tournament.name} #{@tournament_day.pretty_day}"
 
@@ -32,8 +34,6 @@ class FlightsController < BaseController
     @flight.tournament_day = @tournament_day
 
     if @flight.save
-      self.update_player_flight_membership
-
       if params[:commit] == "Save & Continue"
         redirect_to league_tournament_tournament_day_tournament_notifications_path(@tournament.league, @tournament, @tournament_day), flash: { success: "The flight was successfully created." }
       else
@@ -49,8 +49,6 @@ class FlightsController < BaseController
 
   def update
     if @flight.update(flight_params)
-      self.update_player_flight_membership
-
       redirect_to league_tournament_tournament_day_flights_path(@tournament.league, @tournament, @tournament_day), flash: { success: "The flight was successfully updated." }
     else
       render :edit
@@ -64,8 +62,6 @@ class FlightsController < BaseController
   end
 
   def reflight_players
-    self.update_player_flight_membership
-
     redirect_to league_tournament_tournament_day_flights_path(@tournament.league, @tournament, @tournament_day), flash: { success: "The players were re-flighted." }
   end
 
