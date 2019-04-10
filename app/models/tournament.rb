@@ -223,23 +223,23 @@ class Tournament < ApplicationRecord
   end
 
   def mandatory_scoring_rules
-    self.tournament_days.map(&:mandatory_scoring_rules).flatten
+    @mandatory_scoring_rules ||= self.tournament_days.map(&:mandatory_scoring_rules).flatten
   end
 
   def mandatory_individual_scoring_rules
-    self.tournament_days.map(&:mandatory_individual_scoring_rules).flatten
+    @mandatory_individual_scoring_rules ||= self.tournament_days.map(&:mandatory_individual_scoring_rules).flatten
   end
 
   def mandatory_team_scoring_rules
-    self.tournament_days.map(&:mandatory_team_scoring_rules).flatten
+    @mandatory_team_scoring_rules ||= self.tournament_days.map(&:mandatory_team_scoring_rules).flatten
   end
 
   def optional_scoring_rules
-    self.tournament_days.map(&:optional_scoring_rules).flatten
+    @optional_scoring_rules ||= self.tournament_days.map(&:optional_scoring_rules).flatten
   end
 
   def optional_scoring_rules_with_dues
-    self.tournament_days.map(&:optional_scoring_rules_with_dues).flatten
+    @optional_scoring_rules_with_dues ||= self.tournament_days.map(&:optional_scoring_rules_with_dues).flatten
   end
 
   def is_paid?
