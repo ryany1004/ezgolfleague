@@ -87,7 +87,7 @@
         }
       }
 
-      .onboarding__input {
+      .onboarding__input, .selectize-input {
         border: 2px solid ezgl-color('background', 'base');
         padding: 12px 16px;
         width: 100%;
@@ -145,8 +145,18 @@
     }
 
     .league-selection {
-      height: 200px;
-      overflow: scroll;
+      .selectize-input {
+        padding-top: 12px !important;
+      }
+
+      .selectize-dropdown [data-selectable] {
+        font-size: 14px;
+        padding: 8px;
+      }
+
+      .league-selection-register {
+        text-align: center;
+      }
     }
 
     .registration-form-container {
@@ -161,7 +171,7 @@
         color: ezgl-color('accent', 'base');
         width: 18%;
         text-align: right;
-        margin-right: 12px;
+        margin-right: 4px;
       }
 
 

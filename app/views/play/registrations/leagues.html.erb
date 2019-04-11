@@ -19,21 +19,12 @@
         </div>
         <div class="panel-body registration">
           <div class="league-selection">
-            <% @leagues.each do |league| %>
-              <% if !current_user.leagues.include? league %>
-                <div>
-                  <p><%= league.name %></p>
-                  <p><%= league.location %></p>
-                  <% if league.dues_amount == 0 %>
-                    <%= link_to "Join Now", join_league_play_registrations_path(league_id: league.id), class: "btn__ezgl-secondary" %>
-                  <% else %>
-                    <% unless league.encrypted_stripe_production_publishable_key.blank? -%>
-                      <%= link_to "Join Now via Credit Card - #{number_to_currency(league.dues_amount)}", join_league_play_registrations_path(league_id: league.id), class: "btn__ezgl-secondary" %>
-                    <% end -%>
-                  <% end %>
-                </div>
-              <% end -%>
-            <% end -%>
+            <div class="league-selection-dropdown pb-4">
+              <%= select_tag('league', options_from_collection_for_select(@leagues, 'id', 'name')) %>
+            </div>
+            <div class="league-selection-register pb-5">
+              <%= link_to "Join This League", join_league_play_registrations_path, class: "btn__ezgl-secondary join-league-btn" %>
+            </div>
           </div>
           <hr>
           <div class="create-league">
@@ -47,3 +38,23 @@
     </div>
 	</div>
 </div>
+
+<script>
+  $('.selectize-control').remove();
+  var $league_selector = $('#league').selectize({
+      valueField: 'id',
+      labelField: 'name',
+      searchField: 'name',
+      maxItems: '1',
+      placeholder: 'Search for your league...',
+      create: false,
+      render: {
+            option: function (item, escape) {
+                return '<div>' + escape(item.name) + '</div>';
+            }
+      },
+      onChange: function(value) {
+            $('.join-league-btn').attr("href", "/play/registrations/join_league?league_id=" + value);
+      }
+  });
+</script>

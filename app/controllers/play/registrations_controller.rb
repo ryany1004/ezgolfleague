@@ -33,7 +33,7 @@ class Play::RegistrationsController < Play::BaseController
   end
 
   def leagues_list
-  	@leagues = League.where(show_in_search: true).order(:name).limit(100)
+    @leagues = League.where(show_in_search: true).order(:name)
 
     if params[:search].present?
       search_string = "%#{params[:search].downcase}%"
