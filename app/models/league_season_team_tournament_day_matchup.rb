@@ -38,7 +38,9 @@ class LeagueSeasonTeamTournamentDayMatchup < ApplicationRecord
 	end
 
 	def teams_are_balanced?
-		self.team_a.users.size == self.team_b.users.size
+		Rails.logger.debug { "teams_are_balanced? #{self.id} - team_a #{self.team_a.id} is #{self.team_a.users.size} & team_b #{self.team_b.id} is #{self.team_b.users.size}" }
+
+		self.team_a_users.size == self.team_b_users.size
 	end
 
 	def pairings_by_handicap
@@ -125,15 +127,8 @@ class LeagueSeasonTeamTournamentDayMatchup < ApplicationRecord
 	def toggle_user(user)
 		if self.all_users.include?(user)
 			self.exclude_user(user)
-
-      group = self.tournament_day.tournament_group_for_player(user)
-      self.tournament_day.remove_player_from_group(tournament_group: group, user: user) if group.present?
 		else
 			self.include_user(user)
-
-    	group = self.tournament_day.tournament_group_with_open_slots(1)
-    	raise "No groups available" if group.blank?
-    	self.tournament_day.add_player_to_group(tournament_group: group, user: user)
 		end
 	end
 
