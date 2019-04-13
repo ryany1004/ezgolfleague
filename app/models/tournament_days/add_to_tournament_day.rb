@@ -62,9 +62,11 @@ module AddToTournamentDay
   def assign_course_tee_box_to_user(user:, flight:)
     golf_outing = self.golf_outing_for_player(user)
 
-    if flight.blank? == false && golf_outing.blank? == false
+    if flight.present? && golf_outing.present?
       golf_outing.course_tee_box = flight.course_tee_box
       golf_outing.save
+    else
+    	raise "Could not assign course tee box to user #{user&.id} #{flight&.id} #{golf_outing&.id}" #TODO: Remove once we learn more.
     end
   end
 

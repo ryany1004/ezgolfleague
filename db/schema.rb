@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_04_07_001828) do
+ActiveRecord::Schema.define(version: 2019_04_08_222639) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -444,6 +444,7 @@ ActiveRecord::Schema.define(version: 2019_04_07_001828) do
     t.index ["primary_rule"], name: "index_scoring_rules_on_primary_rule"
     t.index ["tournament_day_id"], name: "index_scoring_rules_on_tournament_day_id"
     t.index ["type"], name: "index_scoring_rules_on_type"
+    t.index ["updated_at"], name: "index_scoring_rules_on_updated_at"
   end
 
   create_table "scoring_rules_users", id: false, force: :cascade do |t|
@@ -487,6 +488,8 @@ ActiveRecord::Schema.define(version: 2019_04_07_001828) do
     t.index ["league_season_team_id"], name: "index_tournament_day_results_on_league_season_team_id"
     t.index ["scoring_rule_id"], name: "index_tournament_day_results_on_scoring_rule_id"
     t.index ["sort_rank"], name: "index_tournament_day_results_on_sort_rank"
+    t.index ["updated_at"], name: "index_tournament_day_results_on_updated_at"
+    t.index ["user_id", "scoring_rule_id"], name: "index_tournament_day_results_on_user_id_and_scoring_rule_id"
     t.index ["user_id"], name: "index_tournament_day_results_on_user_id"
     t.index ["user_primary_scorecard_id"], name: "index_tournament_day_results_on_user_primary_scorecard_id"
   end
@@ -504,6 +507,7 @@ ActiveRecord::Schema.define(version: 2019_04_07_001828) do
     t.index ["course_id"], name: "index_tournament_days_on_course_id"
     t.index ["tournament_at"], name: "index_tournament_days_on_tournament_at"
     t.index ["tournament_id"], name: "index_tournament_days_on_tournament_id"
+    t.index ["updated_at"], name: "index_tournament_days_on_updated_at"
   end
 
   create_table "tournament_groups", force: :cascade do |t|
@@ -530,6 +534,7 @@ ActiveRecord::Schema.define(version: 2019_04_07_001828) do
     t.integer "tournament_days_count", default: 0
     t.datetime "tournament_starts_at"
     t.index ["league_id"], name: "index_tournaments_on_league_id"
+    t.index ["updated_at"], name: "index_tournaments_on_updated_at"
   end
 
   create_table "users", force: :cascade do |t|

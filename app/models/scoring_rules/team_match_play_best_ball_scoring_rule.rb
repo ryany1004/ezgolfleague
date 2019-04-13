@@ -20,7 +20,7 @@ class TeamMatchPlayBestBallScoringRule < MatchPlayScoringRule
 	end
 
 	def scoring_computer
-		ScoringComputer::TeamMatchPlayBestBallScoringComputer.new(self)
+		@scoring_computer ||= ScoringComputer::TeamMatchPlayBestBallScoringComputer.new(self)
 	end
 
   def opponent_for_user(user)
