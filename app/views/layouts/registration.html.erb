@@ -10,7 +10,6 @@
   <% end -%>
 	<%= stylesheet_link_tag    'application', media: 'all' %>
 	<%= javascript_include_tag 'application' %>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
   <%= csrf_meta_tags %>
   <link rel="apple-touch-icon" sizes="57x57" href="/icons/apple-icon-57x57.png">
   <link rel="apple-touch-icon" sizes="60x60" href="/icons/apple-icon-60x60.png">
@@ -30,46 +29,11 @@
   
   <%= render partial: 'shared/analytics' %>
 </head>
-<body>
-  <header>
-    <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark" id="mainNav">
-        <div class="container">
-            <a class="navbar-brand text-uppercase" href="#">ezgl</a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
-              <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarCollapse">
-              <ul class="navbar-nav mr-auto">
-                <li class="nav-item active">
-                  <a class="nav-link" href="#">Dashboard</a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" href="#">League</a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" href="#">Tournaments</a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" href="#">Golfers</a>
-                </li>
-              </ul>     
-              <ul class="ml-auto list-inline  profile-dropdown">
-                <li class="list-inline-item dropdown">
-                  <%= link_to image_tag("avatar.png"), user_session_path, class: 'nav-link dropdown-toggle', id: 'dropdown08', :data => { :toggle => "dropdown"}, 'aria-haspopup' => 'true', 'aria-expanded' => "false" %>
-                  <div class="dropdown-menu" aria-labelledby="dropdown08">
-                    <a class="dropdown-item" href="#">Link 1</a>
-                    <a class="dropdown-item" href="#">Link 2</a>
-                    <a class="dropdown-item" href="#">Link 3</a>
-                  </div>
-                </li>
-              </ul>     
-            </div>
-        </div><!-- /.container -->        
-    </nav><!-- /.navbar --> 
-  </header>  
+<body class="onboarding">
+
 <!-- <%= Rails.env %> -->
 
-<div>
+<div class="container master-container">
   <% if Rails.env.staging? %>
     <div class="alert alert-danger alert-dismissable fade in">
       You are running in the staging environment.
@@ -100,6 +64,15 @@
 <% end %>
 
 <footer class="container">
+  <% unless @show_apps_in_footer == false %>
+  <br/><br/>
+  <div>
+    <a href='https://itunes.apple.com/us/app/ez-golf-league/id1088689756?mt=8'><%= image_tag 'app_store.svg', width: "180" %></a>
+    &nbsp;&nbsp;
+    <a href='https://play.google.com/store/apps/details?id=com.ezgolfleague.golfapp&hl=en'><%= image_tag 'google-play-badge.png', width: "200" %></a>
+  </div>
+  <% end %>
+
   <% if user_signed_in? && current_user != true_user && true_user.is_super_user %>
     <br/><br/>
     <strong>You (<%= true_user.complete_name %>) are signed in as <%= current_user.complete_name %>

@@ -4,7 +4,7 @@
     <div class="col-md-4 onboarding__panel">
       <div class="onboarding__panel-header">
         <%= link_to "< Back", user_session_path, class: 'onboarding__backlink' %>
-        <%= image_tag("ezgl-icon-white.png", height: 25) %>
+        <%= link_to image_tag("ezgl-icon-white.png", height: 25), user_session_path %>
       </div>
       <%= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :post }) do |f| %>
       <div class="panel panel-default p-5">

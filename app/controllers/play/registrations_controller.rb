@@ -1,7 +1,7 @@
 class Play::RegistrationsController < Play::BaseController
   include Devise::Controllers::Helpers
 
-  layout "golfer"
+  layout "registration"
 
   skip_before_action :authenticate_user!, only: [:new, :create]
 
@@ -50,7 +50,7 @@ class Play::RegistrationsController < Play::BaseController
     if @league.encrypted_stripe_production_publishable_key.blank? || @league.dues_amount.zero?
       current_user.leagues << @league
 
-      redirect_to setup_completed_play_registrations_path
+      redirect_to play_dashboard_index_path
     else
       @cost_breakdown_lines = [
         {name: "#{@league.name} League Fees", price: @league.dues_amount},
@@ -80,7 +80,7 @@ class Play::RegistrationsController < Play::BaseController
     begin
       Payments::LeagueJoinService.charge_and_join(current_user, league, stripe_token)
 
-      redirect_to setup_completed_play_registrations_path
+      redirect_to play_dashboard_index_path
     rescue Stripe::CardError => e
       redirect_to error_play_payments_path
     end
@@ -117,7 +117,7 @@ class Play::RegistrationsController < Play::BaseController
 
     SendEventToDripJob.perform_later("League admin invited golfers during registration", user: current_user, options: { number_of_golfers: golfers_to_invite.count, league_name: @league.name })
 
-    redirect_to setup_completed_play_registrations_path
+    redirect_to play_dashboard_index_path
   end
 
   private

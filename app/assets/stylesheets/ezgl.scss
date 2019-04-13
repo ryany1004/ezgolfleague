@@ -1,3 +1,5 @@
+@import "color-palette";
+
 body {
   background: #f5f6fa;
   font-family: 'Roboto', sans-serif !important;
@@ -140,6 +142,21 @@ button:focus {
   font-size: 20px;
   font-weight: 500;
 }
+
+/* Modal */
+.modal-body.welcome {
+  text-align: center;
+}
+
+.modal-footer.welcome {
+  border: none;
+}
+
+.form-check-label.welcome {
+  color: ezgl-color('accent', 'light');
+}
+
+
 
 
 /* View League Card */

@@ -19,8 +19,11 @@
   $('.js-scroll-trigger').click(function() {
     $('.navbar-collapse').collapse('hide');
   });
-  
 
+  $(window).on("load",function(){
+    $(".content").mCustomScrollbar();
+  });
+  
   // Collapse Navbar
   $(document).ready(function(){
     var navbarCollapse = function() {
