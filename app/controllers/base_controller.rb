@@ -1,5 +1,5 @@
 class BaseController < ActionController::Base
-  layout "application"
+  layout 'application'
 
   force_ssl if: :ssl_configured?
 
