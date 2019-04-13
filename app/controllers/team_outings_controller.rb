@@ -5,6 +5,8 @@ class TeamOutingsController < BaseController
   def teams
     @page_title = "Matchups for #{@tournament.name}"
     
+    @tournament_day.create_league_season_team_matchups
+
     @registered_teams = @tournament.teams_for_day(@tournament_day)
   end
 

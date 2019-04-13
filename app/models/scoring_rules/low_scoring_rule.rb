@@ -29,6 +29,10 @@ class LowScoringRule < ScoringRule
 	  true
 	end
 
+	def flight_based_payouts?
+		false
+	end
+
 	def can_be_finalized?
 		return false if !self.tournament_day.has_scores?
 

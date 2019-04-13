@@ -5,7 +5,7 @@ json.cache! ['v1', tournament_group] do
 	json.show_players_tee_times tournament_group.tournament_day.tournament.show_players_tee_times
 	json.max_number_of_players	tournament_group.max_number_of_players
 
-	json.golf_outings tournament_group.golf_outings do |golf_outing|
+	json.golf_outings tournament_group.api_golf_outings do |golf_outing|
 		json.server_id							golf_outing.server_id
 		json.course_handicap				golf_outing.course_handicap.to_i
 		json.team_combined_name			golf_outing.team_combined_name

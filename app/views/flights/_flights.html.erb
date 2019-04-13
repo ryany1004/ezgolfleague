@@ -29,7 +29,7 @@
   			<td><%= flight.lower_bound %></td>
         <td><%= flight.upper_bound %></td>
         <td><%= flight.course_tee_box.name %></td>
-        <td><%= link_to "Edit", edit_league_tournament_tournament_day_flight_path(tournament.league, tournament, tournament_day, flight) %> | <%= link_to 'Delete', league_tournament_tournament_day_flight_path(tournament.league, @tournament, tournament_day, flight), data: { confirm: 'Are you sure you want to delete this flight? It will remove all associated payout information.' }, method: :delete %></td>
+        <td><%= link_to "Edit", edit_league_tournament_tournament_day_flight_path(tournament.league, tournament, tournament_day, flight) %> | <%= link_to_if(flights.count > 1, 'Delete', league_tournament_tournament_day_flight_path(tournament.league, @tournament, tournament_day, flight), data: { confirm: 'Are you sure you want to delete this flight? It will remove all associated payout information.' }, method: :delete) %></td>
   		</tr>
   	<% end %>
   	</tbody>

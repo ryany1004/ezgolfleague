@@ -3,6 +3,7 @@ class TournamentGroup < ApplicationRecord
 
   belongs_to :tournament_day, inverse_of: :tournament_groups, touch: true
   has_many :golf_outings, -> { order(:created_at) }, inverse_of: :tournament_group, dependent: :destroy
+  has_many :api_golf_outings, ->{ where.not(course_tee_box: nil) }, class_name: "GolfOuting"
   has_many :users, ->{ order 'last_name, first_name' }, through: :golf_outings
   has_many :daily_teams, -> { order(:created_at) }, inverse_of: :tournament_group, dependent: :destroy
 

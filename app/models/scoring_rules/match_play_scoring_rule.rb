@@ -34,8 +34,12 @@ class MatchPlayScoringRule < StrokePlayScoringRule
 	end
 
   def includes_extra_scoring_column?
-    return true
+    true
   end
+
+	def results_description_column_name
+		"Details"
+	end
 
 	def setup_partial
 		nil

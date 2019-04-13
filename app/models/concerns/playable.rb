@@ -46,15 +46,7 @@ module Playable
   end
 
   def players_for_day(day)
-    players = []
-
-    day.tournament_groups.each do |group|
-      group.players_signed_up.each do |player|
-        players << player unless players.include? player
-      end
-    end
-
-    players
+    day.tournament_groups.includes(:users).map(&:users).flatten
   end
 
   def teams_for_day(day)

@@ -78,35 +78,33 @@ module ScoringRuleScorecards
                 
         if user1_score.present? && user2_score.present?
           if user1_hole_score > user2_hole_score
-            self.running_score = self.running_score - 1
-            self.opponent_running_score = self.opponent_running_score + 1
+            self.running_score = (self.running_score - 1).abs
+            self.opponent_running_score = (self.opponent_running_score + 1).abs
 
             self.holes_won += 1
           elsif user1_hole_score < user2_hole_score
-            self.running_score = self.running_score + 1
-            self.opponent_running_score = self.opponent_running_score - 1
+            self.running_score = (self.running_score + 1).abs
+            self.opponent_running_score = (self.opponent_running_score - 1).abs
           end
         end
       end
       
       self.running_score 
     end
+
+    def match_has_ended?
+    	player_score_delta = (self.running_score - self.opponent_running_score).abs
+    	player_score_delta > self.unplayed_holes || self.unplayed_holes.zero?
+    end
     
     def scorecard_result
-      player_score_delta = (self.running_score - self.opponent_running_score).abs
-      
-      match_has_ended = false
-      match_has_ended = true if player_score_delta > self.unplayed_holes or self.unplayed_holes.zero?
-      return MatchPlayScorecardResult::INCOMPLETE if !match_has_ended
-            
-      if self.running_score == self.opponent_running_score
-        MatchPlayScorecardResult::TIED
+    	return MatchPlayScorecardResult::TIED if self.running_score == self.opponent_running_score
+    	return MatchPlayScorecardResult::INCOMPLETE if !self.match_has_ended?
+
+      if self.running_score > self.opponent_running_score
+      	MatchPlayScorecardResult::WON
       else
-        if self.running_score > self.opponent_running_score
-        	MatchPlayScorecardResult::WON
-        else
-        	MatchPlayScorecardResult::LOST
-        end
+      	MatchPlayScorecardResult::LOST
       end
     end
 
@@ -120,10 +118,12 @@ module ScoringRuleScorecards
       elsif result == MatchPlayScorecardResult::WON
       	return "W"
       else
-      	if self.unplayed_holes != self.scoring_rule.course_holes.count && self.running_score > self.opponent_running_score
-      		winning_string = "#{self.running_score} and #{self.unplayed_holes}"
+      	in_progress_description = "#{self.running_score}&#{self.unplayed_holes}"
 
-      		return "W (#{winning_string})"
+      	if self.unplayed_holes != self.scoring_rule.course_holes.count && self.running_score > self.opponent_running_score
+      		return "W (#{in_progress_description})"
+      	else
+      		return in_progress_description
       	end
       end
 

@@ -126,11 +126,11 @@ class TournamentDay < ApplicationRecord
   end
 
   def eager_groups
-    TournamentGroup.includes(golf_outings: [:user, course_tee_box: :course_hole_tee_boxes, scorecard: [{scores: :course_hole}]]).where(tournament_day: self)
+    @eager_groups ||= TournamentGroup.includes(golf_outings: [:user, course_tee_box: :course_hole_tee_boxes, scorecard: [{scores: :course_hole}]]).where(tournament_day: self)
   end
 
   def flights_with_rankings
-    self.flights.includes(:users, :tournament_day_results, :payout_results)
+    @flights_with_rankings ||= self.flights.includes(:users, :tournament_day_results, :payout_results)
   end
 
   #TODO: MOVE
@@ -198,6 +198,7 @@ class TournamentDay < ApplicationRecord
     if self.tournament.league_season.is_teams?
       number_of_teams = self.tournament.league_season.league_season_teams.size
       number_of_matchups = (number_of_teams.to_f / 2.0).ceil #round up
+      number_of_matchups -= self.league_season_team_tournament_day_matchups.count
 
       number_of_matchups.times.each_with_index do |item, i|
         LeagueSeasonTeamTournamentDayMatchup.create(tournament_day: self)
@@ -250,27 +251,27 @@ class TournamentDay < ApplicationRecord
   end
 
   def scorecard_base_scoring_rule
-    self.scoring_rules.where(primary_rule: true).first
+    @scorecard_base_scoring_rule ||= self.scoring_rules.where(primary_rule: true).first
   end
 
   def mandatory_scoring_rules
-    self.scoring_rules.where(is_opt_in: false).order(:type)
+    @mandatory_scoring_rules ||= self.scoring_rules.where(is_opt_in: false).order(:type)
   end
 
   def mandatory_individual_scoring_rules
-    self.mandatory_scoring_rules.select { |r| r.team_type != ScoringRuleTeamType::LEAGUE }
+    @mandatory_individual_scoring_rules ||= self.mandatory_scoring_rules.select { |r| r.team_type != ScoringRuleTeamType::LEAGUE }
   end
 
   def mandatory_team_scoring_rules
-    self.mandatory_scoring_rules.select { |r| r.team_type == ScoringRuleTeamType::LEAGUE }
+    @mandatory_team_scoring_rules ||= self.mandatory_scoring_rules.select { |r| r.team_type == ScoringRuleTeamType::LEAGUE }
   end
 
   def optional_scoring_rules
-    self.scoring_rules.where(is_opt_in: true).order(:type)
+    @optional_scoring_rules ||= self.scoring_rules.where(is_opt_in: true).order(:type)
   end
 
   def optional_scoring_rules_with_dues
-    self.optional_scoring_rules.select { |r| r.dues_amount > 0 }
+    @optional_scoring_rules_with_dues ||= self.optional_scoring_rules.select { |r| r.dues_amount > 0 }
   end
 
   def legacy_game_type_id

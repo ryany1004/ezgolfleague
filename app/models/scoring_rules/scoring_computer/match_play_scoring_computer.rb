@@ -16,7 +16,7 @@ module ScoringComputer
       eligible_users.each do |user|
       	match_play_scorecard = @scoring_rule.match_play_scorecard_for_user(user)
 
-      	users_with_holes_won << { user: user, holes_won: match_play_scorecard.holes_won }
+      	users_with_holes_won << { user: user, holes_won: match_play_scorecard.holes_won, details: match_play_scorecard.extra_scoring_column_data }
       end
 
       # sort
@@ -26,11 +26,12 @@ module ScoringComputer
       @scoring_rule.payouts.each_with_index do |payout, i|
       	if payout.payout_results.count.zero?
       		user = users_with_holes_won[i][:user]
+      		details = users_with_holes_won[i][:details]
 
       		if user.present?
       			Rails.logger.debug { "Assigning #{user.complete_name}. Payout [#{payout}] Scoring Rule [#{@scoring_rule.name} #{@scoring_rule.id}]" }
 
-      			PayoutResult.create(payout: payout, user: user, scoring_rule: @scoring_rule, amount: payout.amount, points: payout.points)
+      			PayoutResult.create(payout: payout, user: user, scoring_rule: @scoring_rule, amount: payout.amount, points: payout.points, detail: details)
       		end
       	else
       		Rails.logger.debug { "Payout Already Has Results: #{payout.payout_results.map(&:id)}" }

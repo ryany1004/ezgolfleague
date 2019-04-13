@@ -19,10 +19,9 @@ class BestBallScoringRule < StrokePlayScoringRule
 
   def best_ball_scorecard_for_user_in_team(user, daily_team, use_handicaps)
     scorecard = ScoringRuleScorecards::BestBallScorecard.new
-    # scorecard.course_hole_number_suppression_list = self.course_hole_number_suppression_list
     scorecard.user = user
     scorecard.scoring_rule = self
-    scorecard.daily_team = daily_team
+    scorecard.users_to_compare = daily_team.users 
     scorecard.should_use_handicap = use_handicaps
     scorecard.calculate_scores
 

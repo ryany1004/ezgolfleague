@@ -66,7 +66,7 @@ module LeagueSeasonRankingGroups
 							# add the team results
 		          rule.payout_results.where(league_season_team: team).each do |result|
 		            ranking.points += result.points unless result.points.blank?
-		            ranking.amount += result.amount unless result.amount.blank?
+		            ranking.payouts += result.amount unless result.amount.blank?
 		          end
 
 		          # this is a team season so also add the individual results, if any
