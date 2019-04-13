@@ -33,7 +33,7 @@ module EzgolfRails
         'X-Frame-Options' => 'ALLOWALL'
     }
 
-    config.middleware.insert_after ActionDispatch::Static, Rack::Deflater
+    config.middleware.insert_after Rack::Sendfile, Rack::Deflater
 
     ActiveRecord::Base.include_root_in_json = false
   end
