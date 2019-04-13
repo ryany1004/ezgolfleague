@@ -1,7 +1,7 @@
 class Play::RegistrationsController < Play::BaseController
   include Devise::Controllers::Helpers
 
-  layout "registration"
+  layout "onboarding"
 
   skip_before_action :authenticate_user!, only: [:new, :create]
 
