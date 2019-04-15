@@ -211,7 +211,7 @@
                         <div class="row">
                           <div class="col-md-6">
                             <div class="media">
-                              <img src="images/players/1.png" alt="">
+                              <img src="http://placehold.it/40" alt="">
                               <div class="media-body">
                                 <h2>Craig Inesta</h2>
                               </div>
@@ -232,7 +232,7 @@
                         <div class="row">
                           <div class="col-md-6">
                             <div class="media">
-                              <img src="images/players/2.png" alt="">
+                              <img src="http://placehold.it/40" alt="">
                               <div class="media-body">
                                 <h2>Peter McBride</h2>
                               </div>
@@ -253,7 +253,7 @@
                         <div class="row">
                           <div class="col-md-6">
                             <div class="media">
-                              <img src="images/players/3.png" alt="">
+                              <img src="http://placehold.it/40" alt="">
                               <div class="media-body">
                                 <h2>Kevin Johnson</h2>
                               </div>
@@ -274,7 +274,7 @@
                         <div class="row">
                           <div class="col-md-6">
                             <div class="media">
-                              <img src="images/players/4.png" alt="">
+                              <img src="http://placehold.it/40" alt="">
                               <div class="media-body">
                                 <h2>Mike Austin</h2>
                               </div>
@@ -295,7 +295,7 @@
                         <div class="row">
                           <div class="col-md-6">
                             <div class="media">
-                              <img src="images/players/5.png" alt="">
+                              <img src="http://placehold.it/40" alt="">
                               <div class="media-body">
                                 <h2>Jeremy Smith</h2>
                               </div>
@@ -316,7 +316,7 @@
                         <div class="row">
                           <div class="col-md-6">
                             <div class="media">
-                              <img src="images/players/6.png" alt="">
+                              <img src="http://placehold.it/40" alt="">
                               <div class="media-body">
                                 <h2>Jack Rembrandt</h2>
                               </div>
@@ -337,7 +337,7 @@
                         <div class="row">
                           <div class="col-md-6">
                             <div class="media">
-                              <img src="images/players/7.png" alt="">
+                              <img src="http://placehold.it/40" alt="">
                               <div class="media-body">
                                 <h2>Vince Demora</h2>
                               </div>
@@ -358,7 +358,7 @@
                         <div class="row">
                           <div class="col-md-6">
                             <div class="media">
-                              <img src="images/players/8.png" alt="">
+                              <img src="http://placehold.it/40" alt="">
                               <div class="media-body">
                                 <h2>Tito Rodriguez</h2>
                               </div>
@@ -416,5 +416,14 @@
 </div>
 
 <script>
-  $('#welcomeModal').modal('show');
+  if (document.cookie.indexOf("welcomeModal=") >= 0) {
+    // They've been here before.
+  } else {
+    $('#welcomeModal').modal('show');
+    $('#welcomeModal').on('hidden.bs.modal', function () {
+      if ($('#welcome-modal').is(':checked')) {
+        document.cookie = "welcomeModal=true; expires=Fri, 31 Dec 9999 23:59:59 GMT";
+      };
+    });
+  }
 </script>
