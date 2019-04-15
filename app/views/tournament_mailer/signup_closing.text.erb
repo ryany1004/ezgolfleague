@@ -1,4 +1,4 @@
-The tournament <%= @tournament.name %> on <%= @tournament.tournament_starts_at.to_s(:date_time) %> is about to close registration.
+The tournament <%= @tournament.name %> on <%= @tournament.tournament_starts_at.in_time_zone(@user.time_zone).to_s(:date_and_time) %> is about to close registration.
 
 If you want to play in this tournament, please visit this URL to get started: <%= @registration_url %>.
 

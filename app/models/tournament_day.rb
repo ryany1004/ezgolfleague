@@ -228,13 +228,6 @@ class TournamentDay < ApplicationRecord
     end
 
     matchup.save
-
-    league_season_team.users.each { |user|
-	    group = self.tournament_group_with_open_slots(1)
-	    raise "No groups available" if group.blank?
-
-    	self.add_player_to_group(tournament_group: group, user: user)
-    }
   end
 
   def remove_league_season_team(matchup, league_season_team)
@@ -242,12 +235,6 @@ class TournamentDay < ApplicationRecord
     matchup.team_b = nil if league_season_team == matchup.team_b
     matchup.winning_team = nil
     matchup.save
-
-    league_season_team.users.each do |user|
-      group = self.tournament_group_for_player(user)
-
-      self.remove_player_from_group(tournament_group: group, user: user)
-    end
   end
 
   def scorecard_base_scoring_rule

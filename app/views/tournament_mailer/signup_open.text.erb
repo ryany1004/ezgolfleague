@@ -1,7 +1,7 @@
-Great news! The tournament <%= @tournament.name %> on <%= @tournament.tournament_starts_at.to_s(:date_time) %> is open for registration.
+Great news! The tournament <%= @tournament.name %> on <%= @tournament.tournament_starts_at.in_time_zone(@user.time_zone).to_s(:date_and_time) %> is open for registration.
 
 Visit this URL to get started: <%= @registration_url %>.
 
-Please note - signups close on <%= @tournament.signup_closes_at.to_s(:date_time) %>.
+Please note - signups close on <%= @tournament.signup_closes_at.in_time_zone(@user.time_zone).to_s(:date_and_time) %>.
 
 Thanks for using EZGolfLeague!

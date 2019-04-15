@@ -181,6 +181,8 @@ Rails.application.routes.draw do
         resources :scorecards, except: [:delete] do
           patch 'disqualify'
         end
+
+        resource :team_configuration, path: "copy_teams", only: [:update]
       end      
 
       resource :auto_scheduling, path: "autoschedule", only: [:update], controller: "tournaments/auto_scheduling" do
