@@ -28,17 +28,17 @@ module FinderSupport
   def tournaments_happening_at_some_point(start_date, end_date, leagues, restrict_to_configured = true)
     relation = Tournament.includes(:league)
 
-    unless leagues.blank?
+    if leagues.present?
       league_ids = leagues.map { |n| n.id }
 
       relation = relation.includes(:league).where("leagues.id IN (?)", league_ids).references(:league)
     end
 
-    unless start_date.blank?
+    if start_date.present?
       relation = relation.where("tournament_starts_at >= ? OR tournament_days_count = 0", start_date)
     end
 
-    unless end_date.blank?
+    if end_date.present?
       relation = relation.where("tournament_starts_at <= ? OR tournament_days_count = 0", end_date)
     end
 
