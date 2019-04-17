@@ -127,12 +127,16 @@ class User < ApplicationRecord
 
   def can_create_tournaments?
   	if self.is_super_user?
-  		true
+  		return true
   	else
   		if self.selected_league.present?
-  			self.selected_league.has_active_subscription? || self.selected_league.free_tournaments_remaining > 0
+  			if self.selected_league.has_active_subscription?
+  				return true
+  			elsif self.selected_league.free_tournaments_remaining > 0
+  				return true
+  			end
   		else
-  			false
+  			return false
   		end
   	end
 
