@@ -4,7 +4,6 @@ body {
   background: #f5f6fa;
   font-family: 'Roboto', sans-serif !important;
   font-weight: 400;
-  padding-top: 100px;
   position: relative;
 }
 
@@ -37,6 +36,23 @@ a:hover {
   position: absolute;
   width: 100%;
   top: 0;
+}
+
+.banner-full-img {
+  background-image: image-url('course_backgrounds/bg-full.jpg');
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  -ms-background-size: cover;
+  background-size: cover;
+  height: 100vh;
+  position: absolute;
+  width: 100%;
+  top: 0;
+}
+
+.pt-100 {
+  padding-top: 100px;
 }
 
 .navbar-dark .navbar-nav .active>.nav-link,
@@ -110,9 +126,10 @@ button:focus {
   margin-bottom: 0;
 }
 
-.profile-dropdown .dropdown-toggle img {
+.profile-dropdown .dropdown-toggle {
   width: 40px;
   height: 40px;
+  cursor: pointer;
 }
 
 .profile-dropdown .dropdown-toggle::after {

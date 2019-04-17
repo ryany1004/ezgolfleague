@@ -2,9 +2,114 @@
   ezglTrackAnalyticsEvent("Viewed their user profile");
 </script>
 
-<ol class="breadcrumb">
-  <li><%= link_to "Dashboard", play_dashboard_index_path %></li>
-  <li class="active">My Account</li>
-</ol>
+<div class="onboarding">
+  <div id="container">
+    <div class="row">
+      <div class="onboarding__panel registration">
+        <div class="onboarding__panel-side white">
+          <div class="panel-side-text">
+            <div class="nav flex-column" id="v-tab" role="tablist" aria-orientation="vertical">
+              <a class="nav-link active" id="v-edit-profile-tab" data-toggle="pill" href="#v-edit-profile" role="tab" aria-controls="v-edit-profile" aria-selected="true">Edit Profile</a>
+              <a class="nav-link" id="v-edit-contact-info-tab" data-toggle="pill" href="#v-edit-contact-info" role="tab" aria-controls="v-edit-contact-info" aria-selected="false">Edit Contact Info</a>
+              <a class="nav-link" id="v-my-account-tab" data-toggle="pill" href="#v-my-account" role="tab" aria-controls="v-my-account" aria-selected="false">My Account</a>
+              <a class="nav-link" id="v-settings-tab" data-toggle="pill" href="#v-settings" role="tab" aria-controls="v-settings" aria-selected="false">Settings</a>
+            </div>
+          </div>
+          <%= link_to "Exit to Dashboard", play_dashboard_index_path, class: 'btn btn-outline-secondary' %>
+        </div>
+        <div class="panel panel-default panel-user p-5">
+          <div class="panel-body registration">
+            <div class="tab-content" id="v-tabContent">
+              <%= simple_form_for @user_account, url: play_user_account_path(@user_account), multipart: true, :defaults => { :input_html => { :class => "onboarding__input", :label => false }} do |f| %>
+                <% if notification = f.error_notification %>
+                  <div class="alert alert-error fade in">
+                    <a class="close" data-dismiss="alert" href="#">&times;</a>
+                    <%= notification %>
+                  </div>
+                <% end %>
 
-<%= render 'form' %>
+                <div class="tab-pane fade show active" id="v-edit-profile" role="tabpanel" aria-labelledby="v-edit-profile-tab">
+                  <div class="registration-form-container">
+                    <div class="panel-heading">
+                      <h3 class="panel-title pb-4">Edit Profile</h3>
+                    </div>
+                    <div class="registration-full-name form-flex-group">
+                      <div class="form-side-label">
+                        <p>Your Name</p>
+                      </div>
+
+                      <div class="form-flex-group">
+                        <%= f.input :first_name, placeholder: 'Enter your first name...', autofocus: true, required: true %>
+
+                        <%= f.input :last_name, placeholder: 'Enter your last name...', required: true %>
+                      </div>
+                    </div>
+
+                    <div class="form-flex-group">
+                      <div class="form-side-label">
+                        <p>Email</p>
+                      </div>
+
+                      <%= f.input :email, placeholder: 'Enter your email address...', required: true %>
+                    </div>
+
+                    <div class="form-flex-group">
+                      <div class="form-side-label">
+                        <p>Password</p>
+                      </div>
+
+                      <div class="form-flex-group">
+                        <%= f.input :password, placeholder: 'Enter your password...' %>
+
+                        <%= f.input :password_confirmation, placeholder: 'Enter your password again...' %>
+                      </div>
+                    </div>
+
+                    <div class="form-flex-group">
+                      <div class="form-side-label">
+                        <p>Photo</p>
+                      </div>
+                
+                      <div class="upload-photo-container">
+                        <div class="onboarding__input upload-photo" onclick="document.getElementById('user_avatar').click()">Upload Photo +</div>
+                        <%= f.input :avatar %>
+                        <div id="upload-photo-img">
+                          <img id="upload-photo-img-default" src="http://placehold.it/40" >
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="form-flex-group">
+                      <div class="form-side-label">
+                        <p>GHIN Number</p>
+                      </div>
+
+                      <div class="form-flex-group">
+                        <%= f.input :ghin_number, placeholder: '' %>
+
+                        <div class="form-side-label handicap_index-label pl-4 ">
+                          <p>18-Hole Handicap</p>
+                        </div>
+
+                        <%= f.input :handicap_index, placeholder: '' %>
+                      </div>
+                    </div>
+
+                    <div class="form-actions form-flex-group"> 
+                      <div class="form-flex-right">
+                        <%= f.button :submit, "Save", class: 'btn__ezgl-secondary' %>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="tab-pane fade" id="v-edit-contact-info" role="tabpanel" aria-labelledby="v-edit-contact-info-tab">...</div>
+                <div class="tab-pane fade" id="v-my-account" role="tabpanel" aria-labelledby="v-my-account-tab">...</div>
+                <div class="tab-pane fade" id="v-settings" role="tabpanel" aria-labelledby="v-settings-tab">...</div>
+              </div>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

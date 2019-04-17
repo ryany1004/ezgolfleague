@@ -236,6 +236,7 @@
 
     &.registration {
       display: flex;
+      position: relative;
       width: 100%;
       max-width: 960px;
       margin: 36px auto;
@@ -271,6 +272,61 @@
               color: ezgl-color('background', 'light');
               text-decoration: underline;
             }
+          }
+        }
+
+        &.white {
+          background: ezgl-color('background', 'light');
+          border-right: 2px solid ezgl-color('background', 'base');
+          justify-content: start;
+          align-items: start;
+          padding: 24px;
+          
+          .panel-side-text {
+            text-align: left;
+
+            .nav-link {
+              color: ezgl-color('accent', 'base');
+
+              &.active {
+                color: ezgl-color('foreground', 'base');
+                font-weight: 600;
+              }
+            }
+          }
+
+          .btn {
+            position: absolute;
+            bottom: 20px;
+          }
+        }
+      }
+
+      .panel-user {
+        position: relative;
+
+        // #user_ghin_number {
+        //   width: 200px;
+        // }
+
+        // .handicap_index-label {
+        //   width: 250px;
+        // }
+
+        .user_handicap_index {
+          width: 75px;
+          float: right;
+        }
+
+        .form-actions {
+          position: absolute;
+          border-top: 2px solid ezgl-color('background', 'base');
+          padding: 20px;
+          right: 0;
+          bottom: 0;
+
+          .form-flex-right {
+            width: 100%;
           }
         }
       }
