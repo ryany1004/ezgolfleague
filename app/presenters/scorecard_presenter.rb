@@ -97,11 +97,11 @@ class ScorecardPresenter
   end
 
   def scorecard_score_cell_partial
-    @scorecard_score_cell_partial ||= self.primary_scorecard.tournament_day.game_type.scorecard_score_cell_partial
+    @scorecard_score_cell_partial ||= self.primary_scorecard.tournament_day.scorecard_base_scoring_rule.scorecard_score_cell_partial
   end
 
   def scorecard_post_embed_partial
-    @scorecard_post_embed_partial ||= self.primary_scorecard.tournament_day.game_type.scorecard_post_embed_partial
+    @scorecard_post_embed_partial ||= self.primary_scorecard.tournament_day.scorecard_base_scoring_rule.scorecard_post_embed_partial
   end
 
   def show_finalization?
