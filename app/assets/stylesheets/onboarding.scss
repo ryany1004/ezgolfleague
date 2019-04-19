@@ -163,6 +163,27 @@
       }
     }
 
+    #v-settings {
+      .user_wants_email_notifications, .user_wants_push_notifications {
+        margin: 0;
+
+        .checkbox {
+          display: flex;
+        }
+        
+        label {
+          display:  block !important;
+          font-size: 1rem;
+
+          input {
+            width: auto;
+            height: auto;
+            margin: 0 8px 8px 0;
+          }
+        }
+      }
+    }
+
     .registration-form-container {
       display: flex;
       flex-wrap: wrap;
@@ -198,6 +219,15 @@
           width: 35%;
           display: flex;
           justify-content: flex-end;
+        }
+
+        .form-subheader {
+          width: 100%;
+          border-bottom: 3px solid ezgl-color('foreground', 'darker');
+        }
+
+        .user_time_zone {
+          margin: 0;
         }
 
         &.form-actions {
@@ -305,14 +335,6 @@
       .panel-user {
         position: relative;
 
-        // #user_ghin_number {
-        //   width: 200px;
-        // }
-
-        // .handicap_index-label {
-        //   width: 250px;
-        // }
-
         .user_handicap_index {
           width: 75px;
           float: right;
@@ -324,6 +346,8 @@
           padding: 20px;
           right: 0;
           bottom: 0;
+          width: 100%;
+          text-align: right;
 
           .form-flex-right {
             width: 100%;
@@ -334,6 +358,10 @@
       .panel-default {
         width: 77%;
       }
+    }
+
+    &.user-account-edit {
+      min-height: 550px;
     }
   }
 }
