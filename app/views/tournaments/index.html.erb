@@ -1,5 +1,6 @@
 <script>
   mixpanel.identify();
+  
   amplitude.getInstance().setUserId('<%= current_user.id %>');
 
   ezglTrackAnalyticsEvent("Viewed the list of tournaments");
