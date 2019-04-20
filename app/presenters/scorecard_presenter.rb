@@ -76,11 +76,19 @@ class ScorecardPresenter
     @scorecard_total_par ||= self.primary_scorecard.tournament_day.scorecard_base_scoring_rule.course_holes.map { |hole| hole.par }.sum
   end
 
+  def has_scorecard_score_cell_partial?(rule)
+  	rule.respond_to?(:scorecard_score_cell_partial) && rule.scorecard_score_cell_partial.present?
+  end
+
+  def has_scorecard_post_embed_partial?(rule)
+  	rule.respond_to?(:scorecard_post_embed_partial) && rule.scorecard_post_embed_partial.present?
+  end
+
   def scorecard_score_cell_partials
     partials = []
 
     self.primary_scorecard.tournament_day.scoring_rules.each do |rule|
-      partials << {rule: rule, partial: rule.scorecard_score_cell_partial} if rule.respond_to?(:scorecard_score_cell_partial) && rule.scorecard_score_cell_partial.present?
+      partials << {rule: rule, partial: rule.scorecard_score_cell_partial} if self.has_scorecard_score_cell_partial?(rule)
     end
 
     partials
@@ -90,18 +98,26 @@ class ScorecardPresenter
     partials = []
 
     self.primary_scorecard.tournament_day.scoring_rules.each do |rule|
-      partials << {rule: rule, partial: rule.scorecard_post_embed_partial} if rule.respond_to?(:scorecard_score_cell_partial) && rule.scorecard_score_cell_partial.present?
+      partials << {rule: rule, partial: rule.scorecard_post_embed_partial} if has_scorecard_post_embed_partial?(rule)
     end
 
     partials
   end
 
   def scorecard_score_cell_partial
-    @scorecard_score_cell_partial ||= self.primary_scorecard.tournament_day.game_type.scorecard_score_cell_partial
+  	if self.has_scorecard_score_cell_partial?(self.primary_scorecard.tournament_day.scorecard_base_scoring_rule)
+    	self.primary_scorecard.tournament_day.scorecard_base_scoring_rule.scorecard_score_cell_partial
+    else
+    	nil
+    end
   end
 
   def scorecard_post_embed_partial
-    @scorecard_post_embed_partial ||= self.primary_scorecard.tournament_day.game_type.scorecard_post_embed_partial
+  	if self.has_scorecard_post_embed_partial?(self.primary_scorecard.tournament_day.scorecard_base_scoring_rule)
+    	self.primary_scorecard.tournament_day.scorecard_base_scoring_rule.scorecard_post_embed_partial
+    else
+    	nil
+    end
   end
 
   def show_finalization?

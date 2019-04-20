@@ -125,7 +125,23 @@ class User < ApplicationRecord
     response = DRIP_CLIENT.unsubscribe(self.email) if Rails.env.production?
   end
 
-  ##
+  def can_create_tournaments?
+  	if self.is_super_user?
+  		return true
+  	else
+  		if self.selected_league.present?
+  			if self.selected_league.has_active_subscription?
+  				return true
+  			elsif self.selected_league.free_tournaments_remaining > 0
+  				return true
+  			end
+  		else
+  			return false
+  		end
+  	end
+
+  	false
+  end
 
   def can_edit_user?(user)
     return true if self.is_super_user

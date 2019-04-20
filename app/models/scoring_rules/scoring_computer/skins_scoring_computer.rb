@@ -34,28 +34,37 @@ module ScoringComputer
 			"#{hole.id}-#{user.id}"
 		end
 
-		def combine_results(results)
+		def combine_results(results, holes_are_unique: true)
+			grouped_results = {}
+
 			results.each do |r|
-				other_results = results.where(user: r.user).where("id != ?", r.id)
-				other_holes = results.where(user: r.user).pluck(:detail).compact.uniq
+				user_results = grouped_results[r.user]
 
-				other_results.each do |o|
-					r.amount += o.amount if o.amount.present?
-					r.points += o.points if o.points.present?
-
-					o.points = 0
-					o.amount = 0
-					o.detail = nil
-					o.save
+				if user_results.present?
+					user_results << r
+				else
+					grouped_results[r.user] = [r]
 				end
-				
-				other_holes = other_holes.sort_by { |x| x[/\d+/].to_i }
-
-				r.detail = other_holes.join(", ")
-				r.save
 			end
 
-			results.where(detail: nil).destroy_all
+			grouped_results.keys.each do |user|
+				summed_amount = 0
+				aggregate_details = []
+
+				grouped_results[user].each do |r|
+					summed_amount += r.amount
+					aggregate_details << r.detail
+
+					r.destroy
+				end
+
+				PayoutResult.create(
+					user: user,
+					scoring_rule: @scoring_rule,
+					amount: summed_amount,
+					detail: aggregate_details.join(", "),
+					points: 0)
+			end
 		end
 
 		def value_per_skin(skins:)
@@ -67,9 +76,11 @@ module ScoringComputer
 				winners_sum += winners.count
 			end
 
-			return if winners_sum.zero?
+			return 0 if winners_sum.zero?
 
 			total_pot = @scoring_rule.users_eligible_for_payouts.count * @scoring_rule.dues_amount
+
+			Rails.logger.debug { "Value Per Skin: #{@scoring_rule.users_eligible_for_payouts.count} players with #{@scoring_rule.dues_amount} for pot of #{total_pot}. Winners sum: #{winners_sum}" }
 
 			if total_pot > 0
 				(total_pot / winners_sum).floor

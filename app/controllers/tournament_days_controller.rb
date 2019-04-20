@@ -52,12 +52,16 @@ class TournamentDaysController < BaseController
   def destroy
     @tournament_day.destroy
 
+    self.update_tournament_date
+
     redirect_to league_tournament_tournament_days_path(@tournament.league, @tournament), flash: { success: "The day was successfully deleted." }
   end
 
   def update_tournament_date
-    @tournament.tournament_starts_at = @tournament.tournament_days.first.tournament_at unless @tournament.tournament_days.first.blank?
-    @tournament.save
+  	if @tournament.tournament_days.first.present?
+  		@tournament.tournament_starts_at = @tournament.tournament_days.first.tournament_at
+  		@tournament.save
+  	end
   end
 
   private

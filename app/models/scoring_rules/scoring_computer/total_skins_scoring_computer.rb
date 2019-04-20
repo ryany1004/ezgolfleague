@@ -10,6 +10,8 @@ module ScoringComputer
 
 			per_skin = self.value_per_skin(skins: merged_winners)
 
+			Rails.logger.debug { "Rule #{@scoring_rule.id} value per skin: #{per_skin}" }
+
 			merged_winners.each do |s|
 				scoring_rule_hole = @scoring_rule.scoring_rule_course_holes.where(course_hole: s[:hole]).first
 
@@ -26,7 +28,7 @@ module ScoringComputer
 				end
 			end
 
-			self.combine_results(@scoring_rule.reload.payout_results)
+			self.combine_results(@scoring_rule.reload.payout_results, holes_are_unique: false)
 		end
 
 		def merge_winners(gross_winners:, net_winners:)

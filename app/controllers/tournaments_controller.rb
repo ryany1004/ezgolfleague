@@ -9,7 +9,7 @@ class TournamentsController < BaseController
     @upcoming_tournaments = Tournament.all_upcoming([current_user.current_league]).page(params[:page]).without_count
     @past_tournaments = Tournament.all_past([current_user.current_league]).reorder(tournament_starts_at: :desc).page(params[:page]).without_count    
 
-    if current_user.is_super_user? || current_user.selected_league&.has_active_subscription? || current_user.selected_league&.free_tournaments_remaining > 0
+    if current_user.can_create_tournaments?
       @can_create_tournaments = true
     else
       @can_create_tournaments = false
