@@ -5,7 +5,11 @@ module Importers
 
     def self.import_for_all_users
       User.where("ghin_number IS NOT NULL").where("ghin_number != ''").where("ghin_updated_at <= ?", 5.minutes.ago).order(:ghin_updated_at).each do |u|
-        Importers::GHINImporter.import_ghin_for_user(u)
+        if u.tournaments.where("tournament_starts_at > ?", DateTime.now)
+	        Importers::GHINImporter.import_ghin_for_user(u) 
+
+	        sleep 1
+        end
       end
     end
 

@@ -5,7 +5,7 @@ module MatchPlayScorecardSupport
 		elsif self.instance_of?(TeamMatchPlayVsScoringRule) || self.instance_of?(TeamMatchPlayBestBallScoringRule)
 			self.league_team_related_scorecards_for_user(user, only_human_scorecards)
 		else
-			[]
+			raise "MatchPlayScorecardSupport missing a related_scorecards_for_user identifier - this is an error"
 		end
 	end
 
