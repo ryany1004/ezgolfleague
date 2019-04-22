@@ -18,7 +18,7 @@
 </script>
 
 <div class="row">
-  <% if current_user.selected_league&.alert_missing_next_season? || !current_user.selected_league&.exempt_from_subscription %>
+  <% if current_user.selected_league&.alert_missing_next_season? || show_subscription_needed? %>
     <div class="col-md-12">
       <div class="panel panel-default">
         <div class="panel-heading">
@@ -31,12 +31,14 @@
             <br/>
           <% end %>
 
-          <% if !current_user.selected_league&.exempt_from_subscription && current_user.is_any_league_admin? %>
-            <% if !current_user.selected_league.has_active_subscription? %>
-              <p>You currently have <%= current_user.selected_league.free_tournaments_remaining %> free tournaments remaining.</p>
-            <% end %>
+          <% if show_subscription_needed? %>
+          	<% if free_trial_remaining? %>
+          		<p>You currently have <%= current_user.selected_league.free_tournaments_remaining %> free tournaments remaining.</p>
+          	<% else %>
+          		<p>Your free trial is expired - you won't be able to create any new tournaments until you activate a subscription.</p>
 
-            <p><%= link_to "View Your Subscription", current_league_subscription_credits_path(current_user.selected_league), class: 'btn btn-primary' %></p>
+          		<p><%= link_to "View Your Subscription", current_league_subscription_credits_path(current_user.selected_league), class: 'btn btn-primary' %></p>
+          	<% end %>
           <% end %>
         </div>
       </div>
