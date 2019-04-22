@@ -131,11 +131,7 @@ class TournamentsController < BaseController
   end
 
   def fetch_tournament
-    unless params[:tournament_id].blank?
-      @tournament = self.fetch_tournament_from_user_for_tournament_id(params[:tournament_id])
-    else
-      @tournament = self.fetch_tournament_from_user_for_tournament_id(params[:id])
-    end
+  	@tournament = self.fetch_tournament_from_user_for_tournament_id(params[:tournament_id] || params[:id])
   end
 
   def initialize_form
