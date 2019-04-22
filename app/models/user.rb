@@ -243,15 +243,15 @@ class User < ApplicationRecord
   end
 
   def selected_league
-    unless self.current_league.blank? || !self.leagues.include?(self.current_league)
-      self.current_league
-    else
-      unless self.leagues_admin.first.blank?
-        self.leagues_admin.first
-      else
-        self.leagues.first
-      end
-    end
+  	if self.current_league.present? || !self.leagues.include?(self.current_league)
+  		self.current_league
+  	else
+  		if self.leagues_admin.first.present?
+  			self.leagues_admin.first
+  		else
+  			self.leagues.first
+  		end
+  	end
   end
 
   def active_league_season
@@ -276,15 +276,11 @@ class User < ApplicationRecord
   end
 
   def is_member_of_league?(league)
-    if self.league_memberships.where("league_id = ?", league.id).blank?
-      false
-    else
-      true
-    end
+  	self.league_memberships.where(league: league).present?
   end
 
   def league_membership_for_league(league)
-    self.league_memberships.where("league_id = ?", league.id).first
+    self.league_memberships.where(league: league).first
   end
 
   def payments_for_current_league
