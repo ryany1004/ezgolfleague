@@ -77,14 +77,14 @@ class Play::PaymentsController < Play::BaseController
           		user: { complete_name: current_user.complete_name, email: current_user.email, phone_number: current_user.phone_number} }) unless email_addresses.blank?
         end
 
-        self.create_payment(amount, charge_description, charge.id, nil, nil, league_season) #league dues
+        self.create_payment(amount, charge_description, charge.id, nil, league_season) #league dues
       else
         unless tournament.blank?
-          self.create_payment(tournament.dues_for_user(current_user, false), charge_description, charge.id, tournament, nil, nil) #tournaments and any contests
+          self.create_payment(tournament.dues_for_user(current_user, false), charge_description, charge.id, tournament.mandatory_scoring_rules.first, nil) #tournaments and any contests
 
-          tournament.paid_contests.each do |c|
+          tournament.optional_scoring_rules_with_dues.each do |rule|
             if c.users.include? current_user
-              self.create_payment(c.dues_for_user(current_user, false), charge_description, charge.id, nil, c, nil)
+              self.create_payment(c.dues_for_user(current_user, false), charge_description, charge.id, rule, nil)
             end
           end
         end
@@ -101,12 +101,11 @@ class Play::PaymentsController < Play::BaseController
     end
   end
 
-  def create_payment(amount, charge_description, charge_identifier, tournament, contest, league_season)
+  def create_payment(amount, charge_description, charge_identifier, scoring_rule, league_season)
     p = Payment.new(payment_amount: amount, user: current_user, payment_type: charge_description, payment_source: PAYMENT_METHOD_CREDIT_CARD)
     p.transaction_id = charge_identifier
-    p.tournament = tournament unless tournament.blank?
+    p.scoring_rule = scoring_rule unless scoring_rule.blank?
     p.league_season = league_season unless league_season.blank?
-    p.contest = contest unless contest.blank?
     p.save
   end
 
