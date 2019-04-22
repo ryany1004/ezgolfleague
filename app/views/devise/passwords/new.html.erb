@@ -1,16 +1,31 @@
-<h2>Forgot your password?</h2>
-
-<%= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :post }) do |f| %>
-  <%= devise_error_messages! %>
-
-  <div class="field">
-    <%= f.label :email %><br />
-    <%= f.email_field :email, autofocus: true %>
+<div id="container">
+  <div class="row">
+    <div class="col-md-4"></div>
+    <div class="col-md-4 onboarding__panel">
+      <div class="onboarding__panel-header">
+        <%= link_to "< Back", user_session_path, class: 'onboarding__backlink' %>
+        <%= link_to image_tag("ezgl-icon-white.png", height: 25), "https://ezgolfleague.com/" %>
+      </div>
+      <%= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :post }) do |f| %>
+      <div class="panel p-5">
+        <div class="panel-heading">
+          <h3 class="panel-title pb-1">Forgot your password?</h3>
+          <p class="panel-subtitle pb-4">Enter the email address associated with your account,<br>and we will email you a link to reset your link.</p>
+        </div>
+        <div class="panel-body">
+          <div class="field">
+            <%= f.email_field :email, placeholder: "Enter your email address...", autofocus: true, class: 'onboarding__input' %>
+          </div>
+          <div class="actions">
+            <%= f.submit "Send", class: 'btn__ezgl-secondary' %>
+          </div>
+        </div>
+      </div>
+      <% end %>
+      <div class="onboarding__bottom-text">
+        <%= devise_error_messages! %>
+      </div>
+    </div>
+    <div class="col-md-4"></div>
   </div>
-
-  <div class="actions">
-    <%= f.submit "Send me reset password instructions" %>
-  </div>
-<% end %>
-
-<%= render "devise/shared/links" %>
+</div>
