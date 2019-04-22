@@ -33,7 +33,7 @@
 
           <% if show_subscription_needed? %>
           	<% if free_trial_remaining? %>
-          		<p>You currently have <%= current_user.selected_league.free_tournaments_remaining %> free tournaments remaining.</p>
+          		<p>You currently have <%= pluralize(current_user.selected_league.free_tournaments_remaining, 'free tournament') %> remaining for <%= current_user.selected_league.name %>.</p>
           	<% else %>
           		<p>Your free trial is expired - you won't be able to create any new tournaments until you activate a subscription.</p>
 
