@@ -2,31 +2,27 @@
 <html>
 <head>
   <title>EZ Golf League</title>
+  <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
 	<%= stylesheet_link_tag    'application', media: 'all' %>
 	<%= javascript_include_tag 'application' %>
   <%= csrf_meta_tags %>
+  <link rel="apple-touch-icon" sizes="57x57" href="/icons/apple-icon-57x57.png">
+  <link rel="apple-touch-icon" sizes="60x60" href="/icons/apple-icon-60x60.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="/icons/apple-icon-72x72.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="/icons/apple-icon-76x76.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="/icons/apple-icon-114x114.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="/icons/apple-icon-120x120.png">
+  <link rel="apple-touch-icon" sizes="144x144" href="/icons/apple-icon-144x144.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="/icons/apple-icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/icons/apple-icon-180x180.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/icons/android-icon-192x192.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="96x96" href="/icons/favicon-96x96.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/icons/favicon-16x16.png">
+  
   <%= render partial: 'shared/analytics' %>
 </head>
-<body "data-no-turbolink">
-
-<nav class="navbar navbar-inverse">
-  <div class="container-fluid">
-    <!-- Brand and toggle get grouped for better mobile display -->
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-        <span class="sr-only">Toggle Navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      <a class="navbar-brand" href="/">
-        <%= image_tag "ezgolf-logo.png" %>
-      </a>
-    </div>
-  </div><!-- /.container-fluid -->
-</nav>
-
-<div class="container master-container">
+<body "data-no-turbolink" class="onboarding">
   <% flash.each do |type, message| %>
     <div class="alert <%= bootstrap_class_for(type) %> alert-dismissable fade in">
       <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
@@ -35,13 +31,5 @@
   <% end %>
 
   <%= yield %>
-</div>
-
-<footer class="container">
-  <span id="siteseal"><script type="text/javascript" src="https://seal.godaddy.com/getSeal?sealID=harKf0XUqFGg22HrfecoXRz2baJkXjcPkRvFQ0zBMFSMERPq8jyizy8R1fOi"></script></span>
-  <br/><br/>
-  Copyright © EZ Golf League | <%= link_to "Privacy Policy", "/privacy_policy.html" %> | <%= link_to "Terms of Service", "/terms_of_service.html" %>
-</footer>
-
 </body>
 </html>

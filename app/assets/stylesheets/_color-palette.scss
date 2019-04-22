@@ -1,0 +1,61 @@
+$ezgl-color-key: 'base' !default;
+
+$ezgl-colors: (
+  'primary': (
+    'base': #3c8762,
+    'light': #00c185,
+    'dark': #008a60
+  ),
+  'accent': (
+    'base': #828282,
+    'light': #b3b3b3,
+    'dark': #7f8c8d
+  ),
+  'secondary': (
+    'base': #ffdd24,
+    'light': #f4d321,
+    'dark': #dfbf0b
+  ),
+  'foreground': (
+    'base': #191919,
+    'light': #333333,
+    'dark': #111111,
+    'darker': #000000
+  ),
+  'background': (
+    'base': #e9e9e9,
+    'light': #ffffff,
+    'dark': #dddddd
+  )
+);
+
+$ezgl-opacity: (
+  'light': 0.8, // opacity used with lighter colors
+  'dark': 0.4,  // opacity used with darker colors
+);
+
+@function ezgl-color(
+  $name: 'primary',
+  $variant: $ezgl-color-key,
+  $opacity: 1
+) {
+  $color: null;
+  
+  // Get the color spectrum
+  $color-spectrum: map-get($ezgl-colors, $name);
+  
+  // Get the color variant
+  @if $color-spectrum {
+    $color: map-get($color-spectrum, $variant);
+  }
+  
+  // Get the alpha setting
+  $alpha: if(type-of($opacity) == 'number', $opacity, map-get($ezgl-opacity, $opacity));
+  
+  // Set the alpha of the color
+  @if $alpha {
+    $color: rgba($color, $alpha);
+  }
+  
+  @return $color;
+}
