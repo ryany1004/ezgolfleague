@@ -322,13 +322,13 @@ class Tournament < ApplicationRecord
 
     RankLeagueSeasonJob.perform_later(self.league_season)
 
-    self.league.active_season.touch unless self.league.active_season.blank? #cache bust
+    self.league.active_season&.touch
 
     self.send_finalize_event unless !should_email
   end
 
   def send_finalize_event
-    tournament_url = "https://app.ezgolfleague.com/leagues/<%= self.league.id %>/tournaments/<%= self.id %>/finalize?bypass_calc=true"
+    tournament_url = "https://app.ezgolfleague.com/leagues/#{self.league.id}/tournaments/#{self.id}/finalize?bypass_calc=true"
     tournament_info = { tournament_name: self.name, league_name: self.league.name, tournament_url: tournament_url }
 
     email_addresses = nil
