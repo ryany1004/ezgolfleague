@@ -9,11 +9,11 @@ module ApplicationHelper
   end
 
   def has_active_subscription?
-  	current_user.selected_league&.has_active_subscription?
+  	current_user.selected_league.present? ? current_user.selected_league.has_active_subscription? : false
   end
 
   def free_trial_remaining?
-  	current_user.selected_league&.free_tournaments_remaining > 0
+  	current_user.selected_league.present? ? current_user.selected_league.free_tournaments_remaining > 0 : false
   end
 
   def user_is_league_admin(user, league)
