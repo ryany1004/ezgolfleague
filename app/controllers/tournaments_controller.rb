@@ -6,6 +6,8 @@ class TournamentsController < BaseController
   before_action :set_stage
 
   def index
+  	redirect_to leagues_play_registrations_path, flash: { success: "Please create or join a league to continue." } and return if current_user.selected_league.blank? && current_user.impersonatable_users.blank?
+  	
     @upcoming_tournaments = Tournament.all_upcoming([current_user.current_league]).page(params[:page]).without_count
     @past_tournaments = Tournament.all_past([current_user.current_league]).reorder(tournament_starts_at: :desc).page(params[:page]).without_count    
 
@@ -123,11 +125,7 @@ class TournamentsController < BaseController
   end
 
   def fetch_tournament
-    unless params[:tournament_id].blank?
-      @tournament = self.fetch_tournament_from_user_for_tournament_id(params[:tournament_id])
-    else
-      @tournament = self.fetch_tournament_from_user_for_tournament_id(params[:id])
-    end
+  	@tournament = self.fetch_tournament_from_user_for_tournament_id(params[:tournament_id] || params[:id])
   end
 
   def initialize_form

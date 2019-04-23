@@ -11,9 +11,10 @@ module Autoschedule
     self.tournament.players.each do |p|
       flight = previous_day.flight_for_player(p)
       group = previous_day.tournament_group_for_player(p)
+      net_score = previous_day.scorecard_base_scoring_rule.result_for_user(user: p).net_score
 
       unless flight.blank?
-        players_with_scores << {player: p, flight_number: flight.flight_number, net_score: previous_day.player_score(p), previous_day_group_id: group.id}
+        players_with_scores << {player: p, flight_number: flight.flight_number, net_score: net_score, previous_day_group_id: group.id}
       else
         Rails.logger.info { "Flight For Player Was Blank #{p.id}" }
       end

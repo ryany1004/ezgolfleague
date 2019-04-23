@@ -4,6 +4,18 @@ module ApplicationHelper
     boolean ? 'Yes' : 'No'
   end
 
+  def show_subscription_needed?
+  	!current_user.selected_league&.exempt_from_subscription && current_user.is_any_league_admin? && !current_user.selected_league&.has_active_subscription?
+  end
+
+  def has_active_subscription?
+  	current_user.selected_league.present? ? current_user.selected_league.has_active_subscription? : false
+  end
+
+  def free_trial_remaining?
+  	current_user.selected_league.present? ? current_user.selected_league.free_tournaments_remaining > 0 : false
+  end
+
   def user_is_league_admin(user, league)
     return true if user.is_super_user
 

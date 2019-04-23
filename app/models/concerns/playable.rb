@@ -3,7 +3,7 @@ module Playable
 
   def display_teams?
     self.tournament_days.each do |day|
-      return true if day.allow_teams == GameTypes::TEAMS_ALLOWED || day.allow_teams == GameTypes::TEAMS_REQUIRED
+      return true if day.scorecard_base_scoring_rule.team_type == ScoringRuleTeamType::DAILY
     end
 
     false
