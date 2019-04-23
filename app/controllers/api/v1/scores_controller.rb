@@ -8,7 +8,7 @@ class Api::V1::ScoresController < Api::V1::ApiBaseController
     score_id = first_score_dict["scoreServerID"]
     score = Score.where(id: score_id).first
 
-    unless score.blank?
+    if score.present?
       self.fetch_scorecards_for_id(score.scorecard.id)
 
       scores_to_update = Hash.new
