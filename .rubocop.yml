@@ -1,0 +1,16 @@
+Rails:
+  Enabled: true
+Style/Documentation:
+  Enabled: false
+Style/FrozenStringLiteralComment:
+  Enabled: false
+Style/BracesAroundHashParameters:
+  Enabled: false
+Style/ClassAndModuleChildren:
+  Enabled: false
+Style/SymbolArray:
+  Enabled: false
+Style/ModuleFunction:
+  Enabled: false
+Metrics/MethodLength:
+  Max: 20
