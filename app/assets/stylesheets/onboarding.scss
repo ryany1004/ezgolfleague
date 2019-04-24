@@ -12,8 +12,32 @@
 
   .alert {
     position: absolute;
-    top: 0;
-    right: 0;
+    top: 12px;
+    right: 12px;
+  }
+
+  #error_explanation {
+    background: #c0392b;
+    width: 250px;
+    color: white;
+    padding: 12px;
+    border-radius: 4px;
+    margin: 12px auto 24px;
+
+    h2 {
+      display: none;
+    }
+
+    ul {
+      margin: 0;
+      width: 100%;
+      padding: 0;
+      text-align: center;
+
+      li {
+        list-style: none;
+      }
+    }
   }
 
   .container {
