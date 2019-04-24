@@ -243,7 +243,7 @@ class User < ApplicationRecord
   end
 
   def selected_league
-  	if self.current_league.present? || !self.leagues.include?(self.current_league)
+  	if self.current_league.present? && self.leagues.include?(self.current_league)
   		self.current_league
   	else
   		if self.leagues_admin.first.present?
