@@ -2,8 +2,7 @@ class SubscriptionCreditsController < BaseController
   before_action :fetch_league
   before_action :fetch_active_subscription, only: [:current, :update_active]
 
-  def current
-  end
+  def current; end
 
   def information
     render layout: 'golfer'
@@ -22,7 +21,7 @@ class SubscriptionCreditsController < BaseController
     end
 
     active_status = params[:is_active]
-    unless active_status.blank?
+    if active_status.present?
       Rails.logger.info { "Activating #{active_status.keys.count} members." }
 
       active_status.keys.each do |membership_id|
@@ -44,13 +43,13 @@ class SubscriptionCreditsController < BaseController
     active_after_update = @league.league_memberships.reload.active.count
     active_delta = active_after_update - active_before_update
 
-    if active_delta > 0
+    if active_delta.positive?
       per_golfer_cost = SubscriptionCredit.cost_per_golfer(league: @league)
       payment_amount = per_golfer_cost * active_delta
 
       charge = charge_customer(@league, payment_amount, "Add active golfers for #{current_user.email} for league #{@league.name}.")
 
-      unless charge.blank?
+      if charge.present?
         updated_golfers = active_before_update + active_delta
 
         SubscriptionCredit.create(league_season: @league.active_season, amount: payment_amount, golfer_count: updated_golfers, transaction_id: charge.id)

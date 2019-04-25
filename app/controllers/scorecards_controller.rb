@@ -12,7 +12,7 @@ class ScorecardsController < BaseController
       @tournament_day = @tournament.tournament_days.find(params[:tournament_day])
     end
 
-    @page_title = "Scorecards"
+    @page_title = 'Scorecards'
 
     @eager_groups = fetch_eager_groups
   end
@@ -24,7 +24,7 @@ class ScorecardsController < BaseController
   end
 
   def edit
-    redirect_to root_path if !@scorecard.user_can_edit?(current_user)
+    redirect_to root_path unless @scorecard.user_can_edit?(current_user)
 
     eager_groups = fetch_eager_groups
 
@@ -34,11 +34,11 @@ class ScorecardsController < BaseController
   def update
     @scorecard.update(scorecard_params)
 
-    scores_to_update = Hash.new
+    scores_to_update = {}
 
     params[:scorecard][:scores_attributes].to_unsafe_h.keys.each do |key|
-      score_id = params[:scorecard][:scores_attributes][key]["id"]
-      strokes = params[:scorecard][:scores_attributes][key]["strokes"]
+      score_id = params[:scorecard][:scores_attributes][key]['id']
+      strokes = params[:scorecard][:scores_attributes][key]['strokes']
 
       scores_to_update[score_id] = { strokes: strokes }
     end
@@ -47,7 +47,8 @@ class ScorecardsController < BaseController
 
     Updaters::ScorecardUpdating.update_scorecards_for_scores(scores_to_update, @scorecard, @scorecards_to_update)
 
-    redirect_to edit_league_tournament_tournament_day_scorecard_path(@tournament.league, @tournament, @tournament_day, @scorecard), flash: { alert: "The scorecard was successfully updated. NOTE: Net scores are calculated in the background and may not be immediately up to date." }
+    redirect_to edit_league_tournament_tournament_day_scorecard_path(@tournament.league, @tournament, @tournament_day, @scorecard), flash:
+    { alert: 'The scorecard was successfully updated. NOTE: Net scores are calculated in the background and may not be immediately up to date.' }
   end
 
   def disqualify
@@ -58,15 +59,16 @@ class ScorecardsController < BaseController
     golf_outing = @tournament_day.golf_outing_for_player(@player)
     golf_outing.disqualify
 
-    redirect_to edit_league_tournament_tournament_day_scorecard_path(@tournament_day.tournament.league, @tournament_day.tournament, @tournament_day, @scorecard), flash: { alert: "The scorecard disqualification was toggled." }
+    redirect_to edit_league_tournament_tournament_day_scorecard_path(@tournament_day.tournament.league, @tournament_day.tournament, @tournament_day, @scorecard), flash:
+    { alert: 'The scorecard disqualification was toggled.' }
   end
 
   def fetch_eager_groups
-    TournamentGroup.includes(golf_outings: [{scorecard: :scores}, :user]).where(tournament_day: @tournament_day).order(:tee_time_at)
+    TournamentGroup.includes(golf_outings: [{ scorecard: :scores }, :user]).where(tournament_day: @tournament_day).order(:tee_time_at)
   end
 
   def repair_scorecard
-    @scorecard.tournament_day.update_scores_for_scorecard(scorecard: @scorecard) if !@scorecard.tournament_day.has_scores?
+    @scorecard.tournament_day.update_scores_for_scorecard(scorecard: @scorecard) unless @scorecard.tournament_day.has_scores?
   end
 
   def find_next_scorecard(tournament_day, groups, current_scorecard)
@@ -80,11 +82,10 @@ class ScorecardsController < BaseController
     end
 
     sorted_players.each_with_index do |player, i|
-      if player == current_scorecard.golf_outing.user
-        next_golfer = sorted_players[i + 1]
+      next if player != current_scorecard.golf_outing.user
 
-        next_scorecard = tournament_day.primary_scorecard_for_user(next_golfer) unless next_golfer.blank?
-      end
+      next_golfer = sorted_players[i + 1]
+      next_scorecard = tournament_day.primary_scorecard_for_user(next_golfer) if next_golfer.present?
     end
 
     next_scorecard
@@ -114,9 +115,8 @@ class ScorecardsController < BaseController
     @other_scorecards = scorecard_info[:other_scorecards]
     @scorecards_to_update = scorecard_info[:scorecards_to_update]
 
-    @scorecard_presenter = ScorecardPresenter.new({primary_scorecard: @scorecard, secondary_scorecards: @other_scorecards, current_user: self.current_user})
+    @scorecard_presenter = ScorecardPresenter.new({ primary_scorecard: @scorecard, secondary_scorecards: @other_scorecards, current_user: current_user })
 
-    redirect_to root_path if !@scorecard.user_can_view?(current_user)
+    redirect_to root_path unless @scorecard.user_can_view?(current_user)
   end
-
 end

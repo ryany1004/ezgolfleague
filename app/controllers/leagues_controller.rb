@@ -5,18 +5,17 @@ class LeaguesController < BaseController
     if current_user.is_super_user?
       @leagues = League.order(:name).page params[:page]
 
-      @page_title = "All Leagues"
+      @page_title = 'All Leagues'
     else
       @leagues = current_user.leagues_admin.order(:name).page params[:page]
 
-      @page_title = "My Leagues"
+      @page_title = 'My Leagues'
     end
 
-    unless params[:search].blank?
-      search_string = "%#{params[:search].downcase}%"
+    return if params[:search].blank?
 
-      @leagues = @leagues.where("lower(name) LIKE ?", search_string)
-    end
+    search_string = "%#{params[:search].downcase}%"
+    @leagues = @leagues.where('lower(name) LIKE ?', search_string)
   end
 
   def new
@@ -27,18 +26,19 @@ class LeaguesController < BaseController
     @league = League.new(league_params)
 
     if @league.save
-      redirect_to leagues_path, flash: { success: "The league was successfully created." }
+      redirect_to leagues_path, flash:
+      { success: 'The league was successfully created.' }
     else
       render :new
     end
   end
 
-  def edit
-  end
+  def edit; end
 
   def update
     if @league.update(league_params)
-      redirect_to leagues_path, flash: { success: "The league was successfully updated." }
+      redirect_to leagues_path, flash:
+      { success: 'The league was successfully updated.' }
     else
       render :edit
     end
@@ -47,26 +47,29 @@ class LeaguesController < BaseController
   def destroy
     @league.destroy
 
-    redirect_to leagues_path, flash: { success: "The league was successfully deleted." }
+    redirect_to leagues_path, flash:
+    { success: 'The league was successfully deleted.' }
   end
 
   def update_from_ghin
     @league = League.find(params[:league_id])
 
-    users = @league.users.where("ghin_number IS NOT NULL").where("ghin_number != ''").order(:ghin_updated_at)
+    users = @league.users.where.not(ghin_number: nil).where.not(ghin_number: '').order(:ghin_updated_at)
     GhinUpdateJob.perform_later(users.pluck(:id))
 
-    redirect_to leagues_path, flash: { success: "League members will be updated by GHIN." }
+    redirect_to leagues_path, flash:
+    { success: 'League members will be updated by GHIN.' }
   end
 
   def update_league_standings
     @league = League.find(params[:league_id])
 
-    @league.league_seasons.order("created_at DESC").each do |s|
+    @league.league_seasons.order(created_at: :desc).each do |s|
       RankLeagueSeasonJob.perform_later(s)
     end
 
-    redirect_to leagues_path, flash: { success: "All seasons have been queued for standings re-calculation." }
+    redirect_to leagues_path, flash:
+    { success: 'All seasons have been queued for standings re-calculation.' }
   end
 
   def write_member_email
@@ -77,29 +80,47 @@ class LeaguesController < BaseController
     @league = League.find(params[:league_id])
 
     email_addresses = @league.users.pluck(:email)
-    RecordEventJob.perform_later(email_addresses, "A league message was sent", { league_name: @league.name, message_subject: params[:league_send_member_email][:subject], message_contents: params[:league_send_member_email][:contents] })
+    RecordEventJob.perform_later(email_addresses, 'A league message was sent',
+                                 { league_name: @league.name,
+                                   message_subject: params[:league_send_member_email][:subject],
+                                   message_contents: params[:league_send_member_email][:contents] })
 
-    redirect_to leagues_path, flash: { success: "The message was sent." }
+    redirect_to leagues_path, flash:
+    { success: 'The message was sent.' }
   end
 
   private
 
   def league_params
-    params.require(:league).permit(:name, :display_balances_to_players, :override_golfer_price, :allow_scoring_groups, :required_container_frame_url, :free_tournaments_remaining, :show_in_search, :league_description, :contact_name, :contact_phone, :contact_email, :location, :stripe_production_secret_key, :stripe_production_publishable_key, :stripe_test_secret_key, :stripe_test_publishable_key, :stripe_test_mode, :dues_payment_receipt_email_addresses, :apple_pay_merchant_id, :supports_apple_pay, :exempt_from_subscription)
+    params.require(:league).permit(:name,
+                                   :display_balances_to_players,
+                                   :override_golfer_price,
+                                   :allow_scoring_groups,
+                                   :required_container_frame_url,
+                                   :free_tournaments_remaining,
+                                   :show_in_search,
+                                   :league_description,
+                                   :contact_name,
+                                   :contact_phone,
+                                   :contact_email,
+                                   :location,
+                                   :stripe_production_secret_key,
+                                   :stripe_production_publishable_key,
+                                   :stripe_test_secret_key,
+                                   :stripe_test_publishable_key,
+                                   :stripe_test_mode,
+                                   :dues_payment_receipt_email_addresses,
+                                   :apple_pay_merchant_id,
+                                   :supports_apple_pay,
+                                   :exempt_from_subscription,
+                                   :calculate_handicaps_from_past_rounds)
   end
 
   def fetch_league
-    if params[:id].blank?
-      league_id = params[:league_id]
-    else
-      league_id = params[:id]
-    end
-
     if current_user.is_super_user
-      @league = League.find(league_id)
+      @league = League.find(params[:league_id] || params[:id])
     else
-      @league = current_user.leagues_admin.find(league_id)
+      @league = current_user.leagues_admin.find(params[:league_id] || params[:id])
     end
   end
-
 end

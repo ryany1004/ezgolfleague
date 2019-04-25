@@ -4,8 +4,7 @@ class TournamentDaysController < BaseController
   before_action :initialize_form, only: [:new, :edit]
   before_action :fetch_tournament_day, only: [:edit, :update, :destroy]
 
-  def index
-  end
+  def index; end
 
   def new
     @tournament_day = TournamentDay.new
@@ -19,12 +18,14 @@ class TournamentDaysController < BaseController
     @tournament_day.skip_date_validation = current_user.is_super_user
 
     if @tournament_day.save
-      self.update_tournament_date
+      update_tournament_date
 
-      if params[:commit] == "Save & Continue"
-      	redirect_to league_tournament_tournament_day_scoring_rules_path(@tournament.league, @tournament, @tournament_day), flash: { success: "The day was successfully created." }
+      if params[:commit] == 'Save & Continue'
+        redirect_to league_tournament_tournament_day_scoring_rules_path(@tournament.league, @tournament, @tournament_day), flash:
+        { success: 'The day was successfully created.' }
       else
-      	redirect_to new_league_tournament_tournament_day_path(@tournament.league, @tournament), flash: { success: "The day was successfully created." }
+        redirect_to new_league_tournament_tournament_day_path(@tournament.league, @tournament), flash:
+        { success: 'The day was successfully created.' }
       end
     else
       initialize_form
@@ -34,14 +35,15 @@ class TournamentDaysController < BaseController
   end
 
   def edit
-  	@selected_course = [@tournament_day.course]
+    @selected_course = [@tournament_day.course]
   end
 
   def update
     if @tournament_day.update(tournament_day_params)
-      self.update_tournament_date
+      update_tournament_date
 
-      redirect_to league_tournament_tournament_days_path(@tournament.league, @tournament), flash: { success: "The day was successfully updated." }
+      redirect_to league_tournament_tournament_days_path(@tournament.league, @tournament), flash:
+      { success: 'The day was successfully updated.' }
     else
       initialize_form
 
@@ -52,16 +54,17 @@ class TournamentDaysController < BaseController
   def destroy
     @tournament_day.destroy
 
-    self.update_tournament_date
+    update_tournament_date
 
-    redirect_to league_tournament_tournament_days_path(@tournament.league, @tournament), flash: { success: "The day was successfully deleted." }
+    redirect_to league_tournament_tournament_days_path(@tournament.league, @tournament), flash:
+    { success: 'The day was successfully deleted.' }
   end
 
   def update_tournament_date
-  	if @tournament.tournament_days.first.present?
-  		@tournament.tournament_starts_at = @tournament.tournament_days.first.tournament_at
-  		@tournament.save
-  	end
+    return if @tournament.tournament_days.first.blank?
+    
+    @tournament.tournament_starts_at = @tournament.tournament_days.first.tournament_at
+    @tournament.save
   end
 
   private
@@ -75,16 +78,15 @@ class TournamentDaysController < BaseController
   end
 
   def fetch_tournament
-    @tournament = self.fetch_tournament_from_user_for_tournament_id(params[:tournament_id])
+    @tournament = fetch_tournament_from_user_for_tournament_id(params[:tournament_id])
   end
 
   def set_stage
-    @stage_name = "days"
+    @stage_name = 'days'
   end
 
   def initialize_form
     @courses = Course.all.order(:name)
     @selected_course = []
   end
-
 end
