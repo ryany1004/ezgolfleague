@@ -8,11 +8,9 @@ module ScoringRuleScorecards
     def initialize
       self.scores = []
     end
-
-    # Model Stuff
-
+    
     def id
-      return -1
+      (self.user.id * self.scoring_rule.id) * -1 # creates a unique, non-player ID for the scorecard
     end
 
     def tournament_day
