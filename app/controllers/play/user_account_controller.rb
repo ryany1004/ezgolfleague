@@ -8,7 +8,7 @@ class Play::UserAccountController < Play::BaseController
 
   def update
     if @user_account.update(user_params)
-      redirect_to play_dashboard_index_path, flash:
+      redirect_to edit_play_user_account_path, flash:
       { success: 'Your profile was successfully updated.' }
     else
       initialize_form
@@ -23,10 +23,11 @@ class Play::UserAccountController < Play::BaseController
     if @user_account.update(user_params)
       sign_in(@user_account, bypass: true)
 
-      redirect_to play_dashboard_index_path, flash:
+      redirect_to edit_play_user_account_path, flash:
       { success: 'Your password was successfully updated.' }
     else
-      render :password
+      redirect_to edit_play_user_account_path, flash:
+      { error: 'Your passwords do not match.' }
     end
   end
 

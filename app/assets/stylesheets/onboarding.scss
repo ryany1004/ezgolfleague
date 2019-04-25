@@ -336,8 +336,12 @@
         position: relative;
 
         .user_handicap_index {
-          width: 75px;
+          width: 125px;
           float: right;
+        }
+
+        .user_postal_code {
+          width: 300px;
         }
 
         .form-actions {
@@ -357,6 +361,20 @@
   
       .panel-default {
         width: 77%;
+      }
+    }
+
+    .tab-pane {
+      .panel-heading {
+        width: 100%;
+
+        h3 {
+          text-align: left;
+        }
+      }
+
+      form {
+        width: 100%;
       }
     }
 

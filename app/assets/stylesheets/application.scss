@@ -22,6 +22,7 @@
 @import 'selectize.bootstrap3';
 @import "chosen";
 @import "magnific-popup";
+@import "color-palette";
 
 #printable-scorecard-table table, #printable-scorecard-table td, #printable-scorecard-table tr, #printable-scorecard-table th {
   border: 1px solid DarkGrey !important;
@@ -29,6 +30,30 @@
 
 .img-circle {
 	border-radius: 50%;
+}
+
+.alert {
+	position: absolute;
+	color: white;
+	z-index: 10;
+	right: 24px;
+	bottom: 24px;
+	opacity: 1 !important;
+
+	.close {
+		padding-left: 12px;
+    color: white;
+	}
+
+	&.alert-success {
+		background: ezgl-color('primary', 'light');
+    border: ezgl-color('primary', 'light');
+	}
+
+	&.alert-danger {
+		background: ezgl-color('error', 'light');
+    border: ezgl-color('error', 'light');
+	}
 }
 
 @media print {

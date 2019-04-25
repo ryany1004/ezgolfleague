@@ -11,6 +11,7 @@
             <div class="nav flex-column" id="v-tab" role="tablist" aria-orientation="vertical">
               <a class="nav-link active" id="v-edit-profile-tab" data-toggle="pill" href="#v-edit-profile" role="tab" aria-controls="v-edit-profile" aria-selected="true">Edit Profile</a>
               <a class="nav-link" id="v-edit-contact-info-tab" data-toggle="pill" href="#v-edit-contact-info" role="tab" aria-controls="v-edit-contact-info" aria-selected="false">Edit Contact Info</a>
+              <a class="nav-link" id="v-edit-password-tab" data-toggle="pill" href="#v-edit-password" role="tab" aria-controls="v-edit-password" aria-selected="false">Edit Password</a>
               <a class="nav-link" id="v-my-account-tab" data-toggle="pill" href="#v-my-account" role="tab" aria-controls="v-my-account" aria-selected="false">My Account</a>
               <a class="nav-link" id="v-settings-tab" data-toggle="pill" href="#v-settings" role="tab" aria-controls="v-settings" aria-selected="false">Settings</a>
             </div>
@@ -19,19 +20,21 @@
         </div>
         <div class="panel panel-default panel-user p-5">
           <div class="panel-body registration">
-            <%= simple_form_for @user_account, url: play_user_account_path(@user_account), multipart: true, :defaults => { :input_html => { :class => "onboarding__input", :label => false }} do |f| %>
-              <% if notification = f.error_notification %>
-                <div class="alert alert-error fade in">
-                  <a class="close" data-dismiss="alert" href="#">&times;</a>
-                  <%= notification %>
-                </div>
-              <% end %>
-              <div class="tab-content" id="v-tabContent">
-                <div class="tab-pane fade show pb-5 active" id="v-edit-profile" role="tabpanel" aria-labelledby="v-edit-profile-tab">
-                  <div class="registration-form-container">
-                    <div class="panel-heading">
-                      <h3 class="panel-title pb-4">Edit Profile</h3>
-                    </div>
+            <div class="tab-content" id="v-tabContent">
+              <div class="tab-pane fade show pb-5 active" id="v-edit-profile" role="tabpanel" aria-labelledby="v-edit-profile-tab">
+                <div class="registration-form-container">
+                  <div class="panel-heading">
+                    <h3 class="panel-title pb-4">Edit Profile</h3>
+                  </div>
+
+                  <%= simple_form_for @user_account, url: play_user_account_path(@user_account), multipart: true, :defaults => { :input_html => { :class => "onboarding__input", :label => false }} do |f| %>
+                    <% if notification = f.error_notification %>
+                      <div class="alert alert-error fade in">
+                        <a class="close" data-dismiss="alert" href="#">&times;</a>
+                        <%= notification %>
+                      </div>
+                    <% end %>
+
                     <div class="registration-full-name form-flex-group">
                       <div class="form-side-label">
                         <p>Your Name</p>
@@ -50,18 +53,6 @@
                       </div>
 
                       <%= f.input :email, placeholder: 'Enter your email address...' %>
-                    </div>
-
-                    <div class="form-flex-group">
-                      <div class="form-side-label">
-                        <p>Password</p>
-                      </div>
-
-                      <div class="form-flex-group">
-                        <%= f.input :password, placeholder: 'Enter your password...' %>
-
-                        <%= f.input :password_confirmation, placeholder: 'Enter your password again...' %>
-                      </div>
                     </div>
 
                     <div class="form-flex-group">
@@ -93,13 +84,29 @@
                         <%= f.input :handicap_index, placeholder: '' %>
                       </div>
                     </div>
-                  </div>
-                </div>
-                <div class="tab-pane fade pb-5" id="v-edit-contact-info" role="tabpanel" aria-labelledby="v-edit-contact-info-tab">
-                  <div class="registration-form-container">
-                    <div class="panel-heading">
-                      <h3 class="panel-title pb-4">Edit Contact Info</h3>
+
+                    <div class="form-actions form-flex-group"> 
+                      <div class="form-flex-right">
+                        <%= f.button :submit, "Save", class: 'btn__ezgl-secondary' %>
+                      </div>
                     </div>
+                  <% end %>
+                </div>
+              </div>
+              <div class="tab-pane fade pb-5" id="v-edit-contact-info" role="tabpanel" aria-labelledby="v-edit-contact-info-tab">
+                <div class="registration-form-container">
+                  <div class="panel-heading">
+                    <h3 class="panel-title pb-4">Edit Contact Info</h3>
+                  </div>
+
+                  <%= simple_form_for @user_account, url: play_user_account_path(@user_account), multipart: true, :defaults => { :input_html => { :class => "onboarding__input", :label => false }} do |f| %>
+                    <% if notification = f.error_notification %>
+                      <div class="alert alert-error fade in">
+                        <a class="close" data-dismiss="alert" href="#">&times;</a>
+                        <%= notification %>
+                      </div>
+                    <% end %>
+
                     <div class="form-flex-group">
                       <div class="form-side-label">
                         <p>Street Address 1</p>
@@ -134,7 +141,7 @@
                           <p>Zip</p>
                         </div>
 
-                         <%= f.input :postal_code, placeholder: 'Zip Code' %>
+                          <%= f.input :postal_code, placeholder: 'Zip Code' %>
                       </div>
                     </div>
 
@@ -145,14 +152,68 @@
 
                       <%= f.input :phone_number, placeholder: 'Phone Number' %>
                     </div>
-                  </div>
-                </div>
-                <div class="tab-pane fade" id="v-my-account" role="tabpanel" aria-labelledby="v-my-account-tab">...</div>
-                <div class="tab-pane fade" id="v-settings" role="tabpanel" aria-labelledby="v-settings-tab">
-                  <div class="registration-form-container">
-                    <div class="panel-heading">
-                      <h3 class="panel-title pb-4">Settings</h3>
+
+                    <div class="form-actions form-flex-group"> 
+                      <div class="form-flex-right">
+                        <%= f.button :submit, "Save", class: 'btn__ezgl-secondary' %>
+                      </div>
                     </div>
+                  <% end %>
+                </div>
+              </div>
+              <div class="tab-pane fade" id="v-edit-password" role="tabpanel" aria-labelledby="v-edit-password-tab">
+                <div class="registration-form-container">
+                  <div class="panel-heading">
+                    <h3 class="panel-title pb-4">Edit Password</h3>
+                  </div>
+
+                  <%= simple_form_for @user_account, url: change_password_play_user_account_path, multipart: true, :defaults => { :input_html => { :class => "onboarding__input", :label => false }} do |f| %>
+                      <% if notification = f.error_notification %>
+                        <div class="alert alert-error fade in">
+                          <a class="close" data-dismiss="alert" href="#">&times;</a>
+                          <%= notification %>
+                        </div>
+                      <% end %>
+
+                      <div class="form-flex-group pt-4">
+                        <div class="form-side-label">
+                          <p>Password</p>
+                        </div>
+
+                        <%= f.input :password, placeholder: 'Enter your new password...' %>
+                      </div>
+
+                      <div class="form-flex-group">
+                        <div class="form-side-label">
+                          <p>Confirm Password</p>
+                        </div>
+
+                        <%= f.input :password_confirmation, placeholder: 'Enter your new password again...' %>
+                      </div>
+
+                      <div class="form-actions form-flex-group"> 
+                        <div class="form-flex-right">
+                          <%= f.button :submit, "Save", class: 'btn__ezgl-secondary' %>
+                        </div>
+                      </div>
+                    <% end %>
+
+                </div>
+              </div>
+              <div class="tab-pane fade" id="v-my-account" role="tabpanel" aria-labelledby="v-my-account-tab">...</div>
+              <div class="tab-pane fade" id="v-settings" role="tabpanel" aria-labelledby="v-settings-tab">
+                <div class="registration-form-container">
+                  <div class="panel-heading">
+                    <h3 class="panel-title pb-4">Settings</h3>
+                  </div>
+
+                  <%= simple_form_for @user_account, url: play_user_account_path(@user_account), multipart: true, :defaults => { :input_html => { :class => "onboarding__input", :label => false }} do |f| %>
+                    <% if notification = f.error_notification %>
+                      <div class="alert alert-error fade in">
+                        <a class="close" data-dismiss="alert" href="#">&times;</a>
+                        <%= notification %>
+                      </div>
+                    <% end %>
                     <div class="form-flex-group">
                       <div class="form-subheader">
                         <h6>NOTIFICATIONS</h6>
@@ -172,15 +233,16 @@
                     <div class="form-flex-group">
                       <%= f.input :time_zone, label: 'Time Zone', required: true, collection: ActiveSupport::TimeZone.us_zones, value_method: :name %>
                     </div>
-                  </div>
-                </div>
-                <div class="form-actions form-flex-group"> 
-                  <div class="form-flex-right">
-                    <%= f.button :submit, "Save", class: 'btn__ezgl-secondary' %>
-                  </div>
+
+                    <div class="form-actions form-flex-group"> 
+                      <div class="form-flex-right">
+                        <%= f.button :submit, "Save", class: 'btn__ezgl-secondary' %>
+                      </div>
+                    </div>
+                  <% end %>
                 </div>
               </div>
-            <% end %>
+            </div>
           </div>
         </div>
       </div>
