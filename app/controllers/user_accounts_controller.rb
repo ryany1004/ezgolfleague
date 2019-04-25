@@ -3,20 +3,19 @@ class UserAccountsController < BaseController
   before_action :initialize_form, only: [:new, :edit, :edit_current]
 
   def index
+    @page_title = 'User Accounts'
+
     if current_user.is_super_user?
       @user_accounts = User.order(:last_name).page params[:page]
     else
-      membership_ids = current_user.leagues_admin.map { |n| n.id }
-      @user_accounts = User.joins(:league_memberships).where("league_memberships.league_id IN (?)", membership_ids).order(:last_name).page params[:page]
+      membership_ids = current_user.leagues_admin.map(&:id)
+      @user_accounts = User.joins(:league_memberships).where('league_memberships.league_id IN (?)', membership_ids).order(:last_name).page params[:page]
     end
 
-    unless params[:search].blank?
-      search_string = "%#{params[:search].downcase}%"
+    return if params[:search].blank?
 
-      @user_accounts = @user_accounts.where("lower(last_name) LIKE ? OR lower(first_name) LIKE ? OR lower(email) LIKE ?", search_string, search_string, search_string)
-    end
-
-    @page_title = "User Accounts"
+    search_string = "%#{params[:search].downcase}%"
+    @user_accounts = @user_accounts.where('lower(last_name) LIKE ? OR lower(first_name) LIKE ? OR lower(email) LIKE ?', search_string, search_string, search_string)
   end
 
   def new
@@ -26,19 +25,21 @@ class UserAccountsController < BaseController
   def create
     @user_account = User.new(user_params)
 
-    if @user_account.should_invite == "1"
+    if @user_account.should_invite == '1'
       User.invite!(user_params, current_user)
 
-      redirect_to user_accounts_path, flash: { success: "The user was successfully invited." }
+      redirect_to user_accounts_path, flash:
+      { success: 'The user was successfully invited.' }
     else
-      if !current_user.is_super_user?
-        @user_account.leagues << current_user.leagues_admin.first unless current_user.leagues_admin.blank? #add the user to at least one league
+      unless current_user.is_super_user?
+        @user_account.leagues << current_user.leagues_admin.first if current_user.leagues_admin.present? # add the user to at least one league
       end
 
       if @user_account.save
-        GhinUpdateJob.perform_later([@user_account]) unless @user_account.ghin_number.blank?
+        GhinUpdateJob.perform_later([@user_account]) if @user_account.ghin_number.present?
 
-        redirect_to user_accounts_path, flash: { success: "The user was successfully created." }
+        redirect_to user_accounts_path, flash:
+        { success: 'The user was successfully created.' }
       else
         initialize_form
 
@@ -47,12 +48,11 @@ class UserAccountsController < BaseController
     end
   end
 
-  def edit
-  end
+  def edit; end
 
   def update
     if @user_account.update(user_params)
-      unless @user_account.ghin_number.blank?
+      if @user_account.ghin_number.present?
         Rails.logger.info { "Updating GHIN for #{@user_account}" }
 
         GhinUpdateJob.perform_later([@user_account.id])
@@ -60,7 +60,7 @@ class UserAccountsController < BaseController
         Rails.logger.info { "Not Updating GHIN for #{@user_account}" }
       end
 
-      unless @user_account.account_to_merge_to.blank?
+      if @user_account.account_to_merge_to.present?
         destination_account = User.find(@user_account.account_to_merge_to)
 
         @user_account.merge_into_user(destination_account)
@@ -69,7 +69,8 @@ class UserAccountsController < BaseController
       if @user_account == current_user
         redirect_to root_path
       else
-        redirect_to user_accounts_path, flash: { success: "The user was successfully updated." }
+        redirect_to user_accounts_path, flash:
+        { success: 'The user was successfully updated.' }
       end
     else
       initialize_form
@@ -79,27 +80,26 @@ class UserAccountsController < BaseController
   end
 
   def destroy
-    #remove from future tournaments
-    tournaments = Tournament.all_upcoming(@user_account.leagues).each do |t|
-      if t.includes_player?(@user_account)
-        t.tournament_days.each do |d|
-          group = d.tournament_group_for_player(@user_account)
+    Tournament.all_upcoming(@user_account.leagues).each do |t|
+      next unless t.includes_player?(@user_account)
 
-          d.remove_player_from_group(group, @user_account, true) unless group.blank?
-        end
+      t.tournament_days.each do |d|
+        group = d.tournament_group_for_player(@user_account)
+
+        d.remove_player_from_group(group, @user_account, true) if group.present?
       end
     end
 
     @user_account.destroy
 
-    redirect_to user_accounts_path, flash: { success: "The user was successfully deleted." }
+    redirect_to user_accounts_path, flash: { success: 'The user was successfully deleted.' }
   end
 
   def export_users
     @users = User.all
 
     respond_to do |format|
-      format.csv { send_data @users.to_csv, filename: "all_users-#{Date.today}.csv" }
+      format.csv { send_data @users.to_csv, filename: "all_users-#{Time.zone.today}.csv" }
     end
   end
 
@@ -107,7 +107,7 @@ class UserAccountsController < BaseController
     user = User.find(params[:user_account_id])
 
     session[:selected_season_id] = nil
-    
+
     impersonate_user(user)
 
     redirect_to root_path
@@ -118,14 +118,10 @@ class UserAccountsController < BaseController
     redirect_to root_path
   end
 
-  # User
-
   def edit_current
     @user_account = current_user
     @editing_current_user = true
   end
-
-  # League Admin Invite
 
   def setup_league_admin_invite
     @user_account = User.new
@@ -133,21 +129,22 @@ class UserAccountsController < BaseController
   end
 
   def send_league_admin_invite
-    if self.invite_user(user_params, true)
-      redirect_to user_accounts_path, flash: { success: "The league admin was successfully invited." }
+    if invite_user(user_params, true)
+      redirect_to user_accounts_path, flash:
+      { success: 'The league admin was successfully invited.' }
     else
-      redirect_to user_accounts_path, flash: { error: "There was an error inviting the league admin. Please check your information and try again." }
+      redirect_to user_accounts_path, flash:
+      { error: 'There was an error inviting the league admin. Please check your information and try again.' }
     end
   end
-
-  # Golfer Invite
 
   def resend_league_invite
     user = User.find(params[:user_account_id])
 
     user.invite!(current_user)
 
-    redirect_to user_accounts_path, flash: { success: "The golfer was successfully re-invited." }
+    redirect_to user_accounts_path, flash:
+    { success: 'The golfer was successfully re-invited.' }
   end
 
   def setup_golfer_invite
@@ -161,20 +158,22 @@ class UserAccountsController < BaseController
   end
 
   def send_golfer_invite
-    if self.invite_user(user_params, false)
-      redirect_to user_accounts_path, flash: { success: "The golfer was successfully invited." }
+    if invite_user(user_params, false)
+      redirect_to user_accounts_path, flash:
+      { success: 'The golfer was successfully invited.' }
     else
-      redirect_to user_accounts_path, flash: { error: "There was an error inviting the golfer. Please check your information and try again." }
+      redirect_to user_accounts_path, flash:
+      { error: 'There was an error inviting the golfer. Please check your information and try again.' }
     end
   end
 
   def invite_user(user_params, is_admin = false)
-    existing_user = User.where("email = ?", user_params[:email]).first
+    existing_user = User.where(email: user_params[:email]).first
 
     if existing_user.blank?
       @user_account = User.new(user_params)
-      @user_account.password = "temporary_password1234"
-      @user_account.password_confirmation = "temporary_password1234"
+      @user_account.password = 'temporary_password1234'
+      @user_account.password_confirmation = 'temporary_password1234'
 
       if @user_account.save
         @user_account.league_memberships.each do |m|
@@ -192,21 +191,20 @@ class UserAccountsController < BaseController
         return true
       else
         @user_account.errors.each do |e|
-          Rails.logger.debug { "#{e}" }
+          Rails.logger.debug { e.to_s }
         end
 
         return false
       end
     else
       user_params[:league_ids].each do |league_id|
-        unless league_id.blank?
-          league = League.find(league_id)
+        next if league_id.blank?
 
-          existing_membership = existing_user.league_memberships.where("league_id = ?", league.id)
-          if existing_membership.blank?
-            LeagueMembership.create(league: league, user: existing_user, is_admin: is_admin, state: MembershipStates::ADDED)
-          end
-        end
+        league = League.find(league_id)
+
+        existing_membership = existing_user.league_memberships.where('league_id = ?', league.id)
+
+        LeagueMembership.create(league: league, user: existing_user, is_admin: is_admin, state: MembershipStates::ADDED) if existing_membership.blank?
       end
 
       return true
@@ -235,5 +233,4 @@ class UserAccountsController < BaseController
       @leagues = current_user.leagues_admin.order(:name)
     end
   end
-
 end

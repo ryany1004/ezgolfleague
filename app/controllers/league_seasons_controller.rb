@@ -5,19 +5,16 @@ class LeagueSeasonsController < BaseController
   def index
     @league_seasons = @league.league_seasons.order(:starts_at)
 
-    @page_title = "League Seasons"
+    @page_title = 'League Seasons'
   end
 
   def new
     @league_season = LeagueSeason.new
-    
+
     @last_season = @league.league_seasons.last
 
-    year = Time.now.year
-
-    unless @last_season.blank?
-      year = @last_season.starts_at.year + 1
-    end
+    year = Time.zone.now.year
+    year = @last_season.starts_at.year + 1 if @last_season.present?
 
     @league_season.starts_at = Date.civil(year, 1, 1)
     @league_season.ends_at = Date.civil(year, -1, -1)
@@ -27,18 +24,19 @@ class LeagueSeasonsController < BaseController
     @league_season = LeagueSeason.new(season_params)
 
     if @league_season.save
-      redirect_to league_league_seasons_path(@league), flash: { success: "The season was successfully created." }
+      redirect_to league_league_seasons_path(@league), flash:
+      { success: 'The season was successfully created.' }
     else
       render :new
     end
   end
 
-  def edit
-  end
+  def edit; end
 
   def update
     if @league_season.update(season_params)
-      redirect_to league_league_seasons_path(@league), flash: { success: "The season was successfully updated." }
+      redirect_to league_league_seasons_path(@league), flash:
+      { success: 'The season was successfully updated.' }
     else
       render :edit
     end
@@ -47,7 +45,8 @@ class LeagueSeasonsController < BaseController
   def destroy
     @league_season.destroy
 
-    redirect_to league_league_seasons_path(@league), flash: { success: "The season was successfully deleted." }
+    redirect_to league_league_seasons_path(@league), flash:
+    { success: 'The season was successfully deleted.' }
   end
 
   private
@@ -61,6 +60,6 @@ class LeagueSeasonsController < BaseController
   end
 
   def fetch_league
-    @league = self.league_from_user_for_league_id(params[:league_id])
+    @league = league_from_user_for_league_id(params[:league_id])
   end
 end

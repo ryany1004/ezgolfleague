@@ -8,7 +8,7 @@ class Api::V1::LeaguesController < Api::V1::ApiBaseController
   end
 
   def show
-    if params[:id] == "0"
+    if params[:id] == '0'
       league = @current_user.leagues.first
     else
       league = @current_user.leagues.find(params[:id])

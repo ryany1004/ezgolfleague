@@ -5,8 +5,7 @@ class PayoutsController < BaseController
   before_action :fetch_payouts, only: [:index]
   before_action :set_stage
 
-  def index
-  end
+  def index; end
 
   def new
     @payout = Payout.new
@@ -19,22 +18,24 @@ class PayoutsController < BaseController
     @payout.scoring_rule = @scoring_rule
 
     if @payout.save
-      if params[:commit] == "Save & Continue"
-        redirect_to league_tournament_tournament_day_scoring_rules_path(@tournament.league, @tournament, @tournament_day), flash: { success: "The payout was successfully created." }
+      if params[:commit] == 'Save & Continue'
+        redirect_to league_tournament_tournament_day_scoring_rules_path(@tournament.league, @tournament, @tournament_day), flash:
+        { success: 'The payout was successfully created.' }
       else
-        redirect_to new_league_tournament_tournament_day_scoring_rule_payout_path(@tournament.league, @tournament, @tournament_day, @scoring_rule), flash: { success: "The payout was successfully created." }
+        redirect_to new_league_tournament_tournament_day_scoring_rule_payout_path(@tournament.league, @tournament, @tournament_day, @scoring_rule), flash:
+        { success: 'The payout was successfully created.' }
       end
     else
       render :new
     end
   end
 
-  def edit
-  end
+  def edit; end
 
   def update
     if @payout.update(payout_params)
-      redirect_to league_tournament_tournament_day_scoring_rules_path(@tournament.league, @tournament, @tournament_day), flash: { success: "The payout was successfully updated." }
+      redirect_to league_tournament_tournament_day_scoring_rules_path(@tournament.league, @tournament, @tournament_day), flash:
+      { success: 'The payout was successfully updated.' }
     else
       render :edit
     end
@@ -43,7 +44,8 @@ class PayoutsController < BaseController
   def destroy
     @payout.destroy
 
-    redirect_to league_tournament_tournament_day_scoring_rules_path(@tournament.league, @tournament, @tournament_day), flash: { success: "The payout was successfully deleted." }
+    redirect_to league_tournament_tournament_day_scoring_rules_path(@tournament.league, @tournament, @tournament_day), flash:
+    { success: 'The payout was successfully deleted.' }
   end
 
   private
@@ -57,7 +59,7 @@ class PayoutsController < BaseController
   end
 
   def fetch_tournament
-    @tournament = self.fetch_tournament_from_user_for_tournament_id(params[:tournament_id])
+    @tournament = fetch_tournament_from_user_for_tournament_id(params[:tournament_id])
   end
 
   def fetch_payouts
@@ -72,5 +74,4 @@ class PayoutsController < BaseController
     @tournament_day = @tournament.tournament_days.find(params[:tournament_day_id])
     @scoring_rule = @tournament_day.scoring_rules.find(params[:scoring_rule_id])
   end
-
 end

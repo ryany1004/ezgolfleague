@@ -4,13 +4,13 @@ class LeagueMembershipsController < BaseController
   before_action :fetch_membership, only: [:edit, :update, :destroy]
 
   def index
-    @league_memberships = @league.league_memberships.includes(:user).order("users.last_name").page params[:page]
+    @league_memberships = @league.league_memberships.includes(:user).order('users.last_name').page params[:page]
 
-    @page_title = "League Memberships"
+    @page_title = 'League Memberships'
   end
 
   def print
-    @league_memberships = @league.league_memberships.includes(:user).order("users.last_name")
+    @league_memberships = @league.league_memberships.includes(:user).order('users.last_name')
 
     render layout: false
   end
@@ -26,24 +26,24 @@ class LeagueMembershipsController < BaseController
     @league_membership.league = @league
 
     if @league_membership.save
-      redirect_to league_league_memberships_path(@league), flash: { success: "The membership was successfully created." }
+      redirect_to league_league_memberships_path(@league), flash:
+      { success: 'The membership was successfully created.' }
     else
       render :new
     end
   end
 
-  def edit
-  end
+  def edit; end
 
   def update
     if @league_membership.update(membership_params)
-      unless @league_membership.user.ghin_number.blank?
+      if @league_membership.user.ghin_number.present?
         Rails.logger.info { "Updating GHIN for #{@league_membership.user}" }
 
         GhinUpdateJob.perform_later([@league_membership.user.id])
       end
 
-      redirect_to league_league_memberships_path(@league), flash: { success: "The membership was successfully updated." }
+      redirect_to league_league_memberships_path(@league), flash: { success: 'The membership was successfully updated.' }
     else
       render :edit
     end
@@ -52,7 +52,8 @@ class LeagueMembershipsController < BaseController
   def destroy
     @league_membership.destroy
 
-    redirect_to league_league_memberships_path(@league), flash: { success: "The membership was successfully deleted." }
+    redirect_to league_league_memberships_path(@league), flash:
+    { success: 'The membership was successfully deleted.' }
   end
 
   private
@@ -66,19 +67,18 @@ class LeagueMembershipsController < BaseController
   end
 
   def fetch_league
-    @league = self.league_from_user_for_league_id(params[:league_id])
+    @league = league_from_user_for_league_id(params[:league_id])
   end
 
   def fetch_users
-    if @league.users.count > 0
+    if @league.users.count.positive?
       existing_user_ids = @league&.users&.map { |n| n.id }
 
-      @users = User.where("id NOT IN (?)", existing_user_ids).order(:last_name).order(:first_name).order(created_at: :desc)
+      @users = User.where('id NOT IN (?)', existing_user_ids).order(:last_name).order(:first_name).order(created_at: :desc)
     else
       @users = User.all.order(:last_name).order(:first_name).order(created_at: :desc)
     end
 
-    @users = User.where(id: @league_membership.user.id) if @users.count == 0 && @league_membership.blank? == false
+    @users = User.where(id: @league_membership.user.id) if @users.count.zero? && @league_membership.present?
   end
-
 end

@@ -10,9 +10,9 @@ class FlightsController < BaseController
   def index
     @page_title = "Flights for #{@tournament.name} #{@tournament_day.pretty_day}"
 
-    if @tournament.league.allow_scoring_groups && @tournament_day.flights.count == 0
+    if @tournament.league.allow_scoring_groups && @tournament_day.flights.count.zero?
       @tournament_day.create_scoring_group_flights
-    elsif !@tournament.league.allow_scoring_groups && @tournament_day.flights.count == 0
+    elsif !@tournament.league.allow_scoring_groups && @tournament_day.flights.count.zero?
       @tournament_day.copy_flights_from_previous_day
     end
   end
@@ -20,7 +20,7 @@ class FlightsController < BaseController
   def new
     @flight = Flight.new
 
-    if @tournament_day.flights.count > 0
+    if @tournament_day.flights.count.positive?
       @flight.flight_number = @tournament_day.flights.last.flight_number + 1
       @flight.lower_bound = @tournament_day.flights.last.upper_bound + 1
     else
@@ -34,22 +34,24 @@ class FlightsController < BaseController
     @flight.tournament_day = @tournament_day
 
     if @flight.save
-      if params[:commit] == "Save & Continue"
-        redirect_to league_tournament_tournament_day_tournament_notifications_path(@tournament.league, @tournament, @tournament_day), flash: { success: "The flight was successfully created." }
+      if params[:commit] == 'Save & Continue'
+        redirect_to league_tournament_tournament_day_tournament_notifications_path(@tournament.league, @tournament, @tournament_day), flash:
+        { success: 'The flight was successfully created.' }
       else
-        redirect_to new_league_tournament_tournament_day_flight_path(@tournament.league, @tournament, @tournament_day), flash: { success: "The flight was successfully created." }
+        redirect_to new_league_tournament_tournament_day_flight_path(@tournament.league, @tournament, @tournament_day), flash:
+        { success: 'The flight was successfully created.' }
       end
     else
       render :new
     end
   end
 
-  def edit
-  end
+  def edit; end
 
   def update
     if @flight.update(flight_params)
-      redirect_to league_tournament_tournament_day_flights_path(@tournament.league, @tournament, @tournament_day), flash: { success: "The flight was successfully updated." }
+      redirect_to league_tournament_tournament_day_flights_path(@tournament.league, @tournament, @tournament_day), flash:
+      { success: 'The flight was successfully updated.' }
     else
       render :edit
     end
@@ -58,11 +60,13 @@ class FlightsController < BaseController
   def destroy
     @flight.destroy
 
-    redirect_to league_tournament_tournament_day_flights_path(@tournament.league, @tournament, @tournament_day), flash: { success: "The flight was successfully deleted." }
+    redirect_to league_tournament_tournament_day_flights_path(@tournament.league, @tournament, @tournament_day), flash:
+    { success: 'The flight was successfully deleted.' }
   end
 
   def reflight_players
-    redirect_to league_tournament_tournament_day_flights_path(@tournament.league, @tournament, @tournament_day), flash: { success: "The players were re-flighted." }
+    redirect_to league_tournament_tournament_day_flights_path(@tournament.league, @tournament, @tournament_day), flash:
+    { success: 'The players were re-flighted.' }
   end
 
   def update_player_flight_membership
@@ -76,7 +80,7 @@ class FlightsController < BaseController
   end
 
   def fetch_tournament
-    @tournament = self.fetch_tournament_from_user_for_tournament_id(params[:tournament_id])
+    @tournament = fetch_tournament_from_user_for_tournament_id(params[:tournament_id])
   end
 
   def fetch_flights
@@ -104,15 +108,14 @@ class FlightsController < BaseController
       if @tournament.tournament_days.count > 1
         @stage_name = "flights#{@tournament.first_day.id}"
       else
-        @stage_name = "flights"
+        @stage_name = 'flights'
       end
     else
       if @tournament.tournament_days.count > 1
         @stage_name = "flights#{@tournament_day.id}"
       else
-        @stage_name = "flights"
+        @stage_name = 'flights'
       end
     end
   end
-
 end

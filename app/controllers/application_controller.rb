@@ -8,10 +8,10 @@ class ApplicationController < ActionController::Base
   before_action :remove_blocked_user, if: :current_user
 
   def remove_blocked_user
-  	if current_user.is_blocked
-  		sign_out current_user
+    return unless current_user.is_blocked
 
-  		redirect_to new_user_session_path
-  	end
+    sign_out current_user
+
+    redirect_to new_user_session_path
   end
 end

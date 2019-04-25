@@ -6,23 +6,24 @@ class LeagueSeasonTeamsController < BaseController
   def index
     @league_season_teams = @league_season.league_season_teams.order(:name)
 
-    @page_title = "Season Teams"
+    @page_title = 'Season Teams'
   end
 
   def create
-    @league_season_team = LeagueSeasonTeam.new(name: "New Team")
+    @league_season_team = LeagueSeasonTeam.new(name: 'New Team')
     @league_season_team.league_season = @league_season
     @league_season_team.save
 
-    redirect_to edit_league_league_season_league_season_team_path(@league, @league_season, @league_season_team), flash: { success: "The team was successfully created." }
+    redirect_to edit_league_league_season_league_season_team_path(@league, @league_season, @league_season_team), flash:
+    { success: 'The team was successfully created.' }
   end
 
-  def edit
-  end
+  def edit; end
 
   def update
     if @league_season_team.update(team_params)
-      redirect_to league_league_season_league_season_teams_path(@league, @league_season), flash: { success: "The team was successfully updated." }
+      redirect_to league_league_season_league_season_teams_path(@league, @league_season), flash:
+      { success: 'The team was successfully updated.' }
     else
       render :edit
     end
@@ -31,7 +32,8 @@ class LeagueSeasonTeamsController < BaseController
   def destroy
     @league_season_team.destroy
 
-    redirect_to league_league_season_league_season_teams_path(@league, @league_season), flash: { success: "The team was successfully deleted." }
+    redirect_to league_league_season_league_season_teams_path(@league, @league_season), flash:
+    { success: 'The team was successfully deleted.' }
   end
 
   def update_player
@@ -59,13 +61,7 @@ class LeagueSeasonTeamsController < BaseController
   end
 
   def fetch_league_season_team
-    if params[:league_season_team_id].blank?
-      id = params[:id]
-    else
-      id = params[:league_season_team_id]
-    end
-        
-  	@league_season_team = @league_season.league_season_teams.find(id)
+    @league_season_team = @league_season.league_season_teams.find(params[:id] || params[:league_season_team_id])
   end
 
   def fetch_available_users
@@ -73,12 +69,12 @@ class LeagueSeasonTeamsController < BaseController
   end
 
   def fetch_season
-  	fetch_league
+    fetch_league
 
     @league_season = @league.league_seasons.find(params[:league_season_id])
   end
 
   def fetch_league
-    @league = self.league_from_user_for_league_id(params[:league_id])
+    @league = league_from_user_for_league_id(params[:league_id])
   end
 end

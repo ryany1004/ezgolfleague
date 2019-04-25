@@ -1,8 +1,7 @@
 class Play::PaymentsController < Play::BaseController
-  layout "golfer"
+  layout 'golfer'
 
-  def index
-  end
+  def index; end
 
   def new
     if params[:payment_type] == 'league_dues'
@@ -49,7 +48,7 @@ class Play::PaymentsController < Play::BaseController
 
     Rails.logger.info { "Sending Stripe Charge: #{amount} for #{charge_description}" }
 
-    #at this point the charges are already included in the above
+    # at this point the charges are already included in the above
 
     # Create the charge on Stripe's servers - this will charge the user's card
     begin

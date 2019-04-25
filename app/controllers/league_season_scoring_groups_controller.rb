@@ -6,7 +6,7 @@ class LeagueSeasonScoringGroupsController < BaseController
   def index
     @scoring_groups = @league_season.league_season_scoring_groups.order(:name)
 
-    @page_title = "Season Scoring Groups"
+    @page_title = 'Season Scoring Groups'
   end
 
   def new
@@ -18,18 +18,19 @@ class LeagueSeasonScoringGroupsController < BaseController
     @scoring_group.league_season = @league_season
 
     if @scoring_group.save
-      redirect_to league_league_season_league_season_scoring_groups_path(@league, @league_season), flash: { success: "The scoring group was successfully created." }
+      redirect_to league_league_season_league_season_scoring_groups_path(@league, @league_season), flash:
+      { success: 'The scoring group was successfully created.' }
     else
       render :new
     end
   end
 
-  def edit
-  end
+  def edit; end
 
   def update
     if @scoring_group.update(scoring_group_params)
-      redirect_to league_league_season_league_season_scoring_groups_path(@league, @league_season), flash: { success: "The scoring group was successfully updated." }
+      redirect_to league_league_season_league_season_scoring_groups_path(@league, @league_season), flash:
+      { success: 'The scoring group was successfully updated.' }
     else
       render :edit
     end
@@ -38,7 +39,8 @@ class LeagueSeasonScoringGroupsController < BaseController
   def destroy
     @scoring_group.destroy
 
-    redirect_to league_league_season_league_season_scoring_groups_path(@league, @league_season), flash: { success: "The scoring group was successfully deleted." }
+    redirect_to league_league_season_league_season_scoring_groups_path(@league, @league_season), flash:
+    { success: 'The scoring group was successfully deleted.' }
   end
 
   def update_player
@@ -64,13 +66,7 @@ class LeagueSeasonScoringGroupsController < BaseController
   end
 
   def fetch_scoring_group
-    if params[:league_season_scoring_group_id].blank?
-      id = params[:id]
-    else
-      id = params[:league_season_scoring_group_id]
-    end
-        
-  	@scoring_group = @league_season.league_season_scoring_groups.find(id)
+    @scoring_group = @league_season.league_season_scoring_groups.find(params[:id] || params[:league_season_scoring_group_id])
   end
 
   def fetch_available_users
@@ -78,12 +74,12 @@ class LeagueSeasonScoringGroupsController < BaseController
   end
 
   def fetch_season
-  	fetch_league
+    fetch_league
 
     @league_season = @league.league_seasons.find(params[:league_season_id])
   end
 
   def fetch_league
-    @league = self.league_from_user_for_league_id(params[:league_id])
+    @league = league_from_user_for_league_id(params[:league_id])
   end
 end

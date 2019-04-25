@@ -2,8 +2,7 @@ class SubscriptionCreditsController < BaseController
   before_action :fetch_league
   before_action :fetch_active_subscription, only: [:current, :update_active]
 
-  def current
-  end
+  def current; end
 
   def information
     render layout: 'golfer'
@@ -16,28 +15,28 @@ class SubscriptionCreditsController < BaseController
       active_before_update = @active_subscription.golfer_count
     end
 
-		active_status = params[:is_active]
+    active_status = params[:is_active]
 
-		if active_status.present?
-			Rails.logger.info { "Activating #{active_status.keys.count} members." }
+    if active_status.present?
+      Rails.logger.info { "Activating #{active_status.keys.count} members." }
 
-	    @league.league_memberships.each do |m|
-	      m.state = MembershipStates::ADDED
+      @league.league_memberships.each do |m|
+        m.state = MembershipStates::ADDED
 
-	      if active_status.keys.include? m.id
-	      	membership.state = MembershipStates::ACTIVE_FOR_BILLING
+        if active_status.key? m.id
+          membership.state = MembershipStates::ACTIVE_FOR_BILLING
 
-	      	Rails.logger.info { "Updating Member to Active: #{m.user.complete_name} #{m.state}" }
-	      end
+          Rails.logger.info { "Updating Member to Active: #{m.user.complete_name} #{m.state}" }
+        end
 
-	      m.save
-	    end
-	  end
+        m.save
+      end
+    end
 
     active_after_update = @league.league_memberships.reload.active.count
     active_delta = active_after_update - active_before_update
 
-    if active_delta > 0
+    if active_delta.positive?
       per_golfer_cost = SubscriptionCredit.cost_per_golfer(league: @league)
       payment_amount = per_golfer_cost * active_delta
 
@@ -48,14 +47,17 @@ class SubscriptionCreditsController < BaseController
 
         SubscriptionCredit.create(league_season: @league.active_season, amount: payment_amount, golfer_count: updated_golfers, transaction_id: charge.id)
 
-        redirect_to current_league_subscription_credits_path(@league, details_amount: payment_amount, details_golfers: updated_golfers, details_id: charge.id), flash: { success: "Your payment was recorded. Thanks!" }
+        redirect_to current_league_subscription_credits_path(@league, details_amount: payment_amount, details_golfers: updated_golfers, details_id: charge.id), flash:
+        { success: 'Your payment was recorded. Thanks!' }
       else
-        redirect_to current_league_subscription_credits_path(@league), flash: { error: "There was an error processing your payment." }
+        redirect_to current_league_subscription_credits_path(@league), flash:
+        { error: 'There was an error processing your payment.' }
       end
     else
       Rails.logger.info { "Active Delta #{active_delta}. Active After Update: #{active_after_update}" }
 
-      redirect_to current_league_subscription_credits_path(@league), flash: { success: "The memberships were successfully updated. Your account was not charged." }
+      redirect_to current_league_subscription_credits_path(@league), flash:
+      { success: 'The memberships were successfully updated. Your account was not charged.' }
     end
   end
 
@@ -63,14 +65,16 @@ class SubscriptionCreditsController < BaseController
     token = params[:stripeToken]
 
     if token.blank?
-      redirect_to current_league_subscription_credits_path(@league), flash: { error: "There was a problem updating your credit card. Please check your details and try again." }
+      redirect_to current_league_subscription_credits_path(@league), flash:
+      { error: 'There was a problem updating your credit card. Please check your details and try again.' }
     else
       updated_successfully = Stripe::CardTerminal.create_or_update_stripe_customer(@league, user: current_user, token: token)
 
       if updated_successfully
         redirect_to current_league_subscription_credits_path(@league)
       else
-        redirect_to current_league_subscription_credits_path(@league), flash: { error: "We were unable to update your details with the credit system. Please check your details and try again." }
+        redirect_to current_league_subscription_credits_path(@league), flash:
+        { error: 'We were unable to update your details with the credit system. Please check your details and try again.' }
       end
     end
   end
@@ -81,16 +85,19 @@ class SubscriptionCreditsController < BaseController
     payment_amount = Stripe::CardTerminal.payment_amount(number_of_golfers, league: @league)
 
     if number_of_golfers.zero?
-      redirect_to current_league_subscription_credits_path(@league), flash: { error: "We were unable to find your customer information. Please contact customer support." }
+      redirect_to current_league_subscription_credits_path(@league), flash:
+      { error: 'We were unable to find your customer information. Please contact customer support.' }
     else
       charge = charge_customer(@league, payment_amount, "Charge for tournament credits for #{current_user.email} for league #{@league.name}.")
 
-      unless charge.blank?
+      if charge.present?
         SubscriptionCredit.create(league_season: @league.active_season, amount: payment_amount, golfer_count: number_of_golfers, transaction_id: charge.id)
 
-        redirect_to current_league_subscription_credits_path(@league, details_amount: payment_amount, details_golfers: number_of_golfers, details_id: charge.id), flash: { success: "Your payment was recorded. Thanks!" }
+        redirect_to current_league_subscription_credits_path(@league, details_amount: payment_amount, details_golfers: number_of_golfers, details_id: charge.id), flash:
+        { success: 'Your payment was recorded. Thanks!' }
       else
-        redirect_to current_league_subscription_credits_path(@league), flash: { error: "There was an error processing your payment. Please verify you have a valid credit card on file. You can change your card below." }
+        redirect_to current_league_subscription_credits_path(@league), flash:
+        { error: 'There was an error processing your payment. Please verify you have a valid credit card on file. You can change your card below.' }
       end
     end
   end
@@ -98,8 +105,8 @@ class SubscriptionCreditsController < BaseController
   private
 
   def fetch_league
-    @league = self.league_from_user_for_league_id(params[:league_id])
-    @league = current_user.leagues_admin.first if !@league&.user_is_admin(current_user)
+    @league = league_from_user_for_league_id(params[:league_id])
+    @league = current_user.leagues_admin.first unless @league&.user_is_admin(current_user)
 
     redirect_to root_path if @league.blank?
   end
@@ -109,15 +116,14 @@ class SubscriptionCreditsController < BaseController
     @past_subscriptions = []
 
     season = @league.active_season
-    
-    unless season.blank?
+
+    if season.present?
       active_subscriptions = @league.active_season.subscription_credits.order(created_at: :desc)
       @active_subscription = active_subscriptions.try(:first)
 
-      @golfer_count = @active_subscription.golfer_count unless @active_subscription.blank?
+      @golfer_count = @active_subscription.golfer_count if @active_subscription.present?
 
       @past_subscriptions = @league.active_season.subscription_credits
     end
   end
-
 end

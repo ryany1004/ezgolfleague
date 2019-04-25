@@ -1,6 +1,6 @@
 class PrintsController < BaseController
   before_action :fetch_tournament_details
-  
+
   def print_scorecards
     @print_cards = []
 
@@ -10,32 +10,25 @@ class PrintsController < BaseController
 
       other_scorecards = []
       @tournament_day.scoring_rules.each do |rule|
-      	rule.related_scorecards_for_user(player, true).each do |other_card|
-      		if other_card.user != player && !other_scorecards.map(&:user).include?(other_card.user)
-      			other_scorecards << other_card
-      		end
-      	end
+        rule.related_scorecards_for_user(player, true).each do |other_card|
+          other_scorecards << other_card if other_card.user != player && !other_scorecards.map(&:user).include?(other_card.user)
+        end
       end
 
       if other_scorecards.count < 4
         number_to_create = (4 - other_scorecards.count) - 1
 
-        number_to_create.times do
-          extra_scorecard = ScoringRuleScorecards::EmptyLineScorecard.new
-          extra_scorecard.scores_for_course_holes(@tournament_day.scorecard_base_scoring_rule.course_holes)
-
-          other_scorecards << extra_scorecard
-        end
+        other_scorecards += empty_line_scorecards(number_to_create)
       end
 
       scorecard_presenter = ScorecardPresenter.new({ primary_scorecard: primary_scorecard, secondary_scorecards: other_scorecards, current_user: @current_user })
 
-      @print_cards << { p: scorecard_presenter } if !self.printable_cards_includes_player?(@print_cards, player)
+      @print_cards << { p: scorecard_presenter } unless printable_cards_includes_player?(@print_cards, player)
     end
 
     render layout: false
   end
-  
+
   def fetch_tournament_details
     @tournament = Tournament.find(params[:tournament_id])
 
@@ -51,12 +44,27 @@ class PrintsController < BaseController
       return true if card[:p].primary_scorecard.golf_outing.user == player
 
       card[:p].secondary_scorecards.each do |other|
-        unless other.golf_outing.blank?
+        if other.golf_outing.present?
           return true if other.golf_outing.user == player
         end
       end
     end
 
-    return false
+    false
+  end
+
+  private
+
+  def empty_line_scorecards(number_to_create)
+    extra_scorecards = []
+
+    number_to_create.times do
+      extra_scorecard = ScoringRuleScorecards::EmptyLineScorecard.new
+      extra_scorecard.scores_for_course_holes(@tournament_day.scorecard_base_scoring_rule.course_holes)
+
+      extra_scorecards << extra_scorecard
+    end
+
+    extra_scorecards
   end
 end

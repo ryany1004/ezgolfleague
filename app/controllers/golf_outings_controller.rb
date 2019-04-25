@@ -3,7 +3,7 @@ class GolfOutingsController < BaseController
   before_action :set_stage
 
   def players
-    @schedule_options = { 0 => "Manual", 1 => "Automatic: Worst Score First", 2 => "Automatic: Best Score First" }
+    @schedule_options = { 0 => 'Manual', 1 => 'Automatic: Worst Score First', 2 => 'Automatic: Best Score First' }
     @page_title = "Signups for #{@tournament.name}"
     @registered_players = @tournament.players_for_day(@tournament_day)
   end
@@ -30,14 +30,12 @@ class GolfOutingsController < BaseController
     if group_id && player_ids
       group = @tournament_groups.where(id: group_id).first
       player_ids.each do |player_id|
-        if group.golf_outings.where(user_id: player_id).blank?
-          user = User.where(id: player_id).first
-          existing_outing = @tournament_day.golf_outing_for_player(user)
+        next if group.golf_outings.where(user_id: player_id).present?
 
-          unless existing_outing.blank? || user.blank?
-            @tournament_day.move_player_to_tournament_group(user, group)
-          end
-        end
+        user = User.where(id: player_id).first
+        existing_outing = @tournament_day.golf_outing_for_player(user)
+
+        @tournament_day.move_player_to_tournament_group(user, group) if existing_outing.present? && user.present?
       end
     end
 
@@ -56,21 +54,22 @@ class GolfOutingsController < BaseController
 
     @tournament_day.remove_player_from_group(tournament_group: tournament_group, user: user, remove_from_teams: true)
 
-    redirect_to league_tournament_day_players_path(@tournament.league, @tournament, @tournament_day), flash: { success: "The registration was successfully deleted." }
+    redirect_to league_tournament_day_players_path(@tournament.league, @tournament, @tournament_day), flash: { success: 'The registration was successfully deleted.' }
   end
 
   def disqualify_signup
-    if params[:tournament_day].blank?
-      @tournament_day = @tournament.first_day
-    else
+    if params[:tournament_day].present?
       @tournament_day = @tournament.tournament_days.find(params[:tournament_day])
+    else
+      @tournament_day = @tournament.first_day
     end
 
     user = User.find(params[:user_id])
     golf_outing = @tournament_day.golf_outing_for_player(user)
     golf_outing.disqualify
 
-    redirect_to league_tournament_day_players_path(@tournament.league, @tournament, @tournament_day), flash: { success: "The player qualification status changed. You may need to re-finalize the tournament." }
+    redirect_to league_tournament_day_players_path(@tournament.league, @tournament, @tournament_day), flash:
+    { success: 'The player qualification status changed. You may need to re-finalize the tournament.' }
   end
 
   private
@@ -80,11 +79,10 @@ class GolfOutingsController < BaseController
   end
 
   def fetch_tournament
-    @league = self.league_from_user_for_league_id(params[:league_id])
-    @tournament = self.fetch_tournament_from_user_for_tournament_id(params[:tournament_id])
+    @league = league_from_user_for_league_id(params[:league_id])
+    @tournament = fetch_tournament_from_user_for_tournament_id(params[:tournament_id])
     @tournament_day = @tournament.tournament_days.find(params[:tournament_day_id])
     @tournament_groups = @tournament_day.tournament_groups
     @all_league_members = @tournament.league.users
   end
-
 end

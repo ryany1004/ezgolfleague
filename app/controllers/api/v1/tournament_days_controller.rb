@@ -5,15 +5,15 @@ class Api::V1::TournamentDaysController < Api::V1::ApiBaseController
   respond_to :json
 
   def tournament_groups
-    @eager_groups = Rails.cache.fetch(@tournament_day.cache_key("groups"), expires_in: 24.hours, race_condition_ttl: 10) do
-      logger.info { "Fetching Tournament Day - Not Cached" }
+    @eager_groups = Rails.cache.fetch(@tournament_day.cache_key('groups'), expires_in: 24.hours, race_condition_ttl: 10) do
+      Rails.logger.info { 'Fetching Tournament Day - Not Cached' }
 
       @tournament_day.eager_groups
     end
   end
 
   def leaderboard
-    @leaderboard = self.fetch_leaderboard
+    @leaderboard = fetch_leaderboard
 
     @day_flights = @leaderboard[:day_flights]
     @combined_flights = @leaderboard[:combined_flights]
@@ -24,15 +24,15 @@ class Api::V1::TournamentDaysController < Api::V1::ApiBaseController
 
     logger.info { "API Registration Details: #{registration_information}" }
 
-    user = User.find(registration_information["user_id"])
-    tournament_group = @tournament_day.tournament_groups.find(registration_information["tournament_group_id"])
-    confirm_user = registration_information["confirm_user"]
+    user = User.find(registration_information['user_id'])
+    tournament_group = @tournament_day.tournament_groups.find(registration_information['tournament_group_id'])
+    confirm_user = registration_information['confirm_user']
 
     @tournament_day.add_player_to_group(tournament_group: tournament_group, user: user, paying_with_credit_card: false, confirmed: confirm_user, registered_by: "App: #{user.complete_name}")
 
-    Rails.cache.delete(@tournament_day.cache_key("groups"))
+    Rails.cache.delete(@tournament_day.cache_key('groups'))
 
-    TournamentMailer.tournament_player_paying_later(user, @tournament_day.tournament).deliver_later if confirm_user == false
+    TournamentMailer.tournament_player_paying_later(user, @tournament_day.tournament).deliver_later unless confirm_user
 
     eager_groups = @tournament_day.eager_groups
 
@@ -52,13 +52,13 @@ class Api::V1::TournamentDaysController < Api::V1::ApiBaseController
 
     TournamentMailer.tournament_player_cancelled(@current_user, @tournament).deliver_later
 
-    Rails.cache.delete(@tournament_day.cache_key("groups"))
+    Rails.cache.delete(@tournament_day.cache_key('groups'))
 
     @eager_groups = @tournament_day.eager_groups
   end
 
   def register_contests
-    self.register_optional_games
+    register_optional_games
   end
 
   def register_optional_games
@@ -97,7 +97,6 @@ class Api::V1::TournamentDaysController < Api::V1::ApiBaseController
     day_flights_with_rankings = @tournament_day.flights_with_rankings
     combined_flights_with_rankings = FetchingTools::LeaderboardFetching.flights_with_rankings_could_be_combined(@tournament_day)
 
-    leaderboard = { day_flights: day_flights_with_rankings, combined_flights: combined_flights_with_rankings }
+    { day_flights: day_flights_with_rankings, combined_flights: combined_flights_with_rankings }
   end
-
 end
