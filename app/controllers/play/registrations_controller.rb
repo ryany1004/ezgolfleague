@@ -1,7 +1,7 @@
 class Play::RegistrationsController < Play::BaseController
   include Devise::Controllers::Helpers
 
-  layout "golfer"
+  layout 'golfer'
 
   skip_before_action :authenticate_user!, only: [:new, :create]
 
@@ -16,11 +16,11 @@ class Play::RegistrationsController < Play::BaseController
     @show_apps_in_footer = false
 
     if @user_account.save
-      GhinUpdateJob.perform_later([@user_account.id]) unless @user_account.ghin_number.blank?
+      GhinUpdateJob.perform_later([@user_account.id]) if @user_account.ghin_number.present?
 
       sign_in(@user_account, scope: :user)
 
-      redirect_to leagues_play_registrations_path, flash: { success: "Your account was created." }
+      redirect_to leagues_play_registrations_path, flash: { success: 'Your account was created.' }
     else
       render :new
     end
@@ -33,15 +33,15 @@ class Play::RegistrationsController < Play::BaseController
   end
 
   def leagues_list
-  	@leagues = League.where(show_in_search: true).order(:name).limit(100)
+    @leagues = League.where(show_in_search: true).order(:name).limit(100)
 
     if params[:search].present?
       search_string = "%#{params[:search].downcase}%"
 
-      @leagues = @leagues.where("lower(name) LIKE ? OR lower(location) LIKE ?", search_string, search_string)
+      @leagues = @leagues.where('lower(name) LIKE ? OR lower(location) LIKE ?', search_string, search_string)
     end
 
-  	render json: @leagues.to_json
+    render json: @leagues.to_json
   end
 
   def join_league
@@ -53,8 +53,8 @@ class Play::RegistrationsController < Play::BaseController
       redirect_to setup_completed_play_registrations_path
     else
       @cost_breakdown_lines = [
-        {name: "#{@league.name} League Fees", price: @league.dues_amount},
-        {name: "Credit Card Fees", price: Stripe::StripeFees.fees_for_transaction_amount(@league.dues_amount)}
+        { name: "#{@league.name} League Fees", price: @league.dues_amount },
+        { name: 'Credit Card Fees', price: Stripe::StripeFees.fees_for_transaction_amount(@league.dues_amount) }
       ]
 
       @payment_amount = Payments::LeagueJoinService.payment_amount(@league)
@@ -66,8 +66,17 @@ class Play::RegistrationsController < Play::BaseController
 
     if league.present?
       email_addresses = nil
-      email_addresses = league.dues_payment_receipt_email_addresses.split(",") unless league.dues_payment_receipt_email_addresses.blank?
-      RecordEventJob.perform_later(email_addresses, "A user expressed league interest", { league_name: league.name, user: { first_name: current_user.first_name, last_name: current_user.last_name, email: current_user.email, phone_number: current_user.phone_number, ghin_number: current_user.ghin_number } }) unless email_addresses.blank?
+      email_addresses = league.dues_payment_receipt_email_addresses.split(',') if league.dues_payment_receipt_email_addresses.present?
+
+      if email_addresses.present?
+        RecordEventJob.perform_later(email_addresses, 'A user expressed league interest',
+                                     { league_name: league.name,
+                                       user: { first_name: current_user.first_name,
+                                               last_name: current_user.last_name,
+                                               email: current_user.email,
+                                               phone_number: current_user.phone_number,
+                                               ghin_number: current_user.ghin_number } })
+      end
     end
 
     render :thanks
@@ -81,7 +90,7 @@ class Play::RegistrationsController < Play::BaseController
       Payments::LeagueJoinService.charge_and_join(current_user, league, stripe_token)
 
       redirect_to setup_completed_play_registrations_path
-    rescue Stripe::CardError => e
+    rescue Stripe::CardError
       redirect_to error_play_payments_path
     end
   end
@@ -115,7 +124,7 @@ class Play::RegistrationsController < Play::BaseController
       UserMailer.invite(g, @league).deliver_later
     end
 
-    SendEventToDripJob.perform_later("League admin invited golfers during registration", user: current_user, options: { number_of_golfers: golfers_to_invite.count, league_name: @league.name })
+    SendEventToDripJob.perform_later('League admin invited golfers during registration', user: current_user, options: { number_of_golfers: golfers_to_invite.count, league_name: @league.name })
 
     redirect_to setup_completed_play_registrations_path
   end

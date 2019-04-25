@@ -1,5 +1,5 @@
 class Play::ScorecardsController < Play::BaseController
-  layout "golfer"
+  layout 'golfer'
 
   before_action :fetch_scorecard, except: [:finalize_scorecard, :become_designated_scorer, :update_game_type_metadata]
 
@@ -8,12 +8,14 @@ class Play::ScorecardsController < Play::BaseController
   end
 
   def update
-    Updaters::ScorecardUpdating.update_scorecards_for_scores(params[:scorecard][:scores].to_unsafe_h, @scorecard, @scorecards_to_update, false)
+    Updaters::ScorecardUpdating.update_scorecards_for_scores(params[:scorecard][:scores]
+                               .to_unsafe_h, @scorecard, @scorecards_to_update, false)
 
     reload_scorecard = @scorecard
-    reload_scorecard = Scorecard.find(params[:original_scorecard_id]) unless params[:original_scorecard_id].blank?
+    reload_scorecard = Scorecard.find(params[:original_scorecard_id]) if params[:original_scorecard_id].present?
 
-    redirect_to play_scorecard_path(reload_scorecard), flash: { success: "The scorecard was successfully updated." }
+    redirect_to play_scorecard_path(reload_scorecard), flash:
+    { success: 'The scorecard was successfully updated.' }
   end
 
   def finalize_scorecard
@@ -21,7 +23,8 @@ class Play::ScorecardsController < Play::BaseController
     scorecard.is_confirmed = true
     scorecard.save
 
-    redirect_to play_scorecard_path(scorecard), flash: { success: "The scorecard was successfully finalized." }
+    redirect_to play_scorecard_path(scorecard), flash:
+    { success: 'The scorecard was successfully finalized.' }
   end
 
   def become_designated_scorer
@@ -38,7 +41,7 @@ class Play::ScorecardsController < Play::BaseController
       scorecard.save
     end
 
-    redirect_to play_scorecard_path(@scorecard), flash: { success: "The scorecard was successfully updated." }
+    redirect_to play_scorecard_path(@scorecard), flash: { success: 'The scorecard was successfully updated.' }
   end
 
   def update_game_type_metadata
@@ -46,7 +49,7 @@ class Play::ScorecardsController < Play::BaseController
 
     @scorecard.tournament_day.game_type.update_metadata(params[:metadata])
 
-    redirect_to play_scorecard_path(@scorecard), flash: { success: "The scorecard was successfully updated." }
+    redirect_to play_scorecard_path(@scorecard), flash: { success: 'The scorecard was successfully updated.' }
   end
 
   private
@@ -65,7 +68,6 @@ class Play::ScorecardsController < Play::BaseController
     @other_scorecards = scorecard_info[:other_scorecards]
     @scorecards_to_update = scorecard_info[:scorecards_to_update]
 
-    @scorecard_presenter = ScorecardPresenter.new({primary_scorecard: @scorecard, secondary_scorecards: @other_scorecards, current_user: self.current_user})
+    @scorecard_presenter = ScorecardPresenter.new({ primary_scorecard: @scorecard, secondary_scorecards: @other_scorecards, current_user: current_user })
   end
-
 end
