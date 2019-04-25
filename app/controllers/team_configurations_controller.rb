@@ -13,6 +13,8 @@ class TeamConfigurationsController < BaseController
 
 		# add the pairings to the tee groups
 		@tournament_day.league_season_team_tournament_day_matchups.each do |matchup|
+      next if matchup.teams.count.zero?
+
 			matchup.pairings_by_handicap.each do |pairing|
 				group = @tournament_day.tournament_group_with_open_slots(pairing.count)
 				raise "No groups available" if group.blank?
