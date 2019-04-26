@@ -13,7 +13,7 @@ module FetchingTools
           other_scorecards = rule.related_scorecards_for_user(scorecard.golf_outing.user) if other_scorecards.count == 0
 
           other_scorecards.each do |o|
-            if (o.id != -1) && !(scorecards_to_update.include? o)
+            if (o.id >= 0) && !(scorecards_to_update.include? o) # omit non-human scorecards
               scorecards_to_update << o
             end
           end
