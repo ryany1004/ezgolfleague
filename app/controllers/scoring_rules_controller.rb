@@ -68,6 +68,8 @@ class ScoringRulesController < BaseController
   end
 
   def set_primary
+    @tournament_day.scoring_rules.update_all(primary_rule: false)
+
 		@scoring_rule = @tournament_day.scoring_rules.find(params[:scoring_rule_id])
   	@scoring_rule.primary_rule = true
   	@scoring_rule.save
