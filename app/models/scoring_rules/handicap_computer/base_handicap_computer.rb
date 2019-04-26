@@ -8,6 +8,10 @@ module HandicapComputer
 			@scoring_rule.tournament_day
 		end
 
+    def displayable_handicap_allowance(user:)
+      handicap_allowance(user: user)
+    end
+
     def handicap_allowance(user:)
       golf_outing = self.tournament_day.golf_outing_for_player(user)
       return nil if golf_outing.blank? # did not play

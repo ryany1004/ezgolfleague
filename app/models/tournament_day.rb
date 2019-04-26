@@ -287,7 +287,7 @@ class TournamentDay < ApplicationRecord
   def handicap_allowance(user:)
     handicap_computer = self.scorecard_base_scoring_rule.handicap_computer
 
-    handicap_computer.handicap_allowance(user: user)
+    handicap_computer.displayable_handicap_allowance(user: user)
   end
 
   #date parsing
