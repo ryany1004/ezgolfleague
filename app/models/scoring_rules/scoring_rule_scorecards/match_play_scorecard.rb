@@ -31,9 +31,11 @@ module ScoringRuleScorecards
       user1_handicap_allowance = self.scoring_rule.handicap_computer.match_play_handicap_allowance(user: user1)
       user2_handicap_allowance = self.scoring_rule.handicap_computer.match_play_handicap_allowance(user: user2)
 
+      Rails.logger.debug { "MatchPlayScorecard Handicaps: 1: #{user1_handicap_allowance.pluck(:strokes)} 2: #{user2_handicap_allowance.pluck(:strokes)}" }
+
       self.scoring_rule.course_holes.each_with_index do |hole, i|
         score = DerivedScorecardScore.new
-        
+      
         running_score_holes = self.scoring_rule.course_holes.limit(i + 1)
         score.strokes = self.score_for_holes(user1, user1_handicap_allowance, user2, user2_handicap_allowance, hole, running_score_holes)
         
@@ -77,19 +79,27 @@ module ScoringRuleScorecards
         user2_hole_score = adjusted_strokes(user2_score.strokes, user2_handicap_allowance, hole) 
                 
         if user1_score.present? && user2_score.present?
-          if user1_hole_score > user2_hole_score
-            self.running_score = (self.running_score - 1).abs
-            self.opponent_running_score = (self.opponent_running_score + 1).abs
+          Rails.logger.debug { "#{self.user.complete_name} and #{self.opponent.complete_name}. Hole #{hole.hole_number}: User 1: #{user1_hole_score} User 2: #{user2_hole_score}" }
+
+          new_running_score = running_score
+          new_opponent_running_score = opponent_running_score
+
+          if user1_hole_score > user2_hole_score # user 1 lost this hole
+            new_running_score = running_score - 1
+            new_opponent_running_score = opponent_running_score + 1
+          elsif user1_hole_score < user2_hole_score # user 1 won this hole
+            new_running_score = running_score + 1
+            new_opponent_running_score = opponent_running_score - 1
 
             self.holes_won += 1
-          elsif user1_hole_score < user2_hole_score
-            self.running_score = (self.running_score + 1).abs
-            self.opponent_running_score = (self.opponent_running_score - 1).abs
           end
+
+          self.running_score = new_running_score >= 0 ? new_running_score : 0
+          self.opponent_running_score = new_opponent_running_score >= 0 ? new_opponent_running_score : 0
         end
       end
       
-      self.running_score 
+      self.running_score
     end
 
     def match_has_ended?
