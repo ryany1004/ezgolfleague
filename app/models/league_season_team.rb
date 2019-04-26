@@ -2,7 +2,7 @@ class LeagueSeasonTeam < ApplicationRecord
 	belongs_to :league_season
 	has_many :tournament_day_results, inverse_of: :league_season_team
 	has_many :league_season_team_memberships
-	has_many :users, ->{ order 'handicap_index' }, through: :league_season_team_memberships
+	has_many :users, ->{ order 'handicap_index, id DESC' }, through: :league_season_team_memberships
 	has_many :payout_results, inverse_of: :league_season_team
 	has_many :league_season_rankings, dependent: :destroy
 
