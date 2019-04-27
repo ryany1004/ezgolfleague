@@ -13,7 +13,7 @@ module ScoringRuleScorecards
     attr_accessor :unplayed_holes
     attr_accessor :holes_won
 
-    def name(_)
+    def name(_ = false)
       'Match Play'
     end
 
@@ -85,25 +85,25 @@ module ScoringRuleScorecards
         new_running_score = running_score
         new_opponent_running_score = opponent_running_score
 
-        if user1_hole_score > user2_hole_score # user 1 lost this hole
-          new_running_score = running_score - 1
-          new_opponent_running_score = opponent_running_score + 1
-        elsif user1_hole_score < user2_hole_score # user 1 won this hole
+        if user1_hole_score < user2_hole_score # user 1 won this hole
           new_running_score = running_score + 1
           new_opponent_running_score = opponent_running_score - 1
 
           self.holes_won += 1
+        elsif user1_hole_score > user2_hole_score # user 1 lost this hole
+          new_running_score = running_score - 1
+          new_opponent_running_score = opponent_running_score + 1
         end
 
-        self.running_score = new_running_score >= 0 ? new_running_score : 0
-        self.opponent_running_score = new_opponent_running_score >= 0 ? new_opponent_running_score : 0
+        self.running_score = new_running_score
+        self.opponent_running_score = new_opponent_running_score
       end
 
       running_score
     end
 
     def match_has_ended?
-      player_score_delta = (srunning_score - opponent_running_score).abs
+      player_score_delta = (running_score - opponent_running_score).abs
       player_score_delta > unplayed_holes || unplayed_holes.zero?
     end
 
