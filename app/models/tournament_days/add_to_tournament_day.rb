@@ -63,7 +63,7 @@ module AddToTournamentDay
 
   def enable_team_user(user:)
     matchup = league_season_team_matchup_for_player(user)
-    matchup.include_user(user)
+    matchup.include_user(user) if matchup.present?
   end
 
   def assign_course_tee_box_to_user(user:, flight:)
