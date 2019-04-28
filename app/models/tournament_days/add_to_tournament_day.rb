@@ -20,7 +20,9 @@ module AddToTournamentDay
 
     self.create_payment(user: user, paying_with_credit_card: paying_with_credit_card) if self == self.tournament.first_day
 
-    user.send_silent_notification #ask device to update
+    self.enable_team_user(user: user)
+
+    user.send_silent_notification # ask device to update
 
     self.touch
   end
@@ -59,6 +61,11 @@ module AddToTournamentDay
     end
   end
 
+  def enable_team_user(user:)
+    matchup = league_season_team_matchup_for_player(user)
+    matchup.include_user(user)
+  end
+
   def assign_course_tee_box_to_user(user:, flight:)
     golf_outing = self.golf_outing_for_player(user)
 
@@ -66,8 +73,7 @@ module AddToTournamentDay
       golf_outing.course_tee_box = flight.course_tee_box
       golf_outing.save
     else
-    	raise "Could not assign course tee box to user #{user&.id} #{flight&.id} #{golf_outing&.id}" #TODO: Remove once we learn more.
+    	raise "Could not assign course tee box to user #{user&.id} #{flight&.id} #{golf_outing&.id}" # TODO: Remove once we learn more.
     end
   end
-
 end

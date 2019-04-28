@@ -117,6 +117,10 @@ class LeagueSeasonTeamTournamentDayMatchup < ApplicationRecord
     team_a_users + team_b_users
   end
 
+  def unfiltered_users
+    team_a.users + team_b.users
+  end
+
   def toggle_user(user)
     if all_users.include?(user)
       exclude_user(user)

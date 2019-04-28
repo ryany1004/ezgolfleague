@@ -49,6 +49,15 @@ class TeamOutingsController < BaseController
   	redirect_to league_tournament_day_team_path(@league, @tournament, @tournament_day, league_season_team)
   end
 
+  def toggle_players
+    matchup = @tournament_day.league_season_team_matchup_for_team(league_season_team)
+    matchup.unfiltered_users.each do |player|
+      matchup.toggle_user(player)
+    end
+
+    redirect_to league_tournament_day_team_path(@league, @tournament, @tournament_day, league_season_team)
+  end
+
   private
 
   def league_season_team
