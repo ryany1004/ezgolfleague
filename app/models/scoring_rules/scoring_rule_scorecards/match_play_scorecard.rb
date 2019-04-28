@@ -31,7 +31,7 @@ module ScoringRuleScorecards
       user1_handicap_allowance = scoring_rule.handicap_computer.match_play_handicap_allowance(user: user1)
       user2_handicap_allowance = scoring_rule.handicap_computer.match_play_handicap_allowance(user: user2)
 
-      Rails.logger.debug { "MatchPlayScorecard Handicaps: 1: #{user1_handicap_allowance.pluck(:strokes)} 2: #{user2_handicap_allowance.pluck(:strokes)}" }
+      Rails.logger.debug { "MatchPlayScorecard Handicaps: #{user1.complete_name} (#{user1_handicap_allowance.pluck(:strokes).sum}) #{user1_handicap_allowance.pluck(:strokes)} / #{user2.complete_name} #{user2_handicap_allowance.pluck(:strokes).sum} #{user2_handicap_allowance.pluck(:strokes)}" }
 
       scoring_rule.course_holes.each_with_index do |hole, i|
         score = DerivedScorecardScore.new

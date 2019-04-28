@@ -34,9 +34,10 @@
           <% split.each do |score| -%>
             <td>
               <%= link_to_unless !p.user_can_edit_scorecard?(scorecard), "#{scorecard_score_helper(score, print_mode)}", "#", {"data-toggle" => "modal", "data-target" => "#Group#{score.course_hole.id}"} %>
-
-              <% if handicap_allowance_strokes_for_hole(handicap_allowance_for_scorecard(scorecard), score.course_hole) > 0 -%>
-                  </br><span class="label label-success">-<%= handicap_allowance_strokes_for_hole(handicap_allowance_for_scorecard(scorecard), score.course_hole) %></span>
+              
+              <% if handicap_allowance_strokes_for_hole(handicap_allowance_for_scorecard(scorecard), score.course_hole).positive? -%>
+                  </br>
+                  <span class="label label-success">-<%= handicap_allowance_strokes_for_hole(handicap_allowance_for_scorecard(scorecard), score.course_hole) %></span>
               <% end -%>
 
               <% unless score.associated_text.blank? -%>
