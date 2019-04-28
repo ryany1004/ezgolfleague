@@ -23,9 +23,9 @@ module HandicapComputer
         Rails.logger.debug { "MatchPlayHandicapComputer Baseline: #{baseline_handicap} from user #{user_course_handicap} and opponent #{opponent_course_handicap}" }
 
         if user_golf_outing.course_tee_box.tee_box_gender == 'Men'
-          sorted_course_holes_by_handicap = tournament_day.course.course_holes.reorder('mens_handicap')
+          sorted_course_holes_by_handicap = tournament_day.scorecard_base_scoring_rule.course_holes.reorder('mens_handicap')
         else
-          sorted_course_holes_by_handicap = tournament_day.course.course_holes.reorder('womens_handicap')
+          sorted_course_holes_by_handicap = tournament_day.scorecard_base_scoring_rule.course_holes.reorder('womens_handicap')
         end
 
         while baseline_handicap.positive? do
@@ -33,9 +33,7 @@ module HandicapComputer
             existing_hole = nil
 
             allowance.each do |a|
-              if hole == a[:course_hole]
-                existing_hole = a
-              end
+              existing_hole = a if hole == a[:course_hole]
             end
 
             if existing_hole.blank?
