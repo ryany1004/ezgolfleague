@@ -21,6 +21,10 @@ class MatchPlayScoringRule < StrokePlayScoringRule
 		2
 	end
 
+	def handicap_computer
+		HandicapComputer::MatchPlayHandicapComputer.new(self)
+	end
+
 	def scoring_computer
 		ScoringComputer::MatchPlayScoringComputer.new(self)
 	end

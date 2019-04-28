@@ -28,8 +28,8 @@ module ScoringRuleScorecards
       self.opponent_running_score = 0
       self.holes_won = 0
 
-      user1_handicap_allowance = scoring_rule.handicap_computer.handicap_allowance(user: user1)
-      user2_handicap_allowance = scoring_rule.handicap_computer.handicap_allowance(user: user2)
+      user1_handicap_allowance = scoring_rule.handicap_computer.match_play_handicap_allowance(user: user1)
+      user2_handicap_allowance = scoring_rule.handicap_computer.match_play_handicap_allowance(user: user2)
 
       Rails.logger.debug { "MatchPlayScorecard Handicaps: 1: #{user1_handicap_allowance.pluck(:strokes)} 2: #{user2_handicap_allowance.pluck(:strokes)}" }
 
