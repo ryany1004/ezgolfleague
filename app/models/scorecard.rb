@@ -138,7 +138,7 @@ class Scorecard < ApplicationRecord
     return true if self.user == user
     return false if user.blank?
 
-    return true if eague.league_admins.include?(user)
+    return true if league.league_admins.include?(user)
 
     false
   end
