@@ -31,7 +31,9 @@
     <tbody>
       <% p.all_scorecards.each do |scorecard| -%>
         <tr>
-          <td><%= scorecard.flight_number %></td>
+          <td>
+            <%= scorecard.flight_number %> <%= scorecard.matchup_position_indicator %>
+          </td>
           <% if scorecard.should_highlight? -%>
             <td><em><%= scorecard.name(print_mode) %></em></td>
           <% else -%>

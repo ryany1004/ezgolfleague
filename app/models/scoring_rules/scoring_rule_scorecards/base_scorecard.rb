@@ -29,8 +29,6 @@ module ScoringRuleScorecards
       return nil
     end
 
-    ##Logic
-
     def should_highlight?
       return true
     end
@@ -87,6 +85,10 @@ module ScoringRuleScorecards
       return nil
     end
 
+    def matchup_position_indicator
+      nil
+    end
+
     def adjusted_strokes(raw_strokes, handicap_allowance, course_hole)
       hole_score = raw_strokes
 
@@ -100,6 +102,5 @@ module ScoringRuleScorecards
 
       return hole_score
     end
-
   end
 end
