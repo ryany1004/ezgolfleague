@@ -11,7 +11,7 @@ module Scorecards
 
           next if card.golf_outing.blank?
 
-          user_handicap_info = handicap_allowance(user: card.golf_outing.user)
+          user_handicap_info = handicap_allowance
           rows << handicap_row(user_handicap_info)
         end
 
