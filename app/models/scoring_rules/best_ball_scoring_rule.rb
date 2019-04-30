@@ -21,7 +21,7 @@ class BestBallScoringRule < StrokePlayScoringRule
     scorecard = ScoringRuleScorecards::BestBallScorecard.new
     scorecard.user = user
     scorecard.scoring_rule = self
-    scorecard.users_to_compare = daily_team.users 
+    scorecard.users_to_compare = daily_team&.users
     scorecard.should_use_handicap = use_handicaps
     scorecard.calculate_scores
 
