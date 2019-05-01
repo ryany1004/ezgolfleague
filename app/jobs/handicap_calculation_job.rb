@@ -1,9 +1,9 @@
 class HandicapCalculationJob < ApplicationJob
   def perform(league)
     league.league_memberships.each do |membership|
-      scorecards = self.scorecards_for_player(membership.user, league)
+      scorecards = scorecards_for_player(membership.user, league)
 
-      calculated_handicap_index = self.handicap_for_player_with_scorecards(scorecards)
+      calculated_handicap_index = handicap_for_player_with_scorecards(scorecards)
 
       Rails.logger.info { "Calculated Handicap Index of #{calculated_handicap_index} for user #{membership.user.complete_name} in #{league.name}" }
 
@@ -11,20 +11,20 @@ class HandicapCalculationJob < ApplicationJob
       user.handicap_index = calculated_handicap_index
       user.save
 
-      self.update_future_tournaments(league, user)
+      update_future_tournaments(league, user)
     end
   end
 
   def scorecards_for_player(player, league)
     scorecards = []
 
-    player.golf_outings.order(created_at: :desc).limit(100).each do |outing| #the 100 is arbitrary, to make sure we fetch enough records to have 10 valid scorecards
+    player.golf_outings.order(created_at: :desc).limit(100).each do |outing| # the 100 is arbitrary, to make sure we fetch enough records to have 10 valid scorecards
       if !outing.scorecard.has_empty_scores? && outing.in_league?(league)
         scorecards << outing.scorecard
       end
     end
 
-    scorecards = scorecards.sort { |x,y| x.gross_score <=> y.gross_score }
+    scorecards = scorecards.sort_by(&:gross_score)
     scorecards = scorecards[0, 10]
 
     scorecards
@@ -43,7 +43,12 @@ class HandicapCalculationJob < ApplicationJob
         next
       end
 
-      differential = ((gross_score - course_tee_box.rating) * 113) / course_tee_box.slope
+      rating = course_tee_box.rating
+      rating /= 2 if course_tee_box.course.course_holes.count == scorecard.scores.count * 2
+
+      slope = course_tee_box.slope
+
+      differential = ((gross_score - rating) * 113) / slope
 
       Rails.logger.debug "Gross Score: #{gross_score}. Rating: #{course_tee_box.rating}. Slope: #{course_tee_box.slope}. Differential: #{differential}"
 
@@ -52,7 +57,7 @@ class HandicapCalculationJob < ApplicationJob
 
     Rails.logger.debug "Handicap Sum: #{handicap_sum}"
 
-    if handicap_sum > 0
+    if handicap_sum.positive?
       averaged_handicap = ((handicap_sum / scorecards.count) * 0.96).round(1)
     else
       averaged_handicap = 0
@@ -67,11 +72,11 @@ class HandicapCalculationJob < ApplicationJob
       t.tournament_days.each do |td|
         scorecard = td.primary_scorecard_for_user(user)
 
-        unless scorecard.blank?
-          Rails.logger.info "Updating Scorecard #{scorecard.id} Course Handicap for #{user.complete_name}"
+        next if scorecard.blank?
 
-          scorecard.set_course_handicap(true)
-        end
+        Rails.logger.info "Updating Scorecard #{scorecard.id} Course Handicap for #{user.complete_name}"
+
+        scorecard.set_course_handicap(true)
       end
     end
   end
