@@ -77,12 +77,12 @@ module ScoringRuleScorecards
           self.users_to_compare.each do |user|
             scorecard = self.scoring_rule.tournament_day.primary_scorecard_for_user(user)
 
+            raw_score = 0
+
             unless scorecard.blank? || scorecard.scores.blank?
-              raw_score = scorecard.scores.where(course_hole: hole).first.strokes
+              raw_score = scorecard.scores.find_by(course_hole: hole).strokes
             else
               Rails.logger.debug { "Raw Score is 0 - No Scorecard or Scores: \(scorecard.id) \(scorecard.scores&.where(course_hole: hole))" }
-
-              raw_score = 0
             end
 
             if self.should_use_handicap == true
