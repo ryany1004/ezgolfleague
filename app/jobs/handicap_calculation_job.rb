@@ -25,7 +25,7 @@ class HandicapCalculationJob < ApplicationJob
     end
 
     scorecards = scorecards.sort_by(&:gross_score)
-    scorecards = scorecards[0, 10]
+    scorecards = scorecards[0, league.number_of_rounds_to_handicap]
 
     scorecards
   end
