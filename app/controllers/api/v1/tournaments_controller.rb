@@ -36,9 +36,9 @@ class Api::V1::TournamentsController < Api::V1::ApiBaseController
       tournament.tournament_days.each do |d|
         day_flights = d.flights_with_rankings
         combined_flights = FetchingTools::LeaderboardFetching.flights_with_rankings_could_be_combined(d)
-        tournament_presenter = TournamentPresenter.new({tournament: tournament, tournament_day: d, user: current_user, day_flights: day_flights, combined_flights: combined_flights})
+        tournament_presenter = TournamentPresenter.new({ tournament: tournament, tournament_day: d, user: current_user, day_flights: day_flights, combined_flights: combined_flights })
 
-        #payouts
+        # payouts
         payouts = []
         tournament_presenter.payouts.each_with_index do |f, x|
           f[:payouts].each do |p|
@@ -46,7 +46,7 @@ class Api::V1::TournamentsController < Api::V1::ApiBaseController
           end
         end
 
-        #rankings
+        # rankings
         rankings = []
         tournament_presenter.flights_with_rankings.each_with_index do |flight, x|
           flight.tournament_day_results.each_with_index do |result, i|
@@ -54,7 +54,7 @@ class Api::V1::TournamentsController < Api::V1::ApiBaseController
           end
         end        
 
-        #optional_scoring_rules_with_dues
+        # optional_scoring_rules_with_dues
         optional_scoring_rules_with_dues = []
         tournament_presenter.optional_scoring_rules_with_dues.each do |rule|
           optional_scoring_rules_with_dues << { name: rule[:name], winners: rule[:winners] }

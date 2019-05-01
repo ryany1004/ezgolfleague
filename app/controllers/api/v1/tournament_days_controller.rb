@@ -52,7 +52,7 @@ class Api::V1::TournamentDaysController < Api::V1::ApiBaseController
 
     TournamentMailer.tournament_player_cancelled(@current_user, @tournament).deliver_later
 
-    Rails.cache.delete(@tournament_day.cache_key("groups"))
+    Rails.cache.delete(@tournament_day.cache_key('groups'))
 
     @eager_groups = @tournament_day.eager_groups
   end
@@ -99,5 +99,4 @@ class Api::V1::TournamentDaysController < Api::V1::ApiBaseController
 
     leaderboard = { day_flights: day_flights_with_rankings, combined_flights: combined_flights_with_rankings }
   end
-
 end
