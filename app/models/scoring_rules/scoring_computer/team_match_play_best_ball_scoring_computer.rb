@@ -17,6 +17,8 @@ module ScoringComputer
 				team_a_best_ball_scorecard = self.best_ball_scorecard_for_team(matchup.team_a)
 				team_b_best_ball_scorecard = self.best_ball_scorecard_for_team(matchup.team_b)
 
+        Rails.logger.info { "TeamMatchPlayBestBallScoringComputer comparing #{matchup.team_a.name} and #{matchup.team_b.name}" }
+
 				match_play_scorecard = ScoringRuleScorecards::TeamMatchPlayBestBallScorecard.new
 		    match_play_scorecard.team_a_scorecard = team_a_best_ball_scorecard
 		    match_play_scorecard.team_b_scorecard = team_b_best_ball_scorecard
@@ -25,14 +27,17 @@ module ScoringComputer
 
 				if match_play_scorecard.scorecard_result == ::ScoringRuleScorecards::MatchPlayScorecardResult::WON
 					winners << { team: matchup.team_a, details: match_play_scorecard.extra_scoring_column_data }
-
 					matchup.winning_team = matchup.team_a
 					matchup.save
 				elsif match_play_scorecard.scorecard_result == ::ScoringRuleScorecards::MatchPlayScorecardResult::LOST
-					# do nothing
+          winners << { team: matchup.team_b, details: match_play_scorecard.extra_scoring_column_data }
+          matchup.winning_team = matchup.team_b
+          matchup.save
 				elsif match_play_scorecard.scorecard_result == ::ScoringRuleScorecards::MatchPlayScorecardResult::TIED
 					ties << { team: matchup.team_a, details: match_play_scorecard.extra_scoring_column_data }
 					ties << { team: matchup.team_b, details: match_play_scorecard.extra_scoring_column_data }
+        else
+          Rails.logger.info { "TeamMatchPlayBestBallScoringComputer did not produce a final result for matchup #{matchup.id}. #{match_play_scorecard.extra_scoring_column_data}" }
 				end
 			end
 		end
@@ -49,13 +54,13 @@ module ScoringComputer
 		end
 
 		def assign_payouts
-			Rails.logger.debug { "assign_payouts #{self.class}" }
+			Rails.logger.info { "assign_payouts #{self.class}" }
 
 			@scoring_rule.payout_results.destroy_all
 
 			payout_count = @scoring_rule.payouts.count
-			Rails.logger.debug { "Payouts: #{payout_count}" }
-      return if payout_count == 0
+			Rails.logger.info { "Payouts: #{payout_count}" }
+      return if payout_count.zero?
 
       # assign payouts
 			primary_payout = @scoring_rule.payouts.first
