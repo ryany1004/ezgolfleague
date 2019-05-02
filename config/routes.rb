@@ -120,6 +120,7 @@ Rails.application.routes.draw do
   #this is for admin
   resources :leagues do
     patch 'update_from_ghin'
+    patch 'update_calculated_handicaps'
     patch 'update_league_standings'
 
     resources :subscription_credits, except: :show do

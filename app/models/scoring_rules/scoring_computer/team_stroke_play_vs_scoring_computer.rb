@@ -28,6 +28,7 @@ module ScoringComputer
           opponent_result = @scoring_rule.tournament_day_results.find_by(user: opponent)
           next if user_result.blank? && opponent_result.blank?
 
+          # handle if one or the other did not play
           if user_result.present? && opponent_result.blank?
             user_wins(user, opponent, winners, losers)
 
@@ -38,7 +39,7 @@ module ScoringComputer
             next
           end
 
-          if opponent_result.blank? || user_result.par_related_net_score < opponent_result.par_related_net_score
+          if user_result.par_related_net_score < opponent_result.par_related_net_score
             user_wins(user, opponent, winners, losers)
           elsif user_result.par_related_net_score > opponent_result.par_related_net_score
             opponent_wins(user, opponent, winners, losers)

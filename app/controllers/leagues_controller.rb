@@ -59,6 +59,14 @@ class LeaguesController < BaseController
     redirect_to leagues_path, flash: { success: "League members will be updated by GHIN." }
   end
 
+  def update_calculated_handicaps
+    @league = League.find(params[:league_id])
+
+    HandicapCalculationJob.perform_later(@league)
+
+    redirect_to leagues_path, flash: { success: "League members will have handicaps updated from past rounds and changes applied to future tournaments." }
+  end
+
   def update_league_standings
     @league = League.find(params[:league_id])
 
