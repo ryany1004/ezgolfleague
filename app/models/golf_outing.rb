@@ -3,7 +3,7 @@ class GolfOuting < ApplicationRecord
 
   acts_as_paranoid
 
-  belongs_to :tournament_group, inverse_of: :golf_outings, touch: true
+  belongs_to :tournament_group, inverse_of: :golf_outings, optional: true, touch: true
   belongs_to :user, inverse_of: :golf_outings
   belongs_to :course_tee_box, optional: true
   has_one :scorecard, inverse_of: :golf_outing, dependent: :destroy

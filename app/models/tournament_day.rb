@@ -133,6 +133,10 @@ class TournamentDay < ApplicationRecord
     @flights_with_rankings ||= self.flights.includes(:users, :tournament_day_results, :payout_results)
   end
 
+  def golf_outings
+    @golf_outings ||= self.tournament_groups.map(&:golf_outings).flatten
+  end
+
   #TODO: MOVE
   def scorecard_display_partial
     if self.scorecard_base_scoring_rule.course_holes.count <= 9
