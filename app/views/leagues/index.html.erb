@@ -44,7 +44,7 @@
               <li><%= link_to "Update Handicaps from GHIN", league_update_from_ghin_path(league), method: :patch %></li>
 
               <% if league.calculate_handicaps_from_past_rounds %>
-                <li><%= link_to "Re-Calculate Handicaps from Past Rounds", update_calculated_handicaps_path(league), method: :patch %></li>
+                <li><%= link_to "Re-Calculate Handicaps from Past Rounds", league_update_calculated_handicaps_path(league), method: :patch %></li>
               <% end %>
 
               <li><%= link_to "Re-Calculate League Standings", league_update_league_standings_path(league), method: :patch %></li>
