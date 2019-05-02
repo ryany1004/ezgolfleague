@@ -304,5 +304,4 @@ class TournamentPresenter
       cache_key = "tournament_days/#{prefix}-#{tournament_day.id}-#{max_updated_at}"
     end
   end
-
 end

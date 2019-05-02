@@ -275,6 +275,7 @@ class TournamentDay < ApplicationRecord
 
       rule.score
       rule.rank
+      rule.finalize
     end
   end
   

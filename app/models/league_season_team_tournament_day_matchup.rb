@@ -97,12 +97,28 @@ class LeagueSeasonTeamTournamentDayMatchup < ApplicationRecord
     split_ids.presence || []
   end
 
-  def team_a_users
+  def filtered_team_a_users
     team_a.present? ? build_excluded_user_filter(team_a.users) : []
   end
 
-  def team_b_users
+  def team_a_users
+    if team_a_final_sort.present?
+      team_a.users.where(id: team_a_final_sort.split(','))
+    else
+      filtered_team_a_users
+    end
+  end
+
+  def filtered_team_b_users
     team_b.present? ? build_excluded_user_filter(team_b.users) : []
+  end
+
+  def team_b_users
+    if team_b_final_sort.present?
+      team_b.users.where(id: team_b_final_sort.split(','))
+    else
+      filtered_team_b_users
+    end
   end
 
   def users_for_team(team)
@@ -146,6 +162,12 @@ class LeagueSeasonTeamTournamentDayMatchup < ApplicationRecord
     user_ids.delete(user.id.to_s)
 
     self.excluded_user_ids = user_ids.join(',')
+    save
+  end
+
+  def save_teams_sort
+    self.team_a_final_sort = team_a_users.pluck(:id).join(',')
+    self.team_b_final_sort = team_b_users.pluck(:id).join(',')
     save
   end
 end

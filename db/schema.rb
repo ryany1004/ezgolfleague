@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_05_01_233747) do
+ActiveRecord::Schema.define(version: 2019_05_02_221121) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -226,6 +226,8 @@ ActiveRecord::Schema.define(version: 2019_05_01_233747) do
     t.bigint "tournament_day_id"
     t.bigint "league_team_winner_id"
     t.string "excluded_user_ids"
+    t.string "team_a_final_sort"
+    t.string "team_b_final_sort"
     t.index ["league_season_team_a_id"], name: "league_season_team_a_id_index"
     t.index ["league_season_team_a_id"], name: "league_season_team_b_id_index"
     t.index ["league_team_winner_id"], name: "league_team_winner_id_index"

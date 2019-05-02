@@ -193,6 +193,9 @@ class ScoringRule < ApplicationRecord
 		self.scoring_computer.assign_payouts
 	end
 
+  def finalize
+  end
+
 	def result_for_user(user:)
 		self.tournament_day_results.where(user: user).first
 	end

@@ -36,4 +36,9 @@ class TeamMatchPlayBestBallScoringRule < MatchPlayScoringRule
 
   	return nil
   end
+
+  def finalize
+    tournament_day.league_season_team_tournament_day_matchups.each(&:save_teams_sort)
+  end
+
 end
