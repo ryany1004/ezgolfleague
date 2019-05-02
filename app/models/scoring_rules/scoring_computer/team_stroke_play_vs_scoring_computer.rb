@@ -28,15 +28,22 @@ module ScoringComputer
           opponent_result = @scoring_rule.tournament_day_results.find_by(user: opponent)
           next if user_result.blank? && opponent_result.blank?
 
+          if user_result.present? && opponent_result.blank?
+            user_wins(user, opponent, winners, losers)
+
+            next
+          elsif opponent_result.present? && user_result.blank?
+            opponent_wins(user, opponent, winners, losers)
+
+            next
+          end
+
           if opponent_result.blank? || user_result.par_related_net_score < opponent_result.par_related_net_score
-            winners << user
-            losers << opponent
+            user_wins(user, opponent, winners, losers)
           elsif user_result.par_related_net_score > opponent_result.par_related_net_score
-            winners << opponent
-            losers << user
+            opponent_wins(user, opponent, winners, losers)
           else
-            ties << user
-            ties << opponent
+            tie(user, opponent, ties)
           end
         end
       end
@@ -53,6 +60,21 @@ module ScoringComputer
       ties.each do |u|
         PayoutResult.create(scoring_rule: @scoring_rule, user: u, points: primary_payout.points / 2)
       end
+    end
+
+    def user_wins(user, opponent, winners, losers)
+      winners << user
+      losers << opponent
+    end
+
+    def opponent_wins(user, opponent, winners, losers)
+      winners << opponent
+      losers << user
+    end
+
+    def tie(user, opponent, ties)
+      ties << user
+      ties << opponent
     end
   end
 end

@@ -4,5 +4,5 @@ json.cache! ['v1', payout] do
   json.id									payout[:id]
   json.amount							payout[:amount]
   json.points							payout[:points]
-  json.matchup_position   ranking[:matchup_position]
+  json.matchup_position   payout[:matchup_position]
 end
