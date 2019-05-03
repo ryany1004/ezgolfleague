@@ -241,6 +241,16 @@ class TournamentDay < ApplicationRecord
     matchup.save
   end
 
+  def strip_to_front_9
+    self.tournament_groups.each do |g|
+      g.golf_outings.each do |o|
+        o.scorecard.scores.each_with_index do |s, i|
+          s.destroy if i > 8
+        end
+      end
+    end
+  end
+
   def scorecard_base_scoring_rule
     @scorecard_base_scoring_rule ||= self.scoring_rules.where(primary_rule: true).first
   end
