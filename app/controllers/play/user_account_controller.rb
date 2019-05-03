@@ -72,16 +72,16 @@ class Play::UserAccountController < Play::BaseController
 
         SubscriptionCredit.create(league_season: @league.active_season, amount: payment_amount, golfer_count: updated_golfers, transaction_id: charge.id)
 
-        redirect_to current_league_subscription_credits_path(@league, details_amount: payment_amount, details_golfers: updated_golfers, details_id: charge.id), flash:
+        redirect_to edit_play_user_account_path, flash:
         { success: 'Your payment was recorded. Thanks!' }
       else
-        redirect_to current_league_subscription_credits_path(@league), flash:
+        redirect_to edit_play_user_account_path, flash:
         { error: 'There was an error processing your payment.' }
       end
     else
       Rails.logger.info { "Active Delta #{active_delta}. Active After Update: #{active_after_update}" }
 
-      redirect_to current_league_subscription_credits_path(@league), flash:
+      redirect_to edit_play_user_account_path, flash:
       { success: 'The memberships were successfully updated. Your account was not charged.' }
     end
   end
@@ -90,15 +90,15 @@ class Play::UserAccountController < Play::BaseController
     token = params[:stripeToken]
 
     if token.blank?
-      redirect_to current_league_subscription_credits_path(@league), flash:
+      redirect_to edit_play_user_account_path, flash:
       { error: 'There was a problem updating your credit card. Please check your details and try again.' }
     else
       updated_successfully = Stripe::CardTerminal.create_or_update_stripe_customer(@league, user: current_user, token: token)
 
       if updated_successfully
-        redirect_to current_league_subscription_credits_path(@league)
+        redirect_to edit_play_user_account_path
       else
-        redirect_to current_league_subscription_credits_path(@league), flash:
+        redirect_to edit_play_user_account_path, flash:
         { error: 'We were unable to update your details with the credit system. Please check your details and try again.' }
       end
     end
@@ -110,7 +110,7 @@ class Play::UserAccountController < Play::BaseController
     payment_amount = Stripe::CardTerminal.payment_amount(number_of_golfers, league: @league)
 
     if number_of_golfers.zero?
-      redirect_to current_league_subscription_credits_path(@league), flash:
+      redirect_to edit_play_user_account_path, flash:
       { error: 'We were unable to find your customer information. Please contact customer support.' }
     else
       charge = charge_customer(@league, payment_amount, "Charge for tournament credits for #{current_user.email} for league #{@league.name}.")
@@ -118,10 +118,10 @@ class Play::UserAccountController < Play::BaseController
       if charge.present?
         SubscriptionCredit.create(league_season: @league.active_season, amount: payment_amount, golfer_count: number_of_golfers, transaction_id: charge.id)
 
-        redirect_to current_league_subscription_credits_path(@league, details_amount: payment_amount, details_golfers: number_of_golfers, details_id: charge.id), flash:
+        redirect_to edit_play_user_account_path, flash:
         { success: 'Your payment was recorded. Thanks!' }
       else
-        redirect_to current_league_subscription_credits_path(@league), flash:
+        redirect_to edit_play_user_account_path, flash:
         { error: 'There was an error processing your payment. Please verify you have a valid credit card on file. You can change your card below.' }
       end
     end

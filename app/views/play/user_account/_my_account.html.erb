@@ -14,10 +14,15 @@
 			<h4>Pay Per Golfer</h4>
 			<p><%= @active_subscription.golfer_count %> active golfers in your league</p>
 		<% else %>
-			<h4>Free Trial</h4>
-			<% if current_user.selected_league.free_tournaments_remaining > 0 %>
-				<p>You have <%= pluralize(current_user.selected_league.free_tournaments_remaining, 'free tournament') %> left</p>
-			<% end %>
+      <div>
+        <h4>Free Trial</h4>
+        <% if current_user.selected_league.free_tournaments_remaining > 0 %>
+          <p>You have <%= pluralize(current_user.selected_league.free_tournaments_remaining, 'free tournament') %> left</p>
+        <% end %>
+      </div>
+      <div style="position:absolute; right:0;">
+        <a href="#" class="btn btn-primary" role="button" data-toggle="modal" data-target="#myModal">Upgrade</a>
+      </div>
 		<% end %>
 	</div>
 
@@ -28,7 +33,9 @@
 	</div>
 
 	<div class="form-flex-group credit-card pt-2 pb-4">
-		<% unless @league.cc_last_four.blank? %>
+		<% if @league.cc_last_four.blank? %>
+      <span>None</span>
+    <% else %>
 			<span class="credit-card_contact-name"><%= @league.contact_name %></span>
 			<span class="credit-card_cc-last-four">xxxx-xxxx-xxxx-<%= @league.cc_last_four %></span>
 		<% end %>
@@ -37,28 +44,36 @@
 
 	<div class="form-flex-group flex-wrap">
 		<h6>Past Payments</h6>
-		<% @past_subscriptions.each do |p| %>
-			<div class="past-subscription">
-				<span class="past-subscription_date"><%= p.created_at.to_s(:short) %></span>
-				<span class="past-subscription_golfer-count"><%= p.golfer_count %> Active Golfers</span>
-				<span class="past-subscription_amount"><%= number_to_currency(p.amount) %></span>
-			</div>
-		<% end %>
+    <% if @past_subscriptions.blank? %>
+      <div class="past-subscription">
+        <span>None</span>
+      </div>
+    <% else %>
+      <% @past_subscriptions.each do |p| %>
+        <div class="past-subscription">
+          <span class="past-subscription_date"><%= p.created_at.to_s(:short) %></span>
+          <span class="past-subscription_golfer-count"><%= p.golfer_count %> Active Golfers</span>
+          <span class="past-subscription_amount"><%= number_to_currency(p.amount) %></span>
+        </div>
+      <% end %>
+    <% end %>
 	</div>
 </div>
 
 <!-- Active Golfers Modal -->
 <%= simple_form_for :update_active_league_subscription_credits, url: update_active_league_subscription_credits_path(@league), method: :put, :html => {id: "active-form"} do |f| %>
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-  <div class="modal-dialog" role="document">
+  <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="myModalLabel">Update Active Golfers</h4>
+      <div class="modal-header" style="flex-wrap:wrap;">
+        <h4 class="modal-title pl-5 pt-1 pb-1" id="myModalLabel">Upgrade Your Account</h4>
+        <p class="pl-5 pt-1 pb-1">
+          <strong>Just $10 per golfer per season.</strong><br>
+          Includes unlimited use of EZGolfLeague and iOS/Android apps.
+        </p>
+        <button type="button" class="close" style="position:absolute;right:15px;" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
       </div>
       <div class="modal-body">
-        <p>You currently have <%= @league.league_memberships.active.count %> active golfers.</p>
-        <p>Your most recent subscription plan includes <%= @golfer_count %> golfers.</p>
         <table class="table table-striped">
           <thead>
             <tr>
@@ -75,6 +90,8 @@
             <% end %>
           </tbody>
         </table>
+        <p>You currently have <%= @league.league_memberships.active.count %> active golfers.</p>
+        <p>Your most recent subscription plan includes <%= @golfer_count %> golfers.</p>
       </div>
       <div class="modal-footer">
         <p id="activation_text">Activating <span id="active_golfer_number">&nbsp;</span> golfer(s) will result in a charge of <mark id="golfer_change_cost">&nbsp;</mark>.</p>
@@ -200,6 +217,33 @@
     }
   };
 </script>
+
+<% unless params[:details_amount].blank? %>
+<script>
+  ezglTrackAnalyticsEvent("Completed a subscription purchase", { league_name: "<%= @league.name %>", value: <%= params[:details_amount].to_i * 1000 %> });
+
+  ga('ec:addProduct', {               // Provide product details in an productFieldObject.
+  'id': 'EZGL001',                   // Product ID (string).
+  'name': 'Tournament Credits', // Product name (string).
+  'category': 'Subscriptions',            // Product category (string).
+  'quantity': <%= params[:details_golfers] %>                     // Product quantity (number).
+  });
+
+  ga('ec:setAction', 'purchase', {          // Transaction details are provided in an actionFieldObject.
+  'id': '<%= params[:details_id] %>',                         // (Required) Transaction id (string).
+  'revenue': '<%= params[:details_amount] %>',                     // Revenue (currency).
+  'tax': '0.0',                          // Tax (currency).
+  'shipping': '0.0'                     // Shipping (currency).
+  });
+
+  ga('send', 'pageview');
+
+  fbq('track', 'Purchase', {
+  value: <%= params[:details_amount] %>,
+  currency: 'USD'
+  });
+</script>
+<% end %>
 
 <script>
   $("#active_golfers").keyup(function() {
