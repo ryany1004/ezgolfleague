@@ -32,7 +32,7 @@ module ScoringComputer
         next if opponent.blank?
 
         if !eligible_users.include?(opponent) # opponent was disqualified, user wins
-          winners << { user: user, detail: user_match_play_scorecard.extra_scoring_column_data }
+          winners << { user: user, detail: 'W' }
         else
           user_match_play_scorecard = @scoring_rule.match_play_scorecard_for_user(user)
           if user_match_play_scorecard.scorecard_result == ::ScoringRuleScorecards::MatchPlayScorecardResult::WON #in this case, we are good
