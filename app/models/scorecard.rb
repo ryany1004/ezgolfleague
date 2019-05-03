@@ -35,9 +35,7 @@ class Scorecard < ApplicationRecord
   def clear_primary_scorecard_cache
     return if golf_outing.user.blank?
 
-    did_remove = tournament_day.delete_cached_primary_scorecard(user: golf_outing.user)
-
-    Rails.logger.debug { "Removed Cache Key: #{did_remove}" }
+    tournament_day&.delete_cached_primary_scorecard(user: golf_outing.user)
   end
 
   def set_course_handicap(force_recalculation = false)

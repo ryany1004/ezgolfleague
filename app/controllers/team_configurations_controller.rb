@@ -20,7 +20,6 @@ class TeamConfigurationsController < BaseController
 
         pairing.each do |user|
           existing_outing = existing_outing_for_user(user)
-
           if existing_outing.present?
             existing_outing.update(tournament_group: group)
           else
@@ -30,12 +29,17 @@ class TeamConfigurationsController < BaseController
       end
     end
 
+    # clean up any still needed
+    @existing_outings.each do |o|
+      o.destroy if o.tournament_group.blank?
+    end
+
     redirect_to league_tournament_day_players_path(@league, @tournament, @tournament_day)
   end
 
   def existing_outing_for_user(user)
-    @existing_outings.select { |outing| outing.user == user }
-    @existing_outings.count.positive? ? @existing_outings.first : nil
+    filtered_outings = @existing_outings.select { |outing| outing.user == user }
+    filtered_outings.count.positive? ? filtered_outings.first : nil
   end
 
   def fetch_tournament
