@@ -1,0 +1,39 @@
+<div class="registration-form-container">
+	<div class="panel-heading">
+		<h3 class="panel-title pb-4">Settings</h3>
+	</div>
+
+	<%= simple_form_for @user_account, url: play_user_account_path(@user_account), multipart: true, :defaults => { :input_html => { :class => "onboarding__input", :label => false }} do |f| %>
+		<% if notification = f.error_notification %>
+			<div class="alert alert-error fade in">
+				<a class="close" data-dismiss="alert" href="#">&times;</a>
+				<%= notification %>
+			</div>
+		<% end %>
+		<div class="form-flex-group">
+			<div class="form-subheader">
+				<h6>NOTIFICATIONS</h6>
+			</div>
+		</div>
+		<div class="form-flex-group pt-4">
+			<%= f.input :wants_email_notifications, label: 'Send Notifications via Email', as: :boolean %>
+		</div>
+		<div class="form-flex-group">
+			<%= f.input :wants_push_notifications, label: 'Send Notifications via Mobile App', as: :boolean %>
+		</div>
+		<div class="form-flex-group pt-4 pb-3">
+			<div class="form-subheader">
+				<h6>TIME ZONE</h6>
+			</div>
+		</div>
+		<div class="form-flex-group">
+			<%= f.input :time_zone, label: 'Time Zone', required: true, collection: ActiveSupport::TimeZone.us_zones, value_method: :name %>
+		</div>
+
+		<div class="form-actions form-flex-group"> 
+			<div class="form-flex-right">
+				<%= f.button :submit, "Save", class: 'btn__ezgl-secondary' %>
+			</div>
+		</div>
+	<% end %>
+</div>

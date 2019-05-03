@@ -1,0 +1,70 @@
+<div class="registration-form-container">
+	<div class="panel-heading">
+		<h3 class="panel-title pb-4">Edit Profile</h3>
+	</div>
+
+	<%= simple_form_for @user_account, url: play_user_account_path(@user_account), multipart: true, :defaults => { :input_html => { :class => "onboarding__input", :label => false }} do |f| %>
+		<% if notification = f.error_notification %>
+			<div class="alert alert-error fade in">
+				<a class="close" data-dismiss="alert" href="#">&times;</a>
+				<%= notification %>
+			</div>
+		<% end %>
+
+		<div class="registration-full-name form-flex-group">
+			<div class="form-side-label">
+				<p>Your Name</p>
+			</div>
+
+			<div class="form-flex-group">
+				<%= f.input :first_name, placeholder: 'Enter your first name...', autofocus: true %>
+
+				<%= f.input :last_name, placeholder: 'Enter your last name...' %>
+			</div>
+		</div>
+
+		<div class="form-flex-group">
+			<div class="form-side-label">
+				<p>Email</p>
+			</div>
+
+			<%= f.input :email, placeholder: 'Enter your email address...' %>
+		</div>
+
+		<div class="form-flex-group">
+			<div class="form-side-label">
+				<p>Photo</p>
+			</div>
+
+			<div class="upload-photo-container">
+				<div class="onboarding__input upload-photo" onclick="document.getElementById('user_avatar').click()">Upload Photo +</div>
+				<%= f.input :avatar %>
+				<div id="upload-photo-img">
+					<img id="upload-photo-img-default" src="http://placehold.it/40" >
+				</div>
+			</div>
+		</div>
+
+		<div class="form-flex-group">
+			<div class="form-side-label">
+				<p>GHIN Number</p>
+			</div>
+
+			<div class="form-flex-group">
+				<%= f.input :ghin_number, placeholder: '' %>
+
+				<div class="form-side-label handicap_index-label pl-4 ">
+					<p>18-Hole Handicap</p>
+				</div>
+
+				<%= f.input :handicap_index, placeholder: '' %>
+			</div>
+		</div>
+
+		<div class="form-actions form-flex-group"> 
+			<div class="form-flex-right">
+				<%= f.button :submit, "Save", class: 'btn__ezgl-secondary' %>
+			</div>
+		</div>
+	<% end %>
+</div>

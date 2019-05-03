@@ -1,0 +1,237 @@
+<div class="registration-form-container">
+	<div class="panel-heading">
+		<h3 class="panel-title pb-4">My Account</h3>
+	</div>
+
+	<div class="form-flex-group">
+		<div class="form-subheader">
+			<h6>PLAN</h6>
+		</div>
+	</div>
+
+	<div class="form-flex-group flex-wrap pt-3">
+			<% unless @active_subscription.blank? %>
+			<h4>Pay Per Golfer</h4>
+			<p><%= @active_subscription.golfer_count %> active golfers in your league</p>
+		<% else %>
+			<h4>Free Trial</h4>
+			<% if current_user.selected_league.free_tournaments_remaining > 0 %>
+				<p>You have <%= pluralize(current_user.selected_league.free_tournaments_remaining, 'free tournament') %> left</p>
+			<% end %>
+		<% end %>
+	</div>
+
+	<div class="form-flex-group pt-4 pb-3">
+		<div class="form-subheader">
+			<h6>BILLING</h6>
+		</div>
+	</div>
+
+	<div class="form-flex-group credit-card pt-2 pb-4">
+		<% unless @league.cc_last_four.blank? %>
+			<span class="credit-card_contact-name"><%= @league.contact_name %></span>
+			<span class="credit-card_cc-last-four">xxxx-xxxx-xxxx-<%= @league.cc_last_four %></span>
+		<% end %>
+		<span class="credit-card_change"><a href="#" class="btn btn-outline-secondary" role="button" data-toggle="modal" data-target="#creditCardModal">Change</a></span>
+	</div>
+
+	<div class="form-flex-group flex-wrap">
+		<h6>Past Payments</h6>
+		<% @past_subscriptions.each do |p| %>
+			<div class="past-subscription">
+				<span class="past-subscription_date"><%= p.created_at.to_s(:short) %></span>
+				<span class="past-subscription_golfer-count"><%= p.golfer_count %> Active Golfers</span>
+				<span class="past-subscription_amount"><%= number_to_currency(p.amount) %></span>
+			</div>
+		<% end %>
+	</div>
+</div>
+
+<!-- Active Golfers Modal -->
+<%= simple_form_for :update_active_league_subscription_credits, url: update_active_league_subscription_credits_path(@league), method: :put, :html => {id: "active-form"} do |f| %>
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Update Active Golfers</h4>
+      </div>
+      <div class="modal-body">
+        <p>You currently have <%= @league.league_memberships.active.count %> active golfers.</p>
+        <p>Your most recent subscription plan includes <%= @golfer_count %> golfers.</p>
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>Active</th>
+              <th>Name</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @league.league_memberships.each do |m| %>
+            <tr>
+              <td><%= check_box_tag "is_active[#{m.id}]", true, m.state == MembershipStates::ACTIVE_FOR_BILLING %></td>
+              <td><%= m.user.complete_name %></td>
+            </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <p id="activation_text">Activating <span id="active_golfer_number">&nbsp;</span> golfer(s) will result in a charge of <mark id="golfer_change_cost">&nbsp;</mark>.</p>
+
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+        <%= f.button :submit, "Save", class: 'btn btn-primary', :id => "save_and_charge_button" %>
+      </div>
+    </div>
+  </div>
+</div>
+<% end %>
+
+<!-- Credit Card Modal -->
+<div class="modal fade" id="creditCardModal" tabindex="-1" role="dialog" aria-labelledby="creditCardModalLabel">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title pl-5 pt-1 pb-1" id="myModalLabel">Change Credit Card</h4>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      </div>
+      <%= simple_form_for :payment, url: update_credit_card_league_subscription_credits_path(@league), method: :post, :html => {id: "payment-form"} do |f| %>
+        <div class="modal-body pb-4">
+          <span class="payment-errors"></span>
+
+          <div class="registration-form-container">
+            <div class="form-flex-group">
+              <div class="form-side-label pr-2">
+                Card #
+              </div>
+
+              <input type="text" size="20" class="onboarding__input" data-stripe="number"/>
+            </div>
+
+            <div class="form-flex-group pt-3">
+              <div class="form-side-label pr-2">
+                Expiration
+              </div>
+
+              <div class="form-flex-group">
+                <input type="text" size="2" class="onboarding__input" style="width: 75px;" data-stripe="exp-month"/> <input type="text" size="4" class="onboarding__input" style="margin-left: 12px; width: 75px;" data-stripe="exp-year"/>
+
+                <div class="form-side-label handicap_index-label pr-2" style="margin-left: 100px;">
+                  CVC
+                </div>
+
+                <input type="text" size="4" class="onboarding__input" style="width: 75px;" data-stripe="cvc"/>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <%= f.button :button, "Save", class: "btn btn__ezgl-secondary", :id => "submit_button" %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<script>
+  ezglTrackAnalyticsEvent("Viewed subscription details");
+</script>
+
+<script>
+  jQuery(function($) {
+    $('#payment-form').submit(function(event) {
+      var $form = $(this);
+
+      // Disable the submit button to prevent repeated clicks
+      $form.find('submit_button').prop('disabled', true);
+
+      Stripe.card.createToken($form, stripeResponseHandler);
+
+      // Prevent the form from submitting with the default action
+      return false;
+    });
+
+    $("#activation_text").hide();
+
+    $('#active-form :checkbox').change(function() {
+        var activeGolfers = $(":checkbox:checked").length;
+
+        var baselineGolfers = <%= @golfer_count %>;
+        var costPerGolfer = self.costPerGolfer();
+
+        var newGolfers = activeGolfers - baselineGolfers;
+        var proposedCost = costPerGolfer * newGolfers;
+
+        $("#active_golfer_number").html(newGolfers);
+
+        if (activeGolfers > baselineGolfers) {
+          $("#save_and_charge_button").val("Save and Charge Credit Card $" + proposedCost);
+
+          $("#golfer_change_cost").html("$" + proposedCost);
+
+          $("#activation_text").fadeIn();
+        } else {
+          $("#save_and_charge_button").val("Save");
+
+          $("#activation_text").fadeOut();
+        }
+    });
+  });
+
+  function costPerGolfer() {
+    return <%= SubscriptionCredit.cost_per_golfer(league: @league) %>;
+  }
+
+  function stripeResponseHandler(status, response) {
+    var $form = $('#payment-form');
+
+    if (response.error) {
+      // Show the errors on the form
+      $form.find('.payment-errors').text(response.error.message);
+      $form.find('submit_button').prop('disabled', false);
+    } else {
+      // response contains id and card, which contains additional card details
+      var token = response.id;
+      // Insert the token into the form so it gets submitted to the server
+      $form.append($('<input type="hidden" name="stripeToken" />').val(token));
+      // and submit
+      $form.get(0).submit();
+    }
+  };
+</script>
+
+<script>
+  $("#active_golfers").keyup(function() {
+    updateCalculatedCost();
+  });
+
+  $("#tournaments_per_season").keyup(function() {
+    updateCalculatedCost();
+  });
+
+  $("#active_golfers").change(function() {
+    updateCalculatedCost();
+  });
+
+  $("#tournaments_per_season").change(function() {
+    updateCalculatedCost();
+  });
+
+  function updateCalculatedCost() {
+    var golfers = $("#active_golfers").val();
+    
+    $("#purchase_credits_button").prop('disabled', false);
+
+    var cost = 0;
+    var costPerGolfer = <%= SubscriptionCredit.cost_per_golfer(league: @league) %>;
+
+    cost = golfers * costPerGolfer;
+
+    $("#total_cost").html("$" + cost);
+    $("#cost_details").html("($"+ costPerGolfer +" per golfer)");
+    $("#payment_button_text").html("Submit &amp; Pay $" + cost);
+  }
+
+  updateCalculatedCost();
+</script>
