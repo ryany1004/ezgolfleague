@@ -87,16 +87,14 @@ module ScoringRuleScorecards
 
         if user1_hole_score < user2_hole_score # user 1 won this hole
           new_running_score = running_score + 1
-          new_opponent_running_score = opponent_running_score - 1
 
           self.holes_won += 1
         elsif user1_hole_score > user2_hole_score # user 1 lost this hole
-          new_running_score = running_score - 1
           new_opponent_running_score = opponent_running_score + 1
         end
 
-        self.running_score = new_running_score
-        self.opponent_running_score = new_opponent_running_score
+        self.running_score = new_running_score >= 0 ? new_running_score : 0
+        self.opponent_running_score = new_opponent_running_score >= 0 ? new_opponent_running_score : 0
       end
 
       running_score

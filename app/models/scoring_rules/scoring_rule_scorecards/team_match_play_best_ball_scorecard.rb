@@ -56,19 +56,23 @@ module ScoringRuleScorecards
         user1_score = team_a_scorecard.scores[idx]
         user2_score = team_b_scorecard.scores[idx]
 
+        new_running_score = running_score
+        new_opponent_running_score = opponent_running_score
+
         if user1_score.present? && user2_score.present?
-          if user1_score.strokes > user2_score.strokes
-            self.running_score = (running_score - 1).abs
-            self.opponent_running_score = (opponent_running_score + 1).abs
+          if user1_score.strokes < user2_score.strokes # user 1 won this hole
+            new_running_score = running_score + 1
 
             self.team_a_holes_won += 1
-          elsif user1_score.strokes < user2_score.strokes
-            self.running_score = (running_score + 1).abs
-            self.opponent_running_score = (opponent_running_score - 1).abs
+          elsif user1_score.strokes > user2_score.strokes # user 2 won this hole
+            new_opponent_running_score = opponent_running_score + 1
 
             self.team_b_holes_won += 1
           end
         end
+
+        self.running_score = new_running_score >= 0 ? new_running_score : 0
+        self.opponent_running_score = new_opponent_running_score >= 0 ? new_opponent_running_score : 0
       end
 
       Rails.logger.debug { "TeamMatchPlayBestBallScorecard: #{team_a_scorecard.team.name} #{current_hole.hole_number} #{running_score} #{opponent_running_score}" }
