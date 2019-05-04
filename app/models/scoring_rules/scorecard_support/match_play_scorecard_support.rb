@@ -85,9 +85,12 @@ module MatchPlayScorecardSupport
     # add user's team Best Ball
     unless only_human_scorecards
       league_season_team = tournament_day.league_season_team_for_player(user)
-      team_best_ball_scorecard = best_ball_scorecard_for_team(league_season_team)
 
-      other_scorecards << team_best_ball_scorecard
+      if league_season_team.present?
+        team_best_ball_scorecard = best_ball_scorecard_for_team(league_season_team)
+
+        other_scorecards << team_best_ball_scorecard
+      end
     end
 
     # add the opponent and teammates
@@ -101,9 +104,12 @@ module MatchPlayScorecardSupport
       # add opponent team Best Ball
       unless only_human_scorecards
         league_season_team = tournament_day.league_season_team_for_player(opponent)
-        team_best_ball_scorecard = best_ball_scorecard_for_team(league_season_team)
 
-        other_scorecards << team_best_ball_scorecard
+        if league_season_team.present?
+          team_best_ball_scorecard = best_ball_scorecard_for_team(league_season_team)
+
+          other_scorecards << team_best_ball_scorecard
+        end
       end
     end
 
