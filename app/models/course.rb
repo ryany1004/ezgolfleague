@@ -14,22 +14,21 @@ class Course < ApplicationRecord
   paginates_per 50
 
   def complete_name
-    if self.city.blank? || self.us_state.blank?
-      self.name
+    if city.blank? || us_state.blank?
+      name
     else
-      "#{self.name} - #{self.city}, #{self.us_state}"
+      "#{name} - #{city}, #{us_state}"
     end
   end
 
   def geocode
-    unless self.street_address_1.blank?
-      coordinates = Geocoder.coordinates("#{self.street_address_1}, #{self.city}, #{self.us_state}")
+    return if street_address_1.blank?
 
-      unless coordinates.blank?
-        self.latitude = coordinates[0]
-        self.longitude = coordinates[1]
-      end
-    end
+    coordinates = Geocoder.coordinates("#{street_address_1}, #{city}, #{us_state}")
+
+    return if coordinates.blank?
+
+    self.latitude = coordinates[0]
+    self.longitude = coordinates[1]
   end
-
 end
