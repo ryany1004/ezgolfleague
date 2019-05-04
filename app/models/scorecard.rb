@@ -28,6 +28,10 @@ class Scorecard < ApplicationRecord
     tournament_day.tournament.league
   end
 
+  def user
+    golf_outing.user
+  end
+
   def scorecard_payload
     tournament_day.scorecard_base_scoring_rule.scorecard_api(scorecard: self)
   end
