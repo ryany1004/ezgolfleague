@@ -10,6 +10,10 @@ class GolfOuting < ApplicationRecord
 
   validates :course_handicap, presence: true
 
+  def tournament
+    tournament_group.tournament_day.tournament
+  end
+
   def team_combined_name
     if self.tournament_group.daily_teams.count == 0
       nil
