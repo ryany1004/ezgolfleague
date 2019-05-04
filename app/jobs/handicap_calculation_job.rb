@@ -21,10 +21,10 @@ class HandicapCalculationJob < ApplicationJob
     player.golf_outings.order(created_at: :desc).limit(100).each do |outing| # the 100 is arbitrary, to make sure we fetch enough records to have 10 valid scorecards
       Rails.logger.debug { "Outing: #{outing.id} for #{outing.user.complete_name}" }
 
-      if outing.tournament.is_finalized && outing.in_league?(league)
+      if outing.tournament.is_finalized && outing.in_league?(league) && !outing.disqualified
         scorecards << outing.scorecard
       else
-        Rails.logger.debug { "Did not include scorecard. Final? #{outing.tournament.is_finalized} In league? #{outing.in_league?(league)}" }
+        Rails.logger.debug { "Did not include scorecard. Final? #{outing.tournament.is_finalized} DQ? #{outing.disqualified} In league? #{outing.in_league?(league)}" }
       end
     end
 
