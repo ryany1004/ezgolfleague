@@ -203,6 +203,7 @@ Rails.application.routes.draw do
       patch 'tournament_days/:tournament_day_id/teams/:team_id/toggle_player/:player_id' => 'team_outings#toggle_player', as: :update_day_team
       patch 'tournament_days/:tournament_day_id/teams/:team_id/toggle_players' => 'team_outings#toggle_players', as: :toggle_all_team_players
 
+      get 'handicaps'
       patch 'update_course_handicaps'
       patch 'touch_tournament'
       patch 'rescore_players'

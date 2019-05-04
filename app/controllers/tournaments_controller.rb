@@ -108,6 +108,33 @@ class TournamentsController < BaseController
     redirect_to league_tournaments_path(current_user.selected_league), flash: { success: "Cached data for this tournament was discarded." }
   end
 
+  def handicaps
+    day = @tournament.tournament_days.first
+    course = day.course
+    is_9_holes = day.scorecard_base_scoring_rule.course_holes.count == 9
+
+    @handicap_details = []
+
+    @tournament.league.users.each do |u|
+      user_info = { name: u.complete_name }
+
+      course.course_tee_boxes.each do |b|
+        if is_9_holes
+          user_info[b.name] = u.nine_hole_handicap(course, b)
+        else
+          user_info[b.name] = u.standard_handicap(course, b)
+        end
+      end
+
+      @handicap_details << user_info
+    end
+
+    @headers = []
+    course.course_tee_boxes.each do |b|
+      @headers << b.name
+    end
+  end
+
   def update_course_handicaps
     @tournament.update_course_handicaps
 
