@@ -1,23 +1,23 @@
 class CourseHole < ApplicationRecord
   belongs_to :course, inverse_of: :course_holes, touch: true
-  has_many :scoring_rule_course_holes
-  has_many :course_hole_tee_boxes, -> { order("yardage desc") }, dependent: :destroy, inverse_of: :course_hole
+  has_many :scoring_rule_course_holes, inverse_of: :course_hole, dependent: :destroy
+  has_many :course_hole_tee_boxes, -> { order(yardage: :desc) }, dependent: :destroy, inverse_of: :course_hole
   accepts_nested_attributes_for :course_hole_tee_boxes
 
   validates :par, inclusion: 1..7
 
   def name
-    "##{self.hole_number} (Par #{self.par})"
+    "##{hole_number} (Par #{par})"
   end
 
   def yardage_strings
-    if self.course_hole_tee_boxes.blank?
-      ["N/A"]
+    if course_hole_tee_boxes.blank?
+      ['N/A']
     else
       yardage_strings = []
 
-      self.course_hole_tee_boxes.includes(:course_tee_box).each do |b|
-        yardage_strings << "#{b.course_tee_box.name} - #{b.yardage}" unless b.course_tee_box.blank?
+      course_hole_tee_boxes.includes(:course_tee_box).find_each do |b|
+        yardage_strings << "#{b.course_tee_box.name} - #{b.yardage}" if b.course_tee_box.present?
       end
 
       yardage_strings
@@ -29,7 +29,7 @@ class CourseHole < ApplicationRecord
 
     yardage = 0
 
-    self.course_hole_tee_boxes.includes(:course_tee_box).each do |b|
+    course_hole_tee_boxes.includes(:course_tee_box).find_each do |b|
       yardage = b.yardage if b.course_tee_box.name == tee_box_name
     end
 
