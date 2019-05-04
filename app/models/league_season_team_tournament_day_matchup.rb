@@ -121,6 +121,14 @@ class LeagueSeasonTeamTournamentDayMatchup < ApplicationRecord
     end
   end
 
+  def team_users_for_user(user)
+    if team_a.users.include? user
+      team_a_users
+    else
+      team_b_users
+    end
+  end
+
   def users_for_team(team)
     team == team_a ? team_a_users : team_b_users
   end

@@ -14,8 +14,8 @@ module ScoringComputer
       super
 
       tournament_day.league_season_team_tournament_day_matchups.each do |matchup|
-        team_a_best_ball_scorecard = best_ball_scorecard_for_team(matchup.team_a)
-        team_b_best_ball_scorecard = best_ball_scorecard_for_team(matchup.team_b)
+        team_a_best_ball_scorecard = @scoring_rule.best_ball_scorecard_for_team(matchup.team_a)
+        team_b_best_ball_scorecard = @scoring_rule.best_ball_scorecard_for_team(matchup.team_b)
 
         Rails.logger.info { "TeamMatchPlayBestBallScoringComputer comparing #{matchup.team_a.name} and #{matchup.team_b.name}" }
 
@@ -42,17 +42,6 @@ module ScoringComputer
           Rails.logger.info { "TeamMatchPlayBestBallScoringComputer did not produce a final result for matchup #{matchup.id}. #{match_play_scorecard.extra_scoring_column_data}" }
         end
       end
-    end
-
-    def best_ball_scorecard_for_team(league_season_team)
-      scorecard = ScoringRuleScorecards::BestBallScorecard.new
-      scorecard.scoring_rule = @scoring_rule
-      scorecard.team = league_season_team
-      scorecard.users_to_compare = league_season_team.users
-      scorecard.should_use_handicap = true
-      scorecard.calculate_scores
-
-      scorecard
     end
 
     def assign_payouts

@@ -80,7 +80,7 @@ module ScoringRuleScorecards
 
         next if user1_score.blank? || user2_score.blank?
 
-        Rails.logger.debug { "#{user.complete_name} and #{opponent.complete_name}. Hole #{hole.hole_number}: User 1: #{user1_hole_score} User 2: #{user2_hole_score}" }
+        Rails.logger.debug { "MatchPlayScorecard: #{user.complete_name} and #{opponent.complete_name}. Hole #{hole.hole_number}: User 1: #{user1_hole_score} User 2: #{user2_hole_score}" }
 
         new_running_score = running_score
         new_opponent_running_score = opponent_running_score
