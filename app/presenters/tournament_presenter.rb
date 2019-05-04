@@ -60,7 +60,9 @@ class TournamentPresenter
   def course_locations
     locations = ''
 
-    tournament.courses.where.not(street_address_1: nil).each do |course|
+    tournament.courses.each do |course|
+      next if course.street_address_1.blank?
+
       locations << '<p>'
       locations << course.street_address_1 << '<br/>'
       locations << course.city << ', ' << course.us_state << ' ' << course.postal_code << '<br/>'
