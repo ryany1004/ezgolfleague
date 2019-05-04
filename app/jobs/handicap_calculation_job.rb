@@ -55,7 +55,7 @@ class HandicapCalculationJob < ApplicationJob
 
       differential = ((gross_score - rating) * 113) / slope
 
-      Rails.logger.debug "User: #{scorecard.user.complete_name} Gross Score: #{gross_score}. Rating: #{course_tee_box.rating}. Slope: #{course_tee_box.slope}. Differential: #{differential}"
+      Rails.logger.debug "User: #{scorecard.user.complete_name} Gross Score: #{gross_score}. Rating: #{rating}. Slope: #{course_tee_box.slope}. Differential: #{differential}"
 
       differential *= 2 if is_9_holes
       handicap_sum += differential
