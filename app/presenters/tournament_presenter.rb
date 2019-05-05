@@ -182,45 +182,36 @@ class TournamentPresenter
   end
 
   def payouts
-    flights_with_payouts = []
+    payout_details = []
 
     if tournament_day.blank?
-      tournament.tournament_days.each do |d|
-        d.flights.each do |f|
-          payouts = []
-
-          f.payout_results.each do |p|
-            username = p.user.blank? ? '' : p.user.complete_name
-            user_id = p.user.blank? ? nil : p.user.id
-
-            payouts << { flight_number: f.flight_number.to_i,
-                         flight_name: f.display_name,
-                         name: username,
-                         amount: p.amount,
-                         points: p.points.to_i,
-                         user_id: user_id,
-                         matchup_position: p.team_matchup_designator }
-          end
-
-          flights_with_payouts << { payouts: payouts } if payouts.present?
-        end
-      end
+      days = tournament.tournament_days
     else
-      tournament_day.flights.each do |f|
-        payouts = []
+      days = tournament.tournament_days.where(id: tournament_day.id)
+    end
 
-        f.payout_results.each do |p|
-          username = p.user.blank? ? '' : p.user.complete_name
-          user_id = p.user.blank? ? nil : p.user.id
+    days.each do |day|
+      day.mandatory_scoring_rules.each do |rule|
+        rule.payout_results.each do |result|
+          user_id = result.user.blank? ? nil : result.user.id
+          flight_number = result.flight.blank? ? 1 : result.flight.flight_number.to_i
+          flight_name = result.flight.blank? ? nil : result.flight.display_name
 
-          payouts << { flight_number: f.flight_number.to_i, flight_name: f.display_name, name: username, amount: p.amount, points: p.points.to_i, user_id: user_id, matchup_position: p.team_matchup_designator }
+          payout_details <<
+            {
+              flight_number: flight_number,
+              flight_name: flight_name,
+              name: result.name,
+              amount: result.amount,
+              points: result.points.to_i,
+              user_id: user_id,
+              matchup_position: result.team_matchup_designator
+            }
         end
-
-        flights_with_payouts << { payouts: payouts }
       end
     end
 
-    flights_with_payouts
+    payout_details
   end
 
   def optional_scoring_rules_with_dues

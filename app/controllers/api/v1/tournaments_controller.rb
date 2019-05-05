@@ -28,63 +28,21 @@ class Api::V1::TournamentsController < Api::V1::ApiBaseController
 
   def results
     tournament = Tournament.find(params[:tournament_id])
-
-    cache_key = "tournament-json#{tournament.id}-#{tournament.updated_at.to_i}"
-
-    @tournament_results = []
-    @tournament_results = Rails.cache.fetch(cache_key, expires_in: 24.hours, race_condition_ttl: 10) do
-      tournament.tournament_days.each do |d|
-        day_flights = d.flights_with_rankings
-        combined_flights = FetchingTools::LeaderboardFetching.flights_with_rankings_could_be_combined(d)
-        tournament_presenter = TournamentPresenter.new({ tournament: tournament,
-                                                         tournament_day: d,
-                                                         user: current_user,
-                                                         day_flights: day_flights,
-                                                         combined_flights: combined_flights })
-
-        # payouts
-        payouts = []
-        tournament_presenter.payouts.each_with_index do |f, x|
-          f[:payouts].each do |p|
-            payouts << { flight_number: p[:flight_number],
-                         name: p[:name],
-                         id: p[:user_id],
-                         amount: p[:amount].to_f,
-                         points: p[:points],
-                         matchup_position: p[:matchup_position] }
-          end
-        end
-
-        # rankings
-        rankings = []
-        tournament_presenter.flights_with_rankings.each do |flight|
-          flight.tournament_day_results.each do |result|
-            rankings << { flight_number: flight[:flight_number],
-                          ranking: result.rank,
-                          id: result.user.id,
-                          name: result.name,
-                          net_score: result.net_score,
-                          gross_score: result.gross_score,
-                          points: result.points.to_i,
-                          matchup_position: result.matchup_position }
-          end
-        end
-
-        # optional_scoring_rules_with_dues
-        optional_scoring_rules_with_dues = []
-        tournament_presenter.optional_scoring_rules_with_dues.each do |rule|
-          optional_scoring_rules_with_dues << { name: rule[:name], winners: rule[:winners] }
-        end
-
-        @tournament_results << { payouts: payouts,
-                                 rankings: rankings,
-                                 contests: optional_scoring_rules_with_dues }
-      end
-
-      @tournament_results
-    end
-
     @uses_scoring_groups = tournament.league.allow_scoring_groups
+
+    results_presenter = ApiResultsPresenter.new(tournament, current_user)
+
+    if tournament.is_league_teams?
+      cache_key = "tournament-teams-json#{tournament.id}-#{tournament.updated_at.to_i}"
+      @tournament_results = Rails.cache.fetch(cache_key, expires_in: 24.hours, race_condition_ttl: 10) do
+        results_presenter.league_team_results
+      end
+    else
+      cache_key = "tournament-individual-json#{tournament.id}-#{tournament.updated_at.to_i}"
+      @tournament_results = Rails.cache.fetch(cache_key, expires_in: 24.hours, race_condition_ttl: 10) do
+        results_presenter.individual_results
+      end
+    end
   end
 
   def validate_tournaments_exist
