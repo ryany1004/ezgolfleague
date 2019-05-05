@@ -101,7 +101,7 @@ module Scorecards
         handicap_info << [""]
         handicap_info << [""]
 
-        return { title: course_handicap, contents: handicap_info, should_bold: false, should_ornament: true }
+        return { title: course_handicap.to_s, contents: handicap_info, should_bold: false, should_ornament: true }
       end
     end
   end
