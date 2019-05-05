@@ -86,7 +86,7 @@ class ScoringRule < ApplicationRecord
 	end
 
 	def ranked_results
-		#base class does nothing
+		# base class does nothing
 	end
 
 	def team_type

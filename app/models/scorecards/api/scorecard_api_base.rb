@@ -97,9 +97,9 @@ module Scorecards
             end
           end
         end
-        handicap_info << [""]
-        handicap_info << [""]
-        handicap_info << [""]
+        handicap_info << ['']
+        handicap_info << ['']
+        handicap_info << ['']
 
         return { title: course_handicap.to_s, contents: handicap_info, should_bold: false, should_ornament: true }
       end
