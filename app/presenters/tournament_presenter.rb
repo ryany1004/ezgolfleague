@@ -129,6 +129,10 @@ class TournamentPresenter
     end
   end
 
+  def show_aggregated_results?
+    tournament_day.scorecard_base_scoring_rule.has_aggregated_results?
+  end
+
   def includes_user?
     tournament_day.blank? ? tournament.includes_player?(user, tournament.tournament_days.first) : tournament.includes_player?(user, tournament_day)
   end

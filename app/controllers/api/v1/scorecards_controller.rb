@@ -18,7 +18,7 @@ class Api::V1::ScorecardsController < Api::V1::ApiBaseController
     end
   end
 
-  #fetches a condensed version of stats for today used by wearables, widgets, etc... optimized for small payload
+  # fetches a condensed version of stats for today used by wearables, widgets, etc
   def current_day_leaderboard
     tournament_day = nil
 

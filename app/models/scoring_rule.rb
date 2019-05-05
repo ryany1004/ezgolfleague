@@ -85,6 +85,10 @@ class ScoringRule < ApplicationRecord
 		self.tournament_day_results.where(aggregated_result: true)
 	end
 
+  def has_aggregated_results?
+    aggregate_tournament_day_results.count.positive?
+  end
+
 	def ranked_results
 		# base class does nothing
 	end
