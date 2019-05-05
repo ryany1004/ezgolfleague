@@ -24,7 +24,7 @@ module Scorecards
         rows << self.score_row
 
         #handicap
-        rows << self.handicap_row(self.handicap_allowance)
+        rows << self.handicap_row(self.scorecard.course_handicap, self.handicap_allowance)
 
         #additional rows
         rows = rows + self.additional_rows unless self.additional_rows.blank?
@@ -80,7 +80,7 @@ module Scorecards
         return {title: "Par", contents: par_info, should_bold: false, should_ornament: false}
       end
 
-      def handicap_row(allowance)
+      def handicap_row(course_handicap, allowance)
         handicap_info = []
         self.tournament_day.scorecard_base_scoring_rule.course_holes.each do |course_hole|
           if allowance.blank?
@@ -101,7 +101,7 @@ module Scorecards
         handicap_info << [""]
         handicap_info << [""]
 
-        return {title: "", contents: handicap_info, should_bold: false, should_ornament: true}
+        return { title: course_handicap, contents: handicap_info, should_bold: false, should_ornament: true }
       end
     end
   end
