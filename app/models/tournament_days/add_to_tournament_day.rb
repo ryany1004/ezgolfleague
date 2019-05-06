@@ -22,7 +22,7 @@ module AddToTournamentDay
 
     enable_team_user(user: user)
 
-    user.send_silent_notification({ action: 'update', tournament_day_id: id })
+    user.send_silent_notification({ action: 'update', tournament_id: tournament.id, tournament_day_id: id })
 
     touch
   end
