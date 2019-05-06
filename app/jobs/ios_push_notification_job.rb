@@ -1,22 +1,22 @@
 class IosPushNotificationJob < ApplicationJob
   def perform(device, body, content_available = false, extra_data = nil)
     return if Rails.env.development?
-    
+
     begin
-      if device.environment_name == "debug"
+      if device.environment_name == 'debug'
         pusher = IosPushNotificationJob.pusher(true)
       else
         pusher = IosPushNotificationJob.pusher
       end
 
       notification = Apnotic::Notification.new(device.device_identifier)
-      notification.topic = "com.ezgolfleague.GolfApp"
-      notification.content_available = 1 unless content_available.blank?
-      notification.alert = body unless body.blank?
+      notification.topic = 'com.ezgolfleague.GolfApp'
+      notification.content_available = 1 if content_available.present?
+      notification.alert = body if body.present?
       notification.custom_payload = extra_data
 
-      #add a thread id for grouping notifications if they are from the same tournament
-      unless extra_data.blank? || extra_data[:tournament_id].blank?
+      # add a thread id for grouping notifications if they are from the same tournament
+      if extra_data.present? || extra_data[:tournament_id].blank?
         notification.thread_id = "tournament-#{extra_data[:tournament_id]}"
       end
 
@@ -33,8 +33,8 @@ class IosPushNotificationJob < ApplicationJob
   end
 
   def self.pusher(use_debug = false)
-    certificate_file = "#{Rails.root}/config/apns_cert.pem"
-    passphrase = "golf"
+    certificate_file = Rails.root.join('config', 'apns_cert.pem')
+    passphrase = 'golf'
 
     if use_debug == true
       connection = Apnotic::Connection.development(cert_path: certificate_file, cert_pass: passphrase)
@@ -42,6 +42,6 @@ class IosPushNotificationJob < ApplicationJob
       connection = Apnotic::Connection.new(cert_path: certificate_file, cert_pass: passphrase)
     end
 
-    return connection
+    connection
   end
 end

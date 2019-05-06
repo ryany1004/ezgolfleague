@@ -59,12 +59,13 @@ class TournamentsController < BaseController
     redirect_to league_tournaments_path(current_user.selected_league)
   end
 
-  def edit
-  end
+  def edit; end
 
   def update
     if @tournament.update(tournament_params)
-      redirect_to league_tournaments_path(current_user.selected_league), flash: { success: "The tournament was successfully updated." }
+      current_user.send_silent_notification({ action: 'update', tournament_id: @tournament.id })
+
+      redirect_to league_tournaments_path(current_user.selected_league), flash: { success: 'The tournament was successfully updated.' }
     else
       initialize_form
 
@@ -73,13 +74,15 @@ class TournamentsController < BaseController
   end
 
   def destroy
-  	league_season = @tournament.league_season
+    league_season = @tournament.league_season
+
+    current_user.send_silent_notification({ action: 'delete', tournament_id: @tournament.id })
 
     @tournament.destroy
 
-	  RankLeagueSeasonJob.perform_later(league_season) if league_season.present?
+    RankLeagueSeasonJob.perform_later(league_season) if league_season.present?
 
-    redirect_to league_tournaments_path(current_user.selected_league), flash: { success: "The tournament was successfully deleted." }
+    redirect_to league_tournaments_path(current_user.selected_league), flash: { success: 'The tournament was successfully deleted.' }
   end
 
   def options
@@ -91,21 +94,19 @@ class TournamentsController < BaseController
   def touch_tournament
     @tournament.touch
 
-    Rails.cache.clear
-
     @tournament.tournament_days.each do |day|
       day.touch
 
       day.scoring_rules.each do |rule|
-      	rule.touch
+        rule.touch
 
-      	rule.tournament_day_results.each do |result|
-      		result.touch
-      	end
+        rule.tournament_day_results.each(&:touch)
       end
     end
 
-    redirect_to league_tournaments_path(current_user.selected_league), flash: { success: "Cached data for this tournament was discarded." }
+    Rails.cache.clear # NOTE: Do we need this?
+
+    redirect_to league_tournaments_path(current_user.selected_league), flash: { success: 'Cached data for this tournament was discarded.' }
   end
 
   def handicaps
@@ -138,7 +139,7 @@ class TournamentsController < BaseController
   def update_course_handicaps
     @tournament.update_course_handicaps
 
-    redirect_to league_tournaments_path(current_user.selected_league), flash: { success: "The tournament's course handicaps were re-calculated." }
+    redirect_to league_tournaments_path(current_user.selected_league), flash: { success: 'The tournament\'s course handicaps were re-calculated.' }
   end
 
   def rescore_players
@@ -146,21 +147,29 @@ class TournamentsController < BaseController
       d.score_all_rules(delete_first: true)
     end
 
-    redirect_to league_tournaments_path(current_user.selected_league), flash: { success: "The tournament's scores have been re-calculated." }
+    redirect_to league_tournaments_path(current_user.selected_league), flash: { success: 'The tournament\'s scores have been re-calculated.' }
   end
 
   private
 
   def set_stage
-    @stage_name = "basic_details"
+    @stage_name = 'basic_details'
   end
 
   def tournament_params
-    params.require(:tournament).permit(:name, :league_id, :allow_credit_card_payment, :signup_opens_at, :signup_closes_at, :max_players, :show_players_tee_times, :auto_schedule_for_multi_day, tournament_days_attributes: [:id, course_hole_ids: []])
+    params.require(:tournament).permit(:name,
+                                       :league_id,
+                                       :allow_credit_card_payment,
+                                       :signup_opens_at,
+                                       :signup_closes_at,
+                                       :max_players,
+                                       :show_players_tee_times,
+                                       :auto_schedule_for_multi_day,
+                                       tournament_days_attributes: [:id, course_hole_ids: []])
   end
 
   def fetch_tournament
-  	@tournament = self.fetch_tournament_from_user_for_tournament_id(params[:tournament_id] || params[:id])
+    @tournament = fetch_tournament_from_user_for_tournament_id(params[:tournament_id] || params[:id])
   end
 
   def initialize_form
@@ -170,5 +179,4 @@ class TournamentsController < BaseController
       @leagues = current_user.leagues.select { |league| league.membership_for_user(current_user).is_admin }
     end
   end
-
 end
