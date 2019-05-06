@@ -10,10 +10,12 @@ class Api::V1::TournamentDaysController < Api::V1::ApiBaseController
 
       @tournament_day.eager_groups
     end
+
+    fresh_when @tournament_day
   end
 
   def leaderboard
-    @leaderboard = self.fetch_leaderboard
+    @leaderboard = fetch_leaderboard
 
     @day_flights = @leaderboard[:day_flights]
     @combined_flights = @leaderboard[:combined_flights]

@@ -24,6 +24,8 @@ class Api::V1::TournamentsController < Api::V1::ApiBaseController
         tournaments
       end
     end
+
+    fresh_when @tournaments
   end
 
   def results
