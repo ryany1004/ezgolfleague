@@ -12,6 +12,8 @@ module HandicapComputer
 
       opponent = @scoring_rule.opponent_for_user(user)
       opponent_golf_outing = tournament_day.golf_outing_for_player(opponent)
+      return nil if opponent_golf_outing.blank?
+
       opponent_course_handicap = course_handicap_for_game_type(opponent_golf_outing)
 
       allowance = []
