@@ -16,8 +16,10 @@ class IosPushNotificationJob < ApplicationJob
       notification.custom_payload = extra_data
 
       # add a thread id for grouping notifications if they are from the same tournament
-      if extra_data.present? && extra_data[:tournament_id].present?
-        notification.thread_id = "tournament-#{extra_data[:tournament_id]}"
+      if extra_data.present?
+        tournament_id = extra_data[:tournament_id]
+
+        notification.thread_id = "tournament-#{tournament_id}" if tournament_id.present?
       end
 
       response = pusher.push(notification)
