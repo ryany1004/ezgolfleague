@@ -18,7 +18,7 @@ class Api::V1::TournamentsController < Api::V1::ApiBaseController
         past_tournaments = Tournament.all_past(@current_user.leagues, nil).limit(12).reorder(tournament_starts_at: :desc).includes(:league, tournament_days: [:course, :scoring_rules])
 
         tournaments = todays_tournaments + upcoming_tournaments + past_tournaments
-        tournaments = tournaments.select { |t| t.all_days_are_playable? }.to_a
+        tournaments = tournaments.select(&:all_days_are_playable?).to_a
         tournaments = tournaments.uniq
 
         tournaments
