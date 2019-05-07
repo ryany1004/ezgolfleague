@@ -66,38 +66,43 @@
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
       <div class="modal-header" style="flex-wrap:wrap;">
-        <h4 class="modal-title pl-5 pt-1 pb-1" id="myModalLabel">Upgrade Your Account</h4>
-        <p class="pl-5 pt-1 pb-1">
+        <h4 class="modal-title pl-4 pt-1 pb-1" id="myModalLabel">Upgrade Your Account</h4>
+        <p class="pl-4 pt-1 pb-1 pr-4">
           <strong>Just $10 per golfer per season.</strong><br>
           Includes unlimited use of EZGolfLeague and iOS/Android apps.
         </p>
         <button type="button" class="close" style="position:absolute;right:15px;" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
       </div>
       <div class="modal-body">
-        <table class="table table-striped">
-          <thead>
-            <tr>
-              <th>Active</th>
-              <th>Name</th>
-            </tr>
-          </thead>
-          <tbody>
-            <% @league.league_memberships.each do |m| %>
-            <tr>
-              <td><%= check_box_tag "is_active[#{m.id}]", true, m.state == MembershipStates::ACTIVE_FOR_BILLING %></td>
-              <td><%= m.user.complete_name %></td>
-            </tr>
-            <% end %>
-          </tbody>
-        </table>
-        <p>You currently have <%= @league.league_memberships.active.count %> active golfers.</p>
-        <p>Your most recent subscription plan includes <%= @golfer_count %> golfers.</p>
+        <div class="pl-4 pt-1 pb-1 pr-1">
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th>Active</th>
+                <th>Name</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% @league.league_memberships.each do |m| %>
+              <tr>
+                <td style="width:100px;"><%= check_box_tag "is_active[#{m.id}]", true, m.state == MembershipStates::ACTIVE_FOR_BILLING %></td>
+                <td><%= m.user.complete_name %></td>
+              </tr>
+              <% end %>
+            </tbody>
+          </table>
+          <p class="pt-3 mb-0" style="text-align:right;">
+            <strong>You currently have <%= @league.league_memberships.active.count %> active golfers.</strong><br>
+            Your most recent subscription plan includes <%= @golfer_count %> golfers.
+          </p>
+        </div>
       </div>
-      <div class="modal-footer">
-        <p id="activation_text">Activating <span id="active_golfer_number">&nbsp;</span> golfer(s) will result in a charge of <mark id="golfer_change_cost">&nbsp;</mark>.</p>
-
-        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-        <%= f.button :submit, "Save", class: 'btn btn-primary', :id => "save_and_charge_button" %>
+      <div class="modal-footer" style="flex-wrap:wrap;">
+        <p id="activation_text" class="pt-2">Activating <span id="active_golfer_number">&nbsp;</span> golfer(s) will result in a charge of <mark id="golfer_change_cost">&nbsp;</mark>.</p>
+        <div>
+          <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+          <%= f.button :submit, "Save", class: 'btn btn-primary', :id => "save_and_charge_button" %>
+        </div>
       </div>
     </div>
   </div>
