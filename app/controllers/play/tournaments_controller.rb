@@ -10,10 +10,11 @@ class Play::TournamentsController < Play::BaseController
     if tournament.tournament_days.count == 1
       tournament_day = tournament.tournament_days.first
     else
-      tournament_day = tournament.tournament_days.where(id: params[:tournament_day]).first
+      tournament_day = tournament.tournament_days.find_by(id: params[:tournament_day])
+      tournament_day = tournament.tournament_days.last if tournament_day.blank?
     end
 
-    unless tournament_day.blank?
+    if tournament_day.present?
       day_flights = self.fetch_flights_with_rankings(tournament_day)
       combined_flights = self.fetch_combined_flights_with_rankings(tournament_day, day_flights)
     else
