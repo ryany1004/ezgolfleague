@@ -45,6 +45,10 @@ module ScoringComputer
                 Rails.logger.debug { "TIE Assigning #{tie_user.complete_name}. Payout [#{payout}] Scoring Rule [#{@scoring_rule.name} #{@scoring_rule.id}]" }
 
                 PayoutResult.create(payout: payout, user: tie_user, scoring_rule: @scoring_rule, amount: amount, points: points, detail: tie_details)
+
+                users_with_holes_won.each_with_index do |x, i|
+                  users_with_holes_won.delete_at(i) if x[:user] == tie_user
+                end
               end
             else
               Rails.logger.debug { "Assigning #{user.complete_name}. Payout [#{payout}] Scoring Rule [#{@scoring_rule.name} #{@scoring_rule.id}]" }
