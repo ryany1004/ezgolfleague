@@ -42,7 +42,7 @@ module ScoringComputer
                 tie_user = tie[:user]
                 tie_details = tie[:details]
 
-                Rails.logger.debug { "TIE Assigning #{tie_user.complete_name}. Payout [#{payout}] Scoring Rule [#{@scoring_rule.name} #{@scoring_rule.id}]" }
+                Rails.logger.debug { "TIE Assigning #{tie_user.complete_name}. HW: #{holes_won}. Payout [#{payout}] Scoring Rule [#{@scoring_rule.name} #{@scoring_rule.id}]" }
 
                 PayoutResult.create(payout: payout, user: tie_user, scoring_rule: @scoring_rule, amount: amount, points: points, detail: tie_details)
 
