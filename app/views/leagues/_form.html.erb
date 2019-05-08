@@ -12,8 +12,13 @@
   <div class="well">
 	  <%= f.input :name, label: 'Name', required: true %>
     <%= f.input :dues_payment_receipt_email_addresses, label: 'Address(es) For Dues Email Confirmations (separate with commas)' %>
-    <%= f.input :display_balances_to_players, label: 'Show win balances to players?' %>
+    <%= f.input :display_balances_to_players, label: 'Show Win Balances to Players?' %>
+  </div>
+
+  <h3>Handicap Calculations</h3>
+  <div class="well">
     <%= f.input :calculate_handicaps_from_past_rounds, label: 'Automatically Calculate Handicaps From Past Rounds?' %>
+    <%= f.input :number_of_rounds_to_handicap, label: 'Number of Rounds to Use' %>
   </div>
 
   <div class="well">
@@ -47,7 +52,7 @@
       <%= f.input :stripe_production_publishable_key, label: 'Stripe Publishable Key (Production)' %>
       <%= f.input :stripe_test_secret_key, label: 'Stripe Secret Key (Test)' %>
       <%= f.input :stripe_test_publishable_key, label: 'Stripe Publishable Key (Test)' %>
-      <%= f.input :stripe_test_mode, label: 'Use Test Mode?' %>
+      <%= f.input :stripe_test_mode, label: 'Use Test Mode?' %> <% if Rails.env.staging? %>[YES, Staging]<% end %>
     </div>
 
     <h3>Apple Pay</h3>

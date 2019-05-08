@@ -1,26 +1,25 @@
 class LeagueSeasonTeam < ApplicationRecord
-	belongs_to :league_season
-	has_many :tournament_day_results, inverse_of: :league_season_team
-	has_many :league_season_team_memberships
-	has_many :users, ->{ order 'handicap_index' }, through: :league_season_team_memberships
-	has_many :payout_results, inverse_of: :league_season_team
-	has_many :league_season_rankings, dependent: :destroy
+  belongs_to :league_season
+  has_many :tournament_day_results, dependent: :destroy, inverse_of: :league_season_team
+  has_many :league_season_team_memberships, dependent: :destroy
+  has_many :users, -> { order 'handicap_index, id DESC' }, through: :league_season_team_memberships
+  has_many :payout_results, dependent: :destroy, inverse_of: :league_season_team
+  has_many :league_season_rankings, dependent: :destroy
 
-	def should_update_team_name?
-		self.name.include? "Players: "
-	end
+  TEAM_NAME_STATIC_PLAYER_NAME = 'Players: '.freeze
 
-	def update_team_name
-		self.name = "Players: "
+  def should_update_team_name?
+    name.include? TEAM_NAME_STATIC_PLAYER_NAME
+  end
 
-		self.users.each do |u|
-			self.name << u.short_name
+  def update_team_name
+    name = TEAM_NAME_STATIC_PLAYER_NAME
 
-			if u != self.users.last
-				self.name << " / "
-			end
-		end
+    users.each do |u|
+      name << u.short_name
+      name << ' / ' if u != users.last
+    end
 
-		self.save
-	end
+    save
+  end
 end

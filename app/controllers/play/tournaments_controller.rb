@@ -10,7 +10,8 @@ class Play::TournamentsController < Play::BaseController
     if tournament.tournament_days.count == 1
       tournament_day = tournament.tournament_days.first
     else
-      tournament_day = tournament.tournament_days.where(id: params[:tournament_day]).first
+      tournament_day = tournament.tournament_days.find_by(id: params[:tournament_day])
+      tournament_day = tournament.tournament_days.last if tournament_day.blank?
     end
 
     if tournament_day.present?

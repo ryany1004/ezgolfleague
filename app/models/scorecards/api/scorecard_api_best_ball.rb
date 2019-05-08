@@ -4,19 +4,18 @@ module Scorecards
       def additional_rows
         rows = []
 
-        other_scorecards = self.tournament_day.scorecard_base_scoring_rule.related_scorecards_for_user(self.scorecard.golf_outing.user, false)
+        other_scorecards = tournament_day.scorecard_base_scoring_rule.related_scorecards_for_user(scorecard.golf_outing.user, false)
 
         other_scorecards.each do |card|
-          rows << self.score_row_for_scorecard(card, card.name(true))
+          rows << score_row_for_scorecard(card, card.name(true))
 
-          unless card.golf_outing.blank?
-            user_handicap_info = self.handicap_allowance(card.golf_outing.user)
+          next if card.golf_outing.blank?
 
-            rows << self.handicap_row(user_handicap_info)
-          end
+          user_handicap_info = handicap_allowance
+          rows << handicap_row(user_handicap_info)
         end
 
-        return rows
+        rows
       end
     end
   end

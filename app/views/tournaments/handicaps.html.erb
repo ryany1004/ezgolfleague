@@ -1,0 +1,29 @@
+<div class="row">
+  <div class="col-md-12">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title"><%= @tournament.name %> Handicap List</h3>
+      </div>
+      <div class="panel-body">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <% @headers.each do |h| %>
+                <th><%= h %></th>
+              <% end %>
+            </tr>
+          </thead>
+          <% @handicap_details.each do |h| %>
+            <tr>
+              <td><%= h[:name] %></td>
+              <% @headers.each do |x| %>
+                <td><%= h[x] %></td>
+              <% end %>
+            </tr>
+          <% end %>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

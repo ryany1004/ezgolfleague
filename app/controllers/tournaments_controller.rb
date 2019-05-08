@@ -1,7 +1,7 @@
 class TournamentsController < BaseController
   helper Play::TournamentsHelper
 
-  before_action :fetch_tournament, except: [:new, :create]
+  before_action :fetch_tournament, except: [:index, :new, :create]
   before_action :initialize_form, only: [:new, :edit]
   before_action :set_stage
 
@@ -70,6 +70,8 @@ class TournamentsController < BaseController
     if @tournament.update(tournament_params)
       redirect_to league_tournaments_path(current_user.selected_league), flash:
       { success: 'The tournament was successfully updated.' }
+
+      current_user.send_silent_notification({ action: 'update', tournament_id: @tournament.id })
     else
       initialize_form
 
@@ -79,6 +81,8 @@ class TournamentsController < BaseController
 
   def destroy
     league_season = @tournament.league_season
+
+    current_user.send_silent_notification({ action: 'delete', tournament_id: @tournament.id })
 
     @tournament.destroy
 
@@ -97,22 +101,47 @@ class TournamentsController < BaseController
   def touch_tournament
     @tournament.touch
 
-    Rails.cache.clear
-
     @tournament.tournament_days.each do |day|
       day.touch
 
       day.scoring_rules.each do |rule|
         rule.touch
 
-        rule.tournament_day_results.each do |result|
-          result.touch
-        end
+        rule.tournament_day_results.each(&:touch)
       end
     end
 
+    Rails.cache.clear # NOTE: Do we need this?
+
     redirect_to league_tournaments_path(current_user.selected_league), flash:
     { success: 'Cached data for this tournament was discarded.' }
+  end
+
+  def handicaps
+    day = @tournament.tournament_days.first
+    course = day.course
+    is_9_holes = day.scorecard_base_scoring_rule.course_holes.count == 9
+
+    @handicap_details = []
+
+    @tournament.league.users.each do |u|
+      user_info = { name: u.complete_name }
+
+      course.course_tee_boxes.each do |b|
+        if is_9_holes
+          user_info[b.name] = u.nine_hole_handicap(course, b)
+        else
+          user_info[b.name] = u.standard_handicap(course, b)
+        end
+      end
+
+      @handicap_details << user_info
+    end
+
+    @headers = []
+    course.course_tee_boxes.each do |b|
+      @headers << b.name
+    end
   end
 
   def update_course_handicaps

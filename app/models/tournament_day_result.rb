@@ -74,6 +74,10 @@ class TournamentDayResult < ApplicationRecord
   	primary_scorecard.last_hole_played
   end
 
+  def matchup_position
+    primary_scorecard.matchup_position_indicator
+  end
+
   def to_s
     "#{self.name} - Net: #{self.net_score} Gross: #{self.gross_score}"
   end

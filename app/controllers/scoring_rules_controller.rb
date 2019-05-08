@@ -64,6 +64,7 @@ class ScoringRulesController < BaseController
   end
 
   def set_primary
+    @tournament_day.scoring_rules.update_all(primary_rule: false)
     @tournament_day.scoring_rules.find(params[:scoring_rule_id]).update(primary_rule: true)
 
     redirect_to league_tournament_tournament_day_scoring_rules_path(@tournament.league, @tournament, @tournament_day)

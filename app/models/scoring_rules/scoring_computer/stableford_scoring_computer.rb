@@ -17,20 +17,20 @@ module ScoringComputer
     		gross_score = scorecard.gross_score
     		net_score = scorecard.net_score
 
-	    	result = @scoring_rule.tournament_day_results.find_or_create_by(user: user) #TODO: create_or_find_by
+	    	result = @scoring_rule.tournament_day_results.find_or_create_by(user: user) # TODO: create_or_find_by
 
-	    	result.name = result_name
-	    	result.primary_scorecard = self.tournament_day.primary_scorecard_for_user(user)
-	    	result.flight = flight
-	    	result.gross_score = gross_score
-	    	result.net_score = net_score
-	    	result.adjusted_score = 0
-	    	result.front_nine_gross_score = 0
-	    	result.front_nine_net_score = 0
-	    	result.back_nine_gross_score = 0
-	    	result.back_nine_net_score = 0
-	    	result.par_related_net_score = net_score
-	    	result.par_related_gross_score = gross_score
+        result.name = result_name
+        result.primary_scorecard = self.tournament_day.primary_scorecard_for_user(user)
+        result.flight = flight
+        result.gross_score = gross_score
+        result.net_score = net_score
+        result.adjusted_score = 0
+        result.front_nine_gross_score = 0
+        result.front_nine_net_score = 0
+        result.back_nine_gross_score = 0
+        result.back_nine_net_score = 0
+        result.par_related_net_score = net_score
+        result.par_related_gross_score = gross_score
 
 	    	result.save
 

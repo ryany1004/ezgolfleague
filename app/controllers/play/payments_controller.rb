@@ -82,14 +82,15 @@ class Play::PaymentsController < Play::BaseController
           self.create_payment(tournament.dues_for_user(current_user, false), charge_description, charge.id, tournament.mandatory_scoring_rules.first, nil) #tournaments and any contests
 
           tournament.optional_scoring_rules_with_dues.each do |rule|
-            if c.users.include? current_user
-              self.create_payment(c.dues_for_user(current_user, false), charge_description, charge.id, rule, nil)
+            if rule.users.include? current_user
+              dues = rule.dues_for_user(user: current_user, include_credit_card_fees: ffalse)
+              self.create_payment(dues, charge_description, charge.id, rule, nil)
             end
           end
         end
       end
 
-      #confirm player
+      # confirm player
       tournament.confirm_player(current_user) unless tournament.blank?
 
       TournamentMailer.tournament_payment_receipt(current_user, tournament, amount.to_f).deliver_later unless tournament.blank?

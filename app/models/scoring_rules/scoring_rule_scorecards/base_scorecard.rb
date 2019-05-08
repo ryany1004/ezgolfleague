@@ -8,11 +8,9 @@ module ScoringRuleScorecards
     def initialize
       self.scores = []
     end
-
-    # Model Stuff
-
+    
     def id
-      return -1
+      (self.user.id * self.scoring_rule.id) * -1 # creates a unique, non-player ID for the scorecard
     end
 
     def tournament_day
@@ -30,8 +28,6 @@ module ScoringRuleScorecards
     def course_handicap
       return nil
     end
-
-    ##Logic
 
     def should_highlight?
       return true
@@ -89,6 +85,10 @@ module ScoringRuleScorecards
       return nil
     end
 
+    def matchup_position_indicator
+      nil
+    end
+
     def adjusted_strokes(raw_strokes, handicap_allowance, course_hole)
       hole_score = raw_strokes
 
@@ -102,6 +102,5 @@ module ScoringRuleScorecards
 
       return hole_score
     end
-
   end
 end

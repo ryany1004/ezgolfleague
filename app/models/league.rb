@@ -35,7 +35,7 @@ class League < ApplicationRecord
   end
 
   def stripe_publishable_key
-    if self.stripe_test_mode
+    if Rails.env.staging? || self.stripe_test_mode
       self.stripe_test_publishable_key
     else
       self.stripe_production_publishable_key
@@ -43,7 +43,7 @@ class League < ApplicationRecord
   end
 
   def stripe_secret_key
-    if self.stripe_test_mode
+    if Rails.env.staging? || self.stripe_test_mode
       self.stripe_test_secret_key
     else
       self.stripe_production_secret_key

@@ -151,7 +151,7 @@
     <% end %>
   <% end %>
 
-  <% if @tournament_presenter.day_has_league_teams? %>
+  <% if @tournament_presenter.show_aggregated_results? %>
     <%= render partial: 'league_team_rankings', locals: { tournament_presenter: @tournament_presenter } %>
   <% else %>
     <%= render partial: 'individual_rankings', locals: { tournament_presenter: @tournament_presenter } %>

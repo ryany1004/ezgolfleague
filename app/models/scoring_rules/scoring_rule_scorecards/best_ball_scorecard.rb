@@ -9,46 +9,44 @@ module ScoringRuleScorecards
     def initialize
       super
 
-      self.handicap_indices = Hash.new
+      self.handicap_indices = {}
       self.course_hole_number_suppression_list = []
     end
 
     def name(shorten_for_print = false)
-      if self.should_use_handicap == true
-        if shorten_for_print == true
-          return "Net"
+      if should_use_handicap
+        if shorten_for_print
+          'Net'
         else
-          return "Best Ball Net"
+          'Best Ball Net'
         end
       else
-        if shorten_for_print == true
-          return "Gross"
+        if shorten_for_print
+          'Gross'
         else
-          return "Best Ball Gross"
+          'Best Ball Gross'
         end
       end
     end
 
     def should_subtotal?
-      return true
+      true
     end
 
     def should_total?
-      return true
+      true
     end
 
     def handicap_allowance_for_user(user)
-      if self.should_use_handicap == false
-        return nil
-      end
+      return nil unless should_use_handicap
 
-      if self.handicap_indices["#{user.id}"]
-        return self.handicap_indices["#{user.id}"]
+      if handicap_indices[user.id.to_s]
+        handicap_indices[user.id.to_s]
       else
-        handicap_allowance = self.scoring_rule.handicap_computer.handicap_allowance(user: user)
-        self.handicap_indices["#{user.id}"] = handicap_allowance
+        handicap_allowance = scoring_rule.handicap_computer.handicap_allowance(user: user)
+        handicap_indices[user.id.to_s] = handicap_allowance
 
-        return handicap_allowance
+        handicap_allowance
       end
     end
 
@@ -56,40 +54,35 @@ module ScoringRuleScorecards
       new_scores = []
 
       if users_to_compare.blank?
-        Rails.logger.debug { "calculate_scores - Users to Compare" }
+        Rails.logger.debug { 'calculate_scores - 0 Users to Compare' }
 
         return
       end
 
-      self.scoring_rule.tournament_day.scorecard_base_scoring_rule.course_holes.each_with_index do |hole, i|
-        if self.course_hole_number_suppression_list.include? hole.hole_number
-          score = DerivedScorecardScore.new
+      scoring_rule.tournament_day.scorecard_base_scoring_rule.course_holes.each do |hole|
+        score = DerivedScorecardScore.new
+        score.scorecard = self
+        score.course_hole = hole
+
+        if course_hole_number_suppression_list.include? hole.hole_number
           score.strokes = 0
-          score.scorecard = self
-          score.course_hole = hole
-
-          new_scores << score
         else
-          score = DerivedScorecardScore.new
-          score.scorecard = self
-
           comparable_scores = []
-          self.users_to_compare.each do |user|
-            scorecard = self.scoring_rule.tournament_day.primary_scorecard_for_user(user)
+          users_to_compare.each do |user|
+            scorecard = scoring_rule.tournament_day.primary_scorecard_for_user(user)
+            raw_score = 0
 
             unless scorecard.blank? || scorecard.scores.blank?
-              raw_score = scorecard.scores.where(course_hole: hole).first.strokes
+              raw_score = scorecard.scores.find_by(course_hole: hole).strokes
             else
               Rails.logger.debug { "Raw Score is 0 - No Scorecard or Scores: \(scorecard.id) \(scorecard.scores&.where(course_hole: hole))" }
-
-              raw_score = 0
             end
 
-            if self.should_use_handicap == true
-              if raw_score == 0
+            if should_use_handicap
+              if raw_score.zero?
                 hole_score = 0
               else
-                hole_score = self.adjusted_strokes(raw_score, self.handicap_allowance_for_user(user), hole)
+                hole_score = adjusted_strokes(raw_score, handicap_allowance_for_user(user), hole)
               end
             else
               hole_score = raw_score
@@ -98,23 +91,20 @@ module ScoringRuleScorecards
             comparable_scores << hole_score
           end
 
-          score.strokes = self.score_for_scores(comparable_scores, hole)
-
-          score.course_hole = hole
-          new_scores << score
+          score.strokes = score_for_scores(comparable_scores, hole)
         end
+
+        new_scores << score
       end
 
       self.scores = new_scores
     end
 
-    def score_for_scores(comparable_scores, hole)
+    def score_for_scores(comparable_scores, _)
       return 0 if comparable_scores.blank?
 
-      sorted_scores = comparable_scores.sort! { |x,y| y <=> x }
-
-      return sorted_scores[0]
+      sorted_scores = comparable_scores.sort! { |x, y| x <=> y }
+      sorted_scores[0]
     end
-
   end
 end

@@ -8,7 +8,7 @@ class Api::V1::ScorecardsController < Api::V1::ApiBaseController
     if @scorecard.blank?
       Rails.logger.info { "API Scorecard Call Nil #{params[:id]}" }
 
-      render nothing: true, status: :not_found
+      render nothing: true, status: 404
     else
       payload = @scorecard.scorecard_payload
 
@@ -18,7 +18,7 @@ class Api::V1::ScorecardsController < Api::V1::ApiBaseController
     end
   end
 
-  # fetches a condensed version of stats for today used by wearables, widgets, etc... optimized for small payload
+  # fetches a condensed version of stats for today used by wearables, widgets, etc
   def current_day_leaderboard
     tournament_day = nil
 
@@ -30,7 +30,9 @@ class Api::V1::ScorecardsController < Api::V1::ApiBaseController
       tournament_day = t.tournament_days.first if tournament_day.blank?
     end
 
-    leaderboard = FetchingTools::LeaderboardFetching.create_slimmed_down_leaderboard(tournament_day) if tournament_day.present?
+    unless tournament_day.blank?
+      leaderboard = FetchingTools::LeaderboardFetching.create_slimmed_down_leaderboard(tournament_day)
+    end
 
     respond_with(leaderboard) do |format|
       format.json { render json: leaderboard }

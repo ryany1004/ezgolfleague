@@ -133,6 +133,10 @@ class TournamentDay < ApplicationRecord
     @flights_with_rankings ||= self.flights.includes(:users, :tournament_day_results, :payout_results)
   end
 
+  def golf_outings
+    @golf_outings ||= self.tournament_groups.map(&:golf_outings).flatten
+  end
+
   #TODO: MOVE
   def scorecard_display_partial
     if self.scorecard_base_scoring_rule.course_holes.count <= 9
@@ -237,6 +241,16 @@ class TournamentDay < ApplicationRecord
     matchup.save
   end
 
+  def strip_to_front_9
+    self.tournament_groups.each do |g|
+      g.golf_outings.each do |o|
+        o.scorecard.scores.each_with_index do |s, i|
+          s.destroy if i > 8
+        end
+      end
+    end
+  end
+
   def scorecard_base_scoring_rule
     @scorecard_base_scoring_rule ||= self.scoring_rules.where(primary_rule: true).first
   end
@@ -275,6 +289,7 @@ class TournamentDay < ApplicationRecord
 
       rule.score
       rule.rank
+      rule.finalize
     end
   end
   
@@ -287,7 +302,7 @@ class TournamentDay < ApplicationRecord
   def handicap_allowance(user:)
     handicap_computer = self.scorecard_base_scoring_rule.handicap_computer
 
-    handicap_computer.handicap_allowance(user: user)
+    handicap_computer.displayable_handicap_allowance(user: user)
   end
 
   #date parsing

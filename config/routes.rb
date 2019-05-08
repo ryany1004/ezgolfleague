@@ -124,6 +124,7 @@ Rails.application.routes.draw do
 
   resources :leagues do
     patch 'update_from_ghin'
+    patch 'update_calculated_handicaps'
     patch 'update_league_standings'
 
     resources :subscription_credits, except: :show do
@@ -204,7 +205,9 @@ Rails.application.routes.draw do
       delete 'tournament_days/:tournament_day_id/delete_team_signup' => 'team_outings#delete_team_signup', as: :delete_day_teams
       get 'tournament_days/:tournament_day_id/teams/:team_id' => 'team_outings#team', as: :day_team
       patch 'tournament_days/:tournament_day_id/teams/:team_id/toggle_player/:player_id' => 'team_outings#toggle_player', as: :update_day_team
+      patch 'tournament_days/:tournament_day_id/teams/:team_id/toggle_players' => 'team_outings#toggle_players', as: :toggle_all_team_players
 
+      get 'handicaps'
       patch 'update_course_handicaps'
       patch 'touch_tournament'
       patch 'rescore_players'

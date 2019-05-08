@@ -1,5 +1,5 @@
 <% cache p do %>
-  <p><strong>Tee-Time: <%= p.tee_time.to_s(:date_and_time) %> | Tees: <%= p.tee_names %></strong></p>
+  <p><strong>Tee-Time: <%= p.tee_time.to_s(:date_and_time) %> | Tees: <%= p.tee_names %> | <%= p.scoring_rule_name %></strong></p>
 
   <table class="table table-striped table-bordered print-friendly" id="printable-scorecard-table">
     <thead>
@@ -31,7 +31,9 @@
     <tbody>
       <% p.all_scorecards.each do |scorecard| -%>
         <tr>
-          <td><%= scorecard.flight_number %></td>
+          <td>
+            <%= scorecard.flight_number %> <%= scorecard.matchup_position_indicator %>
+          </td>
           <% if scorecard.should_highlight? -%>
             <td><em><%= scorecard.name(print_mode) %></em></td>
           <% else -%>

@@ -30,7 +30,7 @@ module Users
 	    end
 	  end
 
-	  #http://www.usga.org/handicapFAQ/handicap_answer.asp?FAQidx=4
+	  # http://www.usga.org/handicapFAQ/handicap_answer.asp?FAQidx=4
 	  def standard_handicap(selected_course, course_tee_box)
 	    handicap = (self.handicap_index.to_f * (course_tee_box.slope.to_f / 113.0)).round
 
@@ -40,7 +40,7 @@ module Users
 	    handicap
 	  end
 
-	  #http://www.mygolfinstructor.com/instruction/rules-of-golf/tips/calculate-9-hole-handicap-18-hole-handicap/569/
+	  # http://www.mygolfinstructor.com/instruction/rules-of-golf/tips/calculate-9-hole-handicap-18-hole-handicap/569/
 	  def nine_hole_handicap(selected_course, course_tee_box)
 	    handicap = ((self.handicap_index.to_f / 2.0) * (course_tee_box.slope.to_f / 113.0)).round
 

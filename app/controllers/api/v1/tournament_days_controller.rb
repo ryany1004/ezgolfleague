@@ -10,6 +10,8 @@ class Api::V1::TournamentDaysController < Api::V1::ApiBaseController
 
       @tournament_day.eager_groups
     end
+
+    fresh_when @tournament_day
   end
 
   def leaderboard

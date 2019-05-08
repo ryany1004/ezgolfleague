@@ -4,7 +4,7 @@ class TournamentMailer < ApplicationMailer
     @user = user
     @registration_url = "https://app.ezgolfleague.com/play/dashboard"
 
-    mail(to: @user.email, subject: 'EZGolfLeague - A New Tournament is Open for Registration')
+    mail(to: @user.email, subject: 'EZGolfLeague - A New Tournament is Opening for Registration Today')
   end
 
   def signup_closing(tournament, user)

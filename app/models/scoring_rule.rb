@@ -85,8 +85,12 @@ class ScoringRule < ApplicationRecord
 		self.tournament_day_results.where(aggregated_result: true)
 	end
 
+  def has_aggregated_results?
+    aggregate_tournament_day_results.count.positive?
+  end
+
 	def ranked_results
-		#base class does nothing
+		# base class does nothing
 	end
 
 	def team_type
@@ -192,6 +196,9 @@ class ScoringRule < ApplicationRecord
 	def assign_payouts
 		self.scoring_computer.assign_payouts
 	end
+
+  def finalize
+  end
 
 	def result_for_user(user:)
 		self.tournament_day_results.where(user: user).first

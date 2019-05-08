@@ -43,6 +43,7 @@
             <li><%= link_to "Player Signups", league_tournament_day_players_path(tournament.league, tournament, tournament.tournament_days.first) %></li>
           <% end %>
         <% end %>
+        <li><%= link_to 'Player Handicaps', league_tournament_handicaps_path(tournament.league, tournament) %></li>
         <li><%= link_to "Scorecards", league_tournament_tournament_day_scorecards_path(tournament.league, tournament, tournament.tournament_days.first) %></li>
         <li class="divider"></li>
         <li><%= link_to "Game Types & Payouts", league_tournament_tournament_day_scoring_rules_path(tournament.league, tournament, tournament.tournament_days.first) %></li>

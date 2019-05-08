@@ -1,12 +1,20 @@
 module HandicapComputer
-	class BaseHandicapComputer
-		def initialize(scoring_rule)
-			@scoring_rule = scoring_rule
-		end
+  class BaseHandicapComputer
+  	def initialize(scoring_rule)
+  		@scoring_rule = scoring_rule
+  	end
 
-		def tournament_day
-			@scoring_rule.tournament_day
-		end
+  	def tournament_day
+  		@scoring_rule.tournament_day
+  	end
+
+    def displayable_handicap_allowance(user:)
+      handicap_allowance(user: user)
+    end
+
+    def match_play_handicap_allowance(user:)
+      handicap_allowance(user: user)
+    end
 
     def handicap_allowance(user:)
       golf_outing = self.tournament_day.golf_outing_for_player(user)
@@ -57,7 +65,7 @@ module HandicapComputer
 
       allowance
     end
-	
+
     def course_handicap_for_game_type(golf_outing)
       golf_outing.course_handicap
     end
