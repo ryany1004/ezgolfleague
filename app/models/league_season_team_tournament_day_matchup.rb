@@ -159,7 +159,7 @@ class LeagueSeasonTeamTournamentDayMatchup < ApplicationRecord
 
   def exclude_user(user)
     user_ids = user_ids_to_omit
-    user_ids << user.id unless user_ids.include? user.id
+    user_ids << user.id unless user_ids.include? user.id.to_s
 
     self.excluded_user_ids = user_ids.join(',')
     save
