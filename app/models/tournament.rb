@@ -306,11 +306,13 @@ class Tournament < ApplicationRecord
   def run_finalize(should_email = true)
     tournament_days = self.tournament_days.includes(scoring_rules: [payout_results: [:flight, :user, :payout], tournament_day_results: [:user, :primary_scorecard]], tournament_groups: [golf_outings: [:user, scorecard: :scores]])
 
-    Rails.logger.info { "Finalize: Starting" }
+    Rails.logger.info { 'Finalize: Starting' }
 
     tournament_days.each do |day|
       Rails.logger.info { "Finalize #{day.id}: Re-Scoring Users" }
       day.score_all_rules
+
+      day.scoring_rules.each(&:finalize)
 
       Rails.logger.info { "Finalize #{day.id}: Assigning Payouts" }
       day.assign_payouts_all_rules
@@ -381,6 +383,10 @@ class Tournament < ApplicationRecord
 		    end
 	    end
     end
+
+    # scoring_rule_ids = self.tournament_days.map(&:scoring_rules).flatten.map(&:id)
+    # payments = Payment.where(scoring_rule: scoring_rule_ids).where(user: user)
+    # tournament_balance = payments.sum(:payment_amount)
 
     if tournament_balance > 0 && tournament_balance >= self.dues_for_user(user)
       true
