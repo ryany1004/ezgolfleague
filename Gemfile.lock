@@ -207,6 +207,8 @@ GEM
     i18n (1.6.0)
       concurrent-ruby (~> 1.0)
     jaro_winkler (1.5.2)
+    jb (0.7.0)
+      multi_json
     jbuilder (2.8.0)
       activesupport (>= 4.2.0)
       multi_json (>= 1.2)
@@ -483,6 +485,7 @@ DEPENDENCIES
   fcm
   flamegraph
   geocoder
+  jb
   jbuilder
   jquery-rails
   jquery-ui-rails

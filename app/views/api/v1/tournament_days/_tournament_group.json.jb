@@ -1,0 +1,51 @@
+Rails.cache.fetch ['v1', tournament_group], expires_in: 24.hours do
+  json = {
+    server_id: tournament_group.server_id,
+    api_time_description: tournament_group.api_time_description,
+    tee_time_at: tournament_group.tee_time_at,
+    show_players_tee_times: tournament_group.tournament_day.tournament.show_players_tee_times,
+    max_number_of_players: tournament_group.max_number_of_players,
+  }
+
+  json[:golf_outings] = tournament_group.api_golf_outings do |golf_outing|
+    outing_json = {
+      server_id: golf_outing.server_id,
+      course_handicap: golf_outing.course_handicap.to_i,
+      team_combined_name: golf_outing.team_combined_name
+    }
+
+    outing_json[:user] = {
+      server_id: golf_outing.user.server_id,
+      avatar_image_url: golf_outing.user.avatar_image_url,
+      first_name: golf_outing.user.first_name,
+      last_name: golf_outing.user.last_name
+    }
+
+    outing_json[:course_tee_box] = {
+      server_id: golf_outing.course_tee_box.server_id,
+      name: golf_outing.course_tee_box.name
+    }
+
+    outing_json[:scorecard] = {
+      id: golf_outing.scorecard.id,
+      server_id: golf_outing.scorecard.server_id,
+      matchup_position: golf_outing.scorecard.matchup_position_indicator
+    }
+
+    outing_json[:scores] = golf_outing.scorecard.scores.map do |score|
+      {
+        server_id: score.server_id,
+        id: score.id,
+        strokes: score.strokes,
+        course_hole_number: score.course_hole_number,
+        course_hole_par: score.course_hole_par,
+        course_hole_yards: score.course_hole_yards,
+        tee_group_name: score.tee_group_name
+      }
+    end
+
+    outing_json
+  end
+
+  json
+end

@@ -1,0 +1,57 @@
+Rails.cache.fetch ['v1', tournament], expires_in: 24.hours do
+  json = {
+    name: tournament.name,
+    server_id: tournament.server_id,
+    is_finalized: tournament.is_finalized,
+    number_of_players: tournament.number_of_players,
+    is_open_for_registration?: tournament.is_open_for_registration?,
+    dues_amount: tournament.mandatory_dues_amount,
+    allow_credit_card_payment: tournament.allow_credit_card_payment,
+  }
+
+  json[:league] = {
+    name: tournament.league.name,
+    server_id: tournament.league.server_id,
+    apple_pay_merchant_id: tournament.league.apple_pay_merchant_id,
+    supports_apple_pay: tournament.league.supports_apple_pay,
+    stripe_publishable_key: tournament.league.stripe_publishable_key
+  }
+
+  json[:tournament_days] = tournament.tournament_days.map do |day|
+    day_json = {
+      server_id: day.server_id,
+      tournament_at: day.tournament_at,
+      game_type_id: day.legacy_game_type_id,
+      can_be_played?: day.can_be_played?,
+      registered_user_ids: day.registered_user_ids,
+      paid_user_ids: day.paid_user_ids,
+      superuser_user_ids: day.superuser_user_ids,
+      league_admin_user_ids: day.league_admin_user_ids,
+      show_teams?: day.needs_daily_teams?,
+      enter_scores_until_finalized: day.enter_scores_until_finalized
+    }
+
+    day_json[:paid_contests] = day.optional_scoring_rules.map do |contest|
+      {
+        server_id: contest.server_id,
+        name: contest.name,
+        dues_amount: contest.dues_amount
+      }
+    end
+
+    day_json[:course] = {
+      server_id: day.course.server_id,
+      name: day.course.name,
+      street_address_1: day.course.street_address_1,
+      city: day.course.city,
+      us_state: day.course.us_state,
+      postal_code: day.course.postal_code,
+      latitude: day.course.latitude,
+      longitude: day.course.longitude
+    }
+
+    day_json
+  end
+
+  json
+end
