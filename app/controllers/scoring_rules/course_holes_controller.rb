@@ -29,18 +29,9 @@ module ScoringRules
 
       eager_groups.each do |group|
         group.golf_outings.each do |golf_outing|
-          scorecard_base_scoring_rule.course_holes.each_with_index do |hole, i|
-            score = Score.where(scorecard: golf_outing.scorecard).where(sort_order: i).first
+          scorecard = golf_outing.scorecard
 
-            if score.present?
-              Rails.logger.debug { "Updating Score #{score.id} on scorecard #{score.scorecard.id} from course hole #{score.course_hole.id} to course hole #{hole.id}." }
-
-              score.course_hole = hole
-              score.save
-            else
-              Rails.logger.debug { "Could not find a score with sort_order #{i} on scorecard #{score.scorecard.id}." }
-            end
-          end
+          tournament_day.update_scores_for_scorecard(scorecard: scorecard) if !tournament_day.has_scores?
         end
       end
     end
