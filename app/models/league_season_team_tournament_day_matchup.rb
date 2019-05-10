@@ -102,7 +102,11 @@ class LeagueSeasonTeamTournamentDayMatchup < ApplicationRecord
       a_scorecard = tournament_day.primary_scorecard_for_user(a)
       b_scorecard = tournament_day.primary_scorecard_for_user(b)
 
-      a_scorecard.course_handicap <=> b_scorecard.course_handicap
+      if a_scorecard.present? && b_scorecard.present?
+        a_scorecard.course_handicap <=> b_scorecard.course_handicap
+      else
+        0
+      end
     }
   end
 
