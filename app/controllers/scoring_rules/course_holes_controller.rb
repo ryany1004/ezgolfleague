@@ -13,7 +13,8 @@ module ScoringRules
           update_scores_for_course_holes(tournament_day: day)
         end
 
-        redirect_to league_tournament_tournament_day_scoring_rules_path(current_user.selected_league, @tournament, @tournament.tournament_days.first), flash: { success: 'The game type holes were successfully updated.' }
+        redirect_to league_tournament_tournament_day_scoring_rules_path(current_user.selected_league, @tournament, @tournament.tournament_days.first), flash:
+        { success: 'The game type holes were successfully updated.' }
       else
         render :edit
       end
@@ -24,14 +25,15 @@ module ScoringRules
     end
 
     def update_scores_for_course_holes(tournament_day:)
-      eager_groups = TournamentGroup.includes(golf_outings: [{ scorecard: :scores }]).where(tournament_day: tournament_day)
-      scorecard_base_scoring_rule = tournament_day.scorecard_base_scoring_rule
+      return if tournament_day.has_scores?
 
-      eager_groups.each do |group|
+      tournament_day.eager_groups.each do |group|
         group.golf_outings.each do |golf_outing|
           scorecard = golf_outing.scorecard
 
-          tournament_day.update_scores_for_scorecard(scorecard: scorecard) if !tournament_day.has_scores?
+          tournament_day.update_scores_for_scorecard(scorecard: scorecard)
+
+          golf_outing.user.send_silent_notification({ action: 'update', tournament_id: tournament_day.tournament.id, tournament_day_id: tournament_day.id })
         end
       end
     end
