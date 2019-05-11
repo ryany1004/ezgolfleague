@@ -1,1 +1,0 @@
-json.partial! 'league', collection: @leagues, as: :league

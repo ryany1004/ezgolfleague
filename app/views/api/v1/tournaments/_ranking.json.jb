@@ -1,0 +1,12 @@
+Rails.cache.fetch ['v1', ranking], expires_in: 24.hours do
+  {
+    flight_number: ranking[:flight_number],
+    name: ranking[:name],
+    id: ranking[:id],
+    ranking: ranking[:ranking],
+    points: ranking[:points],
+    net_score: ranking[:net_score],
+    gross_score: ranking[:gross_score],
+    matchup_position: ranking[:matchup_position]
+  }
+end

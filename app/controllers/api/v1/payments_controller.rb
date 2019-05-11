@@ -65,5 +65,4 @@ class Api::V1::PaymentsController < Api::V1::ApiBaseController
       transaction_id: charge_identifier,
     )
   end
-
 end

@@ -49,5 +49,4 @@ class Api::V1::SessionsController < Api::V1::ApiBaseController
       render plain: "Success", status: :ok
     end
   end
-
 end

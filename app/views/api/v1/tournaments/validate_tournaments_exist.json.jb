@@ -1,0 +1,3 @@
+@invalid_ids.map do |id|
+  id
+end

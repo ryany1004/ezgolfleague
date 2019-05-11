@@ -1,1 +1,0 @@
-json.partial! 'league_season_ranking_group', collection: @rankings, as: :league_season_ranking_group
