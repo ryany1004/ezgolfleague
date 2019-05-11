@@ -1,1 +1,0 @@
-json.device_id										@device.id

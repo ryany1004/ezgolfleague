@@ -6,8 +6,6 @@
 			<p><em>This is the primary game type for this tournament - it will define how scorecards and handicaps display.</em></p>
 		<% end %>
 
-		<%= link_to_unless @tournament_day.has_scores?, 'Choose Holes to Play', edit_league_tournament_tournament_day_scoring_rule_course_holes_path(@tournament.league, @tournament, @tournament_day, scoring_rule), class: 'btn btn-sm', role: 'button' %>
-
 		<%= link_to 'Edit Game Type', edit_league_tournament_tournament_day_scoring_rule_path(@tournament.league, @tournament, @tournament_day, scoring_rule), class: 'btn btn-sm', role: 'button' %>
 
 		<%= link_to 'Remove Game Type', league_tournament_tournament_day_scoring_rule_path(@tournament.league, @tournament, @tournament_day, scoring_rule), class: 'btn btn-sm', role: 'button', data: { confirm: 'Are you sure you want to remove this game type? That will also destroy any assigned results.' }, method: :delete %>

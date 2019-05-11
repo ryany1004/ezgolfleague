@@ -11,7 +11,7 @@ class GolfOuting < ApplicationRecord
   validates :course_handicap, presence: true
 
   def tournament
-    tournament_group.tournament_day.tournament
+    tournament_group&.tournament_day.tournament
   end
 
   def team_combined_name

@@ -37,9 +37,9 @@ class Scorecard < ApplicationRecord
   end
 
   def clear_primary_scorecard_cache
-    return if golf_outing.user.blank?
+    return if tournament_day.blank? || golf_outing.blank? || golf_outing.user.blank?
 
-    tournament_day&.delete_cached_primary_scorecard(user: golf_outing.user)
+    tournament_day.delete_cached_primary_scorecard(user: golf_outing.user)
   end
 
   def set_course_handicap(force_recalculation = false)

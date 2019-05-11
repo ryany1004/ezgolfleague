@@ -1,15 +1,5 @@
 module ScoringComputer
   class TeamMatchPlayVsScoringComputer < MatchPlayScoringComputer
-    def outcome_lists_include_user(outcome_lists, user)
-      outcome_lists.each do |list|
-        result = list.map(&:values).flatten.include? user
-
-        return true if result
-      end
-
-      false
-    end
-
     def assign_payouts
       Rails.logger.debug { "assign_payouts #{self.class}" }
 

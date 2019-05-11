@@ -185,6 +185,14 @@ class League < ApplicationRecord
     end
   end
 
+  def has_ever_subscribed?
+    self.league_seasons.each do |s|
+      return true if s.subscription_credits.count.positive?
+    end
+
+    false
+  end
+
   ##
 
   def active_season

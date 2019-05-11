@@ -99,6 +99,7 @@ class User < ApplicationRecord
     tags << "Mobile User" if self.mobile_devices.count > 0
     tags << "iOS User" if self.has_ios_devices?
     tags << "Android User" if self.has_android_devices?
+    tags << "Paid League Member" if self.has_any_paid_leagues?
 
   	has_team_leagues = false
   	has_individual_leagues = false
@@ -263,6 +264,14 @@ class User < ApplicationRecord
     return false if self.blank?
 
     self.leagues_admin.count > 0
+  end
+
+  def has_any_paid_leagues?
+    self.leagues.each do |l|
+      return true if l.has_active_subscription?
+    end
+
+    false
   end
 
   def has_all_exempt_leagues?

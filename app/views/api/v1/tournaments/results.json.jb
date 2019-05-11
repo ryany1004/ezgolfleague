@@ -1,0 +1,6 @@
+json = {}
+
+json[:tournament_day_results] = render partial: 'tournament_result', collection: @tournament_results, as: :tournament_result
+json[:uses_scoring_groups] = @uses_scoring_groups
+
+json

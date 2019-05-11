@@ -87,7 +87,7 @@ class LeagueSeasonTeamTournamentDayMatchup < ApplicationRecord
   end
 
   def position_indicator_for_index(index)
-    positions = %w[A B C D E F G H]
+    positions = %w[A B C D E F G H I J K]
 
     positions[index]
   end
@@ -97,8 +97,22 @@ class LeagueSeasonTeamTournamentDayMatchup < ApplicationRecord
     split_ids.presence || []
   end
 
+  def sort_users(users)
+    users.sort { |a, b|
+      a_scorecard = tournament_day.primary_scorecard_for_user(a)
+      b_scorecard = tournament_day.primary_scorecard_for_user(b)
+
+      if a_scorecard.present? && b_scorecard.present?
+        a_scorecard.course_handicap <=> b_scorecard.course_handicap
+      else
+        0
+      end
+    }
+  end
+
   def filtered_team_a_users
-    team_a.present? ? build_excluded_user_filter(team_a.users) : []
+    filtered_users = team_a.present? ? build_excluded_user_filter(team_a.users) : []
+    sort_users(filtered_users)
   end
 
   def team_a_users
@@ -110,7 +124,8 @@ class LeagueSeasonTeamTournamentDayMatchup < ApplicationRecord
   end
 
   def filtered_team_b_users
-    team_b.present? ? build_excluded_user_filter(team_b.users) : []
+    filtered_users = team_b.present? ? build_excluded_user_filter(team_b.users) : []
+    sort_users(filtered_users)
   end
 
   def team_b_users
@@ -159,7 +174,7 @@ class LeagueSeasonTeamTournamentDayMatchup < ApplicationRecord
 
   def exclude_user(user)
     user_ids = user_ids_to_omit
-    user_ids << user.id unless user_ids.include? user.id
+    user_ids << user.id unless user_ids.include? user.id.to_s
 
     self.excluded_user_ids = user_ids.join(',')
     save

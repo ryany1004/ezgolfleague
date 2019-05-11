@@ -1,0 +1,77 @@
+<ol class="breadcrumb">
+  <li><%= link_to "Tournaments", league_tournaments_path(current_user.selected_league) %></li>
+  <li><%= link_to @tournament.name, edit_league_tournament_path(current_user.selected_league, @tournament) %></li>
+  <li class="active">Manage Game Types <%= @tournament_day.pretty_day(true) %></li>
+  <li class="active">Manage Holes</li>
+</ol>
+
+<%= render partial: '/shared/tournaments/manage', locals: {tournament: @tournament, stage: @stage_name} %>
+
+<h5>Holes to Play</h5>
+<div class="well" id="quick-select-well">
+  <p>Click to Quick Select or Pick a Custom Set Below</p>
+
+  <% if @tournament_day.course.course_holes.count > 9 %><a href='#quick-select-well' onClick="selectHoles('all_18');" class="btn btn-info">All 18 Holes</a> <% end %><a href='#quick-select-well' onClick="selectHoles('front_9');" class="btn btn-info">Front 9</a> <a href='#quick-select-well' onClick="selectHoles('back_9');" class="btn btn-info">Back 9</a>
+</div>
+
+<%= simple_form_for @tournament_day, url: league_tournament_tournament_day_course_holes_path(@tournament.league, @tournament, @tournament_day) do |f| %>
+  <% if notification = f.error_notification %>
+    <div class="alert alert-error fade in">
+      <a class="close" data-dismiss="alert" href="#">&times;</a>
+      <%= notification %>
+    </div>
+  <% end %>
+
+  <%= f.simple_fields_for :scoring_rules do |p| %>
+    <%= render partial: 'holes_form', locals: { tournament_day: @tournament_day, scoring_rule: p.object, p: p } if p.object.show_course_holes? %>
+  <% end -%>
+
+  <div class="form-actions">
+    <%= f.button :submit, "Save & Continue", class: 'btn btn-default' %>
+  </div>
+<% end %>
+
+<script type="text/javascript">
+  function selectHoles(holes) {
+    var allHoles = $('.well input:checkbox');
+
+    var arraySize = <%= @tournament_day.course.course_holes.count %>;
+    var holeGroups = [];
+    for (var i = 0; i < Math.ceil(allHoles.length / arraySize); i++) {
+      holeGroups.push(allHoles.slice(i * arraySize, i * arraySize + arraySize));
+    }
+
+    if (holes == 'all_18') {
+      allHoles.prop('checked', true);
+    } else if (holes == 'front_9') {
+      for (var g = 0; g < holeGroups.length; g++) {
+        var subGroup = holeGroups[g];
+
+        for (var index = 0; index < subGroup.length; index++) {
+          var hole = $(subGroup[index]);
+
+          if (index <= 8) {
+            hole.prop('checked', true);
+          } else {
+            hole.prop('checked', false);
+          }
+        }
+      }
+    } else {
+      for (var g = 0; g < holeGroups.length; g++) {
+        var subGroup = holeGroups[g];
+
+        for (var index = 0; index < subGroup.length; index++) {
+          var hole = $(subGroup[index]);
+
+          if (index >= 9) {
+            hole.prop('checked', true);
+          } else {
+            hole.prop('checked', false);
+          }
+        }
+      }
+    }
+  }
+</script>
+

@@ -21,10 +21,13 @@ class HandicapCalculationJob < ApplicationJob
     player.golf_outings.order(created_at: :desc).limit(100).each do |outing| # the 100 is arbitrary, to make sure we fetch enough records to have 10 valid scorecards
       Rails.logger.debug { "Outing: #{outing.id} for #{outing.user.complete_name}" }
 
-      if outing.tournament.is_finalized && outing.in_league?(league) && !outing.disqualified
+      tournament = outing.tournament
+      next if tournament.blank?
+
+      if tournament.is_finalized && outing.in_league?(league) && !outing.disqualified
         scorecards << outing.scorecard
       else
-        Rails.logger.debug { "Did not include scorecard. Final? #{outing.tournament.is_finalized} DQ? #{outing.disqualified} In league? #{outing.in_league?(league)}" }
+        Rails.logger.debug { "Did not include scorecard. Final? #{tournament.is_finalized} DQ? #{outing.disqualified} In league? #{outing.in_league?(league)}" }
       end
     end
 
@@ -55,7 +58,7 @@ class HandicapCalculationJob < ApplicationJob
 
       differential = ((gross_score - rating) * 113) / slope
 
-      Rails.logger.debug "User: #{scorecard.user.complete_name} Gross Score: #{gross_score}. Rating: #{rating}. Slope: #{course_tee_box.slope}. Differential: #{differential}"
+      Rails.logger.info "HANDICAP: User: #{scorecard.user.complete_name} Gross Score: #{gross_score}. Rating: #{rating}. Slope: #{course_tee_box.slope}. Differential: #{differential}"
 
       differential *= 2 if is_9_holes
       handicap_sum += differential

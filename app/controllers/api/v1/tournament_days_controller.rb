@@ -6,7 +6,7 @@ class Api::V1::TournamentDaysController < Api::V1::ApiBaseController
 
   def tournament_groups
     @eager_groups = Rails.cache.fetch(@tournament_day.cache_key('groups'), expires_in: 24.hours, race_condition_ttl: 10) do
-      Rails.logger.info { 'Fetching Tournament Day - Not Cached' }
+      logger.info { 'Fetching Tournament Day - Not Cached' }
 
       @tournament_day.eager_groups
     end
@@ -26,15 +26,15 @@ class Api::V1::TournamentDaysController < Api::V1::ApiBaseController
 
     logger.info { "API Registration Details: #{registration_information}" }
 
-    user = User.find(registration_information['user_id'])
-    tournament_group = @tournament_day.tournament_groups.find(registration_information['tournament_group_id'])
-    confirm_user = registration_information['confirm_user']
+    user = User.find(registration_information["user_id"])
+    tournament_group = @tournament_day.tournament_groups.find(registration_information["tournament_group_id"])
+    confirm_user = registration_information["confirm_user"]
 
     @tournament_day.add_player_to_group(tournament_group: tournament_group, user: user, paying_with_credit_card: false, confirmed: confirm_user, registered_by: "App: #{user.complete_name}")
 
-    Rails.cache.delete(@tournament_day.cache_key('groups'))
+    Rails.cache.delete(@tournament_day.cache_key("groups"))
 
-    TournamentMailer.tournament_player_paying_later(user, @tournament_day.tournament).deliver_later unless confirm_user
+    TournamentMailer.tournament_player_paying_later(user, @tournament_day.tournament).deliver_later if confirm_user == false
 
     eager_groups = @tournament_day.eager_groups
 
@@ -60,7 +60,7 @@ class Api::V1::TournamentDaysController < Api::V1::ApiBaseController
   end
 
   def register_contests
-    register_optional_games
+    self.register_optional_games
   end
 
   def register_optional_games

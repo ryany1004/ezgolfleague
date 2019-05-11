@@ -168,13 +168,14 @@ Rails.application.routes.draw do
           post 'batch_create', on: :collection
         end
 
+        resource :course_holes, path: 'course-holes', only: [:edit, :update], controller: 'tournament_days/course_holes'
+
         resources :scoring_rules do
           get 'options', on: :collection
           patch 'set_primary'
 
           resources :payouts, only: [:new, :create, :edit, :update, :destroy]
-          resources :payout_results, controller: "scoring_rules/payout_results"
-          resource :course_holes, path: "course-holes", only: [:edit, :update], controller: "scoring_rules/course_holes"
+          resources :payout_results, controller: 'scoring_rules/payout_results'
         end
 
         resources :tournament_notifications
@@ -184,7 +185,7 @@ Rails.application.routes.draw do
         end
 
         resource :team_configuration, path: "copy_teams", only: [:update]
-      end      
+      end
 
       resource :auto_scheduling, path: "autoschedule", only: [:update], controller: "tournaments/auto_scheduling" do
         patch 'run_auto_scheduling'

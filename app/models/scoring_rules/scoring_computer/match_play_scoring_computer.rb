@@ -1,5 +1,15 @@
 module ScoringComputer
   class MatchPlayScoringComputer < StrokePlayScoringComputer
+    def outcome_lists_include_user(outcome_lists, user)
+      outcome_lists.each do |list|
+        result = list.map(&:values).flatten.include? user
+
+        return true if result
+      end
+
+      false
+    end
+
     def assign_payouts
       Rails.logger.debug { "assign_payouts #{self.class}" }
 
@@ -11,53 +21,55 @@ module ScoringComputer
 
       eligible_users = @scoring_rule.users_eligible_for_payouts
 
-      users_with_holes_won = []
+      winners = []
+      ties = []
+      losers = []
 
       eligible_users.each do |user|
-        match_play_scorecard = @scoring_rule.match_play_scorecard_for_user(user)
+        next if outcome_lists_include_user([winners, losers, ties], user) # this means we already handled this matchup
 
-        users_with_holes_won << { user: user, holes_won: match_play_scorecard.holes_won, details: match_play_scorecard.extra_scoring_column_data }
+        opponent = @scoring_rule.opponent_for_user(user)
+        next if opponent.blank?
+
+        if !eligible_users.include?(opponent) # opponent was disqualified, user wins
+          winners << { user: user, detail: 'W' }
+        else
+          user_match_play_scorecard = @scoring_rule.match_play_scorecard_for_user(user)
+          if user_match_play_scorecard.scorecard_result == ::ScoringRuleScorecards::MatchPlayScorecardResult::WON # in this case, we are good
+            winners << { user: user, detail: user_match_play_scorecard.extra_scoring_column_data }
+          elsif user_match_play_scorecard.scorecard_result == ::ScoringRuleScorecards::MatchPlayScorecardResult::TIED
+            ties << { user: user, detail: user_match_play_scorecard.extra_scoring_column_data, tie_identifier: "#{user.id}-#{opponent.id}" }
+
+            opponent_match_play_scorecard = @scoring_rule.match_play_scorecard_for_user(opponent)
+            ties << { user: opponent, detail: opponent_match_play_scorecard.extra_scoring_column_data, tie_identifier: "#{user.id}-#{opponent.id}" }
+          elsif user_match_play_scorecard.scorecard_result == ::ScoringRuleScorecards::MatchPlayScorecardResult::LOST
+            losers << { user: user, detail: user_match_play_scorecard.extra_scoring_column_data }
+          end
+        end
       end
 
-      # sort
-      users_with_holes_won.sort! { |x, y| y[:holes_won] <=> x[:holes_won] }
-
-      # assign payouts
+      # winners
+      unclaimed_payouts = []
       @scoring_rule.payouts.each_with_index do |payout, i|
         if payout.payout_results.count.zero?
-          user = users_with_holes_won[i][:user]
-          details = users_with_holes_won[i][:details]
-          holes_won = users_with_holes_won[i][:holes_won]
+          if winners.count > i
+            winner = winners[i]
 
-          if user.present?
-            amount = payout.amount
-            points = payout.points
-
-            others_tied = users_with_holes_won.select { |u| u[:holes_won] == holes_won }
-            if others_tied.present? && others_tied.count > 1
-              amount = (amount / others_tied.count).round if amount.positive?
-              points = (points / others_tied.count).round if points.positive?
-
-              others_tied.each do |tie|
-                tie_user = tie[:user]
-                tie_details = tie[:details]
-
-                Rails.logger.debug { "TIE Assigning #{tie_user.complete_name}. HW: #{holes_won}. Payout [#{payout}] Scoring Rule [#{@scoring_rule.name} #{@scoring_rule.id}]" }
-
-                PayoutResult.create(payout: payout, user: tie_user, scoring_rule: @scoring_rule, amount: amount, points: points, detail: tie_details)
-
-                users_with_holes_won.each_with_index do |x, i|
-                  users_with_holes_won.delete_at(i) if x[:user] == tie_user
-                end
-              end
-            else
-              Rails.logger.debug { "Assigning #{user.complete_name}. Payout [#{payout}] Scoring Rule [#{@scoring_rule.name} #{@scoring_rule.id}]" }
-
-              PayoutResult.create(payout: payout, user: user, scoring_rule: @scoring_rule, amount: amount, points: points, detail: details)
-            end
+            PayoutResult.create(payout: payout, user: winner[:user], scoring_rule: @scoring_rule, amount: payout.amount, points: payout.points, detail: winner[:detail])
+          else
+            unclaimed_payouts << payout
           end
-        else
-          Rails.logger.debug { "Payout Already Has Results: #{payout.payout_results.map(&:id)}" }
+        end
+      end
+
+      # ties
+      grouped_ties = ties.group_by { |i| i[:tie_identifier] }
+      unclaimed_payouts.each_with_index do |payout, i|
+        next unless grouped_ties.keys.count >= i
+
+        tie_group_identifier = grouped_ties.keys[i]
+        grouped_ties[tie_group_identifier].each do |winner|
+          PayoutResult.create(payout: payout, user: winner[:user], scoring_rule: @scoring_rule, amount: payout.amount / 2, points: payout.points / 2, detail: winner[:detail])
         end
       end
     end
