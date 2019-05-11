@@ -26,13 +26,7 @@ Rails.cache.fetch ['v1', tournament_group], expires_in: 24.hours do
       name: golf_outing.course_tee_box.name
     }
 
-    outing_json[:scorecard] = {
-      id: golf_outing.scorecard.id,
-      server_id: golf_outing.scorecard.server_id,
-      matchup_position: golf_outing.scorecard.matchup_position_indicator
-    }
-
-    outing_json[:scores] = golf_outing.scorecard.scores.map do |score|
+    scores = golf_outing.scorecard.scores.map do |score|
       {
         server_id: score.server_id,
         id: score.id,
@@ -43,6 +37,13 @@ Rails.cache.fetch ['v1', tournament_group], expires_in: 24.hours do
         tee_group_name: score.tee_group_name
       }
     end
+
+    outing_json[:scorecard] = {
+      id: golf_outing.scorecard.id,
+      server_id: golf_outing.scorecard.server_id,
+      matchup_position: golf_outing.scorecard.matchup_position_indicator,
+      scores: scores
+    }
 
     outing_json
   end
