@@ -1,10 +1,9 @@
-module ScoringRules
+module TournamentDays
   class CourseHolesController < ::BaseController
     before_action :fetch_tournament
-    before_action :fetch_scoring_rule, only: [:edit, :update]
 
     def edit
-      @stage_name = 'hole_information'
+      @stage_name = 'course_holes'
     end
 
     def update
@@ -13,7 +12,7 @@ module ScoringRules
           update_scores_for_course_holes(tournament_day: day)
         end
 
-        redirect_to league_tournament_tournament_day_scoring_rules_path(current_user.selected_league, @tournament, @tournament.tournament_days.first), flash:
+        redirect_to league_tournament_tournament_day_tournament_groups_path(current_user.selected_league, @tournament, @tournament.tournament_days.first), flash:
         { success: 'The game type holes were successfully updated.' }
       else
         render :edit
@@ -45,10 +44,6 @@ module ScoringRules
     def fetch_tournament
       @tournament = fetch_tournament_from_user_for_tournament_id(params[:tournament_id])
       @tournament_day = @tournament.tournament_days.find(params[:tournament_day_id])
-    end
-
-    def fetch_scoring_rule
-      @scoring_rule = @tournament_day.scoring_rules.find(params[:scoring_rule_id])
     end
   end
 end

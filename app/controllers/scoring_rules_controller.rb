@@ -2,9 +2,9 @@ class ScoringRulesController < BaseController
   before_action :fetch_tournament
   before_action :fetch_scoring_rule, only: [:edit, :update, :destroy]
   before_action :set_stage
-  
+
   def index
-  	@scoring_rules = @tournament_day.scoring_rules
+    @scoring_rules = @tournament_day.scoring_rules
   end
 
   def create
@@ -49,7 +49,7 @@ class ScoringRulesController < BaseController
     self.update_primary_scoring_rule
 
   	if params[:commit] == "Save & Continue"
-  		redirect_to league_tournament_tournament_day_tournament_groups_path(@tournament.league, @tournament, @tournament_day)
+  		redirect_to edit_league_tournament_tournament_day_course_holes_path(@tournament.league, @tournament, @tournament_day)
   	else
   		redirect_to league_tournament_tournament_day_scoring_rules_path(@tournament.league, @tournament, @tournament_day)
   	end
