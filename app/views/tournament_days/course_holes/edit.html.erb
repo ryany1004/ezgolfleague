@@ -35,30 +35,40 @@
   function selectHoles(holes) {
     var allHoles = $('.well input:checkbox');
 
+    var arraySize = <%= @tournament_day.course.course_holes.count %>;
+    var holeGroups = [];
+    for (var i = 0; i < Math.ceil(allHoles.length / arraySize); i++) {
+      holeGroups.push(allHoles.slice(i * arraySize, i * arraySize + arraySize));
+    }
+
     if (holes == 'all_18') {
       allHoles.prop('checked', true);
     } else if (holes == 'front_9') {
-      var index;
+      for (var g = 0; g < holeGroups.length; g++) {
+        var subGroup = holeGroups[g];
 
-      for (index = 0; index < allHoles.length; index++) {
-        var hole = $(allHoles[index]);
+        for (var index = 0; index < subGroup.length; index++) {
+          var hole = $(subGroup[index]);
 
-        if (index <= 8) {
-          hole.prop('checked', true);
-        } else {
-          hole.prop('checked', false);
+          if (index <= 8) {
+            hole.prop('checked', true);
+          } else {
+            hole.prop('checked', false);
+          }
         }
       }
     } else {
-      var index;
+      for (var g = 0; g < holeGroups.length; g++) {
+        var subGroup = holeGroups[g];
 
-      for (index = 0; index < allHoles.length; index++) {
-        var hole = $(allHoles[index]);
+        for (var index = 0; index < subGroup.length; index++) {
+          var hole = $(subGroup[index]);
 
-        if (index >= 9) {
-          hole.prop('checked', true);
-        } else {
-          hole.prop('checked', false);
+          if (index >= 9) {
+            hole.prop('checked', true);
+          } else {
+            hole.prop('checked', false);
+          }
         }
       }
     }
