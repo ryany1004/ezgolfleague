@@ -55,6 +55,10 @@
     background: ezgl-color('secondary', 'base');
     border: ezgl-color('secondary', 'base');
     color: ezgl-color('foreground', 'darker');
+
+    .close {
+      color: ezgl-color('foreground', 'darker');
+    }
   }
 
 	&.alert-danger {

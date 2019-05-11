@@ -68,7 +68,7 @@
                     <% if !current_user.has_all_exempt_leagues? && current_user.is_any_league_admin? %>
                      <%= link_to "Your Subscription", current_league_subscription_credits_path(current_user.selected_league), class: 'dropdown-item' %>
                     <% end %>
-                    <%= link_to "Your User Profile", edit_current_user_accounts_path, class: 'dropdown-item' %>
+                    <%= link_to "Your User Profile", edit_play_user_account_path, class: 'dropdown-item' %>
                     <a class="dropdown-item" href='mailto:support@ezgolfleague.com?subject=I%20Need%20Help%20With%20EZ%20Golf%20League'>Email Support</a>
                     <% if current_user.leagues.count > 1 -%>
                       <div class="dropdown-divider"></div>
@@ -101,16 +101,12 @@
 
     <!-- <%= Rails.env %> -->
 
-    <footer class="container">
-      <br/>
-      Copyright © EZ Golf League | <%= link_to "Privacy Policy", "/privacy_policy.html" %> | <%= link_to "Terms of Service", "/terms_of_service.html" %> | <a href='mailto:support@ezgolfleague.com?subject=I%20Need%20Help%20With%20EZ%20Golf%20League'>Email Support</a> <% if user_signed_in? && current_user.is_super_user %>| <%= link_to "Jobs Queue", "/jobs" %><% end %>
-
-      <br/><br/>
-      <div>
-        <a href='https://itunes.apple.com/us/app/ez-golf-league/id1088689756?mt=8'><%= image_tag 'app_store.svg', width: "180" %></a>
-        &nbsp;&nbsp;
-        <a href='https://play.google.com/store/apps/details?id=com.ezgolfleague.golfapp&hl=en'><%= image_tag 'google-play-badge.png', width: "200" %></a>
+    <footer class="container pt-5 pb-4">
+      <div class="pb-3">
+        <a href='https://itunes.apple.com/us/app/ez-golf-league/id1088689756?mt=8'><%= image_tag 'app_store.svg', width: "150" %></a>
+        <a href='https://play.google.com/store/apps/details?id=com.ezgolfleague.golfapp&hl=en'><%= image_tag 'google-play-badge.png', width: "170" %></a>
       </div>
+      Copyright © EZ Golf League | <%= link_to "Privacy Policy", "/privacy_policy.html" %> | <%= link_to "Terms of Service", "/terms_of_service.html" %> | <a href='mailto:support@ezgolfleague.com?subject=I%20Need%20Help%20With%20EZ%20Golf%20League'>Email Support</a> <% if user_signed_in? && current_user.is_super_user %>| <%= link_to "Jobs Queue", "/jobs" %><% end %>
     </footer>
 
     <% if user_signed_in? -%>

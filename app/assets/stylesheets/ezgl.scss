@@ -126,7 +126,7 @@ button:focus {
   margin-bottom: 0;
 }
 
-.profile-dropdown .dropdown-toggle {
+.profile-dropdown .dropdown-toggle, .profile-dropdown .dropdown-toggle img {
   width: 40px;
   height: 40px;
   cursor: pointer;
@@ -1873,6 +1873,17 @@ button:focus {
 .tornament-info-popup-content-right{
   padding-left: 35px;
 }
+
+footer {
+  text-align: center;
+  font-size: 11px;
+  color: ezgl-color('accent', 'base');
+
+  a {
+    color: #2980b9;
+  }
+}
+
 /* Responsive Media Queries  */
 
 
