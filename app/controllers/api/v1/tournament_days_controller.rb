@@ -5,8 +5,8 @@ class Api::V1::TournamentDaysController < Api::V1::ApiBaseController
   respond_to :json
 
   def tournament_groups
-    @eager_groups = Rails.cache.fetch(@tournament_day.cache_key("groups"), expires_in: 24.hours, race_condition_ttl: 10) do
-      logger.info { "Fetching Tournament Day - Not Cached" }
+    @eager_groups = Rails.cache.fetch(@tournament_day.cache_key('groups'), expires_in: 24.hours, race_condition_ttl: 10) do
+      logger.info { 'Fetching Tournament Day - Not Cached' }
 
       @tournament_day.eager_groups
     end

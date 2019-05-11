@@ -1,0 +1,10 @@
+Rails.cache.fetch ['v1', payout], expires_in: 24.hours do
+  {
+    flight_number: payout[:flight_number],
+    name: payout[:name],
+    id: payout[:id],
+    amount: payout[:amount],
+    points: payout[:points],
+    matchup_position: payout[:matchup_position]
+  }
+end

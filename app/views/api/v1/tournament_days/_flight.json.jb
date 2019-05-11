@@ -1,0 +1,11 @@
+Rails.cache.fetch ['v1', flight], expires_in: 24.hours do
+  json = {
+    flight_number: flight.flight_number,
+    display_name: flight.display_name,
+    api_display_name: flight.api_display_name
+  }
+
+  json[:players] = render partial: 'tournament_day_result', collection: flight.scorecard_base_scoring_rule_tournament_day_results, as: :tournament_day_result
+
+  json
+end
