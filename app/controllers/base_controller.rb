@@ -16,42 +16,34 @@ class BaseController < ActionController::Base
 
   def view_tournament_from_user_for_tournament_id(tournament_id)
     if current_user.is_super_user?
-      @tournament = Tournament.find(tournament_id)
+      Tournament.find_by(id: tournament_id)
     else
-      @tournament = current_user.tournaments.where(id: tournament_id).first
+      current_user.tournaments.find_by(id: tournament_id)
     end
-
-    return @tournament
   end
 
   def fetch_tournament_from_user_for_tournament_id(tournament_id)
     if current_user.is_super_user?
-      @tournament = Tournament.find(tournament_id)
+      Tournament.find_by(id: tournament_id)
     else
-      @tournament = current_user.tournaments_admin.where(id: tournament_id).first
+      current_user.tournaments_admin.find_by(id: tournament_id)
     end
-
-    return @tournament
   end
 
   def view_league_from_user_for_league_id(league_id)
     if current_user.is_super_user?
-      @league = League.find(league_id)
+      League.find_by(id: league_id)
     else
-      @league = current_user.leagues.where(id: league_id).first
+      current_user.leagues.find_by(id: league_id)
     end
-
-    return @league
   end
 
   def league_from_user_for_league_id(league_id)
     if current_user.is_super_user?
-      @league = League.find(league_id)
+      League.find_by(id: league_id)
     else
-      @league = current_user.leagues_admin.where(id: league_id).first
+      current_user.leagues_admin.find_by(id: league_id)
     end
-
-    return @league
   end
 
   impersonates :user
