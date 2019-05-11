@@ -59,7 +59,9 @@ class TournamentsController < BaseController
     redirect_to league_tournaments_path(current_user.selected_league)
   end
 
-  def edit; end
+  def edit
+    redirect_to league_tournaments_path(current_user.selected_league), flash: { success: 'We could not locate the tournament in question in your account.' } if @tournament.blank?
+  end
 
   def update
     if @tournament.update(tournament_params)
