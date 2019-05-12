@@ -4,6 +4,8 @@ class RankLeagueSeasonJob < ApplicationJob
 
     Rails.logger.info { "Ranking Season: #{league_season.id}" }
 
-    LeagueSeasonRankingGroups::RankPosition.compute_rank(league_season)
+    LeagueSeason.transaction do
+      LeagueSeasonRankingGroups::RankPosition.compute_rank(league_season)
+    end
   end
 end
