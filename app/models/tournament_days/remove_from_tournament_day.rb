@@ -23,6 +23,8 @@ module RemoveFromTournamentDay
       self.remove_from_scoring_rules(user: user)
 
       self.refund_user(user: user) if self == self.tournament.first_day
+
+      tournament_group.touch
     end
   end
 

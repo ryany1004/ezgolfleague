@@ -1,4 +1,4 @@
-Rails.cache.fetch ['v1', contest], expires_in: 24.hours do
+Rails.cache.fetch ['v1', contest.cache_key_with_version] do
   {
     name: contest[:name],
     winners: contest[:winners]

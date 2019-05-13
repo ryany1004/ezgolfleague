@@ -1,4 +1,4 @@
-Rails.cache.fetch ['v1', tournament_day_result], expires_in: 24.hours do
+Rails.cache.fetch ['v1', tournament_day_result.cache_key_with_version] do
   {
     id: tournament_day_result.id,
     name: tournament_day_result.name,

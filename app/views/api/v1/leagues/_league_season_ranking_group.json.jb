@@ -1,4 +1,4 @@
-Rails.cache.fetch ['v1', league_season_ranking_group], expires_in: 24.hours do
+Rails.cache.fetch ['v1', league_season_ranking_group.cache_key_with_version] do
   json = {
     name: league_season_ranking_group.name,
     server_id: league_season_ranking_group.server_id

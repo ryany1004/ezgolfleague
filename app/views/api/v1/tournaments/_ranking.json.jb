@@ -1,4 +1,4 @@
-Rails.cache.fetch ['v1', ranking], expires_in: 24.hours do
+Rails.cache.fetch ['v1', ranking.cache_key_with_version] do
   {
     flight_number: ranking[:flight_number],
     name: ranking[:name],

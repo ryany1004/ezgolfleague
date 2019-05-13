@@ -1,4 +1,4 @@
-Rails.cache.fetch ['v1', tournament_group], expires_in: 24.hours do
+Rails.cache.fetch ['v1', tournament_group.cache_key_with_version] do
   json = {
     server_id: tournament_group.server_id,
     api_time_description: tournament_group.api_time_description,

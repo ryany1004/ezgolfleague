@@ -1,4 +1,4 @@
-Rails.cache.fetch ['v1', flight], expires_in: 24.hours do
+Rails.cache.fetch ['v1', flight.cache_key_with_version] do
   json = {
     flight_number: flight.flight_number,
     display_name: flight.display_name,
