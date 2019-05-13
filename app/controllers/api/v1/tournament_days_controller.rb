@@ -62,7 +62,7 @@ class Api::V1::TournamentDaysController < Api::V1::ApiBaseController
   end
 
   def register_contests
-    self.register_optional_games
+    register_optional_games
   end
 
   def register_optional_games
