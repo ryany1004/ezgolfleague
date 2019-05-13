@@ -57,6 +57,8 @@ class Api::V1::TournamentDaysController < Api::V1::ApiBaseController
     Rails.cache.delete(@tournament_day.cache_key('groups'))
 
     @eager_groups = @tournament_day.eager_groups
+
+    render json: { success: true }
   end
 
   def register_contests
