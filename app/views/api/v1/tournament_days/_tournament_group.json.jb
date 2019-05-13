@@ -5,6 +5,7 @@ Rails.cache.fetch ['v1', tournament_group], expires_in: 24.hours do
     tee_time_at: tournament_group.tee_time_at,
     show_players_tee_times: tournament_group.tournament_day.tournament.show_players_tee_times,
     max_number_of_players: tournament_group.max_number_of_players,
+    number_of_tournament_registrations: tournament_group.tournament_day.tournament.number_of_players
   }
 
   json[:golf_outings] = tournament_group.api_golf_outings.map do |golf_outing|
