@@ -3,7 +3,7 @@
 		<h3 class="panel-title pb-4">Edit Profile</h3>
 	</div>
 
-	<%= simple_form_for @user_account, url: play_user_account_path(@user_account), multipart: true, :defaults => { :input_html => { :class => "onboarding__input", :label => false }} do |f| %>
+	<%= simple_form_for @user_account, url: @user_account.new_record? ? user_accounts_path : user_account_path(@user_account), multipart: true, :defaults => { :input_html => { :class => "onboarding__input", :label => false }} do |f| %>
 		<% if notification = f.error_notification %>
 			<div class="alert alert-error fade in">
 				<a class="close" data-dismiss="alert" href="#">&times;</a>
@@ -65,7 +65,7 @@
 			</div>
 		</div>
 
-		<div class="form-flex-group">
+    <div class="form-flex-group">
     	<div class="form-side-label">
 				<p>Time Zone</p>
 			</div>

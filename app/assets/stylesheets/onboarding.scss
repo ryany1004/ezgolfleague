@@ -187,7 +187,15 @@
       }
     }
 
-    #v-settings {
+    #user_ghin_number {
+      width: 250px;
+    }
+
+    .handicap_index-label {
+      width: 24% !important;
+    }
+
+    #v-notifications {
       .user_wants_email_notifications, .user_wants_push_notifications {
         margin: 0;
 
@@ -248,10 +256,6 @@
         .form-subheader {
           width: 100%;
           border-bottom: 3px solid ezgl-color('foreground', 'darker');
-        }
-
-        .user_time_zone {
-          margin: 0;
         }
 
         &.form-actions {
@@ -405,7 +409,7 @@
     &.user-account-edit {
       min-height: 550px;
 
-      #v-my-account {
+      #v-billing {
         .flex-wrap {
           flex-wrap: wrap;
 

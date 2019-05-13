@@ -12,8 +12,8 @@
               <a class="nav-link active" id="v-edit-profile-tab" data-toggle="pill" href="#v-edit-profile" role="tab" aria-controls="v-edit-profile" aria-selected="true">Edit Profile</a>
               <a class="nav-link" id="v-edit-contact-info-tab" data-toggle="pill" href="#v-edit-contact-info" role="tab" aria-controls="v-edit-contact-info" aria-selected="false">Edit Contact Info</a>
               <a class="nav-link" id="v-edit-password-tab" data-toggle="pill" href="#v-edit-password" role="tab" aria-controls="v-edit-password" aria-selected="false">Edit Password</a>
-              <a class="nav-link" id="v-my-account-tab" data-toggle="pill" href="#v-my-account" role="tab" aria-controls="v-my-account" aria-selected="false">My Account</a>
-              <a class="nav-link" id="v-settings-tab" data-toggle="pill" href="#v-settings" role="tab" aria-controls="v-settings" aria-selected="false">Settings</a>
+              <a class="nav-link" id="v-notifications-tab" data-toggle="pill" href="#v-notifications" role="tab" aria-controls="v-notifications" aria-selected="false">Notifications</a>
+              <a class="nav-link" id="v-billing-tab" data-toggle="pill" href="#v-billing" role="tab" aria-controls="v-billing" aria-selected="false">Billing</a>
             </div>
           </div>
           <%= link_to "Exit to Dashboard", play_dashboard_index_path, class: 'btn btn-outline-secondary' %>
@@ -30,11 +30,11 @@
               <div class="tab-pane fade" id="v-edit-password" role="tabpanel" aria-labelledby="v-edit-password-tab">
                 <%= render 'edit_password' %>
               </div>
-              <div class="tab-pane fade" id="v-my-account" role="tabpanel" aria-labelledby="v-my-account-tab">
-                <%= render 'my_account' %>
+              <div class="tab-pane fade" id="v-notifications" role="tabpanel" aria-labelledby="v-notifications-tab">
+                <%= render 'notifications' %>
               </div>
-              <div class="tab-pane fade" id="v-settings" role="tabpanel" aria-labelledby="v-settings-tab">
-                <%= render 'settings' %>
+              <div class="tab-pane fade" id="v-billing" role="tabpanel" aria-labelledby="v-billing-tab">
+                <%= render 'billing' %>
               </div>
             </div>
           </div>

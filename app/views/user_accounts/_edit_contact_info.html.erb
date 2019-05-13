@@ -1,0 +1,66 @@
+<div class="registration-form-container">
+	<div class="panel-heading">
+		<h3 class="panel-title pb-4">Edit Contact Info</h3>
+	</div>
+
+	<%= simple_form_for @user_account, url: @user_account.new_record? ? user_accounts_path : user_account_path(@user_account), multipart: true, :defaults => { :input_html => { :class => "onboarding__input", :label => false }} do |f| %>
+		<% if notification = f.error_notification %>
+			<div class="alert alert-error fade in">
+				<a class="close" data-dismiss="alert" href="#">&times;</a>
+				<%= notification %>
+			</div>
+		<% end %>
+
+		<div class="form-flex-group">
+			<div class="form-side-label">
+				<p>Street Address 1</p>
+			</div>
+
+			<%= f.input :street_address_1, placeholder: 'i.e. 123 Main Street' %>
+		</div>
+
+		<div class="form-flex-group">
+			<div class="form-side-label">
+				<p>Street Address 2</p>
+			</div>
+
+			<%= f.input :street_address_2, placeholder: 'i.e. Suite 200' %>
+		</div>
+
+		<div class="form-flex-group">
+			<div class="form-side-label">
+				<p>City</p>
+			</div>
+
+			<div class="form-flex-group">
+				<%= f.input :city, placeholder: 'City' %>
+
+				<div class="form-side-label handicap_index-label pl-2 ">
+					<p>State</p>
+				</div>
+
+				<%= f.input :us_state, placeholder: 'State', collection: @us_states %>
+
+				<div class="form-side-label handicap_index-label pl-2 ">
+					<p>Zip</p>
+				</div>
+
+					<%= f.input :postal_code, placeholder: 'Zip Code' %>
+			</div>
+		</div>
+
+		<div class="form-flex-group">
+			<div class="form-side-label">
+				<p>Phone Number</p>
+			</div>
+
+			<%= f.input :phone_number, placeholder: 'Phone Number' %>
+		</div>
+
+		<div class="form-actions form-flex-group"> 
+			<div class="form-flex-right">
+				<%= f.button :submit, "Save", class: 'btn__ezgl-secondary' %>
+			</div>
+		</div>
+	<% end %>
+</div>
