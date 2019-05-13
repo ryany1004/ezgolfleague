@@ -34,7 +34,7 @@ class Api::V1::TournamentsController < Api::V1::ApiBaseController
 
     results_presenter = ApiResultsPresenter.new(tournament, current_user)
 
-    if tournament.is_league_teams?
+    if tournament.has_league_season_team_scoring_rules?
       cache_key = "tournament-teams-json#{tournament.id}-#{tournament.updated_at.to_i}"
       @tournament_results = Rails.cache.fetch(cache_key, expires_in: 24.hours, race_condition_ttl: 10) do
         results_presenter.league_team_results

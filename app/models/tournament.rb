@@ -118,6 +118,14 @@ class Tournament < ApplicationRecord
     self.tournament_days.count > 0
   end
 
+  def has_league_season_team_scoring_rules?
+    tournament_days.each do |d|
+      return true if d.scoring_rules.any? { |x| x.team_type == ScoringRuleTeamType::LEAGUE }
+    end
+
+    false
+  end
+
   def previous_day_for_day(day)
     index_for_day = self.tournament_days.index(day)
     unless index_for_day.blank?

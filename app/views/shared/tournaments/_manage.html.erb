@@ -24,7 +24,7 @@
           <li <%= tournament_class_for_stage(stage, "flights") %>><%= link_to 'Flights', league_tournament_tournament_day_flights_path(tournament.league, tournament, tournament_day) %></li>
           <li <%= tournament_class_for_stage(stage, "notifications#{tournament.tournament_days.first.id}") %>><%= link_to 'Notifications', league_tournament_tournament_day_tournament_notifications_path(tournament.league, tournament, tournament_day) %></li>
           
-          <% if @tournament.league_season.is_teams? %>
+          <% if @tournament.has_league_season_team_scoring_rules? %>
           	<% if tournament_day.tournament_groups.count.zero? %>
           		<li class='disabled'><%= link_to 'Teams', "#" %></li>
           	<% else %>
@@ -59,7 +59,7 @@
           <li <%= tournament_class_for_stage(stage, "tee_times#{day.id}") %>><%= link_to 'Tee Times', league_tournament_tournament_day_tournament_groups_path(tournament.league, tournament, day) %></li>
           <li <%= tournament_class_for_stage(stage, "flights#{day.id}") %>><%= link_to 'Flights', league_tournament_tournament_day_flights_path(tournament.league, tournament, day) %></li>
 
-          <% if @tournament.league_season.is_teams? %>
+          <% if @tournament.has_league_season_team_scoring_rules? %>
             <li <%= tournament_class_for_stage(stage, "teams#{day.id}") %>><%= link_to 'Teams', league_tournament_day_teams_path(tournament.league, tournament, day) %></li>
           <% end %>
 

@@ -21,7 +21,7 @@
 	  </div>
 	  <div class="panel-body">
 	  	<% if scoring_rule.payout_type == ScoringRulePayoutType::PREDETERMINED && scoring_rule.payout_assignment_type == ScoringRulePayoutAssignmentType::CALCULATED %>
-	      <% if @tournament.is_league_teams? %>
+	      <% if @tournament.has_league_season_team_scoring_rules? %>
 	        <p>For team tournaments, if a payout has just dollars or dollars AND points, it is awarded once based on the rank of each team in the final results. If a payout ONLY has points, the winning team in each matchup will receive that number of points.</p>
 	      <% else %>
 	        <p>Payouts are assigned to players sorted by the amount/points won - higher values going to higher placing players.</p>
