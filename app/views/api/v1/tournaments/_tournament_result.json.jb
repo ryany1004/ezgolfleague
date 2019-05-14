@@ -1,4 +1,4 @@
-Rails.cache.fetch ['v1', tournament_result.cache_key_with_version] do
+Rails.cache.fetch ['v1', tournament.cache_key_with_version] do
   json = {}
 
   json[:payouts] = render partial: 'payout', collection: tournament_result[:payouts], as: :payout

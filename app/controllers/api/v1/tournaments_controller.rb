@@ -29,18 +29,18 @@ class Api::V1::TournamentsController < Api::V1::ApiBaseController
   end
 
   def results
-    tournament = Tournament.find(params[:tournament_id])
-    @uses_scoring_groups = tournament.league.allow_scoring_groups
+    @tournament = Tournament.find(params[:tournament_id])
+    @uses_scoring_groups = @tournament.league.allow_scoring_groups
 
-    results_presenter = ApiResultsPresenter.new(tournament, current_user)
+    results_presenter = ApiResultsPresenter.new(@tournament, current_user)
 
-    if tournament.has_league_season_team_scoring_rules?
-      cache_key = "tournament-teams-json#{tournament.id}-#{tournament.updated_at.to_i}"
+    if @tournament.has_league_season_team_scoring_rules?
+      cache_key = "tournament-teams-json#{@tournament.id}-#{@tournament.updated_at.to_i}"
       @tournament_results = Rails.cache.fetch(cache_key, expires_in: 24.hours, race_condition_ttl: 10) do
         results_presenter.league_team_results
       end
     else
-      cache_key = "tournament-individual-json#{tournament.id}-#{tournament.updated_at.to_i}"
+      cache_key = "tournament-individual-json#{@tournament.id}-#{@tournament.updated_at.to_i}"
       @tournament_results = Rails.cache.fetch(cache_key, expires_in: 24.hours, race_condition_ttl: 10) do
         results_presenter.individual_results
       end
