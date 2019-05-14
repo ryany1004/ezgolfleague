@@ -14,6 +14,8 @@ module ScoringComputer
       super
 
       tournament_day.league_season_team_tournament_day_matchups.each do |matchup|
+        next if matchup.team_a.blank? || matchup.team_b.blank?
+
         team_a_best_ball_scorecard = @scoring_rule.best_ball_scorecard_for_team(matchup.team_a)
         team_b_best_ball_scorecard = @scoring_rule.best_ball_scorecard_for_team(matchup.team_b)
 
