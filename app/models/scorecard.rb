@@ -21,15 +21,15 @@ class Scorecard < ApplicationRecord
   accepts_nested_attributes_for :scores, :golf_outing
 
   def tournament_day
-    golf_outing.tournament_group.tournament_day
+    golf_outing&.tournament_group&.tournament_day
   end
 
   def league
-    tournament_day.tournament.league
+    tournament_day&.tournament&.league
   end
 
   def user
-    golf_outing.user
+    golf_outing&.user
   end
 
   def scorecard_payload
@@ -37,7 +37,7 @@ class Scorecard < ApplicationRecord
   end
 
   def clear_primary_scorecard_cache
-    return if tournament_day.blank? || golf_outing.blank? || golf_outing.user.blank?
+    return if golf_outing.blank? || golf_outing.user.blank? || tournament_day.blank?
 
     tournament_day.delete_cached_primary_scorecard(user: golf_outing.user)
   end
