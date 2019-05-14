@@ -1,6 +1,4 @@
-Rails.cache.fetch ['v1', contest.cache_key_with_version] do
-  {
-    name: contest[:name],
-    winners: contest[:winners]
-  }
-end
+{
+  name: contest[:name],
+  winners: contest[:winners]
+}

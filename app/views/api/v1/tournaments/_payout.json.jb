@@ -1,10 +1,8 @@
-Rails.cache.fetch ['v1', payout.cache_key_with_version] do
-  {
-    flight_number: payout[:flight_number],
-    name: payout[:name],
-    id: payout[:id],
-    amount: payout[:amount],
-    points: payout[:points],
-    matchup_position: payout[:matchup_position]
-  }
-end
+{
+  flight_number: payout[:flight_number],
+  name: payout[:name],
+  id: payout[:id],
+  amount: payout[:amount],
+  points: payout[:points],
+  matchup_position: payout[:matchup_position]
+}
