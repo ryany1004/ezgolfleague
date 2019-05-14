@@ -69,13 +69,7 @@ class LeagueSeasonTeamTournamentDayMatchup < ApplicationRecord
   def users_with_matchup_indicator(team)
     matchups = []
 
-    if team == team_a
-      users = team_a_users
-    else
-      users = team_b_users
-    end
-
-    users.each_with_index do |u, i|
+    users_for_team(team).each_with_index do |u, i|
       matchups << { user: u, matchup_indicator: position_indicator_for_index(i) }
     end
 
@@ -83,13 +77,7 @@ class LeagueSeasonTeamTournamentDayMatchup < ApplicationRecord
   end
 
   def matchup_indicator_for_user(user)
-    if team_a.users.include? user
-      users = team_a_users
-    else
-      users = team_b_users
-    end
-
-    users.each_with_index do |u, i|
+    team_users_for_user(user).each_with_index do |u, i|
       return position_indicator_for_index(i) if user == u
     end
 
@@ -161,7 +149,13 @@ class LeagueSeasonTeamTournamentDayMatchup < ApplicationRecord
   end
 
   def users_for_team(team)
-    team == team_a ? team_a_users : team_b_users
+    if team == team_a
+      team_a
+    elsif team == team_b
+      team_b
+    else
+      []
+    end
   end
 
   def build_excluded_user_filter(relation)
