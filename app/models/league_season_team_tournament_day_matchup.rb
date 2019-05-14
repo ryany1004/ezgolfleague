@@ -150,9 +150,9 @@ class LeagueSeasonTeamTournamentDayMatchup < ApplicationRecord
 
   def users_for_team(team)
     if team == team_a
-      team_a
+      team_a_users
     elsif team == team_b
-      team_b
+      team_b_users
     else
       []
     end
