@@ -8,10 +8,7 @@ selectedTeams = [];
     <% end %>
   <% end %>
 
-  <% if @tournament_day.scorecard_base_scoring_rule.teams_are_player_vs_player? %>
-  	selectedTeams.push({ name: "<%= team.name %>", id: "<%= team.to_param %>", specifyPlayersButton: specifyPlayersButton, removeButton: removeButton });
-  <% else %>
-	  selectedTeams.push({ name: "<%= team.name %>", id: "<%= team.to_param %>", specifyPlayersButton: "", removeButton: removeButton });
+  selectedTeams.push({ name: "<%= team.name %>", id: "<%= team.to_param %>", specifyPlayersButton: specifyPlayersButton, removeButton: removeButton });
   <% end %>
 <% end %>
 

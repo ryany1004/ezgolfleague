@@ -17,7 +17,7 @@ class PayoutResult < ApplicationRecord
     elsif league_season_team.present?
       league_season_team.name
     else
-      "N/A"
+      'N/A'
     end
   end
 

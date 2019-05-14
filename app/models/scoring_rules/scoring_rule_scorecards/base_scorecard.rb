@@ -50,11 +50,11 @@ module ScoringRuleScorecards
     end
 
     def gross_score
-      return self.scores.map {|score| score.strokes }.sum
+      scores.map { |score| score.strokes }.sum
     end
 
     def net_score
-      return self.scores.map {|score| score.net_strokes }.sum
+      scores.map { |score| score.net_strokes }.sum
     end
 
     def front_nine_score(use_handicap = false)
