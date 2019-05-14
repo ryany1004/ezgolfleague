@@ -1,6 +1,6 @@
 module BestBallScorecardSupport
   def related_scorecards_for_user(user, only_human_scorecards = false)
-    if instance_of?(BestBallScoringRule)
+    if instance_of?(BestBallScoringRule) || instance_of?(TwoManBestBallScoringRule)
       daily_team_related_scorecards_for_user(user, only_human_scorecards)
     elsif instance_of?(TeamBestBallScoringRule)
       league_team_four_best_ball_related_scorecards_for_user(user, only_human_scorecards)
