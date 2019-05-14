@@ -43,14 +43,24 @@ class LeagueSeasonTeamTournamentDayMatchup < ApplicationRecord
   end
 
   def pairings_by_handicap
-    raise 'Unbalanced teams' unless teams_are_balanced?
-
     pairings = []
 
-    team_a_users.each_with_index do |u, i|
-      user_b = team_b_users[i]
+    base_team_users = team_a_users
+    other_team_users = team_b_users
 
-      pairings << [u, user_b]
+    if team_a_users.count.zero?
+      base_team_users = team_b_users
+      other_team_users = team_a_users
+    end
+
+    base_team_users.each_with_index do |u, i|
+      other_user = other_team_users[i]
+
+      if other_user.present?
+        pairings << [u, other_user]
+      else
+        pairings << [u]
+      end
     end
 
     pairings
@@ -116,6 +126,8 @@ class LeagueSeasonTeamTournamentDayMatchup < ApplicationRecord
   end
 
   def team_a_users
+    return [] if team_a.blank?
+
     if team_a_final_sort.present?
       team_a.users.where(id: team_a_final_sort.split(','))
     else
@@ -129,6 +141,8 @@ class LeagueSeasonTeamTournamentDayMatchup < ApplicationRecord
   end
 
   def team_b_users
+    return [] if team_b.blank?
+
     if team_b_final_sort.present?
       team_b.users.where(id: team_b_final_sort.split(','))
     else
@@ -184,7 +198,12 @@ class LeagueSeasonTeamTournamentDayMatchup < ApplicationRecord
     user_ids = user_ids_to_omit
     user_ids.delete(user.id.to_s)
 
-    self.excluded_user_ids = user_ids.join(',')
+    if user_ids.count.positive?
+      self.excluded_user_ids = user_ids.join(',')
+    else
+      self.excluded_user_ids = nil
+    end
+
     save
   end
 

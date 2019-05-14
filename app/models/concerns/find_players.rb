@@ -14,12 +14,12 @@ module FindPlayers
   end
 
   def league_season_team_for_player(user)
-  	self.league_season_team_tournament_day_matchups.each do |m|
-  		return m.team_a if m.team_a.users.include? user
-  		return m.team_b if m.team_b.users.include? user
-  	end
+    league_season_team_tournament_day_matchups.each do |m|
+      return m.team_a if m.team_a.present? && m.team_a.users.include?(user)
+      return m.team_b if m.team_b.present? && m.team_b.users.include?(user)
+    end
 
-  	nil
+    nil
   end
 
   def league_season_team_matchup_for_player(user)

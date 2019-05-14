@@ -4,7 +4,7 @@ module ScoringComputer
       Rails.logger.debug { "assign_payouts #{self.class}" }
 
       @scoring_rule.payout_results.destroy_all
-      
+
       eligible_users = @scoring_rule.users_eligible_for_payouts
 
       winners = []
