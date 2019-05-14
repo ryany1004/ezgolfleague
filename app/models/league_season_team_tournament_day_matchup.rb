@@ -151,10 +151,12 @@ class LeagueSeasonTeamTournamentDayMatchup < ApplicationRecord
   end
 
   def team_users_for_user(user)
-    if team_a.users.include? user
+    if team_a.present? && team_a.users.include?(user)
       team_a_users
-    else
+    elsif team_b.present? && team_b.users.include?(user)
       team_b_users
+    else
+      []
     end
   end
 
