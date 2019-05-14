@@ -1,0 +1,46 @@
+module ScoringComputer
+  class TeamMatchPlayVsPointsPerHoleScoringComputer < MatchPlayScoringComputer
+    def assign_payouts
+      Rails.logger.debug { "assign_payouts #{self.class}" }
+
+      @scoring_rule.payout_results.destroy_all
+      
+      eligible_users = @scoring_rule.users_eligible_for_payouts
+
+      winners = []
+      ties = []
+      losers = []
+
+      eligible_users.each do |user|
+        next if outcome_lists_include_user([winners, losers, ties], user) # this means we already handled this matchup
+
+        opponent = @scoring_rule.opponent_for_user(user)
+        next if opponent.blank?
+
+        if !eligible_users.include?(opponent) # opponent was disqualified, user wins
+          winners << { user: user, detail: 'W' }
+        else
+          user_match_play_scorecard = @scoring_rule.match_play_scorecard_for_user(user)
+          if user_match_play_scorecard.scorecard_result == ::ScoringRuleScorecards::MatchPlayScorecardResult::WON # in this case, we are good
+            winners << { user: user, detail: user_match_play_scorecard.extra_scoring_column_data }
+          elsif user_match_play_scorecard.scorecard_result == ::ScoringRuleScorecards::MatchPlayScorecardResult::TIED
+            ties << { user: user, detail: user_match_play_scorecard.extra_scoring_column_data }
+
+            opponent_match_play_scorecard = @scoring_rule.match_play_scorecard_for_user(opponent)
+            ties << { user: opponent, detail: opponent_match_play_scorecard.extra_scoring_column_data }
+          elsif user_match_play_scorecard.scorecard_result == ::ScoringRuleScorecards::MatchPlayScorecardResult::LOST
+            losers << { user: user, detail: user_match_play_scorecard.extra_scoring_column_data }
+          end
+        end
+      end
+
+      winners.each do |u|
+        PayoutResult.create(scoring_rule: @scoring_rule, user: u[:user], points: 2, detail: u[:detail])
+      end
+
+      ties.each do |u|
+        PayoutResult.create(scoring_rule: @scoring_rule, user: u[:user], points: 1, detail: u[:detail])
+      end
+    end
+  end
+end

@@ -2,7 +2,7 @@ module MatchPlayScorecardSupport
   def related_scorecards_for_user(user, only_human_scorecards = false)
     if instance_of?(MatchPlayScoringRule)
       daily_team_related_scorecards_for_user(user, only_human_scorecards)
-    elsif instance_of?(TeamMatchPlayVsScoringRule)
+    elsif instance_of?(TeamMatchPlayVsScoringRule) || instance_of?(TeamMatchPlayVsPointsPerHoleScoringRule)
       league_team_related_scorecards_for_user(user, only_human_scorecards)
     elsif instance_of?(TeamMatchPlayBestBallScoringRule)
       league_team_four_best_ball_related_scorecards_for_user(user, only_human_scorecards)
