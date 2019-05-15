@@ -37,13 +37,13 @@ module AddToTournamentDay
 
   def create_scores_for_scorecard(scorecard:)
     scorecard_base_scoring_rule.course_holes.each_with_index do |hole, i|
-      Score.create!(scorecard: scorecard, course_hole: hole, sort_order: i)
+      Score.find_or_create_by!(scorecard: scorecard, course_hole: hole, sort_order: i)
     end
   end
 
-  def update_scores_for_scorecard(scorecard:)
-    if self.scorecard_base_scoring_rule.course_holes.count != scorecard.scores.count
-      scorecard.scores.destroy_all
+  def update_scores_for_scorecard(scorecard:, destroy_first: true)
+    if scorecard_base_scoring_rule.course_holes.count != scorecard.scores.count
+      scorecard.scores.destroy_all if destroy_first
 
       create_scores_for_scorecard(scorecard: scorecard)
     end
