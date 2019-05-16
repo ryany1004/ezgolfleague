@@ -151,9 +151,9 @@ module ApplicationHelper
 
   def tournament_class_for_stage(stage, stage_option)
     if stage == stage_option
-      "class=active"
+      'class=active'
     else
-      ""
+      ''
     end
   end
 

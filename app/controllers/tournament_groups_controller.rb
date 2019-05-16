@@ -89,19 +89,6 @@ class TournamentGroupsController < BaseController
   end
 
   def set_stage
-    if params[:tournament_day].blank?
-      if @tournament.tournament_days.count > 1
-        @stage_name = "tee_times#{@tournament.first_day.id}"
-      else
-        @stage_name = "tee_times"
-      end
-    else
-      if @tournament.tournament_days.count > 1
-        @stage_name = "tee_times#{@tournament_day.id}"
-      else
-        @stage_name = "tee_times"
-      end
-    end
+    @stage_name = "tee_times#{@tournament_day.id}"
   end
-
 end

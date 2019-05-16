@@ -5,25 +5,25 @@ class Api::V1::ScoresController < Api::V1::ApiBaseController
     scores = ActiveSupport::JSON.decode(request.body.read)
 
     first_score_dict = scores[0]
-    score_id = first_score_dict["scoreServerID"]
+    score_id = first_score_dict['scoreServerID']
     score = Score.where(id: score_id).first
 
     if score.present?
-      self.fetch_scorecards_for_id(score.scorecard.id)
+      fetch_scorecards_for_id(score.scorecard.id)
 
-      scores_to_update = Hash.new
+      scores_to_update = {}
 
       scores.each do |update_score|
-        scores_to_update[update_score["scoreServerID"]] = {strokes: update_score["score"], date_scored: update_score["dateScored"]}
+        scores_to_update[update_score['scoreServerID']] = { strokes: update_score['score'], date_scored: update_score['dateScored'] }
       end
 
       logger.debug { "Sending: #{scores_to_update}" }
 
       Updaters::ScorecardUpdating.update_scorecards_for_scores(scores_to_update, @scorecard, @scorecards_to_update, true)
 
-      render json: {text: "Success"}
+      render json: { message: 'Success' }
     else
-      render text: "Score Updating Failure", status: :bad_request
+      render json: { message: 'Score Updating Failure' }, status: :bad_request
     end
   end
 

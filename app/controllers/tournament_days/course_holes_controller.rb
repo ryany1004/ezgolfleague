@@ -3,7 +3,7 @@ module TournamentDays
     before_action :fetch_tournament
 
     def edit
-      @stage_name = 'course_holes'
+      @stage_name = "course_holes#{@tournament_day.id}"
     end
 
     def update

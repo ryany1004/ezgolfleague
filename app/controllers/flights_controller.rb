@@ -100,19 +100,6 @@ class FlightsController < BaseController
   end
 
   def set_stage
-    if params[:tournament_day].blank?
-      if @tournament.tournament_days.count > 1
-        @stage_name = "flights#{@tournament.first_day.id}"
-      else
-        @stage_name = "flights"
-      end
-    else
-      if @tournament.tournament_days.count > 1
-        @stage_name = "flights#{@tournament_day.id}"
-      else
-        @stage_name = "flights"
-      end
-    end
+    @stage_name = "flights#{@tournament_day.id}"
   end
-
 end

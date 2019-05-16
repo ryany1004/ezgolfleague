@@ -103,8 +103,8 @@ class ScoringRulesController < BaseController
   def fetch_scoring_rule
   	@scoring_rule = @tournament_day.scoring_rules.find(params[:id])
   end
-  
+
   def set_stage
-    @stage_name = "scoring_rules"
+    @stage_name = "scoring_rules#{@tournament_day.id}"
   end
 end
