@@ -66,7 +66,7 @@ class ScorecardsController < BaseController
   end
 
   def repair_scorecard
-    @scorecard.tournament_day.update_scores_for_scorecard(scorecard: @scorecard) if !@scorecard.tournament_day.has_scores?
+    @scorecard.tournament_day.update_scores_for_scorecard(scorecard: @scorecard)
   end
 
   def find_next_scorecard(tournament_day, groups, current_scorecard)

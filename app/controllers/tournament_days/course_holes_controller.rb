@@ -24,8 +24,6 @@ module TournamentDays
     end
 
     def update_scores_for_course_holes(tournament_day:)
-      return if tournament_day.has_scores?
-
       tournament_day.eager_groups.each do |group|
         group.golf_outings.each do |golf_outing|
           scorecard = golf_outing.scorecard
