@@ -37,6 +37,10 @@ module ScoringRuleScorecards
       true
     end
 
+    def precalculated?
+      true
+    end
+
     def handicap_allowance_for_user(user)
       if handicap_indices[user.id.to_s]
         handicap_indices[user.id.to_s]

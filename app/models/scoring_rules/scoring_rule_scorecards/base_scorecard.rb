@@ -49,6 +49,10 @@ module ScoringRuleScorecards
       return name
     end
 
+    def precalculated?
+      false
+    end
+
     def gross_score
       scores.map { |score| score.strokes }.sum
     end

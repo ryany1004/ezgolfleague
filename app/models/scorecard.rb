@@ -64,6 +64,10 @@ class Scorecard < ApplicationRecord
     end
   end
 
+  def precalculated?
+    false
+  end
+
   def gross_score
     tournament_day_results.first ? tournament_day_results.first&.gross_score : 0
   end
