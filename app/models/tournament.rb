@@ -218,8 +218,6 @@ class Tournament < ApplicationRecord
     cost_lines
   end
 
-  ##
-
   def courses
     distinct_courses = []
 

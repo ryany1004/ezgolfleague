@@ -18,7 +18,8 @@ class HandicapCalculationJob < ApplicationJob
   def scorecards_for_player(player, league)
     scorecards = []
 
-    player.golf_outings.order(created_at: :desc).limit(100).each do |outing| # the 100 is arbitrary, to make sure we fetch enough records to have 10 valid scorecards
+    outings = player.golf_outings.order(created_at: :desc).limit(100) # the 100 is arbitrary, to make sure we fetch enough records
+    outings.each do |outing|
       Rails.logger.debug { "Outing: #{outing.id} for #{outing.user.complete_name}" }
 
       tournament = outing.tournament
@@ -31,7 +32,6 @@ class HandicapCalculationJob < ApplicationJob
       end
     end
 
-    scorecards = scorecards.sort_by(&:gross_score)
     scorecards = scorecards[0, league.number_of_rounds_to_handicap]
 
     scorecards
