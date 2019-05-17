@@ -32,6 +32,7 @@ class HandicapCalculationJob < ApplicationJob
       end
     end
 
+    scorecards.sort! { |x, y| y.tournament_day.tournament_at <=> x.tournament_day.tournament_at }
     scorecards = scorecards[0, league.number_of_rounds_to_handicap]
 
     scorecards
@@ -58,7 +59,7 @@ class HandicapCalculationJob < ApplicationJob
 
       differential = ((gross_score - rating) * 113) / slope
 
-      Rails.logger.info "HANDICAP: User: #{scorecard.user.complete_name} Gross Score: #{gross_score}. Rating: #{rating}. Slope: #{course_tee_box.slope}. Differential: #{differential}"
+      Rails.logger.info "HANDICAP: #{scorecard.tournament_day.tournament.name} User: #{scorecard.user.complete_name} Gross Score: #{gross_score}. Rating: #{rating}. Slope: #{course_tee_box.slope}. Differential: #{differential}"
 
       differential *= 2 if is_9_holes
       handicap_sum += differential
@@ -80,10 +81,9 @@ class HandicapCalculationJob < ApplicationJob
     tournaments.each do |t|
       t.tournament_days.each do |td|
         scorecard = td.primary_scorecard_for_user(user)
-
         next if scorecard.blank?
 
-        Rails.logger.info "Updating Scorecard #{scorecard.id} Course Handicap for #{user.complete_name}"
+        Rails.logger.info "Updating Scorecard #{scorecard.id} Course Handicap for #{user.complete_name} for #{t.name}"
 
         scorecard.set_course_handicap(true)
       end
