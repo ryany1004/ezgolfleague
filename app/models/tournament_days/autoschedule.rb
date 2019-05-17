@@ -20,11 +20,11 @@ module Autoschedule
       end
     end
 
-    if self.tournament.auto_schedule_for_multi_day == AutoScheduleType::AUTOMATIC_WORST_FIRST #worst golfer, worst flight
+    if self.tournament.auto_schedule_for_multi_day == AutoScheduleType::AUTOMATIC_WORST_FIRST # worst golfer, worst flight
       Rails.logger.info { "Scheduling #{players_with_scores.count} Golfers Worst to Best" }
 
       players_with_scores.sort! { |x,y| [y[:flight_number], y[:net_score]] <=> [x[:flight_number], x[:net_score]] }
-    elsif self.tournament.auto_schedule_for_multi_day == AutoScheduleType::AUTOMATIC_BEST_FIRST #best golfer, best flight
+    elsif self.tournament.auto_schedule_for_multi_day == AutoScheduleType::AUTOMATIC_BEST_FIRST # best golfer, best flight
       Rails.logger.info { "Scheduling #{players_with_scores.count} Golfers Best to Worst" }
 
       players_with_scores.sort! { |x,y| [x[:flight_number], x[:net_score]] <=> [y[:flight_number], y[:net_score]] }
@@ -74,7 +74,7 @@ module Autoschedule
 
         Rails.logger.info { "Adding Player #{player.complete_name} to group #{slot.id}." }
 
-        self.add_player_to_group(tournament_group: slot, user: player, paying_now: false, confirmed: true, registered_by: "Auto-Schedule")
+        self.add_player_to_group(tournament_group: slot, user: player, paying_with_credit_card: false, confirmed: true, registered_by: "Auto-Schedule")
 
         #add to new team
         if self.tournament.display_teams?
