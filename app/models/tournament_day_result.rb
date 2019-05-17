@@ -14,10 +14,12 @@ class TournamentDayResult < ApplicationRecord
   end
 
   def name
-    if self.user.present?
-      self.user.complete_name
-    elsif self.league_season_team.present?
+    if self.league_season_team.present?
       self.league_season_team.name
+    elsif self.read_attribute(:name).present?
+      self.read_attribute(:name)
+    elsif self.user.present?
+      self.user.complete_name
     else
       'N/A'
     end

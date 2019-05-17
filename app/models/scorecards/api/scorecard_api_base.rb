@@ -59,7 +59,7 @@ module Scorecards
         #Old Format
         score_info = []
         card.scores.each do |score|
-          score_info << [score.strokes.to_s]
+          score_info << [score.display_score.to_s]
         end
         score_info << ["#{card.front_nine_score(false)}/#{card.front_nine_score(true)}", "#{card.back_nine_score(false)}/#{card.back_nine_score(true)}"]
         score_info << [card.course_handicap.to_s]

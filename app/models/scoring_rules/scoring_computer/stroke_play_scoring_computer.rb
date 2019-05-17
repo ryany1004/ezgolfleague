@@ -111,9 +111,9 @@ module ScoringComputer
 	    par_related_gross_score = gross_score - user_par
 
 	    result_name = Users::ResultName.result_name_for_user(user, self.tournament_day)
-	    
+
 	    if gross_score > 0
-	    	result = @scoring_rule.tournament_day_results.find_or_create_by(user: user) #TODO: create_or_find_by
+	    	result = @scoring_rule.tournament_day_results.find_or_create_by(user: user) # TODO: create_or_find_by
 
 	    	result.name = result_name
 	    	result.primary_scorecard = user_scorecard

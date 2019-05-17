@@ -38,8 +38,6 @@ module ScoringRuleScorecards
     end
 
     def handicap_allowance_for_user(user)
-      return nil unless should_use_handicap
-
       if handicap_indices[user.id.to_s]
         handicap_indices[user.id.to_s]
       else
@@ -63,6 +61,7 @@ module ScoringRuleScorecards
         score = DerivedScorecardScore.new
         score.scorecard = self
         score.course_hole = hole
+        score.display_net = should_use_handicap # this tells the score to display the net value
 
         if course_hole_number_suppression_list.include? hole.hole_number
           score.strokes = 0
@@ -88,7 +87,7 @@ module ScoringRuleScorecards
               net_score = adjusted_strokes(raw_score, handicap_allowance, hole)
               comparable_net_scores << net_score
             else
-              comparable_net_scores << hole_score
+              comparable_net_scores << hole_score # without a handicap allowance these are effectively the same
             end
           end
 
