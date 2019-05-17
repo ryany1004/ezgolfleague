@@ -1,6 +1,5 @@
 module ScoringRuleScorecards
   class BaseScorecard
-
     attr_accessor :user
     attr_accessor :scoring_rule
     attr_accessor :scores
@@ -8,7 +7,7 @@ module ScoringRuleScorecards
     def initialize
       self.scores = []
     end
-    
+
     def id
       (self.user.id * self.scoring_rule.id) * -1 # creates a unique, non-player ID for the scorecard
     end

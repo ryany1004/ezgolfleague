@@ -5,7 +5,12 @@ module ScoringComputer
       daily_team_scorecard = @scoring_rule.best_ball_scorecard_for_user_in_team(user, team, true)
       return nil if daily_team_scorecard.blank? || daily_team_scorecard.scores.blank?
 
-      super(user: user, scorecard: daily_team_scorecard)
+      result = super(user: user, scorecard: daily_team_scorecard)
+
+      # remove any other results with the same name to de-dupe the teams
+      @scoring_rule.tournament_day_results.where(name: result.name).where.not(id: result.id).destroy_all if result.present?
+
+      result
     end
 
     def assign_payouts
