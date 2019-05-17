@@ -33,6 +33,5 @@ module Rankable
     end
 
     last_day_flights
-  end
-  
+  end  
 end

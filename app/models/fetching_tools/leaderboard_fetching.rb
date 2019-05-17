@@ -9,7 +9,7 @@ module FetchingTools
         flight.tournament_day_results.each do |result|
           group = tournament_day.tournament_group_for_player(result.user)
 
-          slimmed_rankings << {id: result.user.id.to_s, group: group.id.to_s, name: result.name, net_score: result.net_score.to_s, par_score: result.par_related_net_score.to_s, place: result.rank.to_s}
+          slimmed_rankings << { id: result.user.id.to_s, group: group.id.to_s, name: result.name, net_score: result.net_score.to_s, par_score: result.par_related_net_score.to_s, place: result.rank.to_s }
         end
       end
 
