@@ -11,7 +11,16 @@ module Autoschedule
     self.tournament.players.each do |p|
       flight = previous_day.flight_for_player(p)
       group = previous_day.tournament_group_for_player(p)
-      net_score = previous_day.scorecard_base_scoring_rule.result_for_user(user: p).net_score
+
+      result = previous_day.scorecard_base_scoring_rule.result_for_user(user: p)
+      if result.blank?
+        result_name = Users::ResultName.result_name_for_user(p, previous_day)
+        result = previous_day.scorecard_base_scoring_rule.tournament_day_results.find_by(name: result_name)
+      end
+
+      next if result.blank?
+
+      net_score = result.net_score
 
       unless flight.blank?
         players_with_scores << {player: p, flight_number: flight.flight_number, net_score: net_score, previous_day_group_id: group.id}
