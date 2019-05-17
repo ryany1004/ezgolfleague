@@ -67,7 +67,7 @@ module Autoschedule
         unless existing_group.blank?
           Rails.logger.info { "Removing #{player.complete_name} from existing group #{existing_group.id}." }
 
-          self.remove_player_from_group(existing_group, player, true)
+          self.remove_player_from_group(tournament_group: existing_group, user: player, remove_from_teams: true)
 
           Rails.logger.info { "Removed #{player.complete_name} from existing group #{existing_group.id}." }
         end
