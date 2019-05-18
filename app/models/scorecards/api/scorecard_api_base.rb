@@ -77,7 +77,7 @@ module Scorecards
         par_info << [""]
         par_info << [""]
 
-        return {title: "Par", contents: par_info, should_bold: false, should_ornament: false}
+        return { title: 'Par', contents: par_info, should_bold: false, should_ornament: false }
       end
 
       def handicap_row(course_handicap, allowance)
