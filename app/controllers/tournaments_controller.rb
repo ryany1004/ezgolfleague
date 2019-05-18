@@ -118,7 +118,8 @@ class TournamentsController < BaseController
 
     @handicap_details = []
 
-    @tournament.league.users.each do |u|
+    users = @tournament.league.users.reorder(:first_name)
+    users.each do |u|
       user_info = { name: u.complete_name }
 
       course.course_tee_boxes.each do |b|
