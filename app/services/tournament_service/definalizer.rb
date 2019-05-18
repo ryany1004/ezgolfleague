@@ -2,10 +2,10 @@ module TournamentService
   module Definalizer
     extend self
 
-    def call(tournament)
+    def call(tournament, clear_matchups = false)
       tournament.update(is_finalized: false)
 
-      remove_league_season_team_matchup_lock(tournament)
+      remove_league_season_team_matchup_lock(tournament) if clear_matchups
     end
 
     private

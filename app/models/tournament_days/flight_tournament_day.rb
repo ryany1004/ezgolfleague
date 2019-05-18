@@ -16,7 +16,7 @@ module FlightTournamentDay
       end
     end
 
-    self.touch #bust the cache, yo.
+    self.touch # bust the cache, yo.
   end
 
   def assign_users_to_flights_from_scoring_groups

@@ -17,8 +17,7 @@ class LeagueSeasonTeamsController < BaseController
     redirect_to edit_league_league_season_league_season_team_path(@league, @league_season, @league_season_team), flash: { success: "The team was successfully created." }
   end
 
-  def edit
-  end
+  def edit; end
 
   def update
     if @league_season_team.update(team_params)
@@ -64,7 +63,7 @@ class LeagueSeasonTeamsController < BaseController
     else
       id = params[:league_season_team_id]
     end
-        
+
   	@league_season_team = @league_season.league_season_teams.find(id)
   end
 

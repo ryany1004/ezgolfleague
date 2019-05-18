@@ -39,11 +39,11 @@ module CourseHandicapTournamentDay
         player_course_handicap = self.player_course_handicap_for_user(user: u)
 
         if player_course_handicap.blank?
-          Rails.logger.info { "team_course_handicap_for_player: Player Course Handicap Was Blank: #{u.id}" }
+          Rails.logger.info { "daily_team_course_handicap_for_user: Player Course Handicap Was Blank: #{u.id}" }
 
           return 0
         else
-          highest_handicap = player_course_handicap if player_course_handicap > highest_handicap #the highest one is returned
+          highest_handicap = player_course_handicap if player_course_handicap > highest_handicap # the highest one is returned
         end
       end
 
