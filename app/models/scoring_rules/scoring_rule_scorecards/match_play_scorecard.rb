@@ -93,8 +93,8 @@ module ScoringRuleScorecards
           new_opponent_running_score = opponent_running_score + 1
         end
 
-        self.running_score = new_running_score >= 0 ? new_running_score : 0
-        self.opponent_running_score = new_opponent_running_score >= 0 ? new_opponent_running_score : 0
+        self.running_score = [new_running_score, 0].max
+        self.opponent_running_score = [new_opponent_running_score, 0].max
       end
 
       running_score
