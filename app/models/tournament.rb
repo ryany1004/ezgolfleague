@@ -309,42 +309,6 @@ class Tournament < ApplicationRecord
     blockers
   end
 
-  def run_finalize(should_email = true)
-    tournament_days = self.tournament_days.includes(scoring_rules: [payout_results: [:flight, :user, :payout], tournament_day_results: [:user, :primary_scorecard]], tournament_groups: [golf_outings: [:user, scorecard: :scores]])
-
-    Rails.logger.info { 'Finalize: Starting' }
-
-    tournament_days.each do |day|
-      Rails.logger.info { "Finalize #{day.id}: Re-Scoring Users" }
-      day.score_all_rules
-
-      day.scoring_rules.each(&:finalize)
-
-      Rails.logger.info { "Finalize #{day.id}: Assigning Payouts" }
-      day.assign_payouts_all_rules
-
-      Rails.logger.info { "Finalize #{day.id}: All Done!" }
-
-      day.touch
-    end
-
-    RankLeagueSeasonJob.perform_later(self.league_season)
-
-    self.league.active_season&.touch
-
-    self.send_finalize_event unless !should_email
-  end
-
-  def send_finalize_event
-    tournament_url = "https://app.ezgolfleague.com/leagues/#{self.league.id}/tournaments/#{self.id}/finalize?bypass_calc=true"
-    tournament_info = { tournament_name: self.name, league_name: self.league.name, tournament_url: tournament_url }
-
-    email_addresses = nil
-    email_addresses = self.league.dues_payment_receipt_email_addresses.split(",") unless self.league.dues_payment_receipt_email_addresses.blank?
-
-    RecordEventJob.perform_later(email_addresses, "A tournament was finalized", tournament_info) unless email_addresses.blank?
-  end
-
   def is_past?
     return false if self.first_day.blank?
 
