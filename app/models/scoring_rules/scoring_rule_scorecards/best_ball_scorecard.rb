@@ -111,7 +111,9 @@ module ScoringRuleScorecards
       comparable_scores.reject!(&:zero?)
 
       sorted_scores = comparable_scores.sort! { |x, y| x <=> y }
-      sorted_scores[0].present? ? sorted_scores[0] : 0
+      sorted_score = sorted_scores[0].present? ? sorted_scores[0] : 0
+
+      [sorted_score, 0].max # you cannot have a negative score here
     end
   end
 end
