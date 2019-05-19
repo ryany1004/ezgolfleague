@@ -19,8 +19,6 @@ module Rankable
                 outer_result.net_score += inner_result.net_score
                 outer_result.back_nine_net_score += inner_result.back_nine_net_score
                 outer_result.gross_score += inner_result.gross_score
-                outer_result.points += inner_result.points
-
                 outer_result.par_related_gross_score += inner_result.par_related_gross_score
                 outer_result.par_related_net_score += inner_result.par_related_net_score
               end
