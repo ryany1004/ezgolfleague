@@ -5,14 +5,9 @@ class ScorecardsController < BaseController
 
   def index
     @tournament = Tournament.find(params[:tournament_id])
+    @tournament_day = @tournament.tournament_days.find(params[:tournament_day_id])
 
-    if params[:tournament_day].blank?
-      @tournament_day = @tournament.first_day
-    else
-      @tournament_day = @tournament.tournament_days.find(params[:tournament_day])
-    end
-
-    @page_title = "Scorecards"
+    @page_title = 'Scorecards'
 
     @eager_groups = fetch_eager_groups
   end
