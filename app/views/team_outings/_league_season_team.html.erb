@@ -3,7 +3,7 @@
     <% if team.present? %>
 	      <% if matchup.users_for_team(team).count.positive? && tournament_day.scorecard_base_scoring_rule.teams_are_player_vs_player? %>
 	      	<% matchup.users_with_matchup_indicator(team).each do |u| %>
-	      		<span class="badge badge-secondary"><%= u[:matchup_indicator] %></span>&nbsp;<%= u[:user].short_name %>
+	      		<span class="badge badge-secondary" user_id="<%= u[:user].id %>"><%= u[:matchup_indicator] %></span>&nbsp;<%= u[:user].short_name %>
 	      	<% end %>
 	      <% else %>
 	      	<%= team.name %>
