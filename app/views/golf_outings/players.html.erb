@@ -12,7 +12,7 @@
 
 <%= render partial: 'multi_day_scheduling', locals: {tournament: @tournament, tournament_day: @tournament_day, schedule_options: @schedule_options} %>
 
-<% if @tournament.league_season.is_teams? %>
+<% if @tournament.league_season.is_teams? && !@tournament.is_finalized %>
 	<div class="well">
 		<h4>Copy Team Players to Tee Groups</h4>
 

@@ -27,6 +27,16 @@
       </tr>
     <% end %>
     </tbody>
+    <% if current_user.supereditor? %>
+      <tfoot>
+        <%= simple_form_for @matchup, url: league_tournament_update_matchup_sequence_path(@tournament.league, @tournament, @tournament_day, @league_season_team, @matchup), method: :patch do |f| %>
+          <tr>
+            <th><%= f.input :team_a_final_sort %> <%= f.input :team_b_final_sort %></th>
+            <th><%= f.button :submit, "Save", class: 'btn btn-default' %></th>
+          </tr>
+      <% end %>
+      </tfoot>
+    <% end %>
   </table>
 </div>
 
