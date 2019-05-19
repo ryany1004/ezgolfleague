@@ -117,7 +117,7 @@ class LeagueSeasonTeamTournamentDayMatchup < ApplicationRecord
     return [] if team_a.blank?
 
     if team_a_final_sort.present?
-      team_a.users.where(id: team_a_final_sort.split(','))
+      team_a.users.find(team_a_final_sort.split(','))
     else
       filtered_team_a_users
     end
@@ -132,7 +132,7 @@ class LeagueSeasonTeamTournamentDayMatchup < ApplicationRecord
     return [] if team_b.blank?
 
     if team_b_final_sort.present?
-      team_b.users.where(id: team_b_final_sort.split(','))
+      team_b.users.find(team_b_final_sort.split(','))
     else
       filtered_team_b_users
     end
