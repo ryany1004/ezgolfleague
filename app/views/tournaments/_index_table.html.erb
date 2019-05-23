@@ -20,7 +20,7 @@
     	<tbody>
     	<% tournaments.each do |tournament| %>
         <% if current_user.is_super_user || tournament.league.membership_for_user(current_user)&.is_admin %>
-          <% cache [tournament, current_user] do %>
+          <% cache [tournament.cache_key_with_version, current_user.cache_key_with_version] do %>
             <%= render tournament %>
           <% end %>
         <% end %>
