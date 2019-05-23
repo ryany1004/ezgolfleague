@@ -43,9 +43,6 @@ class TeamConfigurationsController < BaseController
   end
 
   def existing_outing_for_user(user)
-    # filtered_outings = @existing_outings.select { |outing| outing.user == user }
-    # filtered_outings.count.positive? ? filtered_outings.first : nil
-
     filtered_outings = @tournament_day.golf_outings.select { |outing| outing.user == user }
     filtered_outings.count.positive? ? filtered_outings.first : nil
   end
