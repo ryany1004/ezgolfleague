@@ -2,10 +2,10 @@ module CacheKeyable
   extend ActiveSupport::Concern
 
   def cache_key(type = nil)
-  	key = "#{self.class.name}-#{self.id}-#{self.updated_at.to_i}"
-  	key = "#{key}-#{type}" if type
+    key = "#{self.class.name}-#{self.id}-#{self.updated_at.to_i}"
+    key = "#{key}-#{type}" if type
 
-  	key
+    key
   end
 
   def relation_cache_key(relation, type = nil)
