@@ -56,10 +56,9 @@ class ScoringRulesController < BaseController
   end
   
 	def destroy
-		if @scoring_rule.primary_rule
+		if @scoring_rule.primary_rule.present?
 			new_primary = @tournament_day.scoring_rules.where.not(id: @scoring_rule).first
-			new_primary.primary_rule = true
-			new_primary.save
+      new_primary.update(primary_rule: true) if new_primary.present?
 		end
 
     @scoring_rule.destroy
