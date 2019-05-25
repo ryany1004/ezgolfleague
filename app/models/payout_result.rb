@@ -1,6 +1,6 @@
 class PayoutResult < ApplicationRecord
-	acts_as_paranoid
-	
+  acts_as_paranoid
+
   belongs_to :payout, inverse_of: :payout_results, optional: true, touch: true
   belongs_to :flight, inverse_of: :payout_results, optional: true, touch: true
   belongs_to :user, inverse_of: :payout_results, optional: true
@@ -10,6 +10,12 @@ class PayoutResult < ApplicationRecord
 
   delegate :net_score, to: :tournament_day_result, allow_nil: true
   delegate :par_related_net_score, to: :tournament_day_result, allow_nil: true
+
+  validate :user_or_league_season_team_present
+
+  def user_or_league_season_team_present
+    errors.add(:user, 'Specify a user') if user.blank? && league_season_team.blank?
+  end
 
   def name
     if user.present?
@@ -22,31 +28,26 @@ class PayoutResult < ApplicationRecord
   end
 
   def display_name
-  	if self.flight.present?
-  		self.flight.display_name
-  	else
-  		self.scoring_rule.name
-  	end
+    if flight.present?
+      flight.display_name
+    else
+      scoring_rule.name
+    end
   end
 
   def team_matchup_designator
-  	return nil if !self.scoring_rule.teams_are_player_vs_player?
+    return nil unless scoring_rule.teams_are_player_vs_player?
 
-  	team = self.scoring_rule.tournament_day.league_season_team_for_player(self.user)
-  	matchup = self.scoring_rule.tournament_day.league_season_team_matchup_for_team(team)
-
-  	if matchup.present?
-  		matchup.matchup_indicator_for_user(self.user)
-  	else
-  		nil
-  	end
+    team = scoring_rule.tournament_day.league_season_team_for_player(user)
+    matchup = scoring_rule.tournament_day.league_season_team_matchup_for_team(team)
+    matchup.matchup_indicator_for_user(user) if matchup.present?
   end
 
   def tournament_day_result
-    if self.league_season_team.present?
-      self.scoring_rule.aggregate_tournament_day_results.where(league_season_team: league_season_team).first
+    if league_season_team.present?
+      scoring_rule.aggregate_tournament_day_results.find_by(league_season_team: league_season_team)
     else
-      self.scoring_rule.individual_tournament_day_results.where(user: user).first
+      scoring_rule.individual_tournament_day_results.find_by(user: user)
     end
   end
 end
