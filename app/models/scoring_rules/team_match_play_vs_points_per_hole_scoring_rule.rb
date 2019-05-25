@@ -14,4 +14,13 @@ class TeamMatchPlayVsPointsPerHoleScoringRule < TeamMatchPlayVsScoringRule
   def payout_type
     ScoringRulePayoutType::POT
   end
+
+  def match_play_scorecard_for_user(user)
+    scorecard = ScoringRuleScorecards::TeamMatchPlayPointsPerHoleScorecard.new
+    scorecard.user = user
+    scorecard.opponent = opponent_for_user(user)
+    scorecard.scoring_rule = self
+
+    scorecard
+  end
 end
