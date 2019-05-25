@@ -22,18 +22,18 @@ module ScoringComputer
         Rails.logger.info { "TeamBestBallScoringComputer comparing #{matchup.team_a.name} and #{matchup.team_b.name}" }
 
         if team_a_best_ball_scorecard.net_score < team_b_best_ball_scorecard.net_score
-          winners << matchup.team_a
+          winners << { team: matchup.team_a, net_score: team_a_best_ball_scorecard.net_score }
 
           matchup.winning_team = matchup.team_a
           matchup.save
         elsif team_a_best_ball_scorecard.net_score > team_b_best_ball_scorecard.net_score
-          winners << matchup.team_b
+          winners << { team: matchup.team_b, net_score: team_b_best_ball_scorecard.net_score }
 
           matchup.winning_team = matchup.team_b
           matchup.save
         else
-          ties << matchup.team_a
-          ties << matchup.team_b
+          ties << { team: matchup.team_a, net_score: team_a_best_ball_scorecard.net_score }
+          ties << { team: matchup.team_b, net_score: team_b_best_ball_scorecard.net_score }
         end
       end
     end
@@ -52,15 +52,23 @@ module ScoringComputer
       raise "#{self.class} trying to be used with non splittable payouts." unless primary_payout.apply_as_duplicates?
 
       winners.each do |u|
-        winning_team = u
+        winning_team = u[:team]
+        net_score = u[:net_score]
 
-        PayoutResult.create(league_season_team: winning_team, scoring_rule: @scoring_rule, points: primary_payout.points)
+        PayoutResult.create(league_season_team: winning_team,
+                            scoring_rule: @scoring_rule,
+                            points: primary_payout.points,
+                            details: "Win #{net_score}")
       end
 
       ties.each do |u|
-        winning_team = u
+        winning_team = u[:team]
+        net_score = u[:net_score]
 
-        PayoutResult.create(league_season_team: winning_team, scoring_rule: @scoring_rule, points: primary_payout.points / 2)
+        PayoutResult.create(league_season_team: winning_team,
+                            scoring_rule: @scoring_rule,
+                            points: primary_payout.points / 2,
+                            details: "Tie #{net_score}")
       end
     end
   end
