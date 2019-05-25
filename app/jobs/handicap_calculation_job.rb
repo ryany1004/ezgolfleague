@@ -28,7 +28,7 @@ class HandicapCalculationJob < ApplicationJob
       if tournament.is_finalized && outing.in_league?(league) && !outing.disqualified
         scorecards << outing.scorecard
       else
-        Rails.logger.debug { "Did not include scorecard. Final? #{tournament.is_finalized} DQ? #{outing.disqualified} In league? #{outing.in_league?(league)}" }
+        Rails.logger.debug { "Did not include scorecard #{outing.scorecard.id}. Final? #{tournament.is_finalized} DQ? #{outing.disqualified} In league? #{outing.in_league?(league)}" }
       end
     end
 
