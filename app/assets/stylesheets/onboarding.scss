@@ -187,12 +187,15 @@
       }
     }
 
-    #user_ghin_number {
-      width: 250px;
-    }
-
     .handicap_index-label {
-      width: 24% !important;
+      width: 34% !important;
+      display: flex;
+      align-items: center;
+
+      .fa-eye {
+        color: ezgl-color('secondary', 'dark');
+        margin-bottom: 1rem;
+      }
     }
 
     #v-notifications {

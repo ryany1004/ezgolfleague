@@ -51,9 +51,10 @@
                     <% @ranking_groups.each do |group| %>
                       <%= render partial: 'ranking_group', collection: group.displayable_league_season_rankings %>
                     <% end %>
-                    <div class="row">
+                    <div class="row mt-5">
                       <div class="col-md-12">
-                        <%= link_to "View League", league_path(current_user.selected_league), class: "view-league-btn" %>
+                        <%= link_to "Add Golfers", setup_golfer_invite_user_accounts_path, class: "btn-primary add-golfers" %>
+                        <%= link_to "View League", league_path(current_user.selected_league), class: "view-league-btn mt-3" %>
                       </div>
                     </div>
                   </div><!-- /.ppp-content -->
@@ -67,3 +68,46 @@
         </div><!-- /.row -->
     </div><!-- /.dashboard-content -->
   </div>
+
+  <div class="modal fade" id="welcomeModal" tabindex="-1" role="dialog" aria-labelledby="welcomeModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-body welcome p-5">
+        <div class="p-3">
+          <h2>Welcome to EZ Golf League</h2>
+          <p>Have a look around, and then:</p>
+        </div>
+
+        <div class="p-4">
+          <h5 class="pb-2">1. Add Golfers to your League</h5>
+          <button type="button" class="btn btn-primary">Add Golfers to League</button>
+        </div>
+
+        <div class="p-5">
+          <h5 class="pb-2">2. Create your first Tournament</h5>
+          <button type="button" class="btn btn-primary">Create a Tournament</button>
+        </div>
+      </div>
+      <div class="modal-footer welcome">
+        <div class="input-container pr-4">
+          <input type="checkbox" class="form-check-input" id="welcome-modal"></input>
+          <label class="form-check-label welcome" for="welcome-modal">Don't show this again.</label>
+        </div>
+        <button type="button" class="btn__ezgl-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  if (document.cookie.indexOf("welcomeModal=") >= 0) {
+    // They've been here before.
+  } else {
+    $('#welcomeModal').modal('show');
+    $('#welcomeModal').on('hidden.bs.modal', function () {
+      if ($('#welcome-modal').is(':checked')) {
+        document.cookie = "welcomeModal=true; expires=Fri, 31 Dec 9999 23:59:59 GMT";
+      };
+    });
+  }
+</script>

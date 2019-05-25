@@ -20,6 +20,7 @@
 
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css?family=Roboto:400,400i,500,500i,700,700i,900,900i" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
 
     <link rel="apple-touch-icon" sizes="57x57" href="/icons/apple-icon-57x57.png">
     <link rel="apple-touch-icon" sizes="60x60" href="/icons/apple-icon-60x60.png">
@@ -35,8 +36,7 @@
     <link rel="icon" type="image/png" sizes="96x96" href="/icons/favicon-96x96.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/icons/favicon-16x16.png">
 
-    <%= render partial: 'shared/stripe' %>
-
+    <%= render partial: 'shared/stripe' %> 
     <%= render partial: 'shared/analytics' %>
   </head>
   <body>
@@ -84,7 +84,6 @@
                       <%= link_to "Leagues Admin", leagues_path, class: 'dropdown-item' %>
                       <%= link_to "User Accounts Admin", user_accounts_path, class: 'dropdown-item' %>
                       <%= link_to "Invite League Admin", setup_league_admin_invite_user_accounts_path, class: 'dropdown-item' %>
-                      <div class="dropdown-divider"></div>
                       <% if user_signed_in? && current_user != true_user && true_user.is_super_user %>
                       <%= link_to "Stop #{current_user.complete_name}", stop_impersonating_user_accounts_path, class: 'dropdown-item' %>
                       <% end %>

@@ -55,13 +55,14 @@
 			</div>
 
 			<div class="form-flex-group">
-				<%= f.input :ghin_number, placeholder: '' %>
+				<%= f.input :ghin_number %>
 
-				<div class="form-side-label handicap_index-label pl-4 ">
-					<p>18-Hole Index</p>
+				<div class="form-side-label handicap_index-label pl-4">
+					<p>18-Hole Index</p> 
+					<i class="fa fa-eye pl-2" data-toggle="tooltip" data-placement="top" title="We offer several options for handicapping: pulling from GHIN, automatic based on past performance or manual handicap index. You can also override the handicap index with a manual course handicap - you can enter that below. Handicaps will automatically be converted for 9-hole tournaments."></i>
 				</div>
 
-				<%= f.input :handicap_index, placeholder: '' %>
+				<%= f.input :handicap_index %>
 			</div>
 		</div>
 

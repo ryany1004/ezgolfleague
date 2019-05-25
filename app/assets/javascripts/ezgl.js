@@ -23,11 +23,15 @@
   $(window).on("load",function(){
     $(".content").mCustomScrollbar();
   });
+
+  $(function () {
+    $('[data-toggle="tooltip"]').tooltip();
+  });
   
   // Collapse Navbar
   $(document).ready(function(){
     var navbarCollapse = function() {
-      if ($("#mainNav").offset().top > 100) {
+      if ($("#mainNav").offset().top > 50) {
         $("#mainNav").addClass("navbar-shrink");
       } else {
         $("#mainNav").removeClass("navbar-shrink");

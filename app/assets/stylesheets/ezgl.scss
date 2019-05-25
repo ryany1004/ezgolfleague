@@ -254,6 +254,16 @@ button:focus {
 
 .ppp-content {
   padding: 15px 15px 15px 50px;
+  max-height: 500px;
+  overflow: scroll;
+
+  .add-golfers {
+    width: 96%;
+    display: inline-block;
+    text-align: center;
+    padding: 15px 60px;
+    border-radius: 5px;
+  }
 }
 
 .ppp-content p {
