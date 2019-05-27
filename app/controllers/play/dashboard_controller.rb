@@ -50,7 +50,7 @@ class Play::DashboardController < Play::BaseController
   end
 
   def switch_leagues
-    league = self.view_league_from_user_for_league_id(params[:league_id])
+    league = view_league_from_user_for_league_id(params[:league_id])
     current_user.current_league = league
     current_user.save
 
@@ -58,5 +58,4 @@ class Play::DashboardController < Play::BaseController
 
     redirect_to play_dashboard_index_path
   end
-
 end
