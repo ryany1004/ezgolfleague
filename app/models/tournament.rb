@@ -347,7 +347,7 @@ class Tournament < ApplicationRecord
     tournament_balance = 0.0
 
     scoring_rule_ids = self.tournament_days.map(&:scoring_rules).flatten.map(&:id)
-    payments = Payment.where(scoring_rule: scoring_rule_ids).where(user: user)
+    payments = Payment.where(scoring_rule: scoring_rule_ids).where(user: user).where('payment_amount > 0')
     tournament_balance = payments.sum(:payment_amount)
 
     if tournament_balance > 0 && tournament_balance >= self.dues_for_user(user)
