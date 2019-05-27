@@ -15,10 +15,7 @@ class CalculateNetScoresJob < ApplicationJob
 
 						if h[:strokes] != 0
 							hole_adjusted_score = score.strokes - h[:strokes]
-
-	          	if hole_adjusted_score > 0
-	          		hole_net_score = hole_adjusted_score
-	          	end
+              hole_net_score = [hole_adjusted_score, 0].max
 						end
 
 	        	score.net_strokes = hole_net_score
