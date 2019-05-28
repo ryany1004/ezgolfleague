@@ -2,7 +2,7 @@
     <div class="view-tournament-card h-100">
         <div class="upcoming-tournaments-body text-center">
             <h2>You have no upcoming tournaments.</h2>
-            <%= button_to "Create Tournament", new_league_tournament_path(current_user.current_league), class: "btn btn-primary" %>
+            <%= link_to "Create Tournament", new_league_tournament_path(current_user.selected_league), class: "btn btn-primary" %>
         </div><!-- /.upcoming-tournaments-body -->
         <% if tournament.present? %>
           <div class="upcoming-tournaments-med">
@@ -11,7 +11,7 @@
                   <p>previous tournament</p>
               </div><!-- /.col-md-6 -->
               <div class="col-md-6 text-right">
-                  <p><a href="#">view all</a></p>
+                  <p><%= link_to "view all", league_tournaments_path(current_user.selected_league) %></p>
               </div><!-- /.col-md-6 -->
             </div><!-- /.row -->
           </div><!-- /.upcoming-tournaments-med -->
@@ -19,7 +19,7 @@
               <div class="row">
                 <div class="col-md-8">
                   <h2><%= tournament.name %></h2>
-                  <p class="text-uppercase"><%= tournament.first_day.tournament_at.to_s(:long) %></p>
+                  <p class="text-uppercase"><%= tournament.first_day.tournament_at.to_s(:long) %> <span class="pl-1" style="color:#00c185;">TOURNAMENT COMPLETED</span></p>
                 </div><!-- /.col-md-6 -->
                 <div class="col-md-4 text-right">
                   <%= link_to "View Tournament", league_tournament_path(tournament.league, tournament), class: "btn btn-outline-dark" %>

@@ -415,8 +415,9 @@ button:focus {
 
 .time-col,
 .paid-col,
-.contests-co {
+.contests-col {
   padding-top: 20px;
+  padding-left: 0;
   font-weight: 500;
 }
 
@@ -1012,6 +1013,11 @@ button:focus {
   margin-right: 5px;
   vertical-align: middle;
   line-height: normal;
+}
+
+.tournaments-page-nav {
+  display: flex;
+  justify-content: center;
 }
 
 .profile-img-list {

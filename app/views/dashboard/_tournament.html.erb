@@ -19,7 +19,6 @@
               <div class="col-md-6">
                 <ul class="list-inline player-list text-uppercase">
                   <li class="list-inline-item"><%= tournament.players.count %><span>registered</span></li>
-                  <li class="list-inline-item"><%= tournament.paid_players.count %><span>paid</span></li>
                 </ul>
               </div><!-- /.col-md-6 -->
             </div><!-- /.row -->
@@ -31,9 +30,6 @@
               </div>
               <div class="col">
                 tee time
-              </div>
-              <div class="col">
-                dues paid
               </div>
               <div class="col">
                 contests
@@ -56,14 +52,7 @@
                   <div class="col time-col">
                      <%= group.tee_time_at.to_s(:time_only) %> 
                   </div>
-                  <div class="col paid-col">
-                    <% if tournament.user_has_paid?(outing.user) %>
-                      <span class="color-1"></span>Paid
-                    <% else %>
-                      <span class="color-2"></span> Not Paid
-                    <% end %>
-                  </div>
-                  <div class="col contests-co">
+                  <div class="col contests-col">
                     ???
                   </div>
                 </div><!-- /.row -->
