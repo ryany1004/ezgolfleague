@@ -4,6 +4,12 @@ module AutoScheduleType
   AUTOMATIC_BEST_FIRST = 2
 end
 
+module TournamentState
+  REGISTRATION = 0
+  REVIEW_SCORES = 1
+  POST_SCORES = 2
+end
+
 class Tournament < ApplicationRecord
   include Playable
   include Rankable
@@ -78,6 +84,19 @@ class Tournament < ApplicationRecord
     yield
 
     RankLeagueSeasonJob.perform_later(season)
+  end
+
+  # TODO: Need to update / review this logic
+  def tournament_state
+    if tournament_at > Time.zone.now.at_beginning_of_day
+      TournamentState::REGISTRATION
+    else
+      if is_finalized
+        TournamentState::POST_SCORES
+      else
+        TournamentState::REVIEW_SCORES
+      end
+    end
   end
 
   def league_season
