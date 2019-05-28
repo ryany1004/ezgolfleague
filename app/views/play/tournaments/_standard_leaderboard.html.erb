@@ -22,29 +22,29 @@
           <% combined_flights_with_rankings.each_with_index do |flight, x| %>
             <% current_day_flight = day_flights_with_rankings[x] -%>
             <% flight.scorecard_base_scoring_rule_tournament_day_results.each_with_index do |result, i| -%>
-            <% current_day_player = current_day_flight.tournament_day_results[i] %>
-            <tr>
-              <td><strong><%= flight[:flight_number] %></strong></td>
-              <td><strong><%= result.rank %></strong></td>
-              <td><%= result.name %></td>
-              <td><%= current_day_player.net_score %></td>
-              <td><%= current_day_player.gross_score %></td>
-              <td><%= par_helper(current_day_player.par_related_net_score) %></td>
-              <td><%= par_helper(result.par_related_net_score) %></td>
-              <td><%= result.net_score %></td>
-            </tr>
+              <% current_day_player = current_day_flight.tournament_day_results[i] %>
+              <tr>
+                <td><strong><%= flight[:flight_number] %></strong></td>
+                <td><strong><%= result.rank %></strong></td>
+                <td><%= result.name %></td>
+                <td><%= current_day_player.net_score %></td>
+                <td><%= current_day_player.gross_score %></td>
+                <td><%= par_helper(current_day_player.par_related_net_score) %></td>
+                <td><%= par_helper(result.par_related_net_score) %></td>
+                <td><%= result.net_score %></td>
+              </tr>
             <% end -%>
             <% if x < tournament_day.flights_with_rankings.count - 1 -%>
-            <tr>
-              <td>&nbsp;</td>
-              <td>&nbsp;</td>
-              <td>&nbsp;</td>
-              <td>&nbsp;</td>
-              <td>&nbsp;</td>
-              <td>&nbsp;</td>
-              <td>&nbsp;</td>
-              <td>&nbsp;</td>
-            </tr>
+              <tr>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+              </tr>
             <% end -%>
           <% end -%>
         </tbody>

@@ -12,7 +12,7 @@ class LeagueSeason < ApplicationRecord
   has_many :league_season_scoring_groups, -> { order 'name' }, inverse_of: :league_season, dependent: :destroy
   has_many :league_season_ranking_groups, -> { order 'name' }, inverse_of: :league_season, dependent: :destroy
 
-  validates :name, :starts_at, :ends_at, :league, presence: true
+  validates :name, :starts_at, :ends_at, :league, :dues_amount, presence: true
 
   validate :dates_are_valid
   def dates_are_valid

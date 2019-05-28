@@ -1,6 +1,5 @@
 module ScoringRuleScorecards
   class BaseScorecard
-
     attr_accessor :user
     attr_accessor :scoring_rule
     attr_accessor :scores
@@ -8,7 +7,7 @@ module ScoringRuleScorecards
     def initialize
       self.scores = []
     end
-    
+
     def id
       (self.user.id * self.scoring_rule.id) * -1 # creates a unique, non-player ID for the scorecard
     end
@@ -49,12 +48,16 @@ module ScoringRuleScorecards
       return name
     end
 
+    def precalculated?
+      false
+    end
+
     def gross_score
-      return self.scores.map {|score| score.strokes }.sum
+      scores.map { |score| score.strokes }.sum
     end
 
     def net_score
-      return self.scores.map {|score| score.net_strokes }.sum
+      scores.map { |score| score.net_strokes }.sum
     end
 
     def front_nine_score(use_handicap = false)

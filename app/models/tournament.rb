@@ -118,6 +118,14 @@ class Tournament < ApplicationRecord
     self.tournament_days.count > 0
   end
 
+  def has_league_season_team_scoring_rules?
+    tournament_days.each do |d|
+      return true if d.scoring_rules.any? { |x| x.team_type == ScoringRuleTeamType::LEAGUE }
+    end
+
+    false
+  end
+
   def previous_day_for_day(day)
     index_for_day = self.tournament_days.index(day)
     unless index_for_day.blank?
@@ -210,8 +218,6 @@ class Tournament < ApplicationRecord
     cost_lines
   end
 
-  ##
-
   def courses
     distinct_courses = []
 
@@ -303,42 +309,6 @@ class Tournament < ApplicationRecord
     blockers
   end
 
-  def run_finalize(should_email = true)
-    tournament_days = self.tournament_days.includes(scoring_rules: [payout_results: [:flight, :user, :payout], tournament_day_results: [:user, :primary_scorecard]], tournament_groups: [golf_outings: [:user, scorecard: :scores]])
-
-    Rails.logger.info { 'Finalize: Starting' }
-
-    tournament_days.each do |day|
-      Rails.logger.info { "Finalize #{day.id}: Re-Scoring Users" }
-      day.score_all_rules
-
-      day.scoring_rules.each(&:finalize)
-
-      Rails.logger.info { "Finalize #{day.id}: Assigning Payouts" }
-      day.assign_payouts_all_rules
-
-      Rails.logger.info { "Finalize #{day.id}: All Done!" }
-
-      day.touch
-    end
-
-    RankLeagueSeasonJob.perform_later(self.league_season)
-
-    self.league.active_season&.touch
-
-    self.send_finalize_event unless !should_email
-  end
-
-  def send_finalize_event
-    tournament_url = "https://app.ezgolfleague.com/leagues/#{self.league.id}/tournaments/#{self.id}/finalize?bypass_calc=true"
-    tournament_info = { tournament_name: self.name, league_name: self.league.name, tournament_url: tournament_url }
-
-    email_addresses = nil
-    email_addresses = self.league.dues_payment_receipt_email_addresses.split(",") unless self.league.dues_payment_receipt_email_addresses.blank?
-
-    RecordEventJob.perform_later(email_addresses, "A tournament was finalized", tournament_info) unless email_addresses.blank?
-  end
-
   def is_past?
     return false if self.first_day.blank?
 
@@ -377,7 +347,7 @@ class Tournament < ApplicationRecord
     tournament_balance = 0.0
 
     scoring_rule_ids = self.tournament_days.map(&:scoring_rules).flatten.map(&:id)
-    payments = Payment.where(scoring_rule: scoring_rule_ids).where(user: user)
+    payments = Payment.where(scoring_rule: scoring_rule_ids).where(user: user).where('payment_amount > 0')
     tournament_balance = payments.sum(:payment_amount)
 
     if tournament_balance > 0 && tournament_balance >= self.dues_for_user(user)

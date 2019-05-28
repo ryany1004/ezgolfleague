@@ -12,6 +12,6 @@ class Payout < ApplicationRecord
   end
 
   def apply_as_duplicates?
-  	self.scoring_rule.tournament_day.tournament.is_league_teams? && self.amount.zero?
+    scoring_rule.tournament_day.tournament.has_league_season_team_scoring_rules? && amount.zero?
   end
 end

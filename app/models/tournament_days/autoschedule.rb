@@ -11,7 +11,16 @@ module Autoschedule
     self.tournament.players.each do |p|
       flight = previous_day.flight_for_player(p)
       group = previous_day.tournament_group_for_player(p)
-      net_score = previous_day.scorecard_base_scoring_rule.result_for_user(user: p).net_score
+
+      result = previous_day.scorecard_base_scoring_rule.result_for_user(user: p)
+      if result.blank? # this is a hack for Best Ball # TODO FIX ME
+        result_name = Users::ResultName.result_name_for_user(p, previous_day)
+        result = previous_day.scorecard_base_scoring_rule.tournament_day_results.find_by(name: result_name)
+      end
+
+      next if result.blank?
+
+      net_score = result.net_score
 
       unless flight.blank?
         players_with_scores << {player: p, flight_number: flight.flight_number, net_score: net_score, previous_day_group_id: group.id}
@@ -20,11 +29,11 @@ module Autoschedule
       end
     end
 
-    if self.tournament.auto_schedule_for_multi_day == AutoScheduleType::AUTOMATIC_WORST_FIRST #worst golfer, worst flight
+    if self.tournament.auto_schedule_for_multi_day == AutoScheduleType::AUTOMATIC_WORST_FIRST # worst golfer, worst flight
       Rails.logger.info { "Scheduling #{players_with_scores.count} Golfers Worst to Best" }
 
       players_with_scores.sort! { |x,y| [y[:flight_number], y[:net_score]] <=> [x[:flight_number], x[:net_score]] }
-    elsif self.tournament.auto_schedule_for_multi_day == AutoScheduleType::AUTOMATIC_BEST_FIRST #best golfer, best flight
+    elsif self.tournament.auto_schedule_for_multi_day == AutoScheduleType::AUTOMATIC_BEST_FIRST # best golfer, best flight
       Rails.logger.info { "Scheduling #{players_with_scores.count} Golfers Best to Worst" }
 
       players_with_scores.sort! { |x,y| [x[:flight_number], x[:net_score]] <=> [y[:flight_number], y[:net_score]] }
@@ -67,14 +76,14 @@ module Autoschedule
         unless existing_group.blank?
           Rails.logger.info { "Removing #{player.complete_name} from existing group #{existing_group.id}." }
 
-          self.remove_player_from_group(existing_group, player, true)
+          self.remove_player_from_group(tournament_group: existing_group, user: player, remove_from_teams: true)
 
           Rails.logger.info { "Removed #{player.complete_name} from existing group #{existing_group.id}." }
         end
 
         Rails.logger.info { "Adding Player #{player.complete_name} to group #{slot.id}." }
 
-        self.add_player_to_group(tournament_group: slot, user: player, paying_now: false, confirmed: true, registered_by: "Auto-Schedule")
+        self.add_player_to_group(tournament_group: slot, user: player, paying_with_credit_card: false, confirmed: true, registered_by: "Auto-Schedule")
 
         #add to new team
         if self.tournament.display_teams?

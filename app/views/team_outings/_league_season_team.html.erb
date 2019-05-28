@@ -3,7 +3,7 @@
     <% if team.present? %>
 	      <% if matchup.users_for_team(team).count.positive? && tournament_day.scorecard_base_scoring_rule.teams_are_player_vs_player? %>
 	      	<% matchup.users_with_matchup_indicator(team).each do |u| %>
-	      		<span class="badge badge-secondary"><%= u[:matchup_indicator] %></span>&nbsp;<%= u[:user].short_name %>
+	      		<span class="badge badge-secondary" user_id="<%= u[:user].id %>"><%= u[:matchup_indicator] %></span>&nbsp;<%= u[:user].short_name %>
 	      	<% end %>
 	      <% else %>
 	      	<%= team.name %>
@@ -19,9 +19,7 @@
   </td>
   <td id="action-buttons" style="width: 20%">
     <% if team.present? %>
-    	<% if tournament_day.scorecard_base_scoring_rule.teams_are_player_vs_player? %>
-		    <%= link_to "Specify Players", league_tournament_day_team_path(tournament.league, tournament, tournament_day, team), role: "button", class: "btn btn-info btn-xs" %>
-	    <% end %>
+		  <%= link_to "Specify Players", league_tournament_day_team_path(tournament.league, tournament, tournament_day, team), role: "button", class: "btn btn-info btn-xs" %>
       <%= link_to "Remove", league_tournament_delete_day_teams_path(tournament.league, tournament, tournament_day, matchup_id: matchup.id, team_id: team.id), data: { confirm: 'Are you sure you want to remove this team? This will delete all scores related to the users on this team.' }, method: :delete, role: "button", class: "btn btn-danger btn-xs" %>
     <% else %>
       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;

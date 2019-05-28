@@ -40,6 +40,7 @@ class TeamOutingsController < BaseController
 
   def team
     @league_season_team = league_season_team
+    @matchup = @tournament_day.league_season_team_matchup_for_team(league_season_team)
   end
 
   def toggle_player
@@ -55,6 +56,13 @@ class TeamOutingsController < BaseController
     matchup.unfiltered_users.each do |player|
       matchup.toggle_user(player)
     end
+
+    redirect_to league_tournament_day_team_path(@league, @tournament, @tournament_day, league_season_team)
+  end
+
+  def update_matchup_sequence
+    league_season_team_tournament_day_matchup = @tournament_day.league_season_team_matchup_for_team(league_season_team)
+    league_season_team_tournament_day_matchup.update(params.require(:league_season_team_tournament_day_matchup).permit(:team_a_final_sort, :team_b_final_sort))
 
     redirect_to league_tournament_day_team_path(@league, @tournament, @tournament_day, league_season_team)
   end

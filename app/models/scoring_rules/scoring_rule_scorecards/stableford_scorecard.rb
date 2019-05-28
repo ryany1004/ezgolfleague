@@ -7,20 +7,19 @@ module ScoringRuleScorecards
     def calculate_scores
       new_scores = []
 
-      handicap_allowance = self.tournament_day.handicap_allowance(user: user)
-
       self.tournament_day.scorecard_base_scoring_rule.course_holes.each do |hole|
         score = DerivedScorecardScore.new
-        score.strokes = self.score_for_hole(user, [], hole)
-        score.net_strokes = self.score_for_hole(user, handicap_allowance, hole)
+        score.strokes = self.score_for_hole(user, false, hole)
+        score.net_strokes = self.score_for_hole(user, true, hole)
         score.course_hole = hole
+        score.display_net = true
         new_scores << score
       end
 
       self.scores = new_scores
     end
 
-    def score_for_hole(user, handicap_allowance, hole)
+    def score_for_hole(user, use_handicap, hole)
       scorecard = self.tournament_day.primary_scorecard_for_user(user)
       return 0 if scorecard.blank?
 
@@ -28,14 +27,11 @@ module ScoringRuleScorecards
       return 0 if score.strokes.blank? || score.strokes == 0
 
       strokes = 0
-      strokes = score&.strokes
 
-      handicap_allowance.each do |h|
-        if h[:course_hole] == hole
-          if h[:strokes] != 0
-            strokes = strokes - h[:strokes]
-          end
-        end
+      if use_handicap
+        strokes = score&.net_strokes
+      else
+        strokes = score&.strokes
       end
 
       score = 0

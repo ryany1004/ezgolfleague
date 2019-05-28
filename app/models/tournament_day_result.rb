@@ -1,10 +1,10 @@
 class TournamentDayResult < ApplicationRecord
-	include Rails.application.routes.url_helpers
+  include Rails.application.routes.url_helpers
 
   belongs_to :scoring_rule, inverse_of: :tournament_day_results, touch: true
   belongs_to :user, inverse_of: :tournament_day_results, optional: true
   belongs_to :league_season_team, inverse_of: :tournament_day_results, optional: true
-  belongs_to :primary_scorecard, class_name: "Scorecard", foreign_key: "user_primary_scorecard_id"
+  belongs_to :primary_scorecard, class_name: 'Scorecard', foreign_key: 'user_primary_scorecard_id'
   belongs_to :flight, inverse_of: :tournament_day_results, optional: true, touch: true
 
   validates :name, presence: true
@@ -14,12 +14,14 @@ class TournamentDayResult < ApplicationRecord
   end
 
   def name
-    if self.user.present?
-      self.user.complete_name
-    elsif self.league_season_team.present?
+    if self.league_season_team.present?
       self.league_season_team.name
+    elsif self.read_attribute(:name).present?
+      self.read_attribute(:name)
+    elsif self.user.present?
+      self.user.complete_name
     else
-      "N/A"
+      'N/A'
     end
   end
 
@@ -33,7 +35,11 @@ class TournamentDayResult < ApplicationRecord
     end
   end
 
-  #TODO: refactor, could store not compute
+  def combinable?(other_result)
+    user.id == other_result.user.id
+  end
+
+  # TODO: refactor, could store not compute
   def points
     return 0 if self.user.present? && flight.blank?
 

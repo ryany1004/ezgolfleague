@@ -1,9 +1,7 @@
-Rails.cache.fetch ['v1', tournament_result], expires_in: 24.hours do
-  json = {}
+json = {}
 
-  json[:payouts] = render partial: 'payout', collection: tournament_result[:payouts], as: :payout
-  json[:rankings] = render partial: 'ranking', collection: tournament_result[:rankings], as: :ranking
-  json[:contests] = render partial: 'contest', collection: tournament_result[:contests], as: :contest
+json[:payouts] = render partial: 'payout', collection: tournament_result[:payouts], as: :payout
+json[:rankings] = render partial: 'ranking', collection: tournament_result[:rankings], as: :ranking
+json[:contests] = render partial: 'contest', collection: tournament_result[:contests], as: :contest
 
-  json
-end
+json

@@ -5,7 +5,7 @@ class Api::V1::TournamentDaysController < Api::V1::ApiBaseController
   respond_to :json
 
   def tournament_groups
-    @eager_groups = Rails.cache.fetch(@tournament_day.cache_key('groups'), expires_in: 24.hours, race_condition_ttl: 10) do
+    @eager_groups = Rails.cache.fetch(@tournament_day.cache_key('groups'), expires_in: 1.hour, race_condition_ttl: 10) do
       logger.info { 'Fetching Tournament Day - Not Cached' }
 
       @tournament_day.eager_groups
@@ -57,10 +57,12 @@ class Api::V1::TournamentDaysController < Api::V1::ApiBaseController
     Rails.cache.delete(@tournament_day.cache_key('groups'))
 
     @eager_groups = @tournament_day.eager_groups
+
+    render json: { success: true }
   end
 
   def register_contests
-    self.register_optional_games
+    register_optional_games
   end
 
   def register_optional_games

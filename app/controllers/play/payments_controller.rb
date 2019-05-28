@@ -83,7 +83,7 @@ class Play::PaymentsController < Play::BaseController
 
           tournament.optional_scoring_rules_with_dues.each do |rule|
             if rule.users.include? current_user
-              dues = rule.dues_for_user(user: current_user, include_credit_card_fees: ffalse)
+              dues = rule.dues_for_user(user: current_user, include_credit_card_fees: false)
               self.create_payment(dues, charge_description, charge.id, rule, nil)
             end
           end

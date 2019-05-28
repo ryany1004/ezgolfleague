@@ -82,16 +82,16 @@ module ApplicationHelper
   end
 
   def scorecard_score_helper(score, print_mode = false)
-    if score.strokes != 0
-      return score.strokes
+    if score.display_score != 0
+      score.display_score
     else
       if !score&.scorecard&.is_potentially_editable?
-        return 0
+        0
       else
         if print_mode == true
-          return ""
+          ''
         else
-          return "-"
+          '-'
         end
       end
     end
@@ -159,9 +159,9 @@ module ApplicationHelper
 
   def tournament_class_for_stage(stage, stage_option)
     if stage == stage_option
-      "class=active"
+      'class=active'
     else
-      ""
+      ''
     end
   end
 
@@ -208,7 +208,7 @@ module ApplicationHelper
   def score_for_score_with_handicap_allowance(score, handicap_allowance)
     net_score = score.strokes - handicap_allowance_strokes_for_hole(handicap_allowance_for_scorecard(score.scorecard), score.course_hole)
 
-    if net_score < 0
+    if net_score.negative?
       0
     else
       net_score
@@ -217,7 +217,7 @@ module ApplicationHelper
 
   def score_print_helper(score, print_mode)
     if print_mode && score.zero?
-      ""
+      ''
     else
       score
     end

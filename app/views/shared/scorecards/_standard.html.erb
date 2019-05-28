@@ -84,7 +84,7 @@
         <td>
           <% if scorecard.should_total? -%>
             <strong><%= score_print_helper(scorecard.scores.map {|score| score.strokes }.sum, print_mode) %></strong>
-            <% if scorecard.net_score > 0-%>
+            <% if scorecard.net_score > 0 -%>
             <span class="label label-success">
               <%= score_print_helper(scorecard.net_score, print_mode) %>
             </span>

@@ -18,7 +18,8 @@ class HandicapCalculationJob < ApplicationJob
   def scorecards_for_player(player, league)
     scorecards = []
 
-    player.golf_outings.order(created_at: :desc).limit(100).each do |outing| # the 100 is arbitrary, to make sure we fetch enough records to have 10 valid scorecards
+    outings = player.golf_outings.order(created_at: :desc).limit(100) # the 100 is arbitrary, to make sure we fetch enough records
+    outings.each do |outing|
       Rails.logger.debug { "Outing: #{outing.id} for #{outing.user.complete_name}" }
 
       tournament = outing.tournament
@@ -27,11 +28,11 @@ class HandicapCalculationJob < ApplicationJob
       if tournament.is_finalized && outing.in_league?(league) && !outing.disqualified
         scorecards << outing.scorecard
       else
-        Rails.logger.debug { "Did not include scorecard. Final? #{tournament.is_finalized} DQ? #{outing.disqualified} In league? #{outing.in_league?(league)}" }
+        Rails.logger.debug { "Did not include scorecard #{outing.scorecard.id}. Final? #{tournament.is_finalized} DQ? #{outing.disqualified} In league? #{outing.in_league?(league)}" }
       end
     end
 
-    scorecards = scorecards.sort_by(&:gross_score)
+    scorecards.sort! { |x, y| y.tournament_day.tournament_at <=> x.tournament_day.tournament_at }
     scorecards = scorecards[0, league.number_of_rounds_to_handicap]
 
     scorecards
@@ -58,7 +59,7 @@ class HandicapCalculationJob < ApplicationJob
 
       differential = ((gross_score - rating) * 113) / slope
 
-      Rails.logger.info "HANDICAP: User: #{scorecard.user.complete_name} Gross Score: #{gross_score}. Rating: #{rating}. Slope: #{course_tee_box.slope}. Differential: #{differential}"
+      Rails.logger.info "HANDICAP: #{scorecard.tournament_day.tournament.name} User: #{scorecard.user.complete_name} Gross Score: #{gross_score}. Rating: #{rating}. Slope: #{course_tee_box.slope}. Differential: #{differential}"
 
       differential *= 2 if is_9_holes
       handicap_sum += differential
@@ -80,10 +81,9 @@ class HandicapCalculationJob < ApplicationJob
     tournaments.each do |t|
       t.tournament_days.each do |td|
         scorecard = td.primary_scorecard_for_user(user)
-
         next if scorecard.blank?
 
-        Rails.logger.info "Updating Scorecard #{scorecard.id} Course Handicap for #{user.complete_name}"
+        Rails.logger.info "Updating Scorecard #{scorecard.id} Course Handicap for #{user.complete_name} for #{t.name}"
 
         scorecard.set_course_handicap(true)
       end

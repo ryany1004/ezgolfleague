@@ -43,14 +43,24 @@ class LeagueSeasonTeamTournamentDayMatchup < ApplicationRecord
   end
 
   def pairings_by_handicap
-    raise 'Unbalanced teams' unless teams_are_balanced?
-
     pairings = []
 
-    team_a_users.each_with_index do |u, i|
-      user_b = team_b_users[i]
+    base_team_users = team_a_users
+    other_team_users = team_b_users
 
-      pairings << [u, user_b]
+    if team_a_users.count.zero?
+      base_team_users = team_b_users
+      other_team_users = team_a_users
+    end
+
+    base_team_users.each_with_index do |u, i|
+      other_user = other_team_users[i]
+
+      if other_user.present?
+        pairings << [u, other_user]
+      else
+        pairings << [u]
+      end
     end
 
     pairings
@@ -59,13 +69,7 @@ class LeagueSeasonTeamTournamentDayMatchup < ApplicationRecord
   def users_with_matchup_indicator(team)
     matchups = []
 
-    if team == team_a
-      users = team_a_users
-    else
-      users = team_b_users
-    end
-
-    users.each_with_index do |u, i|
+    users_for_team(team).each_with_index do |u, i|
       matchups << { user: u, matchup_indicator: position_indicator_for_index(i) }
     end
 
@@ -73,13 +77,7 @@ class LeagueSeasonTeamTournamentDayMatchup < ApplicationRecord
   end
 
   def matchup_indicator_for_user(user)
-    if team_a.users.include? user
-      users = team_a_users
-    else
-      users = team_b_users
-    end
-
-    users.each_with_index do |u, i|
+    team_users_for_user(user).each_with_index do |u, i|
       return position_indicator_for_index(i) if user == u
     end
 
@@ -116,8 +114,10 @@ class LeagueSeasonTeamTournamentDayMatchup < ApplicationRecord
   end
 
   def team_a_users
+    return [] if team_a.blank?
+
     if team_a_final_sort.present?
-      team_a.users.where(id: team_a_final_sort.split(','))
+      team_a.users.find(team_a_final_sort.split(','))
     else
       filtered_team_a_users
     end
@@ -129,23 +129,33 @@ class LeagueSeasonTeamTournamentDayMatchup < ApplicationRecord
   end
 
   def team_b_users
+    return [] if team_b.blank?
+
     if team_b_final_sort.present?
-      team_b.users.where(id: team_b_final_sort.split(','))
+      team_b.users.find(team_b_final_sort.split(','))
     else
       filtered_team_b_users
     end
   end
 
   def team_users_for_user(user)
-    if team_a.users.include? user
+    if team_a.present? && team_a.users.include?(user)
       team_a_users
-    else
+    elsif team_b.present? && team_b.users.include?(user)
       team_b_users
+    else
+      []
     end
   end
 
   def users_for_team(team)
-    team == team_a ? team_a_users : team_b_users
+    if team == team_a
+      team_a_users
+    elsif team == team_b
+      team_b_users
+    else
+      []
+    end
   end
 
   def build_excluded_user_filter(relation)
@@ -184,7 +194,12 @@ class LeagueSeasonTeamTournamentDayMatchup < ApplicationRecord
     user_ids = user_ids_to_omit
     user_ids.delete(user.id.to_s)
 
-    self.excluded_user_ids = user_ids.join(',')
+    if user_ids.count.positive?
+      self.excluded_user_ids = user_ids.join(',')
+    else
+      self.excluded_user_ids = nil
+    end
+
     save
   end
 

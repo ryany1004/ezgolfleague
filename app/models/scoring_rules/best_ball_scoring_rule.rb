@@ -1,21 +1,21 @@
 class BestBallScoringRule < StrokePlayScoringRule
-	include ::BestBallScorecardSupport
+  include ::BestBallScorecardSupport
 
-	def name
-		"Best Ball"
-	end
+  def name
+    'Best Ball'
+  end
 
-	def description
-		"The best ball on each hole for each team is used for scoring."
-	end
+  def description
+    'The best ball on each hole for each team is used for scoring.'
+  end
 
-	def team_type
-		ScoringRuleTeamType::DAILY
-	end
+  def team_type
+    ScoringRuleTeamType::DAILY
+  end
 
-	def scoring_computer
-		ScoringComputer::BestBallScoringComputer.new(self)
-	end
+  def scoring_computer
+    ScoringComputer::BestBallScoringComputer.new(self)
+  end
 
   def best_ball_scorecard_for_user_in_team(user, daily_team, use_handicaps)
     scorecard = ScoringRuleScorecards::BestBallScorecard.new
@@ -25,12 +25,12 @@ class BestBallScoringRule < StrokePlayScoringRule
     scorecard.should_use_handicap = use_handicaps
     scorecard.calculate_scores
 
-    return scorecard
+    scorecard
   end
 
-	def scorecard_api(scorecard:)
-    handicap_allowance = self.handicap_computer.handicap_allowance(user: scorecard.golf_outing.user)
+  def scorecard_api(scorecard:)
+    handicap_allowance = handicap_computer.handicap_allowance(user: scorecard.golf_outing.user)
 
-		Scorecards::Api::ScorecardAPIBestBall.new(scorecard.tournament_day, scorecard, handicap_allowance).scorecard_representation
-	end
+    Scorecards::Api::ScorecardAPIBestBall.new(scorecard.tournament_day, scorecard, handicap_allowance).scorecard_representation
+  end
 end

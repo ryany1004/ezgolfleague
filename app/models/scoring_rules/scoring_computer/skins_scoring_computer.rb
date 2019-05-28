@@ -98,9 +98,9 @@ module ScoringComputer
 			
 				@scoring_rule.course_holes.each do |hole|
 					if use_gross_scores
-						strokes = user_scorecard.scores.where(course_hole: hole).first.strokes
+						strokes = user_scorecard.scores.find_by(course_hole: hole).strokes
 					else
-						strokes = user_scorecard.scores.where(course_hole: hole).first.net_strokes
+						strokes = user_scorecard.scores.find_by(course_hole: hole).net_strokes
 					end
 
 					scores[self.user_score_key(user: user, hole: hole)] = strokes
@@ -124,8 +124,9 @@ module ScoringComputer
 					next if user_scorecard.blank?
 
 					strokes = hole_scores[self.user_score_key(user: user, hole: hole)]
-
 					next if strokes.blank? || (strokes.zero? && use_gross_scores) # strokes can be zero but only if net as handicap might take it down to zero or below
+
+          Rails.logger.debug { "Adding User #{user.complete_name} with score #{strokes} to user_scores for hole #{hole.hole_number}" }
 
 					user_scores << { user: user, score: strokes }
 				end

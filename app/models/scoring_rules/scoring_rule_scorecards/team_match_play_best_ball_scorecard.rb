@@ -71,8 +71,8 @@ module ScoringRuleScorecards
           end
         end
 
-        self.running_score = new_running_score >= 0 ? new_running_score : 0
-        self.opponent_running_score = new_opponent_running_score >= 0 ? new_opponent_running_score : 0
+        self.running_score = [new_running_score, 0].max
+        self.opponent_running_score = [new_opponent_running_score, 0].max
       end
 
       Rails.logger.debug { "TeamMatchPlayBestBallScorecard: #{team_a_scorecard.team.name} #{current_hole.hole_number} #{running_score} #{opponent_running_score}" }

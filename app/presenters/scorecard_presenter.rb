@@ -41,8 +41,12 @@ class ScorecardPresenter
     @tee_names ||= self.primary_scorecard&.golf_outing&.course_tee_box&.name
   end
 
+  def scoring_rule
+    primary_scorecard.tournament_day.scorecard_base_scoring_rule
+  end
+
   def scoring_rule_name
-    primary_scorecard.tournament_day.scorecard_base_scoring_rule.name
+    scoring_rule.name
   end
 
   def user_can_edit_any_scorecard?

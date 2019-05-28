@@ -1,4 +1,4 @@
-<p><strong>Tee-Time: <%= p.tee_time.to_s(:date_and_time) %> | Tees: <%= p.tee_names %></strong></p>
+<p><strong>Tee-Time: <%= p.tee_time.to_s(:date_and_time) %> | Tees: <%= p.tee_names %> | <%= p.scoring_rule_name %></strong></p>
 
 <table class="table table-striped table-bordered print-friendly no-bottom-margin" id="printable-scorecard-table">
 	<thead>
@@ -49,7 +49,7 @@
               <% end -%>
 
               <% unless p.scorecard_score_cell_partial.blank? -%>
-                </br><%= render partial: p.scorecard_score_cell_partial, locals: {score: score, scorecards: p.all_scorecards} %>
+                </br><%= render partial: p.scorecard_score_cell_partial, locals: { scoring_rule: p.scoring_rule, score: score, scorecards: p.all_scorecards } %>
               <% end -%>
             </td>
           <% end -%>

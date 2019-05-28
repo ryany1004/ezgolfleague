@@ -65,7 +65,7 @@ class UserAccountsController < BaseController
       if @user_account.account_to_merge_to.present?
         destination_account = User.find(@user_account.account_to_merge_to)
 
-        @user_account.merge_into_user(destination_account)
+        UserService::Merger.call(@user_account, destination_account)
       end
 
       if @user_account == current_user

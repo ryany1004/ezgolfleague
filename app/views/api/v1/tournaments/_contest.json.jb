@@ -1,6 +1,4 @@
-Rails.cache.fetch ['v1', contest], expires_in: 24.hours do
-  {
-    name: contest[:name],
-    winners: contest[:winners]
-  }
-end
+{
+  name: contest[:name],
+  winners: contest[:winners]
+}

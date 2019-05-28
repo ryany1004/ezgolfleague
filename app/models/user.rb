@@ -170,67 +170,6 @@ class User < ApplicationRecord
     end
   end
 
-  #TODO: MOVE
-  def merge_into_user(user, should_delete = false)
-    User.transaction do
-      self.league_memberships.each do |l|
-        user.league_memberships << l
-      end
-      self.league_memberships.clear
-
-      self.league_season_teams.each do |t|
-      	user.league_season_teams << t
-      end
-
-      self.golf_outings.each do |g|
-        user.golf_outings << g
-      end
-
-      self.payout_results.each do |p|
-        user.payout_results << p
-      end
-
-      self.payments.each do |p|
-        user.payments << p
-      end
-
-      self.scoring_rules.each do |r|
-	      user.scoring_rules << r
-      end
-
-      self.league_season_rankings.each do |r|
-      	user.league_season_rankings << r
-      end
-
-			self.tournament_day_results.each do |t|
-				user.tournament_day_results << t
-			end
-
-      self.child_users.each do |u|
-        user.child_users << u
-      end
-      self.child_users.clear
-
-      user.parent_user = self.parent_user
-      self.parent_user = nil
-
-      self.flights.each do |f|
-        user.flights << f
-      end
-      self.flights.clear
-
-      self.daily_teams.each do |g|
-        user.daily_teams << g
-      end
-      self.daily_teams.clear
-
-      user.save
-
-      self.save
-      self.destroy if should_delete
-    end
-  end
-
   def avatar_image_url
     self.avatar.url(:thumb)
   end

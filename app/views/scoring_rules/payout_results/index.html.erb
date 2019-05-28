@@ -29,7 +29,7 @@
 	<tbody>
 	<% @payout_results.each do |result| %>
 		<tr>
-			<td><%= link_to result.user.complete_name, edit_league_tournament_tournament_day_scoring_rule_payout_result_path(@tournament.league, @tournament, @tournament_day, @scoring_rule, result) %></td>
+			<td><%= link_to result.user&.complete_name, edit_league_tournament_tournament_day_scoring_rule_payout_result_path(@tournament.league, @tournament, @tournament_day, @scoring_rule, result) %></td>
 			<td><%= number_to_currency(result.amount) %></td>
       <td><%= result.points.to_i %></td>
       <td><%= result.detail %></td>

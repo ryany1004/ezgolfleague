@@ -100,7 +100,7 @@ class TournamentPresenter
   end
 
   def flight_or_group_name
-    if tournament.is_league_teams?
+    if tournament.has_league_season_team_scoring_rules?
       'Team'
     elsif tournament.league.allow_scoring_groups
       'Group'
@@ -114,7 +114,7 @@ class TournamentPresenter
   end
 
   def day_has_league_teams?
-    tournament.is_league_teams?
+    tournament_day.scoring_rules.any? { |x| x.team_type == ScoringRuleTeamType::LEAGUE }
   end
 
   def day_has_daily_teams?

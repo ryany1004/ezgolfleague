@@ -9,25 +9,29 @@ class Score < ApplicationRecord
   validates :strokes, inclusion: 0..30
 
   def associated_text
-    self.scorecard.tournament_day.scorecard_base_scoring_rule.associated_text_for_score(self)
+    scorecard.tournament_day.scorecard_base_scoring_rule.associated_text_for_score(self)
   end
 
   def course_hole_number
-    self.course_hole.hole_number.to_s
+    course_hole.hole_number.to_s
   end
 
   def course_hole_par
-    self.course_hole.par.to_s
+    course_hole.par.to_s
+  end
+
+  def display_score
+    strokes
   end
 
   def course_hole_yards
-    flight = self.scorecard.tournament_day.flight_for_player(self.scorecard.golf_outing.user)
+    flight = scorecard.tournament_day.flight_for_player(scorecard.golf_outing.user)
 
-    self.course_hole.yards_for_flight(flight) unless flight.blank?
+    course_hole.yards_for_flight(flight) if flight.present?
   end
 
   def tee_group_name
-    flight = self.scorecard.tournament_day.flight_for_player(self.scorecard.golf_outing.user)
+    flight = scorecard.tournament_day.flight_for_player(scorecard.golf_outing.user)
 
     if flight.blank?
       nil

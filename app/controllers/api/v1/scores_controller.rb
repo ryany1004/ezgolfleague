@@ -21,9 +21,9 @@ class Api::V1::ScoresController < Api::V1::ApiBaseController
 
       Updaters::ScorecardUpdating.update_scorecards_for_scores(scores_to_update, @scorecard, @scorecards_to_update, true)
 
-      render json: { text: 'Success' }
+      render json: { message: 'Success' }
     else
-      render text: 'Score Updating Failure', status: :bad_request
+      render json: { message: 'Score Updating Failure' }, status: :bad_request
     end
   end
 

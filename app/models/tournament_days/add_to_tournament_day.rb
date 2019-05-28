@@ -42,11 +42,16 @@ module AddToTournamentDay
   end
 
   def update_scores_for_scorecard(scorecard:)
-    if self.scorecard_base_scoring_rule.course_holes.count != scorecard.scores.count
-      scorecard.scores.destroy_all
-
-      create_scores_for_scorecard(scorecard: scorecard)
+    scorecard_base_scoring_rule.course_holes.each_with_index do |hole, i|
+      existing_score = scorecard.scores.find_by(course_hole: hole)
+      if existing_score.present?
+        existing_score.update(sort_order: i)
+      else
+        Score.create!(scorecard: scorecard, course_hole: hole, sort_order: i)
+      end
     end
+
+    scorecard.scores.where.not(course_hole: scorecard_base_scoring_rule.course_holes).destroy_all
   end
 
   def add_user_to_mandatory_scoring_rules(user:)

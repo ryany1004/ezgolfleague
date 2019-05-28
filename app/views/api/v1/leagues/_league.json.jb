@@ -1,4 +1,4 @@
-Rails.cache.fetch ['v1', league], expires_in: 24.hours do
+Rails.cache.fetch ['v1', league.cache_key_with_version] do
   {
     name: league.name,
     league_description: league.league_description,

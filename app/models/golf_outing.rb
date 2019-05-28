@@ -11,17 +11,17 @@ class GolfOuting < ApplicationRecord
   validates :course_handicap, presence: true
 
   def tournament
-    tournament_group&.tournament_day.tournament
+    tournament_group&.tournament_day&.tournament
   end
 
   def team_combined_name
-    if self.tournament_group.daily_teams.count == 0
+    if tournament_group.daily_teams.count.zero?
       nil
     else
-      daily_team = self.tournament_group.daily_team_for_user_or_index(self.user, 0)
+      daily_team = tournament_group.daily_team_for_user_or_index(user, 0)
 
       if daily_team.blank?
-        "No Team Found"
+        'No Team Found'
       else
         daily_team.short_name
       end
@@ -29,37 +29,37 @@ class GolfOuting < ApplicationRecord
   end
 
   def in_league?(league)
-    self.tournament_group.tournament_day.tournament.league == league
+    tournament_group.tournament_day.tournament.league == league
   end
 
   def disqualification_description
-    if self.disqualified
-      "Re-Qualify"
+    if disqualified
+      'Re-Qualify'
     else
-      "Disqualify"
+      'Disqualify'
     end
   end
 
   def disqualify
-    self.disqualified = !self.disqualified
-    self.save
+    self.disqualified = !disqualified
+    save
 
     # handle scoring rules
-    self.tournament_group.tournament_day.scoring_rules.each do |rule|
-      rule.scoring_rule_participations.where(user: self.user).each do |p|
+    tournament_group.tournament_day.scoring_rules.each do |rule|
+      rule.scoring_rule_participations.where(user: user).find_each do |p|
         p.disqualified = !p.disqualified
         p.save
       end
     end
 
     # handle daily teams
-    daily_team = self.tournament_group.tournament_day.daily_team_for_player(self.user)
-    unless daily_team.blank?
-      daily_team.users.each do |u|
-        team_outing = self.tournament_group.tournament_day.golf_outing_for_player(u)
-        team_outing.disqualified = !team_outing.disqualified unless u == user
-        team_outing.save
-      end
+    daily_team = tournament_group.tournament_day.daily_team_for_player(user)
+    return if daily_team.blank?
+
+    daily_team.users.each do |u|
+      team_outing = tournament_group.tournament_day.golf_outing_for_player(u)
+      team_outing.disqualified = !team_outing.disqualified unless u == user
+      team_outing.save
     end
   end
 end
