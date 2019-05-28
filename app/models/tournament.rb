@@ -247,6 +247,10 @@ class Tournament < ApplicationRecord
     distinct_courses
   end
 
+  def scoring_rules
+    @scoring_rules ||= tournament_days.map(&:scoring_rules).flatten
+  end
+
   def mandatory_scoring_rules
     @mandatory_scoring_rules ||= self.tournament_days.map(&:mandatory_scoring_rules).flatten
   end

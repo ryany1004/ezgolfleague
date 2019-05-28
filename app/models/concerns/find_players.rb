@@ -81,6 +81,16 @@ module FindPlayers
     end
   end
 
+  def scoring_rules_for_user(user:)
+    scoring_rules = []
+
+    self.tournament.scoring_rules.each do |r|
+      scoring_rules << r if r.users.include? user
+    end
+
+    scoring_rules
+  end
+
   def optional_scoring_rules_for_user(user:)
     scoring_rules = []
 
