@@ -60,14 +60,20 @@ module ScoringRuleScorecards
         new_opponent_running_score = opponent_running_score
 
         if user1_score.present? && user2_score.present?
-          if user1_score.strokes < user2_score.strokes # user 1 won this hole
+          if user1_score.net_strokes < user2_score.net_strokes # user 1 won this hole
             new_running_score = running_score + 1
 
             self.team_a_holes_won += 1
-          elsif user1_score.strokes > user2_score.strokes # user 2 won this hole
+
+            Rails.logger.debug { "TeamMatchPlayBestBallScorecard: user 1 won this hole #{user1_score.net_strokes} vs #{user2_score.net_strokes}" }
+          elsif user1_score.net_strokes > user2_score.net_strokes # user 2 won this hole
             new_opponent_running_score = opponent_running_score + 1
 
             self.team_b_holes_won += 1
+
+            Rails.logger.debug { "TeamMatchPlayBestBallScorecard: user 2 won this hole #{user2_score.net_strokes} vs #{user1_score.net_strokes}" }
+          else
+            Rails.logger.debug { "TeamMatchPlayBestBallScorecard: tie hole #{user2_score.net_strokes} vs #{user1_score.net_strokes}" }
           end
         end
 
