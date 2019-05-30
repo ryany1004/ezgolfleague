@@ -51,8 +51,8 @@
                 <li class="nav-item <%= 'active' if request.path.include?('/dashboard') %>">
                   <a class="nav-link" href="/">Dashboard</a>
                 </li>
-                <li class="nav-item <%= 'active' if request.path.include?('/league/current') %>">
-                  <%= link_to "League", leagues_path, class: 'nav-link' %>
+                <li class="nav-item <%= 'active' if request.path.include?('/leagues') %>">
+                  <%= link_to "League", league_path(current_user.selected_league), class: 'nav-link' %>
                 </li>
                 <li class="nav-item <%= 'active' if request.path.include?('/tournaments') %>">
                   <%= link_to "Tournaments", league_tournaments_path(current_user.selected_league), class: 'nav-link' %>

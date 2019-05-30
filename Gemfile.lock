@@ -107,6 +107,7 @@ GEM
       autoprefixer-rails (>= 9.1.0)
       popper_js (>= 1.14.3, < 2)
       sassc-rails (>= 2.0.0)
+    bootstrap-select-rails (1.13.8)
     builder (3.2.3)
     bullet (5.9.0)
       activesupport (>= 3.0.0)
@@ -474,6 +475,7 @@ DEPENDENCIES
   attr_encrypted (~> 3.0.0)
   aws-sdk (~> 2.3)
   bootstrap (~> 4.2.1)
+  bootstrap-select-rails
   bullet
   byebug
   capistrano (= 3.9.0)

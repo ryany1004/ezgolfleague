@@ -451,6 +451,200 @@ button:focus {
   padding-bottom: 12px;
 }
 
+.bootstrap-select>select.bs-select-hidden, select.bs-select-hidden, select.selectpicker {
+  display: none!important;
+}
+
+/* League */
+
+.season-ranking-card {
+  background: #fff;
+  border-radius: .25rem;
+}
+
+.sgl-header-list {
+  margin-bottom: 0;
+}
+
+.sgl-header-list li {
+  text-transform: uppercase;
+  color: #d1d1cf;
+  font-size: 18px;
+}
+
+.sgl-header-list li span {
+  font-size: 30px;
+  color: #fff;
+  font-weight: 500;
+  margin-right: 5px;
+}
+
+.sgl-header-list .list-inline-item:not(:last-child) {
+  margin-right: 25px;
+}
+
+.season-ranking-card {
+  margin-bottom: 30px;
+}
+
+.season-ranking-card-header h2 {
+  font-size: 26px;
+  margin-bottom: 0;
+}
+
+.season-ranking-card-header {
+  padding: 18px 25px;
+  border-bottom: 1px solid #efefef;
+}
+
+.season-ranking-card-header ul {
+  margin-bottom: 0;
+}
+
+.season-ranking-card-header li {
+  text-transform: uppercase;
+  color: #a8a8a8;
+  font-size: 16px;
+}
+
+.season-ranking-card-header li span {
+  font-size: 24px;
+  color: #000;
+  font-weight: 500;
+  margin-right: 5px;
+}
+
+.season-ranking-card-header .list-inline-item:not(:last-child) {
+  margin-right: 25px;
+}
+
+.season-ranking-content h2 {
+  font-size: 36px;
+  font-weight: 500;
+  margin-bottom: 25px;
+}
+
+.season-ranking-content {
+  padding-top: 25%;
+  padding-bottom: 25%;
+  text-align: center;
+}
+
+.season-ranking-content .btn {
+  padding: 12px 20px;
+}
+
+.scorpion-golf-league-green {
+  background: #00c185;
+  border-radius: .25rem;
+  margin-bottom: 30px;
+}
+
+.scorpion-golf-league-gree-btn {
+  padding-bottom: 10px;
+  padding-top: 25px;
+}
+
+.scorpion-golf-league-gree-btn .btn {
+  width: 70%;
+  margin-bottom: 15px;
+  font-size: 18px;
+  font-weight: 500;
+  padding: 12px;
+}
+
+.scorpion-golf-league-gree-list p {
+  font-size: 15px;
+  color: #a5ead5;
+  text-transform: uppercase;
+  margin-bottom: 0;
+  padding-left: 20px;
+}
+
+.scorpion-golf-league-gree-list h2 {
+  color: #fff;
+  font-size: 20px;
+  margin-bottom: 0;
+  padding-left: 20px;
+}
+
+.scorpion-golf-league-gree-list {
+  padding: 10px 0px;
+  border-bottom: 2px solid #4ccda6;
+}
+
+.scorpion-golf-league-green-header {
+  border-bottom: 2px solid #4ccda6;
+}
+
+.scorpion-golf-league-green-header .dropdown .bootstrap-select {
+  width: 100% !important;
+}
+
+.scorpion-golf-league-green-header .dropdown .bootstrap-select .btn-light,
+.scorpion-golf-league-green-header .btn-light:not(:disabled):not(.disabled).active,
+.scorpion-golf-league-green-header .btn-light:not(:disabled):not(.disabled):active,
+.scorpion-golf-league-green-header .show>.btn-light.dropdown-toggle {
+  background: transparent !important;
+  border: none !important;
+}
+
+.scorpion-golf-league-green-header .dropdown .bootstrap-select .btn-light {
+  font-size: 24px;
+  font-weight: 500;
+  color: #fff;
+  padding: 8px 18px;
+}
+
+.scorpion-golf-league-green-header .bootstrap-select .dropdown-menu li {
+  font-size: 20px;
+}
+
+.bootstrap-select .dropdown-menu {
+  background-color: #0caf7c;
+}
+
+.scorpion-golf-league-green-header .btn-light:not(:disabled):not(.disabled).active:focus,
+.scorpion-golf-league-green-header .btn-light:not(:disabled):not(.disabled):active:focus,
+.scorpion-golf-league-green-header .show>.btn-light.dropdown-toggle:focus,
+.btn-light.focus,
+.btn-light:focus {
+  box-shadow: none !important;
+  outline: none !important;
+}
+
+.bootstrap-select .dropdown-toggle:focus {
+  outline: none !important;
+}
+
+.scorpion-golf-league-green-header .bootstrap-select .dropdown-item {
+  color: #fff;
+}
+
+.scorpion-golf-league-green-header .bootstrap-select .dropdown-item.active,
+.scorpion-golf-league-green-header .bootstrap-select .dropdown-item:active,
+.scorpion-golf-league-green-header .bootstrap-select .dropdown-item:focus,
+.scorpion-golf-league-green-header .bootstrap-select .dropdown-item:hover {
+  background: #008a60;
+}
+
+.scorpion-golf-league-green-header .bootstrap-select .dropdown-toggle::after {
+  content: url('../images/icons/expand-button.png');
+  border: none;
+  top: 12px;
+  right: 40px;
+  position: absolute;
+}
+
+.scorpion-golf-league-green-header.dropup .dropdown-toggle::after {
+  border: none !important;
+}
+
+.scorpion-golf-league-green-header .filter-option-inner-inner {
+  border-right: 2px solid #4ccda6;
+  width: 245px;
+}
+
 
 /* Upcoming Tournaments */
 

@@ -18,6 +18,10 @@ class LeaguesController < BaseController
     @leagues = @leagues.where('lower(name) LIKE ?', search_string)
   end
 
+  def show
+    @league = League.find(params[:id])
+  end
+
   def new
     @league = League.new
   end
