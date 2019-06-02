@@ -53,7 +53,7 @@
                       <p><%= league.league_description %></p>
                       <p><strong>Administrator: </strong><%= league.contact_name %></p>
 
-                      <% Tournament.all_upcoming([league], nil).limit(1).each do |t| %>
+                      <% Tournament.all_upcoming([league], nil).limit(1).select {|t| t.all_days_are_playable? }.to_a.each do |t| %>
                         <hr>
                         <p>
                           <strong>Next Tournament</strong>
