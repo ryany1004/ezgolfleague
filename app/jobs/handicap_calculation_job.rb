@@ -42,7 +42,7 @@ class HandicapCalculationJob < ApplicationJob
     handicap_sum = 0.0
 
     scorecards.each do |scorecard|
-      gross_score = scorecard.gross_score
+      gross_score = scorecard.adjusted_score > 0 ? scorecard.adjusted_score : scorecard.gross_score
       course_tee_box = scorecard.golf_outing.course_tee_box
       is_9_holes = course_tee_box.course.course_holes.count == scorecard.scores.count * 2
 
