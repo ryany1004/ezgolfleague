@@ -76,6 +76,10 @@ class Scorecard < ApplicationRecord
     tournament_day_results.first ? tournament_day_results.first&.net_score : 0
   end
 
+  def adjusted_score
+    tournament_day_results.first ? tournament_day_results.first&.adjusted_score : 0
+  end
+
   def front_nine_score(use_handicap = false)
     if use_handicap
       tournament_day_results.first ? tournament_day_results.first&.front_nine_net_score : 0

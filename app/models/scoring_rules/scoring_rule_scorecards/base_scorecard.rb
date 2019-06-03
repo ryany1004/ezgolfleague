@@ -60,6 +60,10 @@ module ScoringRuleScorecards
       scores.map { |score| score.net_strokes }.sum
     end
 
+    def adjusted_score
+      gross_score
+    end
+
     def front_nine_score(use_handicap = false)
       return 0
     end
