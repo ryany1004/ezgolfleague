@@ -330,6 +330,13 @@ button:focus {
   margin-left: 10px;
 }
 
+.golfers {
+  background: white;
+  border: 1px solid #dee2e6;
+  border-radius: 5px;
+  margin-top: 75px !important;
+}
+
 .player-box {
   padding: 26px 25px;
   border-bottom: 1px solid #efefef;
@@ -922,7 +929,7 @@ button:focus {
   margin: 0 15px;
 }
 
-.ttt-header .btn-primary {
+.ttt-header .btn-primary, .ttt-header .btn-success {
   font-size: 19px;
   padding: 12px 30px;
 }

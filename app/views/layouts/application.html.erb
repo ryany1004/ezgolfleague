@@ -51,14 +51,14 @@
                 <li class="nav-item <%= 'active' if request.path.include?('/dashboard') %>">
                   <a class="nav-link" href="/">Dashboard</a>
                 </li>
-                <li class="nav-item <%= 'active' if request.path.include?('/leagues') %>">
+                <li class="nav-item <%= 'active' if current_page?(league_path(current_user.selected_league)) %>">
                   <%= link_to "League", league_path(current_user.selected_league), class: 'nav-link' %>
                 </li>
                 <li class="nav-item <%= 'active' if request.path.include?('/tournaments') %>">
                   <%= link_to "Tournaments", league_tournaments_path(current_user.selected_league), class: 'nav-link' %>
                 </li>
                 <li class="nav-item <%= 'active' if request.path.include?('/golfers') %>">
-                  <%= link_to "Golfers", user_accounts_path, class: 'nav-link' %>
+                  <%= link_to "Golfers", league_league_memberships_path(current_user.selected_league), class: 'nav-link' %>
                 </li>
               </ul>     
               <ul class="ml-auto list-inline  profile-dropdown">
@@ -67,7 +67,7 @@
                   <div class="dropdown-menu" aria-labelledby="dropdown08">
                     <%= link_to "My Profile", edit_user_account_path(current_user.id), class: 'dropdown-item' %>
                     <% if !current_user.has_all_exempt_leagues? && current_user.is_any_league_admin? %>
-                     <%= link_to "Billing", current_league_subscription_credits_path(current_user.selected_league), class: 'dropdown-item' %>
+                     <%= link_to "Billing", edit_user_account_path(current_user.id) + "?billing", class: 'dropdown-item' %>
                     <% end %>
                     <% if current_user.leagues.count > 1 -%>
                       <div class="dropdown-divider"></div>

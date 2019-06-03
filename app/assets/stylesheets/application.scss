@@ -92,6 +92,10 @@
   }
 }
 
+.table thead th {
+  border: none;
+}
+
 //Bootstrap Chosen
 
 select.form-control + .chosen-container.chosen-container-single .chosen-single {
