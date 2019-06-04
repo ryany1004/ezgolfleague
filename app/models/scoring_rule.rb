@@ -20,7 +20,7 @@ class ScoringRule < ApplicationRecord
   belongs_to :tournament_day, touch: true, inverse_of: :scoring_rules
   has_many :payments, inverse_of: :scoring_rule, dependent: :destroy
   has_many :payouts, -> { order(:sort_order, 'amount DESC, points DESC') }, inverse_of: :scoring_rule, dependent: :destroy
-  has_many :payout_results, -> { order(:flight_id, amount: :desc, points: :desc) }, inverse_of: :scoring_rule, dependent: :destroy
+  has_many :payout_results, -> { order(:flight_id, amount: :desc, points: :desc, sorting_hint: :asc) }, inverse_of: :scoring_rule, dependent: :destroy
   has_many :tournament_day_results, -> { order(:flight_id, :sort_rank) }, inverse_of: :scoring_rule, dependent: :destroy
   has_many :scoring_rule_participations, dependent: :destroy, inverse_of: :scoring_rule
   has_many :users, through: :scoring_rule_participations

@@ -40,7 +40,7 @@ module ScoringComputer
     def assign_payouts_across_daily_teams
       Rails.logger.info { 'Splitting Payouts for Daily Team Primary Scoring Rule' }
 
-      @scoring_rule.tournament_day.daily_teams.each do |daily_team|
+      @scoring_rule.tournament_day.daily_teams.each_with_index do |daily_team, i|
         next if daily_team.users.count.zero?
 
         team_results = @scoring_rule.payout_results.where(user: daily_team.users)
@@ -54,6 +54,7 @@ module ScoringComputer
           other_users.each do |o|
             PayoutResult.create(
               user: o,
+              sorting_hint: i,
               scoring_rule: @scoring_rule,
               amount: split_amount,
               scoring_rule_course_hole: result.scoring_rule_course_hole,
