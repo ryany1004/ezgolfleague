@@ -63,7 +63,7 @@ module ScoringComputer
             )
           end
 
-          result.update(amount: split_amount)
+          result.update(amount: split_amount, sorting_hint: i)
         end
       end
     end
