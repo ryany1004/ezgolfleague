@@ -25,6 +25,10 @@ class TournamentPresenter
     tournament_day.blank? ? 'Final' : tournament_day.pretty_day(false)
   end
 
+  def ranking_name
+    tournament_day.scorecard_base_scoring_rule.name
+  end
+
   def player_count
     tournament.number_of_players
   end
