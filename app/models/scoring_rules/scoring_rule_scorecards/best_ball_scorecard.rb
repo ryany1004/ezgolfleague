@@ -60,6 +60,7 @@ module ScoringRuleScorecards
       end
 
       new_scores = []
+      eligible_users = scoring_rule.users_eligible_for_payouts
 
       scoring_rule.tournament_day.scorecard_base_scoring_rule.course_holes.each do |hole|
         score = DerivedScorecardScore.new
@@ -74,7 +75,7 @@ module ScoringRuleScorecards
           comparable_net_scores = []
 
           users_to_compare.each do |user|
-            next unless scoring_rule.users_eligible_for_payouts.include? user # do not use if DQ
+            next unless eligible_users.include? user # do not use if DQ
 
             scorecard = scoring_rule.tournament_day.primary_scorecard_for_user(user)
             raw_score = 0
