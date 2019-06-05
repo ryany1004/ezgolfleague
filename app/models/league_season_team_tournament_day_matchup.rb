@@ -122,7 +122,7 @@ class LeagueSeasonTeamTournamentDayMatchup < ApplicationRecord
       filtered_team_a_users
     end
   end
-  
+
   def filtered_team_b_users
     filtered_users = team_b.present? ? build_excluded_user_filter(team_b.users) : []
     sort_users(filtered_users)
