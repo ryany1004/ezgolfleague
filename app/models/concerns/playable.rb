@@ -2,37 +2,22 @@ module Playable
   extend ActiveSupport::Concern
 
   def display_teams?
-    self.tournament_days.each do |day|
+    tournament_days.each do |day|
       return true if day.scorecard_base_scoring_rule.team_type == ScoringRuleTeamType::DAILY
     end
 
     false
   end
 
-  def players
-    players = []
-
-    self.tournament_days.each do |day|
-      self.players_for_day(day).each do |player|
-        players << player unless players.include? player
-      end
-    end
-
-    players
+  def players(hide_disqualified = false)
+    all_group_ids = tournament_days.includes(:tournament_groups).map(&:tournament_groups).flatten.pluck(:id)
+    outings = GolfOuting.includes(:user).where(tournament_group: all_group_ids)
+    outings = outings.where(disqualified: false) if hide_disqualified
+    outings.map(&:user).uniq
   end
 
   def qualified_players
-    players = []
-
-    self.tournament_days.each do |day|
-      self.players_for_day(day).each do |player|
-        outing = day.golf_outing_for_player(player)
-
-        players << player unless (outing.disqualified) || (players.include? player)
-      end
-    end
-
-    players
+    players(true)
   end
 
   def players_for_day(day)
@@ -51,11 +36,11 @@ module Playable
   end
 
   def number_of_players
-    return 0 if self.first_day.blank?
+    return 0 if first_day.blank?
 
     number_of_players = 0
 
-    self.first_day.tournament_groups.each do |group|
+    first_day.tournament_groups.each do |group|
       number_of_players = number_of_players + group.players_signed_up.count
     end
 
