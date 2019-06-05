@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_06_04_042951) do
+ActiveRecord::Schema.define(version: 2019_06_05_224121) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -154,6 +154,7 @@ ActiveRecord::Schema.define(version: 2019_06_04_042951) do
     t.datetime "deleted_at"
     t.index ["course_tee_box_id"], name: "index_golf_outings_on_course_tee_box_id"
     t.index ["deleted_at"], name: "index_golf_outings_on_deleted_at"
+    t.index ["disqualified"], name: "index_golf_outings_on_disqualified"
     t.index ["is_confirmed"], name: "index_golf_outings_on_is_confirmed"
     t.index ["tournament_group_id"], name: "index_golf_outings_on_tournament_group_id"
     t.index ["user_id"], name: "index_golf_outings_on_user_id"
