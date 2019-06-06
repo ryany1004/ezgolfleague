@@ -12,6 +12,7 @@ class IosPushNotificationJob < ApplicationJob
       notification = Apnotic::Notification.new(device.device_identifier)
       notification.topic = 'com.ezgolfleague.GolfApp'
       notification.content_available = 1 if content_available.present?
+      notification.priority = 5
       notification.alert = body if body.present?
       notification.custom_payload = extra_data
 
