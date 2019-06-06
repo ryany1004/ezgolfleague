@@ -62,7 +62,7 @@ module ScoringComputer
 
 	    scorecard = @scoring_rule.tournament_day.primary_scorecard_for_user(user)
 	    if scorecard.blank?
-	      Rails.logger.info { "Returning 0 - No Scorecard" }
+	      Rails.logger.info { 'Returning 0 - No Scorecard' }
 
 	      return 0
 	    end
@@ -84,7 +84,7 @@ module ScoringComputer
 	  end
 
 		def front_nine_hole_numbers
-			[1, 2, 3, 4, 5, 6, 7, 8, 9]
+		  [1, 2, 3, 4, 5, 6, 7, 8, 9]
 		end
 
 		def back_nine_hole_numbers
