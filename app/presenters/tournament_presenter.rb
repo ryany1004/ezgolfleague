@@ -6,6 +6,7 @@ class TournamentPresenter
   attr_accessor :user
   attr_accessor :day_flights
   attr_accessor :combined_flights
+  attr_accessor :show_combined
 
   def initialize(args)
     args.each do |k, v|
@@ -81,7 +82,7 @@ class TournamentPresenter
     links = []
 
     tournament.tournament_days.each do |day|
-      highlighted = day == tournament_day
+      highlighted = (day == tournament_day) && !show_combined
 
       links << { name: day.pretty_day,
                  link: Rails.application.routes.url_helpers.play_tournament_path(tournament, tournament_day: day),
@@ -89,8 +90,8 @@ class TournamentPresenter
     end
 
     links << { name: 'Final',
-               link: Rails.application.routes.url_helpers.play_tournament_path(tournament),
-               highlighted: tournament_day.blank? } if tournament.tournament_days.count.positive?
+               link: Rails.application.routes.url_helpers.play_tournament_path(tournament, combined: true),
+               highlighted: show_combined } if tournament.tournament_days.count.positive?
 
     links
   end
@@ -142,7 +143,7 @@ class TournamentPresenter
   end
 
   def showing_final?
-    tournament_day.blank?
+    show_combined
   end
 
   def leaderboard_link
@@ -296,7 +297,7 @@ class TournamentPresenter
   end
 
   def flights_with_rankings
-    if tournament_day.blank?
+    if show_combined
       combined_flights
     else
       day_flights

@@ -1,10 +1,10 @@
 class Play::TournamentsController < Play::BaseController
-  layout "golfer"
+  layout 'golfer'
 
   before_action :fetch_tournament, except: [:show]
 
   def show
-    tournament = self.view_tournament_from_user_for_tournament_id(params[:id])
+    tournament = view_tournament_from_user_for_tournament_id(params[:id])
     redirect_to root_path if tournament.blank?
 
     if tournament.tournament_days.count == 1
@@ -15,16 +15,23 @@ class Play::TournamentsController < Play::BaseController
     end
 
     if tournament_day.present?
-      day_flights = self.fetch_flights_with_rankings(tournament_day)
-      combined_flights = self.fetch_combined_flights_with_rankings(tournament_day, day_flights)
+      day_flights = fetch_flights_with_rankings(tournament_day)
+      combined_flights = fetch_combined_flights_with_rankings(tournament_day, day_flights)
     else
       day_flights = nil
-      combined_flights = self.fetch_combined_flights_with_rankings(tournament.tournament_days.last, self.fetch_flights_with_rankings(tournament.tournament_days.last))
+      combined_flights = fetch_combined_flights_with_rankings(tournament.tournament_days.last, fetch_flights_with_rankings(tournament.tournament_days.last))
     end
 
-    @tournament_presenter = TournamentPresenter.new({tournament: tournament, tournament_day: tournament_day, user: current_user, day_flights: day_flights, combined_flights: combined_flights})
+    show_combined = params[:combined].present? ? true : false
 
-    @page_title = "#{tournament.name}"
+    @tournament_presenter = TournamentPresenter.new({ show_combined: show_combined,
+                                                      tournament: tournament,
+                                                      tournament_day: tournament_day,
+                                                      user: current_user,
+                                                      day_flights: day_flights,
+                                                      combined_flights: combined_flights })
+
+    @page_title = tournament.name
   end
 
   def leaderboard
@@ -117,14 +124,13 @@ class Play::TournamentsController < Play::BaseController
     tournament_day.flights_with_rankings
   end
 
-  def fetch_combined_flights_with_rankings(tournament_day, day_flights_with_rankings)
-    return FetchingTools::LeaderboardFetching.flights_with_rankings_could_be_combined(tournament_day)
+  def fetch_combined_flights_with_rankings(tournament_day, _)
+    FetchingTools::LeaderboardFetching.flights_with_rankings_could_be_combined(tournament_day)
   end
 
   private
 
   def fetch_tournament
-    @tournament = self.view_tournament_from_user_for_tournament_id(params[:tournament_id])
+    @tournament = view_tournament_from_user_for_tournament_id(params[:tournament_id])
   end
-
 end

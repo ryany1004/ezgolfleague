@@ -52,7 +52,7 @@ module ScoringComputer
 		end
 
 		def after_updating_scores_for_scorecard(scorecard:)
-			## Most scoring rules do not require after-action updating - commonly used to split scores, copy scores to teammates, etc...
+			# Most scoring rules do not require after-action updating - commonly used to split scores, copy scores to teammates, etc...
 		end
 
 	  def compute_adjusted_user_score(user:)
@@ -69,7 +69,7 @@ module ScoringComputer
 
 	    total_score = 0
 
-	    scorecard_with_holes = Scorecard.where(id: scorecard.id).includes(scores: :course_hole).first
+	    scorecard_with_holes = Scorecard.all.includes(scores: :course_hole).find_by(id: scorecard.id)
 	    scorecard_with_holes.scores.each do |score|
 	      adjusted_score = scorecard.score_or_maximum_for_hole(strokes: score.strokes, course_handicap: scorecard.golf_outing.course_handicap, hole: score.course_hole)
 

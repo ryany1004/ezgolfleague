@@ -36,12 +36,12 @@ class TournamentDayResult < ApplicationRecord
   end
 
   def combinable?(other_result)
-    user.id == other_result.user.id
+    name == other_result.name
   end
 
   # TODO: refactor, could store not compute
   def points
-    return 0 if self.user.present? && flight.blank?
+    return 0 if user.present? && flight.blank?
 
     total_points = 0
 
