@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_06_05_224121) do
+ActiveRecord::Schema.define(version: 2019_06_07_170814) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -446,6 +446,7 @@ ActiveRecord::Schema.define(version: 2019_06_05_224121) do
     t.integer "scoring_rule_course_holes_count", default: 0
     t.boolean "primary_rule", default: false
     t.string "custom_name"
+    t.boolean "base_stroke_play", default: false
     t.index ["primary_rule"], name: "index_scoring_rules_on_primary_rule"
     t.index ["tournament_day_id"], name: "index_scoring_rules_on_tournament_day_id"
     t.index ["type"], name: "index_scoring_rules_on_type"

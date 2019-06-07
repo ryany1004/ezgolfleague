@@ -55,13 +55,13 @@ module ScoringComputer
       back_nine_gross_score = 0
       back_nine_net_score = 0
 
-      adjusted_score = compute_adjusted_user_score(user: user)
-
       if scorecard.precalculated?
         gross_score = scorecard.gross_score
         net_score = scorecard.net_score
       else
         Rails.logger.debug { "Scoring #{scorecard.scores.count} scores for #{user.complete_name}." }
+
+        adjusted_score = compute_adjusted_user_score(user: user)
 
         if scorecard.scores.respond_to?(:includes)
           scores = scorecard.scores.includes(:course_hole)
@@ -111,11 +111,11 @@ module ScoringComputer
         end
       end
 
-	    user_par = self.user_par_for_played_holes(user)
+	    user_par = user_par_for_played_holes(user)
 	    par_related_net_score = net_score - user_par
 	    par_related_gross_score = gross_score - user_par
 
-	    result_name = Users::ResultName.result_name_for_user(user, tournament_day)
+	    result_name = Users::ResultName.result_name_for_user(user, @scoring_rule)
 
 	    if gross_score > 0
 	    	result = @scoring_rule.tournament_day_results.find_or_create_by(user: user) # TODO: create_or_find_by

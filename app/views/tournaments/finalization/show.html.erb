@@ -14,7 +14,7 @@
 
 <div class="row">
   <% @tournament_days.each do |day| %>
-    <% day.scoring_rules.each do |rule| %>
+    <% day.displayable_scoring_rules.each do |rule| %>
       <div class="col-md-12">
         <div class="panel panel-default">
           <div class="panel-heading">
@@ -70,7 +70,7 @@
 
   <% @tournament_days.each do |day| -%>
     <div class="col-md-12">
-      <h3><%= day.pretty_day(true) %> Results</h3>
+      <h3><%= day.pretty_day(true) %> Individual Results</h3>
       <table class="table table-striped">
         <thead>
           <tr>
@@ -83,7 +83,7 @@
           </tr>
         </thead>
         <tbody>
-          <% day.scorecard_base_scoring_rule.individual_tournament_day_results.each do |result| %>
+          <% day.stroke_play_scoring_rule.individual_tournament_day_results.each do |result| %>
             <tr>
               <td><%= result.flight&.display_name %></td>
               <td><%= result.name %><% if result.primary_scorecard != nil && !result.primary_scorecard&.is_confirmed? -%> (Unconfirmed by Player)<% end -%><%- if result.primary_scorecard&.golf_outing&.disqualified %> (Disqualified)<%- end %></td>

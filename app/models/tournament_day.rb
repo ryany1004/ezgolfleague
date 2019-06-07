@@ -252,7 +252,19 @@ class TournamentDay < ApplicationRecord
   end
 
   def scorecard_base_scoring_rule
-    @scorecard_base_scoring_rule ||= self.scoring_rules.where(primary_rule: true).first
+    @scorecard_base_scoring_rule ||= scoring_rules.find_by(primary_rule: true)
+  end
+
+  def stroke_play_scoring_rule
+    if scorecard_base_scoring_rule&.instance_of?(StrokePlayScoringRule)
+      scorecard_base_scoring_rule
+    else
+      scoring_rules.find_by(base_stroke_play: true)
+    end
+  end
+
+  def displayable_scoring_rules
+    @displayable_scoring_rules ||= scoring_rules.where(base_stroke_play: false)
   end
 
   def mandatory_scoring_rules

@@ -4,7 +4,7 @@ class ScoringRulesController < BaseController
   before_action :set_stage
 
   def index
-    @scoring_rules = @tournament_day.scoring_rules
+    @scoring_rules = @tournament_day.displayable_scoring_rules
   end
 
   def create
