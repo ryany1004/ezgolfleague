@@ -1,0 +1,60 @@
+<div class="registration-form-container">
+	<div class="panel-heading">
+		<h3 class="panel-title pb-4">League Details</h3>
+	</div>
+
+  <%= simple_form_for @league, :defaults => { :input_html => { :class => "onboarding__input", :label => false }} do |f| %>
+		<% if notification = f.error_notification %>
+			<div class="alert alert-error fade in">
+				<a class="close" data-dismiss="alert" href="#">&times;</a>
+				<%= notification %>
+			</div>
+		<% end %>
+
+		<div class="form-flex-group">
+			<div class="form-side-label">
+				<p>League Name</p>
+			</div>
+
+      <%= f.input :name, required: true %>
+		</div>
+
+		<div class="form-flex-group">
+			<div class="form-side-label">
+				<p>Description</p>
+			</div>
+
+			<%= f.input :league_description %>
+		</div>
+
+		<div class="form-flex-group">
+			<div class="form-side-label">
+				<p>Play Location</p>
+			</div>
+
+			<%= f.input :location %>
+		</div>    
+
+		<div class="form-flex-group">
+			<div class="form-side-label">
+				<p>Contact Phone</p>
+			</div>
+
+			<div class="form-flex-group">
+        <%= f.input :contact_phone %>
+
+				<div class="form-side-label pl-2 ">
+					<p>Contact Email</p>
+				</div>
+
+				<%= f.input :contact_email %>
+			</div>
+		</div>
+
+		<div class="form-actions form-flex-group"> 
+			<div class="form-flex-right">
+				<%= f.button :submit, "Save", class: 'btn__ezgl-secondary' %>
+			</div>
+		</div>
+	<% end %>
+</div>

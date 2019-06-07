@@ -42,13 +42,13 @@
               </div>
               <div class="scorpion-golf-league-gree-btn text-center">
                 <%= link_to "View Tournaments", league_tournaments_path(@league), class: 'btn btn-primary' %>
-                <a href="#" class="btn btn-success">Manage Golfers</a>
+                <%= link_to "Manage Golfers", league_league_memberships_path(current_user.selected_league), class: 'btn btn-success' %>
                 <a href="#" class="btn btn-success">Edit Scoring Groups</a>
               </div>
           </div><!-- /.scorpion-golf-league-green -->            
           <div class="list-group sidebar-list-group">
-            <%= link_to "Season Settings", edit_league_path(@league.id), class: "list-group-item list-group-item-action" %>
-            <%= link_to "League Settings", edit_league_path(@league.id), class: "list-group-item list-group-item-action" %>
+            <%= link_to image_tag('settings.png') + "Season Settings", edit_league_league_season_path(@league.id), class: "list-group-item list-group-item-action" %>
+            <%= link_to image_tag('settings.png') + "League Settings", edit_league_path(@league.id), class: "list-group-item list-group-item-action" %>
           </div><!-- /.sidebar-list-group -->
         </div><!-- /.col-md-3 -->   
         <div class="col-md-9">

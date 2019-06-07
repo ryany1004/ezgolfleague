@@ -48,7 +48,7 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarCollapse">
               <ul class="navbar-nav mr-auto">
-                <li class="nav-item <%= 'active' if request.path.include?('/dashboard') %>">
+                <li class="nav-item <%= 'active' if current_page?(root_path) %>">
                   <a class="nav-link" href="/">Dashboard</a>
                 </li>
                 <li class="nav-item <%= 'active' if current_page?(league_path(current_user.selected_league)) %>">
@@ -57,7 +57,7 @@
                 <li class="nav-item <%= 'active' if request.path.include?('/tournaments') %>">
                   <%= link_to "Tournaments", league_tournaments_path(current_user.selected_league), class: 'nav-link' %>
                 </li>
-                <li class="nav-item <%= 'active' if request.path.include?('/golfers') %>">
+                <li class="nav-item <%= 'active' if current_page?(league_league_memberships_path(current_user.selected_league)) %>">
                   <%= link_to "Golfers", league_league_memberships_path(current_user.selected_league), class: 'nav-link' %>
                 </li>
               </ul>     
