@@ -84,7 +84,7 @@ module Playable
     total_score = 0
 
     self.tournament_days.each do |day|
-      day.scoring_rules.each do |rule|
+      day.displayable_scoring_rules.each do |rule|
         result = rule.result_for_user(user: user)
         total_score += result.net_score unless result.blank?
       end
@@ -97,7 +97,7 @@ module Playable
     total_points = 0
 
     self.tournament_days.each do |day|
-      day.scoring_rules.each do |rule|
+      day.displayable_scoring_rules.each do |rule|
         total_points += rule.points_for_user(user: user)
       end
     end

@@ -9,7 +9,7 @@ class PrintsController < BaseController
       primary_scorecard = @tournament_day.primary_scorecard_for_user(player)
 
       other_scorecards = []
-      @tournament_day.scoring_rules.each do |rule|
+      @tournament_day.displayable_scoring_rules.each do |rule|
       	rule.related_scorecards_for_user(player, true).each do |other_card|
       		if other_card.user != player && !other_scorecards.map(&:user).include?(other_card.user)
       			other_scorecards << other_card

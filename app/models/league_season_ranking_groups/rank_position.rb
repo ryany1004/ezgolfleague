@@ -40,7 +40,7 @@ module LeagueSeasonRankingGroups
 	      	ranking = LeagueSeasonRanking.create(user: p, league_season_ranking_group: group) if ranking.blank?
 
 	        t.tournament_days.includes(scoring_rules: [payout_results: :user]).each do |day|
-	        	day.scoring_rules.includes(:payout_results).each do |rule|
+	        	day.displayable_scoring_rules.includes(:payout_results).each do |rule|
 		          rule.payout_results.where(user: p).each do |result|
 		          	Rails.logger.debug { "Adding #{result.points} points and #{result.amount} amount from rule #{rule.id} #{rule.name} on day #{day.id} to #{p.complete_name}" }
 
@@ -62,7 +62,7 @@ module LeagueSeasonRankingGroups
 
 				self.league_season.tournaments.includes(:tournament_days).each do |t|
 					t.tournament_days.includes(scoring_rules: [payout_results: :league_season_team]).each do |day|
-						day.scoring_rules.includes(:payout_results).each do |rule|
+						day.displayable_scoring_rules.includes(:payout_results).each do |rule|
 							# add the team results
 		          rule.payout_results.where(league_season_team: team).each do |result|
 		            ranking.points += result.points unless result.points.blank?

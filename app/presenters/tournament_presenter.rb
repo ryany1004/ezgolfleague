@@ -39,7 +39,7 @@ class TournamentPresenter
   end
 
   def scoring_rules
-    tournament_day.scoring_rules
+    tournament_day.displayable_scoring_rules
   end
 
   def date_and_times
