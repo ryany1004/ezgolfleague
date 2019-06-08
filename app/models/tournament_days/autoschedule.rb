@@ -14,7 +14,7 @@ module Autoschedule
 
       result = previous_day.scorecard_base_scoring_rule.result_for_user(user: p)
       if result.blank? # this is a hack for Best Ball # TODO FIX ME
-        result_name = Users::ResultName.result_name_for_user(p, previous_day)
+        result_name = Users::ResultName.result_name_for_user(p, previous_day.scorecard_base_scoring_rule)
         result = previous_day.scorecard_base_scoring_rule.tournament_day_results.find_by(name: result_name)
       end
 

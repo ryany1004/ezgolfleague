@@ -9,7 +9,7 @@ module ScoringComputer
       return nil if scorecard.blank? || scorecard.scores.blank?
       
       if scorecard.gross_score > 0
-      	result_name = Users::ResultName.result_name_for_user(user, self.tournament_day)
+      	result_name = Users::ResultName.result_name_for_user(user, scoring_rule)
 
 				flight = self.tournament_day.flight_for_player(user)
 	    	flight = self.tournament_day.assign_user_to_flight(user: user) if flight.blank?
