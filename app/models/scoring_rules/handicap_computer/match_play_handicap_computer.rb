@@ -8,6 +8,8 @@ module HandicapComputer
 
     def match_play_handicap_allowance(user:)
       user_golf_outing = tournament_day.golf_outing_for_player(user)
+      return nil if user_golf_outing.blank?
+
       user_course_handicap = course_handicap_for_game_type(user_golf_outing)
 
       opponent = @scoring_rule.opponent_for_user(user)
