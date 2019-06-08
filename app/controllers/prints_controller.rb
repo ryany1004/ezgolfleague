@@ -1,6 +1,6 @@
 class PrintsController < BaseController
   before_action :fetch_tournament_details
-  
+
   def print_scorecards
     @print_cards = []
 
@@ -10,11 +10,11 @@ class PrintsController < BaseController
 
       other_scorecards = []
       @tournament_day.displayable_scoring_rules.each do |rule|
-      	rule.related_scorecards_for_user(player, true).each do |other_card|
-      		if other_card.user != player && !other_scorecards.map(&:user).include?(other_card.user)
-      			other_scorecards << other_card
-      		end
-      	end
+        rule.related_scorecards_for_user(player, true).each do |other_card|
+          if other_card.user != player && !other_scorecards.map(&:user).include?(other_card&.user)
+            other_scorecards << other_card
+          end
+        end
       end
 
       if other_scorecards.count < 4
@@ -30,12 +30,12 @@ class PrintsController < BaseController
 
       scorecard_presenter = ScorecardPresenter.new({ primary_scorecard: primary_scorecard, secondary_scorecards: other_scorecards, current_user: @current_user })
 
-      @print_cards << { p: scorecard_presenter } if !self.printable_cards_includes_player?(@print_cards, player)
+      @print_cards << { p: scorecard_presenter } if !printable_cards_includes_player?(@print_cards, player)
     end
 
     render layout: false
   end
-  
+
   def fetch_tournament_details
     @tournament = Tournament.find(params[:tournament_id])
 
@@ -57,6 +57,6 @@ class PrintsController < BaseController
       end
     end
 
-    return false
+    false
   end
 end
