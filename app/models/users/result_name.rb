@@ -1,7 +1,7 @@
 module Users
   class ResultName
     def self.result_name_for_user(user, scoring_rule)
-      if scoring_rule.base_stroke_play || scoring_rule.tournament_day.daily_teams.count.zero?
+      if scoring_rule.stroke_play_scoring_rule || scoring_rule.tournament_day.daily_teams.count.zero?
         user.complete_name
       else
         team_name = ''
