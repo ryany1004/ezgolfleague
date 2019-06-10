@@ -47,7 +47,7 @@ module ScrambleScoringRuleSetup
     metadata = GameTypeMetadatum.where(search_key: handicap_percentage_key).first
 
     if metadata.blank?
-      "0.0"
+      '0.0'
     else
       metadata.float_value
     end

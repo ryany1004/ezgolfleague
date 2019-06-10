@@ -10,7 +10,7 @@ class Api::V1::TournamentsController < Api::V1::ApiBaseController
       @tournaments = []
     else
       cache_key = user_tournaments_cache_key
-      @tournaments = Rails.cache.fetch(cache_key, expires_in: 1.hours, race_condition_ttl: 10) do
+      @tournaments = Rails.cache.fetch(cache_key, expires_in: 1.hour, race_condition_ttl: 10) do
         logger.info { "Fetching Tournaments - Not Cached for #{cache_key}" }
 
         todays_tournaments = Tournament.all_today(@current_user.leagues).includes(:league, tournament_days: [:course, scoring_rules: :payments])

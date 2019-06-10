@@ -29,5 +29,5 @@ module HandicapComputer
 
       team_adjusted_course_handicap
     end
-	end
+  end
 end

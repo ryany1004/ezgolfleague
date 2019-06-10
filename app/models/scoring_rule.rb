@@ -308,6 +308,7 @@ class ScoringRuleOption
       ScoringRuleOption.option(name: 'Team Stroke Play (vs. Opposing Team Member)', class_name: 'TeamStrokePlayVsScoringRule'),
       ScoringRuleOption.option(name: 'Team Match Play (vs. Opposing Team Member)', class_name: 'TeamMatchPlayVsScoringRule'),
       ScoringRuleOption.option(name: 'Team Match Play (Best Ball)', class_name: 'TeamMatchPlayBestBallScoringRule'),
+      ScoringRuleOption.option(name: 'Team Match Play (Scramble) Points Per Hole', class_name: 'TeamMatchPlayScramblePointsPerHoleScoringRule'),
       ScoringRuleOption.option(name: 'Team Match Play (vs. Opposing Team Member) Points Per Hole', class_name: 'TeamMatchPlayVsPointsPerHoleScoringRule'),
       ScoringRuleOption.option(name: 'Team Best Ball', class_name: 'TeamBestBallScoringRule'),
     ]

@@ -6,6 +6,8 @@ module MatchPlayScorecardSupport
       league_team_related_scorecards_for_user(user, only_human_scorecards)
     elsif instance_of?(TeamMatchPlayBestBallScoringRule)
       league_team_four_best_ball_related_scorecards_for_user(user, only_human_scorecards)
+    elsif instance_of?(TeamMatchPlayScramblePointsPerHoleScoringRule)
+      league_team_scramble_related_scorecards_for_user(user, only_human_scorecards)
     else
       raise 'MatchPlayScorecardSupport missing a related_scorecards_for_user identifier - this is an error'
     end
@@ -62,6 +64,27 @@ module MatchPlayScorecardSupport
       next if card.user == user || other_scorecards.include?(card)
 
       other_scorecards << card
+    end
+
+    other_scorecards
+  end
+
+  def league_team_scramble_related_scorecards_for_user(user, only_human_scorecards = false)
+    other_scorecards = []
+
+    unless only_human_scorecards
+      user_match_play_card = match_play_scorecard_for_user(user)
+      other_scorecards << user_match_play_card
+    end
+
+    opponent = opponent_for_user(user)
+    if opponent.present?
+      other_scorecards << tournament_day.primary_scorecard_for_user(opponent)
+
+      unless only_human_scorecards
+        opponent_match_play_card = match_play_scorecard_for_user(opponent)
+        other_scorecards << opponent_match_play_card
+      end
     end
 
     other_scorecards
