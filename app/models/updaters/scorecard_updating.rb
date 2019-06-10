@@ -10,17 +10,18 @@ module Updaters
 
         Rails.logger.info { "#{score_id} #{strokes}" }
 
-        unless strokes.blank? or score_id.blank?
+        unless strokes.blank? || score_id.blank?
           score = Score.find(score_id)
+          next if score.course_hole.blank?
 
           should_update = true
           unless date_scored.blank?
-            scored_at = Time.at(date_scored).to_datetime
+            scored_at = Time.zone.at(date_scored).to_datetime
 
             should_update = false if scored_at <= score.updated_at
           end
 
-          if should_update == true
+          if should_update
             score.strokes = strokes
 
             if notify_score_scores && !score.has_notified

@@ -135,10 +135,11 @@ class ScoringRule < ApplicationRecord
   end
 
   def can_be_played?
-    return true if tournament_day.data_was_imported == true
+    return true if tournament_day.data_was_imported
     return false if tournament_day.tournament_groups.count.zero?
     return false if tournament_day.flights.count.zero?
     return false if tournament_day.scorecard_base_scoring_rule.blank?
+    return false if scoring_rule_course_holes.count.zero?
 
     true
   end
