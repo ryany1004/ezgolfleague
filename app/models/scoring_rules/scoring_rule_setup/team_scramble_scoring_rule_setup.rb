@@ -1,22 +1,22 @@
-module ScrambleScoringRuleSetup
+module TeamScrambleScoringRuleSetup
   def setup_partial
-    'shared/game_type_setup/scramble'
+    'shared/game_type_setup/team_scramble'
   end
 
   def scorecard_score_cell_partial
-    'shared/game_types/scramble_popup'
+    nil
   end
 
   def scorecard_post_embed_partial
-    'shared/game_types/scramble_post_embed'
+    nil
   end
 
   def handicap_percentage_key
-    "HandicapPercentageKey-T-#{tournament_day.id}-GT-6"
+    "HandicapPercentageKey-T-#{id}-GT-6"
   end
 
   def use_back_nine_key
-    "ShouldUseBackNineForTies-T-#{tournament_day.id}-GT-6"
+    "ShouldUseBackNineForTies-T-#{id}-GT-6"
   end
 
   def save_setup_details(game_type_options)

@@ -25,10 +25,10 @@ class ScoringRulesController < BaseController
   def update
   	@scoring_rule.update(scoring_rule_params)
   	@scoring_rule.tournament_day_results.destroy_all # removed cached results as gametype influences scores
-
     if params[:scoring_rule_options].blank? || params[:scoring_rule_options][@scoring_rule.id.to_s].blank?
       @scoring_rule.remove_game_type_options
     else
+      params.require(:scoring_rule_options).permit!
   		@scoring_rule.save_setup_details(params[:scoring_rule_options][@scoring_rule.id.to_s])
   	end
 

@@ -1,4 +1,6 @@
 class TeamMatchPlayScramblePointsPerHoleScoringRule < TeamMatchPlayVsScoringRule
+  include ::TeamScrambleScoringRuleSetup
+
   def name
     'Team Match Play Scramble Points Per Hole'
   end
@@ -9,6 +11,10 @@ class TeamMatchPlayScramblePointsPerHoleScoringRule < TeamMatchPlayVsScoringRule
 
   def scoring_computer
     ScoringComputer::TeamMatchPlayScramblePointsPerHoleScoringComputer.new(self)
+  end
+
+  def handicap_computer
+    HandicapComputer::TeamMatchPlayScramblePointsPerHoleHandicapComputer.new(self)
   end
 
   def payout_type
