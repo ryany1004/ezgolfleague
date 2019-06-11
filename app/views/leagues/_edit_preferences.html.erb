@@ -11,11 +11,8 @@
 			</div>
 		<% end %>
 
-		<div class="form-flex-group">
-			<div class="form-top-label">
-				<p>Address(es) For Dues Email Confirmations (separate with commas)</p>
-			</div>
-
+		<div>
+      <p>Address(es) For Dues Email Confirmations (separate with commas)</p>
       <%= f.input :dues_payment_receipt_email_addresses %>
 		</div>
 
@@ -23,14 +20,17 @@
       <%= f.input :display_balances_to_players, label: 'Show Win Balances to Players?', as: :boolean %>
 		</div>
 
-		<div class="form-flex-group">
-      <%= f.input :calculate_handicaps_from_past_rounds, label: 'Automatically Calculate Handicaps From Past Rounds?', as: :boolean %>
-      <%= f.input :number_of_rounds_to_handicap, label: 'Number of Rounds to Use' %>
-		</div>
-
     <div class="form-flex-group">
       <%= f.input :show_in_search, label: 'Show in League Search?', as: :boolean %>
 		</div>
+
+		<div class="form-flex-group">
+      <%= f.input :calculate_handicaps_from_past_rounds, label: 'Automatically Calculate Handicaps From Past Rounds?', as: :boolean %>
+		</div>
+
+		<div class="form-flex-group">
+      <%= f.input :number_of_rounds_to_handicap, label: 'Number of Rounds to Use' %>
+		</div>    
 
 		<div class="form-actions form-flex-group"> 
 			<div class="form-flex-right">

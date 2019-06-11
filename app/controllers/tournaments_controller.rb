@@ -35,6 +35,7 @@ class TournamentsController < BaseController
     @tournament = Tournament.new
     @tournament.league = current_user.leagues_admin.first if current_user.leagues_admin.count.positive?
     @tournament.signup_opens_at = Time.zone.now
+    @courses = Course.all.order(:name)
   end
 
   def create
@@ -61,7 +62,7 @@ class TournamentsController < BaseController
   end
 
   def show
-    redirect_to league_tournaments_path(current_user.selected_league)
+    @tournament = Tournament.find(params[:id])
   end
 
   def edit

@@ -41,7 +41,7 @@ class LeaguesController < BaseController
 
   def update
     if @league.update(league_params)
-      redirect_to leagues_path, flash:
+      render :edit, flash:
       { success: 'The league was successfully updated.' }
     else
       render :edit
