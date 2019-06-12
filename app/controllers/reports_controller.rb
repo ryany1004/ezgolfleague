@@ -39,5 +39,4 @@ class ReportsController < BaseController
       @tournament_day = @tournament.tournament_days.find(params[:tournament_day])
     end
   end
-
 end
