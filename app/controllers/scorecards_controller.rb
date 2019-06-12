@@ -88,7 +88,7 @@ class ScorecardsController < BaseController
   private
 
   def scorecard_params
-    params.require(:scorecard).permit(scores_attributes: [:id, :strokes], golf_outing_attributes: [:id, :course_handicap])
+    params.require(:scorecard).permit(scores_attributes: [:id, :strokes], golf_outing_attributes: [:id, :course_handicap, :handicap_lock])
   end
 
   def fetch_all_params

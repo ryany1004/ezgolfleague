@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_06_07_170814) do
+ActiveRecord::Schema.define(version: 2019_06_12_155813) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -152,6 +152,7 @@ ActiveRecord::Schema.define(version: 2019_06_07_170814) do
     t.boolean "disqualified", default: false
     t.string "registered_by"
     t.datetime "deleted_at"
+    t.boolean "handicap_lock", default: false
     t.index ["course_tee_box_id"], name: "index_golf_outings_on_course_tee_box_id"
     t.index ["deleted_at"], name: "index_golf_outings_on_deleted_at"
     t.index ["disqualified"], name: "index_golf_outings_on_disqualified"
