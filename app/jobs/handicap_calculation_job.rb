@@ -44,6 +44,8 @@ class HandicapCalculationJob < ApplicationJob
     scorecards.each do |scorecard|
       gross_score = scorecard.adjusted_score.positive? ? scorecard.adjusted_score : scorecard.gross_score
       course_tee_box = scorecard.golf_outing.course_tee_box
+      next if course_tee_box.blank? || course_tee_box.course.blank?
+
       is_9_holes = course_tee_box.course.course_holes.count == scorecard.scores.count * 2
 
       if course_tee_box.rating <= 0 && course_tee_box.slope <= 0

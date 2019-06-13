@@ -26,8 +26,12 @@ class TournamentPresenter
     tournament_day.blank? ? 'Final' : tournament_day.pretty_day(false)
   end
 
-  def ranking_name
-    tournament_day.scorecard_base_scoring_rule.name
+  def ranking_name(ranking_type)
+    if ranking_type == :primary
+      tournament_day.scorecard_base_scoring_rule.name
+    else
+      tournament_day.stroke_play_scoring_rule.name
+    end
   end
 
   def player_count
@@ -132,6 +136,10 @@ class TournamentPresenter
     else
       tournament_day.has_scores?
     end
+  end
+
+  def separate_stroke_play_results?
+    tournament_day.stroke_play_scoring_rule.present? && tournament_day.stroke_play_scoring_rule != tournament_day.scorecard_base_scoring_rule
   end
 
   def show_aggregated_results?
@@ -296,11 +304,15 @@ class TournamentPresenter
     teams
   end
 
-  def flights_with_rankings
+  def flights_with_rankings(scoring_rule_type)
     if show_combined
       combined_flights
     else
-      day_flights
+      if scoring_rule_type == :primary
+        tournament_day.primary_scoring_rule_flights_with_rankings
+      else
+        tournament_day.stroke_play_flights_with_rankings
+      end
     end
   end
 

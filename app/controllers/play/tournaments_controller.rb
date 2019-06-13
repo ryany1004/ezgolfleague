@@ -121,7 +121,7 @@ class Play::TournamentsController < Play::BaseController
   end
 
   def fetch_flights_with_rankings(tournament_day)
-    tournament_day.flights_with_rankings
+    tournament_day.primary_scoring_rule_flights_with_rankings
   end
 
   def fetch_combined_flights_with_rankings(tournament_day, _)
