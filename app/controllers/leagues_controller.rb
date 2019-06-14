@@ -20,6 +20,7 @@ class LeaguesController < BaseController
 
   def show
     @league = League.find(params[:id])
+    @league_season = current_user.active_league_season
   end
 
   def new

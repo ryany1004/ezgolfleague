@@ -18,13 +18,10 @@
               <div class="scorpion-golf-league-green-header">
                   <div class="dropdown">
                     <select class="selectpicker dropup" data-header="">
-                      <option>2018 Season</option>
-                      <option>2017 Season</option>
-                      <option>2016 Season</option>
+                      <option><%= @league_season.name %></option>
                     </select>
                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                      <a class="dropdown-item" href="#">2018 Season</a>
-                      <a class="dropdown-item" href="#">2017 Season</a>
+                      <a class="dropdown-item" href="#"><%= @league_season.name %></a>
                     </div>
                   </div>
               </div>
@@ -32,11 +29,11 @@
                 <div class="row no-gutters">
                   <div class="col-md-6">
                     <p>starts</p>
-                    <h2>05/15/18</h2>
+                    <h2><%= @league_season.starts_at.to_s(:short) %></h2>
                   </div>
                   <div class="col-md-6">
                     <p>ends</p>
-                    <h2>12/29/18</h2>
+                    <h2><%= @league_season.ends_at.to_s(:short) %></h2>
                   </div>
                 </div>
               </div>
@@ -66,10 +63,15 @@
                       </div>
                     </div>
                 </div><!-- /.season-ranking-card-header -->
-                <div class="season-ranking-content">
+                <%= render partial: 'individual_rankings', locals: { league: @league } %>
+                <%
+=begin%>
+ <div class="season-ranking-content">
                   <h2>You have no scoring groups yet.</h2>
-                  <button class="btn btn-primary">Create Scoring Groups</button>
-                </div><!-- /.season-ranking-content -->
+                  <button class="btn btn-primary">Create Scoring Groups</button> 
+                </div><!-- /.season-ranking-content --> 
+<%
+=end%>
             </div>
         </div><!-- /.col-md-8 -->                    
     </div><!-- /.row -->         

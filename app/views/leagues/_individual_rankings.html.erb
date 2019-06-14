@@ -1,0 +1,43 @@
+<div class="view-tournament-card">
+	<div class="player-list-header">
+			<div class="row text-uppercase">
+				<div class="col">
+					pos
+				</div>
+				<div class="col-md-6">
+					player
+				</div>
+				<div class="col">
+					points
+				</div>
+				<div class="col">
+					tournaments
+				</div>
+			</div>
+	</div>
+	<div class="player-list-content mCustomScrollbar" data-mcs-theme="dark">
+		<% league.league_memberships.each do |player| %>
+			<div class="player-list-col">
+				<div class="row">
+					<div class="col">
+						#1
+					</div>
+					<div class="col-md-6">
+						<div class="media">
+							<%= image_tag player.user.avatar.url(:thumb), class: 'img-circle' %>
+							<div class="media-body">
+								<h2><%= player.user.complete_name %></h2>
+							</div>
+						</div>                              
+					</div>
+					<div class="col">
+						200
+					</div>
+					<div class="col">
+						9
+					</div>
+				</div><!-- /.row -->
+			</div><!-- /.player-list-col --> 
+		<% end %>
+	</div><!-- /.player-list-content -->                  
+</div><!-- /.view-tournament-card -->
