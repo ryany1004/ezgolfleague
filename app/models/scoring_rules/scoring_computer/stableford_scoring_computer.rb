@@ -23,7 +23,7 @@ module ScoringComputer
         back_nine_net_score = 0
 
         scorecard.scores.each do |score|
-          score.net_strokes = score.strokes
+          Rails.logger.debug { "Stableford #{user.complete_name} #{score.strokes} (#{score.net_strokes}) on #{score.course_hole.hole_number}" }
 
           front_nine_gross_score += score.strokes if front_nine_hole_numbers.include? score.course_hole.hole_number
           front_nine_net_score += score.net_strokes if front_nine_hole_numbers.include? score.course_hole.hole_number

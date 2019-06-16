@@ -16,6 +16,10 @@ module ScoringRuleScorecards
       self.scoring_rule.tournament_day
     end
 
+    def tournament_day_results
+      scoring_rule.tournament_day_results.where(user: user)
+    end
+
     def golf_outing
       return nil
     end
