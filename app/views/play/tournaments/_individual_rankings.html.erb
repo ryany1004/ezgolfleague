@@ -17,7 +17,7 @@
       		</tr>
       	</thead>
         <tbody>
-          <% cache(@tournament_presenter.day_cache_key("individual-tournament-rankings")) do %>
+          <% cache(@tournament_presenter.day_cache_key("individual-tournament-rankings-#{scoring_rule_type.to_s}")) do %>
             <% @tournament_presenter.flights_with_rankings(scoring_rule_type).each_with_index do |flight, x| %>
               <% @tournament_presenter.showing_final? ? results = flight.tournament_day_results : results = flight %>
               <% results.each_with_index do |result, i| -%>
