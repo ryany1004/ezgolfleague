@@ -26,4 +26,10 @@ class StablefordScoringRule < StrokePlayScoringRule
 
     return scorecard
   end
+
+  def scorecard_api(scorecard:)
+    handicap_allowance = handicap_computer.handicap_allowance(user: scorecard.golf_outing.user)
+
+    Scorecards::Api::ScorecardAPIStableford.new(scorecard.tournament_day, scorecard, handicap_allowance).scorecard_representation
+  end
 end
