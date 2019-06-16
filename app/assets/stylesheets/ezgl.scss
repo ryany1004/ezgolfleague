@@ -644,10 +644,10 @@ button:focus {
 }
 
 .scorpion-golf-league-green-header .bootstrap-select .dropdown-toggle::after {
-  content: url('../images/icons/expand-button.png');
+  content: image-url("expand-button.png");
   border: none;
   top: 12px;
-  right: 40px;
+  right: 20px;
   position: absolute;
 }
 
@@ -2672,6 +2672,16 @@ footer {
   .container {
     max-width: 1240px;
   }
+  .teams-dashboard-leaderboard-mid-row .col-md-3 {
+    -ms-flex: 30%;
+    flex: 30%;
+    max-width: 30%;
+  }
+  .teams-dashboard-leaderboard-mid-row .col-md-9 {
+    -ms-flex: 70%;
+    flex: 70%;
+    max-width: 70%;
+  }
 }
 
 
@@ -2726,7 +2736,10 @@ footer {
 /* Extra large devices (Extra large desktops, 1920 and Down) */
 
 @media (max-width: 1919.98px) {
-  #edit-tee-times,#tornament-info-popup{max-width: 90%;}
+  #edit-tee-times,
+  #tornament-info-popup {
+    max-width: 90%;
+  }
 }
 
 
@@ -2755,8 +2768,17 @@ footer {
     font-size: 30px;
     line-height: 33px;
   }
-  .nineteen-left-card .table .media-td{
+  .nineteen-left-card .table .media-td {
     width: 480px;
+  }
+  .golfer-edit-profile-content {
+    padding: 25px 5px;
+  }
+  .golfer-profile-form {
+    margin-top: 50px;
+  }
+  .scorpion-golf-league-green-header .filter-option-inner-inner {
+    width: 220px;
   }
 }
 
@@ -2771,7 +2793,10 @@ footer {
     padding-top: 29%;
     padding-bottom: 29%;
   }
-  #edit-tee-times,#tornament-info-popup{max-width: 98%;}
+  #edit-tee-times,
+  #tornament-info-popup {
+    max-width: 98%;
+  }
 }
 
 
@@ -2784,6 +2809,9 @@ footer {
   }
   .tournaments-card-slider-top h2 {
     left: 10%;
+  }
+  .scorpion-golf-league-green-header .filter-option-inner-inner {
+    width: 200px;
   }
 }
 
@@ -2889,8 +2917,3 @@ footer {
 /* Small devices (landscape phones, 360px and down) */
 
 @media (max-width: 320px) {}
-
-
-/* Orientation Portrait */
-
-@media only screen and (max-width: 800px) and (orientation: portrait) {}

@@ -18,11 +18,10 @@
               <div class="scorpion-golf-league-green-header">
                   <div class="dropdown">
                     <select class="selectpicker dropup" data-header="">
-                      <option><%= @league_season.name %></option>
+                      <% current_user.selected_league.league_seasons.each do |season| -%>
+                        <option><%= link_to season.name, league_switch_seasons_path(current_user.selected_league, season_id: season.id), method: :put %></option>
+                      <% end %>
                     </select>
-                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                      <a class="dropdown-item" href="#"><%= @league_season.name %></a>
-                    </div>
                   </div>
               </div>
               <div class="scorpion-golf-league-gree-list">
@@ -40,7 +39,6 @@
               <div class="scorpion-golf-league-gree-btn text-center">
                 <%= link_to "View Tournaments", league_tournaments_path(@league), class: 'btn btn-primary' %>
                 <%= link_to "Manage Golfers", league_league_memberships_path(current_user.selected_league), class: 'btn btn-success' %>
-                <a href="#" class="btn btn-success">Edit Scoring Groups</a>
               </div>
           </div><!-- /.scorpion-golf-league-green -->            
           <div class="list-group sidebar-list-group">
@@ -58,12 +56,12 @@
                       <div class="col-md-8">
                         <ul class="list-inline float-right">
                           <li class="list-inline-item"><span><%= @league.league_memberships.count %></span>golfers</li>
-                          <li class="list-inline-item"><span>0</span>scoring groups</li>                              
+                          <li class="list-inline-item"><span><%= @league_season.tournaments.count %></span>tournaments</li>                              
                         </ul>
                       </div>
                     </div>
                 </div><!-- /.season-ranking-card-header -->
-                <%= render partial: 'individual_rankings', locals: { league: @league } %>
+                <%= render partial: 'individual_rankings', locals: {league_season: @league_season, rankings: @rankings} %>
                 <%
 =begin%>
  <div class="season-ranking-content">

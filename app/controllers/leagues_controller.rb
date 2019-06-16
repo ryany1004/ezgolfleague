@@ -21,6 +21,7 @@ class LeaguesController < BaseController
   def show
     @league = League.find(params[:id])
     @league_season = current_user.active_league_season
+    @rankings = @league_season.league_season_ranking_groups
   end
 
   def new
@@ -54,6 +55,12 @@ class LeaguesController < BaseController
 
     redirect_to leagues_path, flash:
     { success: 'The league was successfully deleted.' }
+  end
+
+  def switch_seasons
+    session[:selected_season_id] = params[:season_id]
+
+    redirect_to league_path
   end
 
   def update_from_ghin
