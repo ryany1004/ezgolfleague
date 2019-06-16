@@ -1,7 +1,7 @@
 module ScoringRuleScorecards
   class StablefordScorecard < ScoringRuleScorecards::BaseScorecard
     def name(shorten_for_print = false)
-      return "Stableford"
+      'Stableford'
     end
 
     def calculate_scores
