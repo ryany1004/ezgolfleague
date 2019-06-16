@@ -35,6 +35,15 @@ class PayoutResult < ApplicationRecord
     end
   end
 
+  def course_handicap
+    return nil if user.blank?
+
+    golf_outing = scoring_rule.tournament_day.golf_outing_for_player(user)
+    return nil if golf_outing.blank?
+
+    golf_outing.course_handicap.to_i
+  end
+
   def team_matchup_designator
     return nil unless scoring_rule.teams_are_player_vs_player?
 
