@@ -194,9 +194,6 @@ button:focus {
   color: ezgl-color('accent', 'light');
 }
 
-
-
-
 /* View League Card */
 
 .dashboard-content {
@@ -547,6 +544,39 @@ button:focus {
 
 .season-ranking-content .btn {
   padding: 12px 20px;
+}
+
+#editSeasonModal {
+  .close {
+    position: absolute;
+    top: 18px;
+    left: 18px;
+    z-index: 1;
+    font-weight: 100;
+  }
+
+  .form-group {
+    display: flex;
+    align-items: center;
+
+    label {
+      width: 150px;
+      margin-bottom: 0;
+
+      abbr {
+        display: none;
+      }
+    }
+
+    input {
+      border: 2px solid ezgl-color('background', 'base');
+      padding: 12px 16px;
+      width: 100%;
+      font-style: italic;
+      height: 50px;
+      border-radius: 3px;
+    }
+  }
 }
 
 .scorpion-golf-league-green {
