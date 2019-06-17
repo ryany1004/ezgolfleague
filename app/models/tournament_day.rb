@@ -298,6 +298,10 @@ class TournamentDay < ApplicationRecord
     @displayable_scoring_rules ||= scoring_rules.where(base_stroke_play: false)
   end
 
+  def scorecard_non_base_scoring_rule
+    @scorecard_non_base_scoring_rule ||= scoring_rules.find_by(primary_rule: false, base_stroke_play: false)
+  end
+
   def mandatory_scoring_rules
     @mandatory_scoring_rules ||= self.scoring_rules.where(is_opt_in: false).order(:type)
   end

@@ -40,6 +40,10 @@ class GolfOuting < ApplicationRecord
     end
   end
 
+  def lock_handicap
+    update(handicap_lock: true)
+  end
+
   def disqualify
     self.disqualified = !disqualified
     save
