@@ -52,7 +52,7 @@ a:hover {
 }
 
 .pt-100 {
-  padding-top: 100px;
+  padding-top: 130px;
 }
 
 .pt-150 {
@@ -97,6 +97,27 @@ button:focus {
 
 
 /* Main Navigatin Menu */
+#banner {
+  height: 30px;
+  color: #574e0b;
+  background-color: #f4d321;
+  text-align: center;
+  position: fixed;
+  z-index: 1;
+  max-width: 100%;
+
+  .row {
+    height: 30px;
+    display: flex;
+    align-items: center;
+
+    p {
+      width: 100%;
+      font-size: 12px;
+      margin: 0;
+    }
+  }
+}
 
 #mainNav {
   -webkit-transition: all 0.35s;
@@ -104,6 +125,7 @@ button:focus {
   -o-transition: all 0.35s;
   -ms-transition: all 0.35s;
   transition: all 0.35s;
+  top: 30px;
 }
 
 .navbar-brand {
