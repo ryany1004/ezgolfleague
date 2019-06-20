@@ -41,7 +41,7 @@ class TournamentDay < ApplicationRecord
   end
 
   def can_be_finalized?
-    self.scoring_rules.each do |r|
+    self.displayable_scoring_rules.each do |r|
       if !r.can_be_finalized?
         return false
       end
@@ -126,18 +126,49 @@ class TournamentDay < ApplicationRecord
   end
 
   def eager_groups
-    @eager_groups ||= TournamentGroup.includes(golf_outings: [:user, course_tee_box: :course_hole_tee_boxes, scorecard: [{scores: :course_hole}]]).where(tournament_day: self)
+    @eager_groups ||= TournamentGroup.includes(golf_outings: [:user, course_tee_box: :course_hole_tee_boxes, scorecard: [{ scores: :course_hole }]]).where(tournament_day: self)
   end
 
   def flights_with_rankings
     @flights_with_rankings ||= self.flights.includes(:users, :tournament_day_results, :payout_results)
   end
 
+  def primary_scoring_rule_flights_with_rankings
+    group_results_by_flight(scorecard_base_scoring_rule.tournament_day_results)
+  end
+
+  def stroke_play_flights_with_rankings
+    group_results_by_flight(stroke_play_scoring_rule.tournament_day_results)
+  end
+
+  def group_results_by_flight(results)
+    flights = []
+
+    last_flight_id = nil
+    current_flight_contents = []
+
+    results.each do |r|
+      last_flight_id = r.flight_id if last_flight_id.blank?
+
+      if r.flight_id != last_flight_id
+        flights << current_flight_contents
+        current_flight_contents = []
+
+        last_flight_id = r.flight_id
+      end
+
+      current_flight_contents << r
+    end
+
+    flights << current_flight_contents
+    flights
+  end
+
   def golf_outings
     @golf_outings ||= self.tournament_groups.map(&:golf_outings).flatten
   end
 
-  #TODO: MOVE
+  # TODO: MOVE
   def scorecard_display_partial
     if self.scorecard_base_scoring_rule.course_holes.count <= 9
       '/shared/scorecards/nine_hole'
@@ -153,7 +184,7 @@ class TournamentDay < ApplicationRecord
       '/shared/scorecards/print'
     end
   end
-  #TODO: MOVE
+  # TODO: MOVE
 
   def has_scores?
     self.eager_groups.each do |group|
@@ -252,7 +283,23 @@ class TournamentDay < ApplicationRecord
   end
 
   def scorecard_base_scoring_rule
-    @scorecard_base_scoring_rule ||= self.scoring_rules.where(primary_rule: true).first
+    @scorecard_base_scoring_rule ||= scoring_rules.find_by(primary_rule: true)
+  end
+
+  def stroke_play_scoring_rule
+    if scorecard_base_scoring_rule&.instance_of?(StrokePlayScoringRule)
+      scorecard_base_scoring_rule
+    else
+      scoring_rules.find_by(base_stroke_play: true)
+    end
+  end
+
+  def displayable_scoring_rules
+    @displayable_scoring_rules ||= scoring_rules.where(base_stroke_play: false)
+  end
+
+  def scorecard_non_base_scoring_rule
+    @scorecard_non_base_scoring_rule ||= scoring_rules.find_by(primary_rule: false, base_stroke_play: false)
   end
 
   def mandatory_scoring_rules

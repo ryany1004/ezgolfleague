@@ -22,7 +22,14 @@ class Play::TournamentsController < Play::BaseController
       combined_flights = fetch_combined_flights_with_rankings(tournament.tournament_days.last, fetch_flights_with_rankings(tournament.tournament_days.last))
     end
 
-    @tournament_presenter = TournamentPresenter.new({ tournament: tournament, tournament_day: tournament_day, user: current_user, day_flights: day_flights, combined_flights: combined_flights })
+    show_combined = params[:combined].present? ? true : false
+
+    @tournament_presenter = TournamentPresenter.new({ show_combined: show_combined,
+                                                      tournament: tournament,
+                                                      tournament_day: tournament_day,
+                                                      user: current_user,
+                                                      day_flights: day_flights,
+                                                      combined_flights: combined_flights })
 
     @page_title = tournament.name
   end
@@ -117,7 +124,7 @@ class Play::TournamentsController < Play::BaseController
   end
 
   def fetch_flights_with_rankings(tournament_day)
-    tournament_day.flights_with_rankings
+    tournament_day.primary_scoring_rule_flights_with_rankings
   end
 
   def fetch_combined_flights_with_rankings(tournament_day, _)

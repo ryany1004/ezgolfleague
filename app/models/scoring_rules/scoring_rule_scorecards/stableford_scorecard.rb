@@ -1,16 +1,28 @@
 module ScoringRuleScorecards
   class StablefordScorecard < ScoringRuleScorecards::BaseScorecard
     def name(shorten_for_print = false)
-      return "Stableford"
+      'Stableford'
+    end
+
+    def should_subtotal?
+      true
+    end
+
+    def front_nine_score(_ = false)
+      tournament_day_results.first ? tournament_day_results.first&.front_nine_net_score : 0
+    end
+
+    def back_nine_score(_ = false)
+      tournament_day_results.first ? tournament_day_results.first&.back_nine_net_score : 0
     end
 
     def calculate_scores
       new_scores = []
 
-      self.tournament_day.scorecard_base_scoring_rule.course_holes.each do |hole|
+      tournament_day.scorecard_base_scoring_rule.course_holes.each do |hole|
         score = DerivedScorecardScore.new
-        score.strokes = self.score_for_hole(user, false, hole)
-        score.net_strokes = self.score_for_hole(user, true, hole)
+        score.strokes = score_for_hole(user, false, hole)
+        score.net_strokes = score_for_hole(user, true, hole)
         score.course_hole = hole
         score.display_net = true
         new_scores << score
@@ -23,8 +35,8 @@ module ScoringRuleScorecards
       scorecard = self.tournament_day.primary_scorecard_for_user(user)
       return 0 if scorecard.blank?
 
-      score = scorecard&.scores.where(course_hole: hole).first
-      return 0 if score.strokes.blank? || score.strokes == 0
+      score = scorecard&.scores.find_by(course_hole: hole)
+      return 0 if score.strokes.blank? || score.strokes.zero?
 
       strokes = 0
 

@@ -4,12 +4,12 @@ module TournamentScorecardSupport
   end
 
   def primary_scorecard_for_user(user)
-    cache_key = self.cache_key(self.scorecard_cache_prefix(user: user))
+    cache_key = self.cache_key(scorecard_cache_prefix(user: user))
     scorecard_id = Rails.cache.fetch(cache_key)
 
     if scorecard_id.blank?
-      self.eager_groups.each do |group|
-        golf_outing = group.golf_outings.where(user: user).first
+      eager_groups.each do |group|
+        golf_outing = group.golf_outings.find_by(user: user)
 
         unless golf_outing.blank?
           scorecard = golf_outing.scorecard
@@ -20,7 +20,7 @@ module TournamentScorecardSupport
         end
       end
     else
-      return Scorecard.where(id: scorecard_id).first
+      return Scorecard.find_by(id: scorecard_id)
     end
 
     nil
@@ -41,7 +41,7 @@ module TournamentScorecardSupport
     return true if scorecard.golf_outing.user == user
     return true if scorecard.designated_editor == user
 
-    #check if they are on a team together
+    # check if they are on a team together
     team = scorecard.tournament_day.daily_team_for_player(user)
     unless team.blank?
       team.users.each do |u|

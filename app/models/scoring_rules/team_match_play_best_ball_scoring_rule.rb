@@ -4,7 +4,7 @@ class TeamMatchPlayBestBallScoringRule < MatchPlayScoringRule
   end
 
   def description
-    'Team match play each hole is determined by the team\'s best ball. Sometimes called Four Ball.'
+    'Team match play each hole is determined by the team\'s best ball (net). Sometimes called Four Ball.'
   end
 
   def team_type

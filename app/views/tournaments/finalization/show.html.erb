@@ -14,7 +14,7 @@
 
 <div class="row">
   <% @tournament_days.each do |day| %>
-    <% day.scoring_rules.each do |rule| %>
+    <% day.displayable_scoring_rules.each do |rule| %>
       <div class="col-md-12">
         <div class="panel panel-default">
           <div class="panel-heading">
@@ -44,7 +44,7 @@
                   <td><%= payout_result.points.to_i %></td>
                   <td><%= payout_result.net_score %></td>
                   <td><%= payout_result.par_related_net_score %></td>
-                  <td><%= payout_result.scoring_rule.tournament_day.golf_outing_for_player(payout_result.user).course_handicap.to_i unless payout_result.user.blank? %></td>
+                  <td><%= payout_result.course_handicap %></td>
                   <td><%= payout_result.detail %></td>
                 </tr>
               <% end %>
@@ -70,7 +70,7 @@
 
   <% @tournament_days.each do |day| -%>
     <div class="col-md-12">
-      <h3><%= day.pretty_day(true) %> Results</h3>
+      <h3><%= day.pretty_day(true) %> <%= day.scorecard_base_scoring_rule.name %> Results</h3>
       <table class="table table-striped">
         <thead>
           <tr>
@@ -92,10 +92,40 @@
               <td><%= result.gross_score %></td>
               <td><%= link_to "Edit Scorecard", edit_league_tournament_tournament_day_scorecard_path(day.tournament.league, day.tournament, day, result.primary_scorecard) unless result.primary_scorecard.blank? %></td>
             </tr>
-        	<% end %>
+          <% end %>
         </tbody>
       </table>
     </div>
+
+    <% if day.scorecard_base_scoring_rule != day.stroke_play_scoring_rule %>
+      <div class="col-md-12">
+        <h3><%= day.pretty_day(true) %> <%= day.stroke_play_scoring_rule.name %> Results</h3>
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th><%= flight_or_group(@tournament) %></th>
+              <th>Player</th>
+              <th>Net</th>
+              <th>Par Net</th>
+              <th>Gross</th>
+              <th>&nbsp;</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% day.stroke_play_scoring_rule.individual_tournament_day_results.each do |result| %>
+              <tr>
+                <td><%= result.flight&.display_name %></td>
+                <td><%= result.name %><% if result.primary_scorecard != nil && !result.primary_scorecard&.is_confirmed? -%> (Unconfirmed by Player)<% end -%><%- if result.primary_scorecard&.golf_outing&.disqualified %> (Disqualified)<%- end %></td>
+                <td><%= result.net_score %></td>
+                <td><%= result.par_related_net_score %></td>
+                <td><%= result.gross_score %></td>
+                <td><%= link_to "Edit Scorecard", edit_league_tournament_tournament_day_scorecard_path(day.tournament.league, day.tournament, day, result.primary_scorecard) unless result.primary_scorecard.blank? %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    <% end %>
   <% end -%>
 </div>
 

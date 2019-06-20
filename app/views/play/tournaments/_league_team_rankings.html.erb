@@ -1,7 +1,7 @@
 <div class="col-md-6">
   <div class="panel panel-default panel-success">
     <div class="panel-heading">
-      <h3 class="panel-title"><%= @tournament_presenter.day_name %> Tournament Rankings</h3>
+      <h3 class="panel-title"><%= @tournament_presenter.day_name %> <%= @tournament_presenter.ranking_name %> Tournament Rankings</h3>
     </div>
     <% if @tournament_presenter.day_has_scores? %>
       <table class="table table-striped">

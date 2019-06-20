@@ -16,14 +16,10 @@ module ScoringComputer
       tournament_day.league_season_team_tournament_day_matchups.each do |matchup|
         next if matchup.team_a.blank? || matchup.team_b.blank?
 
-        team_a_best_ball_scorecard = @scoring_rule.best_ball_scorecard_for_team(matchup.team_a)
-        team_b_best_ball_scorecard = @scoring_rule.best_ball_scorecard_for_team(matchup.team_b)
-
         Rails.logger.info { "TeamMatchPlayBestBallScoringComputer comparing #{matchup.team_a.name} and #{matchup.team_b.name}" }
 
         match_play_scorecard = ScoringRuleScorecards::TeamMatchPlayBestBallScorecard.new
-        match_play_scorecard.team_a_scorecard = team_a_best_ball_scorecard
-        match_play_scorecard.team_b_scorecard = team_b_best_ball_scorecard
+        match_play_scorecard.matchup = matchup
         match_play_scorecard.scoring_rule = @scoring_rule
         match_play_scorecard.calculate_scores
 

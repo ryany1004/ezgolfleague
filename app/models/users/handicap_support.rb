@@ -8,7 +8,7 @@ module Users
 
         membership.course_handicap
       else
-        Rails.logger.info { "Handicap: Using Index Derived Handicap" }
+        Rails.logger.info { 'Handicap: Using Index Derived Handicap' }
 
         index_derived_handicap(flight, golf_outing)
       end

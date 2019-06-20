@@ -1,14 +1,14 @@
 module ScrambleScorecardSupport
-	METADATA_KEY = "scramble_scorecard_for_best_ball_hole"
+  METADATA_KEY = 'scramble_scorecard_for_best_ball_hole'
 
-	def related_scorecards_for_user(user, only_human_scorecards = false)
-		[]
-	end
+  def related_scorecards_for_user(user, only_human_scorecards = false)
+    []
+  end
 
 	def other_group_members(user:)
 	  other_members = []
 
-	  team = self.tournament_day.daily_team_for_player(user)
+	  team = tournament_day.daily_team_for_player(user)
 	  team&.users&.each do |u|
 	    other_members << u if u != user
 	  end
@@ -27,12 +27,12 @@ module ScrambleScorecardSupport
     metadata.save
   end
 
-  def selected_scorecard_for_score(score) #this is the one selected as the tee shot
+  def selected_scorecard_for_score(score) # this is the one selected as the tee shot
     return nil if score.scorecard.golf_outing.blank?
 
     tournament_day = score.scorecard.tournament_day
     team = tournament_day.daily_team_for_player(score.scorecard.golf_outing.user)
-    metadata = GameTypeMetadatum.where(daily_team: team, course_hole: score.course_hole, search_key: METADATA_KEY).first
+    metadata = GameTypeMetadatum.find_by(daily_team: team, course_hole: score.course_hole, search_key: METADATA_KEY)
 
     metadata&.scorecard
   end

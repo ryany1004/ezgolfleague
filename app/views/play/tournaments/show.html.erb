@@ -154,6 +154,10 @@
   <% if @tournament_presenter.show_aggregated_results? %>
     <%= render partial: 'league_team_rankings', locals: { tournament_presenter: @tournament_presenter } %>
   <% else %>
-    <%= render partial: 'individual_rankings', locals: { tournament_presenter: @tournament_presenter } %>
+    <%= render partial: 'individual_rankings', locals: { tournament_presenter: @tournament_presenter, scoring_rule_type: :primary } %>
+
+    <% if @tournament_presenter.separate_stroke_play_results? && !@tournament_presenter.showing_final? %>
+      <%= render partial: 'individual_rankings', locals: { tournament_presenter: @tournament_presenter, scoring_rule_type: :stroke_play } %>
+    <% end %>
   <% end %>
 </div>

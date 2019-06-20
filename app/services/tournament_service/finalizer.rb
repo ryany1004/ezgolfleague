@@ -23,9 +23,14 @@ module TournamentService
     def finalize_day(day)
       Rails.logger.info { "Finalize #{day.id}: Re-Scoring Users" }
 
+      TournamentService::ShadowStrokePlay.call(day)
+      day.reload
+
       day.score_all_rules
       day.scoring_rules.each(&:finalize)
       day.assign_payouts_all_rules
+      day.tournament_groups.map(&:golf_outings).flatten.map(&:lock_handicap)
+
       day.touch
 
       Rails.logger.info { "Finalize #{day.id}: All Done!" }

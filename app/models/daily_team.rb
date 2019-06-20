@@ -2,7 +2,7 @@ class DailyTeam < ApplicationRecord
   include Servable
 
   belongs_to :tournament_group, touch: true
-  has_and_belongs_to_many :users, dependent: :nullify, inverse_of: :daily_teams
+  has_and_belongs_to_many :users, -> { order(:last_name, :first_name) }, dependent: :nullify, inverse_of: :daily_teams
   has_many :daily_teams, class_name: 'DailyTeam', foreign_key: 'parent_team_id', inverse_of: :parent_team, dependent: :nullify
   belongs_to :parent_team, class_name: 'DailyTeam', touch: true, optional: true
 

@@ -41,27 +41,27 @@ module ScoringComputer
 				return nil if scorecard.blank?
 			end
 
-			handicap_computer = @scoring_rule.handicap_computer
-			handicap_allowance = handicap_computer.handicap_allowance(user: user)
-			Rails.logger.debug { "Handicap Allowance for User #{user.complete_name}: #{handicap_allowance}" }
+      handicap_computer = @scoring_rule.handicap_computer
+      handicap_allowance = handicap_computer.handicap_allowance(user: user)
+      Rails.logger.debug { "Handicap Allowance for User #{user.complete_name}: #{handicap_allowance}" }
 
-			flight = self.tournament_day.flight_for_player(user)
-    	flight = self.tournament_day.assign_user_to_flight(user: user) if flight.blank?
+      flight = tournament_day.flight_for_player(user)
+      flight = tournament_day.assign_user_to_flight(user: user) if flight.blank?
 
-			gross_score = 0
-			net_score = 0
-			front_nine_net_score = 0
-			front_nine_gross_score = 0
-			back_nine_gross_score = 0
-			back_nine_net_score = 0
+      gross_score = 0
+      net_score = 0
+      front_nine_net_score = 0
+      front_nine_gross_score = 0
+      back_nine_gross_score = 0
+      back_nine_net_score = 0
 
       if scorecard.precalculated?
         gross_score = scorecard.gross_score
         net_score = scorecard.net_score
       else
-        adjusted_score = self.compute_adjusted_user_score(user: user)
-
         Rails.logger.debug { "Scoring #{scorecard.scores.count} scores for #{user.complete_name}." }
+
+        adjusted_score = compute_adjusted_user_score(user: user)
 
         if scorecard.scores.respond_to?(:includes)
           scores = scorecard.scores.includes(:course_hole)
@@ -71,10 +71,10 @@ module ScoringComputer
 
         scores.each do |score|
           score.net_strokes = score.strokes
-          
+
           gross_score += score.strokes
-          front_nine_gross_score += score.strokes if self.front_nine_hole_numbers.include? score.course_hole.hole_number
-          back_nine_gross_score += score.strokes if self.back_nine_hole_numbers.include? score.course_hole.hole_number
+          front_nine_gross_score += score.strokes if front_nine_hole_numbers.include? score.course_hole.hole_number
+          back_nine_gross_score += score.strokes if back_nine_hole_numbers.include? score.course_hole.hole_number
 
           if handicap_allowance.present?
             handicap_allowance.each do |h|
@@ -97,8 +97,8 @@ module ScoringComputer
                 # update stats
                 net_score += hole_net_score
 
-                front_nine_net_score += hole_net_score if self.front_nine_hole_numbers.include? score.course_hole.hole_number
-                back_nine_net_score += hole_net_score if self.back_nine_hole_numbers.include? score.course_hole.hole_number
+                front_nine_net_score += hole_net_score if front_nine_hole_numbers.include? score.course_hole.hole_number
+                back_nine_net_score += hole_net_score if back_nine_hole_numbers.include? score.course_hole.hole_number
               end
             end
           else
@@ -111,11 +111,11 @@ module ScoringComputer
         end
       end
 
-	    user_par = self.user_par_for_played_holes(user)
+	    user_par = user_par_for_played_holes(user)
 	    par_related_net_score = net_score - user_par
 	    par_related_gross_score = gross_score - user_par
 
-	    result_name = Users::ResultName.result_name_for_user(user, self.tournament_day)
+	    result_name = Users::ResultName.result_name_for_user(user, @scoring_rule)
 
 	    if gross_score > 0
 	    	result = @scoring_rule.tournament_day_results.find_or_create_by(user: user) # TODO: create_or_find_by

@@ -20,7 +20,7 @@ class ScoringRule < ApplicationRecord
   belongs_to :tournament_day, touch: true, inverse_of: :scoring_rules
   has_many :payments, inverse_of: :scoring_rule, dependent: :destroy
   has_many :payouts, -> { order(:sort_order, 'amount DESC, points DESC') }, inverse_of: :scoring_rule, dependent: :destroy
-  has_many :payout_results, -> { order(:flight_id, amount: :desc, points: :desc) }, inverse_of: :scoring_rule, dependent: :destroy
+  has_many :payout_results, -> { order(:flight_id, amount: :desc, points: :desc, sorting_hint: :asc) }, inverse_of: :scoring_rule, dependent: :destroy
   has_many :tournament_day_results, -> { order(:flight_id, :sort_rank) }, inverse_of: :scoring_rule, dependent: :destroy
   has_many :scoring_rule_participations, dependent: :destroy, inverse_of: :scoring_rule
   has_many :users, through: :scoring_rule_participations
@@ -135,10 +135,11 @@ class ScoringRule < ApplicationRecord
   end
 
   def can_be_played?
-    return true if tournament_day.data_was_imported == true
+    return true if tournament_day.data_was_imported
     return false if tournament_day.tournament_groups.count.zero?
     return false if tournament_day.flights.count.zero?
     return false if tournament_day.scorecard_base_scoring_rule.blank?
+    return false if scoring_rule_course_holes.count.zero?
 
     true
   end
@@ -268,7 +269,7 @@ class ScoringRule < ApplicationRecord
     winners = []
 
     payout_results.each do |r|
-      winners << { contest_name: name, name: r.user.complete_name, result_value: r.detail, amount: r.amount, points: r.points, user: r.user }
+      winners << { contest_name: name, name: r.user.complete_name, result_value: r.detail, amount: r.amount, points: r.points.to_i, user: r.user }
     end
 
     winners
@@ -308,6 +309,7 @@ class ScoringRuleOption
       ScoringRuleOption.option(name: 'Team Stroke Play (vs. Opposing Team Member)', class_name: 'TeamStrokePlayVsScoringRule'),
       ScoringRuleOption.option(name: 'Team Match Play (vs. Opposing Team Member)', class_name: 'TeamMatchPlayVsScoringRule'),
       ScoringRuleOption.option(name: 'Team Match Play (Best Ball)', class_name: 'TeamMatchPlayBestBallScoringRule'),
+      ScoringRuleOption.option(name: 'Team Match Play (Scramble) Points Per Hole', class_name: 'TeamMatchPlayScramblePointsPerHoleScoringRule'),
       ScoringRuleOption.option(name: 'Team Match Play (vs. Opposing Team Member) Points Per Hole', class_name: 'TeamMatchPlayVsPointsPerHoleScoringRule'),
       ScoringRuleOption.option(name: 'Team Best Ball', class_name: 'TeamBestBallScoringRule'),
     ]

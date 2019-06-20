@@ -8,7 +8,7 @@ module FetchingTools
       other_scorecards = []
       scorecards_to_update = []
 
-      tournament_day.scoring_rules.each do |rule|
+      tournament_day.displayable_scoring_rules.each do |rule|
         if rule.show_other_scorecards?
           other_scorecards = rule.related_scorecards_for_user(scorecard.golf_outing.user) if other_scorecards.count.zero?
 

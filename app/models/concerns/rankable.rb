@@ -21,6 +21,8 @@ module Rankable
                 outer_result.gross_score += inner_result.gross_score
                 outer_result.par_related_gross_score += inner_result.par_related_gross_score
                 outer_result.par_related_net_score += inner_result.par_related_net_score
+              else
+                Rails.logger.debug { "Could not combine #{outer_result.name} and #{inner_result.name}" }
               end
             end
           end

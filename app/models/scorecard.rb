@@ -49,6 +49,8 @@ class Scorecard < ApplicationRecord
       return
     end
 
+    return if golf_outing.handicap_lock
+
     if force_recalculation || (golf_outing.course_handicap.blank? || golf_outing.course_handicap.zero?)
       Rails.logger.debug { 'Recalculating handicaps...' }
 
@@ -74,6 +76,10 @@ class Scorecard < ApplicationRecord
 
   def net_score
     tournament_day_results.first ? tournament_day_results.first&.net_score : 0
+  end
+
+  def adjusted_score
+    tournament_day_results.first ? tournament_day_results.first&.adjusted_score : 0
   end
 
   def front_nine_score(use_handicap = false)

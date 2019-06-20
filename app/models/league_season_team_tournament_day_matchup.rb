@@ -158,6 +158,18 @@ class LeagueSeasonTeamTournamentDayMatchup < ApplicationRecord
     end
   end
 
+  def team_a_disqualified?
+    @team_a_disqualified ||= team_disqualified?(team_a_users)
+  end
+
+  def team_b_disqualified?
+    @team_b_disqualified ||= team_disqualified?(team_b_users)
+  end
+
+  def team_disqualified?(team_users)
+    !team_users.all? { |user| tournament_day.scorecard_base_scoring_rule.users_eligible_for_payouts.include? user }
+  end
+
   def build_excluded_user_filter(relation)
     if user_ids_to_omit.present?
       relation.where('users.ID NOT IN (?)', user_ids_to_omit)

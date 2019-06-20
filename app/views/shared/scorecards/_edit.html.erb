@@ -18,7 +18,9 @@
 	      <td>
 	        <%= f.simple_fields_for :golf_outing, scorecard.golf_outing do |g| %>
 	          <%= g.input :course_handicap, label: false %>
-	          <small>This will be overwritten if updated by GHIN or manual re-calculation.</small>
+	          <small>The handicap may be updated by GHIN or manual re-calculation unless it is locked from editing.</small>
+
+            <%= g.input :handicap_lock, label: "Lock This Handicap" %>
 	        <% end %>
 	      </td>
 			</tr>

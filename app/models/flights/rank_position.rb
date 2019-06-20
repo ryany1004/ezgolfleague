@@ -37,7 +37,7 @@ module Flights
 
           primary_user = team.users.first
           primary_scorecard = self.flight.tournament_day.primary_scorecard_for_user(primary_user)
-          result_name = Users::ResultName.result_name_for_user(primary_user, self.flight.tournament_day)
+          result_name = Users::ResultName.result_name_for_user(primary_user, scoring_rule)
 
           results = self.flight.tournament_day_results.where(user: team.users).where(aggregated_result: false)
 

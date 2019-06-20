@@ -62,9 +62,9 @@ class ApiResultsPresenter
 
   def individual_rankings(tournament_presenter)
     rankings = []
-    tournament_presenter.flights_with_rankings.each do |flight|
-      flight.tournament_day_results.each do |result|
-        rankings << { flight_number: flight[:flight_number],
+    tournament_presenter.flights_with_rankings(:primary).each_with_index do |flight, i|
+      flight.each do |result|
+        rankings << { flight_number: i + 1,
                       ranking: result.rank,
                       id: result.user.id,
                       name: result.name,

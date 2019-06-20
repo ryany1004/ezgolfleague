@@ -52,7 +52,7 @@ module ScoringComputer
 		end
 
 		def after_updating_scores_for_scorecard(scorecard:)
-			## Most scoring rules do not require after-action updating - commonly used to split scores, copy scores to teammates, etc...
+			# Most scoring rules do not require after-action updating - commonly used to split scores, copy scores to teammates, etc...
 		end
 
 	  def compute_adjusted_user_score(user:)
@@ -62,14 +62,14 @@ module ScoringComputer
 
 	    scorecard = @scoring_rule.tournament_day.primary_scorecard_for_user(user)
 	    if scorecard.blank?
-	      Rails.logger.info { "Returning 0 - No Scorecard" }
+	      Rails.logger.info { 'Returning 0 - No Scorecard' }
 
 	      return 0
 	    end
 
 	    total_score = 0
 
-	    scorecard_with_holes = Scorecard.where(id: scorecard.id).includes(scores: :course_hole).first
+	    scorecard_with_holes = Scorecard.all.includes(scores: :course_hole).find_by(id: scorecard.id)
 	    scorecard_with_holes.scores.each do |score|
 	      adjusted_score = scorecard.score_or_maximum_for_hole(strokes: score.strokes, course_handicap: scorecard.golf_outing.course_handicap, hole: score.course_hole)
 
@@ -84,7 +84,7 @@ module ScoringComputer
 	  end
 
 		def front_nine_hole_numbers
-			[1, 2, 3, 4, 5, 6, 7, 8, 9]
+		  [1, 2, 3, 4, 5, 6, 7, 8, 9]
 		end
 
 		def back_nine_hole_numbers

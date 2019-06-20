@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_05_19_192026) do
+ActiveRecord::Schema.define(version: 2019_06_12_155813) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -152,8 +152,10 @@ ActiveRecord::Schema.define(version: 2019_05_19_192026) do
     t.boolean "disqualified", default: false
     t.string "registered_by"
     t.datetime "deleted_at"
+    t.boolean "handicap_lock", default: false
     t.index ["course_tee_box_id"], name: "index_golf_outings_on_course_tee_box_id"
     t.index ["deleted_at"], name: "index_golf_outings_on_deleted_at"
+    t.index ["disqualified"], name: "index_golf_outings_on_disqualified"
     t.index ["is_confirmed"], name: "index_golf_outings_on_is_confirmed"
     t.index ["tournament_group_id"], name: "index_golf_outings_on_tournament_group_id"
     t.index ["user_id"], name: "index_golf_outings_on_user_id"
@@ -364,6 +366,7 @@ ActiveRecord::Schema.define(version: 2019_05_19_192026) do
     t.bigint "scoring_rule_course_hole_id"
     t.string "detail"
     t.bigint "league_season_team_id"
+    t.integer "sorting_hint"
     t.index ["deleted_at"], name: "index_payout_results_on_deleted_at"
     t.index ["flight_id"], name: "index_payout_results_on_flight_id"
     t.index ["league_season_team_id"], name: "index_payout_results_on_league_season_team_id"
@@ -444,6 +447,7 @@ ActiveRecord::Schema.define(version: 2019_05_19_192026) do
     t.integer "scoring_rule_course_holes_count", default: 0
     t.boolean "primary_rule", default: false
     t.string "custom_name"
+    t.boolean "base_stroke_play", default: false
     t.index ["primary_rule"], name: "index_scoring_rules_on_primary_rule"
     t.index ["tournament_day_id"], name: "index_scoring_rules_on_tournament_day_id"
     t.index ["type"], name: "index_scoring_rules_on_type"

@@ -6,6 +6,7 @@ class TournamentPresenter
   attr_accessor :user
   attr_accessor :day_flights
   attr_accessor :combined_flights
+  attr_accessor :show_combined
 
   def initialize(args)
     args.each do |k, v|
@@ -25,6 +26,14 @@ class TournamentPresenter
     tournament_day.blank? ? 'Final' : tournament_day.pretty_day(false)
   end
 
+  def ranking_name(ranking_type)
+    if ranking_type == :primary
+      tournament_day.scorecard_base_scoring_rule.name
+    else
+      tournament_day.stroke_play_scoring_rule.name
+    end
+  end
+
   def player_count
     tournament.number_of_players
   end
@@ -34,7 +43,7 @@ class TournamentPresenter
   end
 
   def scoring_rules
-    tournament_day.scoring_rules
+    tournament_day.displayable_scoring_rules
   end
 
   def date_and_times
@@ -77,7 +86,7 @@ class TournamentPresenter
     links = []
 
     tournament.tournament_days.each do |day|
-      highlighted = day == tournament_day
+      highlighted = (day == tournament_day) && !show_combined
 
       links << { name: day.pretty_day,
                  link: Rails.application.routes.url_helpers.play_tournament_path(tournament, tournament_day: day),
@@ -85,8 +94,8 @@ class TournamentPresenter
     end
 
     links << { name: 'Final',
-               link: Rails.application.routes.url_helpers.play_tournament_path(tournament),
-               highlighted: tournament_day.blank? } if tournament.tournament_days.count.positive?
+               link: Rails.application.routes.url_helpers.play_tournament_path(tournament, combined: true),
+               highlighted: show_combined } if tournament.tournament_days.count.positive?
 
     links
   end
@@ -129,6 +138,10 @@ class TournamentPresenter
     end
   end
 
+  def separate_stroke_play_results?
+    tournament_day.stroke_play_scoring_rule.present? && tournament_day.stroke_play_scoring_rule != tournament_day.scorecard_base_scoring_rule
+  end
+
   def show_aggregated_results?
     tournament_day.scorecard_base_scoring_rule.has_aggregated_results?
   end
@@ -138,7 +151,7 @@ class TournamentPresenter
   end
 
   def showing_final?
-    tournament_day.blank?
+    show_combined
   end
 
   def leaderboard_link
@@ -291,11 +304,15 @@ class TournamentPresenter
     teams
   end
 
-  def flights_with_rankings
-    if tournament_day.blank?
+  def flights_with_rankings(scoring_rule_type)
+    if show_combined
       combined_flights
     else
-      day_flights
+      if scoring_rule_type == :primary
+        tournament_day.primary_scoring_rule_flights_with_rankings
+      else
+        tournament_day.stroke_play_flights_with_rankings
+      end
     end
   end
 

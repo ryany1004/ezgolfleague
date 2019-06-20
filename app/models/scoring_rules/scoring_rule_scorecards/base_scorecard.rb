@@ -16,6 +16,10 @@ module ScoringRuleScorecards
       self.scoring_rule.tournament_day
     end
 
+    def tournament_day_results
+      scoring_rule.tournament_day_results.where(user: user)
+    end
+
     def golf_outing
       return nil
     end
@@ -58,6 +62,10 @@ module ScoringRuleScorecards
 
     def net_score
       scores.map { |score| score.net_strokes }.sum
+    end
+
+    def adjusted_score
+      gross_score
     end
 
     def front_nine_score(use_handicap = false)

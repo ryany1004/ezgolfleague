@@ -1,5 +1,6 @@
 module ScoringRuleScorecards
   class TeamMatchPlayBestBallScorecard < ScoringRuleScorecards::MatchPlayScorecard
+    attr_accessor :matchup
     attr_accessor :team_a_scorecard
     attr_accessor :team_b_scorecard
     attr_accessor :team_a_running_score
@@ -11,6 +12,9 @@ module ScoringRuleScorecards
     def calculate_scores
       new_scores = []
 
+      self.matchup = matchup
+      self.team_a_scorecard = scoring_rule.best_ball_scorecard_for_team(matchup.team_a)
+      self.team_b_scorecard = scoring_rule.best_ball_scorecard_for_team(matchup.team_b)
       self.unplayed_holes = scoring_rule.course_holes.count
       self.running_score = 0
       self.opponent_running_score = 0
@@ -60,22 +64,30 @@ module ScoringRuleScorecards
         new_opponent_running_score = opponent_running_score
 
         if user1_score.present? && user2_score.present?
-          if user1_score.strokes < user2_score.strokes # user 1 won this hole
+          if user1_score.net_strokes < user2_score.net_strokes # user 1 won this hole
             new_running_score = running_score + 1
 
             self.team_a_holes_won += 1
-          elsif user1_score.strokes > user2_score.strokes # user 2 won this hole
+
+            Rails.logger.debug { "TeamMatchPlayBestBallScorecard: user 1 won this hole #{user1_score.net_strokes} vs #{user2_score.net_strokes}" }
+          elsif user1_score.net_strokes > user2_score.net_strokes # user 2 won this hole
             new_opponent_running_score = opponent_running_score + 1
 
             self.team_b_holes_won += 1
+
+            Rails.logger.debug { "TeamMatchPlayBestBallScorecard: user 2 won this hole #{user2_score.net_strokes} vs #{user1_score.net_strokes}" }
+          else
+            Rails.logger.debug { "TeamMatchPlayBestBallScorecard: tie hole #{user2_score.net_strokes} vs #{user1_score.net_strokes}" }
           end
+        else
+          Rails.logger.debug { 'TeamMatchPlayBestBallScorecard: No score for hole' }
         end
 
         self.running_score = [new_running_score, 0].max
         self.opponent_running_score = [new_opponent_running_score, 0].max
       end
 
-      Rails.logger.debug { "TeamMatchPlayBestBallScorecard: #{team_a_scorecard.team.name} #{current_hole.hole_number} #{running_score} #{opponent_running_score}" }
+      Rails.logger.debug { "TeamMatchPlayBestBallScorecard: #{team_a_scorecard.team.name} (vs. #{team_b_scorecard.team.name}) #{current_hole.hole_number} #{running_score} #{opponent_running_score}" }
 
       running_score
     end
@@ -85,6 +97,16 @@ module ScoringRuleScorecards
         team_a_scorecard.team
       elsif team_b_holes_won > team_a_holes_won
         team_b_scorecard.team
+      end
+    end
+
+    def scorecard_result
+      if matchup.team_a_disqualified?
+        MatchPlayScorecardResult::LOST
+      elsif matchup.team_b_disqualified?
+        MatchPlayScorecardResult::WON
+      else
+        super
       end
     end
   end
