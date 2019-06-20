@@ -4,7 +4,7 @@ lock '3.9.0'
 set :application, "ezgolfleague"
 set :repo_url, "git@github.com:dopp10/ezgolfleague.git"
 
-set :stages, ["staging", "production"]
+set :stages, ["staging", "production", "beta"]
 set :default_stage, "production"
 
 set :sidekiq_processes, 2
