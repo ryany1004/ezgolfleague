@@ -12,7 +12,8 @@ class ScoringRulesController < BaseController
     scoring_rule.is_opt_in = scoring_rule.optional_by_default
     scoring_rule.save
 
-    self.update_primary_scoring_rule
+    update_primary_scoring_rule
+    manage_shadow_stroke_play
 
     #default course holes
     @tournament_day.course.course_holes.each do |ch|
@@ -46,7 +47,8 @@ class ScoringRulesController < BaseController
       end
     end
 
-    self.update_primary_scoring_rule
+    update_primary_scoring_rule
+    manage_shadow_stroke_play
 
   	if params[:commit] == "Save & Continue"
   		redirect_to edit_league_tournament_tournament_day_course_holes_path(@tournament.league, @tournament, @tournament_day)
@@ -82,6 +84,10 @@ class ScoringRulesController < BaseController
   		r.primary_rule = true
   		r.save
   	end
+  end
+
+  def manage_shadow_stroke_play
+    TournamentService::ShadowStrokePlay.call(@tournament_day)
   end
 
   private
