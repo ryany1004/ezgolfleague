@@ -1,0 +1,125 @@
+<div class="banner-img fall-classic-img"></div>
+<!-- /.banner-img -->
+<div class="container pt-100">
+  <div class="dashboard-header ttt-header fall-classic-header">
+    <div class="row">
+      <div class="col-md-6">
+        <h2><%= @league.name %></h2>           
+      </div>
+      <!-- /.col-md-8 --> 
+    </div>
+    <!-- /.row -->         
+  </div>
+  <!-- /.dashboard-header --> 
+  <div class="container p-0">
+    <div class="row">
+        <div class="col-md-3">   
+          <div class="scorpion-golf-league-green">
+              <div class="scorpion-golf-league-green-header">
+                  <div class="dropdown">
+                    <select class="selectpicker dropup" data-header="">
+                      <% current_user.selected_league.league_seasons.each do |season| -%>
+                        <option><%= link_to season.name, league_switch_seasons_path(current_user.selected_league, season_id: season.id), method: :put %></option>
+                      <% end %>
+                    </select>
+                      <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <% current_user.selected_league.league_seasons.each do |season| -%>
+                          <%= link_to season.name, league_switch_seasons_path(current_user.selected_league, season_id: season.id), method: :put, class:'dropdown-item' %>
+                        <% end %>
+                      </div>
+                  </div>
+              </div>
+              <div class="scorpion-golf-league-gree-list">
+                <div class="row no-gutters">
+                  <div class="col-md-6">
+                    <p>starts</p>
+                    <h2><%= @league_season.starts_at.to_s(:short) %></h2>
+                  </div>
+                  <div class="col-md-6">
+                    <p>ends</p>
+                    <h2><%= @league_season.ends_at.to_s(:short) %></h2>
+                  </div>
+                </div>
+              </div>
+              <div class="scorpion-golf-league-gree-btn text-center">
+                <%= link_to "View Tournaments", league_tournaments_path(@league), class: 'btn btn-primary' %>
+                <%= link_to "Manage Golfers", league_league_memberships_path(current_user.selected_league), class: 'btn btn-success' %>
+              </div>
+          </div><!-- /.scorpion-golf-league-green -->            
+          <div class="list-group sidebar-list-group">
+            <%= link_to image_tag('settings.png') + "Season Settings", "", data: { toggle:"modal", target:"#editSeasonModal" }, class: "list-group-item list-group-item-action" %>
+            <%= link_to image_tag('settings.png') + "League Settings", edit_league_path(@league.id), class: "list-group-item list-group-item-action" %>
+          </div><!-- /.sidebar-list-group -->
+        </div><!-- /.col-md-3 -->   
+        <div class="col-md-9">
+            <div class="season-ranking-card">
+                <div class="season-ranking-card-header">
+                    <div class="row clearfix">
+                      <div class="col-md-4">
+                        <h2>Season Rankings</h2>
+                      </div>
+                      <div class="col-md-8">
+                        <ul class="list-inline float-right">
+                          <li class="list-inline-item"><span><%= @league.league_memberships.count %></span>golfers</li>
+                          <li class="list-inline-item"><span><%= @league_season.tournaments.count %></span>tournaments</li>                              
+                        </ul>
+                      </div>
+                    </div>
+                </div><!-- /.season-ranking-card-header -->
+                <%= render partial: 'individual_rankings', locals: {league_season: @league_season, rankings: @rankings} %>
+            </div>
+        </div><!-- /.col-md-8 -->                    
+    </div><!-- /.row -->         
+  </div>
+  <!-- /.container -->
+</div>
+<!-- /.container --> 
+
+
+<!-- Season Settings Modal --> 
+<div class="modal fade" id="editSeasonModal" tabindex="-1" role="dialog" aria-labelledby="editSeasonModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+    <div class="modal-content">
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">X</span>
+      </button>
+      <div class="modal-body welcome p-5">
+        <div class="p-3">
+          <h2>Season Settings</h2>
+          <p>Edit settings about this season</p>
+        </div>
+
+        <%= simple_form_for @league_season, url: edit_league_league_season_path([@league, @league_season]), multipart: true, :defaults => { :input_html => { :class => "onboarding__input", :label => false }} do |f| %>
+          <% if notification = f.error_notification %>
+            <div class="alert alert-error fade in">
+              <a class="close" data-dismiss="alert" href="#">&times;</a>
+              <%= notification %>
+            </div>
+          <% end %>
+
+          <%= f.input :name, required: true %>
+
+          <%= f.input :dues_amount, label: 'Dues Amount' %>
+
+          <%= f.hidden_field :starts_at %>
+          <%= f.hidden_field :ends_at %>
+
+          <% if @league_season.new_record? && !@league.allow_scoring_groups -%>
+            <p>Activating team play allows you to create season-long teams who earn points and payouts over the course of the season.</p>
+            <%= f.input :season_type_raw, label: 'Team Play for Season', as: :boolean %>
+          <% elsif @league_season.season_type_raw == 1 %>
+            <p>
+              <strong>This season is configured for team play.</strong>
+            </p>
+          <% end %>
+
+          <%= f.hidden_field :league_id, :value => @league.id %>
+        </div>
+
+        <div class="modal-footer welcome">
+          <%= f.button :submit, "Save", class: 'btn__ezgl-secondary' %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

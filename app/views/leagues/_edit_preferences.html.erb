@@ -1,0 +1,41 @@
+<div class="registration-form-container">
+	<div class="panel-heading">
+		<h3 class="panel-title pb-4">League Details</h3>
+	</div>
+
+  <%= simple_form_for @league, :defaults => { :input_html => { :class => "onboarding__input", :label => false }} do |f| %>
+		<% if notification = f.error_notification %>
+			<div class="alert alert-error fade in">
+				<a class="close" data-dismiss="alert" href="#">&times;</a>
+				<%= notification %>
+			</div>
+		<% end %>
+
+		<div>
+      <p>Address(es) For Dues Email Confirmations (separate with commas)</p>
+      <%= f.input :dues_payment_receipt_email_addresses %>
+		</div>
+
+    <div class="form-flex-group pt-2">
+      <%= f.input :display_balances_to_players, label: 'Show Win Balances to Players?', as: :boolean %>
+		</div>
+
+    <div class="form-flex-group">
+      <%= f.input :show_in_search, label: 'Show in League Search?', as: :boolean %>
+		</div>
+
+		<div class="form-flex-group">
+      <%= f.input :calculate_handicaps_from_past_rounds, label: 'Automatically Calculate Handicaps From Past Rounds?', as: :boolean %>
+		</div>
+
+		<div class="form-flex-group">
+      <%= f.input :number_of_rounds_to_handicap, label: 'Number of Rounds to Use' %>
+		</div>    
+
+		<div class="form-actions form-flex-group"> 
+			<div class="form-flex-right">
+				<%= f.button :submit, "Save", class: 'btn__ezgl-secondary' %>
+			</div>
+		</div>
+	<% end %>
+</div>

@@ -88,10 +88,10 @@ class Tournament < ApplicationRecord
 
   # TODO: Need to update / review this logic
   def tournament_state
-    if tournament_at > Time.zone.now.at_beginning_of_day
+    if self.first_day.tournament_at > Time.zone.now.at_beginning_of_day
       TournamentState::REGISTRATION
     else
-      if is_finalized
+      if self.is_finalized
         TournamentState::POST_SCORES
       else
         TournamentState::REVIEW_SCORES

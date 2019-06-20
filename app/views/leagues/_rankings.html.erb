@@ -1,0 +1,18 @@
+<div class="player-list-col">
+  <div class="row">
+    <div class="col">
+      <%= ranking.rank %>
+    </div>
+    <div class="col-md-6">
+      <div class="media">
+        <%= image_tag ranking.user.avatar.url(:thumb), class: 'img-circle' %>
+        <div class="media-body">
+          <h2><%= ranking.user.complete_name %></h2>
+        </div>
+      </div>                              
+    </div>
+    <div class="col">
+      <%= ranking.points.to_i %>
+    </div>
+  </div><!-- /.row -->
+</div><!-- /.player-list-col --> 

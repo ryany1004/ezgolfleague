@@ -18,6 +18,17 @@ class LeaguesController < BaseController
     @leagues = @leagues.where('lower(name) LIKE ?', search_string)
   end
 
+  def show
+    @league = League.find(params[:id])
+    active_season = current_user.active_league_season
+    if session[:selected_season_id].blank?
+      @league_season = active_season
+    else
+      @league_season = current_user.selected_league.league_seasons.where(id: session[:selected_season_id]).first
+    end
+    @rankings = @league_season.league_season_ranking_groups
+  end
+
   def new
     @league = League.new
   end
@@ -37,7 +48,7 @@ class LeaguesController < BaseController
 
   def update
     if @league.update(league_params)
-      redirect_to leagues_path, flash:
+      render :edit, flash:
       { success: 'The league was successfully updated.' }
     else
       render :edit
@@ -49,6 +60,12 @@ class LeaguesController < BaseController
 
     redirect_to leagues_path, flash:
     { success: 'The league was successfully deleted.' }
+  end
+
+  def switch_seasons
+    session[:selected_season_id] = params[:season_id]
+
+    redirect_to league_path
   end
 
   def update_from_ghin

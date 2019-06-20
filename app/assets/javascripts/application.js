@@ -16,6 +16,7 @@
 //= require turbolinks
 //= require popper
 //= require bootstrap-sprockets
+//= require bootstrap-select
 //= require moment
 //= require bootstrap-datetimepicker
 //= require pickers

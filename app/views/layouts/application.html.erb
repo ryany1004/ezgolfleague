@@ -48,17 +48,17 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarCollapse">
               <ul class="navbar-nav mr-auto">
-                <li class="nav-item <%= 'active' if request.path.include?('/dashboard') %>">
+                <li class="nav-item <%= 'active' if current_page?(root_path) %>">
                   <a class="nav-link" href="/">Dashboard</a>
                 </li>
-                <li class="nav-item <%= 'active' if request.path.include?('/league/current') %>">
-                  <%= link_to "League", leagues_path, class: 'nav-link' %>
+                <li class="nav-item <%= 'active' if current_page?(league_path(current_user.selected_league)) %>">
+                  <%= link_to "League", league_path(current_user.selected_league), class: 'nav-link' %>
                 </li>
                 <li class="nav-item <%= 'active' if request.path.include?('/tournaments') %>">
                   <%= link_to "Tournaments", league_tournaments_path(current_user.selected_league), class: 'nav-link' %>
                 </li>
-                <li class="nav-item <%= 'active' if request.path.include?('/golfers') %>">
-                  <%= link_to "Golfers", user_accounts_path, class: 'nav-link' %>
+                <li class="nav-item <%= 'active' if current_page?(league_league_memberships_path(current_user.selected_league)) %>">
+                  <%= link_to "Golfers", league_league_memberships_path(current_user.selected_league), class: 'nav-link' %>
                 </li>
               </ul>     
               <ul class="ml-auto list-inline  profile-dropdown">
@@ -67,8 +67,9 @@
                   <div class="dropdown-menu" aria-labelledby="dropdown08">
                     <%= link_to "My Profile", edit_user_account_path(current_user.id), class: 'dropdown-item' %>
                     <% if !current_user.has_all_exempt_leagues? && current_user.is_any_league_admin? %>
-                     <%= link_to "Billing", current_league_subscription_credits_path(current_user.selected_league), class: 'dropdown-item' %>
+                     <%= link_to "Billing", edit_user_account_path(current_user.id) + "?billing", class: 'dropdown-item' %>
                     <% end %>
+                    <%= link_to "Support", "mailto:support@ezgolfleague.com?subject=I%20Need%20Help%20With%20EZ%20Golf%20League", class: 'dropdown-item' %>
                     <% if current_user.leagues.count > 1 -%>
                       <div class="dropdown-divider"></div>
                       <p class="dropdown-divider-text">Switch League</p>

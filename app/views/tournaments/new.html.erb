@@ -1,6 +1,180 @@
-<ol class="breadcrumb">
-  <li><%= link_to "Tournaments", league_tournaments_path(current_user.selected_league) %></li>
-  <li class="active">Create Tournament</li>
-</ol>
 
-<%= render 'form' %>
+<div class="create-tournament-page">
+  <div class="container pt-150 pb-100">
+    <div class="cat-card">
+        <div id="stepper1" class="bs-stepper">
+          <div class="bs-stepper-header" role="tablist">
+            <div class="step" data-target="#test-l-1">
+              <button type="button" class="btn btn-link step-trigger" role="tab" id="stepper1trigger1" aria-controls="test-l-1">
+                <span class="bs-stepper-circle">1</span>                  
+              </button>
+            </div>
+            <div class="line"></div>
+            <div class="step" data-target="#test-l-2">
+              <button type="button" class="btn btn-link step-trigger" role="tab" id="stepper1trigger2" aria-controls="test-l-2">
+                <span class="bs-stepper-circle">2</span>                 
+              </button>
+            </div>
+            <div class="line"></div>
+            <div class="step" data-target="#test-l-3">
+              <button type="button" class="btn btn-link step-trigger" role="tab" id="stepper1trigger3" aria-controls="test-l-2">
+                <span class="bs-stepper-circle">2</span>                 
+              </button>
+            </div>
+            <div class="line"></div>
+            <div class="step" data-target="#test-l-4">
+              <button type="button" class="btn btn-link step-trigger" role="tab" id="stepper1trigger4" aria-controls="test-l-3">
+                <span class="bs-stepper-circle">3</span>                  
+              </button>
+            </div>
+          </div>
+          <div class="bs-stepper-content">
+            <form onSubmit="return false">
+              <div id="test-l-1" role="tabpanel" class="content" aria-labelledby="stepper1trigger1">
+                <div class="step-1-content">
+                  <h2>Create a Tournament</h2>
+                  <p>This is simple process to make your tournament.</p>
+                  <p> You can create a tournament in under a minute.</p>
+                  <div class="step-1-content-form">
+                    <% if @tournament.new_record? || is_editable?(@tournament) -%>
+                      <%= simple_form_for [current_user.selected_league, @tournament], :defaults => { :input_html => { :class => "form-control", :label => false }} do |f| %>
+                        <% if notification = f.error_notification %>
+                          <div class="alert alert-error fade in">
+                            <%= notification %>
+                          </div>
+                        <% end %>
+                        <div class="form-group">
+                            <div class="row">
+                              <div class="col-md-4 text-right">
+                                  <label>Tournament Name</label>
+                              </div>
+                                <div class="col-md-5">
+                                  <%= f.input :name, placeholder: 'Choose a name..', required: true %>
+                              </div>
+                            </div>
+                        </div> 
+                        <div class="form-group">
+                            <div class="row">
+                              <div class="col-md-4 text-right">
+                                  <label>Golf Course</label>
+                              </div>
+                                <div class="col-md-5">
+                                  <%= select_tag('course', options_from_collection_for_select(@courses, 'id', 'name')) %>
+                              </div>
+                            </div>
+                        </div> 
+                        <div class="form-group">
+                          <div class="row">
+                            <div class="col-md-4 text-right">
+															<label>Date</label>
+                            </div>
+                              <div class="col-md-5">
+                                <div class="date-inputs">
+																	<div class="row">
+																		<div class="col-md-6">
+																			<%= f.input :signup_opens_at, label: 'Signup Opening Date', as: :datetime_picker, required: true, input_html: { value: @tournament.signup_opens_at.to_s(:date_and_time) } %>
+																		</div>
+																		<div class="col-md-6">
+																			<%= f.input :signup_closes_at, label: 'Signup Closing Date', as: :datetime_picker, required: true, input_html: { value: @tournament.signup_closes_at&.to_s(:date_and_time) } %>
+																		</div>
+																	</div>
+                                </div>
+                            </div>
+                          </div>
+                        </div> 
+                      <% end %>
+                    <% end %>
+                  </div>            
+                </div><!-- /.step-1-content -->
+                <div class="cat-card-footer">                     
+                    <button type="button" class="btn btn-outline-secondary">Cancel</button>
+                    <button class="btn btn-success" onclick="stepper1.next()">Next</button>
+                </div>
+              </div>
+              <div id="test-l-2" role="tabpanel" class="content" aria-labelledby="stepper1trigger2">
+                <h2 class="text-center">Step 2</h2>
+                <div class="cat-card-footer">
+                  <button class="btn btn-success" onclick="stepper1.previous()">Previous</button>
+                  <button class="btn btn-success" onclick="stepper1.next()">Next</button>
+                </div>                  
+              </div>
+              <div id="test-l-3" role="tabpanel" class="content" aria-labelledby="stepper1trigger3">
+                <h2 class="text-center">Step 3</h2>
+                <div class="cat-card-footer">
+                  <button class="btn btn-success" onclick="stepper1.previous()">Previous</button>
+                  <button class="btn btn-success" onclick="stepper1.next()">Next</button>
+                </div>                  
+              </div>
+              <div id="test-l-4" role="tabpanel" class="content text-center" aria-labelledby="stepper1trigger4">
+                <h2 class="text-center">Step 4</h2>
+                <div class="cat-card-footer">
+                    <button class="btn btn-success mt-5" onclick="stepper1.previous()">Previous</button>
+                    <button type="submit" class="btn btn-success mt-5">Submit</button>
+                </div>                  
+              </div>
+            </form>
+          </div>
+        </div>
+    </div>
+  </div>
+</div>
+
+<link rel="stylesheet" href="https://unpkg.com/bs-stepper/dist/css/bs-stepper.min.css">
+<script src="https://unpkg.com/bs-stepper/dist/js/bs-stepper.min.js"></script>
+<script type="text/javascript">      
+        
+  var stepper1 = null
+  var stepper2 = null
+  var stepper3 = null
+  var stepper4 = null
+
+  $('#datetimepicker4,#datetimepicker5').datetimepicker({
+        format: 'MM/DD//YYYY'
+  });
+
+  document.addEventListener('DOMContentLoaded', function () {
+    stepper1 = new Stepper(document.querySelector('#stepper1'))
+    stepper2 = new Stepper(document.querySelector('#stepper2'), {
+      linear: false
+    })
+    stepper3 = new Stepper(document.querySelector('#stepper3'), {
+      linear: false,
+      animation: true
+    })
+    stepper4 = new Stepper(document.querySelector('#stepper4'))
+
+    function handleBreakPointChange (breakpoint) {
+      if (breakpoint === 'large') {
+        stepper1._element.classList.add('vertical')
+        stepper2._element.classList.add('vertical')
+        stepper3._element.classList.add('vertical')
+      } else if (breakpoint === 'xLarge' && stepper1._element.classList.contains('vertical')) {
+        stepper1._element.classList.remove('vertical')
+        stepper2._element.classList.remove('vertical')
+        stepper3._element.classList.remove('vertical')
+      }
+    }
+
+    window.addEventListener('new.bs.breakpoint', function (event) {
+      handleBreakPointChange(event.detail)
+    })
+
+    bsBreakpoints.init()
+    handleBreakPointChange(bsBreakpoints.detectBreakpoint())
+  })
+
+  $('.selectize-control').remove();
+  var $course_selector = $('#course').selectize({
+      valueField: 'id',
+      labelField: 'name',
+      searchField: 'name',
+      maxItems: '1',
+      placeholder: 'Search for a course...',
+      create: false,
+      render: {
+            option: function (item, escape) {
+                return '<div>' + escape(item.name) + '</div>';
+            }
+      }
+  });
+</script>
