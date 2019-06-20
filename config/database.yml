@@ -19,6 +19,13 @@ staging:
   username: postgres
   pool: 20
 
+beta:
+  adapter: postgresql
+  host: localhost
+  database: ezgolfleague_staging
+  username: postgres
+  pool: 20
+
 production:
   adapter: postgresql
   host: localhost
