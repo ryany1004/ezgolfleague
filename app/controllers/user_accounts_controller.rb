@@ -85,7 +85,9 @@ class UserAccountsController < BaseController
         t.tournament_days.each do |d|
           group = d.tournament_group_for_player(@user_account)
 
-          d.remove_player_from_group(group, @user_account, true) unless group.blank?
+          d.remove_player_from_group(tournament_group: group,
+                                     user: @user_account,
+                                     remove_from_teams: true) if group.present?
         end
       end
     end
