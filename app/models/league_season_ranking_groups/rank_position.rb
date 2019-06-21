@@ -121,6 +121,7 @@ module LeagueSeasonRankingGroups
           quantity_at_rank += 1
         end
 
+        result.reload
         result.lock!
         result.rank = rank
         result.save
