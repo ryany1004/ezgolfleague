@@ -4,7 +4,9 @@ module TournamentService
 
     def call(tournament_day)
       if tournament_day.base_is_stroke_play?
-        tournament_day.scoring_rules.find_by(base_stroke_play: true).destroy
+        existing_shadow_rule = tournament_day.scoring_rules.find_by(base_stroke_play: true)
+        existing_shadow_rule.destroy if existing_shadow_rule.present?
+
         return
       end
 
