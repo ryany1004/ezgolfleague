@@ -18,11 +18,14 @@ module LeagueSeasonRankingGroups
 
     def rank_regular_season
       group = LeagueSeasonRankingGroup.find_or_create_by(name: league_season.name, league_season: league_season)
+      group.league_season_rankings.update_all(points: 0, payouts: 0)
 
       common_rank(group)
     end
 
     def rank_scoring_group_season
+      league_season.league_season_ranking_groups.destroy_all # we always destroy these
+
       league_season.league_season_scoring_groups.each do |scoring_group|
         group = LeagueSeasonRankingGroup.find_or_create_by(name: scoring_group.name, league_season: league_season)
 
@@ -31,8 +34,6 @@ module LeagueSeasonRankingGroups
     end
 
     def create_individual_season_rankings(group, limit_to_players = nil)
-      group.league_season_rankings.update_all(points: 0, payouts: 0)
-
       league_season.tournaments.includes(:tournament_days).find_each do |t|
         players = t.players
         players = players.select { |item| limit_to_players.include? item } if limit_to_players.present?
@@ -57,8 +58,6 @@ module LeagueSeasonRankingGroups
     end
 
     def create_team_season_rankings(group)
-      group.league_season_rankings.update_all(points: 0, payouts: 0)
-
       league_season.league_season_teams.each do |team|
         ranking = group.league_season_rankings.find_or_create_by(league_season_team: team)
 
