@@ -31,14 +31,14 @@ module LeagueSeasonRankingGroups
     end
 
     def create_individual_season_rankings(group, limit_to_players = nil)
+      group.league_season_rankings.update_all(points: 0, payouts: 0)
+
       league_season.tournaments.includes(:tournament_days).find_each do |t|
         players = t.players
         players = players.select { |item| limit_to_players.include? item } if limit_to_players.present?
 
         players.each do |p|
           ranking = group.league_season_rankings.find_or_create_by(user: p)
-          ranking.points = 0
-          ranking.payouts = 0
 
           t.tournament_days.includes(scoring_rules: [payout_results: :user]).find_each do |day|
             day.displayable_scoring_rules.includes(:payout_results).find_each do |rule|
@@ -57,10 +57,10 @@ module LeagueSeasonRankingGroups
     end
 
     def create_team_season_rankings(group)
+      group.league_season_rankings.update_all(points: 0, payouts: 0)
+
       league_season.league_season_teams.each do |team|
         ranking = group.league_season_rankings.find_or_create_by(league_season_team: team)
-        ranking.points = 0
-        ranking.payouts = 0
 
         league_season.tournaments.includes(:tournament_days).find_each do |t|
           t.tournament_days.includes(scoring_rules: [payout_results: :league_season_team]).find_each do |day|
