@@ -284,7 +284,8 @@ class TournamentDay < ApplicationRecord
     if base_is_stroke_play?
       scorecard_base_scoring_rule
     else
-      scoring_rules.find_by(base_stroke_play: true)
+      rule = scoring_rules.find_by(base_stroke_play: true)
+      rule.presence || scorecard_base_scoring_rule
     end
   end
 
