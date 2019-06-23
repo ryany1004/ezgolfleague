@@ -71,7 +71,7 @@ class Scorecard < ApplicationRecord
   end
 
   def stroke_play_results
-    tournament_day.stroke_play_scoring_rule.tournament_day_results
+    tournament_day.stroke_play_scoring_rule.tournament_day_results.where(user: user)
   end
 
   def gross_score
