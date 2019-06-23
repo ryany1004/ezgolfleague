@@ -72,7 +72,7 @@
                   <div class="dropdown-menu" aria-labelledby="dropdown08">
                     <%= link_to "My Profile", edit_user_account_path(current_user.id), class: 'dropdown-item' %>
                     <% if !current_user.has_all_exempt_leagues? && current_user.is_any_league_admin? %>
-                     <%= link_to "Billing", edit_user_account_path(current_user.id) + "?billing", class: 'dropdown-item' %>
+                     <%= link_to "Billing", edit_user_account_path(current_user.id) + "#v-billing", class: 'dropdown-item' %>
                     <% end %>
                     <%= link_to "Support", "mailto:support@ezgolfleague.com?subject=I%20Need%20Help%20With%20EZ%20Golf%20League", class: 'dropdown-item' %>
                     <% if current_user.leagues.count > 1 -%>

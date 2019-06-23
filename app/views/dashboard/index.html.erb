@@ -80,12 +80,12 @@
 
         <div class="p-4">
           <h5 class="pb-2">1. Add Golfers to your League</h5>
-          <button type="button" class="btn btn-primary">Add Golfers to League</button>
+          <%= link_to "Add Golfers to League", new_user_account_path, class: 'btn btn-primary' %>
         </div>
 
         <div class="p-5">
           <h5 class="pb-2">2. Create your first Tournament</h5>
-          <button type="button" class="btn btn-primary">Create a Tournament</button>
+          <%= link_to "Create a Tournament", new_league_tournament_path(current_user.selected_league), class: 'btn btn-primary' %>
         </div>
       </div>
       <div class="modal-footer welcome">

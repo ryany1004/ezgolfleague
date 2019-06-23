@@ -21,7 +21,7 @@
         <% end %>
       </div>
       <div style="position:absolute; right:0;">
-        <a href="#" class="btn btn-primary" role="button" data-toggle="modal" data-target="#myModal">Upgrade</a>
+        <a href="#" class="btn btn-primary" role="button" data-toggle="modal" data-target="#leagueSubscriptionsModal">Upgrade</a>
       </div>
 		<% end %>
 	</div>
@@ -62,7 +62,7 @@
 
 <!-- Active Golfers Modal -->
 <%= simple_form_for :update_active_league_subscription_credits, url: update_active_league_subscription_credits_path(@league), method: :put, :html => {id: "active-form"} do |f| %>
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+<div class="modal fade" id="leagueSubscriptionsModal" tabindex="-1" role="dialog" aria-labelledby="leagueSubscriptionsModalLabel">
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
       <div class="modal-header" style="flex-wrap:wrap;">
@@ -75,22 +75,24 @@
       </div>
       <div class="modal-body">
         <div class="pl-4 pt-1 pb-1 pr-1">
-          <table class="table table-striped">
-            <thead>
-              <tr>
-                <th>Active</th>
-                <th>Name</th>
-              </tr>
-            </thead>
-            <tbody>
-              <% @league.league_memberships.each do |m| %>
-              <tr>
-                <td style="width:100px;"><%= check_box_tag "is_active[#{m.id}]", true, m.state == MembershipStates::ACTIVE_FOR_BILLING %></td>
-                <td><%= m.user.complete_name %></td>
-              </tr>
-              <% end %>
-            </tbody>
-          </table>
+          <div class="table-overflow">
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th>Active</th>
+                  <th>Name</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% @league.league_memberships.each do |m| %>
+                <tr>
+                  <td style="width:100px;"><%= check_box_tag "is_active[#{m.id}]", true, m.state == MembershipStates::ACTIVE_FOR_BILLING %></td>
+                  <td><%= m.user.complete_name %></td>
+                </tr>
+                <% end %>
+              </tbody>
+            </table>
+          </div>
           <p class="pt-3 mb-0" style="text-align:right;">
             <strong>You currently have <%= @league.league_memberships.active.count %> active golfers.</strong><br>
             Your most recent subscription plan includes <%= @golfer_count %> golfers.
