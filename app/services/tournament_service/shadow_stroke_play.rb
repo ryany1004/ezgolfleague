@@ -3,25 +3,32 @@ module TournamentService
     extend self
 
     def call(tournament_day)
-      create_shadow_scoring_rule(tournament_day) if tournament_day.stroke_play_scoring_rule.blank?
+      if tournament_day.base_is_stroke_play?
+        existing_shadow_rule = tournament_day.scoring_rules.find_by(base_stroke_play: true)
+        existing_shadow_rule.destroy if existing_shadow_rule.present?
+
+        return
+      end
+
+      rule = create_shadow_scoring_rule(tournament_day)
+      add_course_holes_to_scoring_rule(tournament_day, rule)
+      add_users_to_scoring_rule(tournament_day, rule)
     end
 
     private
 
     def create_shadow_scoring_rule(tournament_day)
-      Rails.logger.info { 'Creating a Shadow Stroke Play Tournament for Day' }
+      StrokePlayScoringRule.find_or_create_by(tournament_day: tournament_day,
+                                              base_stroke_play: true,
+                                              is_opt_in: false)
+    end
 
-      scoring_rule = StrokePlayScoringRule.create(tournament_day: tournament_day,
-                                                  base_stroke_play: true,
-                                                  is_opt_in: false)
+    def add_course_holes_to_scoring_rule(tournament_day, scoring_rule)
+      scoring_rule.course_holes = tournament_day.course.course_holes
+    end
 
-      tournament_day.course.course_holes.each do |ch|
-        scoring_rule.course_holes << ch
-      end
-
-      tournament_day.tournament.players_for_day(tournament_day).each do |u|
-        scoring_rule.users << u unless scoring_rule.users.include? u
-      end
+    def add_users_to_scoring_rule(tournament_day, scoring_rule)
+      scoring_rule.users = tournament_day.tournament.players_for_day(tournament_day)
     end
   end
 end

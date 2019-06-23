@@ -82,13 +82,15 @@ class UserAccountsController < BaseController
   end
 
   def destroy
-    Tournament.all_upcoming(@user_account.leagues).each do |t|
-      next unless t.includes_player?(@user_account)
+    tournaments = Tournament.all_upcoming(@user_account.leagues).each do |t|
+      if t.includes_player?(@user_account)
+        t.tournament_days.each do |d|
+          group = d.tournament_group_for_player(@user_account)
 
-      t.tournament_days.each do |d|
-        group = d.tournament_group_for_player(@user_account)
-
-        d.remove_player_from_group(group, @user_account, true) if group.present?
+          d.remove_player_from_group(tournament_group: group,
+                                     user: @user_account,
+                                     remove_from_teams: true) if group.present?
+        end
       end
     end
 

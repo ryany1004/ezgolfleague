@@ -18,11 +18,14 @@ module LeagueSeasonRankingGroups
 
     def rank_regular_season
       group = LeagueSeasonRankingGroup.find_or_create_by(name: league_season.name, league_season: league_season)
+      group.league_season_rankings.update_all(points: 0, payouts: 0)
 
       common_rank(group)
     end
 
     def rank_scoring_group_season
+      league_season.league_season_ranking_groups.destroy_all # we always destroy these
+
       league_season.league_season_scoring_groups.each do |scoring_group|
         group = LeagueSeasonRankingGroup.find_or_create_by(name: scoring_group.name, league_season: league_season)
 
@@ -117,6 +120,7 @@ module LeagueSeasonRankingGroups
           quantity_at_rank += 1
         end
 
+        result.reload
         result.lock!
         result.rank = rank
         result.save

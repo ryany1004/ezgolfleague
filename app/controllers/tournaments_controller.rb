@@ -157,6 +157,9 @@ class TournamentsController < BaseController
 
   def rescore_players
     @tournament.tournament_days.each do |d|
+      TournamentService::ShadowStrokePlay.call(d)
+      d.reload
+
       d.score_all_rules(delete_first: true)
     end
 

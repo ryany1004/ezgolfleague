@@ -70,31 +70,35 @@ class Scorecard < ApplicationRecord
     false
   end
 
+  def stroke_play_results
+    tournament_day.stroke_play_scoring_rule.tournament_day_results
+  end
+
   def gross_score
-    tournament_day_results.first ? tournament_day_results.first&.gross_score : 0
+    stroke_play_results.first ? stroke_play_results.first&.gross_score : 0
   end
 
   def net_score
-    tournament_day_results.first ? tournament_day_results.first&.net_score : 0
+    stroke_play_results.first ? stroke_play_results.first&.net_score : 0
   end
 
   def adjusted_score
-    tournament_day_results.first ? tournament_day_results.first&.adjusted_score : 0
+    stroke_play_results.first ? stroke_play_results.first&.adjusted_score : 0
   end
 
   def front_nine_score(use_handicap = false)
     if use_handicap
-      tournament_day_results.first ? tournament_day_results.first&.front_nine_net_score : 0
+      stroke_play_results.first ? stroke_play_results.first&.front_nine_net_score : 0
     else
-      tournament_day_results.first ? tournament_day_results.first&.front_nine_gross_score : 0
+      stroke_play_results.first ? stroke_play_results.first&.front_nine_gross_score : 0
     end
   end
 
   def back_nine_score(use_handicap = false)
     if use_handicap
-      tournament_day_results.first ? tournament_day_results.first&.back_nine_net_score : 0
+      stroke_play_results.first ? stroke_play_results.first&.back_nine_net_score : 0
     else
-      tournament_day_results.first ? tournament_day_results.first&.back_nine_gross_score : 0
+      stroke_play_results.first ? stroke_play_results.first&.back_nine_gross_score : 0
     end
   end
 

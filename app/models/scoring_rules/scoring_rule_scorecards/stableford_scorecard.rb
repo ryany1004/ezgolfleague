@@ -8,12 +8,24 @@ module ScoringRuleScorecards
       true
     end
 
-    def front_nine_score(_ = false)
-      tournament_day_results.first ? tournament_day_results.first&.front_nine_net_score : 0
+    def should_total?
+      true
     end
 
-    def back_nine_score(_ = false)
-      tournament_day_results.first ? tournament_day_results.first&.back_nine_net_score : 0
+    def front_nine_score(use_handicap = false)
+      if use_handicap
+        tournament_day_results.first ? tournament_day_results.first&.front_nine_net_score : 0
+      else
+        tournament_day_results.first ? tournament_day_results.first&.front_nine_gross_score : 0
+      end
+    end
+
+    def back_nine_score(use_handicap = false)
+      if use_handicap
+        tournament_day_results.first ? tournament_day_results.first&.back_nine_net_score : 0
+      else
+        tournament_day_results.first ? tournament_day_results.first&.back_nine_gross_score : 0
+      end
     end
 
     def calculate_scores

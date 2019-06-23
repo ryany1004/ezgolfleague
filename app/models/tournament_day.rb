@@ -272,25 +272,20 @@ class TournamentDay < ApplicationRecord
     matchup.save
   end
 
-  def strip_to_front_9
-    self.tournament_groups.each do |g|
-      g.golf_outings.each do |o|
-        o.scorecard.scores.each_with_index do |s, i|
-          s.destroy if i > 8
-        end
-      end
-    end
-  end
-
   def scorecard_base_scoring_rule
     @scorecard_base_scoring_rule ||= scoring_rules.find_by(primary_rule: true)
   end
 
+  def base_is_stroke_play?
+    scorecard_base_scoring_rule&.instance_of?(StrokePlayScoringRule)
+  end
+
   def stroke_play_scoring_rule
-    if scorecard_base_scoring_rule&.instance_of?(StrokePlayScoringRule)
+    if base_is_stroke_play?
       scorecard_base_scoring_rule
     else
-      scoring_rules.find_by(base_stroke_play: true)
+      rule = scoring_rules.find_by(base_stroke_play: true)
+      rule.presence || scorecard_base_scoring_rule
     end
   end
 
