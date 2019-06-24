@@ -101,6 +101,8 @@ module ScoringRuleScorecards
     end
 
     def match_has_ended?
+      return true if running_score.blank? || opponent_running_score.blank?
+
       player_score_delta = (running_score - opponent_running_score).abs
       player_score_delta > unplayed_holes || unplayed_holes.zero?
     end
