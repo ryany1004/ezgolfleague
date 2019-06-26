@@ -4,7 +4,7 @@ common: &defaults
 
   # key: Your Organization key for Scout APM. Found on the settings screen.
   # - Default: none
-  key: 6CxKzjoE6ANGLoxkJ63Q
+  key: D9WYFgYuJwew5ZctnsDN
 
   # log_level: Verboseness of logs.
   # - Default: 'info'
@@ -26,7 +26,7 @@ production:
 
 development:
   name: "EZ Golf League - Development"
-  key: 6CxKzjoE6ANGLoxkJ63Q
+  key: D9WYFgYuJwew5ZctnsDN
   log_level: debug
   monitor: true
   dev_trace: true
