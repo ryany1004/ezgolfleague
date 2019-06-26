@@ -21,8 +21,8 @@ staging:
 
 beta:
   adapter: postgresql
-  host: localhost
-  database: ezgolfleague_staging
+  host: 192.168.211.33
+  database: ezgolfleague_production
   username: postgres
   pool: 20
 
