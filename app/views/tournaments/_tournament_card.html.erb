@@ -4,7 +4,7 @@
       <div class="tournaments-card-slider-top">
         <div class="overlay"></div>
         <p class="text-uppercase para-1"><%= tournament.tournament_starts_at.to_s(:standard) %></p>
-        <p class="text-uppercase para-2"><%= truncate(tournament.first_day.course.name, length: 35) %></p>
+        <p class="text-uppercase para-2"><%= truncate(tournament.first_day.course.name, length: 35) unless tournament.first_day.blank? %></p>
         <h2><%= truncate(tournament.name, length: 40) %></h2>
         <%= image_tag "course_backgrounds/#{rand(6)}.jpg", class: "img-fluid" %>
       </div>
