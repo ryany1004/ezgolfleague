@@ -2,7 +2,7 @@
     <div class="view-tournament-card h-100">
         <div class="upcoming-tournaments-body text-center">
             <h2>You have no upcoming tournaments.</h2>
-            <%= link_to "Create Tournament", new_league_tournament_path(current_user.current_league), class: "btn btn-primary" %>
+            <%= link_to "Create Tournament", new_league_tournament_path(current_user.selected_league), class: "btn btn-primary" %>
         </div><!-- /.upcoming-tournaments-body -->
         <% if tournament.present? %>
           <div class="upcoming-tournaments-med">
