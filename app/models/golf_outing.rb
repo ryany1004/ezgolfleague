@@ -51,8 +51,7 @@ class GolfOuting < ApplicationRecord
     # handle scoring rules
     tournament_group.tournament_day.scoring_rules.each do |rule|
       rule.scoring_rule_participations.where(user: user).find_each do |p|
-        p.toggle :disqualified
-        p.save!
+        p.update(disqualified: disqualified)
       end
     end
 
@@ -62,8 +61,7 @@ class GolfOuting < ApplicationRecord
 
     daily_team.users.each do |u|
       team_outing = tournament_group.tournament_day.golf_outing_for_player(u)
-      team_outing.disqualified = !team_outing.disqualified unless u == user
-      team_outing.save
+      team_outing.update(disqualified: disqualified) unless u == user
     end
   end
 end
