@@ -71,7 +71,7 @@ class Scorecard < ApplicationRecord
   end
 
   def stroke_play_results
-    tournament_day.stroke_play_scoring_rule.tournament_day_results
+    tournament_day.stroke_play_scoring_rule.tournament_day_results.where(user: user)
   end
 
   def gross_score
@@ -108,6 +108,15 @@ class Scorecard < ApplicationRecord
   end
 
   def course_handicap
+    team_handicap = tournament_day.scorecard_base_scoring_rule.handicap_computer.course_handicap_for_game_type(golf_outing)
+    if team_handicap.present?
+      team_handicap.to_i
+    else
+      golf_outing.course_handicap.to_i
+    end
+  end
+
+  def raw_course_handicap
     golf_outing.course_handicap.to_i
   end
 

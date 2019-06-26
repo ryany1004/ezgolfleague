@@ -1,5 +1,3 @@
-# used in the match play scorecard only
-
 module HandicapComputer
   class MatchPlayHandicapComputer < BaseHandicapComputer
     def displayable_handicap_allowance(user:)
@@ -21,7 +19,6 @@ module HandicapComputer
       allowance = []
       if user_course_handicap > opponent_course_handicap
         baseline_handicap = 0
-
         baseline_handicap = user_course_handicap - opponent_course_handicap
 
         Rails.logger.debug { "MatchPlayHandicapComputer Baseline: #{baseline_handicap} from user #{user_course_handicap} and opponent #{opponent_course_handicap}" }

@@ -236,6 +236,11 @@ class ScoringRule < ApplicationRecord
     @users_eligible_for_payouts ||= users.where(scoring_rule_participations: { disqualified: false }).uniq
   end
 
+  def user_disqualified?(user)
+    participation = scoring_rule_participations.find_by(user: user)
+    participation.present? ? participation.disqualified : false
+  end
+
   def cost_breakdown_for_user(user:, include_credit_card_fees: true)
     cost_lines = [
       { name: "#{name} Fees", price: dues_amount.to_f, server_id: id.to_s }

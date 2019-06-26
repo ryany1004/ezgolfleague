@@ -17,10 +17,10 @@ module HandicapComputer
     end
 
     def handicap_allowance(user:)
-      golf_outing = self.tournament_day.golf_outing_for_player(user)
+      golf_outing = tournament_day.golf_outing_for_player(user)
       return nil if golf_outing.blank? # did not play
 
-      course_handicap = self.course_handicap_for_game_type(golf_outing)
+      course_handicap = course_handicap_for_game_type(golf_outing)
 
       allowance = Rails.cache.fetch("golf_outing#{golf_outing.id}-#{golf_outing.updated_at.to_i}", expires_in: 15.minute, race_condition_ttl: 10) do
         return nil if golf_outing.course_tee_box.blank?
@@ -64,6 +64,10 @@ module HandicapComputer
       end
 
       allowance
+    end
+
+    def team_handicap_for_user(user)
+      nil
     end
 
     def course_handicap_for_game_type(golf_outing)

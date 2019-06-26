@@ -6,6 +6,8 @@ module ScoringRuleScorecards
       user1 = user
       user2 = opponent
 
+      return (@scoring_rule.course_holes.count * per_win) if @scoring_rule.user_disqualified?(opponent)
+
       scorecard1 = tournament_day.primary_scorecard_for_user(user1)
       scorecard2 = tournament_day.primary_scorecard_for_user(user2)
 
