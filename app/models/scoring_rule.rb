@@ -237,7 +237,8 @@ class ScoringRule < ApplicationRecord
   end
 
   def user_disqualified?(user)
-    scoring_rule_participations.find_by(user: user).disqualified
+    participation = scoring_rule_participations.find_by(user: user)
+    participation.present? ? participation.disqualified : false
   end
 
   def cost_breakdown_for_user(user:, include_credit_card_fees: true)
