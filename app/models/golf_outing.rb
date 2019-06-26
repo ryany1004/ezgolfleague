@@ -45,14 +45,14 @@ class GolfOuting < ApplicationRecord
   end
 
   def disqualify
-    self.disqualified = !disqualified
+    toggle :disqualified
     save
 
     # handle scoring rules
     tournament_group.tournament_day.scoring_rules.each do |rule|
       rule.scoring_rule_participations.where(user: user).find_each do |p|
-        p.disqualified = !p.disqualified
-        p.save
+        p.toggle :disqualified
+        p.save!
       end
     end
 
