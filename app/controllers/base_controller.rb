@@ -14,7 +14,9 @@ class BaseController < ActionController::Base
   def forward_to_beta
     return if Rails.env.development? || Rails.env.staging?
 
-    if current_user.beta_server && !/^beta/.match(request.host)
+    if params[:set_env] == 'production'
+      current_user.update(beta_server: false)
+    elsif current_user.beta_server && !/^beta/.match(request.host)
       redirect_to("#{request.protocol}beta.ezgolfleague.com#{request.original_fullpath}", status: 302)
     end
   end
