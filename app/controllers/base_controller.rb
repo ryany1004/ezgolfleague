@@ -13,6 +13,7 @@ class BaseController < ActionController::Base
 
   def forward_to_beta
     return if Rails.env.development? || Rails.env.staging?
+    return if current_user.blank?
 
     if params[:set_env] == 'production'
       current_user.update(beta_server: false)
