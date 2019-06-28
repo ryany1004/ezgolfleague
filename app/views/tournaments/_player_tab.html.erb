@@ -4,7 +4,6 @@
       <tr class="text-uppercase">
         <th scope="col" class="pl-5 pr-0">player</th>
         <th scope="col">tee time</th>
-        <th scope="col">dues paid</th>
         <th scope="col">contests</th>
         <th scope="col"></th>
       </tr>
@@ -21,13 +20,6 @@
             </div>
           </td>
           <td><%= tournament_day.tournament_group_for_player(player).tee_time_at.to_s(:time_only) %></td>
-          <td class="paid-td">
-            <% if tournament_day.tournament.user_has_paid?(player) %>
-            <span class="color-1"></span>Paid
-            <% else %>
-            <span class="color-2"></span>Unpaid
-            <% end %>
-          </td>
           <td class="paid-td">XXXX</td>
           <td class="pl-0">
             <div class="dropdown players-edit-drop-down">

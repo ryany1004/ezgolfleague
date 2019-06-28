@@ -47,29 +47,14 @@
           </div>
           <!-- /.col-md-8 -->  
           <div class="col-md-3">
-            <div class="sidebar-slider-card">
-              <h2 class="text-uppercase">registration closed</h2>
-              <p>Your tournament is live. Tournament starts in 5D:8H:4M</p>
-              <a href="#edit-tee-times" class="btn btn-primary popup-with-zoom-anim">Edit Tee Times</a>  
-              <!-- <a href="#" class="btn btn-success">Add Players</a> -->
-              <ul class="list-inline">
-                <li class="list-inline-item active"><a href="#">1</a></li>
-                <li class="list-inline-item active"><a href="#">2</a></li>
-                <li class="list-inline-item"><a href="#">3</a></li>
-                <li class="list-inline-item"><a href="#">4</a></li>
-                <li class="list-inline-item"><a href="#">5</a></li>
-                <li class="list-inline-item"><a href="#">6</a></li>
-              </ul>
-            </div>
+            <%= render partial: 'tournament_sidebar_card', locals: { tournament: @tournament } %>
+
             <div class="list-group sidebar-list-group">
               <a href="#" class="list-group-item list-group-item-action">
               <%= image_tag('settings.png') %>Settings
               </a>
               <a href="#" class="list-group-item list-group-item-action">
               <%= image_tag('print-button.png') %>Print Scrorecards
-              </a>
-              <a href="#" class="list-group-item list-group-item-action">
-              <%= image_tag('screen.png') %>Clubhouse View
               </a>
             </div>
           </div>
@@ -333,10 +318,10 @@
         <div class="tornament-info-popup-content-header">       
           <div class="row">
             <div class="col-md-12">
-                <h2>Fall Classic Tournament</h2>
+                <h2><%= truncate(@tournament.name, length: 40) %></h2>
                 <ul class="float-right list-inline">
-                  <li class="list-inline-item text-uppercase">course: brunswick golf course</li>
-                  <li class="list-inline-item text-uppercase">dates: december 18th, 2018</li>
+                  <li class="list-inline-item text-uppercase">course: <%= truncate(@tournament.first_day.course.name, length: 35) %></li>
+                  <li class="list-inline-item text-uppercase">dates: <%= @tournament.first_day.scorecard_base_scoring_rule.course_holes.count %></li>
                 </ul>
             </div>
           </div>
@@ -346,14 +331,14 @@
             <div class="col-md-5 border-right">
               <div class="tornament-info-popup-content-box">
                 <h2>Players</h2>
-                <p>max: 20 players</p>
-                <p>signup: december 1st-10th, 2018</p>
+                <p>max: <%= @tournament.max_players %></p>
+                <p>signup: <%= @tournament.signup_opens_at.to_s(:standard) %> - <%= @tournament.signup_closes_at.to_s(:standard) %></p>
                 <p>dues: $20/pp</p>
               </div>  
               <div class="tornament-info-popup-content-box mt-5">
                 <h2>Tournament Play</h2>
                 <p>holes: 18</p>
-                <p>flights: l: 68 h: 82 teenbox; blue</p>
+                <p>flights: l: 68 h: 82 tee box; blue</p>
                 <p>tee times: 8am start, 4ppl, 10min int.</p>
               </div> 
             </div>
