@@ -47,7 +47,7 @@ module ScoringRuleScorecards
       scorecard = tournament_day.primary_scorecard_for_user(user)
       return 0 if scorecard.blank?
 
-      score = scorecard&.scores.find_by(course_hole: hole)
+      score = scorecard.scores.find_by(course_hole: hole)
       return 0 if score.strokes.blank? || score.strokes.zero?
 
       strokes = 0
@@ -59,17 +59,17 @@ module ScoringRuleScorecards
       end
 
       score = 0
-      if is_double_eagle?(hole, strokes)
+      if double_eagle?(hole, strokes)
         score = scoring_rule.double_eagle_score
-      elsif is_eagle?(hole, strokes)
+      elsif eagle?(hole, strokes)
         score = scoring_rule.eagle_score
-      elsif is_birdie?(hole, strokes)
+      elsif birdie?(hole, strokes)
         score = scoring_rule.birdie_score
-      elsif is_par?(hole, strokes)
+      elsif par?(hole, strokes)
         score = scoring_rule.par_score
-      elsif is_bogey?(hole, strokes)
+      elsif bogey?(hole, strokes)
         score = scoring_rule.bogey_score
-      elsif is_double_bogey_or_worse?(hole, strokes)
+      elsif double_bogey_or_worse?(hole, strokes)
         score = scoring_rule.double_bogey_score
       end
 
@@ -78,64 +78,34 @@ module ScoringRuleScorecards
       score
     end
 
-    def is_double_eagle?(hole, strokes)
+    def double_eagle?(hole, strokes)
       par = hole.par
-
-      if strokes <= par - 3
-        true
-      else
-        false
-      end
+      strokes <= par - 3
     end
 
-    def is_eagle?(hole, strokes)
+    def eagle?(hole, strokes)
       par = hole.par
-
-      if strokes == par - 2
-        true
-      else
-        false
-      end
+      strokes == par - 2
     end
 
-    def is_birdie?(hole, strokes)
+    def birdie?(hole, strokes)
       par = hole.par
-
-      if strokes == par - 1
-        true
-      else
-        false
-      end
+      strokes == par - 1
     end
 
-    def is_par?(hole, strokes)
+    def par?(hole, strokes)
       par = hole.par
-
-      if par == strokes
-        true
-      else
-        false
-      end
+      par == strokes
     end
 
-    def is_bogey?(hole, strokes)
+    def bogey?(hole, strokes)
       par = hole.par
-
-      if strokes == par + 1
-        true
-      else
-        false
-      end
+      strokes == par + 1
     end
 
-    def is_double_bogey_or_worse?(hole, strokes)
+    def double_bogey_or_worse?(hole, strokes)
       par = hole.par
-
-      if strokes > par + 1
-        true
-      else
-        false
-      end
+      strokes > par + 1
     end
   end
 end
