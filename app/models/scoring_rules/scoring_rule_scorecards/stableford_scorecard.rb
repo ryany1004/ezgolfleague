@@ -14,17 +14,17 @@ module ScoringRuleScorecards
 
     def front_nine_score(use_handicap = false)
       if use_handicap
-        tournament_day_results.first ? tournament_day_results.first&.front_nine_net_score : 0
+        tournament_day_results.first ? tournament_day_results.first.front_nine_net_score : 0
       else
-        tournament_day_results.first ? tournament_day_results.first&.front_nine_gross_score : 0
+        tournament_day_results.first ? tournament_day_results.first.front_nine_gross_score : 0
       end
     end
 
     def back_nine_score(use_handicap = false)
       if use_handicap
-        tournament_day_results.first ? tournament_day_results.first&.back_nine_net_score : 0
+        tournament_day_results.first ? tournament_day_results.first.back_nine_net_score : 0
       else
-        tournament_day_results.first ? tournament_day_results.first&.back_nine_gross_score : 0
+        tournament_day_results.first ? tournament_day_results.first.back_nine_gross_score : 0
       end
     end
 
@@ -44,7 +44,7 @@ module ScoringRuleScorecards
     end
 
     def score_for_hole(user, use_handicap, hole)
-      scorecard = self.tournament_day.primary_scorecard_for_user(user)
+      scorecard = tournament_day.primary_scorecard_for_user(user)
       return 0 if scorecard.blank?
 
       score = scorecard&.scores.find_by(course_hole: hole)
@@ -59,30 +59,32 @@ module ScoringRuleScorecards
       end
 
       score = 0
-      if self.is_double_eagle?(hole, strokes)
-        score = self.scoring_rule.double_eagle_score
-      elsif self.is_eagle?(hole, strokes)
-        score = self.scoring_rule.eagle_score
-      elsif self.is_birdie?(hole, strokes)
-        score = self.scoring_rule.birdie_score
-      elsif self.is_par?(hole, strokes)
-        score = self.scoring_rule.par_score
-      elsif self.is_bogey?(hole, strokes)
-        score = self.scoring_rule.bogey_score
-      elsif self.is_double_bogey_or_worse?(hole, strokes)
-        score = self.scoring_rule.double_bogey_score
+      if is_double_eagle?(hole, strokes)
+        score = scoring_rule.double_eagle_score
+      elsif is_eagle?(hole, strokes)
+        score = scoring_rule.eagle_score
+      elsif is_birdie?(hole, strokes)
+        score = scoring_rule.birdie_score
+      elsif is_par?(hole, strokes)
+        score = scoring_rule.par_score
+      elsif is_bogey?(hole, strokes)
+        score = scoring_rule.bogey_score
+      elsif is_double_bogey_or_worse?(hole, strokes)
+        score = scoring_rule.double_bogey_score
       end
 
-      return score
+      Rails.logger.debug { "STABLEFORD score_for_hole #{user.complete_name} Handicap: #{use_handicap}. Hole #{hole.hole_number} - #{score}" }
+
+      score
     end
 
     def is_double_eagle?(hole, strokes)
       par = hole.par
 
       if strokes <= par - 3
-      	true
+        true
       else
-      	false
+        false
       end
     end
 

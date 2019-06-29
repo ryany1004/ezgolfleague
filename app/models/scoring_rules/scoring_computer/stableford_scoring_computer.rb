@@ -23,13 +23,17 @@ module ScoringComputer
         back_nine_net_score = 0
 
         scorecard.scores.each do |score|
-          Rails.logger.debug { "Stableford #{user.complete_name} #{score.strokes} (#{score.net_strokes}) on #{score.course_hole.hole_number}" }
+          Rails.logger.debug { "Stableford #{user.complete_name} #{score.strokes} (#{score.net_strokes}) on #{score.course_hole.hole_number}." }
 
-          front_nine_gross_score += score.strokes if front_nine_hole_numbers.include? score.course_hole.hole_number
-          front_nine_net_score += score.net_strokes if front_nine_hole_numbers.include? score.course_hole.hole_number
+          if front_nine_hole_numbers.include? score.course_hole.hole_number
+            front_nine_gross_score += score.strokes
+            front_nine_net_score += score.net_strokes
+          end
 
-          back_nine_gross_score += score.strokes if back_nine_hole_numbers.include? score.course_hole.hole_number
-          back_nine_net_score += score.net_strokes if back_nine_hole_numbers.include? score.course_hole.hole_number
+          if back_nine_hole_numbers.include? score.course_hole.hole_number
+            back_nine_gross_score += score.strokes
+            back_nine_net_score += score.net_strokes
+          end
         end
 
         result = @scoring_rule.tournament_day_results.find_or_create_by(user: user) # TODO: create_or_find_by
