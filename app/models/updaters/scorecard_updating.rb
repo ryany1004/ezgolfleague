@@ -24,9 +24,7 @@ module Updaters
           if should_update
             score.strokes = strokes
 
-            if notify_score_scores && !score.has_notified
-              Notifications::ScoreNotification.notify_for_score(score)
-            end
+            Notifications::ScoreNotification.notify_for_score(score) if notify_score_scores && !score.has_notified
 
             score.has_notified = true
             score.save
@@ -34,7 +32,7 @@ module Updaters
             Rails.logger.info { "Updating Score: #{score.id}" }
 
             scorecard_to_rescore = score.scorecard
-            UpdateUserScorecardJob.perform_later(scorecard_to_rescore, []) if scorecard_to_rescore != primary_scorecard && !scorecard_to_rescore.blank?
+            UpdateUserScorecardJob.perform_later(scorecard_to_rescore, []) if scorecard_to_rescore != primary_scorecard && scorecard_to_rescore.present?
           else
             Rails.logger.info { "Not Updating Scores - Too Old #{date_scored}" }
           end
