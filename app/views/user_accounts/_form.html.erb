@@ -107,6 +107,11 @@
   <% end -%>
 
   <% if current_user.is_super_user %>
+  <h3>Environment</h3>
+  <div class="well">
+    <%= f.input :beta_server, label: 'Use Beta Server?', as: :boolean %>
+  </div>
+
   <h3>Parent User</h3>
   <div class="well">
     <%= f.input :parent_id, collection: User.all.order("last_name"), label: false, label_method: :complete_name, include_blank: true, input_html: { class: 'chosen-select' } %>

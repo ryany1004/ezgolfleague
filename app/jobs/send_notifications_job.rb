@@ -1,6 +1,6 @@
 class SendNotificationsJob < ApplicationJob
   def perform
-    @templates = NotificationTemplate.where("deliver_at <= ?", DateTime.now).where(has_been_delivered: false)
+    @templates = NotificationTemplate.where('deliver_at <= ?', Time.zone.now).where(has_been_delivered: false)
 
     @templates.each do |t|
       t.has_been_delivered = true
@@ -20,14 +20,14 @@ class SendNotificationsJob < ApplicationJob
           email_from = t.league.league_admins.first.email
         end
 
-        #email
+        # email
         begin
-          NotificationMailer.notification_message(r, email_from, subject, t.body).deliver_later if r.wants_email_notifications
+          NotificationMailer.notification_message(r, email_from, subject, t.body).deliver_later if r.wants_email_notifications && r.valid?
         rescue => e
           Rails.logger.info { "Error Sending Email Notification: #{e}" }
         end
 
-        #push
+        # push
         begin
           r.send_mobile_notification("#{t.title}: #{t.body}") if r.wants_push_notifications
         rescue => e

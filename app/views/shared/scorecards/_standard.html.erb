@@ -29,8 +29,7 @@
 	</thead>
 	<tbody>
     <% p.all_scorecards.each do |scorecard| -%>
-      <!-- Scorecard ID: <%= scorecard.id %> -->
-      <tr>
+      <tr data-scorecard-id="<%= scorecard.id %>" data-scorecard-scores-count="<%= scorecard.scores.count %>">
         <td>
           <%= scorecard.flight_number %>
           <% if scorecard.matchup_position_indicator.present? %>
@@ -44,10 +43,10 @@
         <% end -%>
         <% scorecard.scores.each_slice(p.number_of_holes / 2).to_a.each_with_index do |split, j| %>
           <% split.each do |score| -%>
-            <td>
+            <td data-score-id="<%= score.id %>">
               <%= link_to_unless !p.user_can_edit_scorecard?(scorecard), "#{scorecard_score_helper(score, print_mode)}", "#", {"data-toggle" => "modal", "data-target" => "#Group#{score.course_hole.id}"} %>
 
-              <% if handicap_allowance_strokes_for_hole(handicap_allowance_for_scorecard(scorecard), score.course_hole) > 0 -%>
+              <% if handicap_allowance_strokes_for_hole(handicap_allowance_for_scorecard(scorecard), score.course_hole).positive? -%>
                   </br><span class="label label-success">-<%= handicap_allowance_strokes_for_hole(handicap_allowance_for_scorecard(scorecard), score.course_hole) %></span>
               <% end -%>
 
@@ -56,17 +55,20 @@
               <% end -%>
 
               <% p.scorecard_score_cell_partials.each do |partial| %>
-                </br><%= render partial: partial[:partial], locals: {scoring_rule: partial[:rule], score: score, scorecards: p.all_scorecards} %>
+                </br>
+                <%= render partial: partial[:partial], locals: {scoring_rule: partial[:rule], score: score, scorecards: p.all_scorecards} %>
               <% end %>
             </td>
           <% end -%>
           <td>
             <% if scorecard.should_subtotal? -%>
-              <strong>
-                <% if j == 0 -%>
+              <strong name="subtotal-<%= j %>">
+                <% if j.zero? -%>
                   <%= score_print_helper(scorecard.front_nine_score, print_mode) %> <%= front_nine_handicap_for_scorecard(scorecard, print_mode) %>
                 <% else -%>
-                  <%= score_print_helper(scorecard.front_nine_score, print_mode) %> <%= front_nine_handicap_for_scorecard(scorecard, print_mode) %><br/><%= score_print_helper(scorecard.back_nine_score, print_mode) %> <%= back_nine_handicap_for_scorecard(scorecard, print_mode) %>
+                  <%= score_print_helper(scorecard.front_nine_score, print_mode) %> <%= front_nine_handicap_for_scorecard(scorecard, print_mode) %>
+                  <br/>
+                  <%= score_print_helper(scorecard.back_nine_score, print_mode) %> <%= back_nine_handicap_for_scorecard(scorecard, print_mode) %>
                 <% end -%>
               </strong>
             <% else -%>

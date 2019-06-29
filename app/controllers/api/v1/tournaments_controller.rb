@@ -9,23 +9,41 @@ class Api::V1::TournamentsController < Api::V1::ApiBaseController
 
       @tournaments = []
     else
-      cache_key = user_tournaments_cache_key
-      @tournaments = Rails.cache.fetch(cache_key, expires_in: 1.hour, race_condition_ttl: 10) do
-        logger.info { "Fetching Tournaments - Not Cached for #{cache_key}" }
+      if params[:fill_league_id].blank?
+        cache_key = user_tournaments_cache_key
+        @tournaments = Rails.cache.fetch(cache_key, expires_in: 1.hour, race_condition_ttl: 10) do
+          logger.info { "Fetching Tournaments - Not Cached for #{cache_key}" }
 
-        todays_tournaments = Tournament.all_today(@current_user.leagues).includes(:league, tournament_days: [:course, scoring_rules: :payments])
-        upcoming_tournaments = Tournament.all_upcoming(@current_user.leagues, nil).includes(:league, tournament_days: [:course, scoring_rules: :payments])
-        past_tournaments = Tournament.all_past(@current_user.leagues, nil).limit(12).reorder(tournament_starts_at: :desc).includes(:league, tournament_days: [:course, scoring_rules: :payments])
+          todays_tournaments = Tournament.all_today(@current_user.leagues).includes(:league, tournament_days: [:course, scoring_rules: :payments])
+          upcoming_tournaments = Tournament.all_upcoming(@current_user.leagues, nil).includes(:league, tournament_days: [:course, scoring_rules: :payments])
+          past_tournaments = Tournament.all_past(@current_user.leagues, nil).limit(12).reorder(tournament_starts_at: :desc).includes(:league, tournament_days: [:course, scoring_rules: :payments])
 
-        tournaments = todays_tournaments + upcoming_tournaments + past_tournaments
-        tournaments = tournaments.select(&:all_days_are_playable?).to_a
-        tournaments = tournaments.uniq
+          tournaments = todays_tournaments + upcoming_tournaments + past_tournaments
+          tournaments = tournaments.select(&:all_days_are_playable?).to_a
+          tournaments = tournaments.uniq
 
-        tournaments
+          tournaments
+        end
+      else
+        logger.info { 'Fetching Historical Tournaments' }
+
+        league = League.find(params[:fill_league_id])
+        tournament_limit = params[:limit]
+
+        @tournaments = Tournament.all_past([league], nil)
+                                 .limit(tournament_limit)
+                                 .reorder(tournament_starts_at: :desc)
+                                 .includes(:league, tournament_days: [:course, scoring_rules: :payments])
       end
     end
 
     fresh_when @tournaments
+  end
+
+  def show
+    @tournament = Tournament.find(params[:id])
+
+    fresh_when @tournament
   end
 
   def results

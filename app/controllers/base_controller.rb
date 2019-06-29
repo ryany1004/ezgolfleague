@@ -8,7 +8,19 @@ class BaseController < ActionController::Base
   end
 
   before_action :authenticate_user!
+  before_action :forward_to_beta
   around_action :user_time_zone, if: :current_user
+
+  def forward_to_beta
+    return if Rails.env.development? || Rails.env.staging?
+    return if current_user.blank?
+
+    if params[:set_env] == 'production'
+      current_user.update(beta_server: false)
+    elsif current_user.beta_server && !/^beta/.match(request.host)
+      redirect_to("#{request.protocol}beta.ezgolfleague.com#{request.original_fullpath}", status: 302)
+    end
+  end
 
   def user_time_zone(&block)
     Time.use_zone(current_user.time_zone, &block)
