@@ -1,8 +1,8 @@
 class TournamentsController < BaseController
   helper Play::TournamentsHelper
 
+  before_action :fetch_league
   before_action :fetch_tournament, except: [:index, :new, :create]
-  before_action :initialize_form, only: [:new, :edit]
   before_action :set_stage
 
   def index
@@ -12,15 +12,9 @@ class TournamentsController < BaseController
       return
     end
 
-    if current_user.is_super_user?
-      @upcoming_tournaments = Tournament.all_upcoming(nil).page(params[:page]).without_count
-      @past_tournaments = Tournament.all_past(nil).reorder(tournament_starts_at: :desc).page(params[:page]).without_count
-      @unconfigured_tournaments = Tournament.all_unconfigured(nil).page(params[:page]).without_count
-    else
-      @upcoming_tournaments = Tournament.all_upcoming(current_user.leagues_admin).page(params[:page]).without_count
-      @past_tournaments = Tournament.all_past(current_user.leagues_admin).reorder(tournament_starts_at: :desc).page(params[:page]).without_count
-      @unconfigured_tournaments = Tournament.all_unconfigured(current_user.leagues_admin).page(params[:page]).without_count
-    end
+    @upcoming_tournaments = Tournament.all_upcoming([@league]).page(params[:page]).without_count
+    @past_tournaments = Tournament.all_past([@league]).reorder(tournament_starts_at: :desc).page(params[:page]).without_count
+    @unconfigured_tournaments = Tournament.all_unconfigured([@league]).page(params[:page]).without_count
 
     if current_user.can_create_tournaments?
       @can_create_tournaments = true
@@ -185,15 +179,15 @@ class TournamentsController < BaseController
                                        tournament_days_attributes: [:id, course_hole_ids: []])
   end
 
-  def fetch_tournament
-    @tournament = fetch_tournament_from_user_for_tournament_id(params[:tournament_id] || params[:id])
+  def fetch_league
+    if current_user.is_super_user?
+      @league = League.find(params[:league_id])
+    else
+      @league = league_from_user_for_league_id(params[:league_id])
+    end
   end
 
-  def initialize_form
-    if current_user.is_super_user?
-      @leagues = League.all.order(:name)
-    else
-      @leagues = current_user.leagues.select { |league| league.membership_for_user(current_user).is_admin }
-    end
+  def fetch_tournament
+    @tournament = fetch_tournament_from_user_for_tournament_id(params[:tournament_id] || params[:id])
   end
 end
