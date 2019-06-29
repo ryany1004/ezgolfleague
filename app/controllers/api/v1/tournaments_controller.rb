@@ -28,6 +28,12 @@ class Api::V1::TournamentsController < Api::V1::ApiBaseController
     fresh_when @tournaments
   end
 
+  def show
+    @tournament = Tournament.find(params[:id])
+
+    fresh_when @tournament
+  end
+
   def results
     @tournament = Tournament.find(params[:tournament_id])
     @uses_scoring_groups = @tournament.league.allow_scoring_groups
