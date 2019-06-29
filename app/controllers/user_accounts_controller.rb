@@ -79,7 +79,7 @@ class UserAccountsController < BaseController
   end
 
   def destroy
-    #remove from future tournaments
+    # remove from future tournaments
     tournaments = Tournament.all_upcoming(@user_account.leagues).each do |t|
       if t.includes_player?(@user_account)
         t.tournament_days.each do |d|

@@ -189,8 +189,6 @@ class League < ApplicationRecord
     false
   end
 
-  ##
-
   def active_season
     this_year_season = self.league_seasons.where("starts_at <= ? AND ends_at >= ?", Date.current.in_time_zone, Date.current.in_time_zone).first
 
@@ -200,18 +198,23 @@ class League < ApplicationRecord
   def active_season_for_user(user)
     this_year_season = user.selected_league.league_seasons.where("starts_at < ? AND ends_at > ?", Date.current.in_time_zone, Date.current.in_time_zone).first
 
-    unless this_year_season.blank?
+    if this_year_season.present?
       this_year_season
     else
       user.selected_league.league_seasons.last
     end
   end
 
-  ##
+  def golfer_count
+    users.count
+  end
+
+  def active_golfer_count
+    league_memberships.active.count
+  end
 
   def state_for_user(user)
-    membership = self.membership_for_user(user)
-
+    membership = membership_for_user(user)
     membership.state
   end
 
@@ -232,6 +235,18 @@ class League < ApplicationRecord
       self.users.order("last_name, first_name")
     else
       self.users.where("users.id NOT IN (?)", ids_to_omit).order("last_name, first_name")
+    end
+  end
+
+  def self.to_csv
+    attributes = %w{name contact_email league_type golfer_count active_golfer_count created_at}
+
+    CSV.generate(headers: true) do |csv|
+      csv << attributes
+
+      all.each do |user|
+        csv << attributes.map{ |attr| user.send(attr) }
+      end
     end
   end
 

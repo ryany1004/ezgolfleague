@@ -123,7 +123,7 @@ class User < ApplicationRecord
   end
 
   def delete_from_drip
-    response = DRIP_CLIENT.unsubscribe(self.email) if Rails.env.production?
+    DRIP_CLIENT.unsubscribe(self.email) if Rails.env.production?
   end
 
   def can_create_tournaments?

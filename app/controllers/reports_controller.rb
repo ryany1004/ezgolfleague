@@ -1,5 +1,5 @@
 class ReportsController < BaseController
-  before_action :fetch_tournament_day, except: [:index, :finalization_report, :leagues_report]
+  before_action :fetch_tournament_day, except: [:index, :finalization_report, :leagues_report, :export_leagues]
 
   def index
     leagues = nil
@@ -16,6 +16,14 @@ class ReportsController < BaseController
 
   def leagues_report
     @leagues = League.all.order(:name)
+  end
+
+  def export_leagues
+    @leagues = League.all.order(:name)
+
+    respond_to do |format|
+      format.csv { send_data @leagues.to_csv, filename: "all_leagues-#{Time.zone.today}.csv" }
+    end
   end
 
   def adjusted_scores

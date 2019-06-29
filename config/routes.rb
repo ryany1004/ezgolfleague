@@ -151,6 +151,7 @@ Rails.application.routes.draw do
       get 'confirmed_players', on: :collection
       get 'finalization_report', on: :collection
       get 'leagues_report', on: :collection
+      patch 'export_leagues', on: :collection
     end
 
     resources :tournaments do
@@ -260,5 +261,4 @@ Rails.application.routes.draw do
     get 'send_tournament_registration_status', on: :collection
     get 'send_tournament_coming_up_emails', on: :collection
   end
-
 end

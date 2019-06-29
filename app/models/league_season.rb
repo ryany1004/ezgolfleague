@@ -56,7 +56,7 @@ class LeagueSeason < ApplicationRecord
   end
 
   def tournaments
-    Tournament.tournaments_happening_at_some_point(self.starts_at, self.ends_at, [self.league], true)
+    Tournament.tournaments_happening_at_some_point(starts_at, ends_at, [league], true)
   end
 
   def season_type
@@ -109,7 +109,7 @@ class LeagueSeason < ApplicationRecord
 
       users_not_in_t << u unless user_is_in_any_team
     end
-    
+
     users_not_in_t
   end
 
