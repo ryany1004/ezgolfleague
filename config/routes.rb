@@ -2,18 +2,18 @@ require 'sidekiq/web'
 
 Rails.application.routes.draw do
   if Rails.env.production?
-    default_url_options host: "app.ezgolfleague.com"
+    default_url_options host: 'app.ezgolfleague.com'
   end
 
   devise_for :users
 
-  root to: 'tournaments#index', constraints: -> (r) { r.env["warden"].authenticate? && r.env['warden'].user.is_any_league_admin? }, as: :league_admin_root
+  root to: 'tournaments#index', constraints: ->(r) { r.env['warden'].authenticate? && r.env['warden'].user.is_any_league_admin? }, as: :league_admin_root
   root to: 'play/dashboard#index'
 
   get 'apple-app-site-association', to: 'api/v1/tournaments#app_association'
   get '.well-known/apple-app-site-association', to: 'api/v1/tournaments#app_association'
 
-  authenticate :user, -> user { user.is_super_user } do
+  authenticate :user, ->(user) { user.is_super_user } do
     mount Sidekiq::Web => '/jobs'
   end
 
@@ -51,7 +51,7 @@ Rails.application.routes.draw do
       get :setup_completed, on: :collection
     end
 
-    resource :user_account, only: [:edit, :update], controller: "user_account" do
+    resource :user_account, only: [:edit, :update], controller: 'user_account' do
       get 'password'
       patch 'change_password'
     end
@@ -70,8 +70,8 @@ Rails.application.routes.draw do
   end
 
   # API
-  namespace "api" do
-    namespace "v1" do
+  namespace 'api' do
+    namespace 'v1' do
       get 'current_day_leaderboard' => 'scorecards#current_day_leaderboard'
 
       resources :sessions, only: [:create] do
@@ -84,7 +84,6 @@ Rails.application.routes.draw do
         get 'league_tournament_info', on: :collection
         get 'notify_interest', on: :collection
         post 'pay_dues', on: :collection
-        #post 'create_league', on: :collection
       end
 
       resources :scores do
@@ -116,7 +115,7 @@ Rails.application.routes.draw do
     end
   end
 
-  #this is for admin
+  # this is for admin
   resources :leagues do
     patch 'update_from_ghin'
     patch 'update_calculated_handicaps'
@@ -180,14 +179,14 @@ Rails.application.routes.draw do
           patch 'disqualify'
         end
 
-        resource :team_configuration, path: "copy_teams", only: [:update]
+        resource :team_configuration, path: 'copy_teams', only: [:update]
       end
 
-      resource :auto_scheduling, path: "autoschedule", only: [:update], controller: "tournaments/auto_scheduling" do
+      resource :auto_scheduling, path: 'autoschedule', only: [:update], controller: 'tournaments/auto_scheduling' do
         patch 'run_auto_scheduling'
       end
 
-      resource :finalization, path: "finalize", only: [:show, :update], controller: "tournaments/finalization"
+      resource :finalization, path: 'finalize', only: [:show, :update], controller: 'tournaments/finalization'
 
       # Individual Outings
       get 'tournament_days/:tournament_day_id/players' => 'golf_outings#players', as: :day_players
@@ -228,7 +227,7 @@ Rails.application.routes.draw do
   end
 
   resources :courses do
-  	get 'list', on: :collection
+    get 'list', on: :collection
 
     resources :course_tee_boxes
 
