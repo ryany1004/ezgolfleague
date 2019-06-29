@@ -97,7 +97,6 @@ Rails.application.routes.draw do
 
       resources :tournaments do
         get 'results'
-
         get 'validate_tournaments_exist', on: :collection
 
         resources :tournament_days, only: [:show] do
