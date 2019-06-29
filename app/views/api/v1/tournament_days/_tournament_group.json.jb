@@ -4,8 +4,7 @@ Rails.cache.fetch ['v1', tournament_group.cache_key_with_version] do
     api_time_description: tournament_group.api_time_description,
     tee_time_at: tournament_group.tee_time_at,
     show_players_tee_times: tournament_group.tournament_day.tournament.show_players_tee_times,
-    max_number_of_players: tournament_group.max_number_of_players,
-    number_of_tournament_registrations: tournament_group.tournament_day.tournament.number_of_players
+    max_number_of_players: tournament_group.max_number_of_players
   }
 
   json[:golf_outings] = tournament_group.api_golf_outings.map do |golf_outing|
