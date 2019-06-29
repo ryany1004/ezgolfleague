@@ -31,8 +31,8 @@ class User < ApplicationRecord
   has_and_belongs_to_many :flights, inverse_of: :users
   has_and_belongs_to_many :daily_teams, inverse_of: :users
   has_and_belongs_to_many :league_season_scoring_groups, inverse_of: :users
-  
-  validates :email, presence: true, uniqueness: true
+
+  validates :email, presence: true, uniqueness: true, format: { with: /\A[\w+\-.]+@[a-z\d\-]+(\.[a-z]+)*\.[a-z]+\z/i }
   validates :first_name, presence: true
   validates :last_name, presence: true
   validates :time_zone, presence: true
