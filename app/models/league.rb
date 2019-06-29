@@ -23,8 +23,8 @@ class League < ApplicationRecord
   attr_encrypted :stripe_production_publishable_key, key: ENCRYPYTED_ATTRIBUTES_KEY, algorithm: 'aes-256-cbc', mode: :single_iv_and_salt, insecure_mode: true
 
   def self.clean_for_dev
-    League.all.each do |l|
-    	l.location = 'x' if l.location.blank?
+    League.all.find_each do |l|
+      l.location = 'x' if l.location.blank?
       l.encrypted_stripe_test_secret_key = nil
       l.encrypted_stripe_production_secret_key = nil
       l.encrypted_stripe_test_publishable_key = nil
