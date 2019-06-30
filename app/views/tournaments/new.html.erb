@@ -17,14 +17,14 @@
             </div>
             <div class="line"></div>
             <div class="step" data-target="#test-l-3">
-              <button type="button" class="btn btn-link step-trigger" role="tab" id="stepper1trigger3" aria-controls="test-l-2">
-                <span class="bs-stepper-circle">2</span>                 
+              <button type="button" class="btn btn-link step-trigger" role="tab" id="stepper1trigger3" aria-controls="test-l-3">
+                <span class="bs-stepper-circle">3</span>                 
               </button>
             </div>
             <div class="line"></div>
             <div class="step" data-target="#test-l-4">
-              <button type="button" class="btn btn-link step-trigger" role="tab" id="stepper1trigger4" aria-controls="test-l-3">
-                <span class="bs-stepper-circle">3</span>                  
+              <button type="button" class="btn btn-link step-trigger" role="tab" id="stepper1trigger4" aria-controls="test-l-4">
+                <span class="bs-stepper-circle">4</span>                  
               </button>
             </div>
           </div>
@@ -34,7 +34,6 @@
                 <div class="step-1-content">
                   <h2>Create a Tournament</h2>
                   <p>This is simple process to make your tournament.</p>
-                  <p> You can create a tournament in under a minute.</p>
                   <div class="step-1-content-form">
                     <% if @tournament.new_record? || is_editable?(@tournament) -%>
                       <%= simple_form_for [current_user.selected_league, @tournament], :defaults => { :input_html => { :class => "form-control", :label => false }} do |f| %>
@@ -43,7 +42,7 @@
                             <%= notification %>
                           </div>
                         <% end %>
-                        <div class="form-group">
+                        <div>
                             <div class="row">
                               <div class="col-md-4 text-right">
                                   <label>Tournament Name</label>
@@ -54,19 +53,9 @@
                             </div>
                         </div> 
                         <div class="form-group">
-                            <div class="row">
-                              <div class="col-md-4 text-right">
-                                  <label>Golf Course</label>
-                              </div>
-                                <div class="col-md-5">
-                                  <%= select_tag('course', options_from_collection_for_select(@courses, 'id', 'name')) %>
-                              </div>
-                            </div>
-                        </div> 
-                        <div class="form-group">
                           <div class="row">
                             <div class="col-md-4 text-right">
-															<label>Date</label>
+															<label>Tournament Date</label>
                             </div>
                               <div class="col-md-5">
                                 <div class="date-inputs">
@@ -82,6 +71,16 @@
                             </div>
                           </div>
                         </div> 
+                        <div class="form-group">
+                            <div class="row">
+                              <div class="col-md-4 text-right">
+                                  <label>Golf Course</label>
+                              </div>
+                                <div class="col-md-5">
+                                  <%= select_tag('course', options_from_collection_for_select(@courses, 'id', 'name')) %>
+                              </div>
+                            </div>
+                        </div> 
                       <% end %>
                     <% end %>
                   </div>            
@@ -92,21 +91,30 @@
                 </div>
               </div>
               <div id="test-l-2" role="tabpanel" class="content" aria-labelledby="stepper1trigger2">
-                <h2 class="text-center">Step 2</h2>
+                <div class="step-1-content">
+                  <h2 class="text-center">Tournament Play</h2>
+                  <p>How do you want to play this tournament?</p> 
+                </div>
                 <div class="cat-card-footer">
                   <button class="btn btn-success" onclick="stepper1.previous()">Previous</button>
                   <button class="btn btn-success" onclick="stepper1.next()">Next</button>
                 </div>                  
               </div>
               <div id="test-l-3" role="tabpanel" class="content" aria-labelledby="stepper1trigger3">
-                <h2 class="text-center">Step 3</h2>
+                <div class="step-1-content">
+                  <h2 class="text-center">Flights</h2>
+                  <p>Add flights for your players to your tournament.</p>
+                </div>
                 <div class="cat-card-footer">
                   <button class="btn btn-success" onclick="stepper1.previous()">Previous</button>
                   <button class="btn btn-success" onclick="stepper1.next()">Next</button>
                 </div>                  
               </div>
               <div id="test-l-4" role="tabpanel" class="content text-center" aria-labelledby="stepper1trigger4">
-                <h2 class="text-center">Step 4</h2>
+                <div class="step-1-content">
+                  <h2 class="text-center">Game Types</h2>
+                  <p>Add different game types to your tournament.</p>
+                </div>
                 <div class="cat-card-footer">
                     <button class="btn btn-success mt-5" onclick="stepper1.previous()">Previous</button>
                     <button type="submit" class="btn btn-success mt-5">Submit</button>
