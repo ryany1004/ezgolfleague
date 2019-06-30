@@ -1,0 +1,48 @@
+<div class="tornament-info-popup-header-top">
+  <div class="row">
+    <div class="col-md-12">
+      <h2>Tournament Info</h2>
+    </div>
+  </div>          
+</div><!-- /.tornament-info-popup-header-top -->
+<div class="tornament-info-popup-content-header">       
+  <div class="row">
+    <div class="col-md-12">
+      <h2><%= truncate(tournament.name, length: 40) %></h2>
+      <ul class="float-right list-inline">
+        <li class="list-inline-item text-uppercase">course: <%= truncate(tournament.first_day.course.name, length: 35) %></li>
+        <li class="list-inline-item text-uppercase">date: <%= tournament.tournament_starts_at.to_s(:standard) %></li>
+      </ul>
+    </div>
+  </div>
+</div><!-- /.tornament-info-popup-content-header -->  
+<div class="tornament-info-popup-content">
+  <div class="row">
+    <div class="col-md-5 border-right">
+      <div class="tornament-info-popup-content-box">
+        <h2>Players</h2>
+        <p>max: <%= tournament.max_players %></p>
+        <p>signup: <%= tournament.signup_opens_at.to_s(:standard) %> - <%= tournament.signup_closes_at.to_s(:standard) %></p>
+        <p>dues: $20/pp</p>
+      </div>  
+      <div class="tornament-info-popup-content-box mt-5">
+        <h2>Tournament Play</h2>
+        <p>holes: <%= tournament.first_day.scorecard_base_scoring_rule.course_holes.count %></p>
+        <p>flights: l: 68 h: 82 tee box; blue</p>
+        <p>tee times: 8am start, 4ppl, 10min int.</p>
+      </div> 
+    </div>
+    <div class="col-md-7">
+      <div class="tornament-info-popup-content-right">
+        <div class="tornament-info-popup-content-box">
+          <h2>Game Types</h2>
+          <% tournament.tournament_days.each do |day| %>
+            <% day.displayable_scoring_rules.each do |rule| %>
+              <p><%= rule.name %></p>
+            <% end %>
+          <% end %>
+        </div>
+      </div>              
+    </div>
+  </div>
+</div>  

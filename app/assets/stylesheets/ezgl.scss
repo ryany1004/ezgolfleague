@@ -624,10 +624,10 @@ button:focus {
 
 .scorpion-golf-league-gree-btn .btn {
   width: 70%;
-  margin-bottom: 15px;
-  font-size: 18px;
-  font-weight: 500;
-  padding: 12px;
+  margin-bottom: 15px !important;
+  font-size: 18px !important;
+  font-weight: 500 !important;
+  padding: 12px !important;
 }
 
 .scorpion-golf-league-gree-list p {
@@ -1559,11 +1559,11 @@ button:focus {
   letter-spacing: 1px;
 }
 
-.sidebar-slider-card .btn-primary,.sidebar-slider-card .btn-success {
+.sidebar-slider-card .btn-primary,.sidebar-slider-card .btn__ezgl-secondary {
   width: 100%;
 }
 
-.sidebar-slider-card .btn-success {
+.sidebar-slider-card .btn__ezgl-secondary {
   margin-top: 12px;
 }
 
@@ -1722,9 +1722,8 @@ button:focus {
 .edit-tee-times-header .btn{margin-right: 40px; font-size: 18px; border-radius: 5px;}
 
 #edit-tee-times .mfp-close{
-  font-size: 60px;
-  font-family: serif;
-  top: 20px;
+  font-size: 2.5rem;
+  top: 12px;
   right: 12px;
   color: #929292;
 }

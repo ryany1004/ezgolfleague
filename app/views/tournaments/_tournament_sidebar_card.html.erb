@@ -3,7 +3,7 @@
     <h2 class="text-uppercase">registration open</h2>
     <p>Your tournament is upcoming. Tournament starts in 5D:8H:4M</p>
     <a href="#edit-tee-times" class="btn btn-primary popup-with-zoom-anim">Edit Tee Times</a>  
-    <a href="#" class="btn btn-success">Add Players</a>
+    <a href="#" class="btn btn__ezgl-secondary">Add Players</a>
     <ul class="list-inline">
       <li class="list-inline-item active"><a href="#">1</a></li>
       <li class="list-inline-item"><a href="#">2</a></li>
@@ -12,7 +12,29 @@
       <li class="list-inline-item"><a href="#">5</a></li>
       <li class="list-inline-item"><a href="#">6</a></li>
     </ul>
-  <% else %>
-    <!-- More states will go here -->
+  <% elsif tournament.tournament_state == TournamentState::REVIEW_SCORES %>
+    <h2 class="text-uppercase">review scores</h2>
+    <p>Review scores. When you're ready, click to calculate results.</p>
+    <a href="#" class="btn btn-primary">Calculate Results</a>  
+    <ul class="list-inline">
+      <li class="list-inline-item active"><a href="#">1</a></li>
+      <li class="list-inline-item active"><a href="#">2</a></li>
+      <li class="list-inline-item active"><a href="#">3</a></li>
+      <li class="list-inline-item active"><a href="#">4</a></li>
+      <li class="list-inline-item"><a href="#">5</a></li>
+      <li class="list-inline-item"><a href="#">6</a></li>
+    </ul>
+  <% elsif tournament.tournament_state == TournamentState::POST_SCORES %>
+    <h2 class="text-uppercase">post scores</h2>
+    <p>The tournament is over. If you'd like, click to edit the results.</p>
+    <a href="#" class="btn btn-primary">Edit Results</a>  
+    <ul class="list-inline">
+      <li class="list-inline-item active"><a href="#">1</a></li>
+      <li class="list-inline-item active"><a href="#">2</a></li>
+      <li class="list-inline-item active"><a href="#">3</a></li>
+      <li class="list-inline-item active"><a href="#">4</a></li>
+      <li class="list-inline-item"><a href="#">5</a></li>
+      <li class="list-inline-item"><a href="#">6</a></li>
+    </ul>
   <% end %>
 </div>

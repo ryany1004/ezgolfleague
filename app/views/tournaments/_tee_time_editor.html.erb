@@ -1,0 +1,57 @@
+<div class="edit-tee-times-header">
+  <div class="row">
+    <div class="col-md-8">
+      <h2>Tee Time Editor</h2>
+    </div>
+    <div class="col-md-4 text-right">
+      <button type="button" class="btn btn__ezgl-secondary">Save</button>
+    </div>
+  </div>
+</div>
+<div class="edit-tee-times-content">
+    <div class="row no-gutters">
+        <div class="col-md-4">
+          <div class="edit-tee-times-left-content mCustomScrollbar" data-mcs-theme="dark">
+            <div class="edit-tee-times-left-content-style sortable" >
+              <% tournament_day.tournament_groups.each_with_index do |group, i| %>
+                <% slices = group.golf_outings.each_slice(2) %>
+                <% slices.each do |slice| %>
+                  <% slice.each do |outing| %>
+                    <div class="media">
+                      <%= image_tag outing.user.avatar.url(:thumb), class: 'img-circle' %>
+                      <div class="media-body">
+                        <h2><%= outing.user.complete_name %></h2>
+                      </div>
+                    </div>
+                  <% end %>
+                <% end %>
+              <% end %>
+            </div>
+          </div><!-- /.edit-tee-times-left-content -->
+        </div>
+
+        <div class="col-md-8">
+          <div class="edit-tee-times-right-content mCustomScrollbar" data-mcs-theme="dark" id="sortable-groups">
+            <% tournament_day.tournament_groups.each_with_index do |group, i| %>
+              <div class="heading-style">
+                <h2 class="text-uppercase">group <%= i + 1 %>: <%= group.tee_time_at.to_s(:time_only) %></h2>
+              </div>
+
+              <% slices = group.golf_outings.each_slice(2) %>
+              <% slices.each do |slice| %>
+                <div class="row <%= 'row-last' if slice == slice.last %> sortable">
+                  <% slice.each do |outing| %>
+                    <div class="media">
+                      <%= image_tag outing.user.avatar.url(:thumb), class: 'img-circle' %>
+                      <div class="media-body">
+                        <h2><%= outing.user.complete_name %></h2>
+                      </div>
+                    </div>
+                  <% end %>
+                </div>
+              <% end %>
+            <% end %>
+          </div><!-- /.tee-times-panel-content -->
+        </div>
+    </div>
+</div>  
