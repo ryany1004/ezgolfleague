@@ -1,5 +1,6 @@
 module MembershipStates
-  INVITED = "Invited"
-  ADDED = "Added"
-  ACTIVE_FOR_BILLING = "Active"
+  INVITED = 'Invited'.freeze
+  ADDED = 'Added'.freeze
+  ACTIVE_FOR_BILLING = 'Active'.freeze
+  EXPIRED = 'Expired'.freeze
 end
