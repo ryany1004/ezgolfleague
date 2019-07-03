@@ -20,7 +20,7 @@ class LeagueMembership < ApplicationRecord
   end
 
   def expire
-    update(state: MembershipStates::EXPIRED)
+    update(state: MembershipStates::EXPIRED) if state == MembershipStates::ACTIVE_FOR_BILLING
   end
 
   def setup_toggle_state

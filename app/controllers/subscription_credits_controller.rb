@@ -3,6 +3,7 @@ class SubscriptionCreditsController < BaseController
   before_action :fetch_active_subscription, only: [:current, :update_active]
 
   def current
+    @league.league_memberships.map(&:expire) if @active_subscription.blank?
   end
 
   def information
