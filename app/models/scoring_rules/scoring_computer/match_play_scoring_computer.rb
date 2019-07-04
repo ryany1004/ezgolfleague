@@ -65,7 +65,7 @@ module ScoringComputer
       # ties
       grouped_ties = ties.group_by { |i| i[:tie_identifier] }
       unclaimed_payouts.each_with_index do |payout, i|
-        next unless grouped_ties.keys.count >= i
+        next unless i < grouped_ties.keys.count
 
         tie_group_identifier = grouped_ties.keys[i]
         grouped_ties[tie_group_identifier].each do |winner|
