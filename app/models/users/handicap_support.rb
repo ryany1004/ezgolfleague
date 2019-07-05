@@ -14,8 +14,27 @@ module Users
       end
     end
 
+    def handicap_or_speculative(tournament_day)
+      scorecard = tournament_day.primary_scorecard_for_user(self)
+      if scorecard.present?
+        scorecard.course_handicap
+      else
+        speculative_handicap(tournament_day)
+      end
+    end
+
+    def speculative_handicap(tournament_day)
+      flight = tournament_day.flights.first
+
+      if tournament_day.scorecard_base_scoring_rule.course_holes.count == 9
+        nine_hole_handicap(tournament_day.course, flight.course_tee_box)
+      else
+        standard_handicap(tournament_day.course, flight.course_tee_box)
+      end
+    end
+
     def index_derived_handicap(flight, golf_outing)
-      unless flight.blank?
+      if flight.present?
         course_tee_box = flight.course_tee_box
       else
         course_tee_box = golf_outing.course_tee_box

@@ -142,7 +142,7 @@
   <% unless @tournament_presenter.tournament_players.blank? %>
     <% cache(@tournament_presenter.day_cache_key("tournament-players")) do %>
       <% if @tournament_presenter.day_has_league_teams? %>
-        <%= render partial: 'tournament_players_league_teams', locals: {name: @tournament_presenter.day_name, teams: @tournament_presenter.tournament_players } %>
+        <%= render partial: 'tournament_players_league_teams', locals: { name: @tournament_presenter.day_name, teams: @tournament_presenter.tournament_players, day: @tournament_presenter.tournament_day } %>
       <% elsif @tournament_presenter.day_has_daily_teams? %>
         <%= render partial: 'tournament_players_daily_teams', locals: {name: @tournament_presenter.day_name, teams: @tournament_presenter.tournament_players } %>
       <% else %>
