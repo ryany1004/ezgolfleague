@@ -1,5 +1,4 @@
 class CrontabController < ApplicationController
-
   def update_all_players_from_ghin
     logger.info { "Importing From GHIN" }
 
@@ -13,6 +12,8 @@ class CrontabController < ApplicationController
 
     tournaments.each do |t|
       t.league.users.each do |u|
+        next unless u.valid?
+
         TournamentMailer.signup_open(t, u).deliver_later
       end
     end
@@ -25,7 +26,9 @@ class CrontabController < ApplicationController
 
     tournaments.each do |t|
       t.league.users.each do |u|
-      	Rails.logger.info { "Sending closing reminder to #{u.complete_name} #{u.id} for #{t.name}" }
+        next unless u.valid?
+
+        Rails.logger.info { "Sending closing reminder to #{u.complete_name} #{u.id} for #{t.name}" }
 
         TournamentMailer.signup_closing(t, u).deliver_later
       end
@@ -44,6 +47,8 @@ class CrontabController < ApplicationController
 
     tournaments.each do |t|
       t.players.each do |u|
+        next unless u.valid?
+
         TournamentMailer.tournament_coming_up(t, u).deliver_later
       end
     end
@@ -63,5 +68,4 @@ class CrontabController < ApplicationController
 
     head :ok, content_type: "text/html"
   end
-
 end
