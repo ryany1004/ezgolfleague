@@ -1,0 +1,76 @@
+<div class="edit-tee-times-header">
+  <div class="row">
+    <div class="col-md-8">
+      <h2>Teams</h2>
+    </div>
+    <div class="col-md-4 text-right">
+      <button type="button" class="btn btn__ezgl-secondary">Save</button>
+    </div>
+  </div>
+</div>
+<div class="edit-tee-times-content">
+  <div class="row no-gutters">
+    <div class="col-md-4">
+      <div class="edit-tee-times-left-content mCustomScrollbar" data-mcs-theme="dark">
+        <div class="edit-tee-times-left-content-style sortable" >
+          <% league.league_memberships.each do |member| %>
+            <div class="media">
+              <%= image_tag member.user.avatar.url(:thumb), class: 'img-circle' %>
+              <div class="media-body">
+                <h2><%= member.user.complete_name %></h2>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      </div><!-- /.edit-tee-times-left-content -->
+    </div>
+
+    <div class="col-md-8">
+      <div class="edit-tee-times-right-content mCustomScrollbar" data-mcs-theme="dark" id="sortable-groups">
+        <div class="heading-style">
+          <h2 class="text-uppercase">team #1</h2>
+          <i class="fas fa-pencil-alt"></i>
+          <i class="fas fa-trash"></i>
+        </div>
+
+        <% slices = league.league_memberships.each_slice(2) %>
+        <% slices.each do |slice| %>
+          <div class="row <%= 'row-last' if slice == slice.last %> sortable">
+            <% slice.each do |member| %>
+              <div class="media">
+                <%= image_tag member.user.avatar.url(:thumb), class: 'img-circle' %>
+                <div class="media-body">
+                  <h2><%= member.user.complete_name %></h2>
+                </div>
+              </div>
+            <% end %>
+          </div>
+        <% end %>                
+      </div><!-- /.tee-times-panel-content -->
+
+      <div class="add-record-container">
+        <div class="cta-container">
+          <%= link_to "Add Team", "#add-team", class: 'btn btn__ezgl-secondary-outline add-team' %>
+        </div>
+
+        <div class="input-container">
+          <input type="text" placeholder="Add team...">
+          <%= link_to "Save", "", class: 'btn btn__ezgl-secondary-outline' %>
+          <p class="close">X</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>  
+
+<script>
+  $('.add-team').click(function(){
+    $('.cta-container').css('display','none');
+    $('.input-container').css('display','flex');
+  });
+
+  $('.close').click(function(){
+    $('.input-container').css('display','none');
+    $('.cta-container').css('display','flex');
+  });
+</script>

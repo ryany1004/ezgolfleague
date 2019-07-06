@@ -37,6 +37,26 @@
 	}
 }
 
+.btn__ezgl-secondary-outline {
+	color: ezgl-color('primary', 'base') !important;
+	background-color: ezgl-color('background', 'light') !important;
+	border-color: ezgl-color('primary', 'base') !important;
+	border-radius: 3px !important;
+	font-weight: 600 !important;
+	padding: 8px 36px !important;
+	line-height: normal !important;
+	font-size: 16px !important;
+	cursor: pointer !important;
+	transition: .3s all !important;
+	font-weight: 400 !important;
+
+	&:hover {
+		background-color: ezgl-color('primary', 'dark') !important;
+		border-color: ezgl-color('primary', 'dark') !important;
+		color: ezgl-color('background', 'light') !important;
+	}
+}
+
 .btn-outline-dark.focus,
 .btn-outline-dark:focus,
 .btn-outline-dark:not(:disabled):not(.disabled).active:focus,
