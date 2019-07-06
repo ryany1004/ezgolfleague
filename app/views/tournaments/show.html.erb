@@ -73,6 +73,10 @@
   <%= render partial: 'tee_time_editor', locals: { tournament_day: @tournament.first_day } %>   
 </div>
 
+<div id="add-players" class="zoom-anim-dialog mfp-hide">
+  <%= render partial: 'add_players', locals: { tournament_day: @tournament.first_day } %>   
+</div>
+
 
 <!-- dialog itself, mfp-hide class is required to make dialog hidden -->
 <div id="tornament-info-popup" class="zoom-anim-dialog mfp-hide">
