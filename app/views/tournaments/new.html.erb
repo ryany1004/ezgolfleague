@@ -21,12 +21,6 @@
                 <span class="bs-stepper-circle">3</span>                 
               </button>
             </div>
-            <div class="line"></div>
-            <div class="step" data-target="#test-l-4">
-              <button type="button" class="btn btn-link step-trigger" role="tab" id="stepper1trigger4" aria-controls="test-l-4">
-                <span class="bs-stepper-circle">4</span>                  
-              </button>
-            </div>
           </div>
           <div class="bs-stepper-content">
             <form onSubmit="return false">
@@ -43,19 +37,35 @@
                           </div>
                         <% end %>
                         <div>
-                            <div class="row">
-                              <div class="col-md-4 text-right">
-                                  <label>Tournament Name</label>
-                              </div>
-                                <div class="col-md-5">
-                                  <%= f.input :name, placeholder: 'Choose a name..', required: true %>
-                              </div>
+                          <div class="row">
+                            <div class="col-md-4 text-right">
+                              <label>Tournament Name</label>
                             </div>
+                              <div class="col-md-5">
+                                <%= f.input :name, placeholder: 'Choose a name...', required: true %>
+                            </div>
+                          </div>
                         </div> 
                         <div class="form-group">
                           <div class="row">
                             <div class="col-md-4 text-right">
 															<label>Tournament Date</label>
+                            </div>
+                              <div class="col-md-5">
+                                <div class="date-inputs">
+																	<div class="row">
+																		<div class="col-12">
+																			<%= f.input :signup_opens_at, label: 'Tournament Date', as: :datetime_picker, required: true, input_html: { value: @tournament.signup_opens_at.to_s(:date_and_time) } %>
+																		</div>
+																	</div>
+                                </div>
+                            </div>
+                          </div>
+                        </div> 
+                        <div class="form-group">
+                          <div class="row">
+                            <div class="col-md-4 text-right">
+															<label>Signup Dates</label>
                             </div>
                               <div class="col-md-5">
                                 <div class="date-inputs">
@@ -71,53 +81,189 @@
                             </div>
                           </div>
                         </div> 
+                        <div>
+                          <div class="row">
+                            <div class="col-md-4 text-right">
+                              <label>Tee Times</label>
+                            </div>
+                            <div class="col-md-5 tee-times-inputs">
+                              <div class="pr-4">
+                                <%= f.input :name, placeholder: 'Start', required: true %>
+                              </div>
+                              <div class="pr-4">
+                                <%= f.input :name, placeholder: 'Groups', required: true %>
+                              </div>
+                              <div>
+                                <%= f.input :name, placeholder: 'Time b/t', required: true %>
+                              </div>
+                            </div>
+                          </div>
+                        </div> 
                         <div class="form-group">
                             <div class="row">
                               <div class="col-md-4 text-right">
                                   <label>Golf Course</label>
                               </div>
                                 <div class="col-md-5">
-                                  <%= select_tag('course', options_from_collection_for_select(@courses, 'id', 'name')) %>
+                                  <%= select_tag('course', options_from_collection_for_select(@courses, 'id', 'name'), {:include_blank => 'Choose a Course...'}) %>
                               </div>
                             </div>
                         </div> 
+                        <div class="form-group">
+                          <%= f.input :name, label: 'Separate golfers into flights', as: :boolean %>
+                        </div>
                       <% end %>
                     <% end %>
                   </div>            
                 </div><!-- /.step-1-content -->
                 <div class="cat-card-footer">                     
                     <button type="button" class="btn btn-outline-secondary">Cancel</button>
-                    <button class="btn btn-success" onclick="stepper1.next()">Next</button>
+                    <button class="btn btn__ezgl-secondary" onclick="stepper1.next()">Next</button>
                 </div>
               </div>
               <div id="test-l-2" role="tabpanel" class="content" aria-labelledby="stepper1trigger2">
                 <div class="step-1-content">
-                  <h2 class="text-center">Tournament Play</h2>
-                  <p>How do you want to play this tournament?</p> 
+                  <h2 class="text-center">Flights (Optional)</h2>
+                  <p>Optionally add flights. If skipping, just click next.</p>
+                  <div class="step-1-content-form">
+                    <% if @tournament.new_record? || is_editable?(@tournament) -%>
+                      <%= simple_form_for [current_user.selected_league, @tournament], :defaults => { :input_html => { :class => "form-control", :label => false }} do |f| %>
+                        <% if notification = f.error_notification %>
+                          <div class="alert alert-error fade in">
+                            <%= notification %>
+                          </div>
+                        <% end %>
+
+                        <div>
+                          <div class="row">
+                            <div class="col-md-4 text-right">
+                              <label>Flight #1</label>
+                            </div>
+                            <div class="col-md-5 tee-times-inputs">
+                              <div class="pr-4">
+                                <%= f.input :name, placeholder: 'L HCP', required: true %>
+                              </div>
+                              <div class="pr-4">
+                                <%= f.input :name, placeholder: 'R HCP', required: true %>
+                              </div>
+                              <div>
+                                <%= f.input :name, placeholder: 'Tee Box', required: true %>
+                              </div>
+                            </div>
+                          </div>
+                        </div> 
+
+                        <div>
+                          <div class="row">
+                            <div class="col-md-4 text-right">
+                              <label>Flight #2</label>
+                            </div>
+                            <div class="col-md-5 tee-times-inputs">
+                              <div class="pr-4">
+                                <%= f.input :name, placeholder: 'L HCP', required: true %>
+                              </div>
+                              <div class="pr-4">
+                                <%= f.input :name, placeholder: 'R HCP', required: true %>
+                              </div>
+                              <div>
+                                <%= f.input :name, placeholder: 'Tee Box', required: true %>
+                              </div>
+                            </div>
+                          </div>
+                        </div> 
+
+                        <div>
+                          <div class="row">
+                            <div class="col-md-4 text-right">
+                              <label>Flight #3</label>
+                            </div>
+                            <div class="col-md-5 tee-times-inputs">
+                              <div class="pr-4">
+                                <%= f.input :name, placeholder: 'L HCP', required: true %>
+                              </div>
+                              <div class="pr-4">
+                                <%= f.input :name, placeholder: 'R HCP', required: true %>
+                              </div>
+                              <div>
+                                <%= f.input :name, placeholder: 'Tee Box', required: true %>
+                              </div>
+                            </div>
+                          </div>
+                        </div> 
+
+                        <div>
+                          <div class="row">
+                            <div class="col-md-4 text-right">
+                              <label>Flight #4</label>
+                            </div>
+                            <div class="col-md-5 tee-times-inputs">
+                              <div class="pr-4">
+                                <%= f.input :name, placeholder: 'L HCP', required: true %>
+                              </div>
+                              <div class="pr-4">
+                                <%= f.input :name, placeholder: 'R HCP', required: true %>
+                              </div>
+                              <div>
+                                <%= f.input :name, placeholder: 'Tee Box', required: true %>
+                              </div>
+                            </div>
+                          </div>
+                        </div> 
+                      <% end %>
+                    <% end %>
+                  </div> 
                 </div>
                 <div class="cat-card-footer">
-                  <button class="btn btn-success" onclick="stepper1.previous()">Previous</button>
-                  <button class="btn btn-success" onclick="stepper1.next()">Next</button>
+                  <button class="btn btn-outline-secondary" onclick="stepper1.previous()">Previous</button>
+                  <button class="btn btn__ezgl-secondary" onclick="stepper1.next()">Next</button>
                 </div>                  
               </div>
-              <div id="test-l-3" role="tabpanel" class="content" aria-labelledby="stepper1trigger3">
-                <div class="step-1-content">
-                  <h2 class="text-center">Flights</h2>
-                  <p>Add flights for your players to your tournament.</p>
-                </div>
-                <div class="cat-card-footer">
-                  <button class="btn btn-success" onclick="stepper1.previous()">Previous</button>
-                  <button class="btn btn-success" onclick="stepper1.next()">Next</button>
-                </div>                  
-              </div>
-              <div id="test-l-4" role="tabpanel" class="content text-center" aria-labelledby="stepper1trigger4">
+              <div id="test-l-3" role="tabpanel" class="content text-center" aria-labelledby="stepper1trigger3">
                 <div class="step-1-content">
                   <h2 class="text-center">Game Types</h2>
                   <p>Add different game types to your tournament.</p>
+                  <div class="step-content-game-types">
+                    <div class="row">
+                      <div class="added-game-type">
+                        <p>Skins</p>
+                        <a href="#" class="btn btn-success">Add Payout</a>
+                      </div>
+                      <div class="add-game-type" data-toggle="modal" data-target="#addGameTypeModal">
+                        <p>+ Add Game</p>
+                      </div>
+                    </div>
+
+                    <div class="row">
+                      <div class="add-game-type" data-toggle="modal" data-target="#addGameTypeModal">
+                        <p>+ Add Game</p>
+                      </div>
+                      <div class="add-game-type" data-toggle="modal" data-target="#addGameTypeModal">
+                        <p>+ Add Game</p>
+                      </div>
+                    </div>
+
+                    <div class="row">
+                      <div class="add-game-type" data-toggle="modal" data-target="#addGameTypeModal">
+                        <p>+ Add Game</p>
+                      </div>
+                      <div class="add-game-type" data-toggle="modal" data-target="#addGameTypeModal"> 
+                        <p>+ Add Game</p>
+                      </div>
+                    </div>
+
+                    <div class="row">
+                      <div class="add-game-type" data-toggle="modal" data-target="#addGameTypeModal">
+                        <p>+ Add Game</p>
+                      </div>
+                      <div class="add-game-type" data-toggle="modal" data-target="#addGameTypeModal">
+                        <p>+ Add Game</p>
+                      </div>
+                    </div>
+                  </div>
                 </div>
                 <div class="cat-card-footer">
-                    <button class="btn btn-success mt-5" onclick="stepper1.previous()">Previous</button>
-                    <button type="submit" class="btn btn-success mt-5">Submit</button>
+                  <button class="btn btn-outline-secondary" onclick="stepper1.previous()">Previous</button>
+                  <button type="submit" class="btn btn__ezgl-secondary">Submit</button>
                 </div>                  
               </div>
             </form>
@@ -127,6 +273,58 @@
   </div>
 </div>
 
+<div class="modal fade" id="addGameTypeModal" tabindex="-1" role="dialog" aria-labelledby="addGameTypeCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-body welcome p-5">
+        <div class="pb-5">
+          <h2>Add Game</h2>
+        </div>
+
+        <% if @tournament.new_record? || is_editable?(@tournament) -%>
+          <%= simple_form_for [current_user.selected_league, @tournament], :defaults => { :input_html => { :class => "form-control", :label => false }} do |f| %>
+            <% if notification = f.error_notification %>
+              <div class="alert alert-error fade in">
+                <%= notification %>
+              </div>
+            <% end %>
+            <div class="row">
+              <div class="col-md-3 text-right">
+                <label>Game Type</label>
+              </div>
+                <div class="col-md-8">
+                  <%= select_tag('gameTypes', options_from_collection_for_select(@courses, 'id', 'name'), {:include_blank => 'Choose a Course...'}) %>
+              </div>
+            </div>
+            <div class="step-1-content-form step-1-content">
+              <div class="row">
+                <div class="col-md-3 text-right">
+                  <label>Attributes</label>
+                </div>
+                <div class="col-md-8 tee-times-inputs">
+                  <div class="pr-4">
+                    <%= f.input :name, placeholder: 'Flight', required: true %>
+                  </div>
+                  <div class="pr-4">
+                    <%= f.input :name, placeholder: 'Amount', required: true %>
+                  </div>
+                  <div>
+                    <%= f.input :name, placeholder: 'Points', required: true %>
+                  </div>
+                </div>
+              </div>
+            </div> 
+
+            <div class="modal-footer welcome">
+              <%= f.button :submit, "Save", class: 'btn__ezgl-secondary' %>
+            </div>
+          <% end %>
+        <% end %>
+    </div>
+  </div>
+</div>
+
+
 <link rel="stylesheet" href="https://unpkg.com/bs-stepper/dist/css/bs-stepper.min.css">
 <script src="https://unpkg.com/bs-stepper/dist/js/bs-stepper.min.js"></script>
 <script type="text/javascript">      
@@ -134,7 +332,6 @@
   var stepper1 = null
   var stepper2 = null
   var stepper3 = null
-  var stepper4 = null
 
   $('#datetimepicker4,#datetimepicker5').datetimepicker({
         format: 'MM/DD//YYYY'
@@ -178,6 +375,20 @@
       searchField: 'name',
       maxItems: '1',
       placeholder: 'Search for a course...',
+      create: false,
+      render: {
+            option: function (item, escape) {
+                return '<div>' + escape(item.name) + '</div>';
+            }
+      }
+  });
+
+  var $gameType_selector = $('#gameTypes').selectize({
+      valueField: 'id',
+      labelField: 'name',
+      searchField: 'name',
+      maxItems: '1',
+      placeholder: 'Choose a game type...',
       create: false,
       render: {
             option: function (item, escape) {
