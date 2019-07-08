@@ -1070,8 +1070,12 @@ button:focus {
       padding: 12px 24px;
 
       p {
-        width: 75%;
+        width: 100%;
         text-align: left;
+      }
+
+      .btn-success {
+        width: 150px;
       }
     }
 
