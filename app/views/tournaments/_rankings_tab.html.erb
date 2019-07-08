@@ -1,0 +1,39 @@
+<div class="tab-pane active" id="rankings-tab">
+  <table class="table">
+    <thead>
+      <tr class="text-uppercase">
+        <th scope="col" class="pl-5 pr-0">Flight</th>
+        <th scope="col">pos</th>
+        <th scope="col">player</th>
+        <th scope="col">net</th>
+        <th scope="col">gross</th>
+        <th scope="col">points</th>
+        <th scope="col">payout</th>
+        <th scope="col"></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% tournament_day.tournament.players_for_day(tournament_day).each do |player| %>
+        <tr>
+          <th class="pl-5 pr-0">1</th>
+          <td>#1</td>
+          <td>
+            <div class="media">
+              <%= image_tag player.avatar.url(:thumb), class: 'img-circle' %>
+              <div class="media-body">
+                <h2><%= player.complete_name %></h2>
+              </div>
+            </div>
+          </td>
+          <td>
+            64
+          </td>
+          <td>71</td>
+          <td>10</td>
+          <td>$20</td>
+          <td class="edit-link"><a href="#"><img src="images/edit.png" alt=""></a></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

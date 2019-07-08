@@ -31,18 +31,44 @@
         <div class="raking-content-card teatime-content-card">
           <div class="raking-content-header-card">
             <ul class="nav nav-pills">
-              <li class="nav-item">
-                <a class="nav-link active" data-toggle="pill" href="#rankings-tab">Players</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" data-toggle="pill" href="#contests-tab">Tee Times</a>
-              </li>
+              <% if @tournament.tournament_state == TournamentState::REGISTRATION %>
+                <li class="nav-item">
+                  <a class="nav-link active" data-toggle="pill" href="#players-tab">Players</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" data-toggle="pill" href="#tee-time-tab">Tee Times</a>
+                </li>
+              <% elsif @tournament.tournament_state == TournamentState::REVIEW_SCORES %>
+                <li class="nav-item">
+                  <a class="nav-link active" data-toggle="pill" href="#rankings-tab">Rankings</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" data-toggle="pill" href="#contests-tab">Contests</a>
+                </li>
+              <% elsif @tournament.tournament_state == TournamentState::POST_SCORES %>
+                <li class="nav-item">
+                  <a class="nav-link active" data-toggle="pill" href="#rankings-tab">Rankings</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" data-toggle="pill" href="#contests-tab">Contests</a>
+                </li>
+              <% end %>
             </ul>
           </div>
           <div class="tab-content">
-            <%= render partial: 'player_tab', locals: { tournament_day: @tournament.first_day } %>
+            <% if @tournament.tournament_state == TournamentState::REGISTRATION %>
+              <%= render partial: 'player_tab', locals: { tournament_day: @tournament.first_day } %>
 
-            <%= render partial: 'tee_time_tab', locals: { tournament_day: @tournament.first_day } %>
+              <%= render partial: 'tee_time_tab', locals: { tournament_day: @tournament.first_day } %>
+            <% elsif @tournament.tournament_state == TournamentState::REVIEW_SCORES %>
+              <%= render partial: 'rankings_tab', locals: { tournament_day: @tournament.first_day } %>
+
+              <%= render partial: 'contests_tab', locals: { tournament_day: @tournament.first_day } %>
+            <% elsif @tournament.tournament_state == TournamentState::POST_SCORES %>
+              <%= render partial: 'rankings_tab', locals: { tournament_day: @tournament.first_day } %>
+
+              <%= render partial: 'contests_tab', locals: { tournament_day: @tournament.first_day } %>
+            <% end %>
           </div>
         </div>
       </div>
