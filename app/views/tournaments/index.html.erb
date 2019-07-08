@@ -31,7 +31,7 @@
         <% @upcoming_tournaments.each_slice(3).each do |slice| %>
           <div class="row mb-5">
             <% slice.each do |tournament| %>
-              <% cache [slice] do %>
+              <% cache [tournament.cache_key_with_version, current_user.cache_key_with_version] do %>
                 <%= render partial: 'tournament_card', locals: { tournament: tournament } %>
               <% end %>
             <% end %>
@@ -55,7 +55,7 @@
         <% @past_tournaments.each_slice(3).each do |slice| %>
           <div class="row mb-5">
             <% slice.each do |tournament| %>
-              <% cache [slice] do %>
+              <% cache [tournament.cache_key_with_version, current_user.cache_key_with_version] do %>
                 <%= render partial: 'tournament_card', locals: { tournament: tournament } %>
               <% end %>
             <% end %>
