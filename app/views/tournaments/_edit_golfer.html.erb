@@ -1,0 +1,45 @@
+<div class="modal-dialog modal-dialog-centered modal-md" role="document">
+  <div class="modal-content edit-golfer-modal">
+    <div class="modal-body p-5">
+      <div class="edit-golfer-modal__header">
+        <div>
+          <%= image_tag('1.png') %>
+        </div>
+        <div class="edit-golfer-modal__header__left pl-4">
+          <h3>Craig Inesta</h3>
+          <div class="dues-text">
+            <div class="paid"></div><p>Tournament Dues Paid</p>
+          </div>
+          <%= link_to "Mark Dues Unpaid", "#remove", class: 'btn btn-outline-dark' %>
+        </div>
+      </div>
+
+      <div class="edit-golfer-modal__tee-times pt-5">
+        <div class="form-subheader">
+          <h6>Tee Time</h6>
+        </div>
+
+        <div class="time">
+          <h5>8:00am</h5>
+          <p>Edit</p>
+        </div>
+      </div>
+
+      <div class="edit-golfer-modal__contests pt-3 pb-3">
+        <div class="form-subheader">
+          <h6>Contests</h6>
+        </div>
+
+        <div class="checkbox"><input type="checkbox">Net & Gross Skins<br></div>
+        <div class="checkbox"><input type="checkbox">Net & Gross Skins<br></div>
+        <div class="checkbox"><input type="checkbox">Net & Gross Skins<br></div>
+        <div class="checkbox"><input type="checkbox">Net & Gross Skins<br></div>
+      </div>
+    </div>
+
+    <div class="modal-footer edit-golfer-modal__footer">
+      <%= link_to "Remove Golfer", "#remove", class: 'btn btn-outline-dark' %>
+      <%= link_to "Save", "#save", class: 'btn btn__ezgl-secondary' %>
+    </div>
+  </div>
+</div>

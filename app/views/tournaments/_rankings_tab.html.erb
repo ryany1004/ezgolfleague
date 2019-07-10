@@ -31,7 +31,9 @@
           <td>71</td>
           <td>10</td>
           <td>$20</td>
-          <td class="edit-link"><a href="#"><img src="images/edit.png" alt=""></a></td>
+          <td class="edit-link">
+            <%= link_to image_tag('edit.png'), "", data: { toggle:"modal", target:"#editGolferRankingModal" } %>
+          </td>
         </tr>
       <% end %>
     </tbody>
