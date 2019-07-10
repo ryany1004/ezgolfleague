@@ -83,6 +83,7 @@
           <a href="#" class="list-group-item list-group-item-action">
           <%= image_tag('print-button.png') %>Print Scrorecards
           </a>
+          <%= link_to image_tag('message.png') + "Send Message to Players", "", data: { toggle:"modal", target:"#sendMessageModal" }, class: "list-group-item list-group-item-action" %>
         </div>
       </div>
       <!-- /.col-md-4 -->         
@@ -103,8 +104,29 @@
   <%= render partial: 'add_players', locals: { tournament_day: @tournament.first_day } %>   
 </div>
 
-
 <!-- dialog itself, mfp-hide class is required to make dialog hidden -->
 <div id="tornament-info-popup" class="zoom-anim-dialog mfp-hide">
   <%= render partial: 'tournament_info', locals: { tournament: @tournament } %>
+</div>
+
+
+<div class="modal fade" id="sendMessageModal" tabindex="-1" role="dialog" aria-labelledby="sendMessageModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-body welcome p-5">
+        <div class="p-3">
+          <h2>Send Message to Players</h2>
+        </div>
+
+        <div class="messagePlayer-form">
+          <input type="text" placeholder="Write a subject..." class="message-subject"></input>
+          <textarea placeholder="Write a message..." class="message-content"></textarea>
+        </div>
+      </div>
+
+      <div class="modal-footer welcome">
+        <%= link_to "Save", "#save", class: 'btn btn__ezgl-secondary' %>
+      </div>
+    </div>
+  </div>
 </div>

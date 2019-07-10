@@ -722,6 +722,31 @@ button:focus {
   width: 245px;
 }
 
+.messagePlayer-form {
+  display: flex;
+  flex-wrap: wrap;
+  max-width: 450px;
+  justify-content: center;
+  margin: 0 auto;
+
+  input {
+    height: 50px;
+  }
+
+  input, textarea {
+    border: 2px solid ezgl-color('background', 'base');
+    padding: 12px 16px;
+    margin: 8px 0;
+    width: 100%;
+    font-style: italic;
+    border-radius: 3px;
+  }
+
+  textarea {
+    height: 250px;
+  }
+}
+
 
 /* Upcoming Tournaments */
 
