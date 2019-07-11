@@ -302,6 +302,7 @@ class ScoringRuleOption
       ScoringRuleOption.option(name: 'Two Man Scramble', class_name: 'TwoManScrambleScoringRule'),
       ScoringRuleOption.option(name: 'Four Man Scramble', class_name: 'FourManScrambleScoringRule'),
       ScoringRuleOption.option(name: 'Gross Skins', class_name: 'GrossSkinsScoringRule'),
+      ScoringRuleOption.option(name: 'Individual 3 Best Balls of 4', class_name: 'ThreeBestBallsOfFourScoringRule'),
       ScoringRuleOption.option(name: 'Net Skins', class_name: 'NetSkinsScoringRule'),
       ScoringRuleOption.option(name: 'Net Skins + Gross Birdies', class_name: 'TotalSkinsScoringRule'),
       ScoringRuleOption.option(name: 'Net Low', class_name: 'NetLowScoringRule'),
