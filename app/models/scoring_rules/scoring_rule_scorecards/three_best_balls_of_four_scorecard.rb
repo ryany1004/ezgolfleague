@@ -19,9 +19,8 @@ module ScoringRuleScorecards
     end
 
     def score_for_scores(comparable_scores, hole)
-      return 0 if comparable_scores.blank?
-
       comparable_scores.reject!(&:zero?)
+      return 0 if comparable_scores.blank?
 
       sorted_scores = comparable_scores.sort! { |x, y| x <=> y }
       best_scores = sorted_scores[0, NUMBER_OF_SCORES_TO_USE]
