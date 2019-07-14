@@ -28,7 +28,9 @@ class PayoutResult < ApplicationRecord
   end
 
   def display_name
-    if flight.present?
+    if daily_team.present?
+      daily_team.short_name
+    elsif flight.present?
       flight.display_name
     else
       scoring_rule.name
@@ -42,6 +44,10 @@ class PayoutResult < ApplicationRecord
     return nil if golf_outing.blank?
 
     golf_outing.course_handicap.to_i
+  end
+
+  def daily_team
+    scoring_rule.tournament_day.daily_team_for_player(user)
   end
 
   def team_matchup_designator
