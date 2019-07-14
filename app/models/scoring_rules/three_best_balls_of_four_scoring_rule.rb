@@ -33,9 +33,17 @@ class ThreeBestBallsOfFourScoringRule < StrokePlayScoringRule
     scorecard
   end
 
-  # def scorecard_api(scorecard:)
-  #   handicap_allowance = handicap_computer.handicap_allowance(user: scorecard.golf_outing.user)
+  def include_ghost_par_scores?(users)
+    if should_add_par? && users.count < users_per_daily_team
+      true
+    else
+      false
+    end
+  end
 
-  #   Scorecards::Api::ScorecardAPIBestBall.new(scorecard.tournament_day, scorecard, handicap_allowance).scorecard_representation
-  # end
+  def scorecard_api(scorecard:)
+    handicap_allowance = handicap_computer.handicap_allowance(user: scorecard.golf_outing.user)
+
+    Scorecards::Api::ScorecardAPIBestBall.new(scorecard.tournament_day, scorecard, handicap_allowance).scorecard_representation
+  end
 end

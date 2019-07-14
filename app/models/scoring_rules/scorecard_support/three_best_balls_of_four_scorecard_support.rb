@@ -21,6 +21,15 @@ module ThreeBestBallsOfFourScorecardSupport
     end
 
     unless only_human_scorecards
+      if team.present? && include_ghost_par_scores?(team.users)
+        ghost_scorecard = ScoringRuleScorecards::GhostScorecard.new
+        ghost_scorecard.scoring_rule = self
+        ghost_scorecard.user = team.users.first
+        ghost_scorecard.calculate_scores
+
+        other_scorecards << ghost_scorecard
+      end
+
       # gross_best_ball_card = best_ball_scorecard_for_user_in_team(user, team, false)
       net_best_ball_card = best_ball_scorecard_for_user_in_team(user, team, true)
 
