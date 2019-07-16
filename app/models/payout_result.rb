@@ -47,6 +47,8 @@ class PayoutResult < ApplicationRecord
   end
 
   def daily_team
+    return nil if scoring_rule.team_type != ScoringRuleTeamType::DAILY
+
     scoring_rule.tournament_day.daily_team_for_player(user)
   end
 
