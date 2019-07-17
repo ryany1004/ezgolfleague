@@ -372,6 +372,23 @@ button:focus {
   border: 1px solid #dee2e6;
   border-radius: 5px;
   margin-top: 75px !important;
+
+  th {
+    font-size: 14px;
+    color: #999999;
+    font-weight: 400;
+  }
+
+  a {
+    color: #000;
+  }
+
+  .int-ctr {
+    font-weight: 500;
+    font-size: 18px;
+    padding-left: 48px;
+    vertical-align: middle;
+  }
 }
 
 .player-box {
@@ -419,6 +436,14 @@ button:focus {
   font-size: 16px;
   color: #000;
   border-bottom: 1px solid #efefef;
+
+  .col {
+    display: flex;
+    align-items: center;
+    font-weight: 500;
+    font-size: 18px;
+    padding-left: 22px;
+  }
 }
 
 .paid-col,
@@ -1265,9 +1290,11 @@ button:focus {
   margin: 0 15px;
 }
 
-.ttt-header .btn-primary, .ttt-header .btn-success {
-  font-size: 19px;
-  padding: 12px 30px;
+.ttt-header .btn-primary, .ttt-header .btn-success, .ttt-header .btn__ezgl-secondary {
+  font-size: 19px !important;
+  padding: 12px 30px !important;
+  line-height: 1.5 !important;
+  border: 1px solid transparent !important;
 }
 
 .ttt-header {

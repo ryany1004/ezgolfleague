@@ -10,7 +10,7 @@
       </div>
       <!-- /.col-md-8 --> 
       <div class="col-md-4 text-right">
-        <%= link_to "Update Handicaps", new_league_tournament_path(current_user.selected_league), class: 'btn btn-success mr-3' %>
+        <%= link_to "Update Handicaps", new_league_tournament_path(current_user.selected_league), class: 'btn btn__ezgl-secondary mr-3' %>
         <%= link_to "Add Golfers", new_league_tournament_path(current_user.selected_league), class: 'btn btn-primary' %>
       </div>
       <!-- /.col-md-6 --> 
@@ -26,7 +26,6 @@
             <th scope="col" class="pl-5 pr-0">golfer</th>
             <th scope="col">handicap index</th>
             <th scope="col">season points</th>
-            <th scope="col">season tournaments</th>
           </tr>
         </thead>
         <tbody>
@@ -40,9 +39,8 @@
                   </div>
                 </div>
               </td>
-              <td><%= membership.user.handicap_index %></td>
-              <td class="paid-td"></span>200</td>
-              <td class="paid-td">9</td>
+              <td class="int-ctr"><%= membership.user.handicap_index %></td>
+              <td class="int-ctr paid-td"></span>200</td>
             </tr>
           <% end %>
         </tbody>

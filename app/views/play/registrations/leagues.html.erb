@@ -20,7 +20,7 @@
         <div class="panel-body registration">
           <div class="league-selection">
             <div class="league-selection-dropdown pb-4">
-              <%= select_tag('league', options_from_collection_for_select(@leagues, 'id', 'name')) %>
+              <%= select_tag('league', options_from_collection_for_select(@leagues, 'id', 'name'), {:include_blank => 'Choose a League...'}) %>
             </div>
             <div class="league-selection-register pb-5">
               <%= link_to "Join This League", join_league_play_registrations_path, class: "btn__ezgl-secondary join-league-btn" %>

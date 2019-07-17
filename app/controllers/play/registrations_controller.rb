@@ -48,18 +48,23 @@ class Play::RegistrationsController < Play::BaseController
   def join_league
     @league = League.find(params[:league_id])
 
-    if @league.encrypted_stripe_production_publishable_key.blank? || @league.dues_amount.zero?
-      current_user.leagues << @league
+    current_user.leagues << @league
 
-      redirect_to play_dashboard_index_path
-    else
-      @cost_breakdown_lines = [
-        { name: "#{@league.name} League Fees", price: @league.dues_amount },
-        { name: "Credit Card Fees", price: Stripe::StripeFees.fees_for_transaction_amount(@league.dues_amount) }
-      ]
+    redirect_to play_dashboard_index_path
 
-      @payment_amount = Payments::LeagueJoinService.payment_amount(@league)
-    end
+    # ToDo Remove if payments in onboarding is no longer wanted
+    # if @league.encrypted_stripe_production_publishable_key.blank? || @league.dues_amount.zero?
+    #   current_user.leagues << @league
+
+    #   redirect_to play_dashboard_index_path
+    # else
+    #   @cost_breakdown_lines = [
+    #     { name: "#{@league.name} League Fees", price: @league.dues_amount },
+    #     { name: "Credit Card Fees", price: Stripe::StripeFees.fees_for_transaction_amount(@league.dues_amount) }
+    #   ]
+
+    #   @payment_amount = Payments::LeagueJoinService.payment_amount(@league)
+    # end
   end
 
   def request_information
@@ -98,7 +103,7 @@ class Play::RegistrationsController < Play::BaseController
     if @league.save
       LeagueMembership.create(league: @league, user: current_user, is_admin: true)
 
-      redirect_to add_golfers_play_registrations_path(league: @league)
+      redirect_to dashboard_index_path
     else
       render :new_league
     end
