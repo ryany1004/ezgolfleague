@@ -62,7 +62,16 @@ class TeamOutingsController < BaseController
 
   def update_matchup_sequence
     league_season_team_tournament_day_matchup = @tournament_day.league_season_team_matchup_for_team(league_season_team)
-    league_season_team_tournament_day_matchup.update(params.require(:league_season_team_tournament_day_matchup).permit(:team_a_final_sort, :team_b_final_sort))
+
+    team_update = params[:team_update].to_unsafe_h
+    sorted_team_values = team_update.values.sort
+
+    ids_to_apply = []
+    sorted_team_values.each do |v|
+      ids_to_apply << team_update.key(v)
+    end
+
+    league_season_team_tournament_day_matchup.force_id_sequence(ids_to_apply, league_season_team)
 
     redirect_to league_tournament_day_team_path(@league, @tournament, @tournament_day, league_season_team)
   end

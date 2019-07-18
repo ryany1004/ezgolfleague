@@ -4,6 +4,8 @@ class LeagueSeasonTeamTournamentDayMatchup < ApplicationRecord
   belongs_to :team_b, class_name: 'LeagueSeasonTeam', foreign_key: 'league_season_team_b_id', optional: true
   belongs_to :winning_team, class_name: 'LeagueSeasonTeam', foreign_key: 'league_team_winner_id', optional: true
 
+  attr_accessor :override_team_sort
+
   def name
     combined_name = ''
 
@@ -88,6 +90,16 @@ class LeagueSeasonTeamTournamentDayMatchup < ApplicationRecord
     positions = %w[A B C D E F G H I J K]
 
     positions[index]
+  end
+
+  def force_id_sequence(sequence, team)
+    if team == team_a
+      self.team_a_final_sort = sequence.join(',')
+    else
+      self.team_b_final_sort = sequence.join(',')
+    end
+
+    save
   end
 
   def user_ids_to_omit
