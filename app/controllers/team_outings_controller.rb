@@ -84,6 +84,14 @@ class TeamOutingsController < BaseController
     end
   end
 
+  def clear_matchup_sequence
+    league_season_team_tournament_day_matchup = @tournament_day.league_season_team_matchup_for_team(league_season_team)
+    league_season_team_tournament_day_matchup.update(team_a_final_sort: nil)
+    league_season_team_tournament_day_matchup.update(team_b_final_sort: nil)
+
+    redirect_to league_tournament_day_team_path(@league, @tournament, @tournament_day, league_season_team)
+  end
+
   private
 
   def league_season_team

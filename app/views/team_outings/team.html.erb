@@ -36,6 +36,10 @@
           <th>&nbsp;</th>
           <th>
             <%= f.button :submit, "Save Custom Order", class: 'btn btn-default' %>
+            <% if @matchup.team_a_final_sort.present? || @matchup.team_b_final_sort.present? %>
+            <br/><br/>
+            <%= link_to 'Clear Custom Matchups', league_tournament_clear_matchup_sequence_path(@tournament.league, @tournament, @tournament_day, @league_season_team, @matchup), method: :patch, class: 'btn btn-warning' %>
+            <% end %>
           </th>
           <th>&nbsp;</th>
         </tr>

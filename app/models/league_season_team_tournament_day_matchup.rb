@@ -131,6 +131,7 @@ class LeagueSeasonTeamTournamentDayMatchup < ApplicationRecord
     if team_a_final_sort.present?
       filtered_user_ids = team_a_final_sort.split(',')
       filtered_user_ids.collect { |i| team_a.users.find_by(id: i) }
+                       .compact
     else
       filtered_team_a_users
     end
@@ -147,6 +148,7 @@ class LeagueSeasonTeamTournamentDayMatchup < ApplicationRecord
     if team_b_final_sort.present?
       filtered_user_ids = team_b_final_sort.split(',')
       filtered_user_ids.collect { |i| team_b.users.find_by(id: i) }
+                       .compact
     else
       filtered_team_b_users
     end
