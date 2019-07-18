@@ -71,6 +71,8 @@ class TeamOutingsController < BaseController
       ids_to_apply << team_update.key(v)
     end
 
+    sorted_team_values = sorted_team_values.uniq
+
     if ids_to_apply.count == sorted_team_values.count
       league_season_team_tournament_day_matchup.force_id_sequence(ids_to_apply, league_season_team)
 
