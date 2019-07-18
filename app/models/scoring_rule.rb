@@ -277,7 +277,7 @@ class ScoringRule < ApplicationRecord
       winners << { contest_name: name,
                    name: r.user&.complete_name,
                    result_value: r.detail.presence || '',
-                   amount: r.amount.presence || 0,
+                   amount: r.amount.presence || '',
                    points: r.points.to_i,
                    user: r.user }
     end
