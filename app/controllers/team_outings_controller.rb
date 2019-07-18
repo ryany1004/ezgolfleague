@@ -71,9 +71,17 @@ class TeamOutingsController < BaseController
       ids_to_apply << team_update.key(v)
     end
 
-    league_season_team_tournament_day_matchup.force_id_sequence(ids_to_apply, league_season_team)
+    if ids_to_apply.count == sorted_team_values.count
+      league_season_team_tournament_day_matchup.force_id_sequence(ids_to_apply, league_season_team)
 
-    redirect_to league_tournament_day_team_path(@league, @tournament, @tournament_day, league_season_team)
+      redirect_to league_tournament_day_team_path(@league, @tournament, @tournament_day, league_season_team)
+    else
+      team
+
+      flash[:error] = 'Each player must have a unique handicap matchup. Please check and try again.'
+
+      render :team
+    end
   end
 
   private
