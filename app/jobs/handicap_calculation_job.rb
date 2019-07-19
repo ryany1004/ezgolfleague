@@ -46,7 +46,7 @@ class HandicapCalculationJob < ApplicationJob
       course_tee_box = scorecard.golf_outing.course_tee_box
       next if course_tee_box.blank? || course_tee_box.course.blank?
 
-      is_9_holes = course_tee_box.course.course_holes.count == scorecard.scores.count * 2
+      is_9_holes = scorecard.scores.count == 9
 
       if course_tee_box.rating <= 0 && course_tee_box.slope <= 0
         Rails.logger.debug "Course Tee Box Does Not Have Rating or Slope: #{course_tee_box.id}"
@@ -61,7 +61,7 @@ class HandicapCalculationJob < ApplicationJob
 
       differential = ((gross_score - rating) * 113) / slope
 
-      Rails.logger.info "HANDICAP: #{scorecard.tournament_day.tournament.name} User: #{scorecard.user.complete_name} Gross Score (Adjusted): #{gross_score}. Rating: #{rating}. Slope: #{course_tee_box.slope}. Differential: #{differential}"
+      Rails.logger.info "HANDICAP: #{scorecard.tournament_day.tournament.name} User: #{scorecard.user.complete_name} (#{scorecard.id}) is_9_holes: #{is_9_holes} Gross Score (Adjusted): #{gross_score}. Rating: #{rating}. Slope: #{course_tee_box.slope}. Differential: #{differential}"
       Rails.logger.info "HANDICAP: Adjusted Gross: #{scorecard.adjusted_score} Gross #{scorecard.gross_score}"
 
       differential *= 2 if is_9_holes
