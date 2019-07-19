@@ -1250,7 +1250,7 @@ button:focus {
         text-align: left;
       }
 
-      .btn-success {
+      .btn-primary {
         width: 150px;
       }
     }
@@ -1266,6 +1266,26 @@ button:focus {
         background: #f5f5f5;
       }
     }
+  }
+}
+
+#addGameTypeModal {
+  .step-1-content-form {
+    padding-bottom: 0;
+  }
+
+  .selectize-input {
+    margin-left: 0;
+    border-color: #e7e7e7;
+    height: 70px;
+    font-size: 18px;
+    border-width: 2px;
+    font-style: italic;
+    color: #b2b2b2;
+  }
+
+  .form-control  {
+    margin-left: 0;
   }
 }
 

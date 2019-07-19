@@ -226,7 +226,7 @@
                     <div class="row">
                       <div class="added-game-type">
                         <p>Skins</p>
-                        <a href="#" class="btn btn-success">Add Payout</a>
+                        <a href="#" class="btn btn-primary">Add Payout</a>
                       </div>
                       <div class="add-game-type" data-toggle="modal" data-target="#addGameTypeModal">
                         <p>+ Add Game</p>
@@ -288,12 +288,14 @@
                 <%= notification %>
               </div>
             <% end %>
-            <div class="row">
-              <div class="col-md-3 text-right">
-                <label>Game Type</label>
-              </div>
-                <div class="col-md-8">
-                  <%= select_tag('gameTypes', options_from_collection_for_select(@courses, 'id', 'name'), {:include_blank => 'Choose a Course...'}) %>
+            <div class="step-1-content-form step-1-content">
+              <div class="row">
+                <div class="col-md-3 text-right">
+                  <label>Game Type</label>
+                </div>
+                  <div class="col-md-8">
+                    <%= select_tag('gameTypes', options_from_collection_for_select(@courses, 'id', 'name'), {:include_blank => 'Choose a Course...'}) %>
+                </div>
               </div>
             </div>
             <div class="step-1-content-form step-1-content">
@@ -303,13 +305,10 @@
                 </div>
                 <div class="col-md-8 tee-times-inputs">
                   <div class="pr-4">
-                    <%= f.input :name, placeholder: 'Flight', required: true %>
-                  </div>
-                  <div class="pr-4">
-                    <%= f.input :name, placeholder: 'Amount', required: true %>
+                    <%= f.input :name, placeholder: 'Holes', required: true %>
                   </div>
                   <div>
-                    <%= f.input :name, placeholder: 'Points', required: true %>
+                    <%= f.input :name, placeholder: 'Payout', required: true %>
                   </div>
                 </div>
               </div>
