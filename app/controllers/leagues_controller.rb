@@ -53,7 +53,11 @@ class LeaguesController < BaseController
   def update_from_ghin
     @league = League.find(params[:league_id])
 
-    users = @league.users.where("ghin_number IS NOT NULL").where("ghin_number != ''").order(:ghin_updated_at)
+    users = @league.users
+                   .where('ghin_number IS NOT NULL')
+                   .where("ghin_number != ''")
+                   .order(:ghin_updated_at)
+
     GhinUpdateJob.perform_later(users.pluck(:id))
 
     redirect_to leagues_path, flash: { success: "League members will be updated by GHIN." }
