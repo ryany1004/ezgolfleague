@@ -1,8 +1,10 @@
 class LeagueSeasonTeamTournamentDayMatchup < ApplicationRecord
-  belongs_to :tournament_day
+  belongs_to :tournament_day, touch: true
   belongs_to :team_a, class_name: 'LeagueSeasonTeam', foreign_key: 'league_season_team_a_id', optional: true
   belongs_to :team_b, class_name: 'LeagueSeasonTeam', foreign_key: 'league_season_team_b_id', optional: true
   belongs_to :winning_team, class_name: 'LeagueSeasonTeam', foreign_key: 'league_team_winner_id', optional: true
+
+  attr_accessor :override_team_sort
 
   def name
     combined_name = ''
@@ -90,6 +92,16 @@ class LeagueSeasonTeamTournamentDayMatchup < ApplicationRecord
     positions[index]
   end
 
+  def force_id_sequence(sequence, team)
+    if team == team_a
+      self.team_a_final_sort = sequence.join(',')
+    else
+      self.team_b_final_sort = sequence.join(',')
+    end
+
+    save
+  end
+
   def user_ids_to_omit
     split_ids = excluded_user_ids&.split(',')
     split_ids.presence || []
@@ -117,7 +129,9 @@ class LeagueSeasonTeamTournamentDayMatchup < ApplicationRecord
     return [] if team_a.blank?
 
     if team_a_final_sort.present?
-      team_a.users.find(team_a_final_sort.split(','))
+      filtered_user_ids = team_a_final_sort.split(',')
+      filtered_user_ids.collect { |i| team_a.users.find_by(id: i) }
+                       .compact
     else
       filtered_team_a_users
     end
@@ -132,7 +146,9 @@ class LeagueSeasonTeamTournamentDayMatchup < ApplicationRecord
     return [] if team_b.blank?
 
     if team_b_final_sort.present?
-      team_b.users.find(team_b_final_sort.split(','))
+      filtered_user_ids = team_b_final_sort.split(',')
+      filtered_user_ids.collect { |i| team_b.users.find_by(id: i) }
+                       .compact
     else
       filtered_team_b_users
     end

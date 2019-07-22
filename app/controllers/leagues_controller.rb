@@ -72,6 +72,7 @@ class LeaguesController < BaseController
     @league = League.find(params[:league_id])
 
     users = @league.users.where.not(ghin_number: nil).where.not(ghin_number: '').order(:ghin_updated_at)
+
     GhinUpdateJob.perform_later(users.pluck(:id))
 
     redirect_to leagues_path, flash:

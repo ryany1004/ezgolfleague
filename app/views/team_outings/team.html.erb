@@ -13,31 +13,39 @@
   <div class="panel-heading">
     <h3 class="panel-title">Players</h3>
 
-    <p>NOTE: An equal number of players must be playing on each team for game types that are matchups.</p>
+    <p>An equal number of players must be playing on each team for game types that are matchups.</p>
+
+    <p>If you specify a custom order, it overrides any changes in handicap.</p>  
 
     <p><%= link_to 'Toggle All Golfers', league_tournament_toggle_all_team_players_path(@league, @tournament, @tournament_day, @league_season_team), method: :patch %></p>
   </div>
 
-  <table class="table table-striped">
-    <tbody>
-    <% @league_season_team.users.each do |user| %>
-      <tr>
-        <td><%= user_playing_status_indicator(@tournament_day, @league_season_team, user) %></td>
-        <td><%= link_to 'Toggle Playing Status', league_tournament_update_day_team_path(@league, @tournament, @tournament_day, @league_season_team, user), method: :patch %></td>
-      </tr>
-    <% end %>
-    </tbody>
-    <% if current_user.supereditor? %>
-      <tfoot>
-        <%= simple_form_for @matchup, url: league_tournament_update_matchup_sequence_path(@tournament.league, @tournament, @tournament_day, @league_season_team, @matchup), method: :patch do |f| %>
-          <tr>
-            <th><%= f.input :team_a_final_sort %> <%= f.input :team_b_final_sort %></th>
-            <th><%= f.button :submit, "Save", class: 'btn btn-default' %></th>
-          </tr>
+  <%= simple_form_for @matchup, url: league_tournament_update_matchup_sequence_path(@tournament.league, @tournament, @tournament_day, @league_season_team, @matchup), method: :patch do |f| %>
+    <table class="table table-striped">
+      <tbody>
+      <% @league_season_team.users.each do |user| %>
+        <tr>
+          <td><%= user_playing_status_indicator(@tournament_day, @league_season_team, user) %></td>
+          <td><%= user_matchup_selector(@tournament_day, @league_season_team, user) %></td>
+          <td><%= link_to 'Toggle Playing Status', league_tournament_update_day_team_path(@league, @tournament, @tournament_day, @league_season_team, user), method: :patch %></td>
+        </tr>
       <% end %>
+      </tbody>
+      <tfoot>
+        <tr>
+          <th>&nbsp;</th>
+          <th>
+            <%= f.button :submit, "Save Custom Order", class: 'btn btn-default' %>
+            <% if @matchup.team_a_final_sort.present? || @matchup.team_b_final_sort.present? %>
+            <br/><br/>
+            <%= link_to 'Clear Custom Matchups', league_tournament_clear_matchup_sequence_path(@tournament.league, @tournament, @tournament_day, @league_season_team, @matchup), method: :patch, class: 'btn btn-warning' %>
+            <% end %>
+          </th>
+          <th>&nbsp;</th>
+        </tr>
       </tfoot>
-    <% end %>
-  </table>
+    </table>
+  <% end %>
 </div>
 
 <%= link_to "Back to Team Setup", league_tournament_day_teams_path(current_user.selected_league, @tournament, @tournament_day), class: 'btn btn-default' %>

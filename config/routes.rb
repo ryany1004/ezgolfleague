@@ -209,6 +209,7 @@ Rails.application.routes.draw do
       patch 'tournament_days/:tournament_day_id/teams/:team_id/toggle_players' => 'team_outings#toggle_players', as: :toggle_all_team_players
 
       patch 'tournament_days/:tournament_day_id/teams/:team_id/:matchup_id/update_matchup_sequence' => 'team_outings#update_matchup_sequence', as: :update_matchup_sequence
+      patch 'tournament_days/:tournament_day_id/teams/:team_id/:matchup_id/clear_matchup_sequence' => 'team_outings#clear_matchup_sequence', as: :clear_matchup_sequence
 
       get 'handicaps'
       patch 'update_course_handicaps'

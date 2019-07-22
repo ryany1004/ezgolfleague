@@ -13,13 +13,15 @@ module ScoringRuleScorecards
     attr_accessor :unplayed_holes
     attr_accessor :holes_won
 
-    def name(_ = false)
-      'Match Play'
+    def name(shorten_for_print = false)
+      if shorten_for_print
+        'Match Play'
+      else
+        "#{self.user.short_name} Match Play"
+      end
     end
 
     def calculate_scores
-      new_scores = []
-
       user1 = user
       user2 = opponent
 
@@ -33,20 +35,22 @@ module ScoringRuleScorecards
 
       Rails.logger.debug { "MatchPlayScorecard Handicaps: #{user1.complete_name} (#{user1_handicap_allowance.pluck(:strokes).sum}) #{user1_handicap_allowance.pluck(:strokes)} / #{user2.complete_name} #{user2_handicap_allowance.pluck(:strokes).sum} #{user2_handicap_allowance.pluck(:strokes)}" }
 
+      new_scores = []
       scoring_rule.course_holes.each_with_index do |hole, i|
         score = DerivedScorecardScore.new
 
         running_score_holes = scoring_rule.course_holes.limit(i + 1)
-        score.strokes = score_for_holes(user1, user1_handicap_allowance, user2, user2_handicap_allowance, hole, running_score_holes)
 
+        score.strokes = score_for_holes(user1, user1_handicap_allowance, user2, user2_handicap_allowance, hole, running_score_holes, score)
         score.course_hole = hole
+
         new_scores << score
       end
 
       self.scores = new_scores
     end
 
-    def score_for_holes(user1, user1_handicap_allowance, user2, user2_handicap_allowance, current_hole, holes)
+    def score_for_holes(user1, user1_handicap_allowance, user2, user2_handicap_allowance, current_hole, holes, scorecard_score)
       return 0 if user1.blank? || user2.blank?
 
       scorecard1 = tournament_day.primary_scorecard_for_user(user1)
@@ -74,28 +78,27 @@ module ScoringRuleScorecards
       holes.each do |hole|
         user1_score = scorecard1.scores.find_by(course_hole: hole)
         user2_score = scorecard2.scores.find_by(course_hole: hole)
+        next if user1_score.blank? || user2_score.blank?
 
         user1_hole_score = adjusted_strokes(user1_score.strokes, user1_handicap_allowance, hole)
         user2_hole_score = adjusted_strokes(user2_score.strokes, user2_handicap_allowance, hole)
 
-        next if user1_score.blank? || user2_score.blank?
-
-        Rails.logger.debug { "MatchPlayScorecard: #{user.complete_name} and #{opponent.complete_name}. Hole #{hole.hole_number}: User 1: #{user1_hole_score} User 2: #{user2_hole_score}" }
-
-        new_running_score = running_score
-        new_opponent_running_score = opponent_running_score
-
-        if user1_hole_score < user2_hole_score # user 1 won this hole
-          new_running_score = running_score + 1
+        if user1_hole_score == user2_hole_score
+          # do nothing
+        elsif user1_hole_score < user2_hole_score
+          self.running_score += 1
+          self.opponent_running_score -= 1
 
           self.holes_won += 1
-        elsif user1_hole_score > user2_hole_score # user 1 lost this hole
-          new_opponent_running_score = opponent_running_score + 1
+        else
+          self.running_score -= 1
+          self.opponent_running_score += 1
         end
 
-        self.running_score = [new_running_score, 0].max
-        self.opponent_running_score = [new_opponent_running_score, 0].max
+        Rails.logger.debug { "MatchPlayScorecard: #{user.complete_name} and #{opponent.complete_name}. Hole #{hole.hole_number}: User 1: #{user1_hole_score} (#{self.running_score}) User 2: #{user2_hole_score} (#{self.opponent_running_score})" }
       end
+
+      scorecard_score.display_override = 'AS' if self.running_score == self.opponent_running_score
 
       running_score
     end

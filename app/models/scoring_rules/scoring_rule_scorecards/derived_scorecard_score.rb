@@ -5,6 +5,7 @@ module ScoringRuleScorecards
     attr_accessor :display_net
     attr_accessor :course_hole
     attr_accessor :scorecard
+    attr_accessor :display_override
 
     def initialize
       self.strokes = 0
@@ -23,6 +24,10 @@ module ScoringRuleScorecards
     end
 
     def display_score
+      display_override.presence || display_strokes
+    end
+
+    def display_strokes
       display_net ? net_strokes : strokes
     end
 

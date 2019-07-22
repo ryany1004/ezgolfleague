@@ -1,9 +1,9 @@
 class League < ApplicationRecord
   include Servable
 
-  has_many :league_seasons, ->{ order 'starts_at' }, dependent: :destroy, inverse_of: :league
-  has_many :league_memberships, ->{includes(:user).order("users.last_name")}, dependent: :destroy
-  has_many :users, ->{ order 'last_name, first_name' }, through: :league_memberships
+  has_many :league_seasons, -> { order 'starts_at' }, dependent: :destroy, inverse_of: :league
+  has_many :league_memberships, -> { includes(:user).order('users.last_name') }, dependent: :destroy
+  has_many :users, -> { order 'last_name, first_name' }, through: :league_memberships
   has_many :tournaments, dependent: :destroy, inverse_of: :league
   has_many :notification_templates, dependent: :destroy
 
@@ -102,7 +102,8 @@ class League < ApplicationRecord
       start_date = Date.civil(Time.now.year, 1, 1)
       end_date = Date.civil(Time.now.year, -1, -1)
 
-      LeagueSeason.create(name: "#{ Time.now.year }", starts_at: start_date, ends_at: end_date, season_type_raw: LeagueSeasonType::TEAM, league: self)
+      s = LeagueSeason.create(name: Time.zone.now.year.to_s, starts_at: start_date, ends_at: end_date, league: self)
+      s.update(season_type_raw: LeagueSeasonType::TEAM) if league_type == 'Team Play'
     end
   end
 

@@ -231,11 +231,11 @@ class TournamentPresenter
     items = []
 
     if tournament_day.blank?
-      tournament.optional_scoring_rules_with_dues.each do |r|
+      tournament.displayable_scoring_rules.each do |r|
         items << { name: r.name, winners: r.legacy_contest_winners } if r.legacy_contest_winners.present?
       end
     else
-      tournament_day.optional_scoring_rules_with_dues.each do |r|
+      tournament_day.displayable_scoring_rules.each do |r|
         items << { name: r.name, winners: r.legacy_contest_winners } if r.legacy_contest_winners.present?
       end
     end
@@ -286,7 +286,24 @@ class TournamentPresenter
     teams = []
 
     tournament_day.league_season_team_tournament_day_matchups.each do |matchup|
-      teams << { name: matchup.name }
+      next if matchup.team_a.blank? || matchup.team_b.blank?
+
+      team_a_matched_users = matchup.users_with_matchup_indicator(matchup.team_a)
+      team_b_matched_users = matchup.users_with_matchup_indicator(matchup.team_b)
+
+      team_a_other_users = matchup.team_a.users.reject { |u| team_a_matched_users.map { |x| x[:user] }.include? u }
+      team_a_other_users.each do |u|
+        team_a_matched_users << { user: u, matchup_indicator: nil }
+      end
+
+      team_b_other_users = matchup.team_b.users.reject { |u| team_b_matched_users.map { |x| x[:user] }.include? u }
+      team_b_other_users.each do |u|
+        team_b_matched_users << { user: u, matchup_indicator: nil }
+      end
+
+      teams << { name: matchup.name,
+                 team_a_users: team_a_matched_users,
+                 team_b_users: team_b_matched_users }
     end
 
     teams

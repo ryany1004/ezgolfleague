@@ -30,7 +30,7 @@ module Scorecards
         rows = rows + self.additional_rows unless self.additional_rows.blank?
 
         #header info
-        header_info = {golfer_name: self.scorecard.golf_outing.user.short_name, net_score: self.scorecard.net_score.to_s, gross_score: self.scorecard.gross_score.to_s, front_nine_score: self.scorecard.front_nine_score(true).to_s, back_nine_score: self.scorecard.back_nine_score(true).to_s}
+        header_info = {golfer_name: self.scorecard.golf_outing.user.short_name, net_score: self.scorecard.net_score.to_s, gross_score: self.scorecard.gross_score.to_s, front_nine_score: self.scorecard.front_nine_score(false).to_s, back_nine_score: self.scorecard.back_nine_score(false).to_s}
 
         return {rows: rows, header: header_info}
       end
@@ -55,17 +55,17 @@ module Scorecards
         return self.score_row_for_scorecard(self.scorecard, self.scorecard.name(true))
       end
 
-      def score_row_for_scorecard(card, title)
-        #Old Format
+      def score_row_for_scorecard(card, title, nines_use_handicaps = false)
+        # Old Format
         score_info = []
         card.scores.each do |score|
           score_info << [score.display_score.to_s]
         end
-        score_info << ["#{card.front_nine_score(false)}/#{card.front_nine_score(true)}", "#{card.back_nine_score(false)}/#{card.back_nine_score(true)}"]
+        score_info << ["#{card.front_nine_score(nines_use_handicaps)}/#{card.back_nine_score(nines_use_handicaps)}"]
         score_info << [card.course_handicap.to_s]
         score_info << ["#{card.gross_score}/#{card.net_score}"]
 
-        return {title: title, contents: score_info, should_bold: false, should_ornament: false}
+        { title: title, contents: score_info, should_bold: false, should_ornament: false }
       end
 
       def par_row

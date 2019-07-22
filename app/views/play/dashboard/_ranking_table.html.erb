@@ -13,7 +13,7 @@
       <td colspan="5"><strong><%= group.name %></strong></td>
     </tr>
     <% group.displayable_league_season_rankings.each do |ranking| %>
-      <% cache [ranking] do %>
+      <% cache [ranking.cache_key_with_version] do %>
         <%= render partial: 'rankings', locals: { ranking: ranking } %>
       <% end %>
     <% end %>

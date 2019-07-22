@@ -274,7 +274,12 @@ class ScoringRule < ApplicationRecord
     winners = []
 
     payout_results.each do |r|
-      winners << { contest_name: name, name: r.user.complete_name, result_value: r.detail, amount: r.amount, points: r.points.to_i, user: r.user }
+      winners << { contest_name: name,
+                   name: r.user&.complete_name,
+                   result_value: r.detail.presence || '',
+                   amount: r.amount.presence || '',
+                   points: r.points.to_i,
+                   user: r.user }
     end
 
     winners
@@ -302,6 +307,7 @@ class ScoringRuleOption
       ScoringRuleOption.option(name: 'Two Man Scramble', class_name: 'TwoManScrambleScoringRule'),
       ScoringRuleOption.option(name: 'Four Man Scramble', class_name: 'FourManScrambleScoringRule'),
       ScoringRuleOption.option(name: 'Gross Skins', class_name: 'GrossSkinsScoringRule'),
+      ScoringRuleOption.option(name: 'Individual 3 Best Balls of 4', class_name: 'ThreeBestBallsOfFourScoringRule'),
       ScoringRuleOption.option(name: 'Net Skins', class_name: 'NetSkinsScoringRule'),
       ScoringRuleOption.option(name: 'Net Skins + Gross Birdies', class_name: 'TotalSkinsScoringRule'),
       ScoringRuleOption.option(name: 'Net Low', class_name: 'NetLowScoringRule'),

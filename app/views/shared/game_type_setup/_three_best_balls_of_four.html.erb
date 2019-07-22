@@ -1,0 +1,2 @@
+<%= check_box_tag("scoring_rule_options[#{scoring_rule.id}][should_add_par_if_small_group]", 'true', scoring_rule.should_add_par?) %>
+<%= label_tag("scoring_rule_options[#{scoring_rule.id}][should_add_par_if_small_group]", "Select to add each hole's par to the score if the group is not full.") %>
