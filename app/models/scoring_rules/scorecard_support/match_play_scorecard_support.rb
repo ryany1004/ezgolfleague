@@ -60,10 +60,14 @@ module MatchPlayScorecardSupport
     group = tournament_day.tournament_group_for_player(user)
     group&.golf_outings&.each do |outing|
       card = tournament_day.primary_scorecard_for_user(outing.user)
-
       next if card.user == user || other_scorecards.include?(card)
 
       other_scorecards << card
+
+      unless only_human_scorecards
+        opponent_match_play_card = match_play_scorecard_for_user(outing.user)
+        other_scorecards << opponent_match_play_card unless opponent_match_play_card.blank?
+      end
     end
 
     other_scorecards
