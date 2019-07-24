@@ -6,21 +6,27 @@
     <div class="row">
       <div class="col-md-8">
         <h2><%= truncate(@tournament.name, length: 40) %></h2>
-        <a href="#tornament-info-popup" class="popup-with-zoom-anim"><%= image_tag('information.svg') %></a>
+        <a href="#tornament-info-popup" class="popup-with-zoom-anim"><%= image_tag('settings.png') %></a>
+        <a href="#tornament-info-popup" class="popup-with-zoom-anim"><%= image_tag('print-button.png') %></a>
+        <%= link_to image_tag('message.png'), "", data: { toggle:"modal", target:"#sendMessageModal" } %>
         <ul class="header-list-para list-inline">
           <li class="list-inline-item"><%= @tournament.tournament_starts_at.to_s(:standard) %></li>
           <li class="list-inline-item"><%= truncate(@tournament.first_day.course.name, length: 35) %></li>
           <li class="list-inline-item"><%= @tournament.first_day.scorecard_base_scoring_rule.course_holes.count %> Holes</li>
+          <li class="list-inline-item"><%= @tournament.players.count %> Players</li>
         </ul>
       </div>
       <!-- /.col-md-8 --> 
       <div class="col-md-4 text-right">
-        <div class="pm-list">
-          <p class="text-uppercase">players</p>
-          <h2><%= @tournament.players.count %></h2>
-        </div>
+        <% if @tournament.tournament_state == TournamentState::REGISTRATION %>
+          <a href="#edit-tee-times" class="btn btn-primary popup-with-zoom-anim mr-3">Edit Tee Times</a>  
+          <a href="#add-players" class="btn btn__ezgl-secondary popup-with-zoom-anim">Add Players</a>
+        <% elsif @tournament.tournament_state == TournamentState::REVIEW_SCORES %>
+          <%= link_to "Calculate Results", "#", class: 'btn btn-primary' %>
+        <% elsif @tournament.tournament_state == TournamentState::POST_SCORES %>
+          <%= link_to "Edit Results", "#", class: 'btn btn-primary' %>
+        <% end %>
       </div>
-      <!-- /.col-md-6 --> 
     </div>
     <!-- /.row -->         
   </div>
@@ -38,7 +44,7 @@
 
   <div class="container p-0 mb-5">
     <div class="row">
-      <div class="col-md-9">
+      <div class="col-md-12">
         <div class="raking-content-card teatime-content-card">
           <div class="raking-content-header-card">
             <ul class="nav nav-pills">
@@ -84,20 +90,6 @@
         </div>
       </div>
       <!-- /.col-md-8 -->  
-      <div class="col-md-3">
-        <%= render partial: 'tournament_sidebar_card', locals: { tournament: @tournament } %>
-
-        <div class="list-group sidebar-list-group">
-          <a href="#" class="list-group-item list-group-item-action">
-          <%= image_tag('settings.png') %>Settings
-          </a>
-          <a href="#" class="list-group-item list-group-item-action">
-          <%= image_tag('print-button.png') %>Print Scrorecards
-          </a>
-          <%= link_to image_tag('message.png') + "Message Players", "", data: { toggle:"modal", target:"#sendMessageModal" }, class: "list-group-item list-group-item-action" %>
-        </div>
-      </div>
-      <!-- /.col-md-4 -->         
     </div>
     <!-- /.row -->         
   </div>

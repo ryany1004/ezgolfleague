@@ -5,7 +5,9 @@
       <div class="tournament-card">
         <div class="tournament-card__header">
           <h3 class="p-4">Tournament Details</h3>
-          <%= link_to "Edit", "#edit", class: 'btn btn__ezgl-secondary' %>
+          <% if @tournament.tournament_state == TournamentState::REGISTRATION %>
+            <%= link_to "Edit", "#edit", class: 'btn btn__ezgl-secondary' %>
+          <% end %>
         </div>
 
         <div class="tournament-card__body">
