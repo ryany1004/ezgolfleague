@@ -747,10 +747,10 @@ button:focus {
   width: 245px;
 }
 
-.messagePlayer-form {
+.messagePlayer-form, .addGolfers-form {
   display: flex;
   flex-wrap: wrap;
-  max-width: 450px;
+  max-width: 550px;
   justify-content: center;
   margin: 0 auto;
 
@@ -770,7 +770,27 @@ button:focus {
   textarea {
     height: 250px;
   }
+
+  .form-side-label {
+    color: ezgl-color('accent', 'base');
+    width: 18%;
+    text-align: left;
+    margin-right: 16px;
+  }
+
+  .form-flex-group {
+    display: flex;
+    position: relative;
+    width: 100%;
+    align-items: center;
+
+    .form-group {
+      width: 100%;
+      margin-left: 12px;
+    }
+  }
 }
+
 
 .edit-golfer-modal {
 
@@ -1269,7 +1289,7 @@ button:focus {
   }
 }
 
-#addGameTypeModal {
+#addGameTypeModal, #addGolfersModal {
   .step-1-content-form {
     padding-bottom: 0;
   }
@@ -1287,6 +1307,19 @@ button:focus {
   .form-control  {
     margin-left: 0;
   }
+
+  h4 {
+    width: 50%; 
+    text-align: center; 
+    border-bottom: 1px solid #000; 
+    line-height: 0.1em;
+    margin: 75px auto 50px; 
+
+    span {
+      background: #fff; 
+      padding: 0 10px; 
+    }
+  } 
 }
 
 .ttt-header h2,

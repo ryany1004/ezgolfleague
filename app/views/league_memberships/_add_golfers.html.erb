@@ -1,0 +1,43 @@
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+  <div class="modal-content">
+    <div class="modal-body welcome p-5">
+      <div>
+        <h2>Create Golfer</h2>
+        <p>Manually Create a Golfer Profile</p>
+      </div>
+
+      <div class="step-1-content-form step-1-content">
+        <div class="row">
+          <div class="col-md-3 text-right">
+            <label>Golfer Name</label>
+          </div>
+          <div class="col-md-8 tee-times-inputs">
+            <div class="pr-4">
+              <input type="text" placeholder="Add First Name..." class="form-control"></input>
+            </div>
+            <div>
+              <input type="text" placeholder="Add Last Name..." class="form-control"></input>
+            </div>
+          </div>
+        </div>
+      </div> 
+
+      <div class="step-1-content-form step-1-content">
+        <div class="row">
+          <div class="col-md-3 text-right">
+            <label>Golfer Email</label>
+          </div>
+            <div class="col-md-8">
+              <input type="text" placeholder="Add Email..." class="form-control"></input>
+          </div>
+        </div>
+      </div>
+
+      <h4><span>OR</span></h4>
+      <%= link_to "Bulk Import", "#bulkAddGolfers", class: 'btn btn-primary' %>
+    </div>
+    <div class="modal-footer">
+      <%= link_to "Add Golfer", "#addGolfer", class: 'btn btn__ezgl-secondary' %>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,38 @@
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+  <div class="modal-content">
+    <div class="modal-body welcome p-5">
+      <div class="p-3">
+        <h2>Edit Golfers Handicaps</h2>
+        <p>Manually edit any golfers handicaps</p>
+      </div>
+
+      <div class="pl-4 pt-1 pb-1 pr-1">
+        <div class="table-overflow">
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Handicap Index</th>
+                <th>Handicap Overrides</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% league_memberships.each do |m| %>
+              <tr>
+                <td><%= m.user.complete_name %></td>
+                <td><%= m.user.handicap_index %></td>
+                <td><%= m.user.handicap_index %></td>
+              </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer" style="flex-wrap:wrap;">
+      <div>
+        <%= link_to "Update Golfers", "#updateGolfers", class: 'btn btn__ezgl-secondary' %>
+      </div>
+    </div>
+  </div>
+</div>
