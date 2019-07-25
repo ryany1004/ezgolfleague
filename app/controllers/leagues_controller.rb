@@ -74,11 +74,11 @@ class LeaguesController < BaseController
   def update_league_standings
     @league = League.find(params[:league_id])
 
-    @league.league_seasons.order("created_at DESC").each do |s|
-      RankLeagueSeasonJob.perform_later(s)
+    @league.league_seasons.order('created_at DESC').each do |s|
+      RankLeagueSeasonJob.perform_later(s, true)
     end
 
-    redirect_to leagues_path, flash: { success: "All seasons have been queued for standings re-calculation." }
+    redirect_to leagues_path, flash: { success: 'All seasons have been queued for standings re-calculation.' }
   end
 
   def write_member_email
