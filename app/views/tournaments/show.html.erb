@@ -6,9 +6,16 @@
     <div class="row">
       <div class="col-md-8">
         <h2><%= truncate(@tournament.name, length: 40) %></h2>
-        <a href="#tornament-info-popup" class="popup-with-zoom-anim"><%= image_tag('settings.png') %></a>
-        <a href="#tornament-info-popup" class="popup-with-zoom-anim"><%= image_tag('print-button.png') %></a>
-        <%= link_to image_tag('message.png'), "", data: { toggle:"modal", target:"#sendMessageModal" } %>
+        <a class="dropdown">
+          <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <%= image_tag('settings.png') %>
+          </a>
+
+          <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+            <a class="dropdown-item" href="#">Print Scorecards</a>
+            <%= link_to "Message Golfers", "#", class:"dropdown-item", data: { toggle:"modal", target:"#sendMessageModal" } %>
+          </div>
+        </a>
         <ul class="header-list-para list-inline">
           <li class="list-inline-item"><%= @tournament.tournament_starts_at.to_s(:standard) %></li>
           <li class="list-inline-item"><%= truncate(@tournament.first_day.course.name, length: 35) %></li>
@@ -19,8 +26,8 @@
       <!-- /.col-md-8 --> 
       <div class="col-md-4 text-right">
         <% if @tournament.tournament_state == TournamentState::REGISTRATION %>
-          <a href="#edit-tee-times" class="btn btn-primary popup-with-zoom-anim mr-3">Edit Tee Times</a>  
-          <a href="#add-players" class="btn btn__ezgl-secondary popup-with-zoom-anim">Add Players</a>
+          <a href="#edit-tee-times" class="btn btn__ezgl-secondary popup-with-zoom-anim mr-3">Edit Tee Times</a>  
+          <a href="#add-players" class="btn btn-primary popup-with-zoom-anim">Edit Players</a>
         <% elsif @tournament.tournament_state == TournamentState::REVIEW_SCORES %>
           <%= link_to "Calculate Results", "#", class: 'btn btn-primary' %>
         <% elsif @tournament.tournament_state == TournamentState::POST_SCORES %>
@@ -51,9 +58,11 @@
               <% if @tournament.tournament_state == TournamentState::REGISTRATION %>
                 <li class="nav-item">
                   <a class="nav-link active" data-toggle="pill" href="#players-tab">Players</a>
+                  <%= link_to "Edit", "#edit", class: 'btn btn__ezgl-secondary r-3' %>
                 </li>
                 <li class="nav-item">
                   <a class="nav-link" data-toggle="pill" href="#tee-time-tab">Tee Times</a>
+                  <%= link_to "Edit", "#edit", class: 'btn btn__ezgl-secondary' %>
                 </li>
               <% elsif @tournament.tournament_state == TournamentState::REVIEW_SCORES %>
                 <li class="nav-item">
