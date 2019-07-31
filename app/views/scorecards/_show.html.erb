@@ -1,0 +1,116 @@
+<div class="tornament-info-popup-header-top">
+    <div class="row">
+      <div class="col-md-12">
+        <h2>Scorecard</h2>
+      </div>
+    </div>          
+  </div><!-- /.tornament-info-popup-header-top -->
+  <div>
+    <table>
+      <thead>
+        <tr>
+          <th scope="col">Hole</th>
+          <% p.sliced_scores.each_with_index do |split, j| %>
+            <% split.each do |score| %>
+              <th scope="col"><%= score.course_hole.hole_number %></th>
+            <% end %>
+            <% if j.zero? %>
+              <th scope="col">OUT</th>
+            <% else %>
+              <th scope="col">OUT/IN</th>
+            <% end %>
+          <% end %>
+          <th scope="col">TOTAL</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Par</td>
+          <% p.sliced_scores.each_with_index do |split, j| %>
+            <% split.each do |score| %>
+              <td><%= score.course_hole.par %></td>
+            <% end %>
+          <% end %>
+          <td>&nbsp;</td>
+        </tr>
+
+        <% p.all_scorecards.each do |scorecard| %>
+          <tr class="score" data-scorecard-id="<%= scorecard.id %>" data-scorecard-scores-count="<%= scorecard.scores.count %>">
+            <td>Score</td>
+            <% scorecard.scores.each_slice(p.number_of_holes / 2).to_a.each_with_index do |split, j| %>
+              <% split.each do |score| %>
+                <td data-score-id="<%= score.id %>">
+                  <%= scorecard_score_helper(score, false) %>
+                </td>
+              <% end %>
+              <% if scorecard.should_subtotal? %>
+                <td name="subtotal-<%= j %>">
+                  <% if j.zero? %>
+                    <%= score_print_helper(scorecard.front_nine_score, false) %> <%= front_nine_handicap_for_scorecard(scorecard, false) %>
+                  <% else %>
+                    <%= score_print_helper(scorecard.front_nine_score, false) %> <%= front_nine_handicap_for_scorecard(scorecard, false) %>
+                    <%= score_print_helper(scorecard.back_nine_score, false) %> <%= back_nine_handicap_for_scorecard(scorecard, false) %>
+                  <% end %>
+                </td>
+              <% else %>
+                <td>&nbsp;</td>
+              <% end %>
+            <% end %>
+
+            <% if scorecard.should_total? %>
+              <td>
+                <%= score_print_helper(scorecard.scores.map {|score| score.strokes }.sum, false) %>
+                <% if scorecard.net_score > 0 -%>
+                  <span class="label label-success">
+                    <%= score_print_helper(scorecard.net_score, false) %>
+                  </span>
+                <% end -%>
+              </td>
+            <% else %>
+              &nbsp;
+            <% end %>
+          </tr>
+        <% end %>
+
+<!--         <tr class="net">
+          <td>Net</td>
+          <td>4</td>
+          <td>4</td>
+          <td>4</td>
+          <td>4</td>
+          <td>4</td>
+          <td>4</td>
+          <td>4</td>
+          <td>4</td>
+          <td>4</td>
+          <td>34</td>
+          <td>4</td>
+          <td>4</td>
+          <td>4</td>
+          <td>4</td>
+          <td>4</td>
+          <td>4</td>
+          <td>4</td>
+          <td>4</td>
+          <td>4</td>
+          <td>34</td>
+          <td>64</td>
+        </tr> -->
+
+        <tr class="m-hcp">
+          <td>M HCP</td>
+          <% p.sliced_scores.each_with_index do |split, j| %>
+            <% split.each do |score| %>
+              <td><%= score.course_hole.mens_handicap %></td>
+            <% end %>
+            <td>&nbsp;</td>
+          <% end %>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="row">
+    <div class="col-md-12 pt-5 cta">
+      <%= link_to "Save", "#save", class: 'btn btn__ezgl-secondary' %>
+    </div>
+  </div>
