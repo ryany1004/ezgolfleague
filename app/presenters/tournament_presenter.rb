@@ -292,11 +292,13 @@ class TournamentPresenter
       team_b_matched_users = matchup.users_with_matchup_indicator(matchup.team_b)
 
       team_a_other_users = matchup.team_a.users.reject { |u| team_a_matched_users.map { |x| x[:user] }.include? u }
+      team_a_other_users = matchup.sort_users(team_a_other_users)
       team_a_other_users.each do |u|
         team_a_matched_users << { user: u, matchup_indicator: nil }
       end
 
       team_b_other_users = matchup.team_b.users.reject { |u| team_b_matched_users.map { |x| x[:user] }.include? u }
+      team_b_other_users = matchup.sort_users(team_b_other_users)
       team_b_other_users.each do |u|
         team_b_matched_users << { user: u, matchup_indicator: nil }
       end

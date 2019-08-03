@@ -317,6 +317,10 @@ class TournamentDay < ApplicationRecord
     @optional_scoring_rules_with_dues ||= self.optional_scoring_rules.select { |r| r.dues_amount > 0 }
   end
 
+  def points_for_user(user:)
+    scoring_rules.map { |rule| rule.points_for_user(user: user) }.sum
+  end
+
   def legacy_game_type_id
   	if self.mandatory_scoring_rules.first.present?
   		self.mandatory_scoring_rules.first.legacy_game_type_id

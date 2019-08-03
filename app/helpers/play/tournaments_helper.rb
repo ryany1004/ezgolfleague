@@ -23,6 +23,11 @@ module Play::TournamentsHelper
     end
   end
 
+  def points_or_blank(day, user)
+    points = day.points_for_user(user: user)
+    points.positive? ? points.to_i : ''
+  end
+
   def format_winners(winners)
     return "" if winners.blank?
 
