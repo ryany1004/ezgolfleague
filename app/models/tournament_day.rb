@@ -298,23 +298,23 @@ class TournamentDay < ApplicationRecord
   end
 
   def mandatory_scoring_rules
-    @mandatory_scoring_rules ||= self.scoring_rules.where(is_opt_in: false).order(:type)
+    @mandatory_scoring_rules ||= scoring_rules.where(is_opt_in: false).order(:type)
   end
 
   def mandatory_individual_scoring_rules
-    @mandatory_individual_scoring_rules ||= self.mandatory_scoring_rules.select { |r| r.team_type != ScoringRuleTeamType::LEAGUE }
+    @mandatory_individual_scoring_rules ||= mandatory_scoring_rules.select { |r| r.team_type != ScoringRuleTeamType::LEAGUE }
   end
 
   def mandatory_team_scoring_rules
-    @mandatory_team_scoring_rules ||= self.mandatory_scoring_rules.select { |r| r.team_type == ScoringRuleTeamType::LEAGUE }
+    @mandatory_team_scoring_rules ||= mandatory_scoring_rules.select { |r| r.team_type == ScoringRuleTeamType::LEAGUE }
   end
 
   def optional_scoring_rules
-    @optional_scoring_rules ||= self.scoring_rules.where(is_opt_in: true).order(:type)
+    @optional_scoring_rules ||= scoring_rules.where(is_opt_in: true).order(:type)
   end
 
   def optional_scoring_rules_with_dues
-    @optional_scoring_rules_with_dues ||= self.optional_scoring_rules.select { |r| r.dues_amount > 0 }
+    @optional_scoring_rules_with_dues ||= optional_scoring_rules.select { |r| r.dues_amount > 0 }
   end
 
   def points_for_user(user:)

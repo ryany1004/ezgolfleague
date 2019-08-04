@@ -19,7 +19,7 @@ module Play::TournamentsHelper
     if flattened_array.count > (index + 1)
       return "(Team #{flattened_array[index] + 1})"
     else
-      return ""
+      return ''
     end
   end
 
@@ -29,9 +29,9 @@ module Play::TournamentsHelper
   end
 
   def format_winners(winners)
-    return "" if winners.blank?
+    return '' if winners.blank?
 
-    html = ""
+    html = ''
 
     winners.each_with_index do |winner, i|
       html << winner[:name] unless winner[:name].blank?
