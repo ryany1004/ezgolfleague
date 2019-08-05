@@ -107,15 +107,6 @@ class LeagueSeasonTeamTournamentDayMatchup < ApplicationRecord
     split_ids.presence || []
   end
 
-  # def sort_users(users)
-  #   users.sort { |a, b|
-  #     a_handicap = a.handicap_or_speculative(tournament_day)
-  #     b_handicap = b.handicap_or_speculative(tournament_day)
-
-  #     a_handicap <=> b_handicap
-  #   }
-  # end
-
   def sort_users(users)
     users.sort { |a, b|
       a_scorecard = tournament_day.primary_scorecard_for_user(a)
@@ -124,7 +115,10 @@ class LeagueSeasonTeamTournamentDayMatchup < ApplicationRecord
       if a_scorecard.present? && b_scorecard.present?
         a_scorecard.raw_course_handicap <=> b_scorecard.raw_course_handicap
       else
-        0
+        a_handicap = a.handicap_or_speculative(tournament_day)
+        b_handicap = b.handicap_or_speculative(tournament_day)
+
+        a_handicap <=> b_handicap
       end
     }
   end
