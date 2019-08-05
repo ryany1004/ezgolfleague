@@ -1,6 +1,6 @@
 module Play::TournamentsHelper
   def team_name(scoring_rule, tournament_group, index)
-    return "" if scoring_rule.team_type == ScoringRuleTeamType::NONE
+    return '' if scoring_rule.team_type == ScoringRuleTeamType::NONE
 
     slots = []
 
