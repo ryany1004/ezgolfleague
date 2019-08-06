@@ -2,6 +2,7 @@
   flight_number: payout[:flight_number],
   name: payout[:name],
   id: payout[:id],
+  item_id: payout[:item_id],
   amount: payout[:amount],
   points: payout[:points],
   matchup_position: payout[:matchup_position]
