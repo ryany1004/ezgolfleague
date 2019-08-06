@@ -212,6 +212,7 @@ class TournamentPresenter
 
           payout_details <<
             {
+              item_id: result.id,
               flight_number: flight_number,
               flight_name: flight_name,
               name: result.name,
