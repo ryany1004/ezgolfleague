@@ -4,7 +4,8 @@
       <h2>Tee Time Editor</h2>
     </div>
     <div class="col-md-4 text-right">
-      <button type="button" class="btn btn__ezgl-secondary">Save</button>
+      <button type="button" class="btn btn__ezgl-secondary add-team ml-3">Add Tee Time</button>
+      <button type="button" class="btn btn__ezgl-primary">Save</button>
     </div>
   </div>
 </div>
@@ -36,9 +37,6 @@
           </div><!-- /.tee-times-panel-content -->
 
           <div class="add-record-container">
-            <div class="cta-container">
-              <%= link_to "Add Tee Time", "#add-team", class: 'btn btn__ezgl-secondary-outline add-team' %>
-            </div>
 
             <div class="input-container">
               <input type="text" placeholder="Add tee time...">
@@ -52,12 +50,10 @@
 
 <script>
   $('.add-team').click(function(){
-    $('.cta-container').css('display','none');
     $('.input-container').css('display','flex');
   });
 
   $('.close').click(function(){
     $('.input-container').css('display','none');
-    $('.cta-container').css('display','flex');
   });
 </script>

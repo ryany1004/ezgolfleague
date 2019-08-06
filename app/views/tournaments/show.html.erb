@@ -26,8 +26,7 @@
       <!-- /.col-md-8 --> 
       <div class="col-md-4 text-right">
         <% if @tournament.tournament_state == TournamentState::REGISTRATION %>
-          <a href="#edit-tee-times" class="btn btn__ezgl-secondary popup-with-zoom-anim mr-3">Edit Tee Times</a>  
-          <a href="#add-players" class="btn btn-primary popup-with-zoom-anim">Edit Players</a>
+          <a href="#add-players" class="btn btn-primary popup-with-zoom-anim">Manage Players/Tee Times</a>
         <% elsif @tournament.tournament_state == TournamentState::REVIEW_SCORES %>
           <%= link_to "Calculate Results", "#", class: 'btn btn-primary' %>
         <% elsif @tournament.tournament_state == TournamentState::POST_SCORES %>
@@ -56,13 +55,9 @@
           <div class="raking-content-header-card">
             <ul class="nav nav-pills">
               <% if @tournament.tournament_state == TournamentState::REGISTRATION %>
-                <li class="nav-item">
-                  <a class="nav-link active" data-toggle="pill" href="#players-tab">Players</a>
-                  <%= link_to "Edit", "#edit", class: 'btn btn__ezgl-secondary r-3' %>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" data-toggle="pill" href="#tee-time-tab">Tee Times</a>
-                  <%= link_to "Edit", "#edit", class: 'btn btn__ezgl-secondary' %>
+                <li class="nav-item tee-times-full-tab">
+                  <a class="nav-link active" data-toggle="pill" href="#tee-time-tab">Players/Tee Times</a>
+                  <%= link_to "Edit", "#add-players", class: 'btn btn__ezgl-secondary popup-with-zoom-anim' %>
                 </li>
               <% elsif @tournament.tournament_state == TournamentState::REVIEW_SCORES %>
                 <li class="nav-item">

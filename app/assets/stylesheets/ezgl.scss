@@ -1770,6 +1770,11 @@ button:focus {
   display: inline-block;
 }
 
+.tee-times-full-tab {
+  width: 99% !important;
+  padding-left: 0 !important;
+}
+
 .raking-content-header-card .nav li,
 .raking-content-header-card .nav .nav-link {
   display: inline-block;
@@ -2042,6 +2047,22 @@ button:focus {
 }
 .tee-times-panel-content{
   padding: 10px 40px;
+
+  .edit-golfer-btn {
+    float: right;
+
+    .edit-golfer-icon {
+      img {
+        width: 24px !important;
+        position: absolute;
+        top: 20px;
+      }
+    }
+
+    &::after {
+      display: none;
+    }
+  }
 }
 .tee-times-panel-content .media{
   border: 1px solid #e7e7e7;
@@ -2077,6 +2098,34 @@ button:focus {
 
     i {
       padding-left: 12px;
+
+      &:hover {
+        cursor: pointer;
+      }
+    }
+  }
+
+  .drag-player-row {
+    width: 100%;
+    margin: 0;
+
+    .drag-player {
+      background: #e7e7e7;
+      border-radius: 3px;
+      border: dashed #b2b2b2;
+      width: 48%;
+      height: 92px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 15px 24px;
+      margin: 0 2% 15px 0px;
+  
+      p {
+        margin: 0;
+        text-transform: uppercase;
+        color: #b2b2b2;
+      }
     }
   }
 
@@ -2118,7 +2167,7 @@ button:focus {
   border-bottom: 1px solid #eaeaea;
 }
 .edit-tee-times-header h2{font-weight: 900; margin-bottom: 0; font-size: 30px; margin-top: 5px;}
-.edit-tee-times-header .btn{margin-right: 40px; font-size: 18px; border-radius: 5px;}
+.edit-tee-times-header .btn{margin-right: 40px; font-size: 18px !important; border-radius: 5px;}
 
 #edit-tee-times .mfp-close, #edit-teams .mfp-close, #add-players .mfp-close {
   font-size: 2.5rem;
