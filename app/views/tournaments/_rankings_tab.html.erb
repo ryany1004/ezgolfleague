@@ -10,7 +10,6 @@
         <th scope="col">points</th>
         <th scope="col">payout</th>
         <th scope="col"></th>
-        <th scope="col"></th>
       </tr>
     </thead>
     <tbody>
@@ -33,11 +32,15 @@
           <td>10</td>
           <td>$20</td>
           <td class="edit-link">
-            <% scorecard = tournament_day.primary_scorecard_for_user(player) %>
-            <%= link_to image_tag('edit.png'), league_tournament_tournament_day_scorecard_path(tournament_day.tournament.league, tournament_day.tournament, tournament_day, scorecard), class:"popup-with-zoom-anim" %>
-          </td>
-          <td class="view-link">
-            <a href="#view-scorecard-popup" class="popup-with-zoom-anim"><i class="fas fa-lg fa-eye"></i></a>
+            <%
+=begin%>
+ <% scorecard = tournament_day.primary_scorecard_for_user(player) %>
+            <%= link_to image_tag('edit.png'), league_tournament_tournament_day_scorecard_path(tournament_day.tournament.league, tournament_day.tournament, tournament_day, scorecard), class:"popup-with-zoom-anim" %> 
+
+              
+<%
+=end%>
+            <%= link_to image_tag('edit.png'), "#view-scorecard-popup", class:"popup-with-zoom-anim" %>
           </td>
         </tr>
       <% end %>
@@ -45,6 +48,265 @@
   </table>
 </div>
 
-<div id="edit-scorecard-popup" class="zoom-anim-dialog mfp-hide">
-  <div id="view-scorecard-contents"></div>
+<div id="view-scorecard-contents"></div>
+
+<div id="view-scorecard-popup" class="zoom-anim-dialog mfp-hide">
+  <div class="tornament-info-popup-header-top">
+    <div class="row">
+      <div class="col-md-4 first">
+        <p>FALL INVITATIONAL TOURNAMENT - ROUND 1</p>
+      </div>
+
+      <div class="col-md-4 center">
+        <p>BRUNSWICK GOLF COURSE</p>
+      </div>
+
+      <div class="col-md-4 last">
+        <%= link_to "Edit", "#edit", class: 'btn btn__ezgl-secondary edit-button mr-2' %>
+        <%= link_to "Save", "#save", class: 'btn btn-primary mr-2' %>
+      </div>
+    </div>          
+  </div><!-- /.tornament-info-popup-header-top -->
+  <div>
+    <table>
+      <thead>
+        <tr>
+          <th scope="col">Hole</th>
+          <th scope="col">1</th>
+          <th scope="col">2</th>
+          <th scope="col">3</th>
+          <th scope="col">4</th>
+          <th scope="col">5</th>
+          <th scope="col">6</th>
+          <th scope="col">7</th>
+          <th scope="col">8</th>
+          <th scope="col">9</th>
+          <th scope="col">Out</th>
+          <th scope="col">10</th>
+          <th scope="col">11</th>
+          <th scope="col">12</th>
+          <th scope="col">13</th>
+          <th scope="col">14</th>
+          <th scope="col">15</th>
+          <th scope="col">16</th>
+          <th scope="col">17</th>
+          <th scope="col">18</th>
+          <th scope="col">Out/In</th>
+          <th scope="col">HDCP</th>
+          <th scope="col">Gross</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Par</td>
+          <td>4</td>
+          <td>4</td>
+          <td>4</td>
+          <td>4</td>
+          <td>4</td>
+          <td>4</td>
+          <td>4</td>
+          <td>4</td>
+          <td>4</td>
+          <td>34</td>
+          <td>4</td>
+          <td>4</td>
+          <td>4</td>
+          <td>4</td>
+          <td>4</td>
+          <td>4</td>
+          <td>4</td>
+          <td>4</td>
+          <td>4</td>
+          <td>34</td>
+          <td>64</td>
+          <td>64</td>
+        </tr>
+
+        <tr class="score">
+          <td>John D. <br><%= link_to "Disqualify", "#disqualify", class: 'btn btn-primary edit' %></td>
+          <td>4</td>
+          <td>4 <br><span class="dot">-1</span></td>
+          <td>4 <br><span class="dot">-2</span></td>
+          <td>4</td>
+          <td>4</td>
+          <td>4</td>
+          <td>4</td>
+          <td>4 <br><span class="dot">-2</span></td>
+          <td>4</td>
+          <td>34</td>
+          <td>4</td>
+          <td>4</td>
+          <td>4 <br><span class="dot">-2</span></td>
+          <td>4</td>
+          <td>4 <br><span class="dot">-2</span></td>
+          <td>4</td>
+          <td>4</td>
+          <td>4</td>
+          <td>4</td>
+          <td>34</td>
+          <td>64 <br><i class="fas fa-unlock edit"></td>
+          <td>64</td>
+        </tr>
+
+        <tr class="score">
+          <td>Sam D. <br><%= link_to "Disqualify", "#disqualify", class: 'btn btn-primary edit' %></td>
+          <td>4</td>
+          <td>4</td>
+          <td>4 <br><span class="dot">-2</span></td>
+          <td>4</td>
+          <td>4</td>
+          <td>4</td>
+          <td>4</td>
+          <td>4 <br><span class="dot">-2</span></td>
+          <td>4</td>
+          <td>34</td>
+          <td>4</td>
+          <td>4</td>
+          <td>4</td>
+          <td>4 <br><span class="dot">-2</span></td>
+          <td>4 <br><span class="dot">-2</span></td>
+          <td>4</td>
+          <td>4</td>
+          <td>4</td>
+          <td>4</td>
+          <td>34</td>
+          <td>64 <br><i class="fas fa-lock edit"></i></td>
+          <td>64</td>
+        </tr>
+
+        <tr class="net">
+          <td>Best Ball Net</td>
+          <td>4</td>
+          <td>4</td>
+          <td>4</td>
+          <td>4</td>
+          <td>4</td>
+          <td>4</td>
+          <td>4</td>
+          <td>4</td>
+          <td>4</td>
+          <td>34</td>
+          <td>4</td>
+          <td>4</td>
+          <td>4</td>
+          <td>4</td>
+          <td>4</td>
+          <td>4</td>
+          <td>4</td>
+          <td>4</td>
+          <td>4</td>
+          <td>34</td>
+          <td>64</td>
+          <td>64</td>
+        </tr>
+
+        <tr class="net">
+          <td>Best Ball Gross</td>
+          <td>4</td>
+          <td>4</td>
+          <td>4</td>
+          <td>4</td>
+          <td>4</td>
+          <td>4</td>
+          <td>4</td>
+          <td>4</td>
+          <td>4</td>
+          <td>34</td>
+          <td>4</td>
+          <td>4</td>
+          <td>4</td>
+          <td>4</td>
+          <td>4</td>
+          <td>4</td>
+          <td>4</td>
+          <td>4</td>
+          <td>4</td>
+          <td>34</td>
+          <td>64</td>
+          <td>64</td>
+        </tr>
+
+        <tr class="m-hcp">
+          <td>M HCP</td>
+          <td>4</td>
+          <td>4</td>
+          <td>4</td>
+          <td>4</td>
+          <td>4</td>
+          <td>4</td>
+          <td>4</td>
+          <td>4</td>
+          <td>4</td>
+          <td>34</td>
+          <td>4</td>
+          <td>4</td>
+          <td>4</td>
+          <td>4</td>
+          <td>4</td>
+          <td>4</td>
+          <td>4</td>
+          <td>4</td>
+          <td>4</td>
+          <td>34</td>
+          <td>64</td>
+          <td>64</td>
+        </tr>
+
+        <tr class="m-hcp">
+          <td>W HCP</td>
+          <td>4</td>
+          <td>4</td>
+          <td>4</td>
+          <td>4</td>
+          <td>4</td>
+          <td>4</td>
+          <td>4</td>
+          <td>4</td>
+          <td>4</td>
+          <td>34</td>
+          <td>4</td>
+          <td>4</td>
+          <td>4</td>
+          <td>4</td>
+          <td>4</td>
+          <td>4</td>
+          <td>4</td>
+          <td>4</td>
+          <td>4</td>
+          <td>34</td>
+          <td>64</td>
+          <td>64</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="tornament-info-popup-header-top">
+    <div class="row">
+      <div class="col-md-3 center">
+        <p>Tees: White</p>
+      </div>
+
+      <div class="col-md-3 center">
+        <p>Date: 12/12/19</p>
+      </div>
+
+      <div class="col-md-3 center">
+        <p>Flight: 1</p>
+      </div>
+
+      <div class="col-md-3 center">
+        <p>Tee Time: 8:00am</p>
+      </div>
+    </div>  
+  </div>
 </div>
+
+<script>
+$( ".edit-button" ).click(function() {
+  $( ".edit" ).toggle( "slow", function() {
+    // Animation complete.
+  });
+});
+</script>

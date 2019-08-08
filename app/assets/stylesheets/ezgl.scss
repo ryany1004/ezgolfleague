@@ -2644,9 +2644,47 @@ button:focus {
 }
 
 #view-scorecard-popup {
+  max-width: 95% !important;
+  padding: 0;
 
   .mfp-close {
     display: none;
+  }
+
+  .tornament-info-popup-header-top {
+    padding-bottom: 0;
+
+    .row {
+      margin: 0;
+
+      .col-md-4, .col-md-3 {
+        display: flex;
+        align-items: center;
+
+        p {
+          margin: 0;
+          font-weight: 600;
+        }
+
+        &.center {
+          justify-content: center;
+        }
+
+        &.last {
+          justify-content: flex-end;
+          padding: 6px;
+        }
+      }
+
+      .col-md-3 {
+        padding: 12px;
+        border-right: 1px solid #b3b3b3;
+
+        p {
+          color: #828282;
+        }
+      }
+    }
   }
   
   table {
@@ -2660,10 +2698,9 @@ button:focus {
         border: 1px solid #049266;
         padding: 8px;
         text-align: center;
-        font-size: 20px;
+        font-size: 18px;
 
         &:first-of-type {
-          font-size: 20px;
           text-align: left;
           padding-left: 12px !important;
         }
@@ -2677,10 +2714,9 @@ button:focus {
           color: ezgl-color('accent', 'base');
           padding: 8px;
           text-align: center;
-          font-size: 20px;
+          font-size: 18px;
 
           &:first-of-type {
-            font-size: 20px;
             text-align: left;
             padding-left: 12px !important;
           }
@@ -2689,14 +2725,37 @@ button:focus {
         &.score {
 
           td {
-            font-size: 24px;
             color: ezgl-color('foreground', 'base');
-            padding: 16px 8px;
+            padding: 12px 8px;
+            vertical-align: top;
 
             &:first-of-type {
-              font-size: 20px;
               text-align: left;
               padding-left: 12px !important;
+            }
+
+            .dot {
+              height: 20px;
+              width: 22px;
+              background-color: ezgl-color('primary', 'base');
+              display: inline-block;
+              font-size: 12px;
+              color: white;
+            }
+
+            .btn {
+              float: left;
+              font-size: 12px;
+              margin-top: 2px;
+            }
+
+            .edit {
+              display: none;
+            }
+
+            .fas {
+              color: #828282;
+              font-size: 14px;
             }
           }
         }
@@ -2707,9 +2766,9 @@ button:focus {
           td {
             color: ezgl-color('foreground', 'base');
             padding: 12px 8px; 
+            font-size: 18px;
 
             &:first-of-type {
-              font-size: 20px;
               text-align: left;
               padding-left: 12px !important;
             }
@@ -2719,7 +2778,7 @@ button:focus {
         &.m-hcp {
 
           td {
-            font-size: 18px;
+            font-size: 14px;
             padding: 6px;
           }
 
@@ -2730,10 +2789,6 @@ button:focus {
         }
       }
     }
-  }
-
-  .btn {
-    float: right;
   }
 }
 
