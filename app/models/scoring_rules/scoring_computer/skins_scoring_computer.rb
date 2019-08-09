@@ -132,8 +132,9 @@ module ScoringComputer
           user_scores << { user: user, score: strokes }
         end
 
-        user_scores.sort! { |x, y| x[:score] <=> y[:score] }
+        next if user_scores.blank?
 
+        user_scores.sort! { |x, y| x[:score] <=> y[:score] }
         user = user_scores[0][:user]
         score = user_scores[0][:score]
         other_users = user_scores.map { |x| x[:user] }
