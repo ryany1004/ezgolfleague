@@ -21,18 +21,15 @@ module ScoringComputer
 
         Rails.logger.info { "TeamBestBallScoringComputer comparing #{matchup.team_a.name} and #{matchup.team_b.name}" }
 
+        # check for DQ
         if matchup.team_a_disqualified?
-          win_result = team_wins(matchup, matchup.team_b, team_b_best_ball_scorecard.net_score)
-          win_result << winners
+          winners << team_wins(matchup, matchup.team_b, team_b_best_ball_scorecard.net_score)
         elsif matchup.team_b_disqualified?
-          win_result = team_wins(matchup, matchup.team_a, team_a_best_ball_scorecard.net_score)
-          win_result << winners
+          winners << team_wins(matchup, matchup.team_a, team_a_best_ball_scorecard.net_score)
         elsif team_a_best_ball_scorecard.net_score < team_b_best_ball_scorecard.net_score
-          win_result = team_wins(matchup, matchup.team_a, team_a_best_ball_scorecard.net_score)
-          win_result << winners
+          winners << team_wins(matchup, matchup.team_a, team_a_best_ball_scorecard.net_score)
         elsif team_a_best_ball_scorecard.net_score > team_b_best_ball_scorecard.net_score
-          win_result = team_wins(matchup, matchup.team_b, team_b_best_ball_scorecard.net_score)
-          win_result << winners
+          winners << team_wins(matchup, matchup.team_b, team_b_best_ball_scorecard.net_score)
         else
           ties << { team: matchup.team_a, net_score: team_a_best_ball_scorecard.net_score }
           ties << { team: matchup.team_b, net_score: team_b_best_ball_scorecard.net_score }
