@@ -21,7 +21,6 @@ module ScoringComputer
 
         Rails.logger.info { "TeamBestBallScoringComputer comparing #{matchup.team_a.name} and #{matchup.team_b.name}" }
 
-        # check for DQ
         if matchup.team_a_disqualified?
           winners << team_wins(matchup, matchup.team_b, team_b_best_ball_scorecard.net_score)
         elsif matchup.team_b_disqualified?
