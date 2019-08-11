@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_06_27_001157) do
+ActiveRecord::Schema.define(version: 2019_08_11_184955) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -193,6 +193,7 @@ ActiveRecord::Schema.define(version: 2019_06_27_001157) do
     t.datetime "updated_at", null: false
     t.integer "rank", default: 0
     t.bigint "league_season_team_id"
+    t.integer "average_score", default: 0
     t.index ["league_season_ranking_group_id"], name: "index_league_season_ranking_group_id"
     t.index ["league_season_team_id"], name: "index_league_season_rankings_on_league_season_team_id"
     t.index ["user_id"], name: "index_league_season_ranking_group_user_id"
@@ -254,6 +255,7 @@ ActiveRecord::Schema.define(version: 2019_06_27_001157) do
     t.datetime "updated_at", null: false
     t.decimal "dues_amount", default: "0.0"
     t.integer "season_type_raw", default: 0
+    t.boolean "rankings_by_scoring_average", default: false
     t.index ["league_id"], name: "index_league_seasons_on_league_id"
   end
 

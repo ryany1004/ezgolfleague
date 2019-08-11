@@ -125,7 +125,7 @@ class Play::TournamentsController < Play::BaseController
   end
 
   def fetch_combined_flights_with_rankings(tournament_day, _)
-    FetchingTools::LeaderboardFetching.flights_with_rankings_could_be_combined(tournament_day)
+    ::FetchingTools::LeaderboardFetching.flights_with_rankings_could_be_combined(tournament_day)
   end
 
   private

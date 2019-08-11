@@ -70,7 +70,11 @@
       <div class="panel-heading">
         <h3 class="panel-title"><%= @league_season.name unless @league_season.blank? %> League Rankings</h3>
       </div>
-      <%= render partial: 'ranking_table', locals: {league_season: @league_season, rankings: @rankings} %>
+      <% if @league_season.rankings_by_scoring_average %>
+        <%= render partial: 'by_average_score_ranking_table', locals: {league_season: @league_season, rankings: @rankings} %>
+      <% else %>
+        <%= render partial: 'by_points_ranking_table', locals: {league_season: @league_season, rankings: @rankings} %>
+      <% end %>
     </div>
   </div>
 
