@@ -32,8 +32,13 @@ class HandicapCalculationJob < ApplicationJob
       end
     end
 
+    # pick which cards we will use
     scorecards.sort! { |x, y| y.tournament_day.tournament_at <=> x.tournament_day.tournament_at }
     scorecards = scorecards[0, league.number_of_rounds_to_handicap]
+
+    # further filter by lowest
+    scorecards = scorecards.sort_by(&:gross_score)
+    scorecards = scorecards[0, league.number_of_lowest_rounds_to_handicap]
 
     scorecards
   end

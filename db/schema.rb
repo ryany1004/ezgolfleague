@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_08_11_184955) do
+ActiveRecord::Schema.define(version: 2019_08_12_004120) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -292,7 +292,8 @@ ActiveRecord::Schema.define(version: 2019_08_11_184955) do
     t.boolean "calculate_handicaps_from_past_rounds", default: false
     t.decimal "override_golfer_price"
     t.string "league_estimated_players"
-    t.integer "number_of_rounds_to_handicap", default: 10
+    t.integer "number_of_rounds_to_handicap"
+    t.integer "number_of_lowest_rounds_to_handicap", default: 10
   end
 
   create_table "mobile_devices", force: :cascade do |t|

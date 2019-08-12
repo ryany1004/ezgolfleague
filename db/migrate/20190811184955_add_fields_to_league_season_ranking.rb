@@ -7,9 +7,11 @@ class AddFieldsToLeagueSeasonRanking < ActiveRecord::Migration[5.2]
       r.update(average_score: 0)
     end
 
-    LeagueSeason.all.each do |l|
+    LeagueSeason.all.order(created_at: :desc).each do |l|
       l.update(rankings_by_scoring_average: false)
+    end
 
+    LeagueSeason.all.order(created_at: :desc).each do |l|
       RankLeagueSeasonJob.perform_later(l)
     end
   end

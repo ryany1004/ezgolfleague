@@ -11,6 +11,14 @@ class League < ApplicationRecord
   validates :location, presence: true
   validates :free_tournaments_remaining, presence: true
   validates :number_of_rounds_to_handicap, presence: true
+  validates :number_of_lowest_rounds_to_handicap, presence: true
+
+  validate :handicap_rounds_bounds_are_correct
+  def handicap_rounds_bounds_are_correct
+    if number_of_lowest_rounds_to_handicap > number_of_rounds_to_handicap
+      errors.add(:number_of_lowest_rounds_to_handicap, 'cannot be more than the total number of rounds')
+    end
+  end
 
   paginates_per 50
 
