@@ -54,6 +54,8 @@ module LeagueSeasonRankingGroups
               end
             end
 
+            next if day.scorecard_base_scoring_rule.blank?
+
             user_result = day.scorecard_base_scoring_rule.result_for_user(user: p)
             if user_result.present?
               score_sum += user_result.gross_score
