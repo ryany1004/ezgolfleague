@@ -97,6 +97,8 @@ module LeagueSeasonRankingGroups
           end
         end
 
+        ranking.average_score = 1 # we do not do averages for teams
+
         ranking.save
       end
     end
@@ -110,9 +112,9 @@ module LeagueSeasonRankingGroups
 
       # sort
       if league_season.rankings_by_scoring_average
-        sorted_results = group.league_season_rankings.unscoped.where('average_score > 0').sort { |x, y| x.user.handicap_index <=> y.user.handicap_index }
+        sorted_results = LeagueSeasonRanking.where(league_season_ranking_group: group).where('average_score > 0').sort { |x, y| x.user.handicap_index <=> y.user.handicap_index }
       else
-        sorted_results = group.league_season_rankings.unscoped.order(points: :desc)
+        sorted_results = LeagueSeasonRanking.where(league_season_ranking_group: group).order(points: :desc)
       end
 
       # rank
@@ -133,7 +135,7 @@ module LeagueSeasonRankingGroups
         if slot_value != last_points
           rank = last_rank + 1
 
-          if quantity_at_rank != 0
+          if quantity_at_rank.positive?
             quantity_at_rank = 0
 
             rank = i + 1
