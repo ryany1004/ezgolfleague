@@ -15,6 +15,14 @@ class HandicapCalculationJob < ApplicationJob
     end
   end
 
+  def scoring_symbol(league)
+    if league.use_equitable_stroke_control
+      :adjusted_score
+    else
+      :gross_score
+    end
+  end
+
   def scorecards_for_player(player, league)
     scorecards = []
 
@@ -37,7 +45,7 @@ class HandicapCalculationJob < ApplicationJob
     scorecards = scorecards[0, league.number_of_rounds_to_handicap]
 
     # further filter by lowest
-    scorecards = scorecards.sort_by(&:gross_score)
+    scorecards = scorecards.sort_by(&scoring_symbol(league))
     scorecards = scorecards[0, league.number_of_lowest_rounds_to_handicap]
 
     scorecards
@@ -47,7 +55,7 @@ class HandicapCalculationJob < ApplicationJob
     handicap_sum = 0.0
 
     scorecards.each do |scorecard|
-      gross_score = scorecard.adjusted_score.positive? ? scorecard.adjusted_score : scorecard.gross_score
+      gross_score = scorecard.handicap_score
       course_tee_box = scorecard.golf_outing.course_tee_box
       next if course_tee_box.blank? || course_tee_box.course.blank?
 
