@@ -15,6 +15,10 @@ class HandicapCalculationJob < ApplicationJob
     end
   end
 
+  def scoring_symbol
+    :gross_score
+  end
+
   def scorecards_for_player(player, league)
     scorecards = []
 
@@ -37,7 +41,7 @@ class HandicapCalculationJob < ApplicationJob
     scorecards = scorecards[0, league.number_of_rounds_to_handicap]
 
     # further filter by lowest
-    scorecards = scorecards.sort_by(&:gross_score)
+    scorecards = scorecards.sort_by(&scoring_symbol)
     scorecards = scorecards[0, league.number_of_lowest_rounds_to_handicap]
 
     scorecards
