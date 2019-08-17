@@ -302,7 +302,7 @@ class TournamentDay < ApplicationRecord
   end
 
   def mandatory_individual_scoring_rules
-    @mandatory_individual_scoring_rules ||= mandatory_scoring_rules.select { |r| r.team_type != ScoringRuleTeamType::LEAGUE }
+    @mandatory_individual_scoring_rules ||= mandatory_scoring_rules.reject { |r| r.team_type == ScoringRuleTeamType::LEAGUE }
   end
 
   def mandatory_team_scoring_rules
@@ -314,7 +314,7 @@ class TournamentDay < ApplicationRecord
   end
 
   def optional_scoring_rules_with_dues
-    @optional_scoring_rules_with_dues ||= optional_scoring_rules.select { |r| r.dues_amount > 0 }
+    @optional_scoring_rules_with_dues ||= optional_scoring_rules.select { |r| r.dues_amount.positive? }
   end
 
   def points_for_user(user:)
