@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_08_12_004120) do
+ActiveRecord::Schema.define(version: 2019_08_17_201543) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -294,6 +294,7 @@ ActiveRecord::Schema.define(version: 2019_08_12_004120) do
     t.string "league_estimated_players"
     t.integer "number_of_rounds_to_handicap"
     t.integer "number_of_lowest_rounds_to_handicap", default: 10
+    t.boolean "use_equitable_stroke_control", default: true
   end
 
   create_table "mobile_devices", force: :cascade do |t|

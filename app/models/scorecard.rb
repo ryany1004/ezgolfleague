@@ -86,6 +86,14 @@ class Scorecard < ApplicationRecord
     stroke_play_results.first ? stroke_play_results.first&.adjusted_score : 0
   end
 
+  def handicap_score
+    if league.use_equitable_stroke_control && adjusted_score.positive?
+      adjusted_score
+    else
+      gross_score
+    end
+  end
+
   def front_nine_score(use_handicap = false)
     if use_handicap
       stroke_play_results.first ? stroke_play_results.first&.front_nine_net_score : 0
