@@ -5,7 +5,7 @@
 <ol class="breadcrumb">
   <li><%= link_to "My Dashboard", play_dashboard_index_path %></li>
   <li><%= link_to @tournament.name, play_tournament_path(@tournament) %></li>
-  <li class="active"><%= @tournament_day.pretty_day(true) %>Tournament Rankings</li>
+  <li class="active"><%= @tournament_day.pretty_day(true) %>Tournament Rankings <% if params[:combined] %>(Combined)<% end %></li>
 </ol>
 
 <%= render partial: @tournament_day.scorecard_base_scoring_rule.leaderboard_partial_name, locals: { tournament_day: @tournament_day, combined_flights_with_rankings: @combined_flights_with_rankings, current_day_flight: @current_day_flight, day_flights_with_rankings: @day_flights_with_rankings } %>

@@ -14,7 +14,7 @@ module Rankable
           last_day_flight.tournament_day_results.each do |outer_result| # outer result
             flight.tournament_day_results.each do |inner_result|
               if outer_result.combinable?(inner_result) # same result
-                Rails.logger.info { "Players Matched For #{outer_result.id}. Adding #{inner_result.net_score} to #{outer_result.net_score}" }
+                Rails.logger.info { "Players Matched For #{outer_result.name} #{outer_result.id}. Adding #{inner_result.net_score} to #{outer_result.net_score}" }
 
                 outer_result.net_score += inner_result.net_score
                 outer_result.back_nine_net_score += inner_result.back_nine_net_score

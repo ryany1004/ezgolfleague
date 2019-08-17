@@ -154,10 +154,10 @@ class TournamentPresenter
     show_combined
   end
 
-  def leaderboard_link
+  def leaderboard_link(combined)
     day = tournament_day.presence || tournament.tournament_days.last
 
-    Rails.application.routes.url_helpers.play_tournament_leaderboard_path(tournament, day: day)
+    Rails.application.routes.url_helpers.play_tournament_leaderboard_path(tournament, day: day, combined: combined)
   end
 
   def scorecard_link

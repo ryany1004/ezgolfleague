@@ -37,7 +37,7 @@ class ApiResultsPresenter
 
   def tournament_presenter(day)
     day_flights = day.flights_with_rankings
-    combined_flights = FetchingTools::LeaderboardFetching.flights_with_rankings_could_be_combined(day)
+    combined_flights = FetchingTools::LeaderboardFetching.flights_with_rankings_could_be_combined(day, true)
 
     TournamentPresenter.new({ tournament: @tournament,
                               tournament_day: day,
