@@ -46,7 +46,7 @@ module ScoringComputer
       end
 
       ties.each do |u|
-        PayoutResult.create(scoring_rule: @scoring_rule, user: u[:user], points: primary_payout.points / 2, detail: u[:detail])
+        PayoutResult.create(scoring_rule: @scoring_rule, user: u[:user], points: (primary_payout.points / 2).floor, detail: u[:detail])
       end
     end
   end

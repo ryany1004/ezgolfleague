@@ -72,7 +72,7 @@ module ScoringComputer
 
         PayoutResult.create(league_season_team: winning_team,
                             scoring_rule: @scoring_rule,
-                            points: primary_payout.points / 2,
+                            points: (primary_payout.points / 2).floor,
                             detail: "Tie #{net_score}")
       end
     end

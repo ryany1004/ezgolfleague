@@ -69,7 +69,9 @@ module ScoringComputer
 
         tie_group_identifier = grouped_ties.keys[i]
         grouped_ties[tie_group_identifier].each do |winner|
-          PayoutResult.create(payout: payout, user: winner[:user], scoring_rule: @scoring_rule, amount: payout.amount / 2, points: payout.points / 2, detail: winner[:detail])
+          amount = (payout.amount / 2.0).floor
+
+          PayoutResult.create(payout: payout, user: winner[:user], scoring_rule: @scoring_rule, amount: amount, points: payout.points / 2, detail: winner[:detail])
         end
       end
     end

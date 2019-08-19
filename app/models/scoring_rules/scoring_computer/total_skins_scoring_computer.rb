@@ -46,7 +46,7 @@ module ScoringComputer
         team_results = @scoring_rule.payout_results.where(user: daily_team.users)
 
         team_results.each do |result|
-          split_amount = result.amount / daily_team.users.count
+          split_amount = (result.amount / daily_team.users.count).floor
 
           Rails.logger.debug { "Splitting payout #{result.amount} to #{split_amount} across #{daily_team.users.count}." }
 

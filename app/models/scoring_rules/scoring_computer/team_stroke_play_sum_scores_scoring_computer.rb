@@ -51,7 +51,7 @@ module ScoringComputer
 
 			payout_count = @scoring_rule.payouts.count
 			Rails.logger.debug { "Payouts: #{payout_count}" }
-			return if payout_count == 0
+			return if payout_count.zero?
 
 			primary_payout = @scoring_rule.payouts.first
 			if primary_payout.apply_as_duplicates?
