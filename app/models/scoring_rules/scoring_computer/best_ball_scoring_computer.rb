@@ -67,7 +67,7 @@ module ScoringComputer
         daily_team = tournament_day.daily_team_for_player(result.user)
 
         if daily_team.present?
-          payout_amount = (result.amount / @scoring_rule.users_per_daily_team.to_f).floor
+          payout_amount = (result.amount / daily_team.users.count.to_f).floor
 
           daily_team.users.each do |u|
             if u != result.user
