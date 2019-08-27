@@ -1,36 +1,37 @@
 module ScoringComputer
-	class StrokePlayScoringComputer < BaseScoringComputer
-		def rank_results_sort_reorder_param
+  class StrokePlayScoringComputer < BaseScoringComputer
+    def rank_results_sort_reorder_param
       if @scoring_rule.use_back_9_to_break_ties?
-        Rails.logger.info { "Tie-breaking is enabled" }
+        Rails.logger.info { 'Tie-breaking is enabled' }
 
-        if @scoring_rule.tournament_day.scorecard_base_scoring_rule.course_holes.count == 9 #if a 9-hole tournament, compare score by score
-          Rails.logger.info { "9-Hole Tie-Breaking" }
+        if @scoring_rule.tournament_day.scorecard_base_scoring_rule.course_holes.count == 9 # if a 9-hole tournament, compare score by score
+          Rails.logger.info { '9-Hole Tie-Breaking' }
 
-          par_related_net_scores = @scoring_rule.individual_tournament_day_results.map { |x| x.par_related_net_score }
+          par_related_net_scores = @scoring_rule.individual_tournament_day_results.map(&:par_related_net_score)
 
           if par_related_net_scores.uniq.length != par_related_net_scores.length
-            Rails.logger.info { "We have tied players, using net_scores" }
+            Rails.logger.info { 'We have tied players, using net_scores' }
 
-            reorder_param = "par_related_net_score, net_score"
+            reorder_param = 'par_related_net_score, net_score'
           else
-            Rails.logger.info { "No tied players..." }
+            Rails.logger.info { 'No tied players...' }
 
-            reorder_param = "par_related_net_score, back_nine_net_score"
+            reorder_param = 'par_related_net_score, back_nine_net_score'
           end
         else
-          Rails.logger.info { "18-Hole Tie-Breaking" }
+          Rails.logger.info { '18-Hole Tie-Breaking' }
 
-          reorder_param = "par_related_net_score, back_nine_net_score"
+          reorder_param = 'par_related_net_score, back_nine_net_score'
         end
       else
-        Rails.logger.info { "Tie-breaking is disabled" }
+        Rails.logger.info { 'Tie-breaking is disabled' }
 
-        reorder_param = "par_related_net_score"
+        reorder_param = 'par_related_net_score'
       end
 
+      reorder_param += ', gross_score, name'
       reorder_param
-		end
+    end
 
 		def generate_tournament_day_result(user:, scorecard: nil)
 			return nil if !@scoring_rule.users.include? user

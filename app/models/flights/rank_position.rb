@@ -63,10 +63,9 @@ module Flights
     # Sort
 
     def sort_by_parameter(parameter, descending = false)
-      parameter = parameter + " DESC" if descending
-      results = tournament_day_results.reorder(parameter)
+      parameter += ' DESC' if descending
 
-    	self.sorted_results = results
+      self.sorted_results = tournament_day_results.reorder(parameter)
     end
 
     # Rank
@@ -76,7 +75,7 @@ module Flights
       last_score = 0
       quantity_at_rank = 0
 
-      sortable_key = sort_parameter.split(", ").first
+      sortable_key = sort_parameter.split(', ').first
 
       Rails.logger.info { "Ranking #{self.sorted_results.count} results" }
 
