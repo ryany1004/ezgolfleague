@@ -76,7 +76,14 @@ module Flights
     # Sort
 
     def sort_by_parameter(parameter, descending = false)
-      parameter += ' DESC' if descending
+      if descending # this means we want to apply descending to the first param
+        split_order_params = parameter.split(',')
+
+        re_sorted_param = split_order_params[0] += ' DESC'
+        split_order_params[0] = re_sorted_param
+
+        parameter = split_order_params.join(', ')
+      end
 
       self.sorted_results = tournament_day_results.reorder(parameter)
     end
