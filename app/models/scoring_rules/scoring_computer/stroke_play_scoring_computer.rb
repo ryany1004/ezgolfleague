@@ -84,10 +84,7 @@ module ScoringComputer
 
                 if h[:strokes] != 0
                   hole_adjusted_score = score.strokes - h[:strokes]
-
-                  if hole_adjusted_score > 0
-                    hole_net_score = hole_adjusted_score
-                  end
+                  hole_net_score = hole_adjusted_score if hole_adjusted_score.positive?
                 end
 
                 Rails.logger.debug { "Hole #{score.course_hole.hole_number} - Hole Net Score: #{hole_net_score}. Hole adjusted score: #{hole_adjusted_score}. Strokes: #{score.strokes}" }
