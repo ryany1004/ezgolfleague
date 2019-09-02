@@ -98,13 +98,14 @@ module ScoringComputer
         next if user_scorecard.blank?
 
         @scoring_rule.course_holes.each do |hole|
-          if use_gross_scores
-            strokes = user_scorecard.scores.find_by(course_hole: hole).strokes
-          else
-            strokes = user_scorecard.scores.find_by(course_hole: hole).net_strokes
-          end
+          score = user_scorecard.scores.find_by(course_hole: hole)
+          next if score.unscored?
 
-          scores[user_score_key(user: user, hole: hole)] = strokes
+          if use_gross_scores
+            scores[user_score_key(user: user, hole: hole)] = score.strokes
+          else
+            scores[user_score_key(user: user, hole: hole)] = score.net_strokes
+          end
         end
       end
 
