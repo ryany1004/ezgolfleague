@@ -4,7 +4,7 @@ module LeagueSeasonRankingGroups
     attr_accessor :sorted_results
 
     def self.compute_rank(league_season, destroy_first = false)
-      rank_computer = self.new
+      rank_computer = RankPosition.new
       rank_computer.league_season = league_season
 
       league_season.league_season_ranking_groups.destroy_all if destroy_first
@@ -41,9 +41,6 @@ module LeagueSeasonRankingGroups
         players.each do |p|
           ranking = group.league_season_rankings.find_or_create_by(user: p)
 
-          score_sum = 0
-          number_of_days = 0
-
           t.tournament_days.includes(scoring_rules: [payout_results: :user]).find_each do |day|
             day.displayable_scoring_rules.includes(:payout_results).find_each do |rule|
               rule.payout_results.where(user: p).find_each do |result|
@@ -55,23 +52,33 @@ module LeagueSeasonRankingGroups
             end
 
             next if day.scorecard_base_scoring_rule.blank?
-
-            user_result = day.scorecard_base_scoring_rule.result_for_user(user: p)
-            if user_result.present?
-              score_sum += user_result.gross_score
-              number_of_days += 1
-            else
-              Rails.logger.debug { "No Result for #{p.complete_name} for day #{day.id}" }
-            end
-          end
-
-          if number_of_days.positive?
-            ranking.average_score = score_sum / number_of_days
-
-            Rails.logger.debug { "Setting Average Score #{ranking.average_score} to #{p.complete_name} with sum #{score_sum} and days #{number_of_days}" }
           end
 
           ranking.save
+        end
+
+        group_averages(group)
+      end
+    end
+
+    def group_averages(group)
+      users_to_average = group.league_season_rankings.pluck(:user_id)
+
+      tournament_days = group.league_season.league.tournaments.where('tournaments.is_finalized = true').includes(:tournament_days).map(&:tournament_days)
+      group_scoring_rules = tournament_days.flatten.map(&:scoring_rules).flatten
+
+      users_to_average.each do |user_id|
+        user_results = TournamentDayResult.where(user_id: user_id).where(scoring_rule: group_scoring_rules)
+
+        score_sum = user_results.sum(:gross_score)
+        number_of_days = user_results.count
+
+        group.league_season_rankings.where(user_id: user_id).find_each do |ranking|
+          next if number_of_days.zero?
+
+          ranking.update(average_score: score_sum / number_of_days)
+
+          Rails.logger.debug { "Setting Average Score #{ranking.average_score} to #{User.find(user_id).complete_name} with sum #{score_sum} and days #{number_of_days}" }
         end
       end
     end
