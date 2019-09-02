@@ -33,14 +33,14 @@ module ScoringComputer
       reorder_param
     end
 
-		def generate_tournament_day_result(user:, scorecard: nil)
-			return nil if !@scoring_rule.users.include? user
+    def generate_tournament_day_result(user:, scorecard: nil)
+      return nil unless @scoring_rule.users.include? user
 
-			user_scorecard = self.tournament_day.primary_scorecard_for_user(user)
-			if scorecard.blank?
-				scorecard = user_scorecard
-				return nil if scorecard.blank?
-			end
+      user_scorecard = tournament_day.primary_scorecard_for_user(user)
+      if scorecard.blank?
+        scorecard = user_scorecard
+        return nil if scorecard.blank?
+      end
 
       handicap_computer = @scoring_rule.handicap_computer
       handicap_allowance = handicap_computer.handicap_allowance(user: user)
@@ -112,73 +112,72 @@ module ScoringComputer
         end
       end
 
-	    user_par = user_par_for_played_holes(user)
-	    par_related_net_score = net_score - user_par
-	    par_related_gross_score = gross_score - user_par
+      user_par = user_par_for_played_holes(user)
+      par_related_net_score = net_score - user_par
+      par_related_gross_score = gross_score - user_par
 
-	    result_name = Users::ResultName.result_name_for_user(user, @scoring_rule)
+      result_name = Users::ResultName.result_name_for_user(user, @scoring_rule)
 
-	    if gross_score > 0
-	    	result = @scoring_rule.tournament_day_results.find_or_create_by(user: user) # TODO: create_or_find_by
+      if gross_score.positive?
+        result = @scoring_rule.tournament_day_results.find_or_create_by(user: user) # TODO: create_or_find_by
 
-	    	result.name = result_name
-	    	result.primary_scorecard = user_scorecard
-	    	result.flight = flight
-	    	result.gross_score = gross_score
-	    	result.net_score = net_score
-	    	result.adjusted_score = adjusted_score
-	    	result.front_nine_gross_score = front_nine_gross_score
-	    	result.front_nine_net_score = front_nine_net_score
-	    	result.back_nine_gross_score = back_nine_gross_score
-	    	result.back_nine_net_score = back_nine_net_score
-	    	result.par_related_net_score = par_related_net_score
-	    	result.par_related_gross_score = par_related_gross_score
+        result.name = result_name
+        result.primary_scorecard = user_scorecard
+        result.flight = flight
+        result.gross_score = gross_score
+        result.net_score = net_score
+        result.adjusted_score = adjusted_score
+        result.front_nine_gross_score = front_nine_gross_score
+        result.front_nine_net_score = front_nine_net_score
+        result.back_nine_gross_score = back_nine_gross_score
+        result.back_nine_net_score = back_nine_net_score
+        result.par_related_net_score = par_related_net_score
+        result.par_related_gross_score = par_related_gross_score
 
-	    	result.save
+        result.save
 
-    		Rails.logger.debug { "Writing tournament day result #{result}" }
+        Rails.logger.debug { "Writing tournament day result #{result}" }
 
-    		result
-	    else
-	    	Rails.logger.debug { "Gross Score was #{gross_score}. Returning nil for tournament day result." }
+        result
+      else
+        Rails.logger.debug { "Gross Score was #{gross_score}. Returning nil for tournament day result." }
 
-	    	self.destroy_user_results(user)
+        destroy_user_results(user)
 
-	    	nil
-	    end
-		end
+        nil
+      end
+    end
 
-		def destroy_user_results(user)
-			@scoring_rule.individual_tournament_day_results.where(user: user).destroy_all
-		end
+    def destroy_user_results(user)
+      @scoring_rule.individual_tournament_day_results.where(user: user).destroy_all
+    end
 
-	  def user_par_for_played_holes(user)
-	    par = 0
+    def user_par_for_played_holes(user)
+      par = 0
 
-	    primary_scorecard = self.tournament_day.primary_scorecard_for_user(user)
-	    return 0 if primary_scorecard.blank?
+      primary_scorecard = tournament_day.primary_scorecard_for_user(user)
+      return 0 if primary_scorecard.blank?
 
-	    primary_scorecard.scores.each do |s|
-	      if s.strokes > 0
-	        par_adjustment = s.course_hole.par
+      primary_scorecard.scores.each do |s|
+        next unless s.strokes.positive?
 
-	        par = par + par_adjustment
-	      end
-	    end
+        par_adjustment = s.course_hole.par
+        par += par_adjustment
+      end
 
-	    Rails.logger.debug { "User Par: #{par}" }
+      Rails.logger.debug { "User Par: #{par}" }
 
-	    par
-	  end
+      par
+    end
 
-		def assign_payouts
-			Rails.logger.debug { "assign_payouts #{self.class} for rule #{@scoring_rule.id}" }
+    def assign_payouts
+      Rails.logger.debug { "assign_payouts #{self.class} for rule #{@scoring_rule.id}" }
 
-			@scoring_rule.payout_results.destroy_all
+      @scoring_rule.payout_results.destroy_all
 
-			payout_count = @scoring_rule.payouts.count
-			Rails.logger.debug { "Payouts: #{payout_count}" }
-      return if payout_count == 0
+      payout_count = @scoring_rule.payouts.count
+      Rails.logger.debug { "Payouts: #{payout_count}" }
+      return if payout_count.zero?
 
       eligible_users = @scoring_rule.users_eligible_for_payouts
       ranked_flights = self.ranked_flights
@@ -200,6 +199,6 @@ module ScoringComputer
           end
         end
       end
-		end
-	end
+    end
+  end
 end
