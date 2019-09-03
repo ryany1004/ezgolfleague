@@ -44,11 +44,10 @@ class FlightsController < BaseController
     end
   end
 
-  def edit
-  end
+  def edit; end
 
   def update
-    if @flight.update(flight_params)
+    if @flight.update!(flight_params)
       redirect_to league_tournament_tournament_day_flights_path(@tournament.league, @tournament, @tournament_day), flash: { success: "The flight was successfully updated." }
     else
       render :edit

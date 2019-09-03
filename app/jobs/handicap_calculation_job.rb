@@ -73,11 +73,11 @@ class HandicapCalculationJob < ApplicationJob
       slope = course_tee_box.slope
 
       differential = ((gross_score - rating) * 113) / slope
+      differential *= 2 if is_9_holes
 
       Rails.logger.info "HANDICAP: #{scorecard.tournament_day.tournament.name} User: #{scorecard.user.complete_name} (#{scorecard.id}) is_9_holes: #{is_9_holes} Gross Score (Adjusted): #{gross_score}. Rating: #{rating}. Slope: #{course_tee_box.slope}. Differential: #{differential}"
       Rails.logger.info "HANDICAP: Adjusted Gross: #{scorecard.adjusted_score} Gross #{scorecard.gross_score}"
 
-      differential *= 2 if is_9_holes
       handicap_sum += differential
     end
 

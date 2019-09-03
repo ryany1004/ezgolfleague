@@ -1,0 +1,23 @@
+<%= simple_form_for [@tournament.league, @tournament, @tournament_day, @flight] do |f| %>
+  <% if notification = f.error_notification %>
+    <div class="alert alert-error fade in">
+      <a class="close" data-dismiss="alert" href="#">&times;</a>
+      <%= notification %>
+    </div>
+  <% end %>
+
+  <legend><%= @tournament_day.pretty_day(true) %>Group Details</legend>
+
+  <h3>Basic Details</h3>
+  <div class="well">
+    <%= f.input :course_tee_box_id, collection: @tournament_day.course.course_tee_boxes, label: "Tee Box", label_method: :name, required: true %>
+
+    <%= f.hidden_field :flight_number %>
+    <%= f.hidden_field :lower_bound %>
+    <%= f.hidden_field :upper_bound %>
+  </div>
+
+  <div class="form-actions">
+    <%= f.button :submit, "Save", class: 'btn btn-default' %>
+  </div>
+<% end %>
