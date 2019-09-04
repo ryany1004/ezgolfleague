@@ -16,12 +16,16 @@
             <%= link_to "Message Golfers", "#", class:"dropdown-item", data: { toggle:"modal", target:"#sendMessageModal" } %>
           </div>
         </a>
-        <ul class="header-list-para list-inline">
+        <%
+=begin%>
+ <ul class="header-list-para list-inline">
           <li class="list-inline-item"><%= @tournament.tournament_starts_at.to_s(:standard) %></li>
           <li class="list-inline-item"><%= truncate(@tournament.first_day.course.name, length: 35) %></li>
           <li class="list-inline-item"><%= @tournament.first_day.scorecard_base_scoring_rule.course_holes.count %> Holes</li>
           <li class="list-inline-item"><%= @tournament.players.count %> Players</li>
-        </ul>
+        </ul> 
+<%
+=end%>
       </div>
       <!-- /.col-md-8 --> 
       <div class="col-md-4 text-right">

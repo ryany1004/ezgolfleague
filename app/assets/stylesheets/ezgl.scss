@@ -2643,12 +2643,16 @@ button:focus {
   padding-left: 35px;
 }
 
-#view-scorecard-popup {
-  max-width: 95% !important;
+#editScorecardModal {
+  max-width: 100% !important;
   padding: 0;
 
-  .mfp-close {
-    display: none;
+  .modal-lg {
+    max-width: 95%;
+
+    .modal-body {
+      padding: 0;
+    }
   }
 
   .tornament-info-popup-header-top {
@@ -2698,7 +2702,7 @@ button:focus {
         border: 1px solid #049266;
         padding: 8px;
         text-align: center;
-        font-size: 18px;
+        font-size: 16px;
 
         &:first-of-type {
           text-align: left;
@@ -2714,7 +2718,7 @@ button:focus {
           color: ezgl-color('accent', 'base');
           padding: 8px;
           text-align: center;
-          font-size: 18px;
+          font-size: 16px;
 
           &:first-of-type {
             text-align: left;
@@ -2766,7 +2770,7 @@ button:focus {
           td {
             color: ezgl-color('foreground', 'base');
             padding: 12px 8px; 
-            font-size: 18px;
+            font-size: 16px;
 
             &:first-of-type {
               text-align: left;
