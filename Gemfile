@@ -37,7 +37,7 @@ gem 'sass-rails', '~> 5.0'
 gem 'scout_apm'
 gem 'sdoc', '~> 0.4.0', group: :doc
 gem 'selectize-rails'
-gem 'sidekiq'
+gem 'sidekiq', '5.2.7'
 gem 'simple_form'
 gem 'stripe', git: 'https://github.com/stripe/stripe-ruby'
 gem 'uglifier', '>= 1.3.0'
