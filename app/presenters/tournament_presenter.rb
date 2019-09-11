@@ -232,11 +232,11 @@ class TournamentPresenter
     items = []
 
     if tournament_day.blank?
-      tournament.optional_scoring_rules_with_dues.each do |r|
+      tournament.displayable_scoring_rules.each do |r|
         items << { name: r.name, winners: r.legacy_contest_winners } if r.legacy_contest_winners.present?
       end
     else
-      tournament_day.optional_scoring_rules_with_dues.each do |r|
+      tournament_day.displayable_scoring_rules.each do |r|
         items << { name: r.name, winners: r.legacy_contest_winners } if r.legacy_contest_winners.present?
       end
     end
