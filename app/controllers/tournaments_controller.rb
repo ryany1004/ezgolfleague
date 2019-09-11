@@ -31,6 +31,7 @@ class TournamentsController < BaseController
     @tournament = Tournament.new
     @tournament.league = current_user.leagues_admin.first if current_user.leagues_admin.count == 1
     @tournament.signup_opens_at = DateTime.now
+    @tournament.allow_credit_card_payment = false if @tournament.league.present? && !@tournament.league.stripe_is_setup?
   end
 
   def create
