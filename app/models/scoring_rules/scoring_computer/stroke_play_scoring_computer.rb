@@ -181,10 +181,10 @@ module ScoringComputer
 
       ranked_flights.each do |flight|
         flight.payouts.where(scoring_rule: @scoring_rule).each_with_index do |payout, i|
-          if payout.payout_results.count == 0
+          if payout.payout_results.count.zero?
             result = flight.tournament_day_results.where(scoring_rule: @scoring_rule)[i]
 
-            if result.present? and eligible_users.include? result.user
+            if result.present? && eligible_users.include?(result.user)
               player = result.user
 
               Rails.logger.debug { "Assigning #{player.complete_name}. Result [#{result}] Payout [#{payout}] Scoring Rule [#{@scoring_rule.name} #{@scoring_rule.id}]" }
