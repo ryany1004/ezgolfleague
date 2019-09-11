@@ -118,6 +118,10 @@ class TournamentPresenter
     end
   end
 
+  def allows_payment?
+    tournament.league.stripe_is_setup? && tournament.allow_credit_card_payment && tournament.mandatory_dues_amount.positive? && includes_user? && !user_paid?
+  end
+
   def day_is_playable?
     tournament_day.blank? ? false : tournament_day.can_be_played?
   end
