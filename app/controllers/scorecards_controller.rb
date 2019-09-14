@@ -113,8 +113,8 @@ class ScorecardsController < BaseController
     @other_scorecards = scorecard_info[:other_scorecards]
     @scorecards_to_update = scorecard_info[:scorecards_to_update]
 
-    @scorecard_presenter = ScorecardPresenter.new({primary_scorecard: @scorecard, secondary_scorecards: @other_scorecards, current_user: self.current_user})
+    @scorecard_presenter = ScorecardPresenter.new({ primary_scorecard: @scorecard, secondary_scorecards: @other_scorecards, current_user: current_user })
 
-    redirect_to root_path if !@scorecard.user_can_view?(current_user)
+    redirect_to root_path unless @scorecard.user_can_view?(current_user)
   end
 end
