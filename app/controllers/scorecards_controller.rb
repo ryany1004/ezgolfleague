@@ -33,7 +33,7 @@ class ScorecardsController < BaseController
   def update
     @scorecard.update(scorecard_params)
 
-    scores_to_update = Hash.new
+    scores_to_update = {}
 
     params[:scorecard][:scores_attributes].to_unsafe_h.keys.each do |key|
       score_id = params[:scorecard][:scores_attributes][key]["id"]
@@ -117,5 +117,4 @@ class ScorecardsController < BaseController
 
     redirect_to root_path if !@scorecard.user_can_view?(current_user)
   end
-
 end
