@@ -6,16 +6,27 @@
     <% teams.each do |team| %>
       <table class="table table-striped">
         <tbody>
+          <tr>
+            <td colspan="3">
+              <strong><%= team[:name] %></strong>
+            </td>
+          </tr>
           <% team[:team_a_users].each_with_index do |u, i| %>
             <% user_b = team[:team_b_users][i] %>
             <tr>
-              <td width='45%'>
-                <%= u[:user].complete_name %> <%= u[:user].handicap_or_speculative(day) %> <% if u[:matchup_indicator].present? %>(<%= u[:matchup_indicator] %>)<% end %>
+              <td width='48%'>
+                <%= u[:user].complete_name %> <%= u[:user].handicap_or_speculative(day) %> <% if u[:matchup_indicator].present? %><span class="label label-success"><%= u[:matchup_indicator] %></span><% end %> <strong><%= points_or_blank(day, u[:user]) %></strong>
               </td>
-              <td width='10%'><% if u[:matchup_indicator].present? %>vs.<% else %>&nbsp;<% end %></td>
-              <td width='45%'>
+              <td width='4%'>
+                <% if u[:matchup_indicator].present? %>
+                  <em>v.</em>
+                <% else %>
+                  &nbsp;
+                <% end %>
+              </td>
+              <td width='48%'>
                 <% if user_b.present? %>
-                  <%= user_b[:user].complete_name %> <%= user_b[:user].handicap_or_speculative(day) %> <% if user_b[:matchup_indicator].present? %>(<%= user_b[:matchup_indicator] %>)<% end %>
+                  <%= user_b[:user].complete_name %> <%= user_b[:user].handicap_or_speculative(day) %> <% if user_b[:matchup_indicator].present? %><span class="label label-success"><%= user_b[:matchup_indicator] %></span><% end %> <strong><%= points_or_blank(day, user_b[:user]) %></strong>
                 <% else %>
                   &nbsp;
                 <% end %>

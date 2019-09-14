@@ -12,7 +12,7 @@ class Flight < ApplicationRecord
   validates :upper_bound, presence: true
   validates :course_tee_box, presence: true
 
-  validate :bounds_are_correct
+  validate :bounds_are_correct, if: :validate_overlap_and_bounds?
   def bounds_are_correct
     if upper_bound.blank? || lower_bound.blank?
       errors.add(:upper_bound, "cannot validate an empty value")
@@ -32,7 +32,7 @@ class Flight < ApplicationRecord
     end
   end
 
-  validate :does_not_overlap
+  validate :does_not_overlap, if: :validate_overlap_and_bounds?
   def does_not_overlap
     if upper_bound.blank? || lower_bound.blank?
       errors.add(:upper_bound, 'cannot validate an empty value')
@@ -54,6 +54,10 @@ class Flight < ApplicationRecord
         end
       end
     end
+  end
+
+  def validate_overlap_and_bounds?
+    !tournament_day.tournament.league.allow_scoring_groups
   end
 
   def display_name(long_flight_name = false)

@@ -87,7 +87,7 @@ class LeagueSeasonTeamTournamentDayMatchup < ApplicationRecord
   end
 
   def position_indicator_for_index(index)
-    positions = %w[A B C D E F G H I J K]
+    positions = %w[A B C D E F G H I J K L M N]
 
     positions[index]
   end
@@ -115,7 +115,10 @@ class LeagueSeasonTeamTournamentDayMatchup < ApplicationRecord
       if a_scorecard.present? && b_scorecard.present?
         a_scorecard.raw_course_handicap <=> b_scorecard.raw_course_handicap
       else
-        0
+        a_handicap = a.handicap_or_speculative(tournament_day)
+        b_handicap = b.handicap_or_speculative(tournament_day)
+
+        a_handicap <=> b_handicap
       end
     }
   end

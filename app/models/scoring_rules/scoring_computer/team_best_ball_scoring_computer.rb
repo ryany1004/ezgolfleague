@@ -21,21 +21,26 @@ module ScoringComputer
 
         Rails.logger.info { "TeamBestBallScoringComputer comparing #{matchup.team_a.name} and #{matchup.team_b.name}" }
 
-        if team_a_best_ball_scorecard.net_score < team_b_best_ball_scorecard.net_score
-          winners << { team: matchup.team_a, net_score: team_a_best_ball_scorecard.net_score }
-
-          matchup.winning_team = matchup.team_a
-          matchup.save
+        if matchup.team_a_disqualified?
+          winners << team_wins(matchup, matchup.team_b, team_b_best_ball_scorecard.net_score)
+        elsif matchup.team_b_disqualified?
+          winners << team_wins(matchup, matchup.team_a, team_a_best_ball_scorecard.net_score)
+        elsif team_a_best_ball_scorecard.net_score < team_b_best_ball_scorecard.net_score
+          winners << team_wins(matchup, matchup.team_a, team_a_best_ball_scorecard.net_score)
         elsif team_a_best_ball_scorecard.net_score > team_b_best_ball_scorecard.net_score
-          winners << { team: matchup.team_b, net_score: team_b_best_ball_scorecard.net_score }
-
-          matchup.winning_team = matchup.team_b
-          matchup.save
+          winners << team_wins(matchup, matchup.team_b, team_b_best_ball_scorecard.net_score)
         else
           ties << { team: matchup.team_a, net_score: team_a_best_ball_scorecard.net_score }
           ties << { team: matchup.team_b, net_score: team_b_best_ball_scorecard.net_score }
         end
       end
+    end
+
+    def team_wins(matchup, team, net_score)
+      matchup.winning_team = team
+      matchup.save
+
+      { team: team, net_score: net_score }
     end
 
     def assign_payouts
@@ -67,7 +72,7 @@ module ScoringComputer
 
         PayoutResult.create(league_season_team: winning_team,
                             scoring_rule: @scoring_rule,
-                            points: primary_payout.points / 2,
+                            points: (primary_payout.points / 2).floor,
                             detail: "Tie #{net_score}")
       end
     end

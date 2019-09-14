@@ -1,6 +1,6 @@
 module Play::TournamentsHelper
   def team_name(scoring_rule, tournament_group, index)
-    return "" if scoring_rule.team_type == ScoringRuleTeamType::NONE
+    return '' if scoring_rule.team_type == ScoringRuleTeamType::NONE
 
     slots = []
 
@@ -19,14 +19,19 @@ module Play::TournamentsHelper
     if flattened_array.count > (index + 1)
       return "(Team #{flattened_array[index] + 1})"
     else
-      return ""
+      return ''
     end
   end
 
-  def format_winners(winners)
-    return "" if winners.blank?
+  def points_or_blank(day, user)
+    points = day.points_for_user(user: user)
+    points.positive? ? points.to_i : '0'
+  end
 
-    html = ""
+  def format_winners(winners)
+    return '' if winners.blank?
+
+    html = ''
 
     winners.each_with_index do |winner, i|
       html << winner[:name] unless winner[:name].blank?

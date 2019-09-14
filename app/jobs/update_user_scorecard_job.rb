@@ -2,7 +2,7 @@ class UpdateUserScorecardJob < ApplicationJob
   def perform(primary_scorecard, other_scorecards)
     primary_user = primary_scorecard.golf_outing.user
 
-    primary_scorecard.tournament_day.displayable_scoring_rules.each do |rule|
+    primary_scorecard.tournament_day.scoring_rules.each do |rule|
       next unless rule.calculate_each_entry?
 
       Rails.logger.debug { "Scoring #{rule.name} for #{primary_user.complete_name}" }

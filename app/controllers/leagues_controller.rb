@@ -139,7 +139,10 @@ class LeaguesController < BaseController
                                    :apple_pay_merchant_id,
                                    :supports_apple_pay,
                                    :exempt_from_subscription,
-                                   :calculate_handicaps_from_past_rounds)
+                                   :calculate_handicaps_from_past_rounds,
+                                   :number_of_rounds_to_handicap,
+                                   :number_of_lowest_rounds_to_handicap,
+                                   :use_equitable_stroke_control)
   end
 
   def fetch_league

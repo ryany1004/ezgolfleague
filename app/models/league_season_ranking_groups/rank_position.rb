@@ -4,7 +4,7 @@ module LeagueSeasonRankingGroups
     attr_accessor :sorted_results
 
     def self.compute_rank(league_season, destroy_first = false)
-      rank_computer = self.new
+      rank_computer = RankPosition.new
       rank_computer.league_season = league_season
 
       league_season.league_season_ranking_groups.destroy_all if destroy_first
@@ -50,9 +50,35 @@ module LeagueSeasonRankingGroups
                 ranking.payouts += result.amount if result.amount.present?
               end
             end
+
+            next if day.scorecard_base_scoring_rule.blank?
           end
 
           ranking.save
+        end
+
+        group_averages(group)
+      end
+    end
+
+    def group_averages(group)
+      users_to_average = group.league_season_rankings.pluck(:user_id)
+
+      tournament_days = group.league_season.league.tournaments.where('tournaments.is_finalized = true').includes(:tournament_days).map(&:tournament_days)
+      group_scoring_rules = tournament_days.flatten.map(&:scoring_rules).flatten
+
+      users_to_average.each do |user_id|
+        user_results = TournamentDayResult.where(user_id: user_id).where(scoring_rule: group_scoring_rules)
+
+        score_sum = user_results.sum(:gross_score)
+        number_of_days = user_results.count
+
+        group.league_season_rankings.where(user_id: user_id).find_each do |ranking|
+          next if number_of_days.zero?
+
+          ranking.update(average_score: score_sum / number_of_days)
+
+          Rails.logger.debug { "Setting Average Score #{ranking.average_score} to #{User.find(user_id).complete_name} with sum #{score_sum} and days #{number_of_days}" }
         end
       end
     end
@@ -80,6 +106,8 @@ module LeagueSeasonRankingGroups
           end
         end
 
+        ranking.average_score = 1 # we do not do averages for teams
+
         ranking.save
       end
     end
@@ -92,7 +120,11 @@ module LeagueSeasonRankingGroups
       end
 
       # sort
-      sorted_results = group.league_season_rankings.sort { |x, y| y.points <=> x.points }
+      if league_season.rankings_by_scoring_average
+        sorted_results = LeagueSeasonRanking.where(league_season_ranking_group: group).where('average_score > 0').sort { |x, y| x.user.handicap_index <=> y.user.handicap_index }
+      else
+        sorted_results = LeagueSeasonRanking.where(league_season_ranking_group: group).order(points: :desc)
+      end
 
       # rank
       last_rank = 0
@@ -100,20 +132,26 @@ module LeagueSeasonRankingGroups
       quantity_at_rank = 0
 
       sorted_results.each_with_index do |result, i|
+        if league_season.rankings_by_scoring_average
+          slot_value = result.user.handicap_index
+        else
+          slot_value = result.points
+        end
+
         # rank = last rank + 1
         # unless last_points are the same, then rank does not change
         # when last_points then does differ, need to move the rank up the number of slots
-        if result.points != last_points
+        if slot_value != last_points
           rank = last_rank + 1
 
-          if quantity_at_rank != 0
+          if quantity_at_rank.positive?
             quantity_at_rank = 0
 
             rank = i + 1
           end
 
           last_rank = rank
-          last_points = result.points
+          last_points = slot_value
         else
           rank = last_rank
 

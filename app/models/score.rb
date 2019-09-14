@@ -8,6 +8,10 @@ class Score < ApplicationRecord
 
   validates :strokes, inclusion: 0..30
 
+  def unscored?
+    strokes.blank? || strokes.zero? && net_strokes.zero?
+  end
+
   def associated_text
     scorecard.tournament_day.scorecard_base_scoring_rule.associated_text_for_score(self)
   end

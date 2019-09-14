@@ -5,7 +5,13 @@ Rails.cache.fetch ['v1', flight.cache_key_with_version] do
     api_display_name: flight.api_display_name
   }
 
-  json[:players] = render partial: 'tournament_day_result', collection: flight.scorecard_base_scoring_rule_tournament_day_results, as: :tournament_day_result
+  if combined
+    results = flight.tournament_day_results
+  else
+    results = flight.scorecard_base_scoring_rule_tournament_day_results
+  end
+
+  json[:players] = render partial: 'tournament_day_result', collection: results, as: :tournament_day_result
 
   json
 end

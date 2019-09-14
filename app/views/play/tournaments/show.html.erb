@@ -45,7 +45,7 @@
       </ul>
       <ul class="list-group">
         <li class="list-group-item">
-          <%= link_to "View Leaderboard", @tournament_presenter.leaderboard_link %>
+          <%= link_to "View Leaderboard", @tournament_presenter.leaderboard_link(params[:combined]) %>
           <% if @tournament_presenter.day_is_playable? && @tournament_presenter.includes_user? -%>
              | <%= link_to "Your #{@tournament_presenter.day_name} Scorecard", @tournament_presenter.scorecard_link unless @tournament_presenter.scorecard_link.blank? %>
           <% else -%>
@@ -56,7 +56,7 @@
             DNP
             <% end -%>
           <% end -%>
-          <% if @tournament_presenter.tournament.mandatory_dues_amount > 0 && @tournament_presenter.includes_user? && !@tournament_presenter.user_paid? -%>
+          <% if @tournament_presenter.allows_payment? -%>
            | <%= link_to "Pay for Registration", new_play_payment_path(:payment_type => "tournament_dues", :tournament_id => @tournament_presenter.tournament.id) %>
           <% end -%>
         </li>

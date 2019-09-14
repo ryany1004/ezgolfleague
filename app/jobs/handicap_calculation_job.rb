@@ -15,6 +15,14 @@ class HandicapCalculationJob < ApplicationJob
     end
   end
 
+  def scoring_symbol(league)
+    if league.use_equitable_stroke_control
+      :adjusted_score
+    else
+      :gross_score
+    end
+  end
+
   def scorecards_for_player(player, league)
     scorecards = []
 
@@ -32,8 +40,13 @@ class HandicapCalculationJob < ApplicationJob
       end
     end
 
+    # pick which cards we will use
     scorecards.sort! { |x, y| y.tournament_day.tournament_at <=> x.tournament_day.tournament_at }
     scorecards = scorecards[0, league.number_of_rounds_to_handicap]
+
+    # further filter by lowest
+    scorecards = scorecards.sort_by(&scoring_symbol(league))
+    scorecards = scorecards[0, league.number_of_lowest_rounds_to_handicap]
 
     scorecards
   end
@@ -42,7 +55,7 @@ class HandicapCalculationJob < ApplicationJob
     handicap_sum = 0.0
 
     scorecards.each do |scorecard|
-      gross_score = scorecard.adjusted_score.positive? ? scorecard.adjusted_score : scorecard.gross_score
+      gross_score = scorecard.handicap_score
       course_tee_box = scorecard.golf_outing.course_tee_box
       next if course_tee_box.blank? || course_tee_box.course.blank?
 
@@ -60,11 +73,11 @@ class HandicapCalculationJob < ApplicationJob
       slope = course_tee_box.slope
 
       differential = ((gross_score - rating) * 113) / slope
+      differential *= 2 if is_9_holes
 
       Rails.logger.info "HANDICAP: #{scorecard.tournament_day.tournament.name} User: #{scorecard.user.complete_name} (#{scorecard.id}) is_9_holes: #{is_9_holes} Gross Score (Adjusted): #{gross_score}. Rating: #{rating}. Slope: #{course_tee_box.slope}. Differential: #{differential}"
       Rails.logger.info "HANDICAP: Adjusted Gross: #{scorecard.adjusted_score} Gross #{scorecard.gross_score}"
 
-      differential *= 2 if is_9_holes
       handicap_sum += differential
     end
 

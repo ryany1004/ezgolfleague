@@ -66,7 +66,7 @@ module ScoringComputer
         winning_team = u[:team]
         details = u[:details]
 
-        PayoutResult.create(league_season_team: winning_team, scoring_rule: @scoring_rule, points: primary_payout.points / 2, detail: details)
+        PayoutResult.create(league_season_team: winning_team, scoring_rule: @scoring_rule, points: (primary_payout.points / 2).floor, detail: details)
       end
     end
   end

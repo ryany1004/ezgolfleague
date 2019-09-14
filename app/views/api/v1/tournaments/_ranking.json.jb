@@ -2,6 +2,7 @@
   flight_number: ranking[:flight_number],
   name: ranking[:name],
   id: ranking[:id],
+  item_id: ranking[:item_id],
   ranking: ranking[:ranking],
   points: ranking[:points],
   net_score: ranking[:net_score],

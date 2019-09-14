@@ -16,10 +16,10 @@ class Play::TournamentsController < Play::BaseController
 
     if tournament_day.present?
       day_flights = fetch_flights_with_rankings(tournament_day)
-      combined_flights = fetch_combined_flights_with_rankings(tournament_day, day_flights)
+      combined_flights = fetch_combined_flights_with_rankings(tournament_day, params[:combine].present?)
     else
       day_flights = nil
-      combined_flights = fetch_combined_flights_with_rankings(tournament.tournament_days.last, fetch_flights_with_rankings(tournament.tournament_days.last))
+      combined_flights = fetch_combined_flights_with_rankings(tournament.tournament_days.last, params[:combine].present?)
     end
 
     show_combined = params[:combined].present? ? true : false
@@ -127,8 +127,8 @@ class Play::TournamentsController < Play::BaseController
     tournament_day.primary_scoring_rule_flights_with_rankings
   end
 
-  def fetch_combined_flights_with_rankings(tournament_day, _)
-    FetchingTools::LeaderboardFetching.flights_with_rankings_could_be_combined(tournament_day)
+  def fetch_combined_flights_with_rankings(tournament_day, should_combine)
+    ::FetchingTools::LeaderboardFetching.flights_with_rankings_could_be_combined(tournament_day, should_combine)
   end
 
   private

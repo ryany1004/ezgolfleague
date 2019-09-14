@@ -274,7 +274,8 @@ class ScoringRule < ApplicationRecord
     winners = []
 
     payout_results.each do |r|
-      winners << { contest_name: name,
+      winners << { item_id: r.id,
+                   contest_name: name,
                    name: r.user&.complete_name,
                    result_value: r.detail.presence || '',
                    amount: r.amount.presence || '',

@@ -1,0 +1,22 @@
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Rank</th>
+      <th>Player</th>
+      <th>Average Score</th>
+      <th>Handicap Index</th>
+    </tr>
+  </thead>
+  <tbody>
+  <% rankings.each do |group| %>
+    <tr>
+      <td colspan="5"><strong><%= group.name %></strong></td>
+    </tr>
+    <% group.displayable_league_season_rankings.each do |ranking| %>
+      <% cache [ranking.cache_key_with_version] do %>
+        <%= render partial: 'average_score_rankings', locals: { ranking: ranking } %>
+      <% end %>
+    <% end %>
+  <% end %>
+  </tbody>
+</table>

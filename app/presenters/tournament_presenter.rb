@@ -118,6 +118,10 @@ class TournamentPresenter
     end
   end
 
+  def allows_payment?
+    tournament.league.stripe_is_setup? && tournament.allow_credit_card_payment && tournament.mandatory_dues_amount.positive? && includes_user? && !user_paid?
+  end
+
   def day_is_playable?
     tournament_day.blank? ? false : tournament_day.can_be_played?
   end
@@ -154,10 +158,10 @@ class TournamentPresenter
     show_combined
   end
 
-  def leaderboard_link
+  def leaderboard_link(combined)
     day = tournament_day.presence || tournament.tournament_days.last
 
-    Rails.application.routes.url_helpers.play_tournament_leaderboard_path(tournament, day: day)
+    Rails.application.routes.url_helpers.play_tournament_leaderboard_path(tournament, day: day, combined: combined)
   end
 
   def scorecard_link
@@ -212,6 +216,7 @@ class TournamentPresenter
 
           payout_details <<
             {
+              item_id: result.id,
               flight_number: flight_number,
               flight_name: flight_name,
               name: result.name,
@@ -292,11 +297,13 @@ class TournamentPresenter
       team_b_matched_users = matchup.users_with_matchup_indicator(matchup.team_b)
 
       team_a_other_users = matchup.team_a.users.reject { |u| team_a_matched_users.map { |x| x[:user] }.include? u }
+      team_a_other_users = matchup.sort_users(team_a_other_users)
       team_a_other_users.each do |u|
         team_a_matched_users << { user: u, matchup_indicator: nil }
       end
 
       team_b_other_users = matchup.team_b.users.reject { |u| team_b_matched_users.map { |x| x[:user] }.include? u }
+      team_b_other_users = matchup.sort_users(team_b_other_users)
       team_b_other_users.each do |u|
         team_b_matched_users << { user: u, matchup_indicator: nil }
       end

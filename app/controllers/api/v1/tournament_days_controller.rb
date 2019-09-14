@@ -99,7 +99,7 @@ class Api::V1::TournamentDaysController < Api::V1::ApiBaseController
 
   def fetch_leaderboard
     day_flights_with_rankings = @tournament_day.flights_with_rankings
-    combined_flights_with_rankings = FetchingTools::LeaderboardFetching.flights_with_rankings_could_be_combined(@tournament_day)
+    combined_flights_with_rankings = FetchingTools::LeaderboardFetching.flights_with_rankings_could_be_combined(@tournament_day, true)
 
     { day_flights: day_flights_with_rankings, combined_flights: combined_flights_with_rankings }
   end

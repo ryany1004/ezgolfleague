@@ -37,7 +37,7 @@ class ApiResultsPresenter
 
   def tournament_presenter(day)
     day_flights = day.flights_with_rankings
-    combined_flights = FetchingTools::LeaderboardFetching.flights_with_rankings_could_be_combined(day)
+    combined_flights = FetchingTools::LeaderboardFetching.flights_with_rankings_could_be_combined(day, true)
 
     TournamentPresenter.new({ tournament: @tournament,
                               tournament_day: day,
@@ -50,6 +50,7 @@ class ApiResultsPresenter
     payouts = []
     tournament_presenter.payouts.each do |p|
       payouts << { flight_number: p[:flight_number],
+                   item_id: p[:item_id],
                    name: p[:name],
                    id: p[:user_id],
                    amount: p[:amount].to_f,
@@ -67,6 +68,7 @@ class ApiResultsPresenter
         rankings << { flight_number: i + 1,
                       ranking: result.rank,
                       id: result.user.id,
+                      item_id: result.id,
                       name: result.name,
                       net_score: result.net_score,
                       gross_score: result.gross_score,

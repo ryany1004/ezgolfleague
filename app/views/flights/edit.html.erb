@@ -4,4 +4,10 @@
   <li class="active"><%= @tournament_day.pretty_day(true) %>Edit Flight</li>
 </ol>
 
-<%= render 'form' %>
+<% if @tournament.league.allow_scoring_groups %>
+  <%= render 'scoring_group_form' %>
+<% else %>
+  <%= render 'form' %>
+<% end %>
+
+

@@ -1,6 +1,6 @@
 json = {}
 
-json[:day_flights] = render partial: 'flight', collection: @day_flights, as: :flight
-json[:combined_flights] = render partial: 'flight', collection: @combined_flights, as: :flight
+json[:day_flights] = render partial: 'flight', collection: @day_flights, as: :flight, locals: { combined: false }
+json[:combined_flights] = render partial: 'flight', collection: @combined_flights, as: :flight, locals: { combined: true }
 
 json
