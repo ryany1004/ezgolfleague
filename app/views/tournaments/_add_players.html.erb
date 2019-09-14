@@ -4,7 +4,8 @@
       <h2>Add Players</h2>
     </div>
     <div class="col-md-4 text-right">
-      <button type="button" class="btn btn__ezgl-secondary">Save</button>
+      <button type="button" class="btn btn__ezgl-secondary add-team mr-2">Add Tee Time</button>
+      <button type="button" class="btn btn-primary">Save</button>
     </div>
   </div>
 </div>
@@ -34,7 +35,9 @@
           <div class="edit-tee-times-right-content mCustomScrollbar" data-mcs-theme="dark" id="sortable-groups">
             <% tournament_day.tournament_groups.each_with_index do |group, i| %>
               <div class="heading-style">
-                <h2 class="text-uppercase">group <%= i + 1 %>: <%= group.tee_time_at.to_s(:time_only) %></h2>
+                <h2 class="text-uppercase"><span class="editTeeTimeText" id="<%= group.id %>" contenteditable="false"><%= group.tee_time_at.to_s(:time_only) %></span></h2>
+                <i class="fas fa-pencil-alt editTeeTimeIcon" id="<%= group.id %>"></i>
+                <i class="fas fa-trash"></i>
               </div>
 
               <% slices = group.golf_outings.each_slice(2) %>
@@ -50,8 +53,48 @@
                   <% end %>
                 </div>
               <% end %>
+
+              <% if slices = 0 %>
+                <div class="row drag-player-row">
+                  <div class="drag-player">
+                    <p>Drag Player Here</p>
+                  </div>
+                  <div class="drag-player">
+                    <p>Drag Player Here</p>
+                  </div>
+                </div>
+              <% end %>
             <% end %>
           </div><!-- /.tee-times-panel-content -->
+
+          <div class="add-record-container">
+            <div class="input-container">
+              <input type="text" placeholder="Add tee time...">
+              <%= link_to "Save", "", class: 'btn btn__ezgl-secondary-outline' %>
+              <p class="close">X</p>
+            </div>
+          </div>
         </div>
     </div>
 </div>  
+
+<script>
+  $( ".editTeeTimeIcon" ).click(function() {
+    var value = $('.editTeeTimeText' + "#" + this.id).attr('contenteditable');
+    if (value == 'false') {
+      $('.editTeeTimeText' + "#" + this.id).attr('contenteditable','true');
+      $('.editTeeTimeText' + "#" + this.id).focus();
+    }
+    else {
+      $('.editTeeTimeText' + "#" + this.id).attr('contenteditable','false');
+    }
+  });
+
+  $('.add-team').click(function(){
+    $('.input-container').css('display','flex');
+  });
+
+  $('.close').click(function(){
+    $('.input-container').css('display','none');
+  });
+</script>
