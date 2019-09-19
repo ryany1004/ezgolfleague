@@ -52,7 +52,7 @@
         <div class="onboarding__input upload-photo" onclick="document.getElementById('user_avatar').click()">Upload Photo +</div>
         <%= f.input :avatar %>
         <div id="upload-photo-img">
-          <img id="upload-photo-img-default" src="http://placehold.it/40" >
+          <img id="upload-photo-img-default" src="http://placehold.it/60" >
         </div>
       </div>
     </div>
@@ -78,8 +78,8 @@ document.getElementById('user_avatar').onchange = function (e) {
       document.getElementById('upload-photo-img-default').remove();
     },
     {
-      width: 40,
-      height: 40,
+      width: 60,
+      height: 60,
       cover: true
     }
   );

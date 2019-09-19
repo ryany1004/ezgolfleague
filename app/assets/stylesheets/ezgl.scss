@@ -807,7 +807,8 @@ select.selectpicker {
     display: flex;
 
     img {
-      height: 120px;
+      height: 60px;
+      width: 60px;
     }
 
     .edit-golfer-modal__header__left {
@@ -1834,7 +1835,8 @@ select.selectpicker {
 }
 
 .raking-content-card .media img {
-  width: 40px;
+  width: 60px;
+  height: 60px;
   margin-right: 8px;
 }
 
@@ -1842,7 +1844,7 @@ select.selectpicker {
   font-size: 18px;
   color: #000;
   margin-bottom: 0;
-  margin-top: 10px;
+  margin-top: 20px;
 }
 
 .raking-content-card .table td,
@@ -1865,11 +1867,12 @@ select.selectpicker {
   font-size: 20px;
   color: #000;
   margin-bottom: 0;
-  margin-top: 13px;
+  margin-top: 16px;
 }
 
 .raking-content-card .tab-pane-2 .media img {
-  width: 50px;
+  width: 60px;
+  height: 60px;
   margin-right: 8px;
 }
 
@@ -2048,7 +2051,8 @@ select.selectpicker {
 }
 
 .teatime-content-card-table .media img {
-  width: 55px;
+  width: 60px;
+  height: 60px;
 }
 
 .teatime-content-card-table .media h2 {
@@ -3082,8 +3086,8 @@ select.selectpicker {
       }
 
       #upload-photo-img img {
-        height: 40px;
-        width: 40px;
+        height: 60px;
+        width: 60px;
         border-radius: 50%;
         margin-left: 12px;
       }
