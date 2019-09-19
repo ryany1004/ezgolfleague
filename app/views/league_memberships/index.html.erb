@@ -4,14 +4,13 @@
   <div class="dashboard-header ttt-header">
     <div class="row">
       <div class="col-md-8">
-        <h2 class="pr-3">Golfers</h2>
-        <p class="mid-ttt-para text-uppercase"><strong><%= @league_memberships.count %></strong>league golfers</p>
+        <h2 class="pr-5">Golfers</h2>
         <p class="text-uppercase"><strong><%= @league_memberships.count %></strong>active golfers</p>
       </div>
       <!-- /.col-md-8 --> 
       <div class="col-md-4 text-right">
         <%= link_to "Edit Handicaps", "", data: { toggle:"modal", target:"#editHandicapsModal" }, class: 'btn btn__ezgl-secondary mr-3' %>
-        <%= link_to "Add Golfers", "", data: { toggle:"modal", target:"#addGolfersModal" }, class: 'btn btn-primary' %>
+        <%= link_to "Create Golfers", "", data: { toggle:"modal", target:"#addGolfersModal" }, class: 'btn btn-primary' %>
       </div>
       <!-- /.col-md-6 --> 
     </div>
@@ -42,7 +41,7 @@
               </td>
               <td class="int-ctr"><%= membership.user.handicap_index %></td>
               <td class="int-ctr paid-td"></span>200</td>
-              <td class="int-ctr pl-3">Yes</td>
+              <td class="int-ctr pl-3"><input type="checkbox" checked></td>
             </tr>
           <% end %>
         </tbody>
