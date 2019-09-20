@@ -33,6 +33,7 @@
           <td>$20</td>
           <td class="edit-link">
             <% scorecard = tournament_day.primary_scorecard_for_user(player) %>
+            <% loading_partial = render partial: 'shared/modal_loading' %>
             <%= link_to image_tag('edit.png'), league_tournament_tournament_day_scorecard_path(tournament_day.tournament.league, tournament_day.tournament, tournament_day, scorecard), data: { toggle:"modal", target: "#editScorecardModal" }, remote: true %>
           </td>
         </tr>
