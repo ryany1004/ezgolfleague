@@ -292,8 +292,12 @@ button:focus {
 
 .ppp-content {
   padding: 15px 15px 15px 50px;
-  max-height: 500px;
-  overflow: scroll;
+
+  .ppp-content-rows {
+    max-height: 500px;
+    overflow: scroll;
+    box-shadow: 0 6px 4px -4px green;
+  }
 
   .add-golfers {
     width: 96%;
@@ -1613,6 +1617,11 @@ select.selectpicker {
   line-height: normal;
   margin-bottom: 0;
   font-weight: 500;
+}
+
+.tournaments-card-slider ul.pagi-style li,
+.tournaments-card-slider ul.pagi-style li a {
+  cursor: default;
 }
 
 .tournaments-card-footer {

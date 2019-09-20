@@ -41,7 +41,7 @@
               </td>
               <td class="int-ctr"><%= membership.user.handicap_index %></td>
               <td class="int-ctr paid-td"></span>200</td>
-              <td class="int-ctr pl-3"><input type="checkbox" checked></td>
+              <td class="int-ctr pl-3"><%= check_box_tag "active" , 1, membership.state == MembershipStates::ACTIVE_FOR_BILLING %></td>
             </tr>
           <% end %>
         </tbody>
