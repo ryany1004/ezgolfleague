@@ -296,7 +296,7 @@ button:focus {
   .ppp-content-rows {
     max-height: 500px;
     overflow: scroll;
-    box-shadow: 0 6px 4px -4px green;
+    box-shadow: 0 6px 4px -4px #d0d0d0;
   }
 
   .add-golfers {
@@ -2312,6 +2312,8 @@ select.selectpicker {
 
 .edit-tee-times-left-content {
   border-right: 1px solid #e7e7e7;
+  max-height: 100vh;
+  overflow: scroll;
 }
 
 .edit-tee-times-left-content-style {
@@ -3402,6 +3404,13 @@ select.selectpicker {
           h6 {
             font-weight: 400;
           }
+        }
+
+        .billing_select_all {
+          float: right;
+          color: ezgl-color('primary', 'base');
+          text-decoration: underline;
+          cursor: pointer;
         }
 
         .credit-card {
