@@ -7,21 +7,28 @@
       </div>
 
       <div class="pl-4 pt-1 pb-1 pr-1">
-        <div class="table-overflow">
-          <table class="table table-striped">
+        <div class="table-overflow golfers" style="margin-top:0!important;">
+          <table class="table teatime-content-card-table">
             <thead>
-              <tr>
-                <th>Name</th>
-                <th>Handicap Index</th>
-                <th>Handicap Overrides</th>
+              <tr class="text-uppercase">
+                <th scope="col" class="pl-5 pr-0" style="text-align:left;">Name</th>
+                <th scope="col">Handicap Index</th>
+                <th scope="col">Handicap Overrides</th>
               </tr>
             </thead>
             <tbody>
               <% league_memberships.each do |m| %>
               <tr>
-                <td><%= m.user.complete_name %></td>
-                <td><%= m.user.handicap_index %></td>
-                <td><%= m.user.handicap_index %></td>
+                <td class="pl-5 pr-0">
+                  <div class="media">
+                    <%= image_tag m.user.avatar.url(:thumb), class: 'img-circle' %>
+                    <div class="media-body">
+                      <h2 style="text-align:left;"><%= link_to m.user.complete_name %></h2>
+                    </div>
+                  </div>           
+                </td>
+                <td style="vertical-align:middle;"><%= m.user.handicap_index %></td>
+                <td style="vertical-align:middle;"><%= m.user.handicap_index %></td>
               </tr>
               <% end %>
             </tbody>

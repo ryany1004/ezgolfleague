@@ -36,7 +36,7 @@
     <link rel="icon" type="image/png" sizes="96x96" href="/icons/favicon-96x96.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/icons/favicon-16x16.png">
 
-    <%= render partial: 'shared/stripe' %> 
+    <%= render partial: 'shared/stripe' %>
     <%= render partial: 'shared/analytics' %>
   </head>
   <body>
@@ -56,7 +56,7 @@
                 <li class="nav-item <%= 'active' if current_page?(root_path) %>">
                   <a class="nav-link" href="/">Dashboard</a>
                 </li>
-                <li class="nav-item <%= 'active' if current_page?(league_path(current_user.selected_league)) %>">
+                <li class="nav-item <%= 'active' if params[:controller] == 'leagues' && %w(index show edit).include?(params[:action]) %>">
                   <%= link_to "League", league_path(current_user.selected_league), class: 'nav-link' %>
                 </li>
                 <li class="nav-item <%= 'active' if request.path.include?('/tournaments') %>">
