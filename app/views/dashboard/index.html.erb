@@ -48,9 +48,11 @@
                     </div><!-- /.row -->
                   </div><!-- /.ppp-header -->
                   <div class="ppp-content">
-                    <% @ranking_groups.each do |group| %>
-                      <%= render partial: 'ranking_group', collection: group.displayable_league_season_rankings %>
-                    <% end %>
+                    <div class="ppp-content-rows">
+                      <% @ranking_groups.each do |group| %>
+                        <%= render partial: 'ranking_group', collection: group.displayable_league_season_rankings %>
+                      <% end %>
+                    </div>
                     <div class="row mt-5">
                       <div class="col-md-12">
                         <%= link_to "Add Golfers", setup_golfer_invite_user_accounts_path, class: "btn-primary add-golfers" %>

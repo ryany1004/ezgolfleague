@@ -23,7 +23,7 @@
               <%= select_tag('league', options_from_collection_for_select(@leagues, 'id', 'name'), {:include_blank => 'Choose a League...'}) %>
             </div>
             <div class="league-selection-register pb-5">
-              <%= link_to "Join This League", join_league_play_registrations_path, class: "btn__ezgl-secondary join-league-btn" %>
+              <%= link_to "Join This League", "#disabled", class: "btn__ezgl-secondary join-league-btn" %>
             </div>
           </div>
           <hr>
@@ -55,6 +55,10 @@
       },
       onChange: function(value) {
             $('.join-league-btn').attr("href", "/play/registrations/join_league?league_id=" + value);
+            
+      },
+      onItemRemove: function(value) {
+            $('.join-league-btn').attr("href", "#disabled");
       }
   });
 </script>

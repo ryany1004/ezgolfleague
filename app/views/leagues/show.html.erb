@@ -81,9 +81,6 @@
 <div class="modal fade" id="editSeasonModal" tabindex="-1" role="dialog" aria-labelledby="editSeasonModalCenterTitle" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
     <div class="modal-content">
-      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-        <span aria-hidden="true">X</span>
-      </button>
       <div class="modal-body welcome p-5">
         <div class="p-3">
           <h2>Season Settings</h2>
@@ -118,6 +115,7 @@
         </div>
 
         <div class="modal-footer welcome">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
           <%= f.button :submit, "Save", class: 'btn__ezgl-secondary' %>
         </div>
       <% end %>

@@ -69,9 +69,8 @@
         <h4 class="modal-title pl-4 pt-1 pb-1" id="myModalLabel">Upgrade Your Account</h4>
         <p class="pl-4 pt-1 pb-1 pr-4">
           <strong>Just $10 per golfer per season.</strong><br>
-          Includes unlimited use of EZGolfLeague and iOS/Android apps.
+          Includes unlimited use of EZ Golf League and iOS/Android apps.
         </p>
-        <button type="button" class="close" style="position:absolute;right:15px;" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
       </div>
       <div class="modal-body">
         <div class="pl-4 pt-1 pb-1 pr-1">
@@ -80,13 +79,13 @@
               <thead>
                 <tr>
                   <th>Active</th>
-                  <th>Name</th>
+                  <th>Name <div class="billing_select_all">Select All</div></th>
                 </tr>
               </thead>
               <tbody>
                 <% @league.league_memberships.each do |m| %>
                 <tr>
-                  <td style="width:100px;"><%= check_box_tag "is_active[#{m.id}]", true, m.state == MembershipStates::ACTIVE_FOR_BILLING %></td>
+                  <td style="width:100px;"><%= check_box_tag "is_active[#{m.id}]", true, m.state == MembershipStates::ACTIVE_FOR_BILLING, class:"billing_checkbox" %></td>
                   <td><%= m.user.complete_name %></td>
                 </tr>
                 <% end %>
@@ -95,7 +94,6 @@
           </div>
           <p class="pt-3 mb-0" style="text-align:right;">
             <strong>You currently have <%= @league.league_memberships.active.count %> active golfers.</strong><br>
-            Your most recent subscription plan includes <%= @golfer_count %> golfers.
           </p>
         </div>
       </div>
@@ -117,7 +115,6 @@
     <div class="modal-content">
       <div class="modal-header">
         <h4 class="modal-title pl-5 pt-1 pb-1" id="myModalLabel">Change Credit Card</h4>
-				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
       </div>
       <%= simple_form_for :payment, url: update_credit_card_league_subscription_credits_path(@league), method: :post, :html => {id: "payment-form"} do |f| %>
         <div class="modal-body pb-4">
@@ -129,7 +126,7 @@
                 Card #
               </div>
 
-              <input type="text" size="20" class="onboarding__input" data-stripe="number"/>
+              <input type="text" size="20" class="onboarding__input" data-stripe="number" placeholder="3787 344936 71000"/>
             </div>
 
             <div class="form-flex-group pt-3">
@@ -138,19 +135,20 @@
               </div>
 
               <div class="form-flex-group">
-                <input type="text" size="2" class="onboarding__input" style="width: 75px;" data-stripe="exp-month"/> <input type="text" size="4" class="onboarding__input" style="margin-left: 12px; width: 75px;" data-stripe="exp-year"/>
+                <input type="text" size="2" class="onboarding__input" style="width: 75px;" data-stripe="exp-month" placeholder="04"/> <input type="text" size="4" class="onboarding__input" style="margin-left: 12px; width: 75px;" data-stripe="exp-year" placeholder="22"/>
 
-                <div class="form-side-label handicap_index-label pr-2" style="margin-left: 100px;">
+                <div class="form-side-label handicap_index-label pr-2" style="justify-content: flex-end;">
                   CVC
                 </div>
 
-                <input type="text" size="4" class="onboarding__input" style="width: 75px;" data-stripe="cvc"/>
+                <input type="text" size="4" class="onboarding__input" style="width: 75px;" data-stripe="cvc" placeholder="5342"/>
               </div>
             </div>
           </div>
         </div>
 
         <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
           <%= f.button :button, "Save", class: "btn btn__ezgl-secondary", :id => "submit_button" %>
         </div>
       <% end %>
@@ -160,6 +158,19 @@
 
 <script>
   ezglTrackAnalyticsEvent("Viewed subscription details");
+</script>
+
+<script>
+  $('#leagueSubscriptionsModal').on('hidden.bs.modal', function () {
+    $('.billing_checkbox').removeAttr('checked');
+    console.log("Upgrade account modal closed, resetting golfer checkboxes...");
+  });
+
+  $('.billing_select_all').click(function(){
+    $(this).text($(this).text() == 'Select All' ? 'Select All' : 'Unselect All');
+    var checkBoxes = $(".billing_checkbox");
+    (checkBoxes.prop("checked")==true)?checkBoxes.prop("checked", false):checkBoxes.prop("checked", true);
+});
 </script>
 
 <script>
