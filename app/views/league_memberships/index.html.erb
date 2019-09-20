@@ -4,7 +4,7 @@
   <div class="dashboard-header ttt-header">
     <div class="row">
       <div class="col-md-8">
-        <h2 class="pr-5">Golfers</h2>
+        <h2 class="pr-2">Golfers</h2>
         <p class="mid-ttt-para text-uppercase"><strong><%= @league_memberships.count %></strong>league golfers</p>
         <p class="text-uppercase"><strong><%= @league_memberships.where(:state => MembershipStates::ACTIVE_FOR_BILLING).count %></strong>active golfers</p>
       </div>
