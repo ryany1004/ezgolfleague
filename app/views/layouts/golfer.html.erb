@@ -130,19 +130,6 @@
   <%= yield %>
 </div>
 
-<% unless current_user.blank? %>
-  <script>
-    $(function() {
-      mixpanel.people.set({
-        "$user_id": "<%= current_user.id %>",
-        "$first_name": "<%= current_user.first_name %>",
-        "$last_name": "<%= current_user.last_name %>",
-        "$email": "<%= current_user.email %>"
-      });
-    });
-  </script>
-<% end %>
-
 <footer class="container">
   <br/>
   Copyright © EZ Golf League | <%= link_to "Privacy Policy", "/privacy_policy.html" %> | <%= link_to "Terms of Service", "/terms_of_service.html" %> | <a href='mailto:support@ezgolfleague.com?subject=I%20Need%20Help%20With%20EZ%20Golf%20League'>Email Support</a>

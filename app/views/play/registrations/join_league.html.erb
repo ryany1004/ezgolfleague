@@ -1,5 +1,5 @@
 <script>
-  ezglTrackAnalyticsEvent("Viewed pay league dues");
+  ezglTrackAnalyticsEvent('viewed a page', { name: 'View Pay League Dues' });
 </script>
 
 <script type="text/javascript">
@@ -7,44 +7,44 @@
 </script>
 
 <script>
-jQuery(function($) {
-  $('#payment-form').submit(function(event) {
-    var $form = $(this);
+  jQuery(function($) {
+    $('#payment-form').submit(function(event) {
+      var $form = $(this);
 
-    // Disable the submit button to prevent repeated clicks
-    $form.find('submit_button').prop('disabled', true);
+      // Disable the submit button to prevent repeated clicks
+      $form.find('submit_button').prop('disabled', true);
 
-    Stripe.card.createToken($form, stripeResponseHandler);
+      Stripe.card.createToken($form, stripeResponseHandler);
 
-    // Prevent the form from submitting with the default action
-    return false;
+      // Prevent the form from submitting with the default action
+      return false;
+    });
   });
-});
 
-function stripeResponseHandler(status, response) {
-  var $form = $('#payment-form');
+  function stripeResponseHandler(status, response) {
+    var $form = $('#payment-form');
 
-  if (response.error) {
-    // Show the errors on the form
-    $form.find('.payment-errors').text(response.error.message);
-    $form.find('submit_button').prop('disabled', false);
-  } else {
-    // response contains id and card, which contains additional card details
-    var token = response.id;
-    // Insert the token into the form so it gets submitted to the server
-    $form.append($('<input type="hidden" name="stripeToken" />').val(token));
-    // and submit
-    $form.get(0).submit();
-  }
-};
+    if (response.error) {
+      // Show the errors on the form
+      $form.find('.payment-errors').text(response.error.message);
+      $form.find('submit_button').prop('disabled', false);
+    } else {
+      // response contains id and card, which contains additional card details
+      var token = response.id;
+      // Insert the token into the form so it gets submitted to the server
+      $form.append($('<input type="hidden" name="stripeToken" />').val(token));
+      // and submit
+      $form.get(0).submit();
+    }
+  };
 
-fbq('track', 'CompleteRegistration', {
-  value: 0.00,
-  currency: 'USD',
-  content_name: 'Create User'
-});
+  fbq('track', 'CompleteRegistration', {
+    value: 0.00,
+    currency: 'USD',
+    content_name: 'Create User'
+  });
 
-ezglTrackAnalyticsEvent("Paid league dues during registration", { league_id: <%= @league.id %>, league_name: <%= @league.name %>, value: <%= @payment_amount.to_i * 1000 %> });
+  ezglTrackAnalyticsEvent('viewed a page', { name: 'Join League, Paid During Registration' });
 </script>
 
 <div class="row">

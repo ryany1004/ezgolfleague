@@ -1,5 +1,5 @@
 <script>
-  ezglTrackAnalyticsEvent("Completed a new payment", { payment_id: <%= @payment.id %>, value: <%= @payment.payment_amount.to_i * 1000 %> } );
+  ezglTrackAnalyticsEvent('viewed a page', { name: 'Payment Completed' });
 </script>
 
 <ol class="breadcrumb">
