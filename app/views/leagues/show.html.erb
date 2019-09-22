@@ -24,7 +24,7 @@
                 </select>
                   <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                     <% current_user.selected_league.league_seasons.each do |season| -%>
-                      <%= link_to season.name, league_switch_seasons_path(current_user.selected_league, season_id: season.id), method: :put, class:'dropdown-item' %>
+                      <%= link_to season.name, league_switch_seasons_path(current_user.selected_league, season_id: season.id), method: :put, class: 'dropdown-item' %>
                     <% end %>
                   </div>
               </div>
