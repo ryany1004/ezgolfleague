@@ -27,11 +27,6 @@
 
 //= require_tree .
 
-function trackUserEvent(eventName) {
-  mixpanel.track(eventName);
-  amplitude.getInstance().logEvent(eventName);
-}
-
 /*menu handler*/
 $(function(){
   function stripTrailingSlash(str) {
@@ -62,10 +57,8 @@ jQuery.fn.extend({
     }
 });
 
-function ezglTrackAnalyticsEvent(eventName, eventProperties = null) {
-  mixpanel.track(eventName);
-  
-  amplitude.getInstance().logEvent(eventName);
+function ezglTrackAnalyticsEvent(eventName, eventProperties = null) {  
+  amplitude.getInstance().logEvent(eventName, eventProperties);
 
   _dcq.push(["track", eventName, eventProperties]);
 }

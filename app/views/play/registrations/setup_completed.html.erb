@@ -1,5 +1,5 @@
 <script>
-  ezglTrackAnalyticsEvent("Completed user setup", { value: <%= params[:details_amount].to_i * 1000 %> });
+  ezglTrackAnalyticsEvent('viewed a page', { name: 'Completed User Setup' });
 </script>
 
 <% unless params[:details_amount].blank? %>

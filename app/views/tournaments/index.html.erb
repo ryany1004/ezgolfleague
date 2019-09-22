@@ -75,11 +75,10 @@
   </div>
 </div>
 
-<script>
-  mixpanel.identify();
+<script>  
   amplitude.getInstance().setUserId('<%= current_user.id %>');
 
-  ezglTrackAnalyticsEvent("Viewed the list of tournaments");
+  ezglTrackAnalyticsEvent('viewed a page', { name: 'Tournament Index' });
 
   _dcq.push(["identify", {
     email: "<%= current_user.email %>",

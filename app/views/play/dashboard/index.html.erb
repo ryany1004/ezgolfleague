@@ -1,5 +1,4 @@
 <script>
-  mixpanel.identify();
   amplitude.getInstance().setUserId('<%= current_user.id %>');
 
   _dcq.push(["identify", {
@@ -15,7 +14,7 @@
 </script>
 
 <script>
-  ezglTrackAnalyticsEvent("Viewed the player dashboard");
+  ezglTrackAnalyticsEvent('viewed a page', { name: 'Player Dashboard' });
 </script>
 
 <% unless @league_season.blank? && @league_season.dues_amount != 0.0 -%>
