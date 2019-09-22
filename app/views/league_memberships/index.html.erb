@@ -25,7 +25,6 @@
           <tr class="text-uppercase">
             <th scope="col" class="pl-5 pr-0">golfer</th>
             <th scope="col">handicap index</th>
-            <th scope="col">season points</th>
             <th scope="col">active</th>
           </tr>
         </thead>
@@ -41,7 +40,6 @@
                 </div>
               </td>
               <td class="int-ctr"><%= membership.user.handicap_index %></td>
-              <td class="int-ctr paid-td"></span>200</td>
               <td class="int-ctr pl-3"><%= check_box_tag "active" , 1, membership.state == MembershipStates::ACTIVE_FOR_BILLING %></td>
             </tr>
           <% end %>
