@@ -13,19 +13,14 @@
     <div class="row no-gutters">
         <div class="col-md-4">
           <div class="edit-tee-times-left-content mCustomScrollbar" data-mcs-theme="dark">
-            <div class="edit-tee-times-left-content-style sortable" >
-              <% tournament_day.tournament_groups.each_with_index do |group, i| %>
-                <% slices = group.golf_outings.each_slice(2) %>
-                <% slices.each do |slice| %>
-                  <% slice.each do |outing| %>
-                    <div class="media">
-                      <%= image_tag outing.user.avatar.url(:thumb), class: 'img-circle' %>
-                      <div class="media-body">
-                        <h2><%= outing.user.complete_name %></h2>
-                      </div>
-                    </div>
-                  <% end %>
-                <% end %>
+            <div class="edit-tee-times-left-content-style sortable">
+              <% @non_registered_players.each do |player| %>
+                <div class="media">
+                  <%= image_tag player.avatar.url(:thumb), class: 'img-circle' %>
+                  <div class="media-body">
+                    <h2><%= player.complete_name %></h2>
+                  </div>
+                </div>
               <% end %>
             </div>
           </div><!-- /.edit-tee-times-left-content -->

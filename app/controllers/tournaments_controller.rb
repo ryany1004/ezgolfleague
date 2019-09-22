@@ -58,7 +58,8 @@ class TournamentsController < BaseController
   end
 
   def show
-    @tournament = Tournament.find(params[:id])
+    registered_players = @tournament.players_for_day(@tournament.first_day)
+    @non_registered_players = @tournament.league.users.select { |x| !registered_players.include?(x) }
   end
 
   def edit
