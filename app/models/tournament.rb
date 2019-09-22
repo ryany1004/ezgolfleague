@@ -40,16 +40,11 @@ class Tournament < ApplicationRecord
   def dates_are_valid
     now = Time.zone.now.at_beginning_of_day
 
-    if signup_opens_at.present? && signup_opens_at < now
-      errors.add(:signup_opens_at, "can't be in the past")
-    end
+    errors.add(:signup_opens_at, "can't be in the past") if signup_opens_at.present? && signup_opens_at < now
+    errors.add(:signup_closes_at, "can't be in the past") if signup_closes_at.present? && signup_closes_at < now
 
-    if signup_closes_at.present? && signup_closes_at < now
-      errors.add(:signup_closes_at, "can't be in the past")
-    end
-
-    unless !self.has_tournament_days?
-      if signup_opens_at.present? && self.first_day.tournament_at.present? && self.first_day.tournament_at < signup_opens_at
+    if has_tournament_days?
+      if signup_opens_at.present? && first_day.tournament_at.present? && first_day.tournament_at < signup_opens_at
         errors.add(:signup_opens_at, "can't be after the tournament")
       end
     end
@@ -60,26 +55,23 @@ class Tournament < ApplicationRecord
   end
 
   def is_super_user_setup?
-    self.skip_date_validation
+    skip_date_validation
   end
 
   validate :league_has_season
   def league_has_season
-    if self.signup_closes_at.blank?
-      errors.add(:signup_closes_at, "must be present.")
+    if signup_closes_at.blank?
+      errors.add(:signup_closes_at, 'must be present.')
     else
-    	seasons = self.league.league_seasons.where("ends_at >= ?", self.signup_closes_at)
-
-      if seasons.blank?
-        errors.add(:signup_closes_at, "can't be outside your configured league seasons.")
-      end
+      seasons = league.league_seasons.where('ends_at >= ?', signup_closes_at)
+      errors.add(:signup_closes_at, "can't be outside your configured league seasons.") if seasons.blank?
     end
   end
 
   paginates_per 20
 
   def recalculate_standings_for_destroy
-    season = self.league_season
+    season = league_season
 
     yield
 
@@ -88,10 +80,10 @@ class Tournament < ApplicationRecord
 
   # TODO: Need to update / review this logic
   def tournament_state
-    if self.first_day.tournament_at > Time.zone.now.at_beginning_of_day
+    if first_day.tournament_at > Time.zone.now.at_beginning_of_day
       TournamentState::REGISTRATION
     else
-      if self.is_finalized
+      if is_finalized
         TournamentState::POST_SCORES
       else
         TournamentState::REVIEW_SCORES
@@ -100,41 +92,34 @@ class Tournament < ApplicationRecord
   end
 
   def league_season
-    return nil if !self.has_tournament_days?
+    return nil unless has_tournament_days?
 
-    self.league.league_seasons.each do |s|
-      if self.first_day.tournament_at >= s.starts_at && self.first_day.tournament_at < s.ends_at
-        return s
-      end
+    league.league_seasons.each do |s|
+      return s if first_day.tournament_at >= s.starts_at && first_day.tournament_at < s.ends_at
     end
 
     nil
   end
 
   def is_league_teams?
-    self.league_season.is_teams?
+    league_season.is_teams?
   end
 
   def season_name
-    season = self.league_season
-
-    unless season.blank?
-      season.name
-    else
-      "?"
-    end
+    season = league_season
+    season.blank? ? '?' : season.name
   end
 
   def first_day
-    self.tournament_days.first
+    tournament_days.first
   end
 
   def last_day
-    self.tournament_days.last
+    tournament_days.last
   end
 
   def has_tournament_days?
-    self.tournament_days.count > 0
+    tournament_days.count > 0
   end
 
   def has_league_season_team_scoring_rules?
@@ -146,32 +131,27 @@ class Tournament < ApplicationRecord
   end
 
   def previous_day_for_day(day)
-    index_for_day = self.tournament_days.index(day)
-    unless index_for_day.blank?
-      if self.tournament_days.count >= (index_for_day - 1)
-        self.tournament_days[index_for_day - 1]
-      else
-        nil
-      end
-    else
-      nil
-    end
+    index_for_day = tournament_days.index(day)
+
+    return nil if index_for_day.blank?
+
+    tournament_days[index_for_day - 1] if tournament_days.count >= (index_for_day - 1)
   end
 
   def finalization_notifications
-    self.notification_templates.where("tournament_notification_action = ?", "On Finalization")
+    notification_templates.where('tournament_notification_action = ?', 'On Finalization')
   end
 
-  def notify_tournament_users(notification_string, extra_data)
-    self.players.each do |u|
-      u.send_mobile_notification(notification_string, { tournament_id: self.id })
+  def notify_tournament_users(notification_string, _)
+    players.each do |u|
+      u.send_mobile_notification(notification_string, { tournament_id: id })
     end
   end
 
   def mandatory_dues_amount
     dues_amount = 0.0
 
-    self.tournament_days.each do |day|
+    tournament_days.each do |day|
       day.mandatory_scoring_rules.each do |rule|
         dues_amount += rule.dues_amount
       end
@@ -181,10 +161,10 @@ class Tournament < ApplicationRecord
   end
 
   def dues_for_user(user, include_credit_card_fees = false)
-    membership = user.league_memberships.where("league_id = ?", self.league.id).first
+    membership = user.league_memberships.where('league_id = ?', league.id).first
 
     if membership.present?
-      dues_amount = self.mandatory_dues_amount
+      dues_amount = mandatory_dues_amount
 
       credit_card_fees = 0
       credit_card_fees = Stripe::StripeFees.fees_for_transaction_amount(dues_amount) if include_credit_card_fees == true
@@ -198,12 +178,10 @@ class Tournament < ApplicationRecord
   end
 
   def total_for_user_with_optional_fees(user:, include_credit_card_fees: true)
-    dues_amount = self.mandatory_dues_amount
+    dues_amount = mandatory_dues_amount
 
-    self.optional_scoring_rules_with_dues.each do |r|
-      if r.users.include? user
-        dues_amount += r.dues_amount
-      end
+    optional_scoring_rules_with_dues.each do |r|
+      dues_amount += r.dues_amount if r.users.include? user
     end
 
     credit_card_fees = Stripe::StripeFees.fees_for_transaction_amount(dues_amount)
@@ -214,24 +192,23 @@ class Tournament < ApplicationRecord
   end
 
   def cost_breakdown_for_user(user:, include_unpaid_optional_rules: true, include_credit_card_fees: true)
-    dues_total = self.mandatory_dues_amount
+    dues_total = mandatory_dues_amount
 
     cost_lines = [
-      {name: "#{self.name} Fees", price: self.mandatory_dues_amount.to_f, server_id: self.id.to_s}
+      { name: "#{name} Fees", price: mandatory_dues_amount.to_f, server_id: id.to_s }
     ]
 
     if include_unpaid_optional_rules
-      self.optional_scoring_rules_with_dues.each do |r|
-        if r.users.include? user
-          cost_lines += r.cost_breakdown_for_user(user: user, include_credit_card_fees: false)
+      optional_scoring_rules_with_dues.each do |r|
+        next unless r.users.include? user
 
-          dues_total += r.dues_amount
-        end
+        cost_lines += r.cost_breakdown_for_user(user: user, include_credit_card_fees: false)
+        dues_total += r.dues_amount
       end
     end
 
     if include_credit_card_fees
-      cost_lines << {name: "Credit Card Fees", price: Stripe::StripeFees.fees_for_transaction_amount(dues_total)}
+      cost_lines << { name: 'Credit Card Fees', price: Stripe::StripeFees.fees_for_transaction_amount(dues_total) }
     end
 
     cost_lines
@@ -240,7 +217,7 @@ class Tournament < ApplicationRecord
   def courses
     distinct_courses = []
 
-    self.tournament_days.each do |day|
+    tournament_days.each do |day|
       distinct_courses << day.course unless distinct_courses.include? day.course
     end
 
@@ -252,27 +229,27 @@ class Tournament < ApplicationRecord
   end
 
   def mandatory_scoring_rules
-    @mandatory_scoring_rules ||= self.tournament_days.map(&:mandatory_scoring_rules).flatten
+    @mandatory_scoring_rules ||= tournament_days.map(&:mandatory_scoring_rules).flatten
   end
 
   def mandatory_individual_scoring_rules
-    @mandatory_individual_scoring_rules ||= self.tournament_days.map(&:mandatory_individual_scoring_rules).flatten
+    @mandatory_individual_scoring_rules ||= tournament_days.map(&:mandatory_individual_scoring_rules).flatten
   end
 
   def mandatory_team_scoring_rules
-    @mandatory_team_scoring_rules ||= self.tournament_days.map(&:mandatory_team_scoring_rules).flatten
+    @mandatory_team_scoring_rules ||= tournament_days.map(&:mandatory_team_scoring_rules).flatten
   end
 
   def optional_scoring_rules
-    @optional_scoring_rules ||= self.tournament_days.map(&:optional_scoring_rules).flatten
+    @optional_scoring_rules ||= tournament_days.map(&:optional_scoring_rules).flatten
   end
 
   def optional_scoring_rules_with_dues
-    @optional_scoring_rules_with_dues ||= self.tournament_days.map(&:optional_scoring_rules_with_dues).flatten
+    @optional_scoring_rules_with_dues ||= tournament_days.map(&:optional_scoring_rules_with_dues).flatten
   end
 
   def is_paid?
-    if self.league.exempt_from_subscription
+    if league.exempt_from_subscription
       true
     else
       false # TODO: Update this to check for subscription or remove this and use other methods.
@@ -280,12 +257,12 @@ class Tournament < ApplicationRecord
   end
 
   def all_days_are_playable?
-    return false if self.tournament_days.count == 0
+    return false if tournament_days.count.zero?
 
     playable = true
 
-    self.tournament_days.each do |d|
-      playable = false if !d.can_be_played?
+    tournament_days.each do |d|
+      playable = false unless d.can_be_played?
     end
 
     playable
@@ -294,7 +271,7 @@ class Tournament < ApplicationRecord
   def any_days_are_playable?
     playable = false
 
-    self.tournament_days.each do |d|
+    tournament_days.each do |d|
       return true if d.can_be_played?
     end
 
@@ -304,11 +281,11 @@ class Tournament < ApplicationRecord
   def sum_player_scores_for_multi_day?
     sum_scores = true
 
-    self.tournament_days.each do |d|
-      if d != self.tournament_days.last
-        d.flights.each do |f|
-          sum_scores = false if f.payouts.count > 0
-        end
+    tournament_days.each do |d|
+      next if d == tournament_days.last
+
+      d.flights.each do |f|
+        sum_scores = false if f.payouts.count.positive?
       end
     end
 
@@ -316,16 +293,16 @@ class Tournament < ApplicationRecord
   end
 
   def can_be_finalized?
-    return false if self.last_day.blank?
-    return false if self.last_day.scoring_rules.count == 0
+    return false if last_day.blank?
+    return false if last_day.scoring_rules.count.zero?
 
-    self.last_day.can_be_finalized?
+    last_day.can_be_finalized?
   end
 
   def finalization_blockers
     blockers = []
 
-    self.tournament_days.each do |d|
+    tournament_days.each do |d|
       blockers += d.finalization_blockers
     end
 
@@ -333,9 +310,9 @@ class Tournament < ApplicationRecord
   end
 
   def is_past?
-    return false if self.first_day.blank?
+    return false if first_day.blank?
 
-    if self.last_day.tournament_at > DateTime.yesterday
+    if last_day.tournament_at > DateTime.yesterday
       false
     else
       true
@@ -343,12 +320,12 @@ class Tournament < ApplicationRecord
   end
 
   def is_open_for_registration?
-    return false if self.number_of_players >= self.max_players
-    return false if self.signup_opens_at > Time.zone.now
-    return false if self.signup_closes_at < Time.zone.now
+    return false if number_of_players >= max_players
+    return false if signup_opens_at > Time.zone.now
+    return false if signup_closes_at < Time.zone.now
 
     unplayable_days = false
-    self.tournament_days.each do |day|
+    tournament_days.each do |day|
       unplayable_days = true if day.can_be_played? == false
     end
     return false if unplayable_days == true
@@ -357,7 +334,7 @@ class Tournament < ApplicationRecord
   end
 
   def update_course_handicaps
-    self.tournament_days.each do |day|
+    tournament_days.each do |day|
       day.tournament_groups.each do |group|
         group.golf_outings.each do |outing|
           outing.scorecard.set_course_handicap(true)
@@ -369,11 +346,11 @@ class Tournament < ApplicationRecord
   def user_has_paid?(user)
     tournament_balance = 0.0
 
-    scoring_rule_ids = self.tournament_days.map(&:scoring_rules).flatten.map(&:id)
+    scoring_rule_ids = tournament_days.map(&:scoring_rules).flatten.map(&:id)
     payments = Payment.where(scoring_rule: scoring_rule_ids).where(user: user).where('payment_amount > 0')
     tournament_balance = payments.sum(:payment_amount)
 
-    if tournament_balance > 0 && tournament_balance >= self.dues_for_user(user)
+    if tournament_balance.positive? && tournament_balance >= dues_for_user(user)
       true
     else
       false
@@ -381,7 +358,6 @@ class Tournament < ApplicationRecord
   end
 
   # date parsing
-  
   def signup_opens_at=(date)
     begin
       parsed = EzglCalendar::CalendarUtils.datetime_for_picker_date(date)
@@ -399,5 +375,4 @@ class Tournament < ApplicationRecord
       write_attribute(:signup_closes_at, date)
     end
   end
-
 end
