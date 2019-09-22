@@ -13,26 +13,24 @@
       </tr>
     </thead>
     <tbody>
-      <% tournament_day.tournament.players_for_day(tournament_day).each do |player| %>
+      <% tournament_day.scorecard_base_scoring_rule.tournament_day_results.each do |result| %>
         <tr>
-          <th class="pl-5 pr-0">1</th>
-          <td>#1</td>
+          <th class="pl-5 pr-0"><%= result.flight.display_name %></th>
+          <td><%= result.rank %></td>
           <td>
             <div class="media">
-              <%= image_tag player.avatar.url(:thumb), class: 'img-circle' %>
+              <%= image_tag result.user.avatar.url(:thumb), class: 'img-circle' %>
               <div class="media-body">
-                <h2><%= player.complete_name %></h2>
+                <h2><%= result.user.complete_name %></h2>
               </div>
             </div>
           </td>
-          <td>
-            64
-          </td>
-          <td>71</td>
-          <td>10</td>
-          <td>$20</td>
+          <td><%= result.net_score %></td>
+          <td><%= result.gross_score %></td>
+          <td><%= result.points.to_i %></td>
+          <td><%= number_to_currency(result.payouts) %></td>
           <td class="edit-link">
-            <% scorecard = tournament_day.primary_scorecard_for_user(player) %>
+            <% scorecard = result.primary_scorecard %>
             <% loading_partial = render partial: 'shared/modal_loading' %>
             <%= link_to image_tag('edit.png'), league_tournament_tournament_day_scorecard_path(tournament_day.tournament.league, tournament_day.tournament, tournament_day, scorecard), data: { toggle:"modal", target: "#editScorecardModal" }, remote: true %>
           </td>
