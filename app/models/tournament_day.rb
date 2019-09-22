@@ -130,7 +130,7 @@ class TournamentDay < ApplicationRecord
   end
 
   def flights_with_rankings
-    @flights_with_rankings ||= self.flights.includes(:users, :tournament_day_results, :payout_results)
+    @flights_with_rankings ||= flights.includes(:users, :tournament_day_results, :payout_results)
   end
 
   def primary_scoring_rule_flights_with_rankings
@@ -319,6 +319,10 @@ class TournamentDay < ApplicationRecord
 
   def points_for_user(user:)
     scoring_rules.map { |rule| rule.points_for_user(user: user) }.sum
+  end
+
+  def scoring_rules_for_user(user:)
+    scoring_rules.map { |rule| rule.users.include? user }
   end
 
   def legacy_game_type_id

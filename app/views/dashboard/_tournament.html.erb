@@ -32,7 +32,7 @@
                 tee time
               </div>
               <div class="col">
-                contests
+                game types
               </div>
             </div>
         </div>
@@ -53,7 +53,7 @@
                      <%= group.tee_time_at.to_s(:time_only) %> 
                   </div>
                   <div class="col contests-col">
-                    ???
+                    <%= tournament.first_day.scoring_rules_for_user(user: outing.user).count %>
                   </div>
                 </div><!-- /.row -->
               </div><!-- /.player-list-col --> 
