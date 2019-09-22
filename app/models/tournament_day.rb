@@ -31,17 +31,15 @@ class TournamentDay < ApplicationRecord
   validates :tournament_at, presence: true
   validates :tournament_at, uniqueness: { scope: :tournament }
 
-  validate :dates_are_valid, on: :create, unless: -> { self.skip_date_validation }
+  validate :dates_are_valid, on: :create, unless: -> { skip_date_validation }
   def dates_are_valid
     now = Time.zone.now.at_beginning_of_day
 
-    if tournament_at.present? && tournament_at < now
-      errors.add(:tournament_at, "can't be in the past")
-    end
+    errors.add(:tournament_at, "can't be in the past") if tournament_at.present? && tournament_at < now
   end
 
   def can_be_finalized?
-    self.displayable_scoring_rules.each do |r|
+    displayable_scoring_rules.each do |r|
       if !r.can_be_finalized?
         return false
       end
@@ -53,7 +51,7 @@ class TournamentDay < ApplicationRecord
   def finalization_blockers
     blockers = []
 
-    self.scoring_rules.each do |r|
+    scoring_rules.each do |r|
       blockers += r.finalization_blockers
     end
 
@@ -61,66 +59,64 @@ class TournamentDay < ApplicationRecord
   end
 
   def can_be_played?
-  	return false if self.mandatory_scoring_rules.count.zero?
-  	return false if self.scorecard_base_scoring_rule.blank?
+    return false if mandatory_scoring_rules.count.zero?
+    return false if scorecard_base_scoring_rule.blank?
 
-    self.scoring_rules.each do |r|
-      if !r.can_be_played?
-        return false
-      end
+    scoring_rules.each do |r|
+      return false unless r.can_be_played?
     end
 
     true
   end
 
   def is_first_day?
-    self.tournament.first_day == self
+    tournament.first_day == self
   end
 
   def pretty_day(add_space = false)
-    if self.tournament.tournament_days.count == 1
-    	day_string = "Day 1"
+    if tournament.tournament_days.count == 1
+      day_string = 'Day 1'
     else
-	    day_index = 0
+      day_index = 0
 
-	    self.tournament.tournament_days.each_with_index do |d, i|
-	      day_index = i if d == self
-	    end
+      tournament.tournament_days.each_with_index do |d, i|
+        day_index = i if d == self
+      end
 
-	    day_string = "Day #{day_index + 1}"
+      day_string = "Day #{day_index + 1}"
     end
 
-    day_string = day_string + " " if add_space
+    day_string += ' ' if add_space
 
     day_string
   end
 
   # TODO: MOVE
   def create_default_flight
-    if self.tournament.league.allow_scoring_groups
-      self.create_scoring_group_flights
+    if tournament.league.allow_scoring_groups
+      create_scoring_group_flights
     else
-      self.create_traditional_flight
+      create_traditional_flight
     end
   end
 
   # TODO: MOVE
   def create_traditional_flight
-    Flight.create(tournament_day: self, flight_number: 1, lower_bound: 0, upper_bound: 300, course_tee_box: self.course.course_tee_boxes.first)
+    Flight.create(tournament_day: self, flight_number: 1, lower_bound: 0, upper_bound: 300, course_tee_box: course.course_tee_boxes.first)
   end
 
   # TODO: MOVE
   def create_scoring_group_flights
-    self.tournament.league_season.league_season_scoring_groups.each_with_index do |g, i|
-      f = Flight.new(tournament_day: self, flight_number: i + 1, lower_bound: 0, upper_bound: 0, course_tee_box: self.course.course_tee_boxes.first, league_season_scoring_group: g)
+    tournament.league_season.league_season_scoring_groups.each_with_index do |g, i|
+      f = Flight.new(tournament_day: self, flight_number: i + 1, lower_bound: 0, upper_bound: 0, course_tee_box: course.course_tee_boxes.first, league_season_scoring_group: g)
 
-      f.save(:validate => false)
+      f.save(validate: false)
     end
   end
 
   # TODO: MOVE
   def copy_flights_from_previous_day
-    self.tournament.first_day.flights.each do |f|
+    tournament.first_day.flights.each do |f|
       Flight.create(tournament_day: self, flight_number: f.flight_number, lower_bound: f.lower_bound, upper_bound: f.upper_bound, course_tee_box: f.course_tee_box)
     end
   end
@@ -165,12 +161,12 @@ class TournamentDay < ApplicationRecord
   end
 
   def golf_outings
-    @golf_outings ||= self.tournament_groups.map(&:golf_outings).flatten
+    @golf_outings ||= tournament_groups.map(&:golf_outings).flatten
   end
 
   # TODO: MOVE
   def scorecard_display_partial
-    if self.scorecard_base_scoring_rule.course_holes.count <= 9
+    if scorecard_base_scoring_rule.course_holes.count <= 9
       '/shared/scorecards/nine_hole'
     else
       '/shared/scorecards/standard'
@@ -178,7 +174,7 @@ class TournamentDay < ApplicationRecord
   end
 
   def scorecard_print_partial
-    if self.scorecard_base_scoring_rule.course_holes.count <= 9
+    if scorecard_base_scoring_rule.course_holes.count <= 9
       '/shared/scorecards/nine_hole_print'
     else
       '/shared/scorecards/print'
@@ -187,10 +183,10 @@ class TournamentDay < ApplicationRecord
   # TODO: MOVE
 
   def has_scores?
-    self.eager_groups.each do |group|
+    eager_groups.each do |group|
       group.golf_outings.each do |golf_outing|
         golf_outing.scorecard.scores.each do |score|
-          return true if score.strokes > 0
+          return true if score.strokes.positive?
         end
       end
     end
@@ -199,21 +195,21 @@ class TournamentDay < ApplicationRecord
   end
 
   def has_payouts?
-    self.flights.each do |flight|
-      return true if flight.payouts.count > 0
+    flights.each do |flight|
+      return true if flight.payouts.count.positive?
     end
 
     false
   end
 
   def needs_daily_teams?
-    self.users_per_daily_teams > 0
+    users_per_daily_teams > 0
   end
 
   def users_per_daily_teams
     users_per = 0
 
-    self.scoring_rules.each do |rule|
+    scoring_rules.each do |rule|
       users_per = rule.users_per_daily_team if rule.users_per_daily_team > 1
     end
 
@@ -221,7 +217,7 @@ class TournamentDay < ApplicationRecord
   end
 
   def daily_teams
-    flattened_teams = self.tournament_groups.collect(&:daily_teams).flatten!
+    flattened_teams = tournament_groups.collect(&:daily_teams).flatten!
     if flattened_teams.present?
       flattened_teams
     else
@@ -230,19 +226,19 @@ class TournamentDay < ApplicationRecord
   end
 
   def create_league_season_team_matchups
-    if self.tournament.league_season.is_teams?
-      number_of_teams = self.tournament.league_season.league_season_teams.size
-      number_of_matchups = (number_of_teams.to_f / 2.0).ceil #round up
-      number_of_matchups -= self.league_season_team_tournament_day_matchups.count
+    if tournament.league_season.is_teams?
+      number_of_teams = tournament.league_season.league_season_teams.size
+      number_of_matchups = (number_of_teams.to_f / 2.0).ceil # round up
+      number_of_matchups -= league_season_team_tournament_day_matchups.count
 
-      number_of_matchups.times.each_with_index do |item, i|
+      number_of_matchups.times.each_with_index do |_, _|
         LeagueSeasonTeamTournamentDayMatchup.create(tournament_day: self)
       end
     end
   end
 
   def tournament_group_with_open_slots(required_slots)
-    self.tournament_groups.each do |group|
+    tournament_groups.each do |group|
       open_slots = group.max_number_of_players - group.golf_outings.count
 
       if open_slots >= required_slots
@@ -252,13 +248,13 @@ class TournamentDay < ApplicationRecord
       end
     end
 
-    return nil
+    nil
   end
 
   def add_league_season_team(league_season_team, matchup, slot_id)
-    if slot_id == "0"
+    if slot_id == '0'
       matchup.team_a = league_season_team
-    elsif slot_id == "1"
+    elsif slot_id == '1'
       matchup.team_b = league_season_team
     end
 
@@ -326,35 +322,33 @@ class TournamentDay < ApplicationRecord
   end
 
   def legacy_game_type_id
-  	if self.mandatory_scoring_rules.first.present?
-  		self.mandatory_scoring_rules.first.legacy_game_type_id
-  	else
-  		-1
-  	end
+    if mandatory_scoring_rules.first.present?
+      mandatory_scoring_rules.first.legacy_game_type_id
+    else
+      -1
+    end
   end
 
   def score_all_rules(delete_first: false)
-    self.scoring_rules.each do |rule|
-    	rule.tournament_day_results.delete_all if delete_first
+    scoring_rules.each do |rule|
+      rule.tournament_day_results.delete_all if delete_first
 
       rule.score
       rule.rank
     end
   end
-  
+
   def assign_payouts_all_rules
-    self.scoring_rules.each do |rule|
-      rule.assign_payouts
-    end
+    scoring_rules.each(&:assign_payouts)
   end
 
   def handicap_allowance(user:)
-    handicap_computer = self.scorecard_base_scoring_rule.handicap_computer
+    handicap_computer = scorecard_base_scoring_rule.handicap_computer
 
     handicap_computer.displayable_handicap_allowance(user: user)
   end
 
-  #date parsing
+  # date parsing
   def tournament_at=(date)
     begin
       parsed = EzglCalendar::CalendarUtils.datetime_for_picker_date(date)
@@ -363,5 +357,4 @@ class TournamentDay < ApplicationRecord
       write_attribute(:tournament_at, date)
     end
   end
-
 end
