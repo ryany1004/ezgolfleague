@@ -85,7 +85,7 @@
               <tbody>
                 <% @league.league_memberships.each do |m| %>
                 <tr>
-                  <td style="width:100px;"><%= check_box_tag "is_active[#{m.id}]", true, m.state == MembershipStates::ACTIVE_FOR_BILLING, class:"billing_checkbox" %></td>
+                  <td data-membership-state="<%= m.state %>" style="width:100px;"><%= check_box_tag "is_active[#{m.id}]", true, m.state == MembershipStates::ACTIVE_FOR_BILLING, class:"billing_checkbox" %></td>
                   <td><%= m.user.complete_name %></td>
                 </tr>
                 <% end %>
