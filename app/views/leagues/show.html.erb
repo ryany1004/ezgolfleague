@@ -87,7 +87,7 @@
           <p>Edit settings about this season</p>
         </div>
 
-        <%= simple_form_for @league_season, url: edit_league_league_season_path([@league, @league_season]), multipart: true, :defaults => { :input_html => { :class => "onboarding__input", :label => false }} do |f| %>
+        <%= simple_form_for [@league, @league_season], defaults: { input_html: { class: "onboarding__input", label: false }} do |f| %>
           <% if notification = f.error_notification %>
             <div class="alert alert-error fade in">
               <a class="close" data-dismiss="alert" href="#">&times;</a>

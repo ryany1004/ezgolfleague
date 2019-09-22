@@ -1,5 +1,5 @@
 class LeaguesController < BaseController
-  before_action :fetch_league, only: [:edit, :update, :destroy]
+  before_action :fetch_league, only: [:show, :edit, :update, :destroy]
 
   def index
     if current_user.is_super_user?
@@ -19,7 +19,6 @@ class LeaguesController < BaseController
   end
 
   def show
-    @league = League.find(params[:id])
     active_season = current_user.active_league_season
     if session[:selected_season_id].blank?
       @league_season = active_season
