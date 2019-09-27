@@ -162,14 +162,43 @@
 
 <script>
   $('#leagueSubscriptionsModal').on('hidden.bs.modal', function () {
-    $('.billing_checkbox').removeAttr('checked');
+    $('#active-form :checkbox').removeAttr('checked');
     console.log("Upgrade account modal closed, resetting golfer checkboxes...");
   });
 
   $('.billing_select_all').click(function(){
-    $(this).text($(this).text() == 'Select All' ? 'Select All' : 'Unselect All');
-    var checkBoxes = $(".billing_checkbox");
+    $(this).toggleClass('selected');
+
+    if ($(".billing_select_all").hasClass("selected")) {
+      $(this).text('Unselect All')
+    } else {
+      $(this).text('Select All')
+    }
+
+    var checkBoxes = $("#active-form :checkbox");
     (checkBoxes.prop("checked")==true)?checkBoxes.prop("checked", false):checkBoxes.prop("checked", true);
+
+    var activeGolfers = $("#active-form :checkbox:checked").length;
+
+    var baselineGolfers = <%= @golfer_count %>;
+    var costPerGolfer = self.costPerGolfer();
+
+    var newGolfers = activeGolfers - baselineGolfers;
+    var proposedCost = costPerGolfer * newGolfers;
+
+    $("#active_golfer_number").html(newGolfers);
+
+    if (activeGolfers > baselineGolfers) {
+      $("#save_and_charge_button").val("Save and Charge Credit Card $" + proposedCost);
+
+      $("#golfer_change_cost").html("$" + proposedCost);
+
+      $("#activation_text").fadeIn();
+    } else {
+      $("#save_and_charge_button").val("Save");
+
+      $("#activation_text").fadeOut();
+    }
 });
 </script>
 
@@ -190,7 +219,7 @@
     $("#activation_text").hide();
 
     $('#active-form :checkbox').change(function() {
-        var activeGolfers = $(":checkbox:checked").length;
+        var activeGolfers = $("#active-form :checkbox:checked").length;
 
         var baselineGolfers = <%= @golfer_count %>;
         var costPerGolfer = self.costPerGolfer();
