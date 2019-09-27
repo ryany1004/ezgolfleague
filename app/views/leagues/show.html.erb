@@ -16,36 +16,31 @@
       <div class="col-md-3">   
         <div class="scorpion-golf-league-green">
           <div class="scorpion-golf-league-green-header">
-              <div class="dropdown">
-                <select class="selectpicker dropup" data-header="">
-                  <% current_user.selected_league.league_seasons.each do |season| -%>
-                    <option><%= link_to season.name, league_switch_seasons_path(current_user.selected_league, season_id: season.id), method: :put %></option>
-                  <% end %>
-                </select>
-                  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                    <% current_user.selected_league.league_seasons.each do |season| -%>
-                      <%= link_to season.name, league_switch_seasons_path(current_user.selected_league, season_id: season.id), method: :put, class: 'dropdown-item' %>
-                    <% end %>
-                  </div>
+            <div class="dropdown">
+              <select class="selectpicker dropup" data-header="" onchange="location = this.value;">
+                <% current_user.selected_league.league_seasons.each do |season| -%>
+                  <option><%= link_to season.name, league_switch_seasons_path(current_user.selected_league, season_id: season.id), method: :put %></option>
+                <% end %>
+              </select>
+            </div>
+          </div>
+          <div class="scorpion-golf-league-gree-list">
+            <div class="row no-gutters">
+              <div class="col-md-6">
+                <p>starts</p>
+                <h2><%= @league_season.starts_at.to_s(:short) %></h2>
+              </div>
+              <div class="col-md-6">
+                <p>ends</p>
+                <h2><%= @league_season.ends_at.to_s(:short) %></h2>
               </div>
             </div>
-            <div class="scorpion-golf-league-gree-list">
-              <div class="row no-gutters">
-                <div class="col-md-6">
-                  <p>starts</p>
-                  <h2><%= @league_season.starts_at.to_s(:short) %></h2>
-                </div>
-                <div class="col-md-6">
-                  <p>ends</p>
-                  <h2><%= @league_season.ends_at.to_s(:short) %></h2>
-                </div>
-              </div>
-            </div>
-            <div class="scorpion-golf-league-gree-btn text-center">
-              <%= link_to "View Tournaments", league_tournaments_path(@league), class: 'btn btn-primary' %>
-              <%= link_to "Manage Golfers", league_league_memberships_path(current_user.selected_league), class: 'btn btn__ezgl-secondary' %>
-              <%= link_to "Edit Teams", "#edit-teams", class: 'btn btn__ezgl-secondary popup-with-zoom-anim' %>
-            </div>
+          </div>
+          <div class="scorpion-golf-league-gree-btn text-center">
+            <%= link_to "View Tournaments", league_tournaments_path(@league), class: 'btn btn-primary' %>
+            <%= link_to "Manage Golfers", league_league_memberships_path(current_user.selected_league), class: 'btn btn__ezgl-secondary' %>
+            <%= link_to "Edit Teams", "#edit-teams", class: 'btn btn__ezgl-secondary popup-with-zoom-anim' %>
+          </div>
         </div><!-- /.scorpion-golf-league-green -->            
         <div class="list-group sidebar-list-group">
           <%= link_to image_tag('settings.png') + "Season Settings", "", data: { toggle:"modal", target:"#editSeasonModal" }, class: "list-group-item list-group-item-action" %>
