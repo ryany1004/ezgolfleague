@@ -2970,6 +2970,22 @@ select.selectpicker {
     right: 12px;
   }
 
+  form {
+    .alert {
+      position: relative;
+      top: auto;
+      right: auto;
+
+      &.fade {
+        padding: 0;
+      }
+    }
+  }
+
+  .optional-text {
+    font-size: 10px;
+  }
+
   #error_explanation {
     background: #c0392b;
     width: 250px;

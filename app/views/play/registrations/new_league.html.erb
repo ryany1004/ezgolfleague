@@ -22,7 +22,8 @@ fbq('track', 'CompleteRegistration', {
       </div>
       <div class="panel panel-default p-5">
         <div class="panel-heading">
-          <h3 class="panel-title pb-4">Add Your League</h3>
+          <h3 class="panel-title pb-1">Add Your League</h3>
+          <h6 class="panel-subtitle pb-4">Give us some information about your league</h6>
         </div>
         <div class="panel-body registration">
           <%= simple_form_for @league, url: create_league_play_registrations_path, :defaults => { :input_html => { :class => "onboarding__input", :label => false }} do |f| %>
@@ -44,7 +45,7 @@ fbq('track', 'CompleteRegistration', {
 
               <div class="form-flex-group">
                 <div class="form-side-label">
-                  <p>Location</p>
+                  <p>Location <span class="optional-text">(Optional)</span></p>
                 </div>
 
                 <%= f.input :location, placeholder: 'Los Angeles, Southern California, etc.', required: true %>
