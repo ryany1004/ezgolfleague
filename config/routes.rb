@@ -124,7 +124,7 @@ Rails.application.routes.draw do
     patch 'update_from_ghin'
     patch 'update_calculated_handicaps'
     patch 'update_league_standings'
-    put 'switch_seasons'
+    get 'switch_seasons'
 
     resources :subscription_credits, except: :show do
       get 'information', on: :collection

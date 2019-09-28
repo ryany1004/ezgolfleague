@@ -64,7 +64,7 @@ class LeaguesController < BaseController
   def switch_seasons
     session[:selected_season_id] = params[:season_id]
 
-    redirect_to league_path
+    redirect_to league_path(params[:league_id])
   end
 
   def update_from_ghin

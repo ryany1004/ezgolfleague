@@ -17,9 +17,9 @@
         <div class="scorpion-golf-league-green">
           <div class="scorpion-golf-league-green-header">
             <div class="dropdown">
-              <select class="selectpicker dropup" data-header="" onchange="location = this.value;">
+              <select class="selectpicker dropup" onchange="location = this.value;">
                 <% current_user.selected_league.league_seasons.each do |season| -%>
-                  <option><%= link_to season.name, league_switch_seasons_path(current_user.selected_league, season_id: season.id), method: :put %></option>
+                  <option <% if season == @league_season %>selected<% end %> value="<%= url_for league_switch_seasons_path(current_user.selected_league, season_id: season.id) %>"><%= season.name %></option>
                 <% end %>
               </select>
             </div>
