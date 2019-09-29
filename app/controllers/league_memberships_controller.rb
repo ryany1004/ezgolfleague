@@ -56,6 +56,18 @@ class LeagueMembershipsController < BaseController
     { success: 'The membership was successfully deleted.' }
   end
 
+  def update_handicaps
+    params[:handicaps].keys.each do |membership_id|
+      league_membership = @league.league_memberships.find(membership_id)
+      next if league_membership.blank?
+
+      league_membership.update(course_handicap: params[:handicaps][membership_id]['course_handicap'])
+      league_membership.user.update(handicap_index: params[:handicaps][membership_id]['handicap_index'])
+    end
+
+    redirect_to league_league_memberships_path(@league), flash: { success: 'The handicaps were successfully updated.' }
+  end
+
   private
 
   def membership_params

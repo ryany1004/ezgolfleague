@@ -147,7 +147,7 @@ Rails.application.routes.draw do
 
     resources :league_memberships do
       get 'print', on: :collection
-      put 'update_active', on: :collection
+      post 'update_handicaps', on: :collection
     end
 
     resources :reports do

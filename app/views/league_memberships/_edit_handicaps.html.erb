@@ -1,46 +1,54 @@
-<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-  <div class="modal-content">
-    <div class="modal-body welcome p-5">
-      <div class="p-3">
-        <h2>Edit Golfers Handicaps</h2>
-        <p>Manually edit any golfers handicaps</p>
-      </div>
+<%= simple_form_for :handicap_update, url: update_handicaps_league_league_memberships_path do |f| %>
+  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-body welcome p-5">
+        <div class="p-3">
+          <h2>Edit Golfers Handicaps</h2>
+          <p>Manually edit any golfers handicaps</p>
+        </div>
 
-      <div class="pl-4 pt-1 pb-1 pr-1">
-        <div class="table-overflow golfers" style="margin-top:0!important;">
-          <table class="table teatime-content-card-table">
-            <thead>
-              <tr class="text-uppercase">
-                <th scope="col" class="pl-5 pr-0" style="text-align:left;">Name</th>
-                <th scope="col">Handicap Index</th>
-                <th scope="col">Handicap Override</th>
-              </tr>
-            </thead>
-            <tbody>
-              <% league_memberships.each do |m| %>
-              <tr>
-                <td class="pl-5 pr-0">
-                  <div class="media">
-                    <%= image_tag m.user.avatar.url(:thumb), class: 'img-circle' %>
-                    <div class="media-body">
-                      <h2 style="text-align:left;"><%= link_to m.user.complete_name %></h2>
-                    </div>
-                  </div>           
-                </td>
-                <td style="vertical-align:middle;"><%= m.user.handicap_index %></td>
-                <td style="vertical-align:middle;"><%= m.course_handicap %></td>
-              </tr>
-              <% end %>
-            </tbody>
-          </table>
+        <div class="pl-4 pt-1 pb-1 pr-1">
+          <div class="table-overflow golfers" style="margin-top:0!important;">
+            <table class="table teatime-content-card-table">
+              <thead>
+                <tr class="text-uppercase">
+                  <th scope="col" class="pl-5 pr-0" style="text-align:left;">Name</th>
+                  <th scope="col">Handicap Index</th>
+                  <th scope="col">Handicap Override</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% league_memberships.each do |m| %>
+                  <%= fields_for "handicaps[]", m do |h| %>
+                    <tr>
+                      <td class="pl-5 pr-0">
+                        <div class="media">
+                          <%= image_tag m.user.avatar.url(:thumb), class: 'img-circle' %>
+                          <div class="media-body">
+                            <h2 style="text-align:left;"><%= link_to m.user.complete_name %></h2>
+                          </div>
+                        </div>           
+                      </td>
+                      <td style="vertical-align:middle;">
+                          <%= h.text_field :handicap_index, value: m.user.handicap_index %>
+                      </td>
+                      <td style="vertical-align:middle;">
+                        <%= h.text_field :course_handicap, value: m.course_handicap %>
+                      </td>
+                    </tr>
+                  <% end %>
+                <% end %>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer" style="flex-wrap:wrap;">
+        <div>
+          <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+          <%= f.button :submit, "Update Golfers", class: 'btn btn__ezgl-secondary' %>
         </div>
       </div>
     </div>
-    <div class="modal-footer" style="flex-wrap:wrap;">
-      <div>
-        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-        <%= link_to "Update Golfers", "#updateGolfers", class: 'btn btn__ezgl-secondary' %>
-      </div>
-    </div>
   </div>
-</div>
+<% end %>
