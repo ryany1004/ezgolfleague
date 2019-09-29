@@ -15,6 +15,14 @@ module FinderSupport
     Tournament.tournaments_happening_at_some_point(nil, nil, leagues, false)
   end
 
+  def all_unfinalized(leagues = nil)
+    Tournament.tournaments_happening_at_some_point(nil, nil, leagues, true).where(is_finalized: false)
+  end
+
+  def next_unfinalized(leagues = nil)
+    all_unfinalized(leagues).first
+  end
+
   def past_for_league_season(league_season)
     if league_season.ends_at > Date.current.in_time_zone
       end_time = Time.zone.now.at_beginning_of_day
@@ -29,27 +37,20 @@ module FinderSupport
     relation = Tournament.includes(:league)
 
     if leagues.present?
-      league_ids = leagues.map { |n| n.id }
-
-      relation = relation.includes(:league).where("leagues.id IN (?)", league_ids).references(:league)
+      league_ids = leagues.map(&:id)
+      relation = relation.includes(:league).where('leagues.id IN (?)', league_ids).references(:league)
     end
 
-    if start_date.present?
-      relation = relation.where("tournament_starts_at >= ? OR tournament_days_count = 0", start_date)
-    end
-
-    if end_date.present?
-      relation = relation.where("tournament_starts_at <= ? OR tournament_days_count = 0", end_date)
-    end
+    relation = relation.where('tournament_starts_at >= ? OR tournament_days_count = 0', start_date) if start_date.present?
+    relation = relation.where('tournament_starts_at <= ? OR tournament_days_count = 0', end_date) if end_date.present?
 
     if restrict_to_configured
-      relation = relation.where("tournament_starts_at IS NOT NULL")
+      relation = relation.where('tournament_starts_at IS NOT NULL')
     else
-      relation = relation.where("tournament_starts_at IS NULL")
+      relation = relation.where('tournament_starts_at IS NULL')
     end
 
     relation = relation.order(:tournament_starts_at)
-
     relation = relation.references(:tournament_days)
 
     relation
