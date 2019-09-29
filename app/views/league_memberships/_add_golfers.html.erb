@@ -33,9 +33,24 @@
         </div>
       </div>
 
+      <div class="step-1-content-form step-1-content">
+        <div class="row">
+          <div class="col-md-3 text-right">
+          </div>
+            <div class="col-md-8 text-left">
+              <input type="checkbox" id="notify" name="notify">
+              <label for="notify" class="pl-2">Notify golfer about account creation</label>
+            </div>
+          </div>
+        </div>
+      </div>
+<%
+=begin%>
+ 
       <h4><span>OR</span></h4>
-      <%= link_to "Bulk Import", "#bulkAddGolfers", class: 'btn btn-primary' %>
-    </div>
+      <%= link_to "Bulk Import", "#bulkAddGolfers", class: 'btn btn-primary' %> 
+<%
+=end%>
     <div class="modal-footer">
       <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
       <%= link_to "Add Golfer", "#addGolfer", class: 'btn btn__ezgl-secondary' %>
