@@ -19,6 +19,10 @@ class DailyTeam < ApplicationRecord
     end
   end
 
+  def full?
+    users.count >= max_players
+  end
+
   def team_number_label
     "Pairing ##{team_number} For Group"
   end
