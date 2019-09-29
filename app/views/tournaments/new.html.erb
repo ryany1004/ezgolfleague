@@ -10,7 +10,7 @@
               </button>
             </div>
             <div class="line"></div>
-            <div class="step" data-target="#test-l-2">
+            <div class="step step-2-dot hidden" data-target="#test-l-2">
               <button type="button" class="btn btn-link step-trigger" role="tab" id="stepper1trigger2" aria-controls="test-l-2">
                 <span class="bs-stepper-circle">2</span>                 
               </button>
@@ -22,6 +22,7 @@
               </button>
             </div>
           </div>
+
           <div class="bs-stepper-content">
             <form onSubmit="return false">
               <div id="test-l-1" role="tabpanel" class="content" aria-labelledby="stepper1trigger1">
@@ -55,7 +56,7 @@
                                 <div class="date-inputs">
 																	<div class="row">
 																		<div class="col-12">
-																			<%= f.input :signup_opens_at, label: 'Tournament Date', as: :datetime_picker, required: true, input_html: { value: @tournament.signup_opens_at.to_s(:date_and_time) } %>
+																			<%= f.input :tournament_starts_at, label: 'Tournament Date', as: :datetime_picker, required: true, input_html: { value: @tournament.tournament_starts_at&.to_s(:date_and_time) } %>
 																		</div>
 																	</div>
                                 </div>
@@ -65,16 +66,16 @@
                         <div class="form-group">
                           <div class="row">
                             <div class="col-md-4 text-right">
-															<label>Signup Dates</label>
+															<label>Registration Dates</label>
                             </div>
                               <div class="col-md-5">
                                 <div class="date-inputs">
 																	<div class="row">
 																		<div class="col-md-6">
-																			<%= f.input :signup_opens_at, label: 'Signup Opening Date', as: :datetime_picker, required: true, input_html: { value: @tournament.signup_opens_at.to_s(:date_and_time) } %>
+																			<%= f.input :signup_opens_at, label: 'Signup Opening Date', placeholder: 'Open', as: :datetime_picker, required: true, input_html: { value: @tournament.signup_opens_at&.to_s(:date_and_time) } %>
 																		</div>
 																		<div class="col-md-6">
-																			<%= f.input :signup_closes_at, label: 'Signup Closing Date', as: :datetime_picker, required: true, input_html: { value: @tournament.signup_closes_at&.to_s(:date_and_time) } %>
+																			<%= f.input :signup_closes_at, label: 'Signup Closing Date', placeholder: 'Close', as: :datetime_picker, required: true, input_html: { value: @tournament.signup_closes_at&.to_s(:date_and_time) } %>
 																		</div>
 																	</div>
                                 </div>
@@ -82,22 +83,6 @@
                           </div>
                         </div> 
                         <div>
-                          <div class="row">
-                            <div class="col-md-4 text-right">
-                              <label>Tee Times</label>
-                            </div>
-                            <div class="col-md-5 tee-times-inputs">
-                              <div class="pr-4">
-                                <%= f.input :name, placeholder: 'Start', required: true %>
-                              </div>
-                              <div class="pr-4">
-                                <%= f.input :name, placeholder: 'Groups', required: true %>
-                              </div>
-                              <div>
-                                <%= f.input :name, placeholder: 'Time b/t', required: true %>
-                              </div>
-                            </div>
-                          </div>
                         </div> 
                         <div class="form-group">
                             <div class="row">
@@ -110,7 +95,8 @@
                             </div>
                         </div> 
                         <div class="form-group">
-                          <%= f.input :name, label: 'Separate golfers into flights', as: :boolean %>
+                          <input type="checkbox" id="separate" name="separate">
+                          <label for="separate" class="pl-2">Separate golfers into flights</label>
                         </div>
                       <% end %>
                     <% end %>
@@ -118,13 +104,13 @@
                 </div><!-- /.step-1-content -->
                 <div class="cat-card-footer">                     
                     <button type="button" class="btn btn-outline-secondary">Cancel</button>
-                    <button class="btn btn__ezgl-secondary" onclick="stepper1.next()">Next</button>
+                    <button class="btn btn__ezgl-secondary" onclick="firstStep()">Next</button>
                 </div>
               </div>
               <div id="test-l-2" role="tabpanel" class="content" aria-labelledby="stepper1trigger2">
                 <div class="step-1-content">
-                  <h2 class="text-center">Flights (Optional)</h2>
-                  <p>Optionally add flights. If skipping, just click next.</p>
+                  <h2 class="text-center">Flights</h2>
+                  <p>Manually add flights below.</p>
                   <div class="step-1-content-form">
                     <% if @tournament.new_record? || is_editable?(@tournament) -%>
                       <%= simple_form_for [current_user.selected_league, @tournament], :defaults => { :input_html => { :class => "form-control", :label => false }} do |f| %>
@@ -262,7 +248,7 @@
                   </div>
                 </div>
                 <div class="cat-card-footer">
-                  <button class="btn btn-outline-secondary" onclick="stepper1.previous()">Previous</button>
+                  <button class="btn btn-outline-secondary" onclick="lastStep()">Previous</button>
                   <button type="submit" class="btn btn__ezgl-secondary">Submit</button>
                 </div>                  
               </div>
@@ -346,7 +332,6 @@
       linear: false,
       animation: true
     })
-    stepper4 = new Stepper(document.querySelector('#stepper4'))
 
     function handleBreakPointChange (breakpoint) {
       if (breakpoint === 'large') {
@@ -367,6 +352,26 @@
     bsBreakpoints.init()
     handleBreakPointChange(bsBreakpoints.detectBreakpoint())
   })
+
+  $('input#separate').change(function() {
+    $('.step-2-dot').toggleClass("hidden")
+  })
+
+  function firstStep () {
+    if ($('input#separate').is(':checked')) {
+      stepper1.next()
+    } else {
+      stepper1.to(3)
+    }
+  }
+
+  function lastStep () {
+    if ($('input#separate').is(':checked')) {
+      stepper1.previous()
+    } else {
+      stepper1.to(1)
+    }
+  }
 
   $('.selectize-control').remove();
   var $course_selector = $('#course').selectize({

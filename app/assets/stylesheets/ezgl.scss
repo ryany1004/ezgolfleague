@@ -25,6 +25,10 @@ a:hover {
   box-shadow: none;
 }
 
+.hidden {
+  display: none;
+}
+
 .banner-img {
   background: #fff url('../images/banner.jpg') no-repeat;
   -webkit-background-size: cover;

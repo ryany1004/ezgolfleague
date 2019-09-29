@@ -101,7 +101,11 @@
         <p id="activation_text" class="pt-2">Activating <span id="active_golfer_number">&nbsp;</span> golfer(s) will result in a charge of <mark id="golfer_change_cost">&nbsp;</mark>.</p>
         <div>
           <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-          <%= f.button :submit, "Save", class: 'btn btn-primary', :id => "save_and_charge_button" %>
+          <% if @league.cc_last_four.blank? %>
+            <span class="credit-card_change"><a href="#" class="btn btn-primary" role="button" data-toggle="modal" data-target="#creditCardModal">Add Credit Card</a></span>
+          <% else %>
+            <%= f.button :submit, "Save", class: 'btn btn-primary', :id => "save_and_charge_button" %>
+          <% end %>
         </div>
       </div>
     </div>
