@@ -63,7 +63,13 @@
               </div><!-- /.view-league-card -->
             </div><!-- /.col-md-4 -->
             <% if @next_tournament.present? %>
-              <%= render partial: 'tournament', locals: { tournament: @next_tournament } %>
+              <% if @next_tournament.tournament_state == TournamentState::REGISTRATION %>
+                <%= render partial: 'registration_tournament', locals: { tournament: @next_tournament } %>
+              <% elsif @next_tournament.tournament_state == TournamentState::REVIEW_SCORES %>
+                <%= render partial: 'review_scores_tournament', locals: { tournament: @next_tournament } %>
+              <% elsif @next_tournament.tournament_state == TournamentState::POST_SCORES %>
+                <%= render partial: 'post_scores_tournament', locals: { tournament: @next_tournament } %>
+              <% end %>
             <% else %>
               <%= render partial: 'no_tournament', locals: { tournament: @previous_tournament } %>
             <% end %>
