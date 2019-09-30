@@ -29,7 +29,6 @@ class TournamentsController < BaseController
     @tournament = Tournament.new
 
     @tournament.league = current_user.leagues_admin.first if current_user.leagues_admin.count.positive?
-    @tournament.signup_opens_at = DateTime.now
     @courses = Course.all.order(:name)
     @tournament.allow_credit_card_payment = false if @tournament.league.present? && !@tournament.league.stripe_is_setup?
   end

@@ -2082,6 +2082,18 @@ select.selectpicker {
   margin-right: 15px;
 }
 
+.handicap-input {
+  vertical-align: middle !important;
+
+  input {
+    height: 40px;
+    width: 50px;
+    border: 1px solid #dee2e6;
+    border-radius: 5px;
+    text-align: center;
+  }
+}
+
 .tee-times-panel-divider {
   margin-top: 0;
   border-top: 1px solid #efefef;
