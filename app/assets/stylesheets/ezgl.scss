@@ -1197,6 +1197,18 @@ select.selectpicker {
   margin-left: 20px;
   border-radius: .25rem;
   width: 100%;
+
+  .input-group {
+    padding-right: 0rem;
+  }
+
+  .input-group-btn {
+    display: none;
+  }
+}
+
+.bootstrap-datepicker-widget {
+  color: black !important;
 }
 
 .step-1-content .form-group {

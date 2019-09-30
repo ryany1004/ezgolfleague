@@ -14,15 +14,6 @@ GIT
       sidekiq (>= 3.4, < 6.0)
 
 GIT
-  remote: git://github.com/zpaulovics/datetimepicker-rails.git
-  revision: 36d21cec5da7f5b214925804f60e63c61c747023
-  branch: master
-  submodules: true
-  specs:
-    datetimepicker-rails (4.7.16)
-      momentjs-rails (>= 2.9.0)
-
-GIT
   remote: https://github.com/stripe/stripe-ruby
   revision: 1f80da4b7ac8309be463540c13b396cb6c0a48ea
   specs:
@@ -479,7 +470,6 @@ DEPENDENCIES
   coffee-rails
   daemons
   dalli
-  datetimepicker-rails!
   derailed
   devise (~> 4.2)
   devise_invitable (~> 1.7.0)

@@ -17,7 +17,6 @@ gem 'capistrano3-delayed-job', '~> 1.0'
 gem 'chosen-rails'
 gem 'coffee-rails'
 gem 'daemons'
-gem 'datetimepicker-rails', github: 'zpaulovics/datetimepicker-rails', branch: 'master', submodules: true
 gem 'devise',           '~> 4.2'
 gem 'devise_invitable', '~> 1.7.0'
 gem 'drip-ruby', require: 'drip'

@@ -15,10 +15,7 @@
 //= require jquery_ujs
 //= require popper
 //= require bootstrap-sprockets
-//= require bootstrap-select
 //= require moment
-//= require bootstrap-datetimepicker
-//= require pickers
 //= require selectize
 //= require chosen-jquery
 //= require chosen_scaffold
@@ -28,9 +25,9 @@
 //= require_tree .
 
 /*menu handler*/
-$(function(){
+$(function() {
   function stripTrailingSlash(str) {
-    if(str.substr(-1) == '/') {
+    if (str.substr(-1) == "/") {
       return str.substr(0, str.length - 1);
     }
     return str;
@@ -40,24 +37,26 @@ $(function(){
   var url = window.location.pathname;
   var activePage = stripTrailingSlash(url);
 
-  $('.nav li a').each(function(){
-    var currentPage = stripTrailingSlash($(this).attr('href'));
+  $(".nav li a").each(function() {
+    var currentPage = stripTrailingSlash($(this).attr("href"));
 
     if (activePage == currentPage && !activePage.includes("play")) {
-      $(this).parent().addClass('active');
+      $(this)
+        .parent()
+        .addClass("active");
     }
   });
 });
 
 jQuery.fn.extend({
-    disable: function(state) {
-        return this.each(function() {
-            this.disabled = state;
-        });
-    }
+  disable: function(state) {
+    return this.each(function() {
+      this.disabled = state;
+    });
+  }
 });
 
-function ezglTrackAnalyticsEvent(eventName, eventProperties = null) {  
+function ezglTrackAnalyticsEvent(eventName, eventProperties = null) {
   amplitude.getInstance().logEvent(eventName, eventProperties);
 
   _dcq.push(["track", eventName, eventProperties]);
