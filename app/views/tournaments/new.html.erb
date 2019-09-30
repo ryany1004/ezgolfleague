@@ -113,6 +113,7 @@
                     <button class="btn btn__ezgl-secondary" onclick="firstStep()">Next</button>
                 </div>
               </div>
+
               <div id="test-l-2" role="tabpanel" class="content" aria-labelledby="stepper1trigger2">
                 <div class="step-1-content">
                   <h2 class="text-center">Flights</h2>
@@ -133,67 +134,73 @@
                             </div>
                             <div class="col-md-5 tee-times-inputs">
                               <div class="pr-4">
-                                <%= f.input :name, placeholder: 'L HCP', required: true %>
+                                <%= f.input :name, placeholder: 'Lowest HCP', required: true %>
                               </div>
                               <div class="pr-4">
-                                <%= f.input :name, placeholder: 'R HCP', required: true %>
+                                <%= f.input :name, placeholder: 'Highest HCP', required: true %>
                               </div>
                               <div>
                                 <%= f.input :name, placeholder: 'Tee Box', required: true %>
                               </div>
                             </div>
                           </div>
+
+                          <div class="btn btn__ezgl-secondary addMoreFlight1" onclick="addFlight2()">Add More</div>
                         </div> 
 
-                        <div>
+                        <div class="flight-2-row hidden">
                           <div class="row">
                             <div class="col-md-4 text-right">
                               <label>Flight #2</label>
                             </div>
                             <div class="col-md-5 tee-times-inputs">
                               <div class="pr-4">
-                                <%= f.input :name, placeholder: 'L HCP', required: true %>
+                                <%= f.input :name, placeholder: 'Lowest HCP', required: true %>
                               </div>
                               <div class="pr-4">
-                                <%= f.input :name, placeholder: 'R HCP', required: true %>
+                                <%= f.input :name, placeholder: 'Highest HCP', required: true %>
                               </div>
                               <div>
                                 <%= f.input :name, placeholder: 'Tee Box', required: true %>
                               </div>
                             </div>
                           </div>
+
+                          <div class="btn btn__ezgl-secondary addMoreFlight2" onclick="addFlight3()">Add More</div>
                         </div> 
 
-                        <div>
+                        <div class="flight-3-row hidden">
                           <div class="row">
                             <div class="col-md-4 text-right">
                               <label>Flight #3</label>
                             </div>
                             <div class="col-md-5 tee-times-inputs">
                               <div class="pr-4">
-                                <%= f.input :name, placeholder: 'L HCP', required: true %>
+                                <%= f.input :name, placeholder: 'Lowest HCP', required: true %>
                               </div>
                               <div class="pr-4">
-                                <%= f.input :name, placeholder: 'R HCP', required: true %>
+                                <%= f.input :name, placeholder: 'Highest HCP', required: true %>
                               </div>
                               <div>
                                 <%= f.input :name, placeholder: 'Tee Box', required: true %>
                               </div>
                             </div>
                           </div>
+
+                          <div class="btn btn__ezgl-secondary addMoreFlight3" onclick="addFlight4()">Add More</div>
                         </div> 
 
-                        <div>
+                        <div class="flight-4-row hidden">
                           <div class="row">
                             <div class="col-md-4 text-right">
                               <label>Flight #4</label>
                             </div>
                             <div class="col-md-5 tee-times-inputs">
                               <div class="pr-4">
-                                <%= f.input :name, placeholder: 'L HCP', required: true %>
+                                <%= f.input :name, placeholder: 'Lowest HCP', required: true %>
                               </div>
                               <div class="pr-4">
-                                <%= f.input :name, placeholder: 'R HCP', required: true %>
+                                <%= f.input :name, placeholder: 'Highest HCP', required: true %>
                               </div>
                               <div>
                                 <%= f.input :name, placeholder: 'Tee Box', required: true %>
@@ -210,6 +217,7 @@
                   <button class="btn btn__ezgl-secondary" onclick="stepper1.next()">Next</button>
                 </div>                  
               </div>
+
               <div id="test-l-3" role="tabpanel" class="content text-center" aria-labelledby="stepper1trigger3">
                 <div class="step-1-content">
                   <h2 class="text-center">Game Types</h2>
@@ -348,7 +356,23 @@
     }
   }
 
+  function addFlight2() {
+    $('.addMoreFlight1').addClass('hidden');
+    $('.flight-2-row').removeClass('hidden');
+  }
+
+  function addFlight3() {
+    $('.addMoreFlight2').addClass('hidden');
+    $('.flight-3-row').removeClass('hidden');
+  }
+
+  function addFlight4() {
+    $('.addMoreFlight3').addClass('hidden');
+    $('.flight-4-row').removeClass('hidden');
+  }
+
   $('.selectize-control').remove();
+
   var $course_selector = $('#course').selectize({
       valueField: 'id',
       labelField: 'name',
