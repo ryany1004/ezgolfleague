@@ -1252,7 +1252,9 @@ select.selectpicker {
   color: #b2b2b2;
 }
 
-#course-selectized::placeholder {
+#course-selectized::placeholder,
+#gameTypes-selectized::placeholder,
+#flight-selectized::placeholder {
   font-style: italic;
   color: #b2b2b2;
 }
