@@ -39,7 +39,6 @@
           <div class="scorpion-golf-league-gree-btn text-center">
             <%= link_to "View Tournaments", league_tournaments_path(@league), class: 'btn btn-primary' %>
             <%= link_to "Manage Golfers", league_league_memberships_path(current_user.selected_league), class: 'btn btn__ezgl-secondary' %>
-            <%= link_to "Edit Teams", "#edit-teams", class: 'btn btn__ezgl-secondary popup-with-zoom-anim' %>
           </div>
         </div><!-- /.scorpion-golf-league-green -->            
         <div class="list-group sidebar-list-group">
@@ -116,9 +115,4 @@
       <% end %>
     </div>
   </div>
-</div>
-
-<!-- Edit Teams Modal --> 
-<div id="edit-teams" class="zoom-anim-dialog mfp-hide">
-  <%= render partial: 'edit_teams', locals: { league: @league } %>   
 </div>

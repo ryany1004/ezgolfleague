@@ -6,7 +6,7 @@
         <div class="tournament-card__header">
           <h3 class="p-4">Tournament Details</h3>
           <% if @tournament.tournament_state == TournamentState::REGISTRATION %>
-            <%= link_to "Edit", "#edit", class: 'btn btn__ezgl-secondary' %>
+            <%= link_to "Edit", "", data: { toggle:"modal", target:"#editTournamentDetailsModal" }, class: 'btn btn__ezgl-secondary' %>
           <% end %>
         </div>
 
@@ -108,3 +108,68 @@
     </div>
   </div>
 </div>
+
+
+<div class="modal fade" id="editTournamentDetailsModal" tabindex="-1" role="dialog" aria-labelledby="editTournamentDetailsCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+    <div class="modal-content">
+      <% if @tournament.new_record? || is_editable?(@tournament) -%>
+        <%= simple_form_for [current_user.selected_league, @tournament], :defaults => { :input_html => { :class => "form-control", :label => false }} do |f| %>    
+          <div class="modal-body welcome p-5">
+            <div class="p-3">
+              <h2 style="font-size:30px;">Edit Tournament Details</h2>
+            </div>
+            <% if notification = f.error_notification %>
+              <div class="alert alert-error fade in">
+                <%= notification %>
+              </div>
+            <% end %>
+            <div class="step-1-content-form step-1-content">
+              <div class="row">
+                <div class="col-md-3 text-right">
+                  <label>Course</label>
+                </div>
+                  <div class="col-md-8">
+                    <%= select_tag('course', options_from_collection_for_select(@courses, 'id', 'name'), {:include_blank => 'Choose a Course...'}) %>
+                </div>
+              </div>
+            </div>
+            <div class="step-1-content-form step-1-content pt-0">
+              <div class="row">
+                <div class="col-md-3 text-right">
+                  <label>Name</label>
+                </div>
+                <div class="col-md-8 tee-times-inputs">
+                  <div>
+                    <%= f.input :name, placeholder: 'Payout', required: true %>
+                  </div>
+                </div>
+              </div>
+            </div> 
+          </div>
+
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+            <%= f.button :submit, "Save", class: 'btn__ezgl-secondary' %>
+          </div>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<script>
+  var $course_selector = $('#course').selectize({
+      valueField: 'id',
+      labelField: 'name',
+      searchField: 'name',
+      maxItems: '1',
+      placeholder: 'Search for a course...',
+      create: false,
+      render: {
+            option: function (item, escape) {
+                return '<div>' + escape(item.name) + '</div>';
+            }
+      }
+  });
+</script>

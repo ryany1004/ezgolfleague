@@ -59,6 +59,7 @@ class TournamentsController < BaseController
   def show
     registered_players = @tournament.players_for_day(@tournament.first_day)
     @non_registered_players = @tournament.league.users.select { |x| !registered_players.include?(x) }
+    @courses = Course.all.order(:name)
   end
 
   def edit

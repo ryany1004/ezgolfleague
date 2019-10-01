@@ -105,19 +105,8 @@
 </div>
 <!-- /.container --> 
 
-
-<!-- dialog itself, mfp-hide class is required to make dialog hidden -->
-<div id="edit-tee-times" class="zoom-anim-dialog mfp-hide">
-  <%= render partial: 'tee_time_editor', locals: { tournament_day: @tournament.first_day } %>   
-</div>
-
 <div id="add-players" class="zoom-anim-dialog mfp-hide">
-  <%= render partial: 'add_players', locals: { tournament_day: @tournament.first_day } %>   
-</div>
-
-<!-- dialog itself, mfp-hide class is required to make dialog hidden -->
-<div id="tornament-info-popup" class="zoom-anim-dialog mfp-hide">
-  <%= render partial: 'tournament_info', locals: { tournament: @tournament } %>
+  <%= render partial: 'add_players', locals: { tournament_day: @tournament.first_day, tournament: @tournament } %>   
 </div>
 
 <div class="modal fade" id="sendMessageModal" tabindex="-1" role="dialog" aria-labelledby="sendMessageModalCenterTitle" aria-hidden="true">

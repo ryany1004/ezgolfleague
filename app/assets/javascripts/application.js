@@ -15,6 +15,7 @@
 //= require jquery_ujs
 //= require popper
 //= require bootstrap-sprockets
+//= require bootstrap-select
 //= require moment
 //= require selectize
 //= require chosen-jquery
