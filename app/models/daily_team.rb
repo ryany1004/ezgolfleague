@@ -8,7 +8,7 @@ class DailyTeam < ApplicationRecord
 
   validate :players_are_valid, on: :update
   def players_are_valid
-    other_teams = tournament_day.daily_teams
+    other_teams = tournament_group.tournament_day.daily_teams
 
     users.each do |u|
       other_teams.each do |other_team|
