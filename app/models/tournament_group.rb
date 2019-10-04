@@ -70,7 +70,7 @@ class TournamentGroup < ApplicationRecord
       else
         nil
       end
-    else #find the team this user is signed up for
+    else # find the team this user is signed up for
       self.tournament_day.daily_team_for_player(user)
     end
   end

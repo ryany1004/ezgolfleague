@@ -17,7 +17,8 @@ class Play::PaymentsController < Play::BaseController
       @payment_amount = @tournament.dues_for_user(current_user, false)
       @cost_breakdown_lines = @tournament.cost_breakdown_for_user(user: current_user)
 
-      @payment_amount += Stripe::StripeFees.fees_for_transaction_amount(@payment_amount)
+      #lines_sum = @cost_breakdown_lines.map(&:price).sum
+      @payment_amount = @tournament.total_for_user_with_optional_fees(user: current_user) #+= Stripe::StripeFees.fees_for_transaction_amount(lines_sum)
     else
       @payment_instructions = "Thanks for paying via EZ Golf League. Please enter your information below."
     end
