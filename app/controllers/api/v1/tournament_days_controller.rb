@@ -47,7 +47,7 @@ class Api::V1::TournamentDaysController < Api::V1::ApiBaseController
     @tournament.tournament_days.each do |day|
       day.tournament_groups.each do |tg|
         tg.golf_outings.each do |outing|
-          day.remove_player_from_group(tournament_group: tg, user: @current_user) if outing.user == @current_user
+          day.remove_player_from_group(tournament_group: tg, user: @current_user, remove_from_teams: true) if outing.user == @current_user
         end
       end
     end
