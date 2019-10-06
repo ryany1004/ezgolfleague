@@ -22,6 +22,8 @@ module AddToTournamentDay
 
     enable_team_user(user: user)
 
+    add_user_to_daily_team(tournament_group, user)
+
     user.send_silent_notification({ action: 'update', tournament_id: tournament.id, tournament_day_id: id })
 
     touch
@@ -52,6 +54,17 @@ module AddToTournamentDay
     end
 
     scorecard.scores.where.not(course_hole: scorecard_base_scoring_rule.course_holes).destroy_all
+  end
+
+  def add_user_to_daily_team(group, user)
+    return if group.daily_teams.count.zero?
+
+    group.daily_teams.each do |team|
+      next if team.full?
+
+      team.users << user
+      break
+    end
   end
 
   def add_user_to_mandatory_scoring_rules(user:)

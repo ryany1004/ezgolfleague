@@ -16,7 +16,7 @@ module Play::TournamentsHelper
 
     flattened_array = slots.flatten
 
-    if flattened_array.count > (index + 1)
+    if flattened_array.count >= (index + 1)
       return "(Team #{flattened_array[index] + 1})"
     else
       return ''

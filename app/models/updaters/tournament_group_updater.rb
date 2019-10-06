@@ -1,6 +1,5 @@
 module Updaters
   class TournamentGroupUpdater
-
     def update_for_params(tournament_group, params)
       player_info = params[:player_submit][:member_id]
       players_signed_up = self.player_signup(tournament_group, player_info) if player_info.present?
