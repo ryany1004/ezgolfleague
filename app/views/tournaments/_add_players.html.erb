@@ -31,8 +31,14 @@
 
             <% tournament_day.tournament_groups.each_with_index do |group, i| %>
               <div class="heading-style">
-                <h2 class="text-uppercase"><span class="editTeeTimeText" id="<%= group.id %>" contenteditable="false"><%= group.tee_time_at.to_s(:time_only) %></span></h2>
-                <i class="fas fa-pencil-alt editTeeTimeIcon" id="<%= group.id %>"></i>
+                <h2 class="text-uppercase">
+                  <div class='input-group date editTeeTimeText' id="<%= group.id %>">
+                    <input type='text' class="form-control editTeeTimeInput noBorder <%= group.id %>" value="<%= group.tee_time_at.to_s(:time_only) %>" /> 
+                  </div>
+                </h2>
+                <span class="input-group-addon">
+                  <i class="fas fa-pencil-alt editTeeTimeIcon" id="<%= group.id %>"></i>
+                </span>
                 <i class="fas fa-trash"></i>
               </div>
 
@@ -71,14 +77,14 @@
 </div>  
 
 <script>
+ $(function () {
+  $('.editTeeTimeInput').datetimepicker({
+      format: 'LT'
+  });
+});
+
   $( ".editTeeTimeIcon" ).click(function() {
-    var value = $('.editTeeTimeText' + "#" + this.id).attr('contenteditable');
-    if (value == 'false') {
-      $('.editTeeTimeText' + "#" + this.id).attr('contenteditable','true');
-      $('.editTeeTimeText' + "#" + this.id).focus();
-    }
-    else {
-      $('.editTeeTimeText' + "#" + this.id).attr('contenteditable','false');
-    }
+    $('.editTeeTimeInput.' + this.id).toggleClass("noBorder");
+    $(this).toggleClass('fa-pencil-alt fa-save');
   });
 </script>

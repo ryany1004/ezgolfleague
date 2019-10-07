@@ -1521,11 +1521,10 @@ select.selectpicker {
 
 .heading-style {
   padding-bottom: 35px;
+  margin-top: 50px;
 }
 
 .heading-style h2 {
-  margin-top: 50px;
-  display: -webkit-flex;
   display: flex;
   width: 100%;
   font-size: 16px;
@@ -1540,7 +1539,7 @@ select.selectpicker {
   display: inline-block;
   content: "";
   height: 2px;
-  background: #e3e4e6;
+  background: #000;
   margin: auto 0 auto 20px;
 }
 
@@ -2208,6 +2207,14 @@ select.selectpicker {
     }
   }
 
+  .noBorder {
+    border: none;
+  }
+
+  .editTeeTimeText {
+    width: 110px;
+  }
+
   .addTeeTimeGreyBtn {
     background: #e7e7e7;
     border-radius: 3px;
@@ -2353,13 +2360,12 @@ select.selectpicker {
   margin-bottom: 35px;
 }
 
-.edit-tee-times-right-content .heading-style h2 {
-  margin-top: 15px;
+.edit-tee-times-right-content .heading-style input {
   color: #000;
   font-size: 20px;
 }
 
-.edit-tee-times-right-content .heading-style h2::after {
+.edit-tee-times-right-content .heading-style input::after {
   background-color: #000;
   height: 3px;
 }
