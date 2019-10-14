@@ -11,7 +11,7 @@
           <div class="edit-tee-times-left-content mCustomScrollbar" data-mcs-theme="dark">
             <div class="edit-tee-times-left-content-style sortable">
               <% @non_registered_players.each do |player| %>
-                <div class="media">
+                <div class="media tee-time-widget">
                   <%= image_tag player.avatar.url(:thumb), class: 'img-circle' %>
                   <div class="media-body">
                     <h2><%= player.complete_name %></h2>
@@ -30,7 +30,7 @@
             </div>
 
             <% tournament_day.tournament_groups.each_with_index do |group, i| %>
-              <div class="heading-style">
+              <div class="heading-style tee-time-popup <%= group.id %>">
                 <h2 class="text-uppercase">
                   <div class='input-group date editTeeTimeText' id="<%= group.id %>">
                     <input type='text' class="form-control editTeeTimeInput noBorder <%= group.id %>" value="<%= group.tee_time_at.to_s(:time_only) %>" /> 
@@ -43,29 +43,81 @@
               </div>
 
               <% slices = group.golf_outings.each_slice(2) %>
+              <% outings_count = 0 %>
+
               <% slices.each do |slice| %>
-                <div class="row <%= 'row-last' if slice == slice.last %> sortable">
+                
+                <div class="row sortable drag-player-row <%= 'row-last' if slice == slice.last %>">
                   <% slice.each do |outing| %>
-                    <div class="media">
-                      <%= image_tag outing.user.avatar.url(:thumb), class: 'img-circle' %>
-                      <div class="media-body">
-                        <h2><%= outing.user.complete_name %></h2>
+                    <% outings_count += 1 %>
+                    <div class="col-md-6 tee-time-widget">
+                      <div class="media">
+                        <%= image_tag outing.user.avatar.url(:thumb), class: 'img-circle' %>
+                        <div class="media-body">
+                          <h2><%= outing.user.complete_name %></h2>
+                        </div>
                       </div>
                     </div>
                   <% end %>
+
+                  <% if outings_count == 3 || outings_count == 1 %>
+                    <div class="drag-player-box">
+                      <div class="drag-player">
+                        <p>Drag Player Here</p>
+                      </div>
+                    </div>
+                  <% end %> 
+                  
                 </div>
               <% end %>
 
-              <% if slices = 0 %>
-                <div class="row drag-player-row">
-                  <div class="drag-player">
-                    <p>Drag Player Here</p>
+              <% if outings_count == 1 || outings_count == 2 %>
+                <div class="row sortable drag-player-row">
+                  <div class="drag-player-box">
+                    <div class="drag-player">
+                      <p>Drag Player Here</p>
+                    </div>
                   </div>
-                  <div class="drag-player">
-                    <p>Drag Player Here</p>
+
+                  <div class="drag-player-box">
+                    <div class="drag-player">
+                      <p>Drag Player Here</p>
+                    </div>
                   </div>
                 </div>
               <% end %>
+
+              <% if outings_count == 0 %>
+                <div class="row sortable drag-player-row">
+                  <div class="drag-player-box">
+                    <div class="drag-player">
+                      <p>Drag Player Here</p>
+                    </div>
+                  </div>
+
+                  <div class="drag-player-box">
+                    <div class="drag-player">
+                      <p>Drag Player Here</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row sortable drag-player-row">
+                  <div class="drag-player-box">
+                    <div class="drag-player">
+                      <p>Drag Player Here</p>
+                    </div>
+                  </div>
+
+                  <div class="drag-player-box">
+                    <div class="drag-player">
+                      <p>Drag Player Here</p>
+                    </div>
+                  </div>
+                </div>
+              <% end %>
+
+              <% outings_count = 0 %>
             <% end %>
 
             <div class="addTeeTimeGreyBtn">
@@ -77,11 +129,11 @@
 </div>  
 
 <script>
- $(function () {
-  $('.editTeeTimeInput').datetimepicker({
-      format: 'LT'
+  $(function () {
+    $('.editTeeTimeInput').datetimepicker({
+        format: 'LT'
+    });
   });
-});
 
   $( ".editTeeTimeIcon" ).click(function() {
     $('.editTeeTimeInput.' + this.id).toggleClass("noBorder");

@@ -7,10 +7,13 @@
       </div>
 
       <% slices = group.golf_outings.each_slice(2) %>
+      <% tee_times_count = 0 %>
+
       <% slices.each do |slice| %>
-        <div class="row <%= 'row-last' if slice == slice.last %>">
+        <div class="row drag-player-row <%= 'row-last' if slice == slice.last %>">
           <% slice.each do |outing| %>
-            <div class="col-md-6">
+            <% tee_times_count += 1 %>
+            <div class="col-md-6 tee-time-widget">
               <div class="media">
                 <%= image_tag outing.user.avatar.url(:thumb), class: 'img-circle' %>
                 <div class="media-body">
@@ -23,9 +26,85 @@
               </div>
             </div>
           <% end %>
+
+          <% if tee_times_count == 3 || tee_times_count == 1 %>
+            <div class="drag-player-box">
+              <div class="drag-player add-player-tee-time">
+                <a href="#add-players" class="add-player-here popup-with-zoom-anim" id="<%= group.id %>">Add Player Here</a>
+              </div>
+            </div>
+          <% end %> 
         </div>
       <% end %>
+
+      <% if tee_times_count == 1 || tee_times_count == 2 %>
+        <div class="row sortable drag-player-row">
+          <div class="drag-player-box">
+            <div class="drag-player add-player-tee-time">
+              <a href="#add-players" class="add-player-here popup-with-zoom-anim" id="<%= group.id %>">Add Player Here</a>
+            </div>
+          </div>
+
+          <div class="drag-player-box">
+            <div class="drag-player add-player-tee-time">
+              <a href="#add-players" class="add-player-here popup-with-zoom-anim" id="<%= group.id %>">Add Player Here</a>
+            </div>
+          </div>
+        </div>
+      <% end %>
+
+      <% if tee_times_count == 0 %>
+        <div class="row drag-player-row">
+          <div class="drag-player-box">
+            <div class="drag-player add-player-tee-time">
+              <a href="#add-players" class="add-player-here popup-with-zoom-anim" id="<%= group.id %>">Add Player Here</a>
+            </div>
+          </div>
+
+          <div class="drag-player-box">
+            <div class="drag-player add-player-tee-time">
+              <a href="#add-players" class="add-player-here popup-with-zoom-anim" id="<%= group.id %>">Add Player Here</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="row drag-player-row">
+          <div class="drag-player-box">
+            <div class="drag-player add-player-tee-time">
+              <a href="#add-players" class="add-player-here popup-with-zoom-anim" id="<%= group.id %>">Add Player Here</a>
+            </div>
+          </div>
+
+          <div class="drag-player-box">
+            <div class="drag-player add-player-tee-time">
+              <a href="#add-players" class="add-player-here popup-with-zoom-anim" id="<%= group.id %>">Add Player Here</a>
+            </div>
+          </div>
+        </div>
+      <% end %>
+
+      <% tee_times_count = 0 %>
+
     <% end %>
   </div>
   <!-- /.tee-times-panel-content -->                      
 </div>
+
+<script>
+  $(".add-player-here").click(function() {
+
+    // $('#add-players').scrollTop($(".tee-time-popup." + this.id).offset().top);
+
+    // var container = $(".edit-tee-times-right-content");
+    // var  scrollTo = $(".tee-time-popup." + this.id);
+
+    // container.animate({
+    //   scrollTop:
+    //     scrollTo.offset().top - container.offset().top + container.scrollTop()
+    // });
+
+      $('#add-players').animate(
+        { scrollTop: $(".tee-time-popup." + this.id).offset().top -80 }, 
+        500);  
+  });
+</script>
