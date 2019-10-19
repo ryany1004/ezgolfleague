@@ -118,30 +118,30 @@ module ApplicationHelper
   end
 
   def handicap_allowance_strokes_for_hole(handicap_allowance, course_hole)
-    return 0 if handicap_allowance.blank?
+    return nil if handicap_allowance.blank?
 
     handicap_allowance.each do |h|
       if h[:course_hole] == course_hole
-        return h[:strokes]
+        return h[:strokes].present? && h[:strokes] != 0 ? h[:strokes] : nil
       end
     end
 
-    0
+    nil
   end
 
   def print_handicap_allowance_strokes_for_hole(handicap_allowance, course_hole)
-    return "" if handicap_allowance.blank?
+    return '' if handicap_allowance.blank?
 
-    pops = ""
+    pops = ''
 
     handicap_allowance.each do |h|
       if h[:course_hole] == course_hole
         if h[:strokes] == 1
-          pops = "•"
+          pops = '•'
         elsif h[:strokes] == 2
-          pops = "••"
+          pops = '••'
         else
-          pops = "!"
+          pops = '!'
         end
       end
     end

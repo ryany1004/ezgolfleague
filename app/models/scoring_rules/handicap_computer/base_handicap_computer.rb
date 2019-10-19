@@ -1,12 +1,12 @@
 module HandicapComputer
   class BaseHandicapComputer
-  	def initialize(scoring_rule)
-  		@scoring_rule = scoring_rule
-  	end
+    def initialize(scoring_rule)
+      @scoring_rule = scoring_rule
+    end
 
-  	def tournament_day
-  		@scoring_rule.tournament_day
-  	end
+    def tournament_day
+      @scoring_rule.tournament_day
+    end
 
     def displayable_handicap_allowance(user:)
       handicap_allowance(user: user)
@@ -27,39 +27,41 @@ module HandicapComputer
 
         Rails.logger.debug { "BaseHandicapComputer Course Handicap: #{course_handicap}" }
 
-        if golf_outing.course_tee_box.tee_box_gender == "Men"
-          sorted_course_holes_by_handicap = self.tournament_day.scorecard_base_scoring_rule.course_holes.reorder("mens_handicap")
+        if golf_outing.course_tee_box.tee_box_gender == 'Men'
+          sorted_course_holes_by_handicap = tournament_day.scorecard_base_scoring_rule.course_holes.reorder('mens_handicap')
         else
-          sorted_course_holes_by_handicap = self.tournament_day.scorecard_base_scoring_rule.course_holes.reorder("womens_handicap")
+          sorted_course_holes_by_handicap = tournament_day.scorecard_base_scoring_rule.course_holes.reorder('womens_handicap')
         end
 
-        if sorted_course_holes_by_handicap.count > 0 && !course_handicap.blank?
+        if sorted_course_holes_by_handicap.count.positive? && !course_handicap.blank?
           allowance = []
-          while course_handicap > 0 do
+
+          while course_handicap != 0
             sorted_course_holes_by_handicap.each do |hole|
               existing_hole = nil
 
               allowance.each do |a|
-                if hole == a[:course_hole]
-                  existing_hole = a
-                end
+                existing_hole = a if hole == a[:course_hole]
               end
 
               if existing_hole.blank?
-                existing_hole = {course_hole: hole, strokes: 0}
+                existing_hole = { course_hole: hole, strokes: 0 }
                 allowance << existing_hole
               end
 
-              if course_handicap > 0
+              if course_handicap.positive?
                 existing_hole[:strokes] = existing_hole[:strokes] + 1
-                course_handicap = course_handicap - 1
+
+                course_handicap -= 1
+              elsif course_handicap.negative?
+                existing_hole[:strokes] = existing_hole[:strokes] - 1
+
+                course_handicap += 1
               end
             end
           end
 
           allowance
-        else
-          nil
         end
       end
 
