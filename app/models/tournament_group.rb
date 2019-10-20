@@ -38,7 +38,7 @@ class TournamentGroup < ApplicationRecord
       team_number = 1
 
       number_of_teams_to_create.times do
-        DailyTeam.create(tournament_group: self, team_number: team_number)
+        DailyTeam.create(tournament_group: self, team_number: team_number, max_players: tournament_day.users_per_daily_teams)
 
         team_number += 1
       end

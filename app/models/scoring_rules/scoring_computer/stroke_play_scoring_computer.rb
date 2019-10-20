@@ -82,7 +82,7 @@ module ScoringComputer
               if h[:course_hole] == score.course_hole
                 hole_net_score = score.strokes
 
-                if h[:strokes] != 0
+                if h[:strokes].present? && h[:strokes] != 0
                   hole_adjusted_score = score.strokes - h[:strokes]
                   hole_net_score = hole_adjusted_score if hole_adjusted_score.positive?
                 end

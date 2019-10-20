@@ -210,7 +210,7 @@ class TournamentDay < ApplicationRecord
     users_per = 0
 
     scoring_rules.each do |rule|
-      users_per = rule.users_per_daily_team if rule.users_per_daily_team > 1
+      users_per = rule.users_per_daily_team if rule.users_per_daily_team > 1 && rule.users_per_daily_team > users_per
     end
 
     users_per
