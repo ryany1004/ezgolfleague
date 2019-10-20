@@ -32,43 +32,43 @@
                 player
               </div>
               <div class="col">
-                total
+                net
               </div>
               <div class="col">
-                thru
+                gross
               </div>
               <div class="col">
-                round
+                par net
               </div>          
             </div>
         </div>
         <div class="player-list-content mCustomScrollbar" data-mcs-theme="dark">
-          <% tournament.first_day.tournament_groups.each do |group| %>
-            <% group.golf_outings.each do |outing| %>
+          <% results.each_with_index do |flight, x| %>
+            <% flight.tournament_day_results.each_with_index do |result, i| -%>
               <div class="player-list-col">
                 <div class="row">
                   <div class="col time-col">
-                    1
+                    <%= result.rank %>
                   </div>
                   <div class="col-md-6">
                     <div class="media">
-                      <%= image_tag outing.user.avatar.url(:thumb), class: 'img-circle' %>
+                      <%= image_tag result.user.avatar.url(:thumb), class: 'img-circle' %>
                       <div class="media-body">
-                        <h2><%= outing.user.complete_name %></h2>
+                        <h2><%= result.user.complete_name %></h2>
                       </div>
                     </div>                              
                   </div>
                   <div class="col time-col">
-                    -8 
+                    <%= result.net_score %>
                   </div>
                   <div class="col contests-col">
-                    9
+                    <%= result.gross_score %>
                   </div>
                   <div class="col contests-col">
-                    -9
+                    <%= par_helper(result.par_related_net_score) %>
                   </div>
                 </div><!-- /.row -->
-              </div><!-- /.player-list-col --> 
+              </div><!-- /.player-list-col -->
             <% end %>
           <% end %>
         </div><!-- /.player-list-content -->                  

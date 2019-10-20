@@ -4,85 +4,87 @@
           <div class="row">
             <div class="col-md-8 vtch-left-content">
                 <h2><%= tournament.name %></h2>
-                <p class="text-uppercase"><%= tournament.first_day.tournament_at.to_s(:long) %><a href="#">post scores</a></p>
+                <p class="text-uppercase"><%= tournament.first_day.tournament_at.to_s(:long) %>
+                  <%= link_to 'post scores', league_tournament_finalization_path(tournament.league, tournament), method: :patch %>
+                </p>
             </div><!-- /.col-md-8 -->
             <div class="col-md-4 text-right">
               <%= link_to "View Tournament", league_tournament_path(tournament.league, tournament), class: "btn btn-primary" %>
             </div><!-- /.col-md-8 -->
           </div><!-- /.row -->
         </div><!-- /.view-tournament-card-header -->
-        <div class="player-box">
-           <div class="row">
-              <div class="col-md-6">
-                <h2>Results</h2>
-              </div><!-- /.col-md-6 -->
-              <div class="col-md-6">
-                <ul class="list-inline player-list text-uppercase">
-                  <li class="list-inline-item"><%= tournament.players.count %><span>registered</span></li>
-                </ul>
-              </div><!-- /.col-md-6 -->
-            </div><!-- /.row -->
-        </div><!-- /.player-box -->
-        <div class="player-list-header">
-            <div class="row text-uppercase">
-              <div class="col">
-                flight
+        <% tournament.first_day.displayable_scoring_rules.each do |rule| %>
+          <div class="player-box">
+             <div class="row">
+                <div class="col-md-6">
+                  <h2><%= tournament.first_day.pretty_day(true) %> <%= rule.name %></h2>
+                </div><!-- /.col-md-6 -->
+                <div class="col-md-6">
+                  <ul class="list-inline player-list text-uppercase">
+                    <li class="list-inline-item"><%= rule.scoring_rule_participations.count %><span>registered</span></li>
+                  </ul>
+                </div><!-- /.col-md-6 -->
+              </div><!-- /.row -->
+          </div><!-- /.player-box -->
+          <div class="player-list-header">
+              <div class="row text-uppercase">
+                <div class="col">
+                  flight
+                </div>
+                <div class="col">
+                  pos
+                </div>                          
+                <div class="col-md-6">
+                  player
+                </div>
+                <div class="col">
+                  net
+                </div>
+                <div class="col">
+                  gross
+                </div>
+                <div class="col">
+                  points
+                </div>
+                <div class="col">
+                  payout
+                </div>
               </div>
-              <div class="col">
-                pos
-              </div>                          
-              <div class="col-md-6">
-                player
-              </div>
-              <div class="col">
-                net
-              </div>
-              <div class="col">
-                gross
-              </div>
-              <div class="col">
-                points
-              </div>
-              <div class="col">
-                payout
-              </div>
-            </div>
-        </div>
-        <div class="player-list-content mCustomScrollbar" data-mcs-theme="dark">
-          <% tournament.first_day.tournament_groups.each do |group| %>
-            <% group.golf_outings.each do |outing| %>
+          </div>
+          <div class="player-list-content mCustomScrollbar" data-mcs-theme="dark">
+            <% rule.individual_tournament_day_results.each do |result| %>
               <div class="player-list-col">
                 <div class="row">
                   <div class="col time-col">
-                    1 
+                    <%= result.flight&.display_name %>
                   </div>
                   <div class="col time-col">
-                    1 
+                    <%= result.rank %>
                   </div>
                   <div class="col-md-6">
                     <div class="media">
-                      <%= image_tag outing.user.avatar.url(:thumb), class: 'img-circle' %>
+                      <%= image_tag result.user.avatar.url(:thumb), class: 'img-circle' %>
                       <div class="media-body">
-                        <h2><%= outing.user.complete_name %></h2>
+                        <h2><%= result.name %></h2>
                       </div>
                     </div>                              
                   </div>
                   <div class="col time-col">
-                    64
+                    <%= result.net_score %>
                   </div>
                   <div class="col contests-col">
-                    71
+                    <%= result.gross_score %>
                   </div>
                   <div class="col time-col">
-                    10
+                    <%= result.points %>
                   </div>
                   <div class="col time-col">
-                    $10
+                    $<%= result.payouts %>
                   </div>
                 </div><!-- /.row -->
-              </div><!-- /.player-list-col --> 
+              </div><!-- /.player-list-col -->
             <% end %>
-          <% end %>
-        </div><!-- /.player-list-content -->                  
+          </div><!-- /.player-list-content -->  
+        <% end %>                
     </div><!-- /.view-tournament-card -->
 </div><!-- /.col-md-8 -->

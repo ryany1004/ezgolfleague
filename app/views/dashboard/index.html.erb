@@ -66,7 +66,7 @@
               <% if @next_tournament.tournament_state == TournamentState::REGISTRATION %>
                 <%= render partial: 'registration_tournament', locals: { tournament: @next_tournament } %>
               <% elsif @next_tournament.tournament_state == TournamentState::REVIEW_SCORES %>
-                <%= render partial: 'review_scores_tournament', locals: { tournament: @next_tournament } %>
+                <%= render partial: 'review_scores_tournament', locals: { tournament: @next_tournament, results: @day_flights_with_rankings } %>
               <% elsif @next_tournament.tournament_state == TournamentState::POST_SCORES %>
                 <%= render partial: 'post_scores_tournament', locals: { tournament: @next_tournament } %>
               <% end %>
