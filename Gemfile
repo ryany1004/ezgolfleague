@@ -43,6 +43,7 @@ gem 'sidekiq', '5.2.7'
 gem 'simple_form'
 gem 'stripe', git: 'https://github.com/stripe/stripe-ruby'
 gem 'uglifier', '>= 1.3.0'
+gem 'webpacker'
 
 group :development do
   gem 'web-console'
