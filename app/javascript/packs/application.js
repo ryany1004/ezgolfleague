@@ -1,5 +1,6 @@
 /* eslint no-console:0 */
 
+/*
 import Vue from 'vue/dist/vue.esm.js';
 import App from '../components/app.vue'
 
@@ -13,6 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   console.log(app)
 })
+*/
 
 /*
 
