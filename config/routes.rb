@@ -1,9 +1,7 @@
 require 'sidekiq/web'
 
 Rails.application.routes.draw do
-  if Rails.env.production?
-    default_url_options host: 'app.ezgolfleague.com'
-  end
+  default_url_options host: 'app.ezgolfleague.com' if Rails.env.production?
 
   devise_for :users
 
@@ -70,8 +68,8 @@ Rails.application.routes.draw do
   end
 
   # API
-  namespace 'api' do
-    namespace 'v1' do
+  namespace :api do
+    namespace :v1 do
       get 'current_day_leaderboard' => 'scorecards#current_day_leaderboard'
 
       resources :sessions, only: [:create] do
@@ -110,6 +108,14 @@ Rails.application.routes.draw do
           get 'leaderboard'
 
           resources :scorecards, only: [:show]
+        end
+      end
+    end
+
+    namespace :v2 do
+      resources :tournaments do
+        resources :tournament_days do
+          resources :tournament_groups
         end
       end
     end
