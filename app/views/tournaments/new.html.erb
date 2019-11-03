@@ -507,18 +507,31 @@
 
   $('.selectize-control').remove();
 
-  var $course_selector = $('#course').selectize({
-      valueField: 'id',
-      labelField: 'name',
-      searchField: 'name',
-      maxItems: '1',
-      placeholder: 'Search for a course...',
-      create: false,
-      render: {
-            option: function (item, escape) {
-                return '<div>' + escape(item.name) + '</div>';
+  var $course_selector = $('#tournament_wizard_course_id').selectize({
+    valueField: 'id',
+    labelField: 'name',
+    searchField: 'name',
+    maxItems: '1',
+    placeholder: 'Start typing to search/filter for a course by name or location',
+    create: false,
+    render: {
+         option: function (item, escape) {
+             return '<div>' + escape(item.name) + ' - ' + escape(item.city) + ', ' + escape(item.us_state) + '</div>';
+         }
+    },
+    load: function(query, callback) {
+        if (!query.length) return callback();
+        $.ajax({
+            url: '<%= url_for list_courses_path %>?search=' + encodeURIComponent(query),
+            type: 'GET',
+            error: function() {
+              callback();
+            },
+            success: function(res) {
+              callback(res);
             }
-      }
+        });
+    }
   });
 
   var $gameType_selector = $('#gameTypes').selectize({
