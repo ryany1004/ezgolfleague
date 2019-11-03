@@ -36,76 +36,112 @@
                   <h2>Create a Tournament</h2>
                   <p>This is simple process to make your tournament.</p>
                   <div class="step-1-content-form">
-                    <% if @tournament.new_record? || is_editable?(@tournament) -%>
-                      <%= simple_form_for [current_user.selected_league, @tournament], :defaults => { :input_html => { :class => "form-control", :label => false }} do |f| %>
-                        <% if notification = f.error_notification %>
-                          <div class="alert alert-error fade in">
-                            <%= notification %>
-                          </div>
-                        <% end %>
-                        <div>
-                          <div class="row">
-                            <div class="col-md-4 text-right">
-                              <label>Tournament Name</label>
-                            </div>
-                              <div class="col-md-5">
-                                <%= f.input :name, placeholder: 'Choose a name...', required: true %>
-                            </div>
-                          </div>
-                        </div> 
-                        <div class="form-group">
-                          <div class="row">
-                            <div class="col-md-4 text-right">
-															<label>Tournament Date</label>
-                            </div>
-                              <div class="col-md-5">
-                                <div class="date-inputs" style="padding-right:24px;">
-																	<div class="row">
-																		<div class="col-12">
-																			<%= f.input :tournament_starts_at, label: 'Tournament Date', as: :datetime_picker, required: true %>
-																		</div>
-																	</div>
-                                </div>
-                            </div>
-                          </div>
-                        </div> 
-                        <div class="form-group">
-                          <div class="row">
-                            <div class="col-md-4 text-right">
-															<label>Registration Dates</label>
-                            </div>
-                              <div class="col-md-5">
-                                <div class="date-inputs">
-																	<div class="row">
-																		<div class="col-md-6">
-																			<%= f.input :signup_opens_at, label: 'Signup Opening Date', placeholder: 'Open', as: :datetime_picker, required: true, input_html: { value: @tournament.signup_opens_at&.to_s(:date_and_time) } %>
-																		</div>
-																		<div class="col-md-6">
-																			<%= f.input :signup_closes_at, label: 'Signup Closing Date', placeholder: 'Close', as: :datetime_picker, required: true, input_html: { value: @tournament.signup_closes_at&.to_s(:date_and_time) } %>
-																		</div>
-																	</div>
-                                </div>
-                            </div>
-                          </div>
-                        </div> 
-                        <div>
-                        </div> 
-                        <div class="form-group">
-                            <div class="row">
-                              <div class="col-md-4 text-right">
-                                  <label>Golf Course</label>
-                              </div>
-                                <div class="col-md-5">
-                                  <%= select_tag('course', options_from_collection_for_select(@courses, 'id', 'name'), {:include_blank => 'Choose a Course...'}) %>
-                              </div>
-                            </div>
-                        </div> 
-                        <div class="form-group">
-                          <input type="checkbox" id="separate" name="separate">
-                          <label for="separate" class="pl-2">Separate golfers into flights</label>
+                    <div>
+                      <div class="row">
+                        <div class="col-md-4 text-right">
+                          <label>Tournament Name</label>
                         </div>
-                      <% end %>
-                    <% end %>
+                          <div class="col-md-5">
+                            <div class="form-group string required tournament_name">
+                              <input label="false" required="required" aria-required="true" placeholder="Choose a name..." type="text" id="tournament_name" class="form-control string required form-control">
+                            </div>
+                        </div>
+                      </div>
+                    </div> 
+                    <div class="form-group">
+                      <div class="row">
+                        <div class="col-md-4 text-right">
+  												<label>Tournament Date</label>
+                        </div>
+                          <div class="col-md-5">
+                            <div class="date-inputs" style="padding-right:24px;">
+  														<div class="row">
+  															<div class="col-12">
+
+
+                                  <div class="form-group string required tournament_starts_at">
+                                    <input label="false" required="required" aria-required="true" type="text" id="tournament_starts_at" class="form-control string required form-control">
+                                  </div>
+
+<!--                                   <div class="form-group datetime_picker required tournament_tournament_starts_at">
+                                    <label for="tournament_tournament_starts_at" class="control-label datetime_picker required">
+                                      <abbr title="required">*</abbr> Tournament Date
+                                    </label>
+                                    <div class="input-group date datetimepicker">
+                                      <input label="false" required="required" aria-required="true" type="text" data-date-options="{&quot;locale&quot;:&quot;en&quot;,&quot;format&quot;:&quot;MM/DD/YYYY h:mm A&quot;,&quot;dayViewHeaderFormat&quot;:&quot;MMMM YYYY&quot;}" name="tournament[tournament_starts_at]" id="tournament_tournament_starts_at" class="form-control string datetime_picker required  form-control ">
+                                      <span class="input-group-btn">
+                                        <button type="button" class="btn btn-default">
+                                          <span class="glyphicon glyphicon-calendar"></span>
+                                        </button>
+                                      </span>
+                                    </div>
+                                  </div> -->
+
+  															</div>
+  														</div>
+                            </div>
+                        </div>
+                      </div>
+                    </div> 
+                    <div class="form-group">
+                      <div class="row">
+                        <div class="col-md-4 text-right">
+  												<label>Registration Dates</label>
+                        </div>
+                          <div class="col-md-5">
+                            <div class="date-inputs">
+  														<div class="row">
+  															<div class="col-md-6">
+                                  <div class="form-group datetime_picker required tournament_signup_opens_at">
+                                    <label for="tournament_signup_opens_at" class="control-label datetime_picker required">
+                                      <abbr title="required">*</abbr> Signup Opening Date
+                                    </label>
+                                    <div class="input-group date datetimepicker">
+                                      <input label="false" required="required" aria-required="true" placeholder="Open" type="text" data-date-options="{&quot;locale&quot;:&quot;en&quot;,&quot;format&quot;:&quot;MM/DD/YYYY h:mm A&quot;,&quot;dayViewHeaderFormat&quot;:&quot;MMMM YYYY&quot;}" name="tournament[signup_opens_at]" id="tournament_signup_opens_at" class="form-control string datetime_picker required  form-control ">
+                                      <span class="input-group-btn">
+                                        <button type="button" class="btn btn-default">
+                                          <span class="glyphicon glyphicon-calendar"></span>
+                                        </button>
+                                      </span>
+                                    </div>
+                                  </div>
+  															</div>
+  															<div class="col-md-6">
+                                  <div class="form-group datetime_picker required tournament_signup_closes_at">
+                                    <label for="tournament_signup_closes_at" class="control-label datetime_picker required">
+                                      <abbr title="required">*</abbr> Signup Closing Date
+                                    </label>
+                                    <div class="input-group date datetimepicker">
+                                      <input label="false" required="required" aria-required="true" placeholder="Close" type="text" data-date-options="{&quot;locale&quot;:&quot;en&quot;,&quot;format&quot;:&quot;MM/DD/YYYY h:mm A&quot;,&quot;dayViewHeaderFormat&quot;:&quot;MMMM YYYY&quot;}" name="tournament[signup_closes_at]" id="tournament_signup_closes_at" class="form-control string datetime_picker required  form-control ">
+                                      <span class="input-group-btn">
+                                        <button type="button" class="btn btn-default">
+                                          <span class="glyphicon glyphicon-calendar"></span>
+                                        </button>
+                                      </span>
+                                    </div>
+                                  </div>
+  															</div>
+  														</div>
+                            </div>
+                        </div>
+                      </div>
+                    </div> 
+                    <div>
+                    </div> 
+                    <div class="form-group">
+                        <div class="row">
+                          <div class="col-md-4 text-right">
+                            <label>Golf Course</label>
+                          </div>
+                            <div class="col-md-5">
+                              <%= select_tag('course', options_from_collection_for_select(@courses, 'id', 'name'), {:include_blank => 'Choose a Course...'}) %>
+                          </div>
+                        </div>
+                    </div> 
+                    <div class="form-group">
+                      <input type="checkbox" id="separate" name="separate">
+                      <label for="separate" class="pl-2">Separate golfers into flights</label>
+                    </div>
                   </div>            
                 </div><!-- /.step-1-content -->
                 <div class="cat-card-footer">                     
@@ -426,13 +462,12 @@
 </div>
 
 <script type="text/javascript">      
-
   document.addEventListener('DOMContentLoaded', function () {
     stepper1 = new Stepper(document.querySelector('#stepper1'))
   })
 
   $(function () {
-    $('#tournament_tournament_starts_at, #tournament_signup_opens_at, #tournament_signup_closes_at').datetimepicker();
+    $('#tournament_starts_at, #tournament_signup_opens_at, #tournament_signup_closes_at').datetimepicker();
   });  
 
   $('input#separate').change(function() {
