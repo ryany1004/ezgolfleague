@@ -43,7 +43,7 @@
                         </div>
                           <div class="col-md-5">
                             <div class="form-group string required tournament_name">
-                              <input label="false" required="required" aria-required="true" placeholder="Choose a name..." type="text" id="tournament_name" class="form-control string required form-control">
+                              <input label="false" required="required" aria-required="true" placeholder="Choose a name..." type="text" id="tournament_name" class="form-control string required form-control" v-model="tournament_wizard.tournament_name">
                             </div>
                         </div>
                       </div>
@@ -57,26 +57,9 @@
                             <div class="date-inputs" style="padding-right:24px;">
   														<div class="row">
   															<div class="col-12">
-
-
                                   <div class="form-group string required tournament_starts_at">
-                                    <input label="false" required="required" aria-required="true" type="text" id="tournament_starts_at" class="form-control string required form-control">
+                                    <date-picker v-model="tournament_wizard.tournament_starts_at"></date-picker>
                                   </div>
-
-<!--                                   <div class="form-group datetime_picker required tournament_tournament_starts_at">
-                                    <label for="tournament_tournament_starts_at" class="control-label datetime_picker required">
-                                      <abbr title="required">*</abbr> Tournament Date
-                                    </label>
-                                    <div class="input-group date datetimepicker">
-                                      <input label="false" required="required" aria-required="true" type="text" data-date-options="{&quot;locale&quot;:&quot;en&quot;,&quot;format&quot;:&quot;MM/DD/YYYY h:mm A&quot;,&quot;dayViewHeaderFormat&quot;:&quot;MMMM YYYY&quot;}" name="tournament[tournament_starts_at]" id="tournament_tournament_starts_at" class="form-control string datetime_picker required  form-control ">
-                                      <span class="input-group-btn">
-                                        <button type="button" class="btn btn-default">
-                                          <span class="glyphicon glyphicon-calendar"></span>
-                                        </button>
-                                      </span>
-                                    </div>
-                                  </div> -->
-
   															</div>
   														</div>
                             </div>
@@ -92,34 +75,10 @@
                             <div class="date-inputs">
   														<div class="row">
   															<div class="col-md-6">
-                                  <div class="form-group datetime_picker required tournament_signup_opens_at">
-                                    <label for="tournament_signup_opens_at" class="control-label datetime_picker required">
-                                      <abbr title="required">*</abbr> Signup Opening Date
-                                    </label>
-                                    <div class="input-group date datetimepicker">
-                                      <input label="false" required="required" aria-required="true" placeholder="Open" type="text" data-date-options="{&quot;locale&quot;:&quot;en&quot;,&quot;format&quot;:&quot;MM/DD/YYYY h:mm A&quot;,&quot;dayViewHeaderFormat&quot;:&quot;MMMM YYYY&quot;}" name="tournament[signup_opens_at]" id="tournament_signup_opens_at" class="form-control string datetime_picker required  form-control ">
-                                      <span class="input-group-btn">
-                                        <button type="button" class="btn btn-default">
-                                          <span class="glyphicon glyphicon-calendar"></span>
-                                        </button>
-                                      </span>
-                                    </div>
-                                  </div>
+                                  <date-picker v-model="tournament_wizard.tournament_opens_at"></date-picker>
   															</div>
   															<div class="col-md-6">
-                                  <div class="form-group datetime_picker required tournament_signup_closes_at">
-                                    <label for="tournament_signup_closes_at" class="control-label datetime_picker required">
-                                      <abbr title="required">*</abbr> Signup Closing Date
-                                    </label>
-                                    <div class="input-group date datetimepicker">
-                                      <input label="false" required="required" aria-required="true" placeholder="Close" type="text" data-date-options="{&quot;locale&quot;:&quot;en&quot;,&quot;format&quot;:&quot;MM/DD/YYYY h:mm A&quot;,&quot;dayViewHeaderFormat&quot;:&quot;MMMM YYYY&quot;}" name="tournament[signup_closes_at]" id="tournament_signup_closes_at" class="form-control string datetime_picker required  form-control ">
-                                      <span class="input-group-btn">
-                                        <button type="button" class="btn btn-default">
-                                          <span class="glyphicon glyphicon-calendar"></span>
-                                        </button>
-                                      </span>
-                                    </div>
-                                  </div>
+                                  <date-picker v-model="tournament_wizard.tournament_closes_at"></date-picker>
   															</div>
   														</div>
                             </div>
@@ -133,14 +92,14 @@
                           <div class="col-md-4 text-right">
                             <label>Golf Course</label>
                           </div>
-                            <div class="col-md-5">
-                              <%= select_tag('course', options_from_collection_for_select(@courses, 'id', 'name'), {:include_blank => 'Choose a Course...'}) %>
+                          <div class="col-md-5">
+                            <%= select_tag('golf-course', options_from_collection_for_select(@courses, 'id', 'name'), { "v-model" => "tournament_wizard.course_id", :include_blank => 'Choose a Course...' }) %>  
                           </div>
                         </div>
                     </div> 
                     <div class="form-group">
-                      <input type="checkbox" id="separate" name="separate">
-                      <label for="separate" class="pl-2">Separate golfers into flights</label>
+                      <input type="checkbox" id="show-flights">
+                      <label for="show-flights" class="pl-2">Separate golfers into flights</label>
                     </div>
                   </div>            
                 </div><!-- /.step-1-content -->
@@ -155,97 +114,31 @@
                   <h2 class="text-center">Flights</h2>
                   <p>Manually add flights below.</p>
                   <div class="step-1-content-form">
-                    <% if @tournament.new_record? || is_editable?(@tournament) -%>
-                      <%= simple_form_for [current_user.selected_league, @tournament], :defaults => { :input_html => { :class => "form-control", :label => false }} do |f| %>
-                        <% if notification = f.error_notification %>
-                          <div class="alert alert-error fade in">
-                            <%= notification %>
-                          </div>
-                        <% end %>
 
-                        <div>
-                          <div class="row">
-                            <div class="col-md-4 text-right">
-                              <label>Flight #1</label>
-                            </div>
-                            <div class="col-md-5 tee-times-inputs">
-                              <div class="pr-4">
-                                <%= f.input :name, placeholder: 'Lowest HCP', required: true %>
-                              </div>
-                              <div class="pr-4">
-                                <%= f.input :name, placeholder: 'Highest HCP', required: true %>
-                              </div>
-                              <div>
-                                <%= f.input :name, placeholder: 'Tee Box', required: true %>
-                              </div>
+                    <div v-for="(flight, index) in tournament_wizard.flights">
+                      <div class="row">
+                        <div class="col-md-4 text-right">
+                          <label>Flight #{{ flight.flight_number }}</label>
+                        </div>
+                        <div class="col-md-5 tee-times-inputs">
+                          <div class="pr-4">
+                            <div class="form-group string required flight_lowest_handicap">
+                              <input label="false" required="required" aria-required="true" placeholder="Lowest HDCP" type="text" id="flight-lowest-handicap" class="form-control string required form-control" v-model="flight.low_handicap">
                             </div>
                           </div>
-
-                          <div class="btn btn__ezgl-secondary addMoreFlight1" onclick="addFlight2()">Add More</div>
-                        </div> 
-
-                        <div class="flight-2-row hidden">
-                          <div class="row">
-                            <div class="col-md-4 text-right">
-                              <label>Flight #2</label>
-                            </div>
-                            <div class="col-md-5 tee-times-inputs">
-                              <div class="pr-4">
-                                <%= f.input :name, placeholder: 'Lowest HCP', required: true %>
-                              </div>
-                              <div class="pr-4">
-                                <%= f.input :name, placeholder: 'Highest HCP', required: true %>
-                              </div>
-                              <div>
-                                <%= f.input :name, placeholder: 'Tee Box', required: true %>
-                              </div>
+                          <div class="pr-4">
+                            <div class="form-group string required flight_highest_handicap">
+                              <input label="false" required="required" aria-required="true" placeholder="Highest HDCP" type="text" id="flight-highest-handicap" class="form-control string required form-control" v-model="flight.high_handicap">
                             </div>
                           </div>
-
-                          <div class="btn btn__ezgl-secondary addMoreFlight2" onclick="addFlight3()">Add More</div>
-                        </div> 
-
-                        <div class="flight-3-row hidden">
-                          <div class="row">
-                            <div class="col-md-4 text-right">
-                              <label>Flight #3</label>
-                            </div>
-                            <div class="col-md-5 tee-times-inputs">
-                              <div class="pr-4">
-                                <%= f.input :name, placeholder: 'Lowest HCP', required: true %>
-                              </div>
-                              <div class="pr-4">
-                                <%= f.input :name, placeholder: 'Highest HCP', required: true %>
-                              </div>
-                              <div>
-                                <%= f.input :name, placeholder: 'Tee Box', required: true %>
-                              </div>
-                            </div>
+                          <div>
+                            <select id="flight-tee-box"></select>
                           </div>
+                        </div>
+                      </div>
+                    </div> 
 
-                          <div class="btn btn__ezgl-secondary addMoreFlight3" onclick="addFlight4()">Add More</div>
-                        </div> 
-
-                        <div class="flight-4-row hidden">
-                          <div class="row">
-                            <div class="col-md-4 text-right">
-                              <label>Flight #4</label>
-                            </div>
-                            <div class="col-md-5 tee-times-inputs">
-                              <div class="pr-4">
-                                <%= f.input :name, placeholder: 'Lowest HCP', required: true %>
-                              </div>
-                              <div class="pr-4">
-                                <%= f.input :name, placeholder: 'Highest HCP', required: true %>
-                              </div>
-                              <div>
-                                <%= f.input :name, placeholder: 'Tee Box', required: true %>
-                              </div>
-                            </div>
-                          </div>
-                        </div> 
-                      <% end %>
-                    <% end %>
+                    <div class="btn btn__ezgl-secondary addMoreFlight1" v-on:click="newFlight">Add More</div>
                   </div> 
                 </div>
                 <div class="cat-card-footer">
@@ -318,18 +211,13 @@
             <div class="p-3">
               <h2 style="font-size:30px;">Add Game</h2>
             </div>
-            <% if notification = f.error_notification %>
-              <div class="alert alert-error fade in">
-                <%= notification %>
-              </div>
-            <% end %>
             <div class="step-1-content-form step-1-content">
               <div class="row">
                 <div class="col-md-3 text-right">
                   <label>Game Type</label>
                 </div>
                   <div class="col-md-8">
-                    <%= select_tag('gameTypes', options_from_collection_for_select(@courses, 'id', 'name'), {:include_blank => 'Choose a Game Type...'}) %>
+                    <select></select>
                 </div>
               </div>
             </div>
@@ -430,7 +318,7 @@
                   <label>Flight</label>
                 </div>
                   <div class="col-md-8">
-                    <%= select_tag('flight', options_from_collection_for_select(@courses, 'id', 'name'), {:include_blank => 'Choose a Flight...'}) %>
+                    <select></select>
                 </div>
               </div>
             </div>
@@ -464,18 +352,18 @@
 <script type="text/javascript">      
   document.addEventListener('DOMContentLoaded', function () {
     stepper1 = new Stepper(document.querySelector('#stepper1'))
+
+    // $('#tournament_starts_at').datetimepicker();
+    // $('#tournament_opens_at').datetimepicker();
+    // $('#tournament_closes_at').datetimepicker();
   })
 
-  $(function () {
-    $('#tournament_starts_at, #tournament_signup_opens_at, #tournament_signup_closes_at').datetimepicker();
-  });  
-
-  $('input#separate').change(function() {
-    $('.step-2-dot').toggleClass("hidden")
+  $('input#show-flights').change(function() {
+    $('.step-2-dot').toggleClass("hidden");
   });
 
   function firstStep () {
-    if ($('input#separate').is(':checked')) {
+    if ($('input#show-flights').is(':checked')) {
       stepper1.next()
     } else {
       stepper1.to(3)
@@ -483,7 +371,7 @@
   }
 
   function lastStep () {
-    if ($('input#separate').is(':checked')) {
+    if ($('input#show-flights').is(':checked')) {
       stepper1.previous()
     } else {
       stepper1.to(1)
@@ -507,69 +395,69 @@
 
   $('.selectize-control').remove();
 
-  var $course_selector = $('#tournament_wizard_course_id').selectize({
-    valueField: 'id',
-    labelField: 'name',
-    searchField: 'name',
-    maxItems: '1',
-    placeholder: 'Start typing to search/filter for a course by name or location',
-    create: false,
-    render: {
-         option: function (item, escape) {
-             return '<div>' + escape(item.name) + ' - ' + escape(item.city) + ', ' + escape(item.us_state) + '</div>';
-         }
-    },
-    load: function(query, callback) {
-        if (!query.length) return callback();
-        $.ajax({
-            url: '<%= url_for list_courses_path %>?search=' + encodeURIComponent(query),
-            type: 'GET',
-            error: function() {
-              callback();
-            },
-            success: function(res) {
-              callback(res);
-            }
-        });
-    }
-  });
+  // var $course_selector = $('#golf-course').selectize({
+  //   valueField: 'id',
+  //   labelField: 'name',
+  //   searchField: 'name',
+  //   maxItems: '1',
+  //   placeholder: 'Start typing to search/filter for a course by name or location',
+  //   create: false,
+  //   render: {
+  //        option: function (item, escape) {
+  //            return '<div>' + escape(item.name) + ' - ' + escape(item.city) + ', ' + escape(item.us_state) + '</div>';
+  //        }
+  //   },
+  //   load: function(query, callback) {
+  //       if (!query.length) return callback();
+  //       $.ajax({
+  //           url: '<%= url_for api_v2_courses_path %>?search=' + encodeURIComponent(query),
+  //           type: 'GET',
+  //           error: function() {
+  //             callback();
+  //           },
+  //           success: function(res) {
+  //             callback(res);
+  //           }
+  //       });
+  //   }
+  // });
 
-  var $gameType_selector = $('#gameTypes').selectize({
-      valueField: 'id',
-      labelField: 'name',
-      searchField: 'name',
-      maxItems: '1',
-      placeholder: 'Choose a game type...',
-      create: false,
-      render: {
-            option: function (item, escape) {
-                return '<div>' + escape(item.name) + '</div>';
-            }
-      }
-  });
+  // var $gameType_selector = $('#gameTypes').selectize({
+  //     valueField: 'id',
+  //     labelField: 'name',
+  //     searchField: 'name',
+  //     maxItems: '1',
+  //     placeholder: 'Choose a game type...',
+  //     create: false,
+  //     render: {
+  //           option: function (item, escape) {
+  //               return '<div>' + escape(item.name) + '</div>';
+  //           }
+  //     }
+  // });
 
-  var $flight_selector = $('#flight').selectize({
-      valueField: 'id',
-      labelField: 'name',
-      searchField: 'name',
-      maxItems: '1',
-      placeholder: 'Choose a flight...',
-      create: false,
-      render: {
-            option: function (item, escape) {
-                return '<div>' + escape(item.name) + '</div>';
-            }
-      }
-  });
+  // var $flight_selector = $('#flight').selectize({
+  //     valueField: 'id',
+  //     labelField: 'name',
+  //     searchField: 'name',
+  //     maxItems: '1',
+  //     placeholder: 'Choose a flight...',
+  //     create: false,
+  //     render: {
+  //           option: function (item, escape) {
+  //               return '<div>' + escape(item.name) + '</div>';
+  //           }
+  //     }
+  // });
 
-  var $hole_selector = $('#holes').selectize({
-      placeholder: 'Choose holes...',
-      onChange: function(value) {
-        if(value == "custom") {
-          $('.holesCustomOptions').removeClass("hidden");
-        } else {
-          $('.holesCustomOptions').addClass("hidden");
-        }
-      }
-  });
+  // var $hole_selector = $('#holes').selectize({
+  //     placeholder: 'Choose holes...',
+  //     onChange: function(value) {
+  //       if(value == "custom") {
+  //         $('.holesCustomOptions').removeClass("hidden");
+  //       } else {
+  //         $('.holesCustomOptions').addClass("hidden");
+  //       }
+  //     }
+  // });
 </script>

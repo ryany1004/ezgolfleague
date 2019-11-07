@@ -2,6 +2,7 @@
   "dependencies": {
     "@rails/webpacker": "^4.0.7",
     "vue": "^2.6.10",
+    "vue-bootstrap-datetimepicker": "^5.0.1",
     "vue-loader": "^15.7.2",
     "vue-template-compiler": "^2.6.10",
     "vuelidate": "^0.7.4"
