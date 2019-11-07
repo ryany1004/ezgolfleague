@@ -14,18 +14,6 @@ class CoursesController < BaseController
                .where('lower(name) LIKE ? OR lower(city) LIKE ? OR lower(us_state) LIKE ?', search_string, search_string, search_string)
   end
 
-  def list
-    @courses = Course.all.order(:name).limit(100)
-
-    return if params[:search].blank?
-
-    search_string = "%#{params[:search].downcase}%"
-    @courses = @courses
-               .where('lower(name) LIKE ? OR lower(city) LIKE ? OR lower(us_state) LIKE ?', search_string, search_string, search_string)
-
-    render json: @courses.to_json
-  end
-
   def new
     @course = Course.new
   end

@@ -113,9 +113,15 @@ Rails.application.routes.draw do
     end
 
     namespace :v2 do
-      resources :tournaments do
-        resources :tournament_days do
-          resources :tournament_groups
+      resources :courses
+
+      resources :leagues do
+        resource :tournament_wizard
+
+        resources :tournaments do
+          resources :tournament_days do
+            resources :tournament_groups
+          end
         end
       end
     end
@@ -239,8 +245,6 @@ Rails.application.routes.draw do
   end
 
   resources :courses do
-    get 'list', on: :collection
-
     resources :course_tee_boxes
 
     resources :course_holes do
