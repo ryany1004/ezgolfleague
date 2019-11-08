@@ -93,12 +93,12 @@
                             <label>Golf Course</label>
                           </div>
                           <div class="col-md-5">
-                            <%= select_tag('golf-course', options_from_collection_for_select(@courses, 'id', 'name'), { "v-model" => "tournament_wizard.course_id", :include_blank => 'Choose a Course...' }) %>  
+                            <selectize v-model="tournament_wizard.course_id" :settings="courseSelectSettings"></selectize>
                           </div>
                         </div>
                     </div> 
                     <div class="form-group">
-                      <input type="checkbox" id="show-flights">
+                      <input type="checkbox" id="show-flights" v-on:click="toggleFlights">
                       <label for="show-flights" class="pl-2">Separate golfers into flights</label>
                     </div>
                   </div>            
@@ -123,16 +123,20 @@
                         <div class="col-md-5 tee-times-inputs">
                           <div class="pr-4">
                             <div class="form-group string required flight_lowest_handicap">
-                              <input label="false" required="required" aria-required="true" placeholder="Lowest HDCP" type="text" id="flight-lowest-handicap" class="form-control string required form-control" v-model="flight.low_handicap">
+                              <input label="false" required="required" aria-required="true" placeholder="Lowest HDCP" type="text" id="flight-lowest-handicap" name="Low Handicap" class="form-control string required form-control" v-model="flight.low_handicap">
                             </div>
                           </div>
                           <div class="pr-4">
                             <div class="form-group string required flight_highest_handicap">
-                              <input label="false" required="required" aria-required="true" placeholder="Highest HDCP" type="text" id="flight-highest-handicap" class="form-control string required form-control" v-model="flight.high_handicap">
+                              <input label="false" required="required" aria-required="true" placeholder="Highest HDCP" type="text" id="flight-highest-handicap" name="High Handicap" class="form-control string required form-control" v-model="flight.high_handicap">
                             </div>
                           </div>
-                          <div>
-                            <select id="flight-tee-box"></select>
+                          <div class="pr-4">
+                            <selectize v-model="flight.tee_box_id">
+                              <option v-for="courseTeeBox in courseTeeBoxes" v-bind:value="courseTeeBox.id">
+                                {{ courseTeeBox.name }}
+                              </option>
+                            </selectize>
                           </div>
                         </div>
                       </div>
@@ -152,40 +156,15 @@
                   <h2 class="text-center">Game Types</h2>
                   <p>Add different game types to your tournament.</p>
                   <div class="step-content-game-types">
-                    <div class="row">
-                      <div class="added-game-type">
-                        <p>Skins</p>
-                        <%= link_to "Add Payout", "", data: { toggle:"modal", target:"#addPayoutModal" }, class: "btn btn-primary" %>
-                      </div>
-                      <div class="add-game-type" data-toggle="modal" data-target="#addGameTypeModal">
-                        <p>+ Add Game</p>
-                      </div>
-                    </div>
-
-                    <div class="row">
-                      <div class="add-game-type" data-toggle="modal" data-target="#addGameTypeModal">
-                        <p>+ Add Game</p>
-                      </div>
-                      <div class="add-game-type" data-toggle="modal" data-target="#addGameTypeModal">
-                        <p>+ Add Game</p>
-                      </div>
-                    </div>
-
-                    <div class="row">
-                      <div class="add-game-type" data-toggle="modal" data-target="#addGameTypeModal">
-                        <p>+ Add Game</p>
-                      </div>
-                      <div class="add-game-type" data-toggle="modal" data-target="#addGameTypeModal"> 
-                        <p>+ Add Game</p>
-                      </div>
-                    </div>
-
-                    <div class="row">
-                      <div class="add-game-type" data-toggle="modal" data-target="#addGameTypeModal">
-                        <p>+ Add Game</p>
-                      </div>
-                      <div class="add-game-type" data-toggle="modal" data-target="#addGameTypeModal">
-                        <p>+ Add Game</p>
+                    <div class="row" v-for="(ruleGroup, index) in tournament_wizard.scoringRules">
+                      <div class="add-game-type" data-toggle="modal" data-target="#addGameTypeModal" v-for="rule in ruleGroup">
+                        <template v-if="rule">
+                          <p>Skins</p>
+                          <%= link_to "Add Payout", "", data: { toggle:"modal", target:"#addPayoutModal" }, class: "btn btn-primary" %>
+                        </template>
+                        <template v-else>
+                          <p>+ Add Game</p>
+                        </template>
                       </div>
                     </div>
                   </div>
@@ -200,151 +179,151 @@
         </div>
     </div>
   </div>
-</div>
 
-<div class="modal fade" id="addGameTypeModal" tabindex="-1" role="dialog" aria-labelledby="addGameTypeCenterTitle" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-    <div class="modal-content">
-      <% if @tournament.new_record? || is_editable?(@tournament) -%>
-        <%= simple_form_for [current_user.selected_league, @tournament], :defaults => { :input_html => { :class => "form-control", :label => false }} do |f| %>    
-          <div class="modal-body welcome p-5">
-            <div class="p-3">
-              <h2 style="font-size:30px;">Add Game</h2>
-            </div>
-            <div class="step-1-content-form step-1-content">
-              <div class="row">
-                <div class="col-md-3 text-right">
-                  <label>Game Type</label>
-                </div>
-                  <div class="col-md-8">
-                    <select></select>
-                </div>
+  <div class="modal fade" id="addGameTypeModal" tabindex="-1" role="dialog" aria-labelledby="addGameTypeCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+      <div class="modal-content">
+        <% if @tournament.new_record? || is_editable?(@tournament) -%>
+          <%= simple_form_for [current_user.selected_league, @tournament], :defaults => { :input_html => { :class => "form-control", :label => false }} do |f| %>    
+            <div class="modal-body welcome p-5">
+              <div class="p-3">
+                <h2 style="font-size:30px;">Add Game</h2>
               </div>
-            </div>
-
-            <div class="step-1-content-form step-1-content">
-              <div class="row">
-                <div class="col-md-3 text-right">
-                  <label>Payout</label>
-                </div>
-                <div class="col-md-8 tee-times-inputs">
-                  <div>
-                    <%= f.input :name, placeholder: 'Payout', required: true %>
+              <div class="step-1-content-form step-1-content">
+                <div class="row">
+                  <div class="col-md-3 text-right">
+                    <label>Game Type</label>
+                  </div>
+                    <div class="col-md-8">
+                      <select></select>
                   </div>
                 </div>
               </div>
-            </div>
 
-            <div class="step-1-content-form step-1-content pt-2">
-              <div class="row">
-                <div class="col-md-3 text-right">
-                  <label>Holes</label>
-                </div>
-                <div class="col-md-8 tee-times-inputs">
-                  <div class="col-md-8 p-0">
-                    <select id="holes">
-                      <option value="front9">Front 9</option>
-                      <option value="back9">Back 9</option>
-                      <option value="18">18</option>
-                      <option value="custom">Custom</option>
-                    </select>
+              <div class="step-1-content-form step-1-content">
+                <div class="row">
+                  <div class="col-md-3 text-right">
+                    <label>Payout</label>
                   </div>
-                </div>
-              </div>
-            </div> 
-
-            <div class="step-1-content-form step-1-content holesCustomOptions hidden">
-              <div class="row">
-                <div class="col-md-3 text-right">
-                  <label>Holes (Custom)</label>
-                </div>
-                <div class="col-md-8 pl-5">
-                  <div class="row pl-5">
+                  <div class="col-md-8 tee-times-inputs">
                     <div>
-                      <input type="checkbox" value="hole1"> Hole 1<br>
-                      <input type="checkbox" value="hole2"> Hole 2<br>
-                      <input type="checkbox" value="hole3"> Hole 3<br>
-                      <input type="checkbox" value="hole4"> Hole 4<br>
-                      <input type="checkbox" value="hole5"> Hole 5<br>
-                      <input type="checkbox" value="hole6"> Hole 6<br>
-                      <input type="checkbox" value="hole7"> Hole 7<br>
-                      <input type="checkbox" value="hole8"> Hole 8<br>
-                      <input type="checkbox" value="hole9"> Hole 9<br>
-                    </div>
-                    <div class="pl-5">
-                      <input type="checkbox" value="hole10"> Hole 10<br>
-                      <input type="checkbox" value="hole11"> Hole 11<br>
-                      <input type="checkbox" value="hole12"> Hole 12<br>
-                      <input type="checkbox" value="hole13"> Hole 13<br>
-                      <input type="checkbox" value="hole14"> Hole 14<br>
-                      <input type="checkbox" value="hole15"> Hole 15<br>
-                      <input type="checkbox" value="hole16"> Hole 16<br>
-                      <input type="checkbox" value="hole17"> Hole 17<br>
-                      <input type="checkbox" value="hole18"> Hole 18<br>
+                      <%= f.input :name, placeholder: 'Payout', required: true %>
                     </div>
                   </div>
                 </div>
               </div>
-            </div> 
-          </div>
 
-          <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-            <%= f.button :submit, "Save", class: 'btn__ezgl-secondary' %>
-          </div>
+              <div class="step-1-content-form step-1-content pt-2">
+                <div class="row">
+                  <div class="col-md-3 text-right">
+                    <label>Holes</label>
+                  </div>
+                  <div class="col-md-8 tee-times-inputs">
+                    <div class="col-md-8 p-0">
+                      <select id="holes">
+                        <option value="front9">Front 9</option>
+                        <option value="back9">Back 9</option>
+                        <option value="18">18</option>
+                        <option value="custom">Custom</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              </div> 
+
+              <div class="step-1-content-form step-1-content holesCustomOptions hidden">
+                <div class="row">
+                  <div class="col-md-3 text-right">
+                    <label>Holes (Custom)</label>
+                  </div>
+                  <div class="col-md-8 pl-5">
+                    <div class="row pl-5">
+                      <div>
+                        <input type="checkbox" value="hole1"> Hole 1<br>
+                        <input type="checkbox" value="hole2"> Hole 2<br>
+                        <input type="checkbox" value="hole3"> Hole 3<br>
+                        <input type="checkbox" value="hole4"> Hole 4<br>
+                        <input type="checkbox" value="hole5"> Hole 5<br>
+                        <input type="checkbox" value="hole6"> Hole 6<br>
+                        <input type="checkbox" value="hole7"> Hole 7<br>
+                        <input type="checkbox" value="hole8"> Hole 8<br>
+                        <input type="checkbox" value="hole9"> Hole 9<br>
+                      </div>
+                      <div class="pl-5">
+                        <input type="checkbox" value="hole10"> Hole 10<br>
+                        <input type="checkbox" value="hole11"> Hole 11<br>
+                        <input type="checkbox" value="hole12"> Hole 12<br>
+                        <input type="checkbox" value="hole13"> Hole 13<br>
+                        <input type="checkbox" value="hole14"> Hole 14<br>
+                        <input type="checkbox" value="hole15"> Hole 15<br>
+                        <input type="checkbox" value="hole16"> Hole 16<br>
+                        <input type="checkbox" value="hole17"> Hole 17<br>
+                        <input type="checkbox" value="hole18"> Hole 18<br>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div> 
+            </div>
+
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+              <%= f.button :submit, "Save", class: 'btn__ezgl-secondary' %>
+            </div>
+          <% end %>
         <% end %>
-      <% end %>
+      </div>
     </div>
   </div>
-</div>
 
-<div class="modal fade" id="addPayoutModal" tabindex="-1" role="dialog" aria-labelledby="addPayoutCenterTitle" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-    <div class="modal-content">
-      <% if @tournament.new_record? || is_editable?(@tournament) -%>
-        <%= simple_form_for [current_user.selected_league, @tournament], :defaults => { :input_html => { :class => "form-control", :label => false }} do |f| %>    
-          <div class="modal-body welcome p-5">
-            <div class="p-3">
-              <h2 style="font-size:30px;">Add Payout</h2>
-            </div>
-            <% if notification = f.error_notification %>
-              <div class="alert alert-error fade in">
-                <%= notification %>
+  <div class="modal fade" id="addPayoutModal" tabindex="-1" role="dialog" aria-labelledby="addPayoutCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+      <div class="modal-content">
+        <% if @tournament.new_record? || is_editable?(@tournament) -%>
+          <%= simple_form_for [current_user.selected_league, @tournament], :defaults => { :input_html => { :class => "form-control", :label => false }} do |f| %>    
+            <div class="modal-body welcome p-5">
+              <div class="p-3">
+                <h2 style="font-size:30px;">Add Payout</h2>
               </div>
-            <% end %>
-            <div class="step-1-content-form step-1-content">
-              <div class="row">
-                <div class="col-md-3 text-right">
-                  <label>Flight</label>
+              <% if notification = f.error_notification %>
+                <div class="alert alert-error fade in">
+                  <%= notification %>
                 </div>
-                  <div class="col-md-8">
-                    <select></select>
-                </div>
-              </div>
-            </div>
-            <div class="step-1-content-form step-1-content pt-0">
-              <div class="row">
-                <div class="col-md-3 text-right">
-                  <label>Attributes</label>
-                </div>
-                <div class="col-md-8 tee-times-inputs">
-                  <div class="pr-4">
-                    <%= f.input :name, placeholder: 'Amount', required: true %>
+              <% end %>
+              <div class="step-1-content-form step-1-content">
+                <div class="row">
+                  <div class="col-md-3 text-right">
+                    <label>Flight</label>
                   </div>
-                  <div>
-                    <%= f.input :name, placeholder: 'Points', required: true %>
+                    <div class="col-md-8">
+                      <select></select>
                   </div>
                 </div>
               </div>
-            </div> 
-          </div>
+              <div class="step-1-content-form step-1-content pt-0">
+                <div class="row">
+                  <div class="col-md-3 text-right">
+                    <label>Attributes</label>
+                  </div>
+                  <div class="col-md-8 tee-times-inputs">
+                    <div class="pr-4">
+                      <%= f.input :name, placeholder: 'Amount', required: true %>
+                    </div>
+                    <div>
+                      <%= f.input :name, placeholder: 'Points', required: true %>
+                    </div>
+                  </div>
+                </div>
+              </div> 
+            </div>
 
-          <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-            <%= f.button :submit, "Save", class: 'btn__ezgl-secondary' %>
-          </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+              <%= f.button :submit, "Save", class: 'btn__ezgl-secondary' %>
+            </div>
+          <% end %>
         <% end %>
-      <% end %>
+      </div>
     </div>
   </div>
 </div>
@@ -352,15 +331,7 @@
 <script type="text/javascript">      
   document.addEventListener('DOMContentLoaded', function () {
     stepper1 = new Stepper(document.querySelector('#stepper1'))
-
-    // $('#tournament_starts_at').datetimepicker();
-    // $('#tournament_opens_at').datetimepicker();
-    // $('#tournament_closes_at').datetimepicker();
   })
-
-  $('input#show-flights').change(function() {
-    $('.step-2-dot').toggleClass("hidden");
-  });
 
   function firstStep () {
     if ($('input#show-flights').is(':checked')) {
@@ -378,22 +349,7 @@
     }
   }
 
-  function addFlight2() {
-    $('.addMoreFlight1').addClass('hidden');
-    $('.flight-2-row').removeClass('hidden');
-  }
-
-  function addFlight3() {
-    $('.addMoreFlight2').addClass('hidden');
-    $('.flight-3-row').removeClass('hidden');
-  }
-
-  function addFlight4() {
-    $('.addMoreFlight3').addClass('hidden');
-    $('.flight-4-row').removeClass('hidden');
-  }
-
-  $('.selectize-control').remove();
+  // $('.selectize-control').remove();
 
   // var $course_selector = $('#golf-course').selectize({
   //   valueField: 'id',

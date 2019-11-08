@@ -113,7 +113,9 @@ Rails.application.routes.draw do
     end
 
     namespace :v2 do
-      resources :courses
+      resources :courses do
+        resources :course_tee_boxes
+      end
 
       resources :leagues do
         resource :tournament_wizard

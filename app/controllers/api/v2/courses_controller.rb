@@ -9,4 +9,10 @@ class Api::V2::CoursesController < BaseController
 
     render json: @courses.to_json
   end
+
+  def show
+    @course = Course.find(params[:id])
+
+    render json: @course.to_json
+  end
 end
