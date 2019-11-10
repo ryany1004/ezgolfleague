@@ -118,6 +118,8 @@ Rails.application.routes.draw do
       end
 
       resources :leagues do
+        resources :scoring_rules
+
         resource :tournament_wizard
 
         resources :tournaments do
