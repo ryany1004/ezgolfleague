@@ -13,8 +13,7 @@ class Api::V1::RegistrationsController < Api::V1::ApiBaseController
     phone_number = details['phoneNumber']
     ghin_number = details['ghinNumber']
 
-    user = User.create(email: email, first_name: first_name, last_name: last_name, password: password, password_confirmation: password, phone_number: phone_number, ghin_number: ghin_number)
-
+    user = User.new(email: email, first_name: first_name, last_name: last_name, password: password, password_confirmation: password, phone_number: phone_number, ghin_number: ghin_number)
     if user.save
       GhinUpdateJob.perform_later([user.id]) if user.ghin_number.present?
 
