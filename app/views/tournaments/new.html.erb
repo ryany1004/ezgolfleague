@@ -156,35 +156,6 @@
                 </div>                  
               </div>
 
-<!--               <div id="test-l-3" role="tabpanel" class="content text-center" aria-labelledby="stepper1trigger3">
-                <div class="step-1-content">
-                  <h2 class="text-center">Game Types</h2>
-                  <p>Add different game types to your tournament.</p>
-                  <div class="step-content-game-types">
-                    <div class="row" v-for="(ruleGroup, index) in tournament_wizard.scoringRules">
-                      <template v-for="rule in ruleGroup">
-                        <div class="add-game-type" data-toggle="modal" :data-target="'#addGameTypeModal' + rule.index">
-                          <template v-if="rule.name">
-                            <p>Skins</p>
-                            <%= link_to "Add Payout", "", data: { toggle:"modal", target:"#addPayoutModal" }, class: "btn btn-primary" %>
-                          </template>
-                          <template v-else>
-                            <p>+ Add Game</p>
-                          </template>
-
-                          <scoring-rule-modal v-bind:modal-index="rule.index" v-bind:scoring-rule-options="scoringRules" v-bind:scoring-rule="rule" ></scoring-rule-modal>
-                        </div>
-                      </template>
-                    </div>
-                  </div>
-                </div>
-                <div class="cat-card-footer">
-                  <button class="btn btn-outline-secondary" onclick="lastStep()">Previous</button>
-                  <button type="submit" class="btn btn__ezgl-secondary">Submit</button>
-                </div>                  
-              </div> -->
-
-
               <div id="test-l-3" role="tabpanel" class="content text-center" aria-labelledby="stepper1trigger3">
                 <div class="step-1-content">
                   <h2 class="text-center">Game Types</h2>
@@ -288,7 +259,7 @@
                               <button type="button" class="btn__ezgl-secondary" data-dismiss="modal">Save</button>
                             </div>
                           </vue-modal>
-                          
+
                         </div>
                       </template>
                     </div>
