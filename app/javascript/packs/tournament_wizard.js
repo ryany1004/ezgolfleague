@@ -42,6 +42,7 @@ document.addEventListener('DOMContentLoaded', () => {
       },
       courseTeeBoxes: [],
       scoringRules: [],
+      selectedScoringRule: { name: null },
       courseSelectSettings: {
         valueField: 'id',
         labelField: 'name',
@@ -113,7 +114,9 @@ document.addEventListener('DOMContentLoaded', () => {
         $('.step-2-dot').toggleClass("hidden");
       },
       showGameTypeModal (scoringRule) {
-        this.$modal.show('scoring-rule', { scoringRule: scoringRule, scoringRuleOptions: this.scoringRules });
+        self.selectedScoringRule = scoringRule;
+
+        this.$modal.show('scoring-rule');
       },
       hideGameTypeModal () {
         this.$modal.hide('scoring-rule');
