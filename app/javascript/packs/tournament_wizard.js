@@ -1,24 +1,27 @@
 /* eslint no-console:0 */
 
-import Vue from 'vue/dist/vue.esm.js';
+import Vue from "vue/dist/vue.esm.js";
 
-import datePicker from 'vue-bootstrap-datetimepicker';
-import 'pc-bootstrap4-datetimepicker/build/css/bootstrap-datetimepicker.css';
+import datePicker from "vue-bootstrap-datetimepicker";
+import "pc-bootstrap4-datetimepicker/build/css/bootstrap-datetimepicker.css";
 
-import Selectize from 'vue2-selectize';
-import VModal from 'vue-js-modal';
+import Selectize from "vue2-selectize";
+import VModal from "vue-js-modal";
+import Multiselect from "vue-multiselect";
 
 Vue.use(VModal, { componentName: "vue-modal" });
+Vue.component("multiselect", Multiselect);
 
-document.addEventListener('DOMContentLoaded', () => {
-  const anchorElement = document.getElementById("tournament-wizard")
-  const props = JSON.parse(anchorElement.getAttribute('data'))
+document.addEventListener("DOMContentLoaded", () => {
+  const anchorElement = document.getElementById("tournament-wizard");
+  const props = JSON.parse(anchorElement.getAttribute("data"));
 
   const app = new Vue({
-    el: '#tournament-wizard',
+    el: "#tournament-wizard",
     components: {
       datePicker,
       Selectize,
+      Multiselect,
       VModal
     },
     data: {
@@ -37,70 +40,87 @@ document.addEventListener('DOMContentLoaded', () => {
           }
         ],
         scoringRules: [
-          [{ id: 0 }, { id: 1 }], [{ id: 2 }, { id: 3 }], [{ id: 4 }, { id: 5 }], [{ id: 6 }, { id: 7 }]
+          [{ id: 0 }, { id: 1 }],
+          [{ id: 2 }, { id: 3 }],
+          [{ id: 4 }, { id: 5 }],
+          [{ id: 6 }, { id: 7 }]
         ]
       },
       courseTeeBoxes: [],
       scoringRules: [],
-      selectedScoringRule: {},
+      selectedScoringRule: "",
+      selectedScoringRuleHolesOptions: [
+        { name: "Front 9", value: "front_nine" },
+        { name: "Back 9", value: "back_nine" },
+        { name: "All 18", value: "all_holes" },
+        { name: "Custom", value: "custom" }
+      ],
       courseSelectSettings: {
-        valueField: 'id',
-        labelField: 'name',
-        searchField: 'name',
-        maxItems: '1',
-        placeholder: 'Start typing to search for a course by name or location',
+        valueField: "id",
+        labelField: "name",
+        searchField: "name",
+        maxItems: "1",
+        placeholder: "Start typing to search for a course by name or location",
         create: false,
         render: {
-             option: function (item, escape) {
-                 return '<div>' + escape(item.name) + ' - ' + escape(item.city) + ', ' + escape(item.us_state) + '</div>';
-             }
+          option: function(item, escape) {
+            return (
+              "<div>" +
+              escape(item.name) +
+              " - " +
+              escape(item.city) +
+              ", " +
+              escape(item.us_state) +
+              "</div>"
+            );
+          }
         },
         load: function(query, callback) {
-            if (!query.length) return callback();
-            $.ajax({
-                url: '/api/v2/courses.json?search=' + encodeURIComponent(query),
-                type: 'GET',
-                success: function(res) {
-                  callback(res);
-                },
-                error: function() {
-                  callback();
-                }
-            });
+          if (!query.length) return callback();
+          $.ajax({
+            url: "/api/v2/courses.json?search=" + encodeURIComponent(query),
+            type: "GET",
+            success: function(res) {
+              callback(res);
+            },
+            error: function() {
+              callback();
+            }
+          });
         },
         onChange: function(value) {
           console.log(value);
           $.ajax({
-              url: `/api/v2/courses/${value}/course_tee_boxes.json`,
-              type: 'GET',
-              success: function(res) {
-                app.courseTeeBoxes = res;
-              },
-              error: function(error) {
-                console.log('Error fetching course tee boxes: ' + error);
-              }
+            url: `/api/v2/courses/${value}/course_tee_boxes.json`,
+            type: "GET",
+            success: function(res) {
+              app.courseTeeBoxes = res;
+            },
+            error: function(error) {
+              console.log("Error fetching course tee boxes: " + error);
+            }
           });
         }
-      },
+      }
     },
-    created: function() {
-
-    },
+    created: function() {},
     mounted: function() {
       $.ajax({
         url: `/api/v2/leagues/${props.league.id}/scoring_rules.json`,
-        method: 'GET',
+        method: "GET",
         success: function(data) {
-          app.scoringRules = data;
+          app.scoringRules = data.flat(1);
         },
         error: function(error) {
           console.log(error);
         }
-      })
+      });
     },
     methods: {
       newFlight(event) {
-        var lastFlight = this.tournament_wizard.flights[this.tournament_wizard.flights.length - 1];
+        var lastFlight = this.tournament_wizard.flights[
+          this.tournament_wizard.flights.length - 1
+        ];
 
         var newFlight = {
           flight_number: lastFlight.flight_number + 1,
@@ -112,17 +132,17 @@ document.addEventListener('DOMContentLoaded', () => {
         this.tournament_wizard.flights.push(newFlight);
       },
       toggleFlights(event) {
-        $('.step-2-dot').toggleClass("hidden");
+        $(".step-2-dot").toggleClass("hidden");
       },
       showGameTypeModal(scoringRule) {
         this.selectedScoringRuleID = scoringRule.id;
 
-        this.$modal.show('scoring-rule');
+        this.$modal.show("scoring-rule");
       },
       hideGameTypeModal() {
         this.selectedScoringRule = {};
 
-        this.$modal.hide('scoring-rule');
+        this.$modal.hide("scoring-rule");
       },
       scoringRuleSelected(event) {
         this.selectedScoringRule.custom_holes = [];
@@ -141,4 +161,4 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }
   });
-})
+});

@@ -25,6 +25,20 @@ a:hover {
   box-shadow: none;
 }
 
+.vue-label {
+  justify-content: center;
+  display: flex;
+  align-items: center;
+
+  label {
+    margin: 0 auto !important;
+  }
+}
+
+.v--modal-overlay .v--modal-box {
+  overflow: visible !important;
+}
+
 .hidden {
   display: none;
 }
@@ -77,10 +91,10 @@ a:hover {
   box-shadow: 0 5px 5px -2px #d0d0d0;
 }
 
-.navbar-dark .navbar-nav .active > .nav-link,
+.navbar-dark .navbar-nav .active>.nav-link,
 .navbar-dark .navbar-nav .nav-link.active,
 .navbar-dark .navbar-nav .nav-link.show,
-.navbar-dark .navbar-nav .show > .nav-link {
+.navbar-dark .navbar-nav .show>.nav-link {
   font-weight: 500;
 }
 
@@ -98,7 +112,7 @@ button:focus {
   flex-wrap: wrap;
 }
 
-.equal > [class*="col-"] {
+.equal>[class*="col-"] {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -527,7 +541,7 @@ button:focus {
   padding-bottom: 12px;
 }
 
-.bootstrap-select > select.bs-select-hidden,
+.bootstrap-select>select.bs-select-hidden,
 select.bs-select-hidden,
 select.selectpicker {
   display: none !important;
@@ -693,11 +707,9 @@ select.selectpicker {
 }
 
 .scorpion-golf-league-green-header .dropdown .bootstrap-select .btn-light,
-.scorpion-golf-league-green-header
-  .btn-light:not(:disabled):not(.disabled).active,
-.scorpion-golf-league-green-header
-  .btn-light:not(:disabled):not(.disabled):active,
-.scorpion-golf-league-green-header .show > .btn-light.dropdown-toggle {
+.scorpion-golf-league-green-header .btn-light:not(:disabled):not(.disabled).active,
+.scorpion-golf-league-green-header .btn-light:not(:disabled):not(.disabled):active,
+.scorpion-golf-league-green-header .show>.btn-light.dropdown-toggle {
   background: transparent !important;
   border: none !important;
 }
@@ -717,11 +729,9 @@ select.selectpicker {
   background-color: #0caf7c;
 }
 
-.scorpion-golf-league-green-header
-  .btn-light:not(:disabled):not(.disabled).active:focus,
-.scorpion-golf-league-green-header
-  .btn-light:not(:disabled):not(.disabled):active:focus,
-.scorpion-golf-league-green-header .show > .btn-light.dropdown-toggle:focus,
+.scorpion-golf-league-green-header .btn-light:not(:disabled):not(.disabled).active:focus,
+.scorpion-golf-league-green-header .btn-light:not(:disabled):not(.disabled):active:focus,
+.scorpion-golf-league-green-header .show>.btn-light.dropdown-toggle:focus,
 .btn-light.focus,
 .btn-light:focus {
   box-shadow: none !important;
@@ -1589,7 +1599,7 @@ select.selectpicker {
   height: 5px;
 }
 
-.tournaments-card-slider .owl-theme .owl-nav.disabled + .owl-dots {
+.tournaments-card-slider .owl-theme .owl-nav.disabled+.owl-dots {
   margin-top: 0;
   position: absolute;
   bottom: -29px;
@@ -1834,7 +1844,7 @@ select.selectpicker {
 }
 
 .raking-content-header-card .nav-pills .nav-link.active,
-.raking-content-header-card .nav-pills .show > .nav-link {
+.raking-content-header-card .nav-pills .show>.nav-link {
   background: transparent;
   color: #000;
   font-size: 1.75rem;
@@ -1972,7 +1982,7 @@ select.selectpicker {
   height: 5px;
 }
 
-.sidebar-slider-card .owl-theme .owl-nav.disabled + .owl-dots {
+.sidebar-slider-card .owl-theme .owl-nav.disabled+.owl-dots {
   margin-top: 0;
   position: absolute;
   top: -29px;
@@ -3242,6 +3252,7 @@ select.selectpicker {
     }
 
     #v-notifications {
+
       .user_wants_email_notifications,
       .user_wants_push_notifications {
         margin: 0;
@@ -3552,13 +3563,11 @@ footer {
 
 /* Small devices (landscape phones, 576px and up) */
 
-@media (min-width: 576px) {
-}
+@media (min-width: 576px) {}
 
 /* Medium devices (tablets, 768px and up) */
 
-@media (min-width: 768px) {
-}
+@media (min-width: 768px) {}
 
 /* Large devices (desktops, 992px and up) */
 
@@ -3570,7 +3579,7 @@ footer {
 
   #mainNav.navbar-shrink .navbar-nav .nav-link:focus,
   #mainNav.navbar-shrink .navbar-nav .nav-link:hover,
-  #mainNav.navbar-shrink .navbar-nav .active > .nav-link {
+  #mainNav.navbar-shrink .navbar-nav .active>.nav-link {
     color: #00c185;
   }
 
@@ -3649,6 +3658,7 @@ footer {
 /* Extra large devices (Extra large desktops, 1920 and Down) */
 
 @media (max-width: 1919.98px) {
+
   #edit-tee-times,
   #edit-teams,
   #tornament-info-popup {
@@ -3658,8 +3668,7 @@ footer {
 
 /* Extra large devices (Extra large desktops, 1680 and Down) */
 
-@media (max-width: 1679.98px) {
-}
+@media (max-width: 1679.98px) {}
 
 /* Extra large devices (Extra large desktops, 1600px and Down) */
 
@@ -3741,102 +3750,82 @@ footer {
 
 /* Extra large devices (large desktops, 1200px and Down) */
 
-@media (max-width: 1199.98px) {
-}
+@media (max-width: 1199.98px) {}
 
 /* Large devices (desktops, 992px and Down) */
 
-@media (max-width: 991.98px) {
-}
+@media (max-width: 991.98px) {}
 
 /* Medium devices (tablets, 768px and Down) */
 
-@media (max-width: 767.98px) {
-}
+@media (max-width: 767.98px) {}
 
 /* Small devices (landscape phones, 576px and Down) */
 
-@media (max-width: 575.98px) {
-}
+@media (max-width: 575.98px) {}
 
 /* Max Width */
 
 /* Extra large devices (Extra large desktops, 1920 and down) */
 
-@media (max-width: 1920px) {
-}
+@media (max-width: 1920px) {}
 
 /* Extra large devices (Extra large desktops, 1680 and down) */
 
-@media (max-width: 1680px) {
-}
+@media (max-width: 1680px) {}
 
 /* Extra large devices (Extra large desktops, 1600px and down) */
 
-@media (max-width: 1600px) {
-}
+@media (max-width: 1600px) {}
 
 /* Extra large devices (Extra large desktops, 1440px and down) */
 
-@media (max-width: 1440px) {
-}
+@media (max-width: 1440px) {}
 
 /* Extra large devices (Extra large desktops, 1366px and down) */
 
-@media (max-width: 1366px) {
-}
+@media (max-width: 1366px) {}
 
 /* Extra large devices (large desktops, 1280px and down) */
 
-@media (max-width: 1280px) {
-}
+@media (max-width: 1280px) {}
 
 /* Extra large devices (large desktops, 1200px and down) */
 
-@media (max-width: 1200px) {
-}
+@media (max-width: 1200px) {}
 
 /* Large devices (desktops, 992px and down) */
 
-@media (max-width: 992px) {
-}
+@media (max-width: 992px) {}
 
 /* Medium devices (tablets, 800px and down) */
 
-@media (max-width: 800px) {
-}
+@media (max-width: 800px) {}
 
 /* Medium devices (tablets, 768px and down) */
 
-@media (max-width: 768px) {
-}
+@media (max-width: 768px) {}
 
 /* Small devices (landscape phones, 576px and down) */
 
-@media (max-width: 576px) {
-}
+@media (max-width: 576px) {}
 
 /* Small devices (landscape phones, 480px and down) */
 
-@media (max-width: 480px) {
-}
+@media (max-width: 480px) {}
 
 /* Small devices (landscape phones, 414px and down) */
 
-@media (max-width: 414px) {
-}
+@media (max-width: 414px) {}
 
 /* Small devices (landscape phones, 384px and down) */
 
-@media (max-width: 384px) {
-}
+@media (max-width: 384px) {}
 
 /* Small devices (landscape phones, 360px and down) */
 
-@media (max-width: 360px) {
-}
+@media (max-width: 360px) {}
 
 /* Small devices (landscape phones, 360px and down) */
 
-@media (max-width: 320px) {
-}
+@media (max-width: 320px) {}

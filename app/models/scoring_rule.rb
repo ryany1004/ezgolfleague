@@ -354,7 +354,7 @@ class ScoringRuleOption
     if show_team_rules
       [['Individual Game Types', individual], ['Team Game Types', team]]
     else
-      [['Individual Game Types', individual]]
+      [[type: 'Individual Game Types', games: individual]]
     end
   end
 end

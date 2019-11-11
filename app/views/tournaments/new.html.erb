@@ -3,6 +3,7 @@
 <% end -%>
 
 <link rel="stylesheet" href="https://unpkg.com/bs-stepper/dist/css/bs-stepper.min.css">
+<link rel="stylesheet" href="https://unpkg.com/vue-multiselect@2.1.0/dist/vue-multiselect.min.css">
 <script src="https://cdn.jsdelivr.net/npm/bs-stepper/dist/js/bs-stepper.min.js"></script>
 
 <% props = {
@@ -190,21 +191,15 @@
   <vue-modal name="scoring-rule" height="auto" clickToClose="false">
     <div class="welcome p-5">
       <div class="p-3">
-        <h2 style="font-size:30px;">Add Game</h2>
+        <h2 style="font-size:30px;text-align:center;">Add Game</h2>
       </div>
       <div class="step-1-content-form step-1-content">
         <div class="row">
-          <div class="col-md-3 text-right">
+          <div class="col-md-3 text-right vue-label">
             <label>Game Type</label>
           </div>
           <div class="col-md-8">
-            <select v-model="selectedScoringRule" @change="scoringRuleSelected($event)">
-              <optgroup v-for="scoringRuleOptionGroup in scoringRules" :label="scoringRuleOptionGroup[0]">
-                <option v-bind:value="scoringRuleOption" v-for="scoringRuleOption in scoringRuleOptionGroup[1]">
-                  {{ scoringRuleOption.name }}
-                </option>
-              </optgroup>
-            </select>
+            <multiselect v-model="selectedScoringRule" :options="scoringRules" :multiple="false" group-values="games" group-label="type" :group-select="false" @select="scoringRuleSelected($event)" placeholder="Choose a game type..." track-by="name" label="name"><span slot="noResult">Oops! No game type found...</span></multiselect> 
           </div>
         </div>
       </div>
@@ -224,17 +219,14 @@
 
       <div class="step-1-content-form step-1-content pt-2" v-if="selectedScoringRule.show_course_holes">
         <div class="row">
-          <div class="col-md-3 text-right">
+          <div class="col-md-3 text-right vue-label">
             <label>Holes</label>
           </div>
           <div class="col-md-8 tee-times-inputs">
             <div class="col-md-8 p-0">
-              <select id="holes" v-model="selectedScoringRule.hole_configuration">
-                <option value="front_nine">Front 9</option>
-                <option value="back_nine">Back 9</option>
-                <option value="all_holes">All 18</option>
-                <option value="custom">Custom</option>
-              </select>
+              <multiselect v-model="selectedScoringRule.hole_configuration" :options="selectedScoringRuleHolesOptions" track-by="value" label="name" placeholder="Choose holes..." :searchable="false">
+                <template slot="singleLabel" slot-scope="{ option }">{{ option.name }}</template>
+              </multiselect>
             </div>
           </div>
         </div>
