@@ -183,7 +183,6 @@ GEM
       httparty (~> 0.10, >= 0.10.0)
     ffi (1.11.1)
     flamegraph (0.9.5)
-    foreman (0.86.0)
     fugit (1.3.3)
       et-orbi (~> 1.1, >= 1.1.8)
       raabro (~> 1.1)
@@ -485,7 +484,6 @@ DEPENDENCIES
   factory_bot_rails
   fcm
   flamegraph
-  foreman
   geocoder
   jb
   jquery-rails
