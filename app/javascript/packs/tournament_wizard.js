@@ -5,10 +5,10 @@ import Vue from 'vue/dist/vue.esm.js';
 import datePicker from 'vue-bootstrap-datetimepicker';
 import 'pc-bootstrap4-datetimepicker/build/css/bootstrap-datetimepicker.css';
 
-import Selectize from 'vue2-selectize'
-import VModal from 'vue-js-modal'
+import Selectize from 'vue2-selectize';
+import VModal from 'vue-js-modal';
 
-Vue.use(VModal, { componentName: "vue-modal" })
+Vue.use(VModal, { componentName: "vue-modal" });
 
 document.addEventListener('DOMContentLoaded', () => {
   const anchorElement = document.getElementById("tournament-wizard")
@@ -37,12 +37,12 @@ document.addEventListener('DOMContentLoaded', () => {
           }
         ],
         scoringRules: [
-          [{ index: 0 }, { index: 1 }], [{ index: 2 }, { index: 3 }], [{ index: 4 }, { index: 5 }], [{ index: 6 }, { index: 7 }]
+          [{ id: 0 }, { id: 1 }], [{ id: 2 }, { id: 3 }], [{ id: 4 }, { id: 5 }], [{ id: 6 }, { id: 7 }]
         ]
       },
       courseTeeBoxes: [],
       scoringRules: [],
-      selectedScoringRule: { name: null },
+      selectedScoringRule: {},
       courseSelectSettings: {
         valueField: 'id',
         labelField: 'name',
@@ -60,32 +60,33 @@ document.addEventListener('DOMContentLoaded', () => {
             $.ajax({
                 url: '/api/v2/courses.json?search=' + encodeURIComponent(query),
                 type: 'GET',
-                error: function() {
-                  callback();
-                },
                 success: function(res) {
                   callback(res);
+                },
+                error: function() {
+                  callback();
                 }
             });
         },
         onChange: function(value) {
           console.log(value);
           $.ajax({
-              url: "/api/v2/courses/" + value + "/course_tee_boxes.json",
+              url: `/api/v2/courses/${value}/course_tee_boxes.json`,
               type: 'GET',
-              error: function(error) {
-                console.log('Error fetching course tee boxes: ' + error);
-              },
               success: function(res) {
                 app.courseTeeBoxes = res;
+              },
+              error: function(error) {
+                console.log('Error fetching course tee boxes: ' + error);
               }
           });
         }
       },
     },
-    mounted: function() {
-      var self = this;
+    created: function() {
 
+    },
+    mounted: function() {
       $.ajax({
         url: `/api/v2/leagues/${props.league.id}/scoring_rules.json`,
         method: 'GET',
@@ -98,7 +99,7 @@ document.addEventListener('DOMContentLoaded', () => {
       })
     },
     methods: {
-      newFlight: function (event) {
+      newFlight(event) {
         var lastFlight = this.tournament_wizard.flights[this.tournament_wizard.flights.length - 1];
 
         var newFlight = {
@@ -110,16 +111,33 @@ document.addEventListener('DOMContentLoaded', () => {
 
         this.tournament_wizard.flights.push(newFlight);
       },
-      toggleFlights: function(event) {
+      toggleFlights(event) {
         $('.step-2-dot').toggleClass("hidden");
       },
-      showGameTypeModal (scoringRule) {
-        self.selectedScoringRule = scoringRule;
+      showGameTypeModal(scoringRule) {
+        this.selectedScoringRuleID = scoringRule.id;
 
         this.$modal.show('scoring-rule');
       },
-      hideGameTypeModal () {
+      hideGameTypeModal() {
+        this.selectedScoringRule = {};
+
         this.$modal.hide('scoring-rule');
+      },
+      scoringRuleSelected(event) {
+        this.selectedScoringRule.custom_holes = [];
+      },
+      addCurrentScoringRule() {
+        this.tournament_wizard.scoringRules.forEach(scoringRuleGroup => {
+          scoringRuleGroup.forEach(scoringRule => {
+            if (scoringRule.id === this.selectedScoringRuleID) {
+              var index = scoringRuleGroup.indexOf(scoringRule);
+              scoringRuleGroup[index] = this.selectedScoringRule;
+            }
+          });
+        });
+
+        this.hideGameTypeModal();
       }
     }
   });

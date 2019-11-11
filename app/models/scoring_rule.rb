@@ -34,7 +34,7 @@ class ScoringRule < ApplicationRecord
 
   attr_accessor :selected_class_name
 
-  def form_class
+  def form_class # TODO: REMOVE?
     becomes(ScoringRule)
   end
 
@@ -288,43 +288,68 @@ class ScoringRule < ApplicationRecord
 end
 
 class ScoringRuleOption
-  attr_accessor :name
-  attr_accessor :class_name
+  attr_accessor :name, :class_name, :custom_name_allowed, :setup_partial, :show_course_holes
 
-  def self.option(name:, class_name:)
+  def self.option(name:, class_name:, custom_name_allowed:, setup_partial:, show_course_holes:)
     o = ScoringRuleOption.new
+
     o.name = name
     o.class_name = class_name
+    o.custom_name_allowed = custom_name_allowed
+    o.setup_partial = setup_partial
+    o.show_course_holes = show_course_holes
 
     o
   end
 
   def self.scoring_rule_options(show_team_rules: false)
-    individual = [
-      ScoringRuleOption.option(name: 'Individual Stroke Play', class_name: 'StrokePlayScoringRule'),
-      ScoringRuleOption.option(name: 'Individual Modified Stableford', class_name: 'StablefordScoringRule'),
-      ScoringRuleOption.option(name: 'Match Play', class_name: 'MatchPlayScoringRule'),
-      ScoringRuleOption.option(name: 'Two Man Best Ball', class_name: 'TwoManBestBallScoringRule'),
-      ScoringRuleOption.option(name: 'Two Man Scramble', class_name: 'TwoManScrambleScoringRule'),
-      ScoringRuleOption.option(name: 'Four Man Scramble', class_name: 'FourManScrambleScoringRule'),
-      ScoringRuleOption.option(name: 'Gross Skins', class_name: 'GrossSkinsScoringRule'),
-      ScoringRuleOption.option(name: 'Individual 3 Best Balls of 4', class_name: 'ThreeBestBallsOfFourScoringRule'),
-      ScoringRuleOption.option(name: 'Net Skins', class_name: 'NetSkinsScoringRule'),
-      ScoringRuleOption.option(name: 'Net Skins + Gross Birdies', class_name: 'TotalSkinsScoringRule'),
-      ScoringRuleOption.option(name: 'Net Low', class_name: 'NetLowScoringRule'),
-      ScoringRuleOption.option(name: 'Gross Low', class_name: 'GrossLowScoringRule'),
-      ScoringRuleOption.option(name: 'Custom', class_name: 'ManualScoringRule'),
+    individual_classes = [
+      'StrokePlayScoringRule',
+      'StablefordScoringRule',
+      'MatchPlayScoringRule',
+      'TwoManBestBallScoringRule',
+      'TwoManScrambleScoringRule',
+      'FourManScrambleScoringRule',
+      'GrossSkinsScoringRule',
+      'ThreeBestBallsOfFourScoringRule',
+      'NetSkinsScoringRule',
+      'TotalSkinsScoringRule',
+      'NetLowScoringRule',
+      'GrossLowScoringRule',
+      'ManualScoringRule'
     ]
 
-    team = [
-      ScoringRuleOption.option(name: 'Team Stroke Play (Sum of Individual Scores)', class_name: 'TeamStrokePlayIndividualSumScoringRule'),
-      ScoringRuleOption.option(name: 'Team Stroke Play (vs. Opposing Team Member)', class_name: 'TeamStrokePlayVsScoringRule'),
-      ScoringRuleOption.option(name: 'Team Match Play (vs. Opposing Team Member)', class_name: 'TeamMatchPlayVsScoringRule'),
-      ScoringRuleOption.option(name: 'Team Match Play (Best Ball)', class_name: 'TeamMatchPlayBestBallScoringRule'),
-      ScoringRuleOption.option(name: 'Team Match Play (Scramble) Points Per Hole', class_name: 'TeamMatchPlayScramblePointsPerHoleScoringRule'),
-      ScoringRuleOption.option(name: 'Team Match Play (vs. Opposing Team Member) Points Per Hole', class_name: 'TeamMatchPlayVsPointsPerHoleScoringRule'),
-      ScoringRuleOption.option(name: 'Team Best Ball', class_name: 'TeamBestBallScoringRule'),
+    individual = []
+    individual_classes.each do |i|
+      instance = i.constantize.new
+
+      individual << ScoringRuleOption.option(name: instance.name,
+                                             class_name: i,
+                                             custom_name_allowed: instance.allows_custom_name?,
+                                             setup_partial: instance.setup_partial,
+                                             show_course_holes: instance.show_course_holes?)
+    end
+
+    team_classes = [
+      'TeamStrokePlayIndividualSumScoringRule',
+      'TeamStrokePlayVsScoringRule',
+      'TeamMatchPlayVsScoringRule',
+      'TeamMatchPlayBestBallScoringRule',
+      'TeamMatchPlayScramblePointsPerHoleScoringRule',
+      'TeamMatchPlayVsPointsPerHoleScoringRule',
+      'TeamBestBallScoringRule'
     ]
+
+    team = []
+    team_classes.each do |i|
+      instance = i.constantize.new
+
+      team << ScoringRuleOption.option(name: instance.name,
+                                       class_name: i,
+                                       custom_name_allowed: instance.allows_custom_name?,
+                                       setup_partial: instance.setup_partial,
+                                       show_course_holes: instance.show_course_holes?)
+    end
 
     if show_team_rules
       [['Individual Game Types', individual], ['Team Game Types', team]]
