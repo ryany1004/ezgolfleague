@@ -6,7 +6,7 @@ class DashboardController < BaseController
     @league_season = current_user.active_league_season
     @ranking_groups = @league_season.league_season_ranking_groups
 
-    if @next_tournament.tournament_state == TournamentState::REVIEW_SCORES
+    if @next_tournament&.tournament_state == TournamentState::REVIEW_SCORES
       @day_flights_with_rankings = ::FetchingTools::LeaderboardFetching.flights_with_rankings_could_be_combined(@next_tournament.first_day, false)
     end
   end
