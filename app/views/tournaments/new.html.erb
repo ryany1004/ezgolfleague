@@ -121,7 +121,7 @@
                   <p>Manually add flights below.</p>
                   <div class="step-1-content-form">
 
-                    <div v-for="(flight, index) in tournament_wizard.flights">
+                    <div v-for="(flight, index) in tournament_wizard.flights" :key="flight.flight_number">
                       <div class="row">
                         <div class="col-md-4 text-right">
                           <label>Flight #{{ flight.flight_number }}</label>
@@ -139,7 +139,7 @@
                           </div>
                           <div class="pr-4">
                             <selectize v-model="flight.tee_box_id">
-                              <option v-for="courseTeeBox in courseTeeBoxes" v-bind:value="courseTeeBox.id">
+                              <option v-for="courseTeeBox in courseTeeBoxes" :key="courseTeeBox.id" v-bind:value="courseTeeBox.id">
                                 {{ courseTeeBox.name }}
                               </option>
                             </selectize>
