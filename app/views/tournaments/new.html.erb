@@ -50,6 +50,7 @@
                           <div class="col-md-5">
                             <div class="form-group string required tournament_name">
                               <input label="false" required="required" aria-required="true" placeholder="Choose a name..." type="text" id="tournament_name" class="form-control string required form-control" v-model="tournament_wizard.tournament_name">
+                              <div v-if="steps.nameStepSubmitted && !$v.tournament_wizard.tournamentName.required" class="invalid-feedback">Name is required</div>
                             </div>
                         </div>
                       </div>
@@ -111,7 +112,7 @@
                 </div><!-- /.step-1-content -->
                 <div class="cat-card-footer">                     
                     <button type="button" class="btn btn-outline-secondary">Cancel</button>
-                    <button class="btn btn__ezgl-secondary" v-on:click="nextStage">Next</button>
+                    <button class="btn btn__ezgl-secondary" v-on:click="nextStage" :disabled="$v.tournament_wizard.$invalid">Next</button>
                 </div>
               </div>
 
@@ -199,7 +200,9 @@
             <label>Game Type</label>
           </div>
           <div class="col-md-8">
-            <multiselect v-model="selectedScoringRule" :options="scoringRules" :multiple="false" group-values="games" group-label="type" :group-select="false" @select="scoringRuleSelected($event)" placeholder="Choose a game type..." track-by="name" label="name"><span slot="noResult">Oops! No game type found...</span></multiselect> 
+            <multiselect v-model="selectedScoringRule" :options="scoringRules" :multiple="false" group-values="games" group-label="type" :group-select="false" @select="scoringRuleSelected($event)" placeholder="Choose a game type..." track-by="name" label="name">
+              <span slot="noResult">Oops! No game type found...</span>
+            </multiselect> 
           </div>
         </div>
       </div>

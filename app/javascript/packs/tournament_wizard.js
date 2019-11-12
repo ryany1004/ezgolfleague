@@ -8,7 +8,9 @@ import "pc-bootstrap4-datetimepicker/build/css/bootstrap-datetimepicker.css";
 import Selectize from "vue2-selectize";
 import VModal from "vue-js-modal";
 import Multiselect from "vue-multiselect";
+
 import Vuelidate from 'vuelidate'
+import { required } from 'vuelidate/lib/validators'
 
 Vue.use(VModal, { componentName: "vue-modal" });
 Vue.component("multiselect", Multiselect);
@@ -48,10 +50,10 @@ document.addEventListener("DOMContentLoaded", () => {
           [{ id: 6 }, { id: 7 }]
         ]
       },
-      validations: {
-        name: {
-          tournament_name
-        }
+      steps: {
+        nameStepSubmitted: false,
+        flightsStepSubmitted: false,
+        scoringRulesStepSubmitted: false
       },
       showFlights: false,
       courseTeeBoxes: [],
@@ -97,7 +99,8 @@ document.addEventListener("DOMContentLoaded", () => {
           });
         },
         onChange: function(value) {
-          console.log(value);
+          app.tournament_wizard.course_id = value;
+
           $.ajax({
             url: `/api/v2/courses/${value}/course_tee_boxes.json`,
             type: "GET",
@@ -108,6 +111,22 @@ document.addEventListener("DOMContentLoaded", () => {
               console.log("Error fetching course tee boxes: " + error);
             }
           });
+        }
+      }
+    },
+    validations: {
+      tournament_wizard: {
+        tournament_name: {
+          required
+        },
+        tournament_starts_at: {
+          required
+        },
+        tournament_closes_at: {
+          required
+        },
+        course_id: {
+          required
         }
       }
     },
