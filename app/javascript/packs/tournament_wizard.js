@@ -8,9 +8,11 @@ import "pc-bootstrap4-datetimepicker/build/css/bootstrap-datetimepicker.css";
 import Selectize from "vue2-selectize";
 import VModal from "vue-js-modal";
 import Multiselect from "vue-multiselect";
+import Vuelidate from 'vuelidate'
 
 Vue.use(VModal, { componentName: "vue-modal" });
 Vue.component("multiselect", Multiselect);
+Vue.use(Vuelidate)
 
 document.addEventListener("DOMContentLoaded", () => {
   const anchorElement = document.getElementById("tournament-wizard");
@@ -46,6 +48,12 @@ document.addEventListener("DOMContentLoaded", () => {
           [{ id: 6 }, { id: 7 }]
         ]
       },
+      validations: {
+        name: {
+          tournament_name
+        }
+      },
+      showFlights: false,
       courseTeeBoxes: [],
       scoringRules: [],
       selectedScoringRule: "",
@@ -158,6 +166,20 @@ document.addEventListener("DOMContentLoaded", () => {
         });
 
         this.hideGameTypeModal();
+      },
+      nextStage() {
+        if (this.showFlights) {
+          stepper1.next();
+        } else {
+          stepper1.to(3);
+        }
+      },
+      lastStage() {
+        if (this.showFlights) {
+          stepper1.previous();
+        } else {
+          stepper1.to(1);
+        }
       }
     }
   });
