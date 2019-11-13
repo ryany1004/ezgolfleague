@@ -40,7 +40,7 @@ document.addEventListener("DOMContentLoaded", () => {
             flight_number: 1,
             low_handicap: 0,
             high_handicap: 300,
-            tee_box_id: null
+            teeBox: null
           }
         ],
         scoringRules: [
@@ -55,64 +55,20 @@ document.addEventListener("DOMContentLoaded", () => {
         flightsStepSubmitted: false,
         scoringRulesStepSubmitted: false
       },
+      isLoading: false,
+      filteredCourses: [],
       showFlights: false,
       courseTeeBoxes: [],
       scoringRules: [],
-      selectedScoringRule: "",
+      selectedScoringRule: {
+        customHoles: []
+      },
       selectedScoringRuleHolesOptions: [
         { name: "Front 9", value: "front_nine" },
         { name: "Back 9", value: "back_nine" },
         { name: "All 18", value: "all_holes" },
         { name: "Custom", value: "custom" }
       ],
-      courseSelectSettings: {
-        valueField: "id",
-        labelField: "name",
-        searchField: "name",
-        maxItems: "1",
-        placeholder: "Start typing to search for a course by name or location",
-        create: false,
-        render: {
-          option: function(item, escape) {
-            return (
-              "<div>" +
-              escape(item.name) +
-              " - " +
-              escape(item.city) +
-              ", " +
-              escape(item.us_state) +
-              "</div>"
-            );
-          }
-        },
-        load: function(query, callback) {
-          if (!query.length) return callback();
-          $.ajax({
-            url: "/api/v2/courses.json?search=" + encodeURIComponent(query),
-            type: "GET",
-            success: function(res) {
-              callback(res);
-            },
-            error: function() {
-              callback();
-            }
-          });
-        },
-        onChange: function(value) {
-          app.tournament_wizard.course_id = value;
-
-          $.ajax({
-            url: `/api/v2/courses/${value}/course_tee_boxes.json`,
-            type: "GET",
-            success: function(res) {
-              app.courseTeeBoxes = res;
-            },
-            error: function(error) {
-              console.log("Error fetching course tee boxes: " + error);
-            }
-          });
-        }
-      }
     },
     validations: {
       tournament_wizard: {
@@ -143,7 +99,64 @@ document.addEventListener("DOMContentLoaded", () => {
         }
       });
     },
+    computed: {
+      showCustomHolePicker() {
+        if (this.selectedScoringRule.hole_configuration != null && this.selectedScoringRule.hole_configuration.value == 'custom') {
+          return true;
+        } else {
+          return false;
+        }
+      }
+    },
     methods: {
+      searchCourses(query) {
+        if (query === "") { return }
+
+        app.isLoading = true;
+
+        fetch(`/api/v2/courses.json?search=${encodeURIComponent(query)}`)
+          .then(
+            function(response) {
+              app.isLoading = false;
+
+              if (response.status < 200 || response.status >= 300) {
+                console.log(`Course Load Error: ${response.status}`);
+
+                return;
+              }
+
+              response.json().then(function(data) {
+                var courses = [];
+
+                data.forEach(course => {
+                  courses.push({ id: course.id, name: `${course.name} in ${course.city}, ${course.us_state}` });
+                });
+
+                app.filteredCourses = courses;
+              });
+            }
+          );
+      },
+      courseSelected(selectedOption, id) {
+        fetch(`/api/v2/courses/${selectedOption.id}/course_tee_boxes.json`)
+          .then(
+            function(response) {
+              if (response.status < 200 || response.status >= 300) {
+                console.log(`Course Tee Box Load Error: ${response.status}`);
+
+                return;
+              }
+
+              response.json().then(function(data) {
+                app.courseTeeBoxes = data;
+
+                if (app.tournament_wizard.flights[0].teeBox == null) {
+                  app.tournament_wizard.flights[0].teeBox = data[0];
+                }
+              });
+            }
+          );
+      },
       newFlight(event) {
         var lastFlight = this.tournament_wizard.flights[
           this.tournament_wizard.flights.length - 1
