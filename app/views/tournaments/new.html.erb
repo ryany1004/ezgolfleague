@@ -100,7 +100,10 @@
                             <label>Golf Course</label>
                           </div>
                           <div class="col-md-5">
-                            <selectize v-model="tournament_wizard.course_id" :settings="courseSelectSettings"></selectize>
+                            <multiselect v-model="tournament_wizard.course_id" id="ajax" label="name" track-by="code" placeholder="Type to search for a course by name or location" open-direction="bottom" :options="filteredCourses" :searchable="true" :loading="isLoading" :internal-search="false" :options-limit="300" :limit="3" :max-height="600" :show-no-results="false" :hide-selected="true" @search-change="searchCourses" @select="courseSelected">
+                              <template slot="singleLabel" slot-scope="{ option }">{{ option.name }}</template>
+                              <span slot="noResult">No courses matched your query.</span>
+                            </multiselect>
                           </div>
                         </div>
                     </div> 
@@ -139,11 +142,7 @@
                             </div>
                           </div>
                           <div class="pr-4">
-                            <selectize v-model="flight.tee_box_id">
-                              <option v-for="courseTeeBox in courseTeeBoxes" :key="courseTeeBox.id" v-bind:value="courseTeeBox.id">
-                                {{ courseTeeBox.name }}
-                              </option>
-                            </selectize>
+                            <multiselect v-model="flight.teeBox" track-by="name" label="name" placeholder="Select" :options="courseTeeBoxes" :searchable="false" :allow-empty="false"></multiselect>
                           </div>
                         </div>
                       </div>
@@ -165,15 +164,17 @@
                   <div class="step-content-game-types">
                     <div class="row" v-for="(ruleGroup, index) in tournament_wizard.scoringRules">
                       <template v-for="rule in ruleGroup">
-                        <div class="add-game-type" v-on:click="showGameTypeModal(rule)">
-                          <template v-if="rule.name">
+                        <template v-if="rule.name">
+                          <div class="added-game-type">
                             <p>{{ rule.name }}</p>
                             <%= link_to "Add Payout", "", data: { toggle:"modal", target:"#addPayoutModal" }, class: "btn btn-primary" %>
-                          </template>
-                          <template v-else>
+                          </div>
+                        </template>
+                        <template v-else>
+                          <div class="add-game-type" v-on:click="showGameTypeModal(rule)">
                             <p>+ Add Game</p>
-                          </template>
-                        </div>
+                          </div>
+                        </template>
                       </template>
                     </div>
                   </div>
@@ -235,7 +236,7 @@
         </div>
       </div> 
 
-      <div class="step-1-content-form step-1-content holesCustomOptions" v-if="selectedScoringRule.hole_configuration == 'custom'">
+      <div class="step-1-content-form step-1-content holesCustomOptions" v-if="showCustomHolePicker">
         <div class="row">
           <div class="col-md-3 text-right">
             <label>Holes (Custom)</label>
@@ -243,26 +244,26 @@
           <div class="col-md-8 pl-5">
             <div class="row pl-5">
               <div>
-                <input type="checkbox" value="1" v-model="selectedScoringRule.custom_holes"> Hole 1<br>
-                <input type="checkbox" value="2" v-model="selectedScoringRule.custom_holes"> Hole 2<br>
-                <input type="checkbox" value="3" v-model="selectedScoringRule.custom_holes"> Hole 3<br>
-                <input type="checkbox" value="4" v-model="selectedScoringRule.custom_holes"> Hole 4<br>
-                <input type="checkbox" value="5" v-model="selectedScoringRule.custom_holes"> Hole 5<br>
-                <input type="checkbox" value="6" v-model="selectedScoringRule.custom_holes"> Hole 6<br>
-                <input type="checkbox" value="7" v-model="selectedScoringRule.custom_holes"> Hole 7<br>
-                <input type="checkbox" value="8" v-model="selectedScoringRule.custom_holes"> Hole 8<br>
-                <input type="checkbox" value="9" v-model="selectedScoringRule.custom_holes"> Hole 9<br>
+                <input type="checkbox" value="1" v-model="selectedScoringRule.customHoles"> Hole 1<br>
+                <input type="checkbox" value="2" v-model="selectedScoringRule.customHoles"> Hole 2<br>
+                <input type="checkbox" value="3" v-model="selectedScoringRule.customHoles"> Hole 3<br>
+                <input type="checkbox" value="4" v-model="selectedScoringRule.customHoles"> Hole 4<br>
+                <input type="checkbox" value="5" v-model="selectedScoringRule.customHoles"> Hole 5<br>
+                <input type="checkbox" value="6" v-model="selectedScoringRule.customHoles"> Hole 6<br>
+                <input type="checkbox" value="7" v-model="selectedScoringRule.customHoles"> Hole 7<br>
+                <input type="checkbox" value="8" v-model="selectedScoringRule.customHoles"> Hole 8<br>
+                <input type="checkbox" value="9" v-model="selectedScoringRule.customHoles"> Hole 9<br>
               </div>
               <div class="pl-5">
-                <input type="checkbox" value="10" v-model="selectedScoringRule.custom_holes"> Hole 10<br>
-                <input type="checkbox" value="11" v-model="selectedScoringRule.custom_holes"> Hole 11<br>
-                <input type="checkbox" value="12" v-model="selectedScoringRule.custom_holes"> Hole 12<br>
-                <input type="checkbox" value="13" v-model="selectedScoringRule.custom_holes"> Hole 13<br>
-                <input type="checkbox" value="14" v-model="selectedScoringRule.custom_holes"> Hole 14<br>
-                <input type="checkbox" value="15" v-model="selectedScoringRule.custom_holes"> Hole 15<br>
-                <input type="checkbox" value="16" v-model="selectedScoringRule.custom_holes"> Hole 16<br>
-                <input type="checkbox" value="17" v-model="selectedScoringRule.custom_holes"> Hole 17<br>
-                <input type="checkbox" value="18" v-model="selectedScoringRule.custom_holes"> Hole 18<br>
+                <input type="checkbox" value="10" v-model="selectedScoringRule.customHoles"> Hole 10<br>
+                <input type="checkbox" value="11" v-model="selectedScoringRule.customHoles"> Hole 11<br>
+                <input type="checkbox" value="12" v-model="selectedScoringRule.customHoles"> Hole 12<br>
+                <input type="checkbox" value="13" v-model="selectedScoringRule.customHoles"> Hole 13<br>
+                <input type="checkbox" value="14" v-model="selectedScoringRule.customHoles"> Hole 14<br>
+                <input type="checkbox" value="15" v-model="selectedScoringRule.customHoles"> Hole 15<br>
+                <input type="checkbox" value="16" v-model="selectedScoringRule.customHoles"> Hole 16<br>
+                <input type="checkbox" value="17" v-model="selectedScoringRule.customHoles"> Hole 17<br>
+                <input type="checkbox" value="18" v-model="selectedScoringRule.customHoles"> Hole 18<br>
               </div>
             </div>
           </div>
