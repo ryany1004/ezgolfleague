@@ -50,7 +50,6 @@
                           <div class="col-md-5">
                             <div class="form-group string required tournament_name">
                               <input label="false" required="required" aria-required="true" placeholder="Choose a name..." type="text" id="tournament_name" class="form-control string required form-control" v-model="tournament_wizard.tournament_name">
-                              <div v-if="steps.nameStepSubmitted && !$v.tournament_wizard.tournamentName.required" class="invalid-feedback">Name is required</div>
                             </div>
                         </div>
                       </div>
@@ -100,7 +99,7 @@
                             <label>Golf Course</label>
                           </div>
                           <div class="col-md-5">
-                            <multiselect v-model="tournament_wizard.course_id" id="ajax" label="name" track-by="code" placeholder="Type to search for a course by name or location" open-direction="bottom" :options="filteredCourses" :searchable="true" :loading="isLoading" :internal-search="false" :options-limit="300" :limit="3" :max-height="600" :show-no-results="false" :hide-selected="true" @search-change="searchCourses" @select="courseSelected">
+                            <multiselect v-model="tournament_wizard.course" id="ajax" label="name" track-by="id" placeholder="Type to search for a course by name or location" open-direction="bottom" :options="filteredCourses" :searchable="true" :loading="isLoading" :internal-search="false" :options-limit="300" :limit="3" :max-height="600" :show-no-results="false" :hide-selected="true" @search-change="searchCourses" @select="courseSelected">
                               <template slot="singleLabel" slot-scope="{ option }">{{ option.name }}</template>
                               <span slot="noResult">No courses matched your query.</span>
                             </multiselect>
@@ -109,7 +108,7 @@
                     </div> 
                     <div class="form-group">
                       <input type="checkbox" id="show-flights" v-model="showFlights" v-on:click="toggleFlights">
-                      <label for="show-flights" class="pl-2">Separate golfers into flights</label>
+                      <label for="show-flights" class="pl-2">Separate Golfers into Flights</label>
                     </div>
                   </div>            
                 </div><!-- /.step-1-content -->
@@ -167,7 +166,7 @@
                         <template v-if="rule.name">
                           <div class="added-game-type">
                             <p>{{ rule.name }}</p>
-                            <%= link_to "Add Payout", "", data: { toggle:"modal", target:"#addPayoutModal" }, class: "btn btn-primary" %>
+                            <a href="#" class="btn btn-primary" v-on:click="showPayoutsModal(rule)">Add Payout</a>
                           </div>
                         </template>
                         <template v-else>
@@ -277,56 +276,43 @@
     </div>
   </vue-modal>
 
-  <div class="modal fade" id="addPayoutModal" tabindex="-1" role="dialog" aria-labelledby="addPayoutCenterTitle" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-      <div class="modal-content">
-        <% if @tournament.new_record? || is_editable?(@tournament) -%>
-          <%= simple_form_for [current_user.selected_league, @tournament], :defaults => { :input_html => { :class => "form-control", :label => false }} do |f| %>    
-            <div class="modal-body welcome p-5">
-              <div class="p-3">
-                <h2 style="font-size:30px;">Add Payout</h2>
-              </div>
-              <% if notification = f.error_notification %>
-                <div class="alert alert-error fade in">
-                  <%= notification %>
-                </div>
-              <% end %>
-              <div class="step-1-content-form step-1-content">
-                <div class="row">
-                  <div class="col-md-3 text-right">
-                    <label>Flight</label>
-                  </div>
-                    <div class="col-md-8">
-                      <select></select>
-                  </div>
-                </div>
-              </div>
-              <div class="step-1-content-form step-1-content pt-0">
-                <div class="row">
-                  <div class="col-md-3 text-right">
-                    <label>Attributes</label>
-                  </div>
-                  <div class="col-md-8 tee-times-inputs">
-                    <div class="pr-4">
-                      <%= f.input :name, placeholder: 'Amount', required: true %>
-                    </div>
-                    <div>
-                      <%= f.input :name, placeholder: 'Points', required: true %>
-                    </div>
-                  </div>
-                </div>
-              </div> 
-            </div>
-
-            <div class="modal-footer">
-              <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-              <%= f.button :submit, "Save", class: 'btn__ezgl-secondary' %>
-            </div>
-          <% end %>
-        <% end %>
+  <vue-modal name="payouts" height="auto" clickToClose="false">
+    <div class="welcome p-5">
+      <div class="p-3">
+        <h2 style="font-size:30px;">Add Payout</h2>
       </div>
+      <div class="step-1-content-form step-1-content">
+        <div class="row">
+          <div class="col-md-3 text-right">
+            <label>Flight</label>
+          </div>
+            <div class="col-md-8">
+              <select></select>
+          </div>
+        </div>
+      </div>
+      <div class="step-1-content-form step-1-content pt-0">
+        <div class="row">
+          <div class="col-md-3 text-right">
+            <label>Attributes</label>
+          </div>
+          <div class="col-md-8 tee-times-inputs">
+            <div class="pr-4">
+              <input label="false" type="text" class="form-control string required form-control">
+            </div>
+            <div>
+              <input label="false" type="text" class="form-control string required form-control">
+            </div>
+          </div>
+        </div>
+      </div> 
     </div>
-  </div>
+
+    <div class="modal-footer">
+      <button type="button" class="btn btn-default" v-on:click="hidePayoutsModal">Cancel</button>
+      <button type="button" class="btn__ezgl-secondary" v-on:click="savePayout">Save</button>
+    </div>
+  </vue-modal>
 </div>
 
 <script type="text/javascript">

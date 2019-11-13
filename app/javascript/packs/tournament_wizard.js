@@ -5,7 +5,6 @@ import Vue from "vue/dist/vue.esm.js";
 import datePicker from "vue-bootstrap-datetimepicker";
 import "pc-bootstrap4-datetimepicker/build/css/bootstrap-datetimepicker.css";
 
-import Selectize from "vue2-selectize";
 import VModal from "vue-js-modal";
 import Multiselect from "vue-multiselect";
 
@@ -24,7 +23,6 @@ document.addEventListener("DOMContentLoaded", () => {
     el: "#tournament-wizard",
     components: {
       datePicker,
-      Selectize,
       Multiselect,
       VModal
     },
@@ -34,7 +32,7 @@ document.addEventListener("DOMContentLoaded", () => {
         tournament_starts_at: null,
         tournament_opens_at: null,
         tournament_closes_at: null,
-        course_id: null,
+        course: null,
         flights: [
           {
             flight_number: 1,
@@ -81,7 +79,7 @@ document.addEventListener("DOMContentLoaded", () => {
         tournament_closes_at: {
           required
         },
-        course_id: {
+        course: {
           required
         }
       }
@@ -180,9 +178,18 @@ document.addEventListener("DOMContentLoaded", () => {
         this.$modal.show("scoring-rule");
       },
       hideGameTypeModal() {
-        this.selectedScoringRule = {};
+        this.selectedScoringRule = {customHoles: []};
 
         this.$modal.hide("scoring-rule");
+      },
+      showPayoutsModal(scoringRule) {
+        this.$modal.show("payouts");
+      },
+      hidePayoutsModal() {
+        this.$modal.hide("payouts");
+      },
+      savePayout() {
+
       },
       scoringRuleSelected(event) {
         this.selectedScoringRule.custom_holes = [];
