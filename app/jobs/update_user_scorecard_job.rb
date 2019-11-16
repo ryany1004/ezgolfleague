@@ -8,6 +8,8 @@ class UpdateUserScorecardJob < ApplicationJob
       Rails.logger.info { "UpdateUserScorecardJob for #{primary_scorecard.id} already exists. Bailing..." }
 
       return
+    else
+      Rails.logger.info { "UpdateUserScorecardJob did not already exist - processing for #{primary_scorecard.id}." }
     end
 
     primary_user = primary_scorecard.golf_outing.user
@@ -48,26 +50,16 @@ class UpdateUserScorecardJob < ApplicationJob
       parsed_job = JSON.parse(j.value)
       next if parsed_job.blank?
 
-      Rails.logger.info { 'Got Parsed Job' }
-
       parsed_args = parsed_job['args']
       next if parsed_args.blank? || parsed_args.first.blank?
-
-      Rails.logger.info { 'Got Parsed Args' }
 
       parsed_arguments = parsed_args.first['arguments']
       next if parsed_arguments.blank? || parsed_arguments.first.blank?
 
-      Rails.logger.info { 'Got Parsed Arguments' }
-
       global_id = parsed_arguments.first['_aj_globalid']
       next if global_id.blank?
 
-      Rails.logger.info { 'Got Global ID' + global_id }
-
       return true if global_id.include?(primary_scorecard.id.to_s)
-
-      Rails.logger.info { "Failed Compare: #{global_id} to #{primary_scorecard.id}" }
     end
 
     false
