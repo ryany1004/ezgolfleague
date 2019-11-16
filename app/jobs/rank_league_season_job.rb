@@ -1,4 +1,6 @@
 class RankLeagueSeasonJob < ApplicationJob
+  queue_as :calculations
+  
   def perform(league_season, destroy_first = false)
     return if league_season.blank?
 

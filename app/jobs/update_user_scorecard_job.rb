@@ -1,4 +1,6 @@
 class UpdateUserScorecardJob < ApplicationJob
+  queue_as :calculations
+  
   def perform(primary_scorecard, other_scorecards)
     primary_user = primary_scorecard.golf_outing.user
 
