@@ -1,4 +1,6 @@
 class AndroidPushNotificationJob < ApplicationJob
+  queue_as :notifications
+
   def perform(user, body, extra_data = nil)
     return if Rails.env.development?
 

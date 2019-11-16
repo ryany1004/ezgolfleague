@@ -1,4 +1,6 @@
 class SendUserToDripJob < ApplicationJob
+  queue_as :notifications
+  
   def perform(user)
 	  options = {
 	    tags: user.drip_tags,
