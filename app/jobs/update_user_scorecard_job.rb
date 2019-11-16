@@ -60,7 +60,7 @@ class UpdateUserScorecardJob < ApplicationJob
 
       Rails.logger.info { 'Got Parsed Arguments' }
 
-      global_id = parsed_arguments['_aj_globalid']
+      global_id = parsed_arguments.first['_aj_globalid']
       next if global_id.blank?
 
       Rails.logger.info { 'Got Global ID' + global_id }
