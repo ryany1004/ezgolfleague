@@ -1,6 +1,6 @@
 class RankFlightsJob < ApplicationJob
   queue_as :calculations
-  
+
   def perform(tournament_day)
     tournament_day.scoring_rules.each do |rule|
       tournament_day.flights.each do |flight|
