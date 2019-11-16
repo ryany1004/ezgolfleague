@@ -8,8 +8,12 @@ import "pc-bootstrap4-datetimepicker/build/css/bootstrap-datetimepicker.css";
 import VModal from "vue-js-modal";
 import Multiselect from "vue-multiselect";
 
-import Vuelidate from 'vuelidate'
-import { required } from 'vuelidate/lib/validators'
+import Vuelidate from 'vuelidate';
+import { required } from 'vuelidate/lib/validators';
+
+import EZGLFlight from 'packs/models/flight.js';
+import EZGLScoringRule from 'packs/models/scoring_rule.js'
+import EZGLPayout from 'packs/models/payout.js'
 
 Vue.use(VModal, { componentName: "vue-modal" });
 Vue.component("multiselect", Multiselect);
@@ -34,18 +38,25 @@ document.addEventListener("DOMContentLoaded", () => {
         tournament_closes_at: null,
         course: null,
         flights: [
-          {
-            flight_number: 1,
-            low_handicap: 0,
-            high_handicap: 300,
-            teeBox: null
-          }
+          new EZGLFlight({})
         ],
         scoringRules: [
-          [{ id: 0 }, { id: 1 }],
-          [{ id: 2 }, { id: 3 }],
-          [{ id: 4 }, { id: 5 }],
-          [{ id: 6 }, { id: 7 }]
+          [
+            new EZGLScoringRule({}),
+            new EZGLScoringRule({})
+          ],
+          [
+            new EZGLScoringRule({}),
+            new EZGLScoringRule({})
+          ],
+          [
+            new EZGLScoringRule({}),
+            new EZGLScoringRule({})
+          ],
+          [
+            new EZGLScoringRule({}),
+            new EZGLScoringRule({})
+          ]
         ]
       },
       steps: {
@@ -161,12 +172,11 @@ document.addEventListener("DOMContentLoaded", () => {
           this.tournament_wizard.flights.length - 1
         ];
 
-        var newFlight = {
-          flight_number: lastFlight.flight_number + 1,
-          low_handicap: lastFlight.high_handicap + 1,
-          high_handicap: lastFlight.high_handicap + 100,
-          tee_box_id: null
-        };
+        let newFlight = new EZGLFlight({
+          flightNumber: lastFlight.flightNumber + 1,
+          lowHandicap: lastFlight.highHandicap + 1,
+          highHandicap: lastFlight.highHandicap + 100
+        });
 
         this.tournament_wizard.flights.push(newFlight);
       },
@@ -202,7 +212,7 @@ document.addEventListener("DOMContentLoaded", () => {
           });
         });
 
-        this.selectedPayout = nil;
+        this.selectedPayout = {};
 
         this.$modal.hide("payouts");
       },
@@ -210,14 +220,27 @@ document.addEventListener("DOMContentLoaded", () => {
         this.selectedScoringRule.custom_holes = [];
       },
       addCurrentScoringRule() {
-        this.tournament_wizard.scoringRules.forEach(scoringRuleGroup => {
-          scoringRuleGroup.forEach(scoringRule => {
-            if (scoringRule.id === this.selectedScoringRuleID) {
-              var index = scoringRuleGroup.indexOf(scoringRule);
-              scoringRuleGroup[index] = this.selectedScoringRule;
-            }
-          });
-        });
+        loop1:
+          for (var scoringRuleGroupIndex in this.tournament_wizard.scoringRules) {
+            var scoringRuleGroup = this.tournament_wizard.scoringRules[scoringRuleGroupIndex];
+
+            loop2:
+              for (var scoringRuleIndex in scoringRuleGroup) {
+                var scoringRule = scoringRuleGroup[scoringRuleIndex];
+
+                if (scoringRule.canBeAssigned()) {
+                  var index = scoringRuleGroup.indexOf(scoringRule);
+
+                  scoringRuleGroup[index] = new EZGLScoringRule({
+                    name: this.selectedScoringRule.name,
+                    className: this.selectedScoringRule.class_name,
+                    holeConfiguration: this.selectedScoringRule.hole_configuration
+                  });
+
+                  break loop1;
+                }
+              }
+          }
 
         this.hideGameTypeModal();
       },

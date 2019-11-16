@@ -124,20 +124,20 @@
                   <p>Manually add flights below.</p>
                   <div class="step-1-content-form">
 
-                    <div v-for="(flight, index) in tournament_wizard.flights" :key="flight.flight_number">
+                    <div v-for="(flight, index) in tournament_wizard.flights" :key="flight.flightNumber">
                       <div class="row">
                         <div class="col-md-4 text-right">
-                          <label>Flight #{{ flight.flight_number }}</label>
+                          <label>Flight #{{ flight.flightNumber }}</label>
                         </div>
                         <div class="col-md-5 tee-times-inputs">
                           <div class="pr-4">
                             <div class="form-group string required flight_lowest_handicap">
-                              <input label="false" required="required" aria-required="true" placeholder="Lowest HDCP" type="text" id="flight-lowest-handicap" name="Low Handicap" class="form-control string required form-control" v-model="flight.low_handicap">
+                              <input label="false" required="required" aria-required="true" placeholder="Lowest HDCP" type="text" id="flight-lowest-handicap" name="Low Handicap" class="form-control string required form-control" v-model="flight.lowHandicap">
                             </div>
                           </div>
                           <div class="pr-4">
                             <div class="form-group string required flight_highest_handicap">
-                              <input label="false" required="required" aria-required="true" placeholder="Highest HDCP" type="text" id="flight-highest-handicap" name="High Handicap" class="form-control string required form-control" v-model="flight.high_handicap">
+                              <input label="false" required="required" aria-required="true" placeholder="Highest HDCP" type="text" id="flight-highest-handicap" name="High Handicap" class="form-control string required form-control" v-model="flight.highHandicap">
                             </div>
                           </div>
                           <div class="pr-4">
@@ -287,7 +287,7 @@
             <label>Flight</label>
           </div>
             <div class="col-md-8">
-              <multiselect v-model="selectedPayout.flight" :options="tournament_wizard.flights" track-by="flight_number" label="flight_number" placeholder="Choose Flight" :searchable="false">
+              <multiselect v-model="selectedPayout.flight" :options="tournament_wizard.flights" track-by="flightNumber" label="flightNumber" placeholder="Choose Flight" :searchable="false">
               </multiselect>
           </div>
         </div>
