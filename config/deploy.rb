@@ -8,7 +8,7 @@ set :stages, ["staging", "production", "beta"]
 set :default_stage, "production"
 
 set :sidekiq_processes, 4
-set :sidekiq_options_per_process, ["--queue high --queue ezgolfleague_production_mailers --queue rollbar --queue notifications", "--queue high --queue default"]
+set :sidekiq_options_per_process, ["--queue high --queue ezgolfleague_production_mailers --queue rollbar --queue ezgolfleague_production_notifications", "--queue high --queue default"]
 set :init_system, :systemd
 set :service_unit_name, "sidekiq.service"
 
