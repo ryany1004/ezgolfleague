@@ -61,6 +61,7 @@ document.addEventListener("DOMContentLoaded", () => {
       selectedScoringRule: {
         customHoles: []
       },
+      selectedPayout: {},
       selectedScoringRuleHolesOptions: [
         { name: "Front 9", value: "front_nine" },
         { name: "Back 9", value: "back_nine" },
@@ -182,14 +183,28 @@ document.addEventListener("DOMContentLoaded", () => {
 
         this.$modal.hide("scoring-rule");
       },
-      showPayoutsModal(scoringRule) {
+      newPayout(scoringRule) {
+        this.selectedPayout = {
+          scoringRule: scoringRule
+        }
+
         this.$modal.show("payouts");
       },
       hidePayoutsModal() {
         this.$modal.hide("payouts");
       },
       savePayout() {
+        this.tournament_wizard.scoringRules.forEach(scoringRuleGroup => {
+          scoringRuleGroup.forEach(scoringRule => {
+            if (scoringRule.id === this.selectedPayout.scoringRule.id) {
+              scoringRule.payouts.push(this.selectedPayout);
+            }
+          });
+        });
 
+        this.selectedPayout = nil;
+
+        this.$modal.hide("payouts");
       },
       scoringRuleSelected(event) {
         this.selectedScoringRule.custom_holes = [];

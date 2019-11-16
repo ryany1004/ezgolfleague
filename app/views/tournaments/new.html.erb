@@ -166,7 +166,7 @@
                         <template v-if="rule.name">
                           <div class="added-game-type">
                             <p>{{ rule.name }}</p>
-                            <a href="#" class="btn btn-primary" v-on:click="showPayoutsModal(rule)">Add Payout</a>
+                            <a href="#" class="btn btn-primary" v-on:click="newPayout(rule)">Add Payout</a>
                           </div>
                         </template>
                         <template v-else>
@@ -287,25 +287,37 @@
             <label>Flight</label>
           </div>
             <div class="col-md-8">
-              <select></select>
+              <multiselect v-model="selectedPayout.flight" :options="tournament_wizard.flights" track-by="flight_number" label="flight_number" placeholder="Choose Flight" :searchable="false">
+              </multiselect>
           </div>
         </div>
       </div>
-      <div class="step-1-content-form step-1-content pt-0">
+
+      <div class="step-1-content-form step-1-content">
         <div class="row">
           <div class="col-md-3 text-right">
-            <label>Attributes</label>
+            <label>Points</label>
           </div>
           <div class="col-md-8 tee-times-inputs">
-            <div class="pr-4">
-              <input label="false" type="text" class="form-control string required form-control">
-            </div>
             <div>
-              <input label="false" type="text" class="form-control string required form-control">
+              <input label="false" type="text" class="form-control string required form-control" v-model="selectedPayout.points">
             </div>
           </div>
         </div>
-      </div> 
+      </div>
+
+      <div class="step-1-content-form step-1-content">
+        <div class="row">
+          <div class="col-md-3 text-right">
+            <label>Payout $</label>
+          </div>
+          <div class="col-md-8 tee-times-inputs">
+            <div>
+              <input label="false" type="text" class="form-control string required form-control" v-model="selectedPayout.payout">
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
 
     <div class="modal-footer">
