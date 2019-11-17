@@ -194,7 +194,7 @@
                 </div>
                 <div class="cat-card-footer">
                   <button class="btn btn-outline-secondary" v-on:click="lastStage">Previous</button>
-                  <button class="btn btn__ezgl-secondary" v-on:click="saveTournament">Submit</button>
+                  <button class="btn btn__ezgl-secondary" v-on:click="saveTournament" :disabled="!canSubmit">Submit</button>
                 </div>                  
               </div>
             </form>

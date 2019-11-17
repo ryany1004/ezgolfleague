@@ -9,7 +9,7 @@ import VModal from "vue-js-modal";
 import Multiselect from "vue-multiselect";
 
 import Vuelidate from 'vuelidate';
-import { required } from 'vuelidate/lib/validators';
+import { required, minValue } from 'vuelidate/lib/validators';
 
 import EZGLFlight from 'packs/models/flight.js';
 import EZGLScoringRule from 'packs/models/scoring_rule.js'
@@ -67,6 +67,7 @@ document.addEventListener("DOMContentLoaded", () => {
         flightsStepSubmitted: false,
         scoringRulesStepSubmitted: false
       },
+      canSubmit: false,
       isLoading: false,
       filteredCourses: [],
       showFlights: false,
@@ -96,6 +97,9 @@ document.addEventListener("DOMContentLoaded", () => {
         },
         course: {
           required
+        },
+        numberOfPlayers: {
+          minValue: minValue(1)
         }
       }
     },
@@ -115,13 +119,6 @@ document.addEventListener("DOMContentLoaded", () => {
     computed: {
       showCustomHolePicker() {
         if (this.selectedScoringRule.hole_configuration != null && this.selectedScoringRule.hole_configuration.value == 'custom') {
-          return true;
-        } else {
-          return false;
-        }
-      },
-      canSubmitTournament() {
-        if (this.tournamentWizard.scoringRules[0].name != null) {
           return true;
         } else {
           return false;
@@ -246,6 +243,8 @@ document.addEventListener("DOMContentLoaded", () => {
                     className: this.selectedScoringRule.class_name,
                     holeConfiguration: this.selectedScoringRule.hole_configuration
                   });
+
+                  this.canSubmit = true;
 
                   break loop1;
                 }
