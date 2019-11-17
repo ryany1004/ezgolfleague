@@ -20,7 +20,7 @@ class Api::V2::TournamentWizardsController < BaseController
         days.each do |day|
           create_tee_groups(day, payload)
 
-          create_flights(day, payload)
+          create_flights(day, payload) if custom_flights?(payload)
 
           create_scoring_rules(day, payload)
         end
@@ -85,6 +85,13 @@ class Api::V2::TournamentWizardsController < BaseController
 
       tee_time += 8.minutes
     end
+  end
+
+  def custom_flights?(payload)
+    flight_data = payload['flights']
+    return false if flight_data.count == 1 && flight_data.first['high_handicap'] == 300
+
+    true
   end
 
   def create_flights(tournament_day, payload)
