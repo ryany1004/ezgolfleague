@@ -1,5 +1,4 @@
 <div class="col-md-6">
-
   <div class="tournament-card raking-content-card">
     <div class="tournament-card__header">
       <h3 class="p-4">Game Types</h3>
@@ -20,26 +19,19 @@
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td class="pl-4 pr-5">Skins</td>
-            <td>4</td>
-            <td>$20</td>
-            <td>Yes</td>
-            <td>No</td>
-          </tr>
-
-          <tr>
-            <td class="pl-4 pr-5">Scramble</td>
-            <td>4</td>
-            <td>$40</td>
-            <td>No</td>
-            <td>No</td>
-          </tr>
+          <% @tournament.first_day.scoring_rules.each do |rule| %>
+            <tr>
+              <td class="pl-4 pr-5"><%= rule.name %></td>
+              <td><%= rule.users.count %></td>
+              <td><%= number_to_currency(rule.dues_amount) %></td>
+              <td><%= human_boolean(rule.is_opt_in) %></td>
+              <td>-</td>
+            </tr>
+          <% end %>
         </tbody>
       </table>
     </div>
   </div>
-
 </div>
 
 

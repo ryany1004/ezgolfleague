@@ -1,5 +1,4 @@
 <div class="col-md-6">
-
   <div class="tournament-card raking-content-card">
     <div class="tournament-card__header">
       <h3 class="p-4">Flights</h3>
@@ -19,26 +18,19 @@
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td class="pl-4 pr-5">#1</td>
-            <td>68</td>
-            <td>74</td>
-            <td>Whites</td>
-          </tr>
-
-          <tr>
-            <td class="pl-4 pr-5">#2</td>
-            <td>75</td>
-            <td>82</td>
-            <td>Whites</td>
-          </tr>
+          <% @tournament.first_day.flights.each do |f| %>
+            <tr>
+              <td class="pl-4 pr-5">#<%= f.flight_number %></td>
+              <td><%= f.lower_bound %></td>
+              <td><%= f.upper_bound %></td>
+              <td><%= f.course_tee_box.name %></td>
+            </tr>
+          <% end %>
         </tbody>
       </table>
     </div>
   </div>
-
 </div>
-
 
 <div class="modal fade" id="editFlightsModal" tabindex="-1" role="dialog" aria-labelledby="editFlightsCenterTitle" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-lg" role="document">

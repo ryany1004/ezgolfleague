@@ -18,7 +18,7 @@
                   <p>Course:</p>
                 </div>
                 <div class="right">
-                  <p>GLEN OAKS CLUB</p>
+                  <p><%= @tournament.first_day.course.name %></p>
                 </div>
               </div>
             </div>
@@ -29,7 +29,7 @@
                   <p>Sign Up Start:</p>
                 </div>
                 <div class="right">
-                  <p>9/1/19</p>
+                  <p><%= @tournament.signup_opens_at.to_s(:short) %></p>
                 </div>
               </div>
             </div>
@@ -40,7 +40,7 @@
                   <p>Dues?</p>
                 </div>
                 <div class="right">
-                  <p>yes</p>
+                  <p><%= human_boolean(@tournament.mandatory_dues_amount.positive?) %></p>
                 </div>
               </div>
             </div>
@@ -51,7 +51,7 @@
                   <p>show $ payouts?</p>
                 </div>
                 <div class="right">
-                  <p>yes</p>
+                  <p>-</p>
                 </div>
               </div>
             </div>
@@ -64,7 +64,7 @@
                   <p>Date:</p>
                 </div>
                 <div class="right">
-                  <p>12/9/19, 8am</p>
+                  <p><%= @tournament.tournament_starts_at.to_s(:date_and_time) %></p>
                 </div>
               </div>
             </div>
@@ -75,7 +75,7 @@
                   <p>Sign Up End:</p>
                 </div>
                 <div class="right">
-                  <p>9/5/19</p>
+                  <p><%= @tournament.signup_closes_at.to_s(:short) %></p>
                 </div>
               </div>
             </div>
@@ -86,7 +86,7 @@
                   <p>tee time splits:</p>
                 </div>
                 <div class="right">
-                  <p>10 min</p>
+                  <p>8 min</p>
                 </div>
               </div>
             </div>
@@ -97,18 +97,16 @@
                   <p>Scoring Until Finalized?</p>
                 </div>
                 <div class="right">
-                  <p>No</p>
+                  <p><%= human_boolean(@tournament.first_day.enter_scores_until_finalized) %></p>
                 </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-
     </div>
   </div>
 </div>
-
 
 <div class="modal fade" id="editTournamentDetailsModal" tabindex="-1" role="dialog" aria-labelledby="editTournamentDetailsCenterTitle" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
@@ -130,7 +128,7 @@
                   <label>Course</label>
                 </div>
                   <div class="col-md-8">
-                    <%= select_tag('course', options_from_collection_for_select(@courses, 'id', 'name'), {:include_blank => 'Choose a Course...'}) %>
+                    <select></select>
                 </div>
               </div>
             </div>
@@ -157,19 +155,3 @@
     </div>
   </div>
 </div>
-
-<script>
-  var $course_selector = $('#course').selectize({
-      valueField: 'id',
-      labelField: 'name',
-      searchField: 'name',
-      maxItems: '1',
-      placeholder: 'Search for a course...',
-      create: false,
-      render: {
-            option: function (item, escape) {
-                return '<div>' + escape(item.name) + '</div>';
-            }
-      }
-  });
-</script>
