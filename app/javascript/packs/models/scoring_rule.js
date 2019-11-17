@@ -38,6 +38,6 @@ export default class EZGLScoringRule extends Model {
   }
 
   canBeSubmitted() {
-    !this.canBeAssigned();
+    return !this.canBeAssigned();
   }
 }

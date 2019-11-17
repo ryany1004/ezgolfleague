@@ -38,6 +38,7 @@ document.addEventListener("DOMContentLoaded", () => {
         startsAt: null,
         opensAt: null,
         closesAt: null,
+        numberOfPlayers: 0,
         course: null,
         flights: [
           new EZGLFlight({})
@@ -274,6 +275,7 @@ document.addEventListener("DOMContentLoaded", () => {
           opens_at: this.tournamentWizard.opensAt,
           closes_at: this.tournamentWizard.closesAt,
           course_id: this.tournamentWizard.course.id,
+          number_of_players: this.tournamentWizard.numberOfPlayers,
           flights: [],
           scoring_rules: []
         };
@@ -281,7 +283,7 @@ document.addEventListener("DOMContentLoaded", () => {
         this.tournamentWizard.flights.forEach(flight => {
           let f = {
             flight_number: flight.flightNumber,
-            low_handicap: flight.low_handicap,
+            low_handicap: flight.lowHandicap,
             high_handicap: flight.highHandicap,
             tee_box_id: flight.teeBox.id
           };
@@ -317,21 +319,22 @@ document.addEventListener("DOMContentLoaded", () => {
       },
       saveTournament() {
         let tournamentPayload = this.tournamentData();
+        let jsonPayload = JSON.stringify(tournamentPayload);
 
         fetch(`/api/v2/leagues/${props.league.id}/tournament_wizard`, {
-          method: 'post',
+          method: 'POST',
           headers: {
             'Content-Type': 'application/json',
             'X-CSRF-TOKEN': this.csrfToken
           },
-          body: JSON.stringify(tournamentPayload)
+          body: jsonPayload
         }).then(function (response) {
           return response.json();
         }).then(function (data) {
           console.log(data);
-          //handle errors
+          // handle errors
 
-          // window.location.href = data.successUrl;
+          window.location.href = data.url;
         });
       }
     }
