@@ -1,4 +1,6 @@
 class SendNotificationsJob < ApplicationJob
+  queue_as :notifications
+  
   def perform
     @templates = NotificationTemplate.where('deliver_at <= ?', Time.zone.now).where(has_been_delivered: false)
 

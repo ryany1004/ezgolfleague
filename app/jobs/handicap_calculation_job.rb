@@ -1,4 +1,6 @@
 class HandicapCalculationJob < ApplicationJob
+  queue_as :calculations
+
   def perform(league)
     league.league_memberships.each do |membership|
       scorecards = scorecards_for_player(membership.user, league)

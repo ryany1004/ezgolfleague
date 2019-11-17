@@ -1,5 +1,17 @@
+require 'sidekiq/api'
+
 class UpdateUserScorecardJob < ApplicationJob
+  queue_as :calculations
+
   def perform(primary_scorecard, other_scorecards)
+    if job_exists?(primary_scorecard)
+      Rails.logger.info { "UpdateUserScorecardJob for #{primary_scorecard.id} already exists. Bailing..." }
+
+      return
+    else
+      Rails.logger.info { "UpdateUserScorecardJob did not already exist - processing for #{primary_scorecard.id}." }
+    end
+
     primary_user = primary_scorecard.golf_outing.user
 
     primary_scorecard.tournament_day.scoring_rules.each do |rule|
@@ -29,6 +41,28 @@ class UpdateUserScorecardJob < ApplicationJob
 
       Rails.logger.info { "Scoring: #{primary_scorecard.id}. User: #{primary_user.complete_name}. Result: #{result}" } if result.present?
     end
+  end
+
+  # this is a hack that should be replaced
+  def job_exists?(primary_scorecard)
+    queue = Sidekiq::Queue.new('ezgolfleague_production_calculations')
+    queue.each do |j|
+      parsed_job = JSON.parse(j.value)
+      next if parsed_job.blank?
+
+      parsed_args = parsed_job['args']
+      next if parsed_args.blank? || parsed_args.first.blank?
+
+      parsed_arguments = parsed_args.first['arguments']
+      next if parsed_arguments.blank? || parsed_arguments.first.blank?
+
+      global_id = parsed_arguments.first['_aj_globalid']
+      next if global_id.blank?
+
+      return true if global_id.include?(primary_scorecard.id.to_s)
+    end
+
+    false
   end
 
   def clear_caches(primary_scorecard)

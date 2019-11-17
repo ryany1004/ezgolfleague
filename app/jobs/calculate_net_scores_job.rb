@@ -1,4 +1,6 @@
 class CalculateNetScoresJob < ApplicationJob
+  queue_as :calculations
+
   def perform(scorecard)
     stroke_play = StrokePlayScoringRule.new(tournament_day: scorecard.tournament_day)
 

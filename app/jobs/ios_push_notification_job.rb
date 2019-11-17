@@ -1,4 +1,6 @@
 class IosPushNotificationJob < ApplicationJob
+  queue_as :notifications
+  
   def perform(device, body, content_available = false, extra_data = nil)
     return if Rails.env.development?
 
