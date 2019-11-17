@@ -46,10 +46,11 @@ gem 'uglifier', '>= 1.3.0'
 gem 'webpacker'
 
 group :development do
-  gem 'web-console'
+  gem 'capistrano-sidekiq', github: 'seuros/capistrano-sidekiq'
+  gem 'faker'
   gem 'listen'
   gem 'rubocop'
-  gem 'capistrano-sidekiq', github: 'seuros/capistrano-sidekiq'
+  gem 'web-console'
 end
 
 group :development, :test do
