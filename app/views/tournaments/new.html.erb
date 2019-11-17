@@ -49,7 +49,7 @@
                         </div>
                           <div class="col-md-5">
                             <div class="form-group string required tournament_name">
-                              <input label="false" required="required" aria-required="true" placeholder="Choose a name..." type="text" id="tournament_name" class="form-control string required form-control" v-model="tournament_wizard.tournament_name">
+                              <input label="false" required="required" aria-required="true" placeholder="Choose a name..." type="text" id="name" class="form-control string required form-control" v-model="tournamentWizard.name">
                             </div>
                         </div>
                       </div>
@@ -64,7 +64,7 @@
   														<div class="row">
   															<div class="col-12">
                                   <div class="form-group string required tournament_starts_at">
-                                    <date-picker v-model="tournament_wizard.tournament_starts_at"></date-picker>
+                                    <date-picker v-model="tournamentWizard.startsAt"></date-picker>
                                   </div>
   															</div>
   														</div>
@@ -81,10 +81,10 @@
                             <div class="date-inputs">
   														<div class="row">
   															<div class="col-md-6">
-                                  <date-picker v-model="tournament_wizard.tournament_opens_at"></date-picker>
+                                  <date-picker v-model="tournamentWizard.opensAt"></date-picker>
   															</div>
   															<div class="col-md-6">
-                                  <date-picker v-model="tournament_wizard.tournament_closes_at"></date-picker>
+                                  <date-picker v-model="tournamentWizard.closesAt"></date-picker>
   															</div>
   														</div>
                             </div>
@@ -99,7 +99,7 @@
                             <label>Golf Course</label>
                           </div>
                           <div class="col-md-5">
-                            <multiselect v-model="tournament_wizard.course" id="ajax" label="name" track-by="id" placeholder="Type to search for a course by name or location" open-direction="bottom" :options="filteredCourses" :searchable="true" :loading="isLoading" :internal-search="false" :options-limit="300" :limit="3" :max-height="600" :show-no-results="false" :hide-selected="true" @search-change="searchCourses" @select="courseSelected">
+                            <multiselect v-model="tournamentWizard.course" id="ajax" label="name" track-by="id" placeholder="Type to search for a course by name or location" open-direction="bottom" :options="filteredCourses" :searchable="true" :loading="isLoading" :internal-search="false" :options-limit="300" :limit="3" :max-height="600" :show-no-results="false" :hide-selected="true" @search-change="searchCourses" @select="courseSelected">
                               <template slot="singleLabel" slot-scope="{ option }">{{ option.name }}</template>
                               <span slot="noResult">No courses matched your query.</span>
                             </multiselect>
@@ -114,7 +114,7 @@
                 </div><!-- /.step-1-content -->
                 <div class="cat-card-footer">                     
                     <button type="button" class="btn btn-outline-secondary">Cancel</button>
-                    <button class="btn btn__ezgl-secondary" v-on:click="nextStage" :disabled="$v.tournament_wizard.$invalid">Next</button>
+                    <button class="btn btn__ezgl-secondary" v-on:click="nextStage" :disabled="$v.tournamentWizard.$invalid">Next</button>
                 </div>
               </div>
 
@@ -123,8 +123,7 @@
                   <h2 class="text-center">Flights</h2>
                   <p>Manually add flights below.</p>
                   <div class="step-1-content-form">
-
-                    <div v-for="(flight, index) in tournament_wizard.flights" :key="flight.flightNumber">
+                    <div v-for="flight in tournamentWizard.flights" :key="flight.id">
                       <div class="row">
                         <div class="col-md-4 text-right">
                           <label>Flight #{{ flight.flightNumber }}</label>
@@ -146,7 +145,6 @@
                         </div>
                       </div>
                     </div> 
-
                     <div class="btn btn__ezgl-secondary addMoreFlight1" v-on:click="newFlight">Add More</div>
                   </div> 
                 </div>
@@ -161,7 +159,7 @@
                   <h2 class="text-center">Game Types</h2>
                   <p>Add different game types to your tournament.</p>
                   <div class="step-content-game-types">
-                    <div class="row" v-for="(ruleGroup, index) in tournament_wizard.scoringRules">
+                    <div class="row" v-for="(ruleGroup, index) in tournamentWizard.scoringRules">
                       <template v-for="rule in ruleGroup">
                         <template v-if="rule.name">
                           <div class="added-game-type">
@@ -180,7 +178,7 @@
                 </div>
                 <div class="cat-card-footer">
                   <button class="btn btn-outline-secondary" v-on:click="lastStage">Previous</button>
-                  <button type="submit" class="btn btn__ezgl-secondary">Submit</button>
+                  <button class="btn btn__ezgl-secondary" v-on:click="saveTournament">Submit</button>
                 </div>                  
               </div>
             </form>
@@ -287,7 +285,7 @@
             <label>Flight</label>
           </div>
             <div class="col-md-8">
-              <multiselect v-model="selectedPayout.flight" :options="tournament_wizard.flights" track-by="flightNumber" label="flightNumber" placeholder="Choose Flight" :searchable="false">
+              <multiselect v-model="selectedPayout.flight" :options="tournamentWizard.flights" track-by="flightNumber" label="flightNumber" placeholder="Choose Flight" :searchable="false">
               </multiselect>
           </div>
         </div>

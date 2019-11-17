@@ -120,7 +120,7 @@ Rails.application.routes.draw do
       resources :leagues do
         resources :scoring_rules
 
-        resource :tournament_wizard
+        resource :tournament_wizard, only: [:create]
 
         resources :tournaments do
           resources :tournament_days do

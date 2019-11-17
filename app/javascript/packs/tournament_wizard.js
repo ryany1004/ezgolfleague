@@ -22,6 +22,7 @@ Vue.use(Vuelidate)
 document.addEventListener("DOMContentLoaded", () => {
   const anchorElement = document.getElementById("tournament-wizard");
   const props = JSON.parse(anchorElement.getAttribute("data"));
+  const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
   const app = new Vue({
     el: "#tournament-wizard",
@@ -31,11 +32,12 @@ document.addEventListener("DOMContentLoaded", () => {
       VModal
     },
     data: {
-      tournament_wizard: {
-        tournament_name: null,
-        tournament_starts_at: null,
-        tournament_opens_at: null,
-        tournament_closes_at: null,
+      csrfToken: document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+      tournamentWizard: {
+        name: null,
+        startsAt: null,
+        opensAt: null,
+        closesAt: null,
         course: null,
         flights: [
           new EZGLFlight({})
@@ -81,14 +83,14 @@ document.addEventListener("DOMContentLoaded", () => {
       ],
     },
     validations: {
-      tournament_wizard: {
-        tournament_name: {
+      tournamentWizard: {
+        name: {
           required
         },
-        tournament_starts_at: {
+        startsAt: {
           required
         },
-        tournament_closes_at: {
+        closesAt: {
           required
         },
         course: {
@@ -112,6 +114,13 @@ document.addEventListener("DOMContentLoaded", () => {
     computed: {
       showCustomHolePicker() {
         if (this.selectedScoringRule.hole_configuration != null && this.selectedScoringRule.hole_configuration.value == 'custom') {
+          return true;
+        } else {
+          return false;
+        }
+      },
+      canSubmitTournament() {
+        if (this.tournamentWizard.scoringRules[0].name != null) {
           return true;
         } else {
           return false;
@@ -160,16 +169,16 @@ document.addEventListener("DOMContentLoaded", () => {
               response.json().then(function(data) {
                 app.courseTeeBoxes = data;
 
-                if (app.tournament_wizard.flights[0].teeBox == null) {
-                  app.tournament_wizard.flights[0].teeBox = data[0];
+                if (app.tournamentWizard.flights[0].teeBox == null) {
+                  app.tournamentWizard.flights[0].teeBox = data[0];
                 }
               });
             }
           );
       },
       newFlight(event) {
-        var lastFlight = this.tournament_wizard.flights[
-          this.tournament_wizard.flights.length - 1
+        var lastFlight = this.tournamentWizard.flights[
+          this.tournamentWizard.flights.length - 1
         ];
 
         let newFlight = new EZGLFlight({
@@ -178,7 +187,7 @@ document.addEventListener("DOMContentLoaded", () => {
           highHandicap: lastFlight.highHandicap + 100
         });
 
-        this.tournament_wizard.flights.push(newFlight);
+        this.tournamentWizard.flights.push(newFlight);
       },
       toggleFlights(event) {
         $(".step-2-dot").toggleClass("hidden");
@@ -204,7 +213,7 @@ document.addEventListener("DOMContentLoaded", () => {
         this.$modal.hide("payouts");
       },
       savePayout() {
-        this.tournament_wizard.scoringRules.forEach(scoringRuleGroup => {
+        this.tournamentWizard.scoringRules.forEach(scoringRuleGroup => {
           scoringRuleGroup.forEach(scoringRule => {
             if (scoringRule.id === this.selectedPayout.scoringRule.id) {
               scoringRule.payouts.push(this.selectedPayout);
@@ -221,8 +230,8 @@ document.addEventListener("DOMContentLoaded", () => {
       },
       addCurrentScoringRule() {
         loop1:
-          for (var scoringRuleGroupIndex in this.tournament_wizard.scoringRules) {
-            var scoringRuleGroup = this.tournament_wizard.scoringRules[scoringRuleGroupIndex];
+          for (var scoringRuleGroupIndex in this.tournamentWizard.scoringRules) {
+            var scoringRuleGroup = this.tournamentWizard.scoringRules[scoringRuleGroupIndex];
 
             loop2:
               for (var scoringRuleIndex in scoringRuleGroup) {
@@ -257,6 +266,73 @@ document.addEventListener("DOMContentLoaded", () => {
         } else {
           stepper1.to(1);
         }
+      },
+      tournamentData() {
+        let payload = {
+          name: this.tournamentWizard.name,
+          starts_at: this.tournamentWizard.startsAt,
+          opens_at: this.tournamentWizard.opensAt,
+          closes_at: this.tournamentWizard.closesAt,
+          course_id: this.tournamentWizard.course.id,
+          flights: [],
+          scoring_rules: []
+        };
+
+        this.tournamentWizard.flights.forEach(flight => {
+          let f = {
+            flight_number: flight.flightNumber,
+            low_handicap: flight.low_handicap,
+            high_handicap: flight.highHandicap,
+            tee_box_id: flight.teeBox.id
+          };
+
+          payload.flights.push(f);
+        });
+
+        var flatRules = this.tournamentWizard.scoringRules.flat();
+        flatRules.forEach(rule => {
+          if (rule.canBeSubmitted()) {
+            let r = {
+              name: rule.name,
+              class_name: rule.className,
+              hole_configuration: rule.holeConfiguration.value,
+              payouts: []
+            };
+
+            rule.payouts.forEach(payout => {
+              let p = {
+                flight_number: payout.flight.flightNumber,
+                points: payout.points,
+                amount: payout.amount
+              }
+
+              r.payouts.push(p);
+            });
+
+            payload.scoring_rules.push(r);
+          }
+        });
+
+        return payload;
+      },
+      saveTournament() {
+        let tournamentPayload = this.tournamentData();
+
+        fetch(`/api/v2/leagues/${props.league.id}/tournament_wizard`, {
+          method: 'post',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': this.csrfToken
+          },
+          body: JSON.stringify(tournamentPayload)
+        }).then(function (response) {
+          return response.json();
+        }).then(function (data) {
+          console.log(data);
+          //handle errors
+
+          // window.location.href = data.successUrl;
+        });
       }
     }
   });
