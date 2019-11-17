@@ -21,6 +21,7 @@ module HandicapComputer
       return nil if golf_outing.blank? # did not play
 
       course_handicap = course_handicap_for_game_type(golf_outing)
+      course_handicap = course_handicap.round
 
       allowance = Rails.cache.fetch("golf_outing#{golf_outing.id}-#{golf_outing.updated_at.to_i}", expires_in: 15.minute, race_condition_ttl: 10) do
         return nil if golf_outing.course_tee_box.blank?
@@ -35,7 +36,7 @@ module HandicapComputer
 
         if sorted_course_holes_by_handicap.count.positive? && !course_handicap.blank?
           allowance = []
-
+          
           while course_handicap != 0
             sorted_course_holes_by_handicap.each do |hole|
               existing_hole = nil
@@ -59,6 +60,8 @@ module HandicapComputer
                 course_handicap += 1
               end
             end
+
+            Rails.logger.debug { "CH: #{course_handicap}" }
           end
 
           allowance
