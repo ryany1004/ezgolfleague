@@ -1,108 +1,120 @@
-<div class="banner-img fall-classic-img"></div>
-<!-- /.banner-img -->
+<% content_for :head do -%>
+  <%= javascript_pack_tag 'tournament_show' %>
+<% end -%>
 
-<div class="container pt-130">
-  <div class="dashboard-header ttt-header fall-classic-header">
-    <div class="row">
-      <div class="col-md-8">
-        <h2><%= truncate(@tournament.name, length: 40) %></h2>
-        <a class="dropdown">
-          <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <%= image_tag('settings.png') %>
+<% props = {
+    league: @league
+  }.to_json
+%>
+
+<div id="tournament-show" data="<%= props %>">
+
+  <div class="banner-img fall-classic-img"></div>
+  <!-- /.banner-img -->
+
+  <div class="container pt-130">
+    <div class="dashboard-header ttt-header fall-classic-header">
+      <div class="row">
+        <div class="col-md-8">
+          <h2><%= truncate(@tournament.name, length: 40) %></h2>
+          <a class="dropdown">
+            <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <%= image_tag('settings.png') %>
+            </a>
+
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+              <a class="dropdown-item" href="#">Print Scorecards</a>
+              <%= link_to "Message Golfers", "#", class:"dropdown-item", data: { toggle:"modal", target:"#sendMessageModal" } %>
+            </div>
           </a>
-
-          <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-            <a class="dropdown-item" href="#">Print Scorecards</a>
-            <%= link_to "Message Golfers", "#", class:"dropdown-item", data: { toggle:"modal", target:"#sendMessageModal" } %>
-          </div>
-        </a>
-      </div>
-      <!-- /.col-md-8 --> 
-      <div class="col-md-4 text-right">
-        <% if @tournament.tournament_state == TournamentState::REGISTRATION %>
-          <a href="#add-players" class="btn btn-primary popup-with-zoom-anim">Manage Players/Tee Times</a>
-        <% elsif @tournament.tournament_state == TournamentState::REVIEW_SCORES %>
-          <%= link_to "Calculate Results", "#", class: 'btn btn-primary' %>
-        <% elsif @tournament.tournament_state == TournamentState::POST_SCORES %>
-          <%= link_to "Edit Results", "#", class: 'btn btn-primary' %>
-        <% end %>
-      </div>
-    </div>
-    <!-- /.row -->         
-  </div>
-  <!-- /.dashboard-header --> 
-
-  <%= render partial: 'tournament_details' %>
-
-  <div class="container p-0 mb-5">
-    <div class="row">
-      <%= render partial: 'flight_details' %>
-
-      <%= render partial: 'game_types' %>
-    </div>
-  </div>
-
-  <div class="container p-0 mb-5">
-    <div class="row">
-      <div class="col-md-12">
-        <div class="raking-content-card teatime-content-card">
-          <div class="raking-content-header-card">
-            <ul class="nav nav-pills">
-              <% if @tournament.tournament_state == TournamentState::REGISTRATION %>
-                <li class="nav-item tee-times-full-tab">
-                  <a class="nav-link active" data-toggle="pill" href="#tee-time-tab">Players/Tee Times</a>
-                  <%= link_to "Edit", "#add-players", class: 'btn btn__ezgl-secondary popup-with-zoom-anim' %>
-                </li>
-              <% elsif @tournament.tournament_state == TournamentState::REVIEW_SCORES %>
-                <li class="nav-item">
-                  <a class="nav-link active" data-toggle="pill" href="#rankings-tab">Rankings</a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" data-toggle="pill" href="#contests-tab">Contests</a>
-                </li>
-              <% elsif @tournament.tournament_state == TournamentState::POST_SCORES %>
-                <li class="nav-item">
-                  <a class="nav-link active" data-toggle="pill" href="#rankings-tab">Rankings</a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" data-toggle="pill" href="#contests-tab">Contests</a>
-                </li>
-              <% end %>
-            </ul>
-          </div>
-          <div class="tab-content">
-            <% if @tournament.tournament_state == TournamentState::REGISTRATION %>
-              <%= render partial: 'player_tab', locals: { tournament_day: @tournament.first_day } %>
-
-              <%= render partial: 'tee_time_tab', locals: { tournament_day: @tournament.first_day } %>
-            <% elsif @tournament.tournament_state == TournamentState::REVIEW_SCORES %>
-              <%= render partial: 'rankings_tab', locals: { tournament_day: @tournament.first_day } %>
-
-              <%= render partial: 'contests_tab', locals: { tournament_day: @tournament.first_day } %>
-            <% elsif @tournament.tournament_state == TournamentState::POST_SCORES %>
-              <%= render partial: 'rankings_tab', locals: { tournament_day: @tournament.first_day } %>
-
-              <%= render partial: 'contests_tab', locals: { tournament_day: @tournament.first_day } %>
-            <% end %>
-          </div>
+        </div>
+        <!-- /.col-md-8 --> 
+        <div class="col-md-4 text-right">
+          <% if @tournament.tournament_state == TournamentState::REGISTRATION %>
+            <a href="#" class="btn btn-primary" v-on:click="showTeeTimeEditorModal(addId)">Manage Players/Tee Times</a>
+          <% elsif @tournament.tournament_state == TournamentState::REVIEW_SCORES %>
+            <%= link_to "Calculate Results", "#", class: 'btn btn-primary' %>
+          <% elsif @tournament.tournament_state == TournamentState::POST_SCORES %>
+            <%= link_to "Edit Results", "#", class: 'btn btn-primary' %>
+          <% end %>
         </div>
       </div>
-      <!-- /.col-md-8 -->  
+      <!-- /.row -->         
     </div>
-    <!-- /.row -->         
+    <!-- /.dashboard-header --> 
+
+    <%= render partial: 'tournament_details' %>
+
+    <div class="container p-0 mb-5">
+      <div class="row">
+        <%= render partial: 'flight_details' %>
+
+        <%= render partial: 'game_types' %>
+      </div>
+    </div>
+
+    <div class="container p-0 mb-5">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="raking-content-card teatime-content-card">
+            <div class="raking-content-header-card">
+              <ul class="nav nav-pills">
+                <% if @tournament.tournament_state == TournamentState::REGISTRATION %>
+                  <li class="nav-item tee-times-full-tab">
+                    <a class="nav-link active" data-toggle="pill" href="#tee-time-tab">Players/Tee Times</a>
+                    <%= link_to "Edit", "#add-players", class: 'btn btn__ezgl-secondary popup-with-zoom-anim' %>
+                  </li>
+                <% elsif @tournament.tournament_state == TournamentState::REVIEW_SCORES %>
+                  <li class="nav-item">
+                    <a class="nav-link active" data-toggle="pill" href="#rankings-tab">Rankings</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" data-toggle="pill" href="#contests-tab">Contests</a>
+                  </li>
+                <% elsif @tournament.tournament_state == TournamentState::POST_SCORES %>
+                  <li class="nav-item">
+                    <a class="nav-link active" data-toggle="pill" href="#rankings-tab">Rankings</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" data-toggle="pill" href="#contests-tab">Contests</a>
+                  </li>
+                <% end %>
+              </ul>
+            </div>
+            <div class="tab-content">
+              <% if @tournament.tournament_state == TournamentState::REGISTRATION %>
+                <%= render partial: 'player_tab', locals: { tournament_day: @tournament.first_day } %>
+
+                <%= render partial: 'tee_time_tab', locals: { tournament_day: @tournament.first_day } %>
+              <% elsif @tournament.tournament_state == TournamentState::REVIEW_SCORES %>
+                <%= render partial: 'rankings_tab', locals: { tournament_day: @tournament.first_day } %>
+
+                <%= render partial: 'contests_tab', locals: { tournament_day: @tournament.first_day } %>
+              <% elsif @tournament.tournament_state == TournamentState::POST_SCORES %>
+                <%= render partial: 'rankings_tab', locals: { tournament_day: @tournament.first_day } %>
+
+                <%= render partial: 'contests_tab', locals: { tournament_day: @tournament.first_day } %>
+              <% end %>
+            </div>
+          </div>
+        </div>
+        <!-- /.col-md-8 -->  
+      </div>
+      <!-- /.row -->         
+    </div>
+    <!-- /.container -->
   </div>
-  <!-- /.container -->
-</div>
-<!-- /.container --> 
+  <!-- /.container --> 
 
-<div id="add-players" class="zoom-anim-dialog mfp-hide">
-  <%= render partial: 'add_players', locals: { tournament_day: @tournament.first_day, tournament: @tournament } %>   
-</div>
+  <vue-modal name="tee-time-editor" height="auto" width="85%" :scrollable="false" @opened="openedTeeTimeEditor" clickToClose="true">
+    <%= render partial: 'add_players', locals: { tournament_day: @tournament.first_day, tournament: @tournament } %>   
+  </vue-modal>
 
-<div class="modal fade" id="sendMessageModal" tabindex="-1" role="dialog" aria-labelledby="sendMessageModalCenterTitle" aria-hidden="true">
-  <%= render partial: 'send_message' %>
-</div>
+  <div class="modal fade" id="sendMessageModal" tabindex="-1" role="dialog" aria-labelledby="sendMessageModalCenterTitle" aria-hidden="true">
+    <%= render partial: 'send_message' %>
+  </div>
 
-<div class="modal fade" id="editGolferModal" tabindex="-1" role="dialog" aria-labelledby="editGolferModalCenterTitle" aria-hidden="true">
-  <%= render partial: 'edit_golfer' %>
+  <div class="modal fade" id="editGolferModal" tabindex="-1" role="dialog" aria-labelledby="editGolferModalCenterTitle" aria-hidden="true">
+    <%= render partial: 'edit_golfer' %>
+  </div>
 </div>

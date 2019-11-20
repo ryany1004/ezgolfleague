@@ -2170,10 +2170,11 @@ select.selectpicker {
 
 /* Styles for dialog window */
 #edit-tee-times,
+.edit-tee-times,
 #edit-teams,
 #add-players {
   background: white;
-  max-width: 85%;
+  max-width: 100%;
   margin: 40px auto;
   position: relative;
   border-radius: 5px;
@@ -2311,8 +2312,9 @@ select.selectpicker {
 }
 
 .edit-tee-times-right-content {
-  padding: 10px 0px 25px 20px;
+  padding: 10px 20px 25px;
   height: 600px;
+  overflow: scroll;
 }
 
 .edit-tee-times-right-content .media {
