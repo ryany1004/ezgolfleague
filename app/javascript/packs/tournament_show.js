@@ -27,26 +27,16 @@ document.addEventListener("DOMContentLoaded", () => {
     computed: {},
     methods: {
       showTeeTimeEditorModal(addId) {
-        console.log(addId);
         this.$modal.show("tee-time-editor");
+        const clickLink = "#grp-" + addId;
 
         setTimeout(function() {
-          $("#add-players").animate(
-            { scrollTop: $(".tee-time-popup." + addId).offset().top - 80 },
-            500
-          );
-        }, 1000);
-      },
-
-      openedTeeTimeEditor(e) {
-        console.log("opened", e);
-        console.log("ref", e.ref);
+          document
+            .getElementById("listScrollLink")
+            .setAttribute("href", clickLink);
+          document.getElementById("listScrollLink").click();
+        }, 100);
       }
     }
   });
 });
-
-$("#add-players").animate(
-  { scrollTop: $(".tee-time-popup.6449").offset().top - 80 },
-  500
-);

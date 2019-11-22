@@ -24,21 +24,31 @@
           </div>
 
           <div class="col-md-8">
-            <div class="edit-tee-times-right-content mCustomScrollbar" data-mcs-theme="dark" id="sortable-groups">
+
+            <nav id="autoScroll" class="navbar hidden">
+              <ul class="nav nav-pills">
+                <li class="nav-item">
+                  <a class="nav-link" id="listScrollLink" href="#"></a>
+                </li>
+              </ul>
+            </nav>
+
+            <div class="edit-tee-times-right-content mCustomScrollbar" data-spy="scroll" data-target="#autoScroll" data-offset="50" data-mcs-theme="dark" id="sortable-groups">
 
               <div class="addTeeTimeGreyBtn mt-2">
                 <p>Add Previous Tee Time</p>
               </div>
 
+
               <% tournament_day.tournament_groups.each_with_index do |group, i| %>
-                <div class="heading-style tee-time-popup <%= group.id %>">
+                <div class="heading-style tee-time-popup" id="grp-<%= group.id %>">
                   <h2 class="text-uppercase">
-                    <div class='input-group date editTeeTimeText' id="<%= group.id %>">
+                    <div class='input-group date editTeeTimeText' >
                       <input type='text' class="form-control editTeeTimeInput noBorder <%= group.id %>" value="<%= group.tee_time_at.to_s(:time_only) %>" /> 
                     </div>
                   </h2>
                   <span class="input-group-addon">
-                    <i class="fas fa-pencil-alt editTeeTimeIcon" id="<%= group.id %>"></i>
+                    <i class="fas fa-pencil-alt editTeeTimeIcon" id="a"></i>
                   </span>
                   <i class="fas fa-trash"></i>
                 </div>
@@ -120,10 +130,11 @@
 
                 <% outings_count = 0 %>
               <% end %>
-
+              
               <div class="addTeeTimeGreyBtn">
                 <p>Add Next Tee Time</p>
               </div>
+
             </div><!-- /.tee-times-panel-content -->
           </div>
       </div>
