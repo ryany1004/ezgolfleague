@@ -1,27 +1,31 @@
 /* eslint no-console:0 */
 
-import Vue from "vue/dist/vue.esm.js";
+import Vue from 'vue/dist/vue.esm.js';
 
-import datePicker from "vue-bootstrap-datetimepicker";
-import "pc-bootstrap4-datetimepicker/build/css/bootstrap-datetimepicker.css";
+import datePicker from 'vue-bootstrap-datetimepicker';
+import 'pc-bootstrap4-datetimepicker/build/css/bootstrap-datetimepicker.css';
 
-import VModal from "vue-js-modal";
-import Multiselect from "vue-multiselect";
+import VModal from 'vue-js-modal';
+import Multiselect from 'vue-multiselect';
 
 import Vuelidate from 'vuelidate';
 import { required, minValue } from 'vuelidate/lib/validators';
+
+import IndividualStrokePlaySetup from 'components/ScoringRuleSetup/IndividualStrokePlaySetup';
 
 import EZGLFlight from 'packs/models/flight.js';
 import EZGLScoringRule from 'packs/models/scoring_rule.js'
 import EZGLPayout from 'packs/models/payout.js'
 
-Vue.use(VModal, { componentName: "vue-modal" });
-Vue.component("multiselect", Multiselect);
+Vue.use(VModal, { componentName: 'vue-modal' });
 Vue.use(Vuelidate)
+Vue.component('multiselect', Multiselect);
 
-document.addEventListener("DOMContentLoaded", () => {
-  const anchorElement = document.getElementById("tournament-wizard");
-  const props = JSON.parse(anchorElement.getAttribute("data"));
+Vue.component('stroke-play-setup', IndividualStrokePlaySetup);
+
+document.addEventListener('DOMContentLoaded', () => {
+  const anchorElement = document.getElementById('tournament-wizard');
+  const props = JSON.parse(anchorElement.getAttribute('data'));
   const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
   const app = new Vue({
@@ -29,7 +33,8 @@ document.addEventListener("DOMContentLoaded", () => {
     components: {
       datePicker,
       Multiselect,
-      VModal
+      VModal,
+      IndividualStrokePlaySetup
     },
     data: {
       csrfToken: document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
@@ -75,6 +80,7 @@ document.addEventListener("DOMContentLoaded", () => {
       courseTeeBoxes: [],
       scoringRules: [],
       selectedScoringRule: {
+        customConfiguration: {},
         customHoles: []
       },
       selectedPayout: {},
@@ -106,6 +112,12 @@ document.addEventListener("DOMContentLoaded", () => {
         method: "GET",
         success: function(data) {
           app.scoringRules = data.flat(1);
+
+          app.scoringRules.forEach(ruleGroup => {
+            ruleGroup.games.forEach(rule => {
+              rule.customConfiguration = {};
+            });
+          });
         },
         error: function(error) {
           console.log(error);
@@ -243,6 +255,15 @@ document.addEventListener("DOMContentLoaded", () => {
       },
       scoringRuleSelected(event) {
         this.selectedScoringRule.custom_holes = [];
+        this.selectedScoringRule.customConfiguration = {};
+      },
+      scoringRuleOptionUpdated(updatedOptions) {
+        Object.entries(updatedOptions).forEach(entry => {
+          let key = entry[0];
+          let value = entry[1];
+
+          this.selectedScoringRule.customConfiguration[key] = value;
+        });
       },
       addCurrentScoringRule() {
         loop1:
@@ -259,7 +280,8 @@ document.addEventListener("DOMContentLoaded", () => {
                   scoringRuleGroup[index] = new EZGLScoringRule({
                     name: this.selectedScoringRule.name,
                     className: this.selectedScoringRule.class_name,
-                    holeConfiguration: this.selectedScoringRule.hole_configuration
+                    holeConfiguration: this.selectedScoringRule.hole_configuration,
+                    customConfiguration: this.selectedScoringRule.customConfiguration
                   });
 
                   this.canSubmit = true;
@@ -284,6 +306,9 @@ document.addEventListener("DOMContentLoaded", () => {
         } else {
           stepper1.to(1);
         }
+      },
+      hideErrorModal() {
+        this.$modal.hide("save-errors");
       },
       tournamentData() {
         let payload = {
@@ -315,6 +340,7 @@ document.addEventListener("DOMContentLoaded", () => {
               name: rule.name,
               class_name: rule.className,
               hole_configuration: rule.holeConfiguration.value,
+              custom_configuration: rule.customConfiguration,
               payouts: []
             };
 
@@ -348,10 +374,11 @@ document.addEventListener("DOMContentLoaded", () => {
         }).then(function (response) {
           return response.json();
         }).then(function (data) {
-          console.log(data);
-          // handle errors
-
-          window.location.href = data.url;
+          if (data.errors.length > 0) {
+            app.$modal.show("save-errors");
+          } else {
+            window.location.href = data.url;
+          }          
         });
       }
     }

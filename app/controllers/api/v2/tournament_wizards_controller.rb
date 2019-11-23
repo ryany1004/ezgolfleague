@@ -18,6 +18,8 @@ class Api::V2::TournamentWizardsController < BaseController
       if tournament.save
         days = create_tournament_days(tournament, payload)
         days.each do |day|
+          next if day.invalid?
+
           create_tee_groups(day, payload)
 
           create_flights(day, payload) if custom_flights?(payload)
@@ -114,6 +116,7 @@ class Api::V2::TournamentWizardsController < BaseController
       scoring_rule.is_opt_in = false
 
       if scoring_rule.save
+        assign_custom_configuration(scoring_rule, s['custom_configuration'])
         assign_course_holes(scoring_rule, s['hole_configuration'])
         update_primary_scoring_rule(tournament_day)
         manage_shadow_stroke_play(tournament_day)
@@ -148,6 +151,10 @@ class Api::V2::TournamentWizardsController < BaseController
     end
 
     payouts
+  end
+
+  def assign_custom_configuration(scoring_rule, custom_config)
+    scoring_rule.save_setup_details(custom_config)
   end
 
   def assign_course_holes(scoring_rule, hole_information)

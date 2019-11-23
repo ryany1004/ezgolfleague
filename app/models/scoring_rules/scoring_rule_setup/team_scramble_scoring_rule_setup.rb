@@ -1,6 +1,6 @@
 module TeamScrambleScoringRuleSetup
-  def setup_partial
-    'shared/game_type_setup/team_scramble'
+  def setup_component_name
+    'team_scramble'
   end
 
   def scorecard_score_cell_partial

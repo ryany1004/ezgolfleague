@@ -281,7 +281,9 @@
             </div>
           </div>
         </div>
-      </div> 
+      </div>
+
+      <stroke-play-setup v-if="selectedScoringRule.setup_component_name === 'individual_stroke_play'" @nine-hole-tiebreaking-changed="scoringRuleOptionUpdated"/>
     </div>
 
     <div class="modal-footer">
@@ -337,6 +339,23 @@
     <div class="modal-footer">
       <button type="button" class="btn btn-default" v-on:click="hidePayoutsModal">Cancel</button>
       <button type="button" class="btn__ezgl-secondary" v-on:click="savePayout">Save</button>
+    </div>
+  </vue-modal>
+
+  <vue-modal name="save-errors" height="auto">
+    <div class="welcome p-5">
+      <div class="p-3">
+        <h2 style="font-size:30px;">Save Error</h2>
+      </div>
+      <div class="step-1-content-form step-1-content">
+        <div class="row">
+          <p>We were unable to save your tournament. Please check your data and re-submit.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-footer">
+      <button type="button" class="btn btn-default" v-on:click="hideErrorModal">OK</button>
     </div>
   </vue-modal>
 </div>

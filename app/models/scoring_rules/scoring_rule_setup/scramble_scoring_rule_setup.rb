@@ -1,6 +1,6 @@
 module ScrambleScoringRuleSetup
-  def setup_partial
-    'shared/game_type_setup/scramble'
+  def setup_component_name
+    'scramble'
   end
 
   def scorecard_score_cell_partial

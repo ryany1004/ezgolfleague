@@ -1,23 +1,24 @@
 module StrokePlayScoringRuleSetup
-	def setup_partial
-		'shared/game_type_setup/individual_stroke_play'
-	end
+  def setup_component_name
+    'individual_stroke_play'
+  end
 
   def use_back_nine_key
-   	"ShouldUseBackNineForTies-T-#{self.tournament_day.id}-#{self.id}"
+    "ShouldUseBackNineForTies-T-#{tournament_day.id}-#{id}"
   end
 
   def legacy_use_back_nine_key
-    "ShouldUseBackNineForTies-T-#{self.tournament_day.id}-1"
+    "ShouldUseBackNineForTies-T-#{tournament_day.id}-1"
   end
 
   def save_setup_details(game_type_options)
-    should_use_back_nine_for_ties = 0
-    should_use_back_nine_for_ties = 1 if game_type_options['use_back_9_to_handle_ties'] == 'true'
-
-    metadata = GameTypeMetadatum.find_or_create_by(search_key: use_back_nine_key)
-    metadata.integer_value = should_use_back_nine_for_ties
-    metadata.save
+    if game_type_options['nineHoleTiebreaking']
+      metadata = GameTypeMetadatum.find_or_create_by(search_key: use_back_nine_key)
+      metadata.integer_value = 1
+      metadata.save
+    else
+      remove_game_type_options
+    end
   end
 
   def remove_game_type_options

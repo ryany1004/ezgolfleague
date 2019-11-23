@@ -1,6 +1,6 @@
 module ThreeBestBallsOfFourScoringRuleSetup
-  def setup_partial
-    'shared/game_type_setup/three_best_balls_of_four'
+  def setup_component_name
+    'three_best_balls_of_four'
   end
 
   def should_add_par_key

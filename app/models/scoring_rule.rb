@@ -288,15 +288,15 @@ class ScoringRule < ApplicationRecord
 end
 
 class ScoringRuleOption
-  attr_accessor :name, :class_name, :custom_name_allowed, :setup_partial, :show_course_holes
+  attr_accessor :name, :class_name, :custom_name_allowed, :setup_component_name, :show_course_holes
 
-  def self.option(name:, class_name:, custom_name_allowed:, setup_partial:, show_course_holes:)
+  def self.option(name:, class_name:, custom_name_allowed:, setup_component_name:, show_course_holes:)
     o = ScoringRuleOption.new
 
     o.name = name
     o.class_name = class_name
     o.custom_name_allowed = custom_name_allowed
-    o.setup_partial = setup_partial
+    o.setup_component_name = setup_component_name
     o.show_course_holes = show_course_holes
 
     o
@@ -326,7 +326,7 @@ class ScoringRuleOption
       individual << ScoringRuleOption.option(name: instance.name,
                                              class_name: i,
                                              custom_name_allowed: instance.allows_custom_name?,
-                                             setup_partial: instance.setup_partial,
+                                             setup_component_name: instance.setup_component_name,
                                              show_course_holes: instance.show_course_holes?)
     end
 
@@ -347,7 +347,7 @@ class ScoringRuleOption
       team << ScoringRuleOption.option(name: instance.name,
                                        class_name: i,
                                        custom_name_allowed: instance.allows_custom_name?,
-                                       setup_partial: instance.setup_partial,
+                                       setup_component_name: instance.setup_component_name,
                                        show_course_holes: instance.show_course_holes?)
     end
 

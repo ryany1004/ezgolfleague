@@ -61,7 +61,7 @@ class SkinsScoringRule < ScoringRule
   end
 
   # TODO: Move these to the base class somehow? Seems lame to have to define as nil if they are simply not supported
-  def setup_partial
+  def setup_component_name
     nil
   end
 

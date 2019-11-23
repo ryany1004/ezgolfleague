@@ -1,8 +1,8 @@
 module StablefordScoringRuleSetup
-	def setup_partial
-		'shared/game_type_setup/individual_stableford'
-	end
-
+  def setup_component_name
+    'individual_stableford'
+  end
+  
   def leaderboard_partial_name
     'stableford_leaderboard'
   end

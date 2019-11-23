@@ -41,9 +41,9 @@ class MatchPlayScoringRule < StrokePlayScoringRule
 		"Details"
 	end
 
-	def setup_partial
-		nil
-	end
+  def setup_component_name
+    nil
+  end
 
 	def can_be_played?
 	  return false if self.tournament_day.tournament_groups.count.zero?
