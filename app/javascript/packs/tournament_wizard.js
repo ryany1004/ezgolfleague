@@ -70,6 +70,7 @@ document.addEventListener("DOMContentLoaded", () => {
       canSubmit: false,
       isLoading: false,
       filteredCourses: [],
+      showBackNineHoles: false,
       showFlights: false,
       courseTeeBoxes: [],
       scoringRules: [],
@@ -77,12 +78,7 @@ document.addEventListener("DOMContentLoaded", () => {
         customHoles: []
       },
       selectedPayout: {},
-      selectedScoringRuleHolesOptions: [
-        { name: "Front 9", value: "front_nine" },
-        { name: "Back 9", value: "back_nine" },
-        { name: "All 18", value: "all_holes" },
-        { name: "Custom", value: "custom" }
-      ],
+      selectedScoringRuleHolesOptions: [],
     },
     validations: {
       tournamentWizard: {
@@ -146,7 +142,9 @@ document.addEventListener("DOMContentLoaded", () => {
                 var courses = [];
 
                 data.forEach(course => {
-                  courses.push({ id: course.id, name: `${course.name} in ${course.city}, ${course.us_state}` });
+                  courses.push({ id: course.id,
+                                 name: `${course.name} in ${course.city}, ${course.us_state}`,
+                                 number_of_holes: course.number_of_holes });
                 });
 
                 app.filteredCourses = courses;
@@ -164,6 +162,8 @@ document.addEventListener("DOMContentLoaded", () => {
                 return;
               }
 
+              app.configureHoleOptions(selectedOption.number_of_holes);
+
               response.json().then(function(data) {
                 app.courseTeeBoxes = data;
 
@@ -173,6 +173,24 @@ document.addEventListener("DOMContentLoaded", () => {
               });
             }
           );
+      },
+      configureHoleOptions(numberOfHoles) {
+        let holeOptions = [];
+
+        if (numberOfHoles >= 9) {
+          holeOptions.push({ name: "Front 9", value: "front_nine" });
+        }
+
+        if (numberOfHoles == 18) {
+          holeOptions.push({ name: "Back 9", value: "back_nine" });
+          holeOptions.push({ name: "All 18", value: "all_holes" });
+
+          this.showBackNineHoles = true;
+        }
+
+        holeOptions.push({ name: "Custom", value: "custom" });
+
+        this.selectedScoringRuleHolesOptions = holeOptions;
       },
       newFlight(event) {
         var lastFlight = this.tournamentWizard.flights[

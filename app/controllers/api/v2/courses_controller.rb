@@ -7,7 +7,7 @@ class Api::V2::CoursesController < BaseController
     @courses = @courses
                .where('lower(name) LIKE ? OR lower(city) LIKE ? OR lower(us_state) LIKE ?', search_string, search_string, search_string)
 
-    render json: @courses.to_json
+    render json: @courses.to_json(methods: :number_of_holes)
   end
 
   def show

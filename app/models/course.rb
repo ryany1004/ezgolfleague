@@ -21,6 +21,10 @@ class Course < ApplicationRecord
     end
   end
 
+  def number_of_holes
+    course_holes.count
+  end
+
   def geocode
     return if street_address_1.blank?
 

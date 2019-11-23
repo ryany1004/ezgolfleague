@@ -267,7 +267,7 @@
                 <input type="checkbox" value="8" v-model="selectedScoringRule.customHoles"> Hole 8<br>
                 <input type="checkbox" value="9" v-model="selectedScoringRule.customHoles"> Hole 9<br>
               </div>
-              <div class="pl-5">
+              <div class="pl-5" v-if="showBackNineHoles">
                 <input type="checkbox" value="10" v-model="selectedScoringRule.customHoles"> Hole 10<br>
                 <input type="checkbox" value="11" v-model="selectedScoringRule.customHoles"> Hole 11<br>
                 <input type="checkbox" value="12" v-model="selectedScoringRule.customHoles"> Hole 12<br>
