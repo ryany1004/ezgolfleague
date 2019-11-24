@@ -43,6 +43,8 @@ document.addEventListener('DOMContentLoaded', () => {
         startsAt: null,
         opensAt: null,
         closesAt: null,
+        showTeeTimes: false,
+        enterScoresUntilFinalized: false,
         numberOfPlayers: 0,
         course: null,
         flights: [
@@ -134,6 +136,9 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     },
     methods: {
+      cancelWizard() {
+        window.history.back();
+      },
       searchCourses(query) {
         if (query === "") { return }
 
@@ -318,6 +323,8 @@ document.addEventListener('DOMContentLoaded', () => {
           closes_at: this.tournamentWizard.closesAt,
           course_id: this.tournamentWizard.course.id,
           number_of_players: this.tournamentWizard.numberOfPlayers,
+          show_tee_times: this.tournamentWizard.showTeeTimes,
+          enter_scores_until_finalized: this.tournamentWizard.enterScoresUntilFinalized,
           flights: [],
           scoring_rules: []
         };

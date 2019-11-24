@@ -11,8 +11,8 @@ class Api::V2::TournamentWizardsController < BaseController
                                 signup_opens_at: formatted_time(payload['opens_at']),
                                 signup_closes_at: formatted_time(payload['closes_at']),
                                 auto_schedule_for_multi_day: 0,
-                                show_players_tee_times: true,
-                                allow_credit_card_payment: false)
+                                show_players_tee_times: payload['show_tee_times'],
+                                allow_credit_card_payment: league.stripe_is_setup?)
 
     Tournament.transaction do
       if tournament.save
@@ -66,6 +66,7 @@ class Api::V2::TournamentWizardsController < BaseController
   def create_tournament_days(tournament, payload)
     day = TournamentDay.new(tournament: tournament,
                             course: course(payload['course_id']),
+                            enter_scores_until_finalized: payload['enter_scores_until_finalized'],
                             tournament_at: formatted_time(payload['starts_at']))
 
     if day.save

@@ -110,6 +110,42 @@
                       </div>
                     </div> 
                     <div class="form-group">
+                      <div class="row">
+                        <div class="col-md-4 text-right">
+                          <label>Players Should See Tee-Times</label>
+                        </div>
+                          <div class="col-md-5">
+                            <div style="padding-right:24px;">
+                              <div class="row">
+                                <div class="col-12">
+                                  <div class="form-group string required">
+                                    <input type="checkbox" id="show-tee-times" v-model="showTeeTimes">
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                        </div>
+                      </div>
+                    </div> 
+                    <div class="form-group">
+                      <div class="row">
+                        <div class="col-md-4 text-right">
+                          <label>Allow Players to Enter Scores Until Finalized</label>
+                        </div>
+                          <div class="col-md-5">
+                            <div style="padding-right:24px;">
+                              <div class="row">
+                                <div class="col-12">
+                                  <div class="form-group string required">
+                                    <input type="checkbox" id="enter-scores-until-finalized" v-model="enterScoresUntilFinalized">
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                        </div>
+                      </div>
+                    </div> 
+                    <div class="form-group">
                         <div class="row">
                           <div class="col-md-4 text-right">
                             <label>Golf Course</label>
@@ -129,7 +165,7 @@
                   </div>            
                 </div><!-- /.step-1-content -->
                 <div class="cat-card-footer">                     
-                    <button type="button" class="btn btn-outline-secondary">Cancel</button>
+                    <button type="button" class="btn btn-outline-secondary" v-on:click="cancelWizard">Cancel</button>
                     <button class="btn btn__ezgl-secondary" v-on:click="nextStage" :disabled="$v.tournamentWizard.$invalid">Next</button>
                 </div>
               </div>
