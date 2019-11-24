@@ -39,7 +39,7 @@ class Api::V2::TournamentWizardsController < BaseController
 
     Rails.logger.info("Errors: #{@errors}")
 
-    render json: { tournament_id: tournament.id, url: url, errors: @errors.to_json }
+    render json: { tournament_id: tournament.id, url: url, errors: @errors }
   end
 
   private
