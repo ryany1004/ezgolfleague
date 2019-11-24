@@ -15,7 +15,6 @@ import IndividualStrokePlaySetup from 'components/ScoringRuleSetup/IndividualStr
 
 import EZGLFlight from 'packs/models/flight.js';
 import EZGLScoringRule from 'packs/models/scoring_rule.js'
-import EZGLPayout from 'packs/models/payout.js'
 
 Vue.use(VModal, { componentName: 'vue-modal' });
 Vue.use(Vuelidate)
@@ -237,7 +236,10 @@ document.addEventListener('DOMContentLoaded', () => {
       },
       newPayout(scoringRule) {
         this.selectedPayout = {
-          scoringRule: scoringRule
+          scoringRule: scoringRule,
+          flight: this.tournamentWizard.flights[0],
+          points: 0,
+          payout: 0
         }
 
         this.$modal.show("payouts");
@@ -354,8 +356,8 @@ document.addEventListener('DOMContentLoaded', () => {
             rule.payouts.forEach(payout => {
               let p = {
                 flight_number: payout.flight.flightNumber,
-                points: payout.points,
-                amount: payout.amount
+                points: payout.points ? payout.points : 0,
+                amount: payout.amount ? payout.amount : 0
               }
 
               r.payouts.push(p);
