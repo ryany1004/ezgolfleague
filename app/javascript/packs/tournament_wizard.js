@@ -1,5 +1,3 @@
-/* eslint no-console:0 */
-
 import Vue from 'vue/dist/vue.esm.js';
 
 import datePicker from 'vue-bootstrap-datetimepicker';
