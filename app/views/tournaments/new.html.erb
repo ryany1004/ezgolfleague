@@ -22,7 +22,7 @@
               </button>
             </div>
             <div class="line"></div>
-            <div class="step step-2-dot hidden" data-target="#test-l-2">
+            <div class="step step-2-dot hidden" id="step-2-dot" data-target="#test-l-2">
               <button type="button" class="btn btn-link step-trigger" role="tab" id="stepper1trigger2" aria-controls="test-l-2">
                 <span class="bs-stepper-circle">2</span>                 
               </button>
@@ -396,9 +396,3 @@
     </div>
   </vue-modal>
 </div>
-
-<script type="text/javascript">
-  document.addEventListener('DOMContentLoaded', function () {
-    stepper1 = new Stepper(document.querySelector('#stepper1'));
-  });
-</script>
