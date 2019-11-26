@@ -44,25 +44,25 @@ class League < ApplicationRecord
   end
 
   def stripe_publishable_key
-    if Rails.env.staging? || self.stripe_test_mode
-      self.stripe_test_publishable_key
+    if Rails.env.staging? || stripe_test_mode
+      stripe_test_publishable_key
     else
-      self.stripe_production_publishable_key
+      stripe_production_publishable_key
     end
   end
 
   def stripe_secret_key
-    if Rails.env.staging? || self.stripe_test_mode
-      self.stripe_test_secret_key
+    if Rails.env.staging? || stripe_test_mode
+      stripe_test_secret_key
     else
-      self.stripe_production_secret_key
+      stripe_production_secret_key
     end
   end
 
   def stripe_is_setup?
     return false if Rails.env.development?
 
-    if self.stripe_test_publishable_key.blank? || self.stripe_production_publishable_key.blank?
+    if stripe_test_publishable_key.blank? || stripe_production_publishable_key.blank?
       false
     else
       true
@@ -70,7 +70,7 @@ class League < ApplicationRecord
   end
 
   def user_is_admin(user)
-    membership = self.league_memberships.where(user: user).first
+    membership = league_memberships.where(user: user).first
     if membership.blank? || !membership.is_admin
       false
     else
@@ -81,24 +81,24 @@ class League < ApplicationRecord
   def league_admins
     users = []
 
-    admin_memberships = self.league_memberships.where(is_admin: true)
+    admin_memberships = league_memberships.where(is_admin: true)
     admin_memberships.each do |m|
       users << m.user
     end
 
-    return users
+    users
   end
 
   def notify_super_users
-    title = "New League Created: #{self.name}"
+    title = "New League Created: #{name}"
 
     body = "A new league has been created.\n\n"
-    body += self.name + "\n\n"
-    body += "Season Starts: #{self.start_date}\n\n"
-    body += "League Type: #{self.league_type}\n\n"
-    body += "Estimated Players: #{self.league_estimated_players}\n\n"
-    body += "Comments: #{self.more_comments}\n\n"
-    body += "https://app.ezgolfleague.com/leagues/#{self.id}/edit"
+    body += name + "\n\n"
+    body += "Season Starts: #{start_date}\n\n"
+    body += "League Type: #{league_type}\n\n"
+    body += "Estimated Players: #{league_estimated_players}\n\n"
+    body += "Comments: #{more_comments}\n\n"
+    body += "https://app.ezgolfleague.com/leagues/#{id}/edit"
 
     User.where(is_super_user: true).each do |u|
       NotificationMailer.notification_message(u, 'support@ezgolfleague.com', title, body).deliver_later
@@ -106,43 +106,45 @@ class League < ApplicationRecord
   end
 
   def create_default_league_season
-    if self.active_season.blank?
-      start_date = Date.civil(Time.now.year, 1, 1)
-      end_date = Date.civil(Time.now.year, -1, -1)
-
-      s = LeagueSeason.create(name: Time.zone.now.year.to_s, starts_at: start_date, ends_at: end_date, league: self)
-      s.update(season_type_raw: LeagueSeasonType::TEAM) if league_type == 'Team Play'
-    end
+    create_season_for_year(Time.now.year) if active_season.blank?
   end
 
-  def alert_missing_next_season?
-    last_season = self.league_seasons.last
-    current_season = self.active_season
+  def create_season_for_year(year)
+    start_date = Date.civil(year, 1, 1)
+    end_date = Date.civil(year, -1, -1)
 
-    return false if current_season.blank?
+    s = LeagueSeason.create(name: Time.zone.now.year.to_s, starts_at: start_date, ends_at: end_date, league: self)
+    s.update(season_type_raw: LeagueSeasonType::TEAM) if league_type == 'Team Play'
+  end
+
+  def create_missing_next_season
+    last_season = league_seasons.last
+    current_season = active_season
+
+    return if current_season.blank?
 
     if current_season.ends_at - 60.days < DateTime.now && current_season == last_season
-      true
-    else
-      false
+      new_year = Time.now.beginning_of_year + 1.year
+
+      create_season_for_year(new_year)
     end
   end
 
   def membership_for_user(user)
-    self.league_memberships.where(user: user).first
+    league_memberships.where(user: user).first
   end
 
   def set_user_as_active(user)
-    membership = self.membership_for_user(user)
+    membership = membership_for_user(user)
     membership.state == MembershipStates::ACTIVE_FOR_BILLING
     membership.save
   end
 
   def dues_for_user(user, include_credit_card_fees = true)
-    membership = self.league_memberships.where(user: user).first
+    membership = league_memberships.where(user: user).first
 
     unless membership.blank?
-      dues_amount = self.dues_amount
+      dues_amount = dues_amount
       discount_amount = dues_amount - membership.league_dues_discount
       credit_card_fees = 0.0
 
@@ -157,19 +159,19 @@ class League < ApplicationRecord
   end
 
   def cost_breakdown_for_user(user)
-    membership = self.league_memberships.where(user: user).first
+    membership = league_memberships.where(user: user).first
 
     cost_lines = [
-      {name: "#{self.name} League Fees", price: self.dues_amount},
-      {name: "Dues Discount", price: (membership.league_dues_discount * -1.0)},
-      {name: "Credit Card Fees", price: Stripe::StripeFees.fees_for_transaction_amount(self.dues_amount - membership.league_dues_discount)}
+      { name: "#{name} League Fees", price: dues_amount },
+      { name: "Dues Discount", price: (membership.league_dues_discount * -1.0) },
+      { name: "Credit Card Fees", price: Stripe::StripeFees.fees_for_transaction_amount(dues_amount - membership.league_dues_discount) }
     ]
 
     cost_lines
   end
 
   def dues_amount
-    season = self.active_season
+    season = active_season
 
     unless season.blank?
       season.dues_amount.to_f
@@ -179,11 +181,11 @@ class League < ApplicationRecord
   end
 
   def has_active_subscription?
-    return true if self.exempt_from_subscription
-    return false if self.active_season.blank?
+    return true if exempt_from_subscription
+    return false if active_season.blank?
 
-    active_subscriptions = self.active_season.subscription_credits
-    if active_subscriptions.count > 0
+    active_subscriptions = active_season.subscription_credits
+    if active_subscriptions.count.positive?
       true
     else
       false
@@ -191,7 +193,7 @@ class League < ApplicationRecord
   end
 
   def has_ever_subscribed?
-    self.league_seasons.each do |s|
+    league_seasons.each do |s|
       return true if s.subscription_credits.count.positive?
     end
 
@@ -199,7 +201,7 @@ class League < ApplicationRecord
   end
 
   def active_season
-    this_year_season = self.league_seasons.where("starts_at <= ? AND ends_at >= ?", Date.current.in_time_zone, Date.current.in_time_zone).first
+    this_year_season = league_seasons.where("starts_at <= ? AND ends_at >= ?", Date.current.in_time_zone, Date.current.in_time_zone).first
 
     this_year_season
   end
@@ -241,9 +243,9 @@ class League < ApplicationRecord
     end
 
     if ids_to_omit.blank?
-      self.users.order("last_name, first_name")
+      users.order("last_name, first_name")
     else
-      self.users.where("users.id NOT IN (?)", ids_to_omit).order("last_name, first_name")
+      users.where("users.id NOT IN (?)", ids_to_omit).order("last_name, first_name")
     end
   end
 
@@ -254,7 +256,7 @@ class League < ApplicationRecord
       csv << attributes
 
       all.each do |user|
-        csv << attributes.map{ |attr| user.send(attr) }
+        csv << attributes.map { |attr| user.send(attr) }
       end
     end
   end
