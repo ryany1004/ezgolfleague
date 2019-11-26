@@ -9,12 +9,15 @@ import Multiselect from 'vue-multiselect';
 import Vuelidate from 'vuelidate';
 import { required, minValue } from 'vuelidate/lib/validators';
 
+import { ToggleButton } from 'vue-js-toggle-button';
+
 import IndividualStrokePlaySetup from '../components/ScoringRuleSetup/IndividualStrokePlaySetup';
 
 import EZGLFlight from './models/flight';
 import EZGLScoringRule from './models/scoring_rule';
 
 Vue.use(VModal, { componentName: 'vue-modal' });
+Vue.component('ToggleButton', ToggleButton);
 Vue.use(Vuelidate);
 Vue.component('multiselect', Multiselect);
 
