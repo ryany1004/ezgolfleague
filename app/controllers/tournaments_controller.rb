@@ -26,11 +26,10 @@ class TournamentsController < BaseController
   end
 
   def new
-    @tournament = Tournament.new
-
-    @tournament.league = current_user.leagues_admin.first if current_user.leagues_admin.count.positive?
-    @courses = Course.all.order(:name)
-    @tournament.allow_credit_card_payment = false if @tournament.league.present? && !@tournament.league.stripe_is_setup?
+    if current_user.leagues_admin.count.positive?
+      league = current_user.leagues_admin.first
+      league.create_missing_next_season
+    end
   end
 
   def create
