@@ -1,6 +1,6 @@
-const uuidv1 = require('uuid/v1');
+import { Model } from 'vue-mc';
 
-import {Model, Collection} from 'vue-mc'
+const uuidv1 = require('uuid/v1');
 
 export default class EZGLFlight extends Model {
   defaults() {

@@ -1,6 +1,6 @@
-const uuidv1 = require('uuid/v1');
+import { Model } from 'vue-mc';
 
-import {Model, Collection} from 'vue-mc'
+const uuidv1 = require('uuid/v1');
 
 export default class EZGLScoringRule extends Model {
   defaults() {
@@ -27,9 +27,9 @@ export default class EZGLScoringRule extends Model {
   canBeAssigned() {
     if (this.name == null) {
       return true;
-    } else {
-      return false;
     }
+
+    return false;
   }
 
   canBeSubmitted() {
