@@ -1,0 +1,51 @@
+version: '3.7'
+
+# bring up clean ezgolfeapp and postgres database 
+#
+# with Docker installed, run 
+#   "docker-compose up --build  --force-recreate" 
+#
+# which will result in app being available on http://localhost:3000
+
+
+services:
+
+  app:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    # command: ["bundle", "exec", "rails", "server", "-p", "3000", "-b", "0.0.0.0"]
+    command: bash -c "rm -f /app/tmp/pids/server.pid && bundle exec rake yarn:install && bundle exec rails s -p 3000 -b '0.0.0.0'"
+    ports:
+      - 3000:3000
+    environment:
+      - DATABASE_URL=postgresql://postgres@db/ezgolfleague_development?pool=5
+      - PGUSER=postgres
+      - PGHOST=db
+      - PGDATABASE=ezgolfleague_development
+      - RAILS_ENV=development
+      - NODE_ENV=development
+    volumes:
+      - .:/app
+    depends_on:
+      - db
+  db:
+    image: postgres:11.4
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=ezgolfleague_development      
+      - PGUSER=postgres
+      - PGDATABASE=ezgolfleague_development
+    volumes:
+      - ${LOAD_DB:-./nonexistent.sql}:/docker-entrypoint-initdb.d/db.sql
+
+  # webpacker:
+  #   build: .
+  #   # env_file:
+  #   #   - '.env.docker'
+  #   command: ./bin/webpack-dev-server
+  #   volumes:
+  #     - .:/app
+  #   ports:
+  #     - '3035:3035'
