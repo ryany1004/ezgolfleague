@@ -48,7 +48,7 @@
                           <label>Tournament Name</label>
                         </div>
                           <div class="col-md-5">
-                            <div class="form-group string required tournament_name">
+                            <div class="string required tournament_name">
                               <input label="false" required="required" aria-required="true" placeholder="Choose a name..." type="text" id="name" class="form-control string required form-control" v-model="tournamentWizard.name">
                             </div>
                         </div>
@@ -83,7 +83,7 @@
   															<div class="col-md-6">
                                   <date-picker v-model="tournamentWizard.opensAt"></date-picker>
   															</div>
-  															<div class="col-md-6">
+  															<div class="col-md-6" style="padding-right: 40px;">
                                   <date-picker v-model="tournamentWizard.closesAt"></date-picker>
   															</div>
   														</div>
@@ -91,7 +91,22 @@
                         </div>
                       </div>
                     </div> 
+
                     <div class="form-group">
+                        <div class="row">
+                          <div class="col-md-4 text-right">
+                            <label>Golf Course</label>
+                          </div>
+                          <div class="col-md-5" style="margin-left: 20px;">
+                            <multiselect v-model="tournamentWizard.course" id="ajax" label="name" track-by="id" placeholder="Type to search for a course by name or location" open-direction="bottom" :options="filteredCourses" :searchable="true" :loading="isLoading" :internal-search="false" :options-limit="300" :limit="3" :max-height="600" :show-no-results="false" :hide-selected="true" @search-change="searchCourses" @select="courseSelected">
+                              <template slot="singleLabel" slot-scope="{ option }">{{ option.name }}</template>
+                              <span slot="noResult">No courses matched your query.</span>
+                            </multiselect>
+                          </div>
+                        </div>
+                    </div> 
+
+                    <div class="form-group" style="margin-bottom:15px;">
                       <div class="row">
                         <div class="col-md-4 text-right">
                           <label>Number of Players</label>
@@ -101,7 +116,7 @@
                               <div class="row">
                                 <div class="col-12">
                                   <div class="form-group string required">
-                                    <input label="false" required="required" aria-required="true" placeholder="How Many People Can Register?" type="text" id="name" class="form-control string required form-control" v-model="tournamentWizard.numberOfPlayers">
+                                    <input label="false" required="required" aria-required="true" placeholder="How Many People Can Register?" type="text" id="name" style="width: 80px;" class="form-control string required form-control" v-model="tournamentWizard.numberOfPlayers">
                                   </div>
                                 </div>
                               </div>
@@ -109,59 +124,39 @@
                         </div>
                       </div>
                     </div> 
-                    <div class="form-group">
-                      <div class="row">
-                        <div class="col-md-4 text-right">
-                          <label>Players Should See Tee-Times</label>
-                        </div>
-                          <div class="col-md-5">
-                            <div style="padding-right:24px;">
-                              <div class="row">
-                                <div class="col-12">
-                                  <div class="form-group string required">
-                                    <input type="checkbox" id="show-tee-times" v-model="tournamentWizard.showTeeTimes">
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                        </div>
-                      </div>
-                    </div> 
-                    <div class="form-group">
-                      <div class="row">
-                        <div class="col-md-4 text-right">
-                          <label>Allow Players to Enter Scores Until Finalized</label>
-                        </div>
-                          <div class="col-md-5">
-                            <div style="padding-right:24px;">
-                              <div class="row">
-                                <div class="col-12">
-                                  <div class="form-group string required">
-                                    <input type="checkbox" id="enter-scores-until-finalized" v-model="tournamentWizard.enterScoresUntilFinalized">
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                        </div>
-                      </div>
-                    </div> 
+
                     <div class="form-group">
                         <div class="row">
                           <div class="col-md-4 text-right">
-                            <label>Golf Course</label>
+                            <label>Allow Players to Enter<br>Scores Until Finalized</label>
                           </div>
-                          <div class="col-md-5">
-                            <multiselect v-model="tournamentWizard.course" id="ajax" label="name" track-by="id" placeholder="Type to search for a course by name or location" open-direction="bottom" :options="filteredCourses" :searchable="true" :loading="isLoading" :internal-search="false" :options-limit="300" :limit="3" :max-height="600" :show-no-results="false" :hide-selected="true" @search-change="searchCourses" @select="courseSelected">
-                              <template slot="singleLabel" slot-scope="{ option }">{{ option.name }}</template>
-                              <span slot="noResult">No courses matched your query.</span>
-                            </multiselect>
+                          <div class="col-md-5 text-left" style="margin-left: 20px;">
+                            <toggle-button id="enter-scores-until-finalized" v-model="tournamentWizard.enterScoresUntilFinalized"/>
                           </div>
                         </div>
                     </div> 
+
                     <div class="form-group">
-                      <input type="checkbox" id="show-flights" v-model="showFlights" v-on:click="toggleFlights">
-                      <label for="show-flights" class="pl-2">Separate Golfers into Flights</label>
-                    </div>
+                        <div class="row">
+                          <div class="col-md-4 text-right">
+                            <label>Players Should<br>See Tee-Times</label>
+                          </div>
+                          <div class="col-md-5 text-left" style="margin-left: 20px;">
+                            <toggle-button id="show-tee-times" v-model="tournamentWizard.showTeeTimes"/>
+                          </div>
+                        </div>
+                    </div> 
+
+                    <div class="form-group">
+                        <div class="row">
+                          <div class="col-md-4 text-right">
+                            <label>Separate Golfers<br>into Flights</label>
+                          </div>
+                          <div class="col-md-5 text-left" style="margin-left: 20px;">
+                            <toggle-button id="show-flights" v-model="toggleFlights"/>
+                          </div>
+                        </div>
+                    </div> 
                   </div>            
                 </div><!-- /.step-1-content -->
                 <div class="cat-card-footer">                     
