@@ -69,11 +69,6 @@ document.addEventListener('DOMContentLoaded', () => {
           ],
         ],
       },
-      steps: {
-        nameStepSubmitted: false,
-        flightsStepSubmitted: false,
-        scoringRulesStepSubmitted: false,
-      },
       canSubmit: false,
       isLoading: false,
       filteredCourses: [],
