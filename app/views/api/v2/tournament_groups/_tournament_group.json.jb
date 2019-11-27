@@ -1,0 +1,29 @@
+Rails.cache.fetch ['v2', @tournament_day.cache_key_with_version] do
+  json = {}
+
+  json[:nonRegisteredPlayers] = @non_registered_players.map do |player|
+    {
+      id: player.id,
+      name: player.complete_name,
+      shortName: player.short_name
+    }
+  end
+
+  json[:tournamentGroups] = @tournament_groups.map do |group|
+    group_json = {
+      teeTime: group.formatted_tee_time
+    }
+
+    group_json[:registeredPlayers] = group.users do |player|
+      {
+        id: player.id,
+        name: player.complete_name,
+        shortName: player.short_name
+      }
+    end
+
+    group_json
+  end
+
+  json
+end

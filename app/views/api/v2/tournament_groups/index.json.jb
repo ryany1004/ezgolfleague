@@ -1,0 +1,1 @@
+render partial: 'tournament_group', collection: @tournament_groups, as: :tournament_group
