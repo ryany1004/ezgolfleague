@@ -153,7 +153,7 @@
                             <label>Separate Golfers<br>into Flights</label>
                           </div>
                           <div class="col-md-5 text-left" style="margin-left: 20px;">
-                            <toggle-button id="show-flights" v-model="showFlights" v-on:click="toggleFlights" />
+                            <toggle-button id="show-flights" v-model="showFlights" @change="toggleFlights"/>
                           </div>
                         </div>
                     </div> 
