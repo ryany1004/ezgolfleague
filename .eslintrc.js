@@ -19,6 +19,7 @@ module.exports = {
     'vue',
   ],
   rules: {
+    'class-methods-use-this': 'off',
     'import/no-unresolved': 'off',
     'no-console': 'off',
     'no-param-reassign': ['error', { 'props': false }]

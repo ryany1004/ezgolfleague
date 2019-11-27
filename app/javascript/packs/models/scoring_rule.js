@@ -10,18 +10,18 @@ export default class EZGLScoringRule extends Model {
       className: null,
       holeConfiguration: null,
       customConfiguration: {
-        nineHoleTiebreaking: false
+        nineHoleTiebreaking: false,
       },
-      payouts: []
-    }
+      payouts: [],
+    };
   }
 
   mutations() {
-    return {}
+    return {};
   }
 
   validation() {
-    return {}
+    return {};
   }
 
   canBeAssigned() {

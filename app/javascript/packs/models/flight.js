@@ -9,15 +9,15 @@ export default class EZGLFlight extends Model {
       flightNumber: 1,
       lowHandicap: 0,
       highHandicap: 300,
-      teeBox: null
-    }
+      teeBox: null,
+    };
   }
 
   mutations() {
-    return {}
+    return {};
   }
 
   validation() {
-    return {}
+    return {};
   }
 }
