@@ -21,6 +21,7 @@ module.exports = {
   rules: {
     'class-methods-use-this': 'off',
     'import/no-unresolved': 'off',
+    'max-len': ['error', { 'code': 150 }],
     'no-console': 'off',
     'no-param-reassign': ['error', { 'props': false }]
   },
