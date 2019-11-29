@@ -11,35 +11,32 @@
     </thead>                        
     <tbody>
       <div class="tee-times-panel-content">
-        <% tournament_day.tournament_groups.each_with_index do |group, i| %>
-          <tr>
-            <td colspan="4" class="pl-5 pr-0 border-0">
-              <div class="heading-style">
-                <h2 class="text-uppercase">closest to the hole  <%= i + 1 %>: <%= group.tee_time_at.to_s(:time_only) %></h2>
-              </div>
-            </td>                            
-          </tr>
+        <% tournament_day.displayable_scoring_rules.each do |rule| %>
+            <tr>
+              <td colspan="4" class="pl-5 pr-0 border-0">
+                <div class="heading-style">
+                  <h2 class="text-uppercase"><%= rule.name %></h2>
+                </div>
+              </td>                            
+            </tr>
 
-          <% slices = group.golf_outings.each_slice(2) %>
-          <% slices.each do |slice| %>
-            <% slice.each do |outing| %>
+            <% rule.payout_results.each do |payout_result| %>
               <tr>
                 <td class="pl-5 pr-0 border-top-0">
                   <div class="media">
-                    <%= image_tag outing.user.avatar.url(:thumb), class: 'img-circle' %>
+                    <%= image_tag payout_result.user.avatar.url(:thumb), class: 'img-circle' %>
                     <div class="media-body">
-                      <h2><%= outing.user.complete_name %></h2>
+                      <h2><%= payout_result.name %></h2>
                     </div>
                   </div>
                 </td>
                 <td class="border-top-0">
-                  $10
+                  <%= number_to_currency(payout_result.amount) %>
                 </td>
-                <td class="border-top-0">2</td>
-                <td class="border-top-0">Closet to Hole 6</td>
+                <td class="border-top-0"><%= payout_result.points.to_i %></td>
+                <td class="border-top-0"><%= payout_result.detail %></td>
               </tr>
             <% end %>
-          <% end %>
         <% end %>
       </div>
     </tbody>
