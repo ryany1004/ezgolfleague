@@ -9,4 +9,7 @@ export default {
   getGameTypes(leagueId) {
     return client.get(`/api/v2/leagues/${leagueId}/scoring_rules.json`);
   },
+  getTournametGroups(leagueId, tournamentId, tournamentDayId) {
+    return client.get(`/api/v2/leagues/${leagueId}/tournaments/${tournamentId}/tournament_days/${tournamentDayId}/tournament_groups.json`);
+  },
 };
