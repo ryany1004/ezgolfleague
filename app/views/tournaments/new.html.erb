@@ -211,7 +211,7 @@
                         <template v-if="rule.name">
                           <div class="added-game-type">
                             <p>{{ rule.name }}</p>
-                            <a href="#" class="btn btn-primary" v-on:click="newPayout(rule)">Add Payout</a>
+                            <a href="#" class="btn btn-primary" v-on:click="showPayoutsModal(rule)">Payouts</a>
                           </div>
                         </template>
                         <template v-else>
@@ -245,34 +245,34 @@
             <label>Game Type</label>
           </div>
           <div class="col-md-8">
-            <multiselect v-model="selectedScoringRule" :options="scoringRules" :multiple="false" group-values="games" group-label="type" :group-select="false" @select="scoringRuleSelected($event)" placeholder="Choose a game type..." track-by="name" label="name">
+            <multiselect v-model="selectedScoringRule" :options="scoringRules" :multiple="false" group-values="games" group-label="type" :group-select="false" placeholder="Choose a game type..." track-by="name" label="name">
               <span slot="noResult">Oops! No game type found...</span>
             </multiselect> 
           </div>
         </div>
       </div>
 
-      <div class="step-1-content-form step-1-content" v-if="selectedScoringRule.custom_name_allowed">
+      <div class="step-1-content-form step-1-content" v-if="selectedScoringRule.customNameAllowed">
         <div class="row">
           <div class="col-md-3 text-right">
             <label>Name</label>
           </div>
           <div class="col-md-8 tee-times-inputs">
             <div>
-              <input label="false" type="text" class="form-control string required form-control" v-model="selectedScoringRule.custom_name">
+              <input label="false" type="text" class="form-control string required form-control" v-model="selectedScoringRule.customName">
             </div>
           </div>
         </div>
       </div>
 
-      <div class="step-1-content-form step-1-content pt-2" v-if="selectedScoringRule.show_course_holes">
+      <div class="step-1-content-form step-1-content pt-2" v-if="selectedScoringRule.showCourseHoles">
         <div class="row">
           <div class="col-md-3 text-right vue-label">
             <label>Holes</label>
           </div>
           <div class="col-md-8 tee-times-inputs">
             <div class="col-md-8 p-0">
-              <multiselect v-model="selectedScoringRule.hole_configuration" :options="selectedScoringRuleHolesOptions" track-by="value" label="name" placeholder="Choose holes..." :searchable="false">
+              <multiselect v-model="selectedScoringRule.holeConfiguration" :options="selectedScoringRuleHolesOptions" track-by="value" label="name" placeholder="Choose holes..." :searchable="false">
                 <template slot="singleLabel" slot-scope="{ option }">{{ option.name }}</template>
               </multiselect>
             </div>
@@ -314,7 +314,7 @@
         </div>
       </div>
 
-      <stroke-play-setup v-if="selectedScoringRule.setup_component_name === 'individual_stroke_play'" @nine-hole-tiebreaking-changed="scoringRuleOptionUpdated"/>
+      <stroke-play-setup v-if="selectedScoringRule.setupComponentName === 'individual_stroke_play'" @nine-hole-tiebreaking-changed="scoringRuleOptionUpdated"/>
     </div>
 
     <div class="modal-footer">
@@ -326,48 +326,33 @@
   <vue-modal name="payouts" height="auto" clickToClose="false">
     <div class="welcome p-5">
       <div class="p-3">
-        <h2 style="font-size:30px;">Add Payout</h2>
+        <h2 style="font-size:30px;">Payouts</h2>
       </div>
 
-      <div class="step-1-content-form step-1-content" v-if="tournamentWizard.flights.length > 1">
-        <div class="row">
-          <div class="col-md-3 text-right">
-            <label>Flight</label>
-          </div>
-            <div class="col-md-8">
-              <multiselect v-model="selectedPayout.flight" :options="tournamentWizard.flights" track-by="flightNumber" label="flightNumber" placeholder="Choose Flight" :searchable="false">
-              </multiselect>
-          </div>
-        </div>
-      </div>
-
-      <div class="step-1-content-form step-1-content">
-        <div class="row">
-          <div class="col-md-3 text-right">
-            <label>Points</label>
-          </div>
-          <div class="col-md-8 tee-times-inputs">
-            <div>
-              <input label="false" type="text" class="form-control string required form-control" v-model="selectedPayout.points">
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="step-1-content-form step-1-content">
-        <div class="row">
-          <div class="col-md-3 text-right">
-            <label>Payout $</label>
-          </div>
-          <div class="col-md-8 tee-times-inputs">
-            <div>
-              <input label="false" type="text" class="form-control string required form-control" v-model="selectedPayout.payout">
-            </div>
-          </div>
-        </div>
-      </div>
+      <table class="table">
+        <thead>
+          <tr class="text-uppercase">
+            <th scope="col" class="pl-5 pr-0">Flight</th>
+            <th scope="col">Points</th>
+            <th scope="col">$</th>
+            <th scope="col"><button type="button" class="btn__ezgl-secondary-outline float-right" v-on:click="newPayout(selectedScoringRule)">Add</button></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(payout, index) in selectedScoringRule.payouts">
+            <th class="pl-5 pr-0"><multiselect v-model="payout.flight" :options="tournamentWizard.flights" track-by="flightNumber" label="flightNumber" :searchable="false">
+                </multiselect></th>
+            <td><input label="false" type="text" class="form-control string required form-control" v-model="payout.points"></td>
+            <td><input label="false" type="text" class="form-control string required form-control" v-model="payout.payout">
+              </div></td>
+            <td class="edit-link">
+              <!-- <button type="button" class="btn btn-default" v-on:click="editPayout(index, payout.scoringRule.id)">Edit</button> -->
+              <button type="button" class="btn btn-default float-right" v-on:click="deletePayout(index, payout.scoringRule.id)">Remove</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
-
     <div class="modal-footer">
       <button type="button" class="btn btn-default" v-on:click="hidePayoutsModal">Cancel</button>
       <button type="button" class="btn__ezgl-secondary" v-on:click="savePayout">Save</button>

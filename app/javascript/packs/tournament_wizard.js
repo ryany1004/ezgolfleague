@@ -11,6 +11,8 @@ import { required, minValue } from 'vuelidate/lib/validators';
 
 import { ToggleButton } from 'vue-js-toggle-button';
 
+import api from 'api';
+
 import IndividualStrokePlaySetup from '../components/ScoringRuleSetup/IndividualStrokePlaySetup';
 
 import EZGLFlight from './models/flight';
@@ -76,11 +78,8 @@ document.addEventListener('DOMContentLoaded', () => {
       showFlights: false,
       courseTeeBoxes: [],
       scoringRules: [],
-      selectedScoringRule: {
-        customConfiguration: {},
-        customHoles: [],
-      },
-      selectedPayout: {},
+      selectedScoringRuleId: null,
+      selectedPayoutIndex: null,
       selectedScoringRuleHolesOptions: [],
     },
     validations: {
@@ -103,10 +102,9 @@ document.addEventListener('DOMContentLoaded', () => {
       },
     },
     mounted() {
-      fetch(`/api/v2/leagues/${props.league.id}/scoring_rules.json`)
-        .then((response) => response.json())
-        .then((data) => {
-          app.scoringRules = data.flat(1);
+      api.getGameTypes(props.league.id)
+        .then((response) => {
+          app.scoringRules = response.data.flat(1);
 
           app.scoringRules.forEach((ruleGroup) => {
             ruleGroup.games.forEach((rule) => {
@@ -116,8 +114,39 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     },
     computed: {
+      selectedScoringRule: {
+        get() {
+          const scoringRule = this.scoringRuleForID(this.selectedScoringRuleId);
+
+          if (scoringRule != null) {
+            return scoringRule;
+          }
+
+          return new EZGLScoringRule({});
+        },
+        set(newValue) {
+          const scoringRule = this.scoringRuleForID(this.selectedScoringRuleId);
+
+          if (scoringRule == null) {
+            console.error(`Could not locate scoring for ID ${this.selectedScoringRuleId}.`);
+
+            return;
+          }
+
+          scoringRule.name = newValue.name;
+          scoringRule.className = newValue.className;
+          scoringRule.holeConfiguration = newValue.holeConfiguration;
+          scoringRule.customConfiguration = newValue.customConfiguration;
+          scoringRule.customNameAllowed = newValue.customNameAllowed;
+          scoringRule.customName = newValue.customName;
+          scoringRule.showCourseHoles = newValue.showCourseHoles;
+          scoringRule.setupComponentName = newValue.setupComponentName;
+        },
+      },
       showCustomHolePicker() {
-        if (this.selectedScoringRule.hole_configuration != null && this.selectedScoringRule.hole_configuration.value === 'custom') {
+        if (this.selectedScoringRule.holeConfiguration == null) { return false; }
+
+        if (this.selectedScoringRule.holeConfiguration != null && this.selectedScoringRule.holeConfiguration.value === 'custom') {
           return true;
         }
 
@@ -217,44 +246,39 @@ document.addEventListener('DOMContentLoaded', () => {
         element.classList.toggle('hidden');
       },
       showGameTypeModal(scoringRule) {
-        this.selectedScoringRuleID = scoringRule.id;
+        this.selectedScoringRuleId = scoringRule.id;
 
         this.$modal.show('scoring-rule');
       },
       hideGameTypeModal() {
-        this.selectedScoringRule = { customHoles: [] };
+        this.selectedScoringRuleId = null;
 
         this.$modal.hide('scoring-rule');
       },
+      showPayoutsModal(scoringRule) {
+        this.selectedScoringRuleId = scoringRule.id;
+
+        this.$modal.show('payouts');
+      },
       newPayout(scoringRule) {
-        this.selectedPayout = {
+        const newPayout = {
           scoringRule,
           flight: this.tournamentWizard.flights[0],
           points: 0,
           payout: 0,
         };
 
-        this.$modal.show('payouts');
+        scoringRule.payouts.push(newPayout);
       },
       hidePayoutsModal() {
         this.$modal.hide('payouts');
       },
       savePayout() {
-        this.tournamentWizard.scoringRules.forEach((scoringRuleGroup) => {
-          scoringRuleGroup.forEach((scoringRule) => {
-            if (scoringRule.id === this.selectedPayout.scoringRule.id) {
-              scoringRule.payouts.push(this.selectedPayout);
-            }
-          });
-        });
-
-        this.selectedPayout = {};
-
         this.$modal.hide('payouts');
       },
-      scoringRuleSelected() {
-        this.selectedScoringRule.custom_holes = [];
-        this.selectedScoringRule.customConfiguration = {};
+      deletePayout(payoutIndex, scoringRuleID) {
+        const scoringRule = this.scoringRuleForID(scoringRuleID);
+        scoringRule.payouts.splice(payoutIndex, 1);
       },
       scoringRuleOptionUpdated(updatedOptions) {
         Object.entries(updatedOptions).forEach((entry) => {
@@ -264,31 +288,21 @@ document.addEventListener('DOMContentLoaded', () => {
           this.selectedScoringRule.customConfiguration[key] = value;
         });
       },
-      addCurrentScoringRule() {
-        loop1:
-          for (var scoringRuleGroupIndex in this.tournamentWizard.scoringRules) {
-            var scoringRuleGroup = this.tournamentWizard.scoringRules[scoringRuleGroupIndex];
+      scoringRuleForID(scoringRuleID) {
+        const flatRules = this.tournamentWizard.scoringRules.flat();
 
-            loop2:
-              for (var scoringRuleIndex in scoringRuleGroup) {
-                var scoringRule = scoringRuleGroup[scoringRuleIndex];
+        let scoringRule = null;
 
-                if (scoringRule.canBeAssigned()) {
-                  var index = scoringRuleGroup.indexOf(scoringRule);
-
-                  scoringRuleGroup[index] = new EZGLScoringRule({
-                    name: this.selectedScoringRule.name,
-                    className: this.selectedScoringRule.class_name,
-                    holeConfiguration: this.selectedScoringRule.hole_configuration,
-                    customConfiguration: this.selectedScoringRule.customConfiguration,
-                  });
-
-                  this.canSubmit = true;
-
-                  break loop1;
-                }
-              }
+        flatRules.forEach((rule) => {
+          if (rule.id === scoringRuleID) {
+            scoringRule = rule;
           }
+        });
+
+        return scoringRule;
+      },
+      addCurrentScoringRule() {
+        this.canSubmit = true;
 
         this.hideGameTypeModal();
       },
