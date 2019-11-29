@@ -134,14 +134,45 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
           }
 
-          scoringRule.name = newValue.name;
-          scoringRule.className = newValue.className;
-          scoringRule.holeConfiguration = newValue.holeConfiguration;
-          scoringRule.customConfiguration = newValue.customConfiguration;
-          scoringRule.customNameAllowed = newValue.customNameAllowed;
-          scoringRule.customName = newValue.customName;
-          scoringRule.showCourseHoles = newValue.showCourseHoles;
-          scoringRule.setupComponentName = newValue.setupComponentName;
+          if (newValue.name != null) {
+            scoringRule.name = newValue.name;
+          }
+
+          if (newValue.className != null) {
+            scoringRule.className = newValue.className;
+          }
+
+          if (newValue.holeConfiguration != null) {
+            scoringRule.holeConfiguration = newValue.holeConfiguration;
+          }
+
+          if (newValue.customConfiguration != null) {
+            scoringRule.customConfiguration = newValue.customConfiguration;
+          }
+
+          if (newValue.customNameAllowed != null) {
+            scoringRule.customNameAllowed = newValue.customNameAllowed;
+          }
+
+          if (newValue.customName != null) {
+            scoringRule.customName = newValue.customName;
+          }
+
+          if (newValue.showCourseHoles != null) {
+            scoringRule.showCourseHoles = newValue.showCourseHoles;
+          }
+
+          if (newValue.setupComponentName != null) {
+            scoringRule.setupComponentName = newValue.setupComponentName;
+          }
+
+          if (newValue.isMandatory != null) {
+            scoringRule.isMandatory = newValue.isMandatory;
+          }
+
+          if (newValue.duesAmount != null) {
+            scoringRule.duesAmount = newValue.duesAmount;
+          }
         },
       },
       showCustomHolePicker() {
@@ -370,6 +401,8 @@ document.addEventListener('DOMContentLoaded', () => {
               class_name: rule.className,
               hole_configuration: rule.holeConfiguration.value,
               custom_configuration: rule.customConfiguration,
+              dues_amount: rule.duesAmount,
+              is_mandatory: rule.isMandatory,
               payouts: [],
             };
 

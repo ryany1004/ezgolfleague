@@ -250,6 +250,32 @@
         </div>
       </div>
 
+      <div class="step-1-content-form step-1-content" v-if="selectedScoringRule.className">
+        <div class="row">
+          <div class="col-md-3 text-right">
+            <label>Mandatory for All Players</label>
+          </div>
+          <div class="col-md-8 tee-times-inputs">
+            <div>
+              <toggle-button id="is-mandatory" v-model="selectedScoringRule.isMandatory"/>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="step-1-content-form step-1-content" v-if="selectedScoringRule.className">
+        <div class="row">
+          <div class="col-md-3 text-right">
+            <label>Dues Amount $</label>
+          </div>
+          <div class="col-md-8 tee-times-inputs">
+            <div>
+            <input label="false" type="text" class="form-control string form-control" v-model="selectedScoringRule.duesAmount">
+            </div>
+          </div>
+        </div>
+      </div>
+
       <div class="step-1-content-form step-1-content" v-if="selectedScoringRule.customNameAllowed">
         <div class="row">
           <div class="col-md-3 text-right">

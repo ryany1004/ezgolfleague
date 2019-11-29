@@ -114,7 +114,8 @@ class Api::V2::TournamentWizardsController < BaseController
     scoring_rule_data = payload['scoring_rules']
     scoring_rule_data.each do |s|
       scoring_rule = s['class_name'].constantize.new(tournament_day: tournament_day)
-      scoring_rule.is_opt_in = false
+      scoring_rule.is_opt_in = !s['is_mandatory']
+      scoring_rule.dues_amount = s['dues_amount']
 
       if scoring_rule.save
         assign_custom_configuration(scoring_rule, s['custom_configuration'])
