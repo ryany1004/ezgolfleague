@@ -72,6 +72,7 @@ document.addEventListener('DOMContentLoaded', () => {
         ],
       },
       canSubmit: false,
+      scoringRuleValid: false,
       isLoading: false,
       filteredCourses: [],
       showBackNineHoles: false,
@@ -249,6 +250,15 @@ document.addEventListener('DOMContentLoaded', () => {
         this.selectedScoringRuleId = scoringRule.id;
 
         this.$modal.show('scoring-rule');
+
+        this.checkScoringRuleIsValid();
+      },
+      checkScoringRuleIsValid() {
+        if (this.selectedScoringRule.canBeSubmitted()) {
+          this.scoringRuleValid = true;
+        } else {
+          this.scoringRuleValid = false;
+        }
       },
       hideGameTypeModal() {
         this.selectedScoringRuleId = null;

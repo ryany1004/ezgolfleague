@@ -24,15 +24,7 @@ export default class EZGLScoringRule extends Model {
     return {};
   }
 
-  canBeAssigned() {
-    if (this.name == null) {
-      return true;
-    }
-
-    return false;
-  }
-
   canBeSubmitted() {
-    return !this.canBeAssigned();
+    return this.name != null && this.holeConfiguration != null;
   }
 }

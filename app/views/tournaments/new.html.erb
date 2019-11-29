@@ -245,7 +245,7 @@
             <label>Game Type</label>
           </div>
           <div class="col-md-8">
-            <multiselect v-model="selectedScoringRule" :options="scoringRules" :multiple="false" group-values="games" group-label="type" :group-select="false" placeholder="Choose a game type..." track-by="name" label="name">
+            <multiselect v-model="selectedScoringRule" :options="scoringRules" :multiple="false" group-values="games" group-label="type" :group-select="false" placeholder="Choose a game type..." track-by="name" label="name" @close="checkScoringRuleIsValid">
               <span slot="noResult">Oops! No game type found...</span>
             </multiselect> 
           </div>
@@ -272,7 +272,7 @@
           </div>
           <div class="col-md-8 tee-times-inputs">
             <div class="col-md-8 p-0">
-              <multiselect v-model="selectedScoringRule.holeConfiguration" :options="selectedScoringRuleHolesOptions" track-by="value" label="name" placeholder="Choose holes..." :searchable="false">
+              <multiselect v-model="selectedScoringRule.holeConfiguration" :options="selectedScoringRuleHolesOptions" track-by="value" label="name" placeholder="Choose holes..." :searchable="false" @close="checkScoringRuleIsValid">
                 <template slot="singleLabel" slot-scope="{ option }">{{ option.name }}</template>
               </multiselect>
             </div>
@@ -319,7 +319,7 @@
 
     <div class="modal-footer">
       <button type="button" class="btn btn-default" v-on:click="hideGameTypeModal">Cancel</button>
-      <button type="button" class="btn__ezgl-secondary" v-on:click="addCurrentScoringRule">Save</button>
+      <button type="button" class="btn__ezgl-secondary" v-on:click="addCurrentScoringRule" :disabled="!scoringRuleValid">Save</button>
     </div>
   </vue-modal>
 
@@ -346,7 +346,6 @@
             <td><input label="false" type="text" class="form-control string required form-control" v-model="payout.payout">
               </div></td>
             <td class="edit-link">
-              <!-- <button type="button" class="btn btn-default" v-on:click="editPayout(index, payout.scoringRule.id)">Edit</button> -->
               <button type="button" class="btn btn-default float-right" v-on:click="deletePayout(index, payout.scoringRule.id)">Remove</button>
             </td>
           </tr>
