@@ -1,10 +1,13 @@
 import Vue from "vue/dist/vue.esm.js";
 import VModal from 'vue-js-modal';
 
+import { BSpinner } from 'bootstrap-vue';
+
 import api from 'api';
 
 import Scorecard from '../components/Scorecard/Scorecard';
 
+Vue.component('b-spinner', BSpinner);
 Vue.use(VModal, { componentName: "vue-modal" });
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -43,8 +46,11 @@ document.addEventListener("DOMContentLoaded", () => {
         }, 100);
       },
       displayScorecard(event) {
+        app.$modal.show('scorecard-loading-modal');
+
         api.getScorecard(event.currentTarget.dataset.scorecardId)
           .then((response) => {
+            app.$modal.hide('scorecard-loading-modal');
             app.$modal.show('scorecard-modal', { scorecard: response.data });
           });
       },
