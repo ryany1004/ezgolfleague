@@ -117,6 +117,8 @@ Rails.application.routes.draw do
         resources :course_tee_boxes
       end
 
+      resources :scorecards
+
       resources :leagues do
         resources :scoring_rules
 

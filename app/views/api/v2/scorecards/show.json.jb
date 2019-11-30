@@ -1,0 +1,1 @@
+render partial: 'scorecard', as: :scorecard

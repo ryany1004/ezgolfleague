@@ -1,0 +1,44 @@
+Rails.cache.fetch ['v2', @scorecard.cache_key_with_version] do
+  json = {}
+
+  json[:tee_time_at] = @scorecard_presenter.tee_time.to_s(:date_and_time)
+  json[:tournament_name] = @scorecard_presenter.tournament.name
+  json[:flight_name] = @scorecard_presenter.flight.display_name
+
+  json[:holes] = @scorecard_presenter.primary_scorecard.scores.map do |score|
+    {
+      score_id: score.id,
+      hole_number: score.course_hole_number,
+      yards_for_flight: score.course_hole.yards_for_flight(@scorecard_presenter.flight),
+      par: score.course_hole.par,
+      handicap: score.course_hole.mens_handicap
+    }
+  end
+
+  json[:scorecards] = @scorecard_presenter.all_scorecards.map do |scorecard|
+    scorecard_json = {
+      id: scorecard.id,
+      user_name: scorecard.user.short_name,
+      should_subtitle: scorecard.should_subtotal?,
+      should_total: scorecard.should_total?,
+      front_nine_handicap_subtotal: front_nine_handicap_for_scorecard(scorecard, true),
+      back_nine_handicap_subtotal: back_nine_handicap_for_scorecard(scorecard, true),
+      course_handicap: scorecard.course_handicap,
+      net_total: score_print_helper(scorecard.net_score, false),
+      gross_total: score_print_helper(scorecard.scores.map {|score| score.strokes }.sum, true)
+    }
+
+    scorecard_json[:scores] = scorecard.scores.map do |score|
+      score_json = {
+        handicap_strokes: handicap_allowance_strokes_for_hole(handicap_allowance_for_scorecard(scorecard), score.course_hole),
+        score: score.display_score
+      }
+
+      score_json
+    end
+
+    scorecard_json
+  end
+
+  json
+end
