@@ -19,7 +19,7 @@
           <td><%= result.rank %></td>
           <td>
             <div class="media">
-              <%= image_tag result.user.avatar.url(:thumb), class: 'img-circle' %>
+              <%= user_avatar(result.user) %>
               <div class="media-body">
                 <h2><%= result.user.complete_name %></h2>
               </div>
@@ -31,8 +31,7 @@
           <td><%= number_to_currency(result.payouts) %></td>
           <td class="edit-link">
             <% scorecard = result.primary_scorecard %>
-            <% loading_partial = render partial: 'shared/modal_loading' %>
-            <%= link_to image_tag('edit.png'), league_tournament_tournament_day_scorecard_path(tournament_day.tournament.league, tournament_day.tournament, tournament_day, scorecard), data: { toggle:"modal", target: "#editScorecardModal" }, remote: true %>
+            <a href='#' data-scorecard-id='<%= scorecard.id %>' v-on:click="displayScorecard"><%= image_tag('edit.png') %></a>
           </td>
         </tr>
       <% end %>
@@ -40,18 +39,6 @@
   </table>
 </div>
 
-<div class="modal fade" id="editScorecardModal" tabindex="-1" role="dialog" aria-labelledby="ditScorecardModalCenterTitle" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-    <div class="modal-content">
-      <div class="modal-body" id="view-scorecard-contents"><!-- Contents Inserted --></div>
-    </div>
-  </div>
+<div id="editScorecardModal">
+  <scorecard/>
 </div>
-
-<script>
-$( ".edit-button" ).click(function() {
-  $( ".edit" ).toggle( "slow", function() {
-    // Animation complete.
-  });
-});
-</script>

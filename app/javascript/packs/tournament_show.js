@@ -1,5 +1,9 @@
 import Vue from "vue/dist/vue.esm.js";
-import VModal from "vue-js-modal";
+import VModal from 'vue-js-modal';
+
+import api from 'api';
+
+import Scorecard from '../components/Scorecard/Scorecard';
 
 Vue.use(VModal, { componentName: "vue-modal" });
 
@@ -13,13 +17,14 @@ document.addEventListener("DOMContentLoaded", () => {
   const app = new Vue({
     el: "#tournament-show",
     components: {
-      VModal
+      VModal,
+      Scorecard,
     },
     data: {
       csrfToken: document
         .querySelector('meta[name="csrf-token"]')
         .getAttribute("content"),
-      teeTime: {}
+      teeTime: {},
     },
     validations: {},
     created: {},
@@ -36,7 +41,13 @@ document.addEventListener("DOMContentLoaded", () => {
             .setAttribute("href", clickLink);
           document.getElementById("listScrollLink").click();
         }, 100);
-      }
-    }
+      },
+      displayScorecard(event) {
+        api.getScorecard(event.currentTarget.dataset.scorecardId)
+          .then((response) => {
+            app.$modal.show('scorecard-modal', { scorecard: response.data });
+          });
+      },
+    },
   });
 });

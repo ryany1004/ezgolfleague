@@ -13,10 +13,6 @@ class ScorecardsController < BaseController
   end
 
   def show
-    # eager_groups = fetch_eager_groups
-
-    # @next_scorecard = find_next_scorecard(@tournament_day, eager_groups, @scorecard)
-
     respond_to do |format|
       format.js { render layout: false }
     end

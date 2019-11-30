@@ -18,6 +18,7 @@ Rails.cache.fetch ['v2', @scorecard.cache_key_with_version] do
   json[:scorecards] = @scorecard_presenter.all_scorecards.map do |scorecard|
     scorecard_json = {
       id: scorecard.id,
+      name: scorecard.name,
       user_name: scorecard.user.short_name,
       should_subtitle: scorecard.should_subtotal?,
       should_total: scorecard.should_total?,
