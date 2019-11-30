@@ -15,7 +15,7 @@
         <div class="edit-tee-times-left-content-style sortable" >
           <% league.league_memberships.each do |member| %>
             <div class="media">
-              <%= image_tag member.user.avatar.url(:thumb), class: 'img-circle' %>
+              <%= user_avatar(member.user) %>
               <div class="media-body">
                 <h2><%= member.user.complete_name %></h2>
               </div>
@@ -38,7 +38,7 @@
           <div class="row <%= 'row-last' if slice == slice.last %> sortable">
             <% slice.each do |member| %>
               <div class="media">
-                <%= image_tag member.user.avatar.url(:thumb), class: 'img-circle' %>
+                <%= user_avatar(member.user) %>
                 <div class="media-body">
                   <h2><%= member.user.complete_name %></h2>
                 </div>

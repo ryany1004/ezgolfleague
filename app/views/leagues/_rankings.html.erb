@@ -5,7 +5,7 @@
     </div>
     <div class="col-md-9">
       <div class="media">
-        <%= image_tag ranking.user.avatar.url(:thumb), class: 'img-circle' %>
+        <%= user_avatar(ranking.user) %>
         <div class="media-body">
           <h2><%= ranking.user.complete_name %></h2>
         </div>

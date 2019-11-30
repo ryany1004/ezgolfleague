@@ -63,7 +63,7 @@
                   </div>
                   <div class="col-md-6">
                     <div class="media">
-                      <%= image_tag result.user.avatar.url(:thumb), class: 'img-circle' %>
+                      <%= user_avatar(result.user) %>
                       <div class="media-body">
                         <h2><%= result.name %></h2>
                       </div>

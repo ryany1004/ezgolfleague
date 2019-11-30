@@ -31,7 +31,7 @@
             <div class="col-md-5">
               <ul class="profile-img-list list-inline">
                 <% tournament.players[0..3].each do |player| %>
-                  <li class="list-inline-item"><%= image_tag player.avatar.url(:thumb) %></li>
+                  <li class="list-inline-item"><%= user_avatar(player) %></li>
                 <% end %>
                 <% if tournament.players.count > 4 %>
                   <li class="list-inline-item"><span>+<%= tournament.players.count - 4 %></span></li>

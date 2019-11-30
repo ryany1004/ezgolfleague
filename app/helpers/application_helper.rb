@@ -31,6 +31,16 @@ module ApplicationHelper
     end
   end
 
+  def user_avatar(user)
+    if Rails.env.development?
+      image = 'avatar'
+    else
+      image = avatar_image_url
+    end
+
+    image_tag image, class: 'img-circle'
+  end
+
   def current_league_name
     current_user.selected_league.name
   end

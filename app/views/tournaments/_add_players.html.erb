@@ -13,7 +13,7 @@
               <div class="edit-tee-times-left-content-style sortable">
                 <% @non_registered_players.each do |player| %>
                   <div class="media tee-time-widget">
-                    <%= image_tag player.avatar.url(:thumb), class: 'img-circle' %>
+                    <%= user_avatar(player) %>
                     <div class="media-body">
                       <h2><%= player.complete_name %></h2>
                     </div>
@@ -63,7 +63,7 @@
                       <% outings_count += 1 %>
                       <div class="col-md-6 tee-time-widget">
                         <div class="media">
-                          <%= image_tag outing.user.avatar.url(:thumb), class: 'img-circle' %>
+                          <%= user_avatar(outing.user) %>
                           <div class="media-body">
                             <h2><%= outing.user.complete_name %></h2>
                           </div>

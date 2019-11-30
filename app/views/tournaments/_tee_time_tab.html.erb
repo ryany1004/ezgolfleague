@@ -15,7 +15,7 @@
             <% tee_times_count += 1 %>
             <div class="col-md-6 tee-time-widget">
               <div class="media">
-                <%= image_tag outing.user.avatar.url(:thumb), class: 'img-circle' %>
+                <%= user_avatar(outing.user) %>
                 <div class="media-body">
                   <h2><%= outing.user.complete_name %></h2>
 

@@ -33,7 +33,7 @@
             <tr>
               <td class="pl-5 pr-0">
                 <div class="media">
-                  <%= image_tag membership.user.avatar.url(:thumb), class: 'img-circle' %>
+                  <%= user_avatar(membership.user) %>
                   <div class="media-body">
                     <h2><%= link_to membership.user.complete_name, edit_league_league_membership_path(@league, membership) %></h2>
                   </div>

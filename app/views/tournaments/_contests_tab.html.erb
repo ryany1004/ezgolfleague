@@ -24,7 +24,7 @@
               <tr>
                 <td class="pl-5 pr-0 border-top-0">
                   <div class="media">
-                    <%= image_tag payout_result.user.avatar.url(:thumb), class: 'img-circle' %>
+                    <%= user_avatar(payout_result.user) %>
                     <div class="media-body">
                       <h2><%= payout_result.name %></h2>
                     </div>

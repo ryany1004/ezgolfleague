@@ -41,7 +41,7 @@
 				<%= f.input :avatar %>
 				<div id="upload-photo-img">
           <% if current_user.avatar %>
-            <%= image_tag current_user.avatar.url(:thumb), class: 'img-circle' %>
+            <%= user_avatar(current_user) %>
           <% else %>
 					  <img id="upload-photo-img-default" src="http://placehold.it/40" >
           <% end %>

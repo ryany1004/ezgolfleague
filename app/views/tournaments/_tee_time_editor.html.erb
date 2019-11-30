@@ -25,7 +25,7 @@
                 <div class="row <%= 'row-last' if slice == slice.last %> sortable">
                   <% slice.each do |outing| %>
                     <div class="media">
-                      <%= image_tag outing.user.avatar.url(:thumb), class: 'img-circle' %>
+                      <%= user_avatar(outing.user) %>
                       <div class="media-body">
                         <h2><%= outing.user.complete_name %></h2>
                       </div>
