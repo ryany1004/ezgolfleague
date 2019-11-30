@@ -12,4 +12,7 @@ export default {
   getTournametGroups(leagueId, tournamentId, tournamentDayId) {
     return client.get(`/api/v2/leagues/${leagueId}/tournaments/${tournamentId}/tournament_days/${tournamentDayId}/tournament_groups.json`);
   },
+  getScorecard(scorecardId) {
+    return client.get(`/api/v2/scorecards/${scorecardId}.json`);
+  },
 };
