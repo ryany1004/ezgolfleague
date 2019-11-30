@@ -35,7 +35,7 @@ module ApplicationHelper
     if Rails.env.development?
       image = 'avatar'
     else
-      image = avatar_image_url
+      image = user.avatar_image_url
     end
 
     image_tag image, class: 'img-circle'
