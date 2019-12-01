@@ -15,4 +15,13 @@ export default {
   getScorecard(scorecardId) {
     return client.get(`/api/v2/scorecards/${scorecardId}.json`);
   },
+  postTournamentWizard(csrfToken, leagueId, wizardData) {
+    const config = {
+      headers: {
+        'X-CSRF-TOKEN': csrfToken,
+      },
+    };
+
+    return client.post(`/api/v2/leagues/${leagueId}/tournament_wizard`, wizardData, config);
+  },
 };
