@@ -17,6 +17,8 @@ import IndividualStrokePlaySetup from '../components/ScoringRuleSetup/Individual
 import StablefordSetup from '../components/ScoringRuleSetup/StablefordSetup';
 import BestThreeBallsOfFourSetup from '../components/ScoringRuleSetup/BestThreeBallsOfFourSetup';
 
+import ErrorDisplay from '../components/Shared/ErrorDisplay';
+
 import EZGLFlight from './models/flight';
 import EZGLScoringRule from './models/scoring_rule';
 
@@ -28,6 +30,7 @@ Vue.component('multiselect', Multiselect);
 Vue.component('stroke-play-setup', IndividualStrokePlaySetup);
 Vue.component('stableford-setup', StablefordSetup);
 Vue.component('best-three-balls-of-four-setup', BestThreeBallsOfFourSetup);
+Vue.component('error-display', ErrorDisplay);
 
 document.addEventListener('DOMContentLoaded', () => {
   const bsStepper = new Stepper(document.querySelector('#stepper1'));
@@ -40,6 +43,7 @@ document.addEventListener('DOMContentLoaded', () => {
       datePicker,
       Multiselect,
       VModal,
+      ErrorDisplay,
       IndividualStrokePlaySetup,
       StablefordSetup,
       BestThreeBallsOfFourSetup,
@@ -88,6 +92,7 @@ document.addEventListener('DOMContentLoaded', () => {
       selectedScoringRuleId: null,
       selectedPayoutIndex: null,
       selectedScoringRuleHolesOptions: [],
+      saveErrors: [],
     },
     validations: {
       tournamentWizard: {
@@ -435,6 +440,8 @@ document.addEventListener('DOMContentLoaded', () => {
         api.postTournamentWizard(this.csrfToken, props.league.id, jsonPayload)
           .then((response) => {
             if (response.data.errors.length > 0) {
+              app.saveErrors = response.data.errors;
+
               app.$modal.show('save-errors');
             } else {
               window.location.href = response.data.url;

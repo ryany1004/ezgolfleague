@@ -395,11 +395,15 @@
   <vue-modal name="save-errors" height="auto">
     <div class="welcome p-5">
       <div class="p-3">
-        <h2 style="font-size:30px;">Save Error</h2>
+        <h2 style="font-size:30px;">Tournament Save Error</h2>
       </div>
       <div class="step-1-content-form step-1-content">
         <div class="row">
           <p>We were unable to save your tournament. Please check your data and re-submit.</p>
+          <br/>
+          <p>
+            <error-display v-bind:errors="saveErrors"/>
+          </p>
         </div>
       </div>
     </div>
