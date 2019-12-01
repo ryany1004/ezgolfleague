@@ -32,6 +32,7 @@ pickle-email-*.html
 *.bowerrc
 bower.json
 
+.vscode
 .DS_Store
 .byebug_history
 .ruby-version*
