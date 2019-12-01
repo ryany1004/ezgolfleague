@@ -306,17 +306,17 @@ class ScoringRuleOption
     individual_classes = [
       'StrokePlayScoringRule',
       'StablefordScoringRule',
-      'MatchPlayScoringRule',
-      'TwoManBestBallScoringRule',
-      'TwoManScrambleScoringRule',
-      'FourManScrambleScoringRule',
-      'GrossSkinsScoringRule',
+      # 'MatchPlayScoringRule',
+      # 'TwoManBestBallScoringRule',
+      # 'TwoManScrambleScoringRule',
+      # 'FourManScrambleScoringRule',
+      # 'GrossSkinsScoringRule',
       'ThreeBestBallsOfFourScoringRule',
-      'NetSkinsScoringRule',
-      'TotalSkinsScoringRule',
-      'NetLowScoringRule',
-      'GrossLowScoringRule',
-      'ManualScoringRule'
+      # 'NetSkinsScoringRule',
+      # 'TotalSkinsScoringRule',
+      # 'NetLowScoringRule',
+      # 'GrossLowScoringRule',
+      # 'ManualScoringRule'
     ]
 
     individual = []
@@ -331,13 +331,13 @@ class ScoringRuleOption
     end
 
     team_classes = [
-      'TeamStrokePlayIndividualSumScoringRule',
-      'TeamStrokePlayVsScoringRule',
-      'TeamMatchPlayVsScoringRule',
-      'TeamMatchPlayBestBallScoringRule',
-      'TeamMatchPlayScramblePointsPerHoleScoringRule',
-      'TeamMatchPlayVsPointsPerHoleScoringRule',
-      'TeamBestBallScoringRule'
+      # 'TeamStrokePlayIndividualSumScoringRule',
+      # 'TeamStrokePlayVsScoringRule',
+      # 'TeamMatchPlayVsScoringRule',
+      # 'TeamMatchPlayBestBallScoringRule',
+      # 'TeamMatchPlayScramblePointsPerHoleScoringRule',
+      # 'TeamMatchPlayVsPointsPerHoleScoringRule',
+      # 'TeamBestBallScoringRule'
     ]
 
     team = []
