@@ -21,8 +21,11 @@ module.exports = {
   rules: {
     'class-methods-use-this': 'off',
     'import/no-unresolved': 'off',
-    'max-len': ['error', { 'code': 150 }],
+    'max-len': ['error', { 'code': 200 }],
     'no-console': 'off',
     'no-param-reassign': ['error', { 'props': false }]
+  },
+  settings: {
+    'html/html-extensions': ['.html']
   },
 };
