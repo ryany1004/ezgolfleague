@@ -14,6 +14,8 @@ import { ToggleButton } from 'vue-js-toggle-button';
 import api from 'api';
 
 import IndividualStrokePlaySetup from '../components/ScoringRuleSetup/IndividualStrokePlaySetup';
+import StablefordSetup from '../components/ScoringRuleSetup/StablefordSetup';
+import BestThreeBallsOfFourSetup from '../components/ScoringRuleSetup/BestThreeBallsOfFourSetup';
 
 import EZGLFlight from './models/flight';
 import EZGLScoringRule from './models/scoring_rule';
@@ -24,6 +26,8 @@ Vue.use(Vuelidate);
 Vue.component('multiselect', Multiselect);
 
 Vue.component('stroke-play-setup', IndividualStrokePlaySetup);
+Vue.component('stableford-setup', StablefordSetup);
+Vue.component('best-three-balls-of-four-setup', BestThreeBallsOfFourSetup);
 
 document.addEventListener('DOMContentLoaded', () => {
   const bsStepper = new Stepper(document.querySelector('#stepper1'));
@@ -37,6 +41,8 @@ document.addEventListener('DOMContentLoaded', () => {
       Multiselect,
       VModal,
       IndividualStrokePlaySetup,
+      StablefordSetup,
+      BestThreeBallsOfFourSetup,
     },
     data: {
       csrfToken: document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
@@ -426,22 +432,14 @@ document.addEventListener('DOMContentLoaded', () => {
         const tournamentPayload = this.tournamentData();
         const jsonPayload = JSON.stringify(tournamentPayload);
 
-        fetch(`/api/v2/leagues/${props.league.id}/tournament_wizard`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'X-CSRF-TOKEN': this.csrfToken,
-          },
-          body: jsonPayload,
-        }).then((response) => {
-          return response.json();
-        }).then((data) => {
-          if (data.errors.length > 0) {
-            app.$modal.show('save-errors');
-          } else {
-            window.location.href = data.url;
-          }
-        });
+        api.postTournamentWizard(this.csrfToken, props.league.id, jsonPayload)
+          .then((response) => {
+            if (response.data.errors.length > 0) {
+              app.$modal.show('save-errors');
+            } else {
+              window.location.href = response.data.url;
+            }
+          });
       },
     },
   });

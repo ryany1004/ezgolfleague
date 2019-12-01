@@ -338,7 +338,17 @@
         </div>
       </div>
 
-      <stroke-play-setup v-if="selectedScoringRule.setupComponentName === 'individual_stroke_play'" @nine-hole-tiebreaking-changed="scoringRuleOptionUpdated"/>
+      <template v-if="selectedScoringRule.setupComponentName === 'individual_stroke_play'">
+        <stroke-play-setup @game-type-options-changed="scoringRuleOptionUpdated"/>
+      </template>
+
+      <template v-if="selectedScoringRule.setupComponentName === 'individual_stableford'">
+        <stableford-setup @game-type-options-changed="scoringRuleOptionUpdated"/>
+      </template>
+
+      <template v-if="selectedScoringRule.setupComponentName === 'three_best_balls_of_four'" >
+        <best-three-balls-of-four-setup @game-type-options-changed="scoringRuleOptionUpdated"/>
+      </template>
     </div>
 
     <div class="modal-footer">
