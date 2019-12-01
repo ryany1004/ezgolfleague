@@ -7,7 +7,7 @@ module ScorecardNetScores
 
       Rails.logger.debug { "Hole: #{score.course_hole.hole_number} - Score Strokes #{score.strokes}" }
 
-      if !handicap_allowance.blank?
+      if handicap_allowance.present?
         handicap_allowance.each do |h|
           if h[:course_hole] == score.course_hole
             if h[:strokes] != 0

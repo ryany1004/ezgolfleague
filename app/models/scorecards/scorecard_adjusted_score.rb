@@ -1,7 +1,7 @@
 module ScorecardAdjustedScore
   def score_or_maximum_for_hole(strokes:, course_handicap:, hole:)
-    if course_handicap == 0
-      Rails.logger.debug { "No Course Handicap" }
+    if course_handicap.zero?
+      Rails.logger.debug { 'No Course Handicap' }
 
       return strokes
     end
@@ -35,7 +35,7 @@ module ScorecardAdjustedScore
 
         adjusted_score
       else
-        Rails.logger.info { "Adjusted Score Was Too High... Bailing" }
+        Rails.logger.info { 'Adjusted Score Was Too High... Bailing' }
 
         strokes
       end
