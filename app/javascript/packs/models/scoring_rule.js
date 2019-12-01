@@ -9,9 +9,7 @@ export default class EZGLScoringRule extends Model {
       name: null,
       className: null,
       holeConfiguration: null,
-      customConfiguration: {
-        nineHoleTiebreaking: false,
-      },
+      customConfiguration: {},
       isMandatory: true,
       duesAmount: 0,
       payouts: [],
