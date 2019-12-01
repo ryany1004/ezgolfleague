@@ -50,6 +50,7 @@ group :development do
   gem 'faker'
   gem 'listen'
   gem 'rubocop'
+  gem 'rubocop-rails'
   gem 'web-console'
 end
 
