@@ -82,7 +82,7 @@ module StablefordScoringRuleSetup
   end
 
   def save_setup_details(game_type_options)
-    score_types = ["double_eagle_score", "eagle_score", "birdie_score", "par_score", "bogey_score", "double_bogey_score"]
+    score_types = ["doubleEagleScore", "eagleScore", "birdieScore", "parScore", "bogeyScore", "doubleBogeyScore"]
     score_types.each do |score_type|
       score = 0
       score = game_type_options[score_type]
@@ -94,7 +94,7 @@ module StablefordScoringRuleSetup
   end
 
   def remove_game_type_options
-    score_types = ["double_eagle_score", "eagle_score", "birdie_score", "par_score", "bogey_score", "double_bogey_score"]
+    score_types = ["doubleEagleScore", "eagleScore", "birdieScore", "parScore", "bogeyScore", "doubleBogeyScore"]
     score_types.each do |score_type|
       metadata = GameTypeMetadatum.where(search_key: self.score_key(score_type)).first
       metadata.destroy unless metadata.blank?

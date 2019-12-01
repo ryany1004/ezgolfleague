@@ -9,7 +9,7 @@ module ThreeBestBallsOfFourScoringRuleSetup
 
   def save_setup_details(game_type_options)
     should_add_par_if_small_group = 0
-    should_add_par_if_small_group = 1 if game_type_options['should_add_par_if_small_group'] == 'true'
+    should_add_par_if_small_group = 1 if game_type_options['shouldAddParIfSmallGroup'] == 'true'
 
     metadata = GameTypeMetadatum.find_or_create_by(search_key: should_add_par_key)
     metadata.integer_value = should_add_par_if_small_group
