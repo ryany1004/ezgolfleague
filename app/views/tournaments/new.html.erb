@@ -208,7 +208,7 @@
                       <template v-for="rule in ruleGroup">
                         <template v-if="rule.name">
                           <div class="added-game-type">
-                            <p>{{ rule.name }}</p>
+                            <p v-on:click="showGameTypeModal(rule)">{{ rule.name }}</p>
                             <a href="#" class="btn btn-primary" v-on:click="showPayoutsModal(rule)">Payouts</a>
                           </div>
                         </template>
