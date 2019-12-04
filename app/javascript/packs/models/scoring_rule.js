@@ -10,6 +10,7 @@ export default class EZGLScoringRule extends Model {
       className: null,
       holeConfiguration: null,
       customConfiguration: {},
+      customHoles: [],
       isMandatory: true,
       duesAmount: 0,
       payouts: [],
