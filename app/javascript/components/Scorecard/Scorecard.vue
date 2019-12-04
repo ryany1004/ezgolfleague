@@ -12,7 +12,7 @@
           <a href="#edit" class="btn btn__ezgl-secondary edit-button mr-2">Edit</a>
           <a href="#save" class="btn btn-primary mr-2">Save</a>
         </div>
-      </div>          
+      </div>
     </div>
     <div>
       <table>
@@ -92,7 +92,7 @@
             <td>M HCP</td>
             <td>&nbsp;</td>
 
-            <template v-for="(holeGroup, j) in sliceScores(scorecard.holes)">
+            <template v-for="holeGroup in sliceScores(scorecard.holes)">
               <template v-for="hole in holeGroup">
                 <td>{{ hole.handicap }}</td>
               </template>
@@ -106,39 +106,39 @@
 </template>
 
 <script>
-  export default {
-    data() {
-      return {
-        scorecard: {
-          holes: [],
-          scorecards: [
-            {
-              scores: []
-            }
-          ]
-        }
-      }
-    },
-    methods: {
-      beforeOpen (event) {
-        this.scorecard = event.params.scorecard;
+export default {
+  data() {
+    return {
+      scorecard: {
+        holes: [],
+        scorecards: [
+          {
+            scores: [],
+          },
+        ],
       },
-      sliceScores(scores) {
-        const sliceLength = scores.length / 2;
-        const slices = scores.length / sliceLength;
+    };
+  },
+  methods: {
+    beforeOpen(event) {
+      this.scorecard = event.params.scorecard;
+    },
+    sliceScores(scores) {
+      const sliceLength = scores.length / 2;
+      const slices = scores.length / sliceLength;
 
-        var sliced = [];
+      const sliced = [];
 
-        for (var i = 0; i < slices; i++) {
-          var start = i * sliceLength;
-          var end = (i + 1) * sliceLength;
-          var slice = scores.slice(start, end);
+      for (var i = 0; i < slices; i++) {
+        var start = i * sliceLength;
+        var end = (i + 1) * sliceLength;
+        var slice = scores.slice(start, end);
 
-          sliced.push(slice);
-        }
-
-        return sliced;
+        sliced.push(slice);
       }
-    }
-  }
+
+      return sliced;
+    },
+  },
+};
 </script>
