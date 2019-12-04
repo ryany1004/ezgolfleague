@@ -1,1 +1,36 @@
-render partial: 'tournament_group', collection: @tournament_groups, as: :tournament_group
+Rails.cache.fetch ['v2', @tournament_day.cache_key_with_version] do
+  json = {}
+
+  json[:non_registered_players] = @non_registered_players.map do |player|
+    {
+      id: player.id,
+      name: player.complete_name,
+      short_name: player.short_name,
+      image_url: player.avatar_image_url,
+    }
+  end
+
+  json[:tournament_groups] = @tournament_groups.map do |group|
+    group_json = {
+      id: group.id,
+      tee_time: group.formatted_tee_time
+    }
+
+    group_json[:tournament_group_slots] = group.users_in_slots.map do |player|
+      if player.present?
+        {
+          id: player.id,
+          name: player.complete_name,
+          short_name: player.short_name,
+          image_url: player.avatar_image_url
+        }
+      else
+        {}
+      end
+    end
+
+    group_json
+  end
+
+  json
+end
