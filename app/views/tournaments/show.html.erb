@@ -3,15 +3,14 @@
 <% end -%>
 
 <% props = {
-    league: @league
+    league: @league,
+    tournament: @tournament,
+    tournament_day: @tournament.first_day
   }.to_json
 %>
 
 <div id="tournament-show" data="<%= props %>">
-
   <div class="banner-img fall-classic-img"></div>
-  <!-- /.banner-img -->
-
   <div class="container pt-130">
     <div class="dashboard-header ttt-header fall-classic-header">
       <div class="row">
@@ -28,7 +27,6 @@
             </div>
           </a>
         </div>
-        <!-- /.col-md-8 --> 
         <div class="col-md-4 text-right">
           <% if @tournament.tournament_state == TournamentState::REGISTRATION %>
             <a href="#" class="btn btn-primary" v-on:click="showTeeTimeEditorModal(addId)">Manage Players/Tee Times</a>
@@ -38,10 +36,8 @@
             <%= link_to "Edit Results", "#", class: 'btn btn-primary' %>
           <% end %>
         </div>
-      </div>
-      <!-- /.row -->         
+      </div>        
     </div>
-    <!-- /.dashboard-header --> 
 
     <%= render partial: 'tournament_details' %>
 
@@ -62,7 +58,7 @@
                 <% if @tournament.tournament_state == TournamentState::REGISTRATION %>
                   <li class="nav-item tee-times-full-tab">
                     <a class="nav-link active" data-toggle="pill" href="#tee-time-tab">Players/Tee Times</a>
-                    <%= link_to "Edit", "#add-players", class: 'btn btn__ezgl-secondary popup-with-zoom-anim' %>
+                    <a href="#" class="btn btn__ezgl-secondary" v-on:click="showTeeTimeEditor">Edit</a>
                   </li>
                 <% elsif @tournament.tournament_state == TournamentState::REVIEW_SCORES %>
                   <li class="nav-item">
@@ -97,18 +93,12 @@
               <% end %>
             </div>
           </div>
-        </div>
-        <!-- /.col-md-8 -->  
-      </div>
-      <!-- /.row -->         
+        </div> 
+      </div>        
     </div>
-    <!-- /.container -->
   </div>
-  <!-- /.container --> 
 
-  <vue-modal name="tee-time-editor" height="auto" width="85%" :scrollable="false" @opened="openedTeeTimeEditor" clickToClose="true">
-    <%= render partial: 'add_players', locals: { tournament_day: @tournament.first_day, tournament: @tournament } %>   
-  </vue-modal>
+  <tee-time-editor/>
 
   <div class="modal fade" id="sendMessageModal" tabindex="-1" role="dialog" aria-labelledby="sendMessageModalCenterTitle" aria-hidden="true">
     <%= render partial: 'send_message' %>
