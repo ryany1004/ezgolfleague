@@ -129,7 +129,7 @@
                             <label>Allow Players to Enter<br>Scores Until Finalized</label>
                           </div>
                           <div class="col-md-5 text-left" style="margin-left: 20px;">
-                            <toggle-button id="enter-scores-until-finalized" v-model="tournamentWizard.enterScoresUntilFinalized"/>
+                            <toggle-button id="enter-scores-until-finalized" v-model="tournamentWizard.enterScoresUntilFinalized" :labels="{checked: 'yes', unchecked: 'no'}"/>
                           </div>
                         </div>
                     </div> 
@@ -140,7 +140,7 @@
                             <label>Players Should<br>See Tee-Times</label>
                           </div>
                           <div class="col-md-5 text-left" style="margin-left: 20px;">
-                            <toggle-button id="show-tee-times" v-model="tournamentWizard.showTeeTimes"/>
+                            <toggle-button id="show-tee-times" v-model="tournamentWizard.showTeeTimes" :labels="{checked: 'yes', unchecked: 'no'}"/>
                           </div>
                         </div>
                     </div> 
@@ -151,7 +151,7 @@
                             <label>Separate Golfers<br>into Flights</label>
                           </div>
                           <div class="col-md-5 text-left" style="margin-left: 20px;">
-                            <toggle-button id="show-flights" v-model="showFlights" @change="toggleFlights"/>
+                            <toggle-button id="show-flights" v-model="showFlights" @change="toggleFlights" :labels="{checked: 'yes', unchecked: 'no'}"/>
                           </div>
                         </div>
                     </div> 
@@ -310,7 +310,7 @@
             <label>Holes (Custom)</label>
           </div>
           <div class="col-md-8 pl-5">
-            <div class="row pl-5">
+            <div class="row">
               <div>
                 <input type="checkbox" value="1" v-model="selectedScoringRule.customHoles"> Hole 1<br>
                 <input type="checkbox" value="2" v-model="selectedScoringRule.customHoles"> Hole 2<br>
