@@ -47,6 +47,24 @@ class TournamentGroup < ApplicationRecord
     end
   end
 
+  def users_in_slots
+    count = max_number_of_players.abs
+    count = golf_outings.count if golf_outings.count > count # so we do not hide people if this gets screwed up
+
+    group_slots = []
+
+    count.times.each_with_index do |_, i|
+      user = user_for_index(i)
+      if user.present?
+        group_slots << user
+      else
+        group_slots << nil
+      end
+    end
+
+    group_slots
+  end
+
   def golfer_outing_for_index(index)
     if index < self.golf_outings.count
       self.golf_outings[index]
