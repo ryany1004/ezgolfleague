@@ -4,7 +4,7 @@
           <div class="row">
             <div class="col-md-8 vtch-left-content">
                 <h2><%= tournament.name %></h2>
-                <p class="text-uppercase"><%= tournament.first_day.tournament_at.to_s(:long) %><a href="#">review scores</a></p>
+                <p class="text-uppercase"><%= tournament.first_day.tournament_at.to_s(:long) %><span class="vtch-left-status">review scores</span></p>
             </div><!-- /.col-md-8 -->
             <div class="col-md-4 text-right">
               <%= link_to "View Tournament", league_tournament_path(tournament.league, tournament), class: "btn btn-primary" %>

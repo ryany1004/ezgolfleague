@@ -5,7 +5,7 @@
             <div class="col-md-8 vtch-left-content">
                 <h2><%= tournament.name %></h2>
                 <p class="text-uppercase"><%= tournament.first_day.tournament_at.to_s(:long) %>
-                  <%= link_to 'post scores', league_tournament_finalization_path(tournament.league, tournament), method: :patch %>
+                  <span class="vtch-left-status">post scores</span>
                 </p>
             </div><!-- /.col-md-8 -->
             <div class="col-md-4 text-right">
