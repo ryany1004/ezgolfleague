@@ -27,7 +27,6 @@ document.addEventListener('DOMContentLoaded', () => {
       csrfToken: document
         .querySelector('meta[name="csrf-token"]')
         .getAttribute('content'),
-      teeTime: {},
     },
     methods: {
       showTeeTimeEditor() {

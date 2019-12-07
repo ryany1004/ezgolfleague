@@ -1,5 +1,5 @@
 <template>
-  <vue-modal name="tee-time-editor" height="auto" width="85%" :scrollable="false" @before-open="beforeOpen" clickToClose="true">
+  <vue-modal name="tee-time-editor" height="auto" width="85%" :scrollable="false" @before-open="beforeOpen" :clickToClose="true">
     <div class="edit-tee-times">
       <div class="edit-tee-times-header">
         <div class="row">
@@ -13,12 +13,14 @@
               <div class="col-md-4">
                 <div class="edit-tee-times-left-content mCustomScrollbar" data-mcs-theme="dark">
                   <div class="edit-tee-times-left-content-style sortable">
-                    <div class="media tee-time-widget" v-for="player in teeGroupData.nonRegisteredPlayers" v-bind:key="player.id">
-                      <img :src=player.imageUrl>
-                      <div class="media-body">
-                        <h2>{{ player.name }}</h2>
+                    <draggable v-model="teeGroupData.nonRegisteredPlayers" group="players" @start="dragFromUnregistered">
+                      <div class="media tee-time-widget" v-for="player in teeGroupData.nonRegisteredPlayers" v-bind:key="player.id">
+                        <img :src=player.imageUrl>
+                        <div class="media-body">
+                          <h2>{{ player.name }}</h2>
+                        </div>
                       </div>
-                    </div>
+                    </draggable>
                   </div>
                 </div>
               </div>
@@ -35,11 +37,11 @@
                   <div class="addTeeTimeGreyBtn mt-2">
                     <p>Add Previous Tee Time</p>
                   </div>
-                  <div v-for="tournamentGroup in teeGroupData.tournamentGroups" v-bind:key="tournamentGroup.id">
+                  <div v-for="(tournamentGroup, groupIndex) in teeGroupData.tournamentGroups" v-bind:key="tournamentGroup.id">
                     <div class="heading-style tee-time-popup">
                       <h2 class="text-uppercase">
                         <div class='input-group date editTeeTimeText' >
-                          <input type='text' class="form-control editTeeTimeInput noBorder" value="TEE TIME TEXT"/>
+                          <date-picker class="form-control editTeeTimeInput noBorder" v-model="tournamentGroup.teeTime"></date-picker>
                         </div>
                       </h2>
                       <span class="input-group-addon">
@@ -47,9 +49,10 @@
                       </span>
                       <i class="fas fa-trash"></i>
                     </div>
-                    <div class="row sortable drag-player-row" v-for="(sliceGroup, index) in sliceTournamentGroupSlots(tournamentGroup.tournamentGroupSlots)" v-bind:key="index">
-                      <template v-for="player in sliceGroup">
-                        <div class="col-md-6 tee-time-widget" v-if="player.id != null">
+
+                    <draggable v-model="tournamentGroup.players" group="players" class="row drag-player-row" :move="attemptDrop" @change="dropInGroup(groupIndex, $event)">
+                      <template v-for="player in tournamentGroup.players">
+                        <div class="col-md-6 tee-time-widget" v-bind:key="player.id">
                           <div class="media">
                             <img :src=player.imageUrl>
                             <div class="media-body">
@@ -57,13 +60,15 @@
                             </div>
                           </div>
                         </div>
-                        <div class="drag-player-box" v-else>
-                          <div class="drag-player">
-                            <p>Drag Player Here</p>
-                          </div>
-                        </div>
                       </template>
-                    </div>
+
+                      <div class="drag-player-box" v-for="n in remainingSlotsForGroup(tournamentGroup)" v-bind:key="n">
+                        <div class="drag-player" :id=n>
+                          <p>Drag Player Here</p>
+                        </div>
+                      </div>
+                    </draggable>
+
                     <div class="addTeeTimeGreyBtn">
                       <p>Add Next Tee Time</p>
                     </div>
@@ -77,16 +82,22 @@
 </template>
 
 <script>
+import draggable from 'vuedraggable';
+import datePicker from 'vue-bootstrap-datetimepicker';
+
+import api from 'api';
+
 export default {
+  components: {
+    draggable,
+    datePicker,
+  },
   data() {
     return {
+      csrfToken: document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
       teeGroupData: {
         nonRegisteredPlayers: [],
-        tournamentGroups: [
-          {
-            tournamentGroupSlots: [],
-          },
-        ],
+        tournamentGroups: [],
       },
     };
   },
@@ -94,22 +105,51 @@ export default {
     beforeOpen(event) {
       this.teeGroupData = event.params.teeGroupData;
     },
-    sliceTournamentGroupSlots(groupSlots) {
-      const sliceLength = 2;
-      const slices = groupSlots.length / sliceLength;
+    remainingSlotsForGroup(tournamentGroup) {
+      const remainingSlots = tournamentGroup.maxNumberOfPlayers - tournamentGroup.players.length;
+      return remainingSlots >= 0 ? remainingSlots : 0;
+    },
+    dragFromUnregistered(event) {
+      this.playerDragIndex = event.oldIndex;
+    },
+    attemptDrop(event) { // why is this not firing?!?
+      console.log('Drop attempted');
+      console.log(event);
 
-      const sliced = [];
+      return true;
+    },
+    dropInGroup(groupId) {
+      const group = this.teeGroupData.tournamentGroups[groupId];
+      const remainingSlots = group.maxNumberOfPlayers - group.players.length;
 
-      var i = 0;
-      for (; i < slices; i++) {
-        const start = i * sliceLength;
-        const end = (i + 1) * sliceLength;
-        const slice = groupSlots.slice(start, end);
+      if (remainingSlots < 0) {
+        const playerToRemove = group.players.pop();
 
-        sliced.push(slice);
+        this.teeGroupData.nonRegisteredPlayers.push(playerToRemove);
       }
 
-      return sliced;
+      this.saveGroup(group);
+    },
+    saveGroup(group) {
+      const payload = {
+        leagueId: this.teeGroupData.leagueId,
+        tournamentId: this.teeGroupData.tournamentId,
+        tournamentDayId: this.teeGroupData.tournamentDayId,
+        group,
+      };
+
+      api.patchTournamentGroup(this.csrfToken, payload)
+        .then((response) => {
+          console.log(response);
+
+          // if (response.data.errors.length > 0) {
+          //   app.saveErrors = response.data.errors;
+
+          //   app.$modal.show('save-errors');
+          // } else {
+          //   window.location.href = response.data.url;
+          // }
+        });
     },
   },
 };

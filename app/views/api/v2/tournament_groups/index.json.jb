@@ -1,5 +1,9 @@
 Rails.cache.fetch ['v2', @tournament_day.cache_key_with_version] do
-  json = {}
+  json = {
+    league_id: @tournament.league.id,
+    tournament_id: @tournament.id,
+    tournament_day_id: @tournament_day.id,
+  }
 
   json[:non_registered_players] = @non_registered_players.map do |player|
     {
@@ -13,20 +17,19 @@ Rails.cache.fetch ['v2', @tournament_day.cache_key_with_version] do
   json[:tournament_groups] = @tournament_groups.map do |group|
     group_json = {
       id: group.id,
-      tee_time: group.formatted_tee_time
+      tee_time: group.formatted_tee_time,
+      max_number_of_players: group.max_number_of_players,
     }
 
-    group_json[:tournament_group_slots] = group.users_in_slots.map do |player|
-      if player.present?
-        {
-          id: player.id,
-          name: player.complete_name,
-          short_name: player.short_name,
-          image_url: player.avatar_image_url
-        }
-      else
-        {}
-      end
+    group_json[:players] = group.golf_outings.map do |outing|
+      player = outing.user
+
+      {
+        id: player.id,
+        name: player.complete_name,
+        short_name: player.short_name,
+        image_url: player.avatar_image_url,
+      }
     end
 
     group_json
