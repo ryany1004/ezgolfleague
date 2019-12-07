@@ -302,6 +302,21 @@ document.addEventListener('DOMContentLoaded', () => {
           this.scoringRuleValid = false;
         }
       },
+      deleteScoringRule(scoringRuleToDelete) {
+        for (var i = 0; i < this.tournamentWizard.scoringRules.length; i++) {
+          const scoringRuleGroup = this.tournamentWizard.scoringRules[i];
+
+          for (var j = 0; j < scoringRuleGroup.length; j++) {
+            const scoringRule = scoringRuleGroup[j];
+
+            if (scoringRule.id === scoringRuleToDelete.id) {
+              scoringRuleGroup[j] = new EZGLScoringRule();
+
+              this.$forceUpdate(); // NOTE: would like to re-visit this
+            }
+          }
+        }
+      },
       hideGameTypeModal() {
         this.selectedScoringRuleId = null;
 
