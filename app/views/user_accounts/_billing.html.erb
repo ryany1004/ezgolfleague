@@ -13,6 +13,10 @@
 			<% unless @active_subscription.blank? %>
 			<h4>Pay Per Golfer</h4>
 			<p><%= @active_subscription.golfer_count %> active golfers in your league</p>
+
+      <div style="position:absolute; right:0;">
+        <a href="#" class="btn btn-primary" role="button" data-toggle="modal" data-target="#leagueSubscriptionsModal">Update</a>
+      </div>
 		<% else %>
       <div>
         <h4>Free Trial</h4>
@@ -130,7 +134,7 @@
                 Card #
               </div>
 
-              <input type="text" size="20" class="onboarding__input" data-stripe="number" placeholder="3787 344936 71000"/>
+              <input type="text" size="20" class="onboarding__input" data-stripe="number" placeholder="XXXX XXXX XXXX XXXX"/>
             </div>
 
             <div class="form-flex-group pt-3">
@@ -139,13 +143,13 @@
               </div>
 
               <div class="form-flex-group">
-                <input type="text" size="2" class="onboarding__input" style="width: 75px;" data-stripe="exp-month" placeholder="04"/> <input type="text" size="4" class="onboarding__input" style="margin-left: 12px; width: 75px;" data-stripe="exp-year" placeholder="22"/>
+                <input type="text" size="2" class="onboarding__input" style="width: 75px;" data-stripe="exp-month" placeholder="MM"/> <input type="text" size="4" class="onboarding__input" style="margin-left: 12px; width: 75px;" data-stripe="exp-year" placeholder="YY"/>
 
                 <div class="form-side-label handicap_index-label pr-2" style="justify-content: flex-end;">
                   CVC
                 </div>
 
-                <input type="text" size="4" class="onboarding__input" style="width: 75px;" data-stripe="cvc" placeholder="5342"/>
+                <input type="text" size="4" class="onboarding__input" style="width: 75px;" data-stripe="cvc" placeholder="XXX"/>
               </div>
             </div>
           </div>

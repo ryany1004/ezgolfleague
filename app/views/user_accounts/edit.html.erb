@@ -9,7 +9,9 @@
               <a class="nav-link" id="v-edit-contact-info-tab" data-toggle="pill" href="#v-edit-contact-info" role="tab" aria-controls="v-edit-contact-info" aria-selected="false">Edit Contact Info</a>
               <a class="nav-link" id="v-edit-password-tab" data-toggle="pill" href="#v-edit-password" role="tab" aria-controls="v-edit-password" aria-selected="false">Edit Password</a>
               <a class="nav-link" id="v-notifications-tab" data-toggle="pill" href="#v-notifications" role="tab" aria-controls="v-notifications" aria-selected="false">Notifications</a>
-              <a class="nav-link" id="v-billing-tab" data-toggle="pill" href="#v-billing" role="tab" aria-controls="v-billing" aria-selected="false">Billing</a>
+              <% if current_user.is_any_league_admin? && !current_user.selected_league.exempt_from_subscription %>
+                <a class="nav-link" id="v-billing-tab" data-toggle="pill" href="#v-billing" role="tab" aria-controls="v-billing" aria-selected="false">Billing</a>
+              <% end %>
             </div>
           </div>
           <%= link_to "Exit to Dashboard", root_path, class: 'btn btn-outline-secondary' %>

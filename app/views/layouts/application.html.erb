@@ -78,13 +78,13 @@
                   <a class="nav-link dropdown-toggle" href="#" id="dropdown08" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><%= user_avatar(current_user) %></a>
                   <div class="dropdown-menu" aria-labelledby="dropdown08">
                     <%= link_to "My Profile", edit_user_account_path(current_user.id), class: 'dropdown-item' %>
-                    <% if !current_user.has_all_exempt_leagues? && current_user.is_any_league_admin? %>
+                    <% if current_user.is_any_league_admin? && !current_user.selected_league.exempt_from_subscription %>
                      <%= link_to "Billing", edit_user_account_path(current_user.id) + "#v-billing", class: 'dropdown-item' %>
                     <% end %>
                     <%= link_to "Support", "mailto:support@ezgolfleague.com?subject=I%20Need%20Help%20With%20EZ%20Golf%20League", class: 'dropdown-item' %>
                     <% if current_user.leagues.count > 1 -%>
                       <div class="dropdown-divider"></div>
-                      <p class="dropdown-divider-text">Switch League</p>
+                      <p class="dropdown-divider-text">Switch League (Currently <%= current_user.selected_league.name %>)</p>
                       <% current_user.leagues.each do |l| -%>
                         <%= link_to l.name, switch_leagues_dashboard_index_path(league_id: l.id), method: :put, class: 'dropdown-item' %>
                      <% end -%>
