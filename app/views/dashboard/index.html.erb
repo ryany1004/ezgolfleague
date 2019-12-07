@@ -55,7 +55,7 @@
                     </div>
                     <div class="row mt-5">
                       <div class="col-md-12">
-                        <%= link_to "Add Golfers", setup_golfer_invite_user_accounts_path, class: "btn-primary add-golfers" %>
+                        <%= link_to "Manage Golfers", league_league_memberships_path(current_user.selected_league), class: "btn-primary add-golfers" %>
                         <%= link_to "View League", league_path(current_user.selected_league), class: "view-league-btn mt-3" %>
                       </div>
                     </div>

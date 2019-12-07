@@ -1,59 +1,53 @@
-<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-  <div class="modal-content">
-    <div class="modal-body welcome p-5">
-      <div>
-        <h2>Create Golfer</h2>
-        <p>Manually Create a Golfer Profile</p>
-      </div>
-
-      <div class="step-1-content-form step-1-content">
-        <div class="row">
-          <div class="col-md-3 text-right">
-            <label>Golfer Name</label>
-          </div>
-          <div class="col-md-8 tee-times-inputs">
-            <div class="pr-4">
-              <input type="text" placeholder="Add First Name..." class="form-control"></input>
-            </div>
-            <div>
-              <input type="text" placeholder="Add Last Name..." class="form-control"></input>
-            </div>
-          </div>
+<%= simple_form_for User.new, url: user_accounts_path, multipart: true do |f| %>
+  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-body welcome p-5">
+        <div>
+          <h2>Create Golfer</h2>
+          <p>Manually Create a Golfer Profile</p>
         </div>
-      </div> 
 
-      <div class="step-1-content-form step-1-content">
-        <div class="row">
-          <div class="col-md-3 text-right">
-            <label>Golfer Email</label>
+        <div class="step-1-content-form step-1-content">
+          <div class="row">
+            <div class="col-md-3 text-right">
+              <label>Golfer Name</label>
+            </div>
+            <div class="col-md-8 tee-times-inputs">
+              <div class="pr-4">
+                <%= f.input :first_name, placeholder: 'First Name', required: true, class: "form-control" %>
+              </div>
+              <div>
+                <%= f.input :last_name, placeholder: 'Last Name', required: true, class: "form-control" %>
+              </div>
+            </div>
           </div>
-            <div class="col-md-8">
-              <input type="text" placeholder="Add Email..." class="form-control"></input>
-          </div>
-        </div>
-      </div>
+        </div> 
 
-      <div class="step-1-content-form step-1-content">
-        <div class="row">
-          <div class="col-md-3 text-right">
-          </div>
-            <div class="col-md-8 text-left">
-              <input type="checkbox" id="notify" name="notify">
-              <label for="notify" class="pl-2">Notify golfer about account creation</label>
+        <div class="step-1-content-form step-1-content">
+          <div class="row">
+            <div class="col-md-3 text-right">
+              <label>Golfer Email</label>
+            </div>
+              <div class="col-md-8">
+                <%= f.input :email, label: 'Email Address', placeholder: 'i.e. user@domain.com', required: true, class: "form-control" %>
             </div>
           </div>
         </div>
+
+        <div class="step-1-content-form step-1-content">
+          <div class="row">
+            <div class="col-md-3 text-right">
+            </div>
+              <div class="col-md-8 text-left">
+                <%= f.input :should_invite, label: 'Notify golfer about account creation', as: :boolean %>
+              </div>
+            </div>
+          </div>
+        </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+        <%= f.button :submit, "Add Golfer", class: 'btn btn__ezgl-secondary' %>
       </div>
-<%
-=begin%>
- 
-      <h4><span>OR</span></h4>
-      <%= link_to "Bulk Import", "#bulkAddGolfers", class: 'btn btn-primary' %> 
-<%
-=end%>
-    <div class="modal-footer">
-      <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-      <%= link_to "Add Golfer", "#addGolfer", class: 'btn btn__ezgl-secondary' %>
     </div>
   </div>
-</div>
+<% end %>

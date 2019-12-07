@@ -27,27 +27,14 @@ class UserAccountsController < BaseController
   def create
     @user_account = User.new(user_params)
 
-    if @user_account.should_invite == '1'
-      User.invite!(user_params, current_user)
+    if @user_account.save
+      @user_account.leagues << current_user.selected_league
+      @user_account.invite!(current_user) if @user_account.should_invite == '1'
 
-      redirect_to user_accounts_path, flash:
-      { success: 'The user was successfully invited.' }
-    else
-      unless current_user.is_super_user?
-        @user_account.leagues << current_user.leagues_admin.first if current_user.leagues_admin.present? # add the user to at least one league
-      end
-
-      if @user_account.save
-        GhinUpdateJob.perform_later([@user_account]) if @user_account.ghin_number.present?
-
-        redirect_to user_accounts_path, flash:
-        { success: 'The user was successfully created.' }
-      else
-        initialize_form
-
-        render :new
-      end
+      GhinUpdateJob.perform_later([@user_account]) if @user_account.ghin_number.present?
     end
+
+    redirect_to league_league_memberships_path(current_user.selected_league)
   end
 
   def edit; end
@@ -337,8 +324,8 @@ class UserAccountsController < BaseController
   end
 
   def fetch_league
-    @league = league_from_user_for_league_id(params[:league_id])
-    @league = current_user.leagues_admin.first unless @league&.user_is_admin(current_user)
+    @league = current_user.selected_league
+    @league = current_user.leagues_admin.first if @league.blank?
   end
 
   def fetch_active_subscription
