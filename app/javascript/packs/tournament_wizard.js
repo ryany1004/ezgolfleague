@@ -303,16 +303,19 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       },
       deleteScoringRule(scoringRuleToDelete) {
-        for (var i = 0; i < this.tournamentWizard.scoringRules.length; i++) {
+        // for (const [i, scoringRuleGroup] of this.tournamentWizard.scoringRules.entries()) {
+
+        // }
+        for (let i = 0; i < this.tournamentWizard.scoringRules.length; i += 1) {
           const scoringRuleGroup = this.tournamentWizard.scoringRules[i];
 
-          for (var j = 0; j < scoringRuleGroup.length; j++) {
+          for (let j = 0; j < scoringRuleGroup.length; j += 1) {
             const scoringRule = scoringRuleGroup[j];
 
             if (scoringRule.id === scoringRuleToDelete.id) {
               scoringRuleGroup[j] = new EZGLScoringRule();
 
-              this.$forceUpdate(); // NOTE: would like to re-visit this
+              this.$forceUpdate(); // TODO: would like to re-visit this
             }
           }
         }
