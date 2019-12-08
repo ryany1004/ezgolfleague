@@ -106,7 +106,7 @@ class League < ApplicationRecord
   end
 
   def create_default_league_season
-    create_season_for_year(Time.now.year) if active_season.blank?
+    create_season_for_year(Time.zone.now.year) if active_season.blank?
   end
 
   def create_season_for_year(year)
