@@ -24,6 +24,15 @@ export default {
 
     return client.post(`/api/v2/leagues/${leagueId}/tournament_wizard`, wizardData, config);
   },
+  createTournamentGroup(csrfToken, tournamentGroupPayload) {
+    const config = {
+      headers: {
+        'X-CSRF-TOKEN': csrfToken,
+      },
+    };
+
+    return client.post(`/api/v2/leagues/${tournamentGroupPayload.leagueId}/tournaments/${tournamentGroupPayload.tournamentId}/tournament_days/${tournamentGroupPayload.tournamentDayId}/tournament_groups?position=${tournamentGroupPayload.position}`, null, config);
+  },
   patchTournamentGroup(csrfToken, tournamentGroupPayload) {
     const config = {
       headers: {
@@ -34,5 +43,14 @@ export default {
     const jsonPayload = JSON.stringify(tournamentGroupPayload);
 
     return client.patch(`/api/v2/leagues/${tournamentGroupPayload.leagueId}/tournaments/${tournamentGroupPayload.tournamentId}/tournament_days/${tournamentGroupPayload.tournamentDayId}/tournament_groups/${tournamentGroupPayload.group.id}`, jsonPayload, config);
+  },
+  destroyTournamentGroup(csrfToken, tournamentGroupPayload) {
+    const config = {
+      headers: {
+        'X-CSRF-TOKEN': csrfToken,
+      },
+    };
+
+    return client.delete(`/api/v2/leagues/${tournamentGroupPayload.leagueId}/tournaments/${tournamentGroupPayload.tournamentId}/tournament_days/${tournamentGroupPayload.tournamentDayId}/tournament_groups/${tournamentGroupPayload.group.id}.json`, config);
   },
 };

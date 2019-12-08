@@ -13,7 +13,7 @@
               <div class="col-md-4">
                 <div class="edit-tee-times-left-content mCustomScrollbar" data-mcs-theme="dark">
                   <div class="edit-tee-times-left-content-style sortable">
-                    <draggable v-model="teeGroupData.nonRegisteredPlayers" group="players" @start="dragFromUnregistered">
+                    <draggable v-model="teeGroupData.nonRegisteredPlayers" group="players" :move="attemptDrop">
                       <div class="media tee-time-widget" v-for="player in teeGroupData.nonRegisteredPlayers" v-bind:key="player.id">
                         <img :src=player.imageUrl>
                         <div class="media-body">
@@ -24,7 +24,6 @@
                   </div>
                 </div>
               </div>
-
               <div class="col-md-8">
                 <nav id="autoScroll" class="navbar hidden">
                   <ul class="nav nav-pills">
@@ -34,10 +33,10 @@
                   </ul>
                 </nav>
                 <div class="edit-tee-times-right-content mCustomScrollbar" data-spy="scroll" data-target="#autoScroll" data-offset="50" data-mcs-theme="dark" id="sortable-groups">
-                  <div class="addTeeTimeGreyBtn mt-2">
+                  <div class="addTeeTimeGreyBtn mt-2" v-on:click="addTournamentGroupAtPosition(0)">
                     <p>Add Previous Tee Time</p>
                   </div>
-                  <div v-for="(tournamentGroup, groupIndex) in teeGroupData.tournamentGroups" v-bind:key="tournamentGroup.id">
+                  <div v-for="(tournamentGroup, groupIndex) in teeGroupData.tournamentGroups" v-bind:key="tournamentGroup.id" :id=tournamentGroup.id>
                     <div class="heading-style tee-time-popup">
                       <h2 class="text-uppercase">
                         <div class='input-group date editTeeTimeText' >
@@ -47,10 +46,10 @@
                       <span class="input-group-addon">
                         <i class="fas fa-pencil-alt editTeeTimeIcon" id="a"></i>
                       </span>
-                      <i class="fas fa-trash"></i>
+                      <i class="fas fa-trash" v-on:click="deleteTournamentGroup(tournamentGroup)"></i>
                     </div>
 
-                    <draggable v-model="tournamentGroup.players" group="players" class="row drag-player-row" :move="attemptDrop" @change="dropInGroup(groupIndex, $event)">
+                    <draggable v-model="tournamentGroup.players" group="players" class="row drag-player-row" @change="dropInGroup(groupIndex, $event)">
                       <template v-for="player in tournamentGroup.players">
                         <div class="col-md-6 tee-time-widget" v-bind:key="player.id">
                           <div class="media">
@@ -62,14 +61,14 @@
                         </div>
                       </template>
 
-                      <div class="drag-player-box" v-for="n in remainingSlotsForGroup(tournamentGroup)" v-bind:key="n">
+                      <div class="drag-player-box" v-for="n in remainingSlotsForGroup(tournamentGroup)" :id="groupIndex + '-' + n" v-bind:key="groupIndex + '-' + n">
                         <div class="drag-player" :id=n>
                           <p>Drag Player Here</p>
                         </div>
                       </div>
                     </draggable>
 
-                    <div class="addTeeTimeGreyBtn">
+                    <div class="addTeeTimeGreyBtn" v-on:click="addTournamentGroupAtPosition(groupIndex + 1)">
                       <p>Add Next Tee Time</p>
                     </div>
                   </div>
@@ -109,14 +108,40 @@ export default {
       const remainingSlots = tournamentGroup.maxNumberOfPlayers - tournamentGroup.players.length;
       return remainingSlots >= 0 ? remainingSlots : 0;
     },
-    dragFromUnregistered(event) {
-      this.playerDragIndex = event.oldIndex;
-    },
-    attemptDrop(event) { // why is this not firing?!?
-      console.log('Drop attempted');
-      console.log(event);
+    attemptDrop(event) {
+      // Can I hide the div for the related empty box? Or use a z-index background?
 
       return true;
+    },
+    addTournamentGroupAtPosition(position) {
+      const payload = {
+        leagueId: this.teeGroupData.leagueId,
+        tournamentId: this.teeGroupData.tournamentId,
+        tournamentDayId: this.teeGroupData.tournamentDayId,
+        position,
+      };
+
+      api.createTournamentGroup(this.csrfToken, payload)
+        .then((response) => {
+          console.log(response);
+
+          this.teeGroupData = response.data;
+        });
+    },
+    deleteTournamentGroup(group) {
+      const payload = {
+        leagueId: this.teeGroupData.leagueId,
+        tournamentId: this.teeGroupData.tournamentId,
+        tournamentDayId: this.teeGroupData.tournamentDayId,
+        group,
+      };
+
+      api.destroyTournamentGroup(this.csrfToken, payload)
+        .then((response) => {
+          console.log(response);
+
+          this.teeGroupData = response.data;
+        });
     },
     dropInGroup(groupId) {
       const group = this.teeGroupData.tournamentGroups[groupId];
@@ -138,18 +163,7 @@ export default {
         group,
       };
 
-      api.patchTournamentGroup(this.csrfToken, payload)
-        .then((response) => {
-          console.log(response);
-
-          // if (response.data.errors.length > 0) {
-          //   app.saveErrors = response.data.errors;
-
-          //   app.$modal.show('save-errors');
-          // } else {
-          //   window.location.href = response.data.url;
-          // }
-        });
+      api.patchTournamentGroup(this.csrfToken, payload);
     },
   },
 };

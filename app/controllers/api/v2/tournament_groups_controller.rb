@@ -1,11 +1,25 @@
 class Api::V2::TournamentGroupsController < BaseController
+  respond_to :json
+
   before_action :fetch
 
   def index
-    @tournament_groups = @tournament_day.tournament_groups
+    index_payload
+  end
 
-    registered_players = @tournament.players_for_day(@tournament.first_day)
-    @non_registered_players = @tournament.league.users.reject { |x| registered_players.include?(x) }
+  def create
+    starting_index = params[:position].to_i
+    starting_index = 0 if starting_index.blank?
+
+    basis_group = @tournament_day.tournament_groups[starting_index]
+
+    TournamentGroup.create(tournament_day: @tournament_day,
+                           tee_time_at: basis_group.tee_time_at - 8.minutes,
+                           max_number_of_players: basis_group.max_number_of_players)
+
+    index_payload
+
+    render :index
   end
 
   def update
@@ -20,7 +34,24 @@ class Api::V2::TournamentGroupsController < BaseController
     render json: { errors: @errors }
   end
 
+  def destroy
+    group_id = params['id']
+
+    @tournament_day.tournament_groups.find(group_id).destroy
+
+    index_payload
+    
+    render :index
+  end
+
   private
+
+  def index_payload
+    @tournament_groups = @tournament_day.tournament_groups
+
+    registered_players = @tournament.players_for_day(@tournament.first_day)
+    @non_registered_players = @tournament.league.users.reject { |x| registered_players.include?(x) }
+  end
 
   def update_membership(group, player_ids)
     player_ids.each do |player_id|
