@@ -1,4 +1,6 @@
 class Api::V2::CourseTeeBoxesController < BaseController
+  respond_to :json
+
   def index
     @course = Course.find(params[:course_id])
 

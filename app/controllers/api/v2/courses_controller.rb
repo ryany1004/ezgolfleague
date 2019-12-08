@@ -1,4 +1,6 @@
 class Api::V2::CoursesController < BaseController
+  respond_to :json
+
   def index
     @courses = Course.all.order(:name).limit(100)
     return if params[:search].blank?

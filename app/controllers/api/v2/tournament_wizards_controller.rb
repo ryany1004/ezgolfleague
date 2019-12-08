@@ -1,4 +1,6 @@
 class Api::V2::TournamentWizardsController < BaseController
+  respond_to :json
+
   def create
     payload = ActiveSupport::JSON.decode(request.body.read)
 

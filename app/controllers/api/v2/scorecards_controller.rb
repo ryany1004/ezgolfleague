@@ -1,4 +1,6 @@
 class Api::V2::ScorecardsController < BaseController
+  respond_to :json
+
   def show
     scorecard_info = FetchingTools::ScorecardFetching.fetch_scorecards_and_related(params[:id])
 
