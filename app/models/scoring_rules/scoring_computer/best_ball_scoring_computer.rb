@@ -58,6 +58,8 @@ module ScoringComputer
 
         return result
       end
+
+      nil
     end
 
     def split_team_payouts
