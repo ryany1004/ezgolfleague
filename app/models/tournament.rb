@@ -79,18 +79,12 @@ class Tournament < ApplicationRecord
   end
 
   def tournament_state
-    if first_day.tournament_at > Time.zone.now.at_beginning_of_day
-      if first_day.has_scores?
-        TournamentState::REVIEW_SCORES
-      else
-        TournamentState::REGISTRATION
-      end
+    if is_finalized
+      TournamentState::POST_SCORES
+    elsif first_day.has_scores? || Time.zone.now >= first_day.tournament_at
+      TournamentState::REVIEW_SCORES
     else
-      if is_finalized
-        TournamentState::POST_SCORES
-      else
-        TournamentState::REVIEW_SCORES
-      end
+      TournamentState::REGISTRATION
     end
   end
 
