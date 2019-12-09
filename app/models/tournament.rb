@@ -78,10 +78,13 @@ class Tournament < ApplicationRecord
     RankLeagueSeasonJob.perform_later(season)
   end
 
-  # TODO: Need to update / review this logic
   def tournament_state
     if first_day.tournament_at > Time.zone.now.at_beginning_of_day
-      TournamentState::REGISTRATION
+      if first_day.has_scores?
+        TournamentState::REVIEW_SCORES
+      else
+        TournamentState::REGISTRATION
+      end
     else
       if is_finalized
         TournamentState::POST_SCORES
