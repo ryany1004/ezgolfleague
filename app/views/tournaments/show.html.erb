@@ -29,7 +29,7 @@
         </div>
         <div class="col-md-4 text-right">
           <% if @tournament.tournament_state == TournamentState::REGISTRATION %>
-            <a href="#" class="btn btn-primary" v-on:click="showTeeTimeEditorModal(addId)">Manage Players/Tee Times</a>
+            <a href="#" class="btn btn-primary" v-on:click="showTeeTimeEditor">Manage Players/Tee Times</a>
           <% elsif @tournament.tournament_state == TournamentState::REVIEW_SCORES %>
             <%= link_to "Calculate Results", league_tournament_finalization_path(@tournament.league, @tournament), class: 'btn btn-primary' %>
           <% elsif @tournament.tournament_state == TournamentState::POST_SCORES %>
