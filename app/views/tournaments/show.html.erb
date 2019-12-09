@@ -31,7 +31,7 @@
           <% if @tournament.tournament_state == TournamentState::REGISTRATION %>
             <a href="#" class="btn btn-primary" v-on:click="showTeeTimeEditorModal(addId)">Manage Players/Tee Times</a>
           <% elsif @tournament.tournament_state == TournamentState::REVIEW_SCORES %>
-            <%= link_to "Calculate Results", "#", class: 'btn btn-primary' %>
+            <%= link_to "Calculate Results", league_tournament_finalization_path(@tournament.league, @tournament), class: 'btn btn-primary' %>
           <% elsif @tournament.tournament_state == TournamentState::POST_SCORES %>
             <%= link_to "Edit Results", "#", class: 'btn btn-primary' %>
           <% end %>
