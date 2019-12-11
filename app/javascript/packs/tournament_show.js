@@ -2,14 +2,14 @@ import Vue from 'vue/dist/vue.esm';
 
 import VModal from 'vue-js-modal';
 
-import { BSpinner } from 'bootstrap-vue';
+import NProgress from 'nprogress';
+import 'nprogress/nprogress.css';
 
 import api from 'api';
 
 import Scorecard from '../components/Scorecard/Scorecard';
 import TeeTimeEditor from '../components/TeeTimes/TeeTimeEditor.vue';
 
-Vue.component('b-spinner', BSpinner);
 Vue.use(VModal, { componentName: 'vue-modal' });
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -36,11 +36,12 @@ document.addEventListener('DOMContentLoaded', () => {
           });
       },
       displayScorecard(event) {
-        app.$modal.show('scorecard-loading-modal');
+        NProgress.start();
 
         api.getScorecard(event.currentTarget.dataset.scorecardId)
           .then((response) => {
-            app.$modal.hide('scorecard-loading-modal');
+            NProgress.done();
+
             app.$modal.show('scorecard-modal', { scorecard: response.data });
           });
       },
