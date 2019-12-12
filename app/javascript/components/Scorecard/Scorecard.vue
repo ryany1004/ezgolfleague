@@ -129,10 +129,10 @@ export default {
 
       const sliced = [];
 
-      for (var i = 0; i < slices; i++) {
-        var start = i * sliceLength;
-        var end = (i + 1) * sliceLength;
-        var slice = scores.slice(start, end);
+      for (let i = 0; i < slices; i += 1) {
+        const start = i * sliceLength;
+        const end = (i + 1) * sliceLength;
+        const slice = scores.slice(start, end);
 
         sliced.push(slice);
       }
