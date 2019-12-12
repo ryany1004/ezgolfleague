@@ -12,7 +12,7 @@
           <div class="row no-gutters">
               <div class="col-md-4">
                 <div class="edit-tee-times-left-content mCustomScrollbar" data-mcs-theme="dark">
-                  <div class="edit-tee-times-left-content-style sortable">
+                  <div class="edit-tee-times-left-content-style">
                     <draggable v-model="teeGroupData.nonRegisteredPlayers" group="players" :move="attemptDrop">
                       <div class="media tee-time-widget" v-for="player in teeGroupData.nonRegisteredPlayers" v-bind:key="player.id">
                         <img :src=player.imageUrl>
@@ -110,7 +110,6 @@ export default {
     },
     attemptDrop(event) {
       // Can I hide the div for the related empty box? Or use a z-index background?
-
       return true;
     },
     addTournamentGroupAtPosition(position) {
@@ -168,3 +167,9 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.sortable-ghost {
+  opacity: .5;
+}
+</style>
