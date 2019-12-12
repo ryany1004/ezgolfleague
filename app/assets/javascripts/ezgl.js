@@ -64,11 +64,6 @@
   });
 
   $(document).ready(function() {
-    $(".sortable").sortable({
-      connectWith: ".sortable",
-      zIndex: 9999999999999
-    });
-
     $(".popup-with-zoom-anim").magnificPopup({
       type: "inline",
 
