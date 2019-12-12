@@ -6,6 +6,12 @@ const client = applyConverters(axios.create());
 client.defaults.headers.post['Content-Type'] = 'application/json';
 
 export default {
+  searchCourses(query) {
+    return client.get(`/api/v2/courses.json?search=${encodeURIComponent(query)}`);
+  },
+  getCourseTeeBoxes(courseId) {
+    return client.get(`/api/v2/courses/${courseId}/course_tee_boxes.json`);
+  },
   getGameTypes(leagueId) {
     return client.get(`/api/v2/leagues/${leagueId}/scoring_rules.json`);
   },

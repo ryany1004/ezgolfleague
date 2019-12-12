@@ -205,52 +205,36 @@ document.addEventListener('DOMContentLoaded', () => {
 
         app.isLoading = true;
 
-        fetch(`/api/v2/courses.json?search=${encodeURIComponent(query)}`)
+        api.searchCourses(query)
           .then((response) => {
             app.isLoading = false;
 
-            if (response.status < 200 || response.status >= 300) {
-              console.log(`Course Load Error: ${response.status}`);
+            const courses = [];
 
-              return;
-            }
-
-            response.json().then((data) => {
-              const courses = [];
-
-              data.forEach((course) => {
-                courses.push({
-                  id: course.id,
-                  name: `${course.name} in ${course.city}, ${course.us_state}`,
-                  number_of_holes: course.number_of_holes,
-                });
+            response.data.forEach((course) => {
+              courses.push({
+                id: course.id,
+                name: `${course.name} in ${course.city}, ${course.us_state}`,
+                number_of_holes: course.number_of_holes,
               });
-
-              app.filteredCourses = courses;
             });
+
+            app.filteredCourses = courses;
           });
       },
       courseSelected(selectedOption) {
-        fetch(`/api/v2/courses/${selectedOption.id}/course_tee_boxes.json`)
+        api.getCourseTeeBoxes(selectedOption.id)
           .then((response) => {
-            if (response.status < 200 || response.status >= 300) {
-              console.log(`Course Tee Box Load Error: ${response.status}`);
-
-              return;
-            }
-
             app.configureHoleOptions(selectedOption.number_of_holes);
 
-            response.json().then((data) => {
-              app.courseTeeBoxes = data;
+            app.courseTeeBoxes = response.data;
 
-              if (app.tournamentWizard.flights[0].teeBox == null) {
-                const flight = app.tournamentWizard.flights[0];
-                const firstTeeBox = data[0];
+            if (app.tournamentWizard.flights[0].teeBox == null) {
+              const flight = app.tournamentWizard.flights[0];
+              const firstTeeBox = response.data[0];
 
-                flight.teeBox = firstTeeBox;
-              }
-            });
+              flight.teeBox = firstTeeBox;
+            }
           });
       },
       configureHoleOptions(numberOfHoles) {
@@ -303,9 +287,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       },
       deleteScoringRule(scoringRuleToDelete) {
-        // for (const [i, scoringRuleGroup] of this.tournamentWizard.scoringRules.entries()) {
-
-        // }
         for (let i = 0; i < this.tournamentWizard.scoringRules.length; i += 1) {
           const scoringRuleGroup = this.tournamentWizard.scoringRules[i];
 
