@@ -90,7 +90,7 @@ class Flight < ApplicationRecord
 
   def as_json(options = {})
     super(
-      only: [:flight_number],
+      only: [:id, :flight_number, :lower_bound, :upper_bound],
       methods: [:display_name, :api_display_name, :players]
     )
   end
