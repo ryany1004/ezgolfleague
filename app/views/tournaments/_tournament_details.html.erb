@@ -6,7 +6,7 @@
         <div class="tournament-card__header">
           <h3 class="p-4">Tournament Details</h3>
           <% if @tournament.tournament_state == TournamentState::REGISTRATION %>
-            <%= link_to "Edit", "", data: { toggle:"modal", target:"#editTournamentDetailsModal" }, class: 'btn btn__ezgl-secondary' %>
+            <a href='#' class='btn btn__ezgl-secondary' v-on:click="showTournamentDetails">Edit</a>
           <% end %>
         </div>
 
@@ -104,54 +104,6 @@
           </div>
         </div>
       </div>
-    </div>
-  </div>
-</div>
-
-<div class="modal fade" id="editTournamentDetailsModal" tabindex="-1" role="dialog" aria-labelledby="editTournamentDetailsCenterTitle" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-    <div class="modal-content">
-      <% if @tournament.new_record? || is_editable?(@tournament) -%>
-        <%= simple_form_for [current_user.selected_league, @tournament], :defaults => { :input_html => { :class => "form-control", :label => false }} do |f| %>    
-          <div class="modal-body welcome p-5">
-            <div class="p-3">
-              <h2 style="font-size:30px;">Edit Tournament Details</h2>
-            </div>
-            <% if notification = f.error_notification %>
-              <div class="alert alert-error fade in">
-                <%= notification %>
-              </div>
-            <% end %>
-            <div class="step-1-content-form step-1-content">
-              <div class="row">
-                <div class="col-md-3 text-right">
-                  <label>Course</label>
-                </div>
-                  <div class="col-md-8">
-                    <select></select>
-                </div>
-              </div>
-            </div>
-            <div class="step-1-content-form step-1-content pt-0">
-              <div class="row">
-                <div class="col-md-3 text-right">
-                  <label>Name</label>
-                </div>
-                <div class="col-md-8 tee-times-inputs">
-                  <div>
-                    <%= f.input :name, placeholder: 'Payout', required: true %>
-                  </div>
-                </div>
-              </div>
-            </div> 
-          </div>
-
-          <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-            <%= f.button :submit, "Save", class: 'btn__ezgl-secondary' %>
-          </div>
-        <% end %>
-      <% end %>
     </div>
   </div>
 </div>

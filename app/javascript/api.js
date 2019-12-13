@@ -30,6 +30,17 @@ export default {
 
     return client.post(`/api/v2/leagues/${leagueId}/tournament_wizard`, wizardData, config);
   },
+  patchTournamentDetails(csrfToken, tournamentDetailsPayload) {
+    const config = {
+      headers: {
+        'X-CSRF-TOKEN': csrfToken,
+      },
+    };
+
+    const jsonPayload = JSON.stringify(tournamentDetailsPayload);
+
+    return client.patch(`/api/v2/leagues/${tournamentDetailsPayload.leagueId}/tournaments/${tournamentDetailsPayload.tournamentId}`, jsonPayload, config);
+  },
   createTournamentGroup(csrfToken, tournamentGroupPayload) {
     const config = {
       headers: {
