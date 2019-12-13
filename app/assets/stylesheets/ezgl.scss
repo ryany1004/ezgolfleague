@@ -102,6 +102,10 @@ button:focus {
   outline: none;
 }
 
+.mCSB_container {
+  overflow: visible !important;
+}
+
 /* equal */
 
 .equal {
@@ -1196,7 +1200,7 @@ select.selectpicker {
   font-size: 18px;
   border-width: 2px;
   font-style: italic;
-  color: #b2b2b2;
+  color: #000;
 }
 
 .step-1-content .custom-select {
@@ -1219,6 +1223,14 @@ select.selectpicker {
   .input-group-btn {
     display: none;
   }
+}
+
+.delete-scoring-rule {
+  border: 1px solid;
+  padding: 7.5px 12px !important;
+  margin-left: 8px;
+  border-radius: 3px;
+  cursor: pointer;
 }
 
 .bootstrap-datepicker-widget {

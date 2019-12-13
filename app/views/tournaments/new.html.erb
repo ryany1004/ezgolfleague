@@ -95,7 +95,7 @@
                           <div class="col-md-4 text-right">
                             <label>Golf Course</label>
                           </div>
-                          <div class="col-md-5" style="margin-left: 20px;">
+                          <div class="col-md-5" style="margin-left: 20px; display: flex; align-items: center;">
                             <multiselect v-model="tournamentWizard.course" id="ajax" label="name" track-by="id" placeholder="Type to search for a course by name or location" open-direction="bottom" :options="filteredCourses" :searchable="true" :loading="isLoading" :internal-search="false" :options-limit="300" :limit="3" :max-height="600" :show-no-results="false" :hide-selected="true" @search-change="searchCourses" @select="courseSelected">
                               <template slot="singleLabel" slot-scope="{ option }">{{ option.name }}</template>
                               <span slot="noResult">No courses matched your query.</span>
@@ -104,7 +104,7 @@
                         </div>
                     </div> 
 
-                    <div class="form-group" style="margin-bottom:15px;">
+                    <div class="form-group" style="margin-bottom:0px;">
                       <div class="row">
                         <div class="col-md-4 text-right">
                           <label>Number of Players</label>
@@ -128,7 +128,7 @@
                           <div class="col-md-4 text-right">
                             <label>Allow Players to Enter<br>Scores Until Finalized</label>
                           </div>
-                          <div class="col-md-5 text-left" style="margin-left: 20px;">
+                          <div class="col-md-5 text-left" style="margin-left: 20px; display: flex; align-items: center;">
                             <toggle-button id="enter-scores-until-finalized" v-model="tournamentWizard.enterScoresUntilFinalized" :labels="{checked: 'yes', unchecked: 'no'}"/>
                           </div>
                         </div>
@@ -139,7 +139,7 @@
                           <div class="col-md-4 text-right">
                             <label>Players Should<br>See Tee-Times</label>
                           </div>
-                          <div class="col-md-5 text-left" style="margin-left: 20px;">
+                          <div class="col-md-5 text-left" style="margin-left: 20px; display: flex; align-items: center;">
                             <toggle-button id="show-tee-times" v-model="tournamentWizard.showTeeTimes" :labels="{checked: 'yes', unchecked: 'no'}"/>
                           </div>
                         </div>
@@ -150,7 +150,7 @@
                           <div class="col-md-4 text-right">
                             <label>Separate Golfers<br>into Flights</label>
                           </div>
-                          <div class="col-md-5 text-left" style="margin-left: 20px;">
+                          <div class="col-md-5 text-left" style="margin-left: 20px; display: flex; align-items: center;">
                             <toggle-button id="show-flights" v-model="showFlights" @change="toggleFlights" :labels="{checked: 'yes', unchecked: 'no'}"/>
                           </div>
                         </div>
@@ -210,7 +210,7 @@
                           <div class="added-game-type" v-bind:key="rule.id">
                             <p v-on:click="showGameTypeModal(rule)">{{ rule.name }}</p>
                             <a href="#" class="btn btn-primary" v-on:click="showPayoutsModal(rule)">Payouts</a>
-                            <a href="#" class="btn__ezgl-secondary-outline" v-on:click="deleteScoringRule(rule)">X</a>
+                            <a href="#" class="btn-outline-secondary delete-scoring-rule" v-on:click="deleteScoringRule(rule)">X</a>
                           </div>
                         </template>
                         <template v-else>
@@ -233,7 +233,7 @@
     </div>
   </div>
 
-  <vue-modal name="scoring-rule" height="auto" clickToClose="false">
+  <vue-modal name="scoring-rule" height="auto" maxHeight="500px" :scrollable="true" clickToClose="false">
     <div class="welcome p-5">
       <div class="p-3">
         <h2 style="font-size:30px;text-align:center;">Add Game</h2>
