@@ -6,12 +6,23 @@ import NProgress from 'nprogress';
 import 'nprogress/nprogress.css';
 
 import api from 'api';
+import store from '../store/store';
 
 import Scorecard from '../components/Scorecard/Scorecard';
 import TeeTimeEditor from '../components/TeeTimes/TeeTimeEditor.vue';
 import TournamentDetails from '../components/Tournament/TournamentDetails.vue';
+import Flights from '../components/Tournament/Flights.vue';
 
 Vue.use(VModal, { componentName: 'vue-modal' });
+
+function getTournament(leagueId, tournamentId) {
+  store.dispatch('tournament/fetchTournament', {
+    leagueId,
+    tournamentId,
+  });
+}
+
+Vue.config.productionTip = false;
 
 document.addEventListener('DOMContentLoaded', () => {
   const anchorElement = document.getElementById('tournament-show');
@@ -19,33 +30,37 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const app = new Vue({
     el: '#tournament-show',
+    store,
     components: {
       VModal,
       Scorecard,
       TeeTimeEditor,
       TournamentDetails,
+      Flights,
     },
-    data: {
-      csrfToken: document
-        .querySelector('meta[name="csrf-token"]')
-        .getAttribute('content'),
-      externalData: JSON.parse(anchorElement.getAttribute('data')),
+    created() {
+      store.dispatch('setCsrfToken', {
+        csrfToken: document
+          .querySelector('meta[name="csrf-token"]')
+          .getAttribute('content'),
+      });
+
+      getTournament(props.league.id, props.tournament.id);
     },
     methods: {
       showTournamentDetails() {
-        const tournament = {
-          leagueId: this.externalData.league.id,
-          tournamentId: this.externalData.tournament.id,
-          tournamentDayId: this.externalData.tournament_day.id,
-          name: this.externalData.tournament.name,
-          startsAt: this.externalData.tournament.tournament_starts_at,
-          opensAt: this.externalData.tournament.signup_opens_at,
-          closesAt: this.externalData.tournament.signup_closes_at,
-          numberOfPlayers: this.externalData.tournament.max_players,
-          showTeeTimes: this.externalData.tournament.show_players_tee_times,
-        };
+        app.$modal.show('tournament-details-modal');
+      },
+      showFlights() {
+        // const tournament = {
+        //   leagueId: this.externalData.league.id,
+        //   tournamentId: this.externalData.tournament.id,
+        //   tournamentDayId: this.externalData.tournament_day.id,
+        // };
 
-        app.$modal.show('tournament-details-modal', { tournament, csrfToken: this.csrfToken });
+        // const flights = this.externalData.flights;
+
+        // app.$modal.show('flights-modal', { tournament, flights, csrfToken: this.csrfToken });
       },
       showTeeTimeEditor() {
         api.getTournametGroups(props.league.id, props.tournament.id, props.tournament_day.id)

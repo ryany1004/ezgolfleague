@@ -1,0 +1,15 @@
+Rails.cache.fetch ['v2', @tournament.cache_key_with_version] do
+  json = {}
+
+  json[:league_id] = @tournament.league.id
+  json[:id] = @tournament.id
+  json[:name] = @tournament.name
+  json[:starts_at] = @tournament.tournament_starts_at.to_s(:date_and_time)
+  json[:opens_at] = @tournament.signup_opens_at.to_s(:date_and_time)
+  json[:closes_at] = @tournament.signup_closes_at.to_s(:date_and_time)
+  json[:number_of_players] = @tournament.max_players
+  json[:enter_scores_until_finalized] = @tournament.first_day.enter_scores_until_finalized
+  json[:show_tee_times] = @tournament.show_players_tee_times
+
+  json
+end

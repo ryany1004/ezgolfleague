@@ -5,6 +5,8 @@ const client = applyConverters(axios.create());
 
 client.defaults.headers.post['Content-Type'] = 'application/json';
 
+// TODO: split this into multiple files / services
+
 export default {
   searchCourses(query) {
     return client.get(`/api/v2/courses.json?search=${encodeURIComponent(query)}`);
@@ -30,6 +32,9 @@ export default {
 
     return client.post(`/api/v2/leagues/${leagueId}/tournament_wizard`, wizardData, config);
   },
+  getTournament(leagueId, tournamentId) {
+    return client.get(`/api/v2/leagues/${leagueId}/tournaments/${tournamentId}.json`);
+  },
   patchTournamentDetails(csrfToken, tournamentDetailsPayload) {
     const config = {
       headers: {
@@ -39,7 +44,7 @@ export default {
 
     const jsonPayload = JSON.stringify(tournamentDetailsPayload);
 
-    return client.patch(`/api/v2/leagues/${tournamentDetailsPayload.leagueId}/tournaments/${tournamentDetailsPayload.tournamentId}`, jsonPayload, config);
+    return client.patch(`/api/v2/leagues/${tournamentDetailsPayload.leagueId}/tournaments/${tournamentDetailsPayload.id}`, jsonPayload, config);
   },
   createTournamentGroup(csrfToken, tournamentGroupPayload) {
     const config = {

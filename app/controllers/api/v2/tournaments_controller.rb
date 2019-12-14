@@ -3,14 +3,16 @@ class Api::V2::TournamentsController < BaseController
 
   before_action :fetch
 
+  def show; end
+
   def update
     payload = ActiveSupport::JSON.decode(request.body.read)
 
     @errors = []
 
-    starts_at = DateTime.parse(payload['startsAt'])
-    registration_opens_at = DateTime.parse(payload['opensAt'])
-    registration_closes_at = DateTime.parse(payload['closesAt'])
+    starts_at = parse_date(payload['startsAt'])
+    registration_opens_at = parse_date(payload['opensAt'])
+    registration_closes_at = parse_date(payload['closesAt'])
 
     @tournament.update(name: payload['name'],
                        signup_opens_at: registration_opens_at,
@@ -26,6 +28,10 @@ class Api::V2::TournamentsController < BaseController
   end
 
   private
+
+  def parse_date(date_string)
+    Date.strptime(date_string, '%m/%d/%Y %I:%M %p')
+  end
 
   def fetch
     @tournament = fetch_tournament_from_user_for_tournament_id(params[:id])

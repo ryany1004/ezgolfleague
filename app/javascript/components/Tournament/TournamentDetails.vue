@@ -1,5 +1,5 @@
 <template>
-  <vue-modal name="tournament-details-modal" height="auto" width="85%" :scrollable="false" @before-open="beforeOpenDetails">
+  <vue-modal name="tournament-details-modal" height="auto" width="85%" :scrollable="false">
     <form onSubmit="return false">
       <div class="step-1-content p-3">
         <h2>Tournament Details</h2>
@@ -11,7 +11,7 @@
               </div>
                 <div class="col-md-5">
                   <div class="string required tournament_name">
-                    <input label="false" required="required" aria-required="true" placeholder="Choose a name..." type="text" id="name" class="form-control string required form-control" v-model="tournament.name">
+                    <input label="false" required="required" aria-required="true" placeholder="Choose a name..." type="text" id="name" class="form-control string required form-control" v-model="name">
                   </div>
               </div>
             </div>
@@ -25,7 +25,7 @@
                   <div class="date-inputs" style="padding-right:24px;">
                     <div class="row">
                       <div class="col-12">
-                        <date-picker v-model="tournament.startsAt"></date-picker>
+                        <date-picker v-model="startsAt"></date-picker>
                       </div>
                     </div>
                   </div>
@@ -41,10 +41,10 @@
                   <div class="date-inputs">
                     <div class="row">
                       <div class="col-md-6">
-                        <date-picker v-model="tournament.opensAt"></date-picker>
+                        <date-picker v-model="opensAt"></date-picker>
                       </div>
                       <div class="col-md-6" style="padding-right: 40px;">
-                        <date-picker v-model="tournament.closesAt"></date-picker>
+                        <date-picker v-model="closesAt"></date-picker>
                       </div>
                     </div>
                   </div>
@@ -61,7 +61,7 @@
                     <div class="row">
                       <div class="col-12">
                         <div class="form-group string required">
-                          <input label="false" required="required" aria-required="true" placeholder="How Many People Can Register?" type="text" id="name" style="width: 80px;" class="form-control string required form-control" v-model="tournament.numberOfPlayers">
+                          <input label="false" required="required" aria-required="true" placeholder="How Many People Can Register?" type="text" id="name" style="width: 80px;" class="form-control string required form-control" v-model="numberOfPlayers">
                         </div>
                       </div>
                     </div>
@@ -75,7 +75,7 @@
                   <label>Players Should<br>See Tee-Times</label>
                 </div>
                 <div class="col-md-5 text-left" style="margin-left: 20px;">
-                  <toggle-button id="show-tee-times" v-model="tournament.showTeeTimes" :labels="{checked: 'yes', unchecked: 'no'}"/>
+                  <toggle-button id="show-tee-times" v-model="showTeeTimes" :labels="{checked: 'yes', unchecked: 'no'}"/>
                 </div>
               </div>
           </div>
@@ -90,62 +90,107 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
+
 import datePicker from 'vue-bootstrap-datetimepicker';
 import { ToggleButton } from 'vue-js-toggle-button';
-import api from 'api';
+
+import store from '../../store/store';
 
 export default {
   components: {
     datePicker,
     ToggleButton,
   },
-  data() {
-    return {
-      tournament: {
-        name: null,
-        startsAt: null,
-        opensAt: null,
-        closesAt: null,
-        numberOfPlayers: 0,
-        enterScoresUntilFinalized: false,
-        showTeeTimes: false,
+  computed: {
+    name: {
+      get() {
+        return this.$store.state.tournament.tournament.name;
       },
-      leagueId: null,
-      tournamentId: null,
-      tournamentDayId: null,
-      csrfToken: null,
-      saveErrors: [],
-    };
+      set(value) {
+        this.$store.dispatch('tournament/updateTournamentValue', {
+          key: 'name',
+          value,
+        });
+      },
+    },
+    startsAt: {
+      get() {
+        return new Date(this.$store.state.tournament.tournament.startsAt);
+      },
+      set(value) {
+        this.$store.dispatch('tournament/updateTournamentValue', {
+          key: 'startsAt',
+          value,
+        });
+      },
+    },
+    opensAt: {
+      get() {
+        return new Date(this.$store.state.tournament.tournament.opensAt);
+      },
+      set(value) {
+        this.$store.dispatch('tournament/updateTournamentValue', {
+          key: 'opensAt',
+          value,
+        });
+      },
+    },
+    closesAt: {
+      get() {
+        return new Date(this.$store.state.tournament.tournament.closesAt);
+      },
+      set(value) {
+        this.$store.dispatch('tournament/updateTournamentValue', {
+          key: 'closesAt',
+          value,
+        });
+      },
+    },
+    numberOfPlayers: {
+      get() {
+        return this.$store.state.tournament.tournament.numberOfPlayers;
+      },
+      set(value) {
+        this.$store.dispatch('tournament/updateTournamentValue', {
+          key: 'numberOfPlayers',
+          value,
+        });
+      },
+    },
+    enterScoresUntilFinalized: {
+      get() {
+        return this.$store.state.tournament.tournament.enterScoresUntilFinalized;
+      },
+      set(value) {
+        this.$store.dispatch('tournament/updateTournamentValue', {
+          key: 'enterScoresUntilFinalized',
+          value,
+        });
+      },
+    },
+    showTeeTimes: {
+      get() {
+        return this.$store.state.tournament.tournament.showTeeTimes;
+      },
+      set(value) {
+        this.$store.dispatch('tournament/updateTournamentValue', {
+          key: 'showTeeTimes',
+          value,
+        });
+      },
+    },
   },
   methods: {
-    beforeOpenDetails(event) {
-      this.csrfToken = event.params.csrfToken;
-
-      this.leagueId = event.params.tournament.leagueId;
-      this.tournamentId = event.params.tournament.tournamentId;
-      this.tournamentDayId = event.params.tournament.tournamentDayId;
-
-      this.tournament = event.params.tournament;
-      this.tournament.startsAt = new Date(this.tournament.startsAt);
-      this.tournament.opensAt = new Date(this.tournament.opensAt);
-      this.tournament.closesAt = new Date(this.tournament.closesAt);
-    },
     cancelEdit() {
       this.$modal.hide('tournament-details-modal');
     },
     save() {
-      const tournamentDetailsPayload = this.tournament;
-      tournamentDetailsPayload.leagueId = this.leagueId;
-      tournamentDetailsPayload.tournamentId = this.tournamentId;
-      tournamentDetailsPayload.tournamentDayId = this.tournamentDayId;
+      this.$store.dispatch('tournament/saveTournamentDetails')
+        .then(() => {
+          this.$modal.hide('tournament-details-modal');
 
-      api.patchTournamentDetails(this.csrfToken, tournamentDetailsPayload)
-        .then((response) => {
-          if (response.data.errors.length > 0) {
-            this.$modal.hide('tournament-details-modal');
-
-            window.location.href = response.data.url;
-          }
+          window.location.reload();
         });
     },
   },
