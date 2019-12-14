@@ -90,12 +90,17 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
+import { createHelpers } from 'vuex-map-fields';
 
 import datePicker from 'vue-bootstrap-datetimepicker';
 import { ToggleButton } from 'vue-js-toggle-button';
 
 import store from '../../store/store';
+
+const { mapFields } = createHelpers({
+  getterType: 'tournament/getField',
+  mutationType: 'tournament/updateField',
+});
 
 export default {
   components: {
@@ -103,83 +108,15 @@ export default {
     ToggleButton,
   },
   computed: {
-    name: {
-      get() {
-        return this.$store.state.tournament.tournament.name;
-      },
-      set(value) {
-        this.$store.dispatch('tournament/updateTournamentValue', {
-          key: 'name',
-          value,
-        });
-      },
-    },
-    startsAt: {
-      get() {
-        return new Date(this.$store.state.tournament.tournament.startsAt);
-      },
-      set(value) {
-        this.$store.dispatch('tournament/updateTournamentValue', {
-          key: 'startsAt',
-          value,
-        });
-      },
-    },
-    opensAt: {
-      get() {
-        return new Date(this.$store.state.tournament.tournament.opensAt);
-      },
-      set(value) {
-        this.$store.dispatch('tournament/updateTournamentValue', {
-          key: 'opensAt',
-          value,
-        });
-      },
-    },
-    closesAt: {
-      get() {
-        return new Date(this.$store.state.tournament.tournament.closesAt);
-      },
-      set(value) {
-        this.$store.dispatch('tournament/updateTournamentValue', {
-          key: 'closesAt',
-          value,
-        });
-      },
-    },
-    numberOfPlayers: {
-      get() {
-        return this.$store.state.tournament.tournament.numberOfPlayers;
-      },
-      set(value) {
-        this.$store.dispatch('tournament/updateTournamentValue', {
-          key: 'numberOfPlayers',
-          value,
-        });
-      },
-    },
-    enterScoresUntilFinalized: {
-      get() {
-        return this.$store.state.tournament.tournament.enterScoresUntilFinalized;
-      },
-      set(value) {
-        this.$store.dispatch('tournament/updateTournamentValue', {
-          key: 'enterScoresUntilFinalized',
-          value,
-        });
-      },
-    },
-    showTeeTimes: {
-      get() {
-        return this.$store.state.tournament.tournament.showTeeTimes;
-      },
-      set(value) {
-        this.$store.dispatch('tournament/updateTournamentValue', {
-          key: 'showTeeTimes',
-          value,
-        });
-      },
-    },
+    ...mapFields([
+      'tournament.name',
+      'tournament.startsAt',
+      'tournament.opensAt',
+      'tournament.closesAt',
+      'tournament.numberOfPlayers',
+      'tournament.enterScoresUntilFinalized',
+      'tournament.showTeeTimes',
+    ]),
   },
   methods: {
     cancelEdit() {

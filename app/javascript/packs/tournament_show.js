@@ -52,15 +52,7 @@ document.addEventListener('DOMContentLoaded', () => {
         app.$modal.show('tournament-details-modal');
       },
       showFlights() {
-        // const tournament = {
-        //   leagueId: this.externalData.league.id,
-        //   tournamentId: this.externalData.tournament.id,
-        //   tournamentDayId: this.externalData.tournament_day.id,
-        // };
-
-        // const flights = this.externalData.flights;
-
-        // app.$modal.show('flights-modal', { tournament, flights, csrfToken: this.csrfToken });
+        app.$modal.show('flights-modal');
       },
       showTeeTimeEditor() {
         api.getTournametGroups(props.league.id, props.tournament.id, props.tournament_day.id)

@@ -8,6 +8,9 @@ client.defaults.headers.post['Content-Type'] = 'application/json';
 // TODO: split this into multiple files / services
 
 export default {
+  runAll(requests) {
+    return Promise.all(requests);
+  },
   searchCourses(query) {
     return client.get(`/api/v2/courses.json?search=${encodeURIComponent(query)}`);
   },
@@ -45,6 +48,37 @@ export default {
     const jsonPayload = JSON.stringify(tournamentDetailsPayload);
 
     return client.patch(`/api/v2/leagues/${tournamentDetailsPayload.leagueId}/tournaments/${tournamentDetailsPayload.id}`, jsonPayload, config);
+  },
+  createFlight(csrfToken, flightsPayload) {
+    const config = {
+      headers: {
+        'X-CSRF-TOKEN': csrfToken,
+      },
+    };
+
+    const jsonPayload = JSON.stringify(flightsPayload);
+
+    return client.post(`/api/v2/leagues/${flightsPayload.leagueId}/tournaments/${flightsPayload.tournamentId}/tournament_days/${flightsPayload.tournamentDayId}/flights`, jsonPayload, config);
+  },
+  patchFlight(csrfToken, flightsPayload) {
+    const config = {
+      headers: {
+        'X-CSRF-TOKEN': csrfToken,
+      },
+    };
+
+    const jsonPayload = JSON.stringify(flightsPayload);
+
+    return client.patch(`/api/v2/leagues/${flightsPayload.leagueId}/tournaments/${flightsPayload.tournamentId}/tournament_days/${flightsPayload.tournamentDayId}/flights/${flightsPayload.id}`, jsonPayload, config);
+  },
+  destroyFlight(csrfToken, flightsPayload) {
+    const config = {
+      headers: {
+        'X-CSRF-TOKEN': csrfToken,
+      },
+    };
+
+    return client.delete(`/api/v2/leagues/${flightsPayload.leagueId}/tournaments/${flightsPayload.tournamentId}/tournament_days/${flightsPayload.tournamentDayId}/flights/${flightsPayload.id}`, config);
   },
   createTournamentGroup(csrfToken, tournamentGroupPayload) {
     const config = {

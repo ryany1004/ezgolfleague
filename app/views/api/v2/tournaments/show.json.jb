@@ -11,5 +11,59 @@ Rails.cache.fetch ['v2', @tournament.cache_key_with_version] do
   json[:enter_scores_until_finalized] = @tournament.first_day.enter_scores_until_finalized
   json[:show_tee_times] = @tournament.show_players_tee_times
 
+  json[:tournament_days] = @tournament.tournament_days.map do |day|
+    day_json = {
+      id: day.id,
+      tournament_at: day.tournament_at
+    }
+
+    course_json = {
+      id: day.course.id,
+      name: day.course.name,
+      city: day.course.city,
+      us_state: day.course.us_state
+    }
+
+    course_json[:course_tee_boxes] = day.course.course_tee_boxes.map do |box|
+      {
+        id: box.id,
+        name: box.name,
+        rating: box.rating,
+        slope: box.slope
+      }
+    end
+    day_json[:course] = course_json
+
+    day_json[:flights] = day.flights.map do |flight|
+      flight_json = {
+        id: flight.id,
+        flight_number: flight.flight_number,
+        lower_bound: flight.lower_bound,
+        upper_bound: flight.upper_bound
+      }
+
+      flight_json[:course_tee_box] = {
+        id: flight.course_tee_box.id,
+        name: flight.course_tee_box.name,
+        rating: flight.course_tee_box.rating,
+        slope: flight.course_tee_box.slope
+      }
+
+      flight_json
+    end
+
+    day_json[:scoring_rules] = day.scoring_rules.map do |rule|
+      {
+        id: rule.id,
+        name: rule.name,
+        is_opt_in: rule.is_opt_in,
+        dues_amount: rule.dues_amount,
+        custom_name: rule.custom_name
+      }
+    end
+
+    day_json
+  end
+
   json
 end

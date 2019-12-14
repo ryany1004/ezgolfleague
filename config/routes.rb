@@ -126,6 +126,7 @@ Rails.application.routes.draw do
 
         resources :tournaments do
           resources :tournament_days do
+            resources :flights
             resources :tournament_groups
           end
         end
