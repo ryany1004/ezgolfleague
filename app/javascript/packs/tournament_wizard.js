@@ -214,8 +214,8 @@ document.addEventListener('DOMContentLoaded', () => {
             response.data.forEach((course) => {
               courses.push({
                 id: course.id,
-                name: `${course.name} in ${course.city}, ${course.us_state}`,
-                number_of_holes: course.number_of_holes,
+                name: `${course.name} in ${course.city}, ${course.usState}`,
+                numberOfHoles: course.numberOfHoles,
               });
             });
 
@@ -225,7 +225,7 @@ document.addEventListener('DOMContentLoaded', () => {
       courseSelected(selectedOption) {
         api.getCourseTeeBoxes(selectedOption.id)
           .then((response) => {
-            app.configureHoleOptions(selectedOption.number_of_holes);
+            app.configureHoleOptions(selectedOption.numberOfHoles);
 
             app.courseTeeBoxes = response.data;
 
@@ -241,12 +241,12 @@ document.addEventListener('DOMContentLoaded', () => {
         const holeOptions = [];
 
         if (numberOfHoles >= 9) {
-          holeOptions.push({ name: 'Front 9', value: 'front_nine' });
+          holeOptions.push({ name: 'Front 9', value: 'frontNine' });
         }
 
         if (numberOfHoles === 18) {
-          holeOptions.push({ name: 'Back 9', value: 'back_nine' });
-          holeOptions.push({ name: 'All 18', value: 'all_holes' });
+          holeOptions.push({ name: 'Back 9', value: 'backNine' });
+          holeOptions.push({ name: 'All 18', value: 'allHoles' });
 
           this.showBackNineHoles = true;
         }
