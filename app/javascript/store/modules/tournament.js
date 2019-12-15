@@ -14,24 +14,66 @@ export const state = {
       },
     ],
   },
+  holeOptions: [],
+  scoringRules: [],
   flightsToDelete: [],
+  scoringRulesToDelete: [],
 };
 
 export const mutations = {
   updateField,
   setTournament(state, payload) {
     state.tournament = payload;
+
+    const holeOptions = [];
+    const { numberOfHoles } = state.tournament.tournamentDays[0].course;
+
+    if (numberOfHoles >= 9) {
+      holeOptions.push({ name: 'Front 9', value: 'frontNine' });
+    }
+
+    if (numberOfHoles === 18) {
+      holeOptions.push({ name: 'Back 9', value: 'backNine' });
+      holeOptions.push({ name: 'All 18', value: 'allHoles' });
+    }
+
+    holeOptions.push({ name: 'Custom', value: 'custom' });
+
+    state.holeOptions = holeOptions;
+  },
+  setScoringRules(state, payload) {
+    state.scoringRules = payload;
   },
   addFlight(state, payload) {
     state.tournament.tournamentDays[0].flights.push(payload);
   },
   deleteFlight(state, index) {
     const deadFlight = state.tournament.tournamentDays[0].flights[index];
-    if (deadFlight.id != null) {
+    if (deadFlight.id != undefined) {
       state.flightsToDelete.push(deadFlight);
     }
-    
+
     state.tournament.tournamentDays[0].flights.splice(index, 1);
+  },
+  addScoringRule(state, payload) {
+    const newRule = {
+      name: payload.name,
+      setupComponentName: payload.setupComponentName,
+      customNameAllowed: payload.customNameAllowed,
+      showCourseHoles: payload.showCourseHoles,
+      className: payload.className,
+      holeConfiguration: {},
+    };
+
+    state.tournament.tournamentDays[0].scoringRules.push(newRule);
+  },
+  deleteScoringRule(state, index) {
+    const deadRule = state.tournament.tournamentDays[0].scoringRules[index];
+    if (deadRule.id != undefined) {
+      state.scoringRulesToDelete.push(deadRule);
+    }
+
+    state.tournament.tournamentDays[0].scoringRules.splice(index, 1);
   },
 };
 
@@ -40,6 +82,14 @@ export const actions = {
     return api.getTournament(leagueId, tournamentId)
       .then((response) => {
         commit('setTournament', response.data);
+      });
+  },
+  fetchScoringRules({ commit }, { leagueId }) {
+    return api.getGameTypes(leagueId)
+      .then((response) => {
+        const flattenedRules = response.data.flat(1);
+
+        commit('setScoringRules', flattenedRules);
       });
   },
   saveTournamentDetails({ rootState }) {
@@ -105,8 +155,28 @@ export const actions = {
 
     return api.runAll(requests);
   },
+  addScoringRule({ commit }, { value }) {
+    commit('addScoringRule', value);
+  },
+  deleteScoringRule({ commit }, { index }) {
+    commit('deleteScoringRule', index);
+  },
 };
 
 export const getters = {
   getField,
+  groupedScoringRules: (state) => {
+    return state.scoringRules;
+  },
+  availableScoringRules: (state) => {
+    const rules = [];
+
+    state.scoringRules.forEach((rule) => {
+      rule.games.forEach((game) => {
+        rules.push(game);
+      });
+    });
+
+    return rules;
+  },
 };

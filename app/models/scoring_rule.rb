@@ -228,6 +228,20 @@ class ScoringRule < ApplicationRecord
     payouts
   end
 
+  def hole_configuration
+    if course_holes.count == 18
+      { name: 'All 18', value: 'allHoles' }
+    elsif course_holes.count == 9
+      if course_holes.first.hole_number == '1'
+        { name: 'Front 9', value: 'frontNine' }
+      else
+        { name: 'Back 9', value: 'backNine' }
+      end
+    else
+      { name: 'Custom', value: 'custom' }
+    end
+  end
+
   def flight_payouts
     @flight_payouts ||= tournament_day.flights.map(&:payouts).flatten
   end

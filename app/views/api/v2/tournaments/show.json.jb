@@ -21,7 +21,8 @@ Rails.cache.fetch ['v2', @tournament.cache_key_with_version] do
       id: day.course.id,
       name: day.course.name,
       city: day.course.city,
-      us_state: day.course.us_state
+      us_state: day.course.us_state,
+      number_of_holes: day.course.course_holes.count
     }
 
     course_json[:course_tee_boxes] = day.course.course_tee_boxes.map do |box|
@@ -53,13 +54,20 @@ Rails.cache.fetch ['v2', @tournament.cache_key_with_version] do
     end
 
     day_json[:scoring_rules] = day.scoring_rules.map do |rule|
-      {
+      rule_json = {
         id: rule.id,
         name: rule.name,
         is_opt_in: rule.is_opt_in,
         dues_amount: rule.dues_amount,
         custom_name: rule.custom_name
       }
+
+      rule_json[:hole_configuration] = {
+        name: rule.hole_configuration[:name],
+        value: rule.hole_configuration[:value]
+      }
+
+      rule_json
     end
 
     day_json

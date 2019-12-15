@@ -12,15 +12,9 @@ import Scorecard from '../components/Scorecard/Scorecard';
 import TeeTimeEditor from '../components/TeeTimes/TeeTimeEditor.vue';
 import TournamentDetails from '../components/Tournament/TournamentDetails.vue';
 import Flights from '../components/Tournament/Flights.vue';
+import ScoringRules from '../components/Tournament/ScoringRules.vue';
 
 Vue.use(VModal, { componentName: 'vue-modal' });
-
-function getTournament(leagueId, tournamentId) {
-  store.dispatch('tournament/fetchTournament', {
-    leagueId,
-    tournamentId,
-  });
-}
 
 Vue.config.productionTip = false;
 
@@ -37,6 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
       TeeTimeEditor,
       TournamentDetails,
       Flights,
+      ScoringRules,
     },
     created() {
       store.dispatch('setCsrfToken', {
@@ -45,7 +40,12 @@ document.addEventListener('DOMContentLoaded', () => {
           .getAttribute('content'),
       });
 
-      getTournament(props.league.id, props.tournament.id);
+      store.dispatch('tournament/fetchTournament', {
+        leagueId: props.league.id,
+        tournamentId: props.tournament.id,
+      });
+
+      store.dispatch('tournament/fetchScoringRules', { leagueId: props.league.id });
     },
     methods: {
       showTournamentDetails() {
@@ -53,6 +53,9 @@ document.addEventListener('DOMContentLoaded', () => {
       },
       showFlights() {
         app.$modal.show('flights-modal');
+      },
+      showScoringRules() {
+        app.$modal.show('scoring-rules-modal');
       },
       showTeeTimeEditor() {
         api.getTournametGroups(props.league.id, props.tournament.id, props.tournament_day.id)

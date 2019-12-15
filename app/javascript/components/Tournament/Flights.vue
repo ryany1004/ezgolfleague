@@ -50,7 +50,7 @@ import store from '../../store/store';
 
 export default {
   components: {
-    Multiselect
+    Multiselect,
   },
   computed: {
     ...mapMultiRowFields('tournament', ['tournament.tournamentDays[0].flights', 'tournament.tournamentDays[0].course.courseTeeBoxes']),
