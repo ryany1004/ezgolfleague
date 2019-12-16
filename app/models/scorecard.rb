@@ -28,8 +28,8 @@ class Scorecard < ApplicationRecord
     tournament_day&.tournament&.league
   end
 
-  def user
-    golf_outing&.user
+  def flight
+    tournament_day.flight_for_player(golf_outing.user)
   end
 
   def scorecard_payload
@@ -111,7 +111,6 @@ class Scorecard < ApplicationRecord
   end
 
   def flight_number
-    flight = tournament_day.flight_for_player(golf_outing.user)
     flight.display_name if flight.present?
   end
 

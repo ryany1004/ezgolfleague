@@ -62,10 +62,11 @@
                   </li>
                 <% elsif @tournament.tournament_state == TournamentState::REVIEW_SCORES %>
                   <li class="nav-item">
-                    <a class="nav-link active" data-toggle="pill" href="#rankings-tab">Rankings</a>
+                    <a class="nav-link active" data-toggle="pill" href="#rankings-tab">Scorecards</a>
                   </li>
+
                   <li class="nav-item">
-                    <a class="nav-link" data-toggle="pill" href="#contests-tab">Game Types</a>
+                    <a class="nav-link active" data-toggle="pill" href="#">&nbsp;</a>
                   </li>
                 <% elsif @tournament.tournament_state == TournamentState::POST_SCORES %>
                   <li class="nav-item">
@@ -83,9 +84,7 @@
 
                 <%= render partial: 'tee_time_tab', locals: { tournament_day: @tournament.first_day } %>
               <% elsif @tournament.tournament_state == TournamentState::REVIEW_SCORES %>
-                <%= render partial: 'rankings_tab', locals: { tournament_day: @tournament.first_day } %>
-
-                <%= render partial: 'contests_tab', locals: { tournament_day: @tournament.first_day } %>
+                <%= render partial: 'scorecards_tab', locals: { tournament_day: @tournament.first_day } %>
               <% elsif @tournament.tournament_state == TournamentState::POST_SCORES %>
                 <%= render partial: 'rankings_tab', locals: { tournament_day: @tournament.first_day } %>
 

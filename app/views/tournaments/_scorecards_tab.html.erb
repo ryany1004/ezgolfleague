@@ -1,0 +1,37 @@
+<div class="tab-pane active" id="rankings-tab">
+  <table class="table">
+    <thead>
+      <tr class="text-uppercase">
+        <th scope="col" class="pl-5 pr-0">Flight</th>
+        <th scope="col">player</th>
+        <th scope="col">net</th>
+        <th scope="col">gross</th>
+        <th scope="col"></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% tournament_day.scorecard_base_scoring_rule.scorecards.each do |scorecard| %>
+        <tr>
+          <th class="pl-5 pr-0"><%= scorecard.flight.display_name %></th>
+          <td>
+            <div class="media">
+              <%= user_avatar(scorecard.user) %>
+              <div class="media-body">
+                <h2><%= scorecard.user.complete_name %></h2>
+              </div>
+            </div>
+          </td>
+          <td><%= scorecard.net_score %></td>
+          <td><%= scorecard.gross_score %></td>
+          <td class="edit-link">
+            <a href='#' data-scorecard-id='<%= scorecard.id %>' v-on:click="showScorecard"><%= image_tag('edit.png') %></a>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+
+<div id="editScorecardModal">
+  <scorecard/>
+</div>

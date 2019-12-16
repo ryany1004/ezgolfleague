@@ -70,6 +70,10 @@ class ScoringRule < ApplicationRecord
     HandicapComputer::BaseHandicapComputer.new(self)
   end
 
+  def scorecards
+    users.map { |u| tournament_day.primary_scorecard_for_user(u) }
+  end
+
   def scorecard_api(scorecard:)
     return nil if scorecard.blank?
 
