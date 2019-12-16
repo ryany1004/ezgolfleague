@@ -63,10 +63,12 @@ document.addEventListener('DOMContentLoaded', () => {
             app.$modal.show('tee-time-editor', { teeGroupData: response.data });
           });
       },
-      displayScorecard(event) {
+      showScorecard(event) {
         NProgress.start();
 
-        api.getScorecard(event.currentTarget.dataset.scorecardId)
+        const { scorecardId } = event.currentTarget.dataset;
+
+        api.getScorecard(scorecardId)
           .then((response) => {
             NProgress.done();
 

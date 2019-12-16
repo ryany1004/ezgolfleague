@@ -31,7 +31,7 @@
           <td><%= number_to_currency(result.payouts) %></td>
           <td class="edit-link">
             <% scorecard = result.primary_scorecard %>
-            <a href='#' data-scorecard-id='<%= scorecard.id %>' v-on:click="displayScorecard"><%= image_tag('edit.png') %></a>
+            <a href='#' data-scorecard-id='<%= scorecard.id %>' v-on:click="showScorecard"><%= image_tag('edit.png') %></a>
           </td>
         </tr>
       <% end %>

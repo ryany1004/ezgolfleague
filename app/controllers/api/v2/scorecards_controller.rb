@@ -20,13 +20,13 @@ class Api::V2::ScorecardsController < BaseController
 
   def update
     payload = ActiveSupport::JSON.decode(request.body.read)
-    scorecard_data = payload['scorecards'].first
-    scores = scorecard_data['scores']
 
     scores_to_update = {}
 
-    scores.each do |score_data|
-      scores_to_update[score_data['id']] = { strokes: score_data['score'] }
+    payload['scorecards'].each do |card_data|
+      card_data['scores'].each do |score_data|
+        scores_to_update[score_data['id']] = { strokes: score_data['score'] }
+      end
     end
 
     Updaters::ScorecardUpdating.update_scorecards_for_scores(scores_to_update, @scorecard, @scorecards_to_update)

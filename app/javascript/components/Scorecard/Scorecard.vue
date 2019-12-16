@@ -9,7 +9,7 @@
           <p>{{ scorecard.tournamentName }}</p>
         </div>
         <div class="col-md-4 last">
-          <a href="#edit" class="btn btn__ezgl-secondary edit-button mr-2" v-on:click="toggleEdit">Edit</a>
+          <a href="#edit" class="btn btn__ezgl-secondary edit-button mr-2" v-on:click="toggleEdit" v-if="!editMode">Edit</a>
           <a href="#save" class="btn btn-primary mr-2" v-on:click="saveScorecard">Save</a>
         </div>
       </div>
@@ -120,6 +120,7 @@ export default {
     return {
       csrfToken: document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
       scorecard: {
+        primaryScorecardId: null,
         holes: [],
         scorecards: [
           {
