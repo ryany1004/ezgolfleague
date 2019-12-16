@@ -67,6 +67,8 @@ Rails.cache.fetch ['v2', @tournament.cache_key_with_version] do
         value: rule.hole_configuration[:value]
       }
 
+      rule_json[:custom_configuration] = rule.custom_configuration_params if rule.respond_to?(:custom_configuration_params)
+
       rule_json
     end
 

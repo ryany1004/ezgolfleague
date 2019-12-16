@@ -100,4 +100,15 @@ module StablefordScoringRuleSetup
       metadata.destroy unless metadata.blank?
     end
   end
+
+  def custom_configuration_params
+    {
+      double_eagle_score: double_eagle_score,
+      eagle_score: eagle_score,
+      birdie_score: birdie_score,
+      par_score: par_score,
+      bogey_score: bogey_score,
+      double_bogey_score: double_bogey_score
+    }
+  end
 end

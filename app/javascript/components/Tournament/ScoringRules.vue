@@ -8,7 +8,7 @@
           <h2 style="font-size:30px;">Game Types</h2>
         </div>
 
-        <div class="btn-group float-right">
+        <div class="btn-group float-right mb-3">
           <button type="button" class="btn__ezgl-secondary-outline float-right" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             Add Game Type
           </button>
@@ -20,17 +20,12 @@
         <table class="table" v-for="(scoringRule, index) in scoringRules" v-bind:key="index">
           <thead class="thead-light">
             <tr class="text-uppercase">
+              <th scope="col" class="pl-5 pr-0"><strong>{{ scoringRule.name }}</strong></th>
               <th scope="col" class="pl-5 pr-0">&nbsp;</th>
-              <th scope="col" class="pl-5 pr-0">&nbsp;</th>
-              <th scope="col">&nbsp;</th>
+              <th scope="col"><button type="button" class="btn__ezgl-secondary-outline float-right" v-on:click="deleteScoringRule(index)">Delete</button></th>
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td><strong>{{ scoringRule.name }}</strong></td>
-              <td>&nbsp;</td>
-              <td><button type="button" class="btn__ezgl-secondary-outline float-right" v-on:click="deleteScoringRule(index)">Delete</button></td>
-            </tr>
             <tr>
               <td>Dues Amount $</td>
               <td><input label="false" type="text" class="form-control string required form-control" v-model="scoringRule.duesAmount"></td>
@@ -88,19 +83,42 @@
               <td>&nbsp;</td>
             </tr>
             <tr v-if="scoringRuleProtoAttribute(scoringRule.name, 'setupComponentName') === 'individual_stroke_play'">
-              <td colspan="5">
-                <individual-stroke-play-setup @game-type-options-changed="scoringRuleOptionUpdated"/>
+              <td>Tie-Breaking<br/><caption>18-hole tournaments use the back nine.</caption></td>
+              <td>
+                <!-- <input label="false" type="checkbox" class="form-control required form-control" v-model="scoringRule.customConfiguration.nineHoleTiebreaking"> -->
+                <input label="false" type="checkbox" class="form-control required form-control" :checked="customConfigurationValue('nineHoleTiebreaking', index)" @change="$emit('input', updateCustomConfigurationValue('nineHoleTiebreaking', index, $event.target.checked))">
               </td>
+              <td>&nbsp;</td>
             </tr>
             <tr v-if="scoringRuleProtoAttribute(scoringRule.name, 'setupComponentName') === 'individual_stableford'">
-              <td colspan="5">
-                <stableford-setup @game-type-options-changed="scoringRuleOptionUpdated"/>
+              <td>Stableford Scores</td>
+              <td>
+                <label>Double Eagle Score</label>
+                <input label="false" type="text" class="form-control string required form-control" :value="customConfigurationValue('doubleEagleScore', index)" @change="$emit('input', updateCustomConfigurationValue('doubleEagleScore', index, $event.target.value))">
+                <br/>
+                <label>Eagle Score</label>
+                <input label="false" type="text" class="form-control string required form-control" :value="customConfigurationValue('eagleScore', index)" @change="$emit('input', updateCustomConfigurationValue('eagleScore', index, $event.target.value))">
+                <br/>
+                <label>Birdie Score</label>
+                <input label="false" type="text" class="form-control string required form-control" :value="customConfigurationValue('birdieScore', index)" @change="$emit('input', updateCustomConfigurationValue('birdieScore', index, $event.target.value))">
+                <br/>
+                <label>Par Score</label>
+                <input label="false" type="text" class="form-control string required form-control" :value="customConfigurationValue('parScore', index)" @change="$emit('input', updateCustomConfigurationValue('parScore', index, $event.target.value))">
+                <br/>
+                <label>Bogey Score</label>
+                <input label="false" type="text" class="form-control string required form-control" :value="customConfigurationValue('bogeyScore', index)" @change="$emit('input', updateCustomConfigurationValue('bogeyScore', index, $event.target.value))">
+                <br/>
+                <label>Double Bogey Score</label>
+                <input label="false" type="text" class="form-control string required form-control" :value="customConfigurationValue('doubleBogeyScore', index)" @change="$emit('input', updateCustomConfigurationValue('doubleBogeyScore', index, $event.target.value))">
               </td>
+              <td>&nbsp;</td>
             </tr>
             <tr v-if="scoringRuleProtoAttribute(scoringRule.name, 'setupComponentName') === 'three_best_balls_of_four'">
-              <td colspan="5">
-                <best-three-balls-of-four-setup @game-type-options-changed="scoringRuleOptionUpdated"/>
+              <td>Add each hole's par to the score if the group is not full.</td>
+              <td>
+                <input label="false" type="checkbox" class="form-control required form-control" :checked="customConfigurationValue('shouldAddParIfSmallGroup', index)" @change="$emit('input', updateCustomConfigurationValue('shouldAddParIfSmallGroup', index, $event.target.checked))">
               </td>
+              <td>&nbsp;</td>
             </tr>
           </tbody>
         </table>
@@ -116,21 +134,9 @@
 <script>
 import { mapMultiRowFields } from 'vuex-map-fields';
 
-import Multiselect from 'vue-multiselect';
-
-import IndividualStrokePlaySetup from '../ScoringRuleSetup/IndividualStrokePlaySetup';
-import StablefordSetup from '../ScoringRuleSetup/StablefordSetup';
-import BestThreeBallsOfFourSetup from '../ScoringRuleSetup/BestThreeBallsOfFourSetup';
-
 import store from '../../store/store';
 
 export default {
-  components: {
-    Multiselect,
-    IndividualStrokePlaySetup,
-    StablefordSetup,
-    BestThreeBallsOfFourSetup,
-  },
   computed: {
     ...mapMultiRowFields('tournament', ['tournament.tournamentDays[0].course', 'tournament.tournamentDays[0].scoringRules', 'holeOptions']),
     availableScoringRules() {
@@ -164,8 +170,11 @@ export default {
     showBackNine() {
       return this.course.numberOfCourseHoles === 18;
     },
-    scoringRuleOptionUpdated(event) {
-      console.log(event);
+    customConfigurationValue(attribute, index) {
+      return this.$store.getters['tournament/customScoringRuleConfigurationValue'](attribute, index);
+    },
+    updateCustomConfigurationValue(attribute, index, newValue) {
+      this.$store.dispatch('tournament/updateCustomScoringRuleConfigurationValue', { attribute, index, newValue } );
     },
     newScoringRule(value) {
       this.$store.dispatch('tournament/addScoringRule', { value });

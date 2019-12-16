@@ -30,4 +30,8 @@ module ThreeBestBallsOfFourScoringRuleSetup
       false
     end
   end
+
+  def custom_configuration_params
+    { shouldAddParIfSmallGroup: should_add_par? }
+  end
 end

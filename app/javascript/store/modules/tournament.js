@@ -62,7 +62,11 @@ export const mutations = {
       customNameAllowed: payload.customNameAllowed,
       showCourseHoles: payload.showCourseHoles,
       className: payload.className,
-      holeConfiguration: {},
+      duesAmount: 0,
+      isOptIn: false,
+      customName: null,
+      holeConfiguration: state.holeOptions[0],
+      customConfiguration: {},
     };
 
     state.tournament.tournamentDays[0].scoringRules.push(newRule);
@@ -74,6 +78,12 @@ export const mutations = {
     }
 
     state.tournament.tournamentDays[0].scoringRules.splice(index, 1);
+  },
+  updateCustomScoringRuleConfigurationValue(state, payload) {
+    const { scoringRules } = state.tournament.tournamentDays[0];
+    const rule = scoringRules[payload.index];
+
+    rule.customConfiguration[payload.attribute] = payload.newValue;
   },
 };
 
@@ -161,10 +171,60 @@ export const actions = {
   deleteScoringRule({ commit }, { index }) {
     commit('deleteScoringRule', index);
   },
+  updateCustomScoringRuleConfigurationValue({ commit }, { attribute, index, newValue }) {
+    commit('updateCustomScoringRuleConfigurationValue', { attribute, index, newValue });
+  },
+  saveScoringRules({ rootState }) {
+    const { scoringRules } = state.tournament.tournamentDays[0];
+
+    const requests = [];
+
+    scoringRules.forEach((rule) => {
+      const rulePayload = {
+        leagueId: state.tournament.leagueId,
+        tournamentId: state.tournament.id,
+        tournamentDayId: state.tournament.tournamentDays[0].id,
+        customName: rule.customName,
+        duesAmount: rule.duesAmount,
+        isOptIn: rule.isOptIn,
+        holeConfiguration: rule.holeConfiguration,
+        className: rule.className,
+        customConfiguration: rule.customConfiguration,
+      };
+
+      if (rule.id == null) {
+        requests.push(api.createScoringRule(rootState.csrfToken, rulePayload));
+      } else {
+        rulePayload.id = rule.id;
+
+        requests.push(api.patchScoringRule(rootState.csrfToken, rulePayload));
+      }
+    });
+
+    const deadRules = state.scoringRulesToDelete;
+    deadRules.forEach((rule) => {
+      const rulePayload = {
+        leagueId: state.tournament.leagueId,
+        tournamentId: state.tournament.id,
+        tournamentDayId: state.tournament.tournamentDays[0].id,
+        id: rule.id,
+      };
+
+      requests.push(api.destroyScoringRule(rootState.csrfToken, rulePayload));
+    });
+
+    return api.runAll(requests);
+  },
 };
 
 export const getters = {
   getField,
+  customScoringRuleConfigurationValue: (state) => (attribute, index) => {
+    const { scoringRules } = state.tournament.tournamentDays[0];
+    const rule = scoringRules[index];
+
+    return rule.customConfiguration[attribute];
+  },
   groupedScoringRules: (state) => {
     return state.scoringRules;
   },

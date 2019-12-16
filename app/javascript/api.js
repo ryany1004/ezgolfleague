@@ -109,4 +109,35 @@ export default {
 
     return client.delete(`/api/v2/leagues/${tournamentGroupPayload.leagueId}/tournaments/${tournamentGroupPayload.tournamentId}/tournament_days/${tournamentGroupPayload.tournamentDayId}/tournament_groups/${tournamentGroupPayload.group.id}.json`, config);
   },
+  createScoringRule(csrfToken, scoringRulePayload) {
+    const config = {
+      headers: {
+        'X-CSRF-TOKEN': csrfToken,
+      },
+    };
+
+    const jsonPayload = JSON.stringify(scoringRulePayload);
+
+    return client.post(`/api/v2/leagues/${scoringRulePayload.leagueId}/tournaments/${scoringRulePayload.tournamentId}/tournament_days/${scoringRulePayload.tournamentDayId}/scoring_rules`, jsonPayload, config);
+  },
+  patchScoringRule(csrfToken, scoringRulePayload) {
+    const config = {
+      headers: {
+        'X-CSRF-TOKEN': csrfToken,
+      },
+    };
+
+    const jsonPayload = JSON.stringify(scoringRulePayload);
+
+    return client.patch(`/api/v2/leagues/${scoringRulePayload.leagueId}/tournaments/${scoringRulePayload.tournamentId}/tournament_days/${scoringRulePayload.tournamentDayId}/scoring_rules/${scoringRulePayload.id}.json`, jsonPayload, config);
+  },
+  destroyScoringRule(csrfToken, scoringRulePayload) {
+    const config = {
+      headers: {
+        'X-CSRF-TOKEN': csrfToken,
+      },
+    };
+
+    return client.delete(`/api/v2/leagues/${scoringRulePayload.leagueId}/tournaments/${scoringRulePayload.tournamentId}/tournament_days/${scoringRulePayload.tournamentDayId}/scoring_rules/${scoringRulePayload.id}.json`, config);
+  },
 };

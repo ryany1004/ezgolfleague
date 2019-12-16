@@ -22,17 +22,21 @@ module StrokePlayScoringRuleSetup
   end
 
   def remove_game_type_options
-    metadata = GameTypeMetadatum.where(search_key: use_back_nine_key).first
-    metadata.destroy unless metadata.blank?
+    metadata = GameTypeMetadatum.find_by(search_key: use_back_nine_key)
+    metadata.destroy if metadata.present?
   end
 
   def use_back_9_to_break_ties?
-    metadata = GameTypeMetadatum.where(search_key: use_back_nine_key).first
+    metadata = GameTypeMetadatum.find_by(search_key: use_back_nine_key)
 
-    if !metadata.blank? && metadata.integer_value == 1
+    if metadata.present? && metadata.integer_value == 1
       true
     else
       false
     end
+  end
+
+  def custom_configuration_params
+    { nine_hole_tiebreaking: use_back_9_to_break_ties? }
   end
 end
