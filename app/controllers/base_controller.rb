@@ -42,6 +42,16 @@ class BaseController < ActionController::Base
     end
   end
 
+  def fetch_scorecard(scorecard_id)
+    scorecard = Scorecard.find(scorecard_id)
+
+    if current_user.is_super_user? || scorecard.user_can_edit?(current_user)
+      scorecard
+    else
+      nil
+    end
+  end
+
   def view_league_from_user_for_league_id(league_id)
     if current_user.is_super_user?
       League.find_by(id: league_id)

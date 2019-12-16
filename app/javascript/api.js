@@ -26,6 +26,15 @@ export default {
   getScorecard(scorecardId) {
     return client.get(`/api/v2/scorecards/${scorecardId}.json`);
   },
+  patchScorecard(csrfToken, scorecardPayload) {
+    const config = {
+      headers: {
+        'X-CSRF-TOKEN': csrfToken,
+      },
+    };
+
+    return client.patch(`/api/v2/scorecards/${scorecardPayload.primaryScorecardId}.json`, scorecardPayload, config);
+  },
   postTournamentWizard(csrfToken, leagueId, wizardData) {
     const config = {
       headers: {

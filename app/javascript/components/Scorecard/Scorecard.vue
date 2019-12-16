@@ -9,106 +9,116 @@
           <p>{{ scorecard.tournamentName }}</p>
         </div>
         <div class="col-md-4 last">
-          <a href="#edit" class="btn btn__ezgl-secondary edit-button mr-2">Edit</a>
-          <a href="#save" class="btn btn-primary mr-2">Save</a>
+          <a href="#edit" class="btn btn__ezgl-secondary edit-button mr-2" v-on:click="toggleEdit">Edit</a>
+          <a href="#save" class="btn btn-primary mr-2" v-on:click="saveScorecard">Save</a>
         </div>
       </div>
     </div>
     <div>
-      <table>
-        <thead>
-          <tr>
-            <th scope="col">Flight</th>
-            <th scope="col">Hole<br>Yards</th>
-            <template v-for="(holeGroup, j) in sliceScores(scorecard.holes)">
-              <template v-for="hole in holeGroup">
-                <th scope="col">{{ hole.holeNumber }}<br>{{ hole.yardForFlight }}</th>
-              </template>
-              <template v-if="j == 0">
-                <th scope="col">Out</th>
-              </template>
-              <template v-else>
-                <th scope="col">Out <br>In</th>
-              </template>
-            </template>
-            <th scope="col">HDCP</th>
-            <th scope="col">Gross <br>Net</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>&nbsp;</td>
-            <td>Par</td>
-            <template v-for="(holeGroup, j) in sliceScores(scorecard.holes)">
-              <template v-for="hole in holeGroup">
-                <td>{{ hole.par }}</td>
-              </template>
-              <td>&nbsp;</td>
-            </template>
-          </tr>
-          <tr class="score" v-for="card in scorecard.scorecards" :key="card.id">
-            <td>{{ scorecard.flightName }}</td>
-            <td>{{ card.name }}<br><a href="#disqualify" class="btn btn-primary edit">Disqualify</a></td>
-
-            <template v-for="(scoreGroup, j) in sliceScores(card.scores)">
-              <td v-for="score in scoreGroup">
-                {{ score.score }}
-                <template v-if="score.handicapStrokes != null">
-                  <br/>
-                  <span class="dot">
-                    {{ score.handicapStrokes * -1 }}
-                  </span>
+      <form onSubmit="return false">
+        <table>
+          <thead>
+            <tr>
+              <th scope="col">Flight</th>
+              <th scope="col">Hole<br>Yards</th>
+              <template v-for="(holeGroup, j) in sliceScores(scorecard.holes)">
+                <template v-for="hole in holeGroup">
+                  <th scope="col">{{ hole.holeNumber }}<br>{{ hole.yardForFlight }}</th>
                 </template>
-              </td>
-              <template v-if="card.shouldSubtitle">
-                <td v-if="j == 0" name="inner-subtitle">
-                  {{ card.frontNineHandicapSubtotal }}
-                </td>
-                <td v-else name="outer-subtitle">
-                  {{ card.frontNineHandicapSubtotal }}
-                  <br>
-                  {{ card.backNineHandicapSubtotal }}
-                </td>
+                <template v-if="j == 0">
+                  <th scope="col">Out</th>
+                </template>
+                <template v-else>
+                  <th scope="col">Out <br>In</th>
+                </template>
               </template>
-              <template v-else>
+              <th scope="col">HDCP</th>
+              <th scope="col">Gross <br>Net</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>&nbsp;</td>
+              <td>Par</td>
+              <template v-for="(holeGroup, j) in sliceScores(scorecard.holes)">
+                <template v-for="hole in holeGroup">
+                  <td>{{ hole.par }}</td>
+                </template>
                 <td>&nbsp;</td>
               </template>
-            </template>
-            <td name="course-handicap">
-              {{ card.courseHandicap }}
-              <br/>
-              <i class="fas fa-unlock edit"/>
-            </td>
-            <td name="total" v-if="card.shouldTotal">
-              {{ card.grossTotal }}
-              <br>
-              <template v-if="card.netTotal > 0">
-                {{ card.netTotal }}
-              </template>
-            </td>
-            <td v-else>&nbsp;</td>
-          </tr>
-          <tr class="m-hcp">
-            <td>M HCP</td>
-            <td>&nbsp;</td>
+            </tr>
+            <tr class="score" v-for="card in scorecard.scorecards" :key="card.id">
+              <td>{{ scorecard.flightName }}</td>
+              <td>{{ card.name }}<br><a href="#disqualify" class="btn btn-primary edit">Disqualify</a></td>
 
-            <template v-for="holeGroup in sliceScores(scorecard.holes)">
-              <template v-for="hole in holeGroup">
-                <td>{{ hole.handicap }}</td>
+              <template v-for="(scoreGroup, j) in sliceScores(card.scores)">
+                <td v-for="score in scoreGroup" v-bind:key="score.id">
+                  <template v-if="editMode">
+                    <input label="false" type="number" class="form-control string required" style="padding:0;" v-model.number="score.score">
+                  </template>
+                  <template v-else>
+                    {{ score.score }}
+                  </template>
+                  <template v-if="score.handicapStrokes != null">
+                    <br/>
+                    <span class="dot">
+                      {{ score.handicapStrokes * -1 }}
+                    </span>
+                  </template>
+                </td>
+                <template v-if="card.shouldSubtitle">
+                  <td v-if="j == 0" name="inner-subtitle">
+                    {{ card.frontNineHandicapSubtotal }}
+                  </td>
+                  <td v-else name="outer-subtitle">
+                    {{ card.frontNineHandicapSubtotal }}
+                    <br>
+                    {{ card.backNineHandicapSubtotal }}
+                  </td>
+                </template>
+                <template v-else>
+                  <td>&nbsp;</td>
+                </template>
               </template>
+              <td name="course-handicap">
+                {{ card.courseHandicap }}
+                <br/>
+                <i class="fas fa-unlock edit"/>
+              </td>
+              <td name="total" v-if="card.shouldTotal">
+                {{ card.grossTotal }}
+                <br>
+                <template v-if="card.netTotal > 0">
+                  {{ card.netTotal }}
+                </template>
+              </td>
+              <td v-else>&nbsp;</td>
+            </tr>
+            <tr class="m-hcp">
+              <td>M HCP</td>
               <td>&nbsp;</td>
-            </template>
-          </tr>
-        </tbody>
-      </table>
+
+              <template v-for="holeGroup in sliceScores(scorecard.holes)">
+                <template v-for="hole in holeGroup">
+                  <td>{{ hole.handicap }}</td>
+                </template>
+                <td>&nbsp;</td>
+              </template>
+            </tr>
+          </tbody>
+        </table>
+      </form>
     </div>
   </vue-modal>
 </template>
 
 <script>
+import api from 'api';
+
 export default {
   data() {
     return {
+      csrfToken: document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
       scorecard: {
         holes: [],
         scorecards: [
@@ -117,11 +127,15 @@ export default {
           },
         ],
       },
+      editMode: false,
     };
   },
   methods: {
     beforeOpen(event) {
       this.scorecard = event.params.scorecard;
+    },
+    toggleEdit() {
+      this.editMode = !this.editMode;
     },
     sliceScores(scores) {
       const sliceLength = scores.length / 2;
@@ -138,6 +152,14 @@ export default {
       }
 
       return sliced;
+    },
+    saveScorecard() {
+      api.patchScorecard(this.csrfToken, this.scorecard)
+        .then((response) => {
+          this.editMode = false;
+
+          this.$modal.hide('scorecard-modal');
+        });
     },
   },
 };

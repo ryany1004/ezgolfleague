@@ -1,4 +1,6 @@
 class Api::V2::ScorecardsController < BaseController
+  before_action :fetch_scorecard, only: [:update]
+
   respond_to :json
 
   def show
@@ -14,5 +16,42 @@ class Api::V2::ScorecardsController < BaseController
     @scorecard_presenter = ScorecardPresenter.new({ primary_scorecard: @scorecard, secondary_scorecards: @other_scorecards, current_user: current_user })
 
     render json: { error: 'Unauthorized Scorecard' }, status: :unauthorized unless @scorecard.user_can_view?(current_user)
+  end
+
+  def update
+    payload = ActiveSupport::JSON.decode(request.body.read)
+    scorecard_data = payload['scorecards'].first
+    scores = scorecard_data['scores']
+
+    scores_to_update = {}
+
+    scores.each do |score_data|
+      scores_to_update[score_data['id']] = { strokes: score_data['score'] }
+    end
+
+    Updaters::ScorecardUpdating.update_scorecards_for_scores(scores_to_update, @scorecard, @scorecards_to_update)
+
+    render json: :ok
+  end
+
+  private
+
+  def fetch_scorecard
+    scorecard_info = FetchingTools::ScorecardFetching.fetch_scorecards_and_related(params[:id])
+
+    @tournament_day = scorecard_info[:tournament_day]
+    @tournament = scorecard_info[:tournament]
+
+    @scorecard = scorecard_info[:scorecard]
+    @other_scorecards = scorecard_info[:other_scorecards]
+    @scorecards_to_update = scorecard_info[:scorecards_to_update]
+
+    @scorecard_presenter = ScorecardPresenter.new({ primary_scorecard: @scorecard, secondary_scorecards: @other_scorecards, current_user: current_user })
+
+    if @scorecard.user_can_view?(current_user)
+      @scorecard_presenter
+    else
+      nil
+    end
   end
 end
