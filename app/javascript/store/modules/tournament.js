@@ -239,4 +239,7 @@ export const getters = {
 
     return rules;
   },
+  selectedScoringRules: (state) => {
+    return state.tournament.tournamentDays[0].scoringRules;
+  },
 };

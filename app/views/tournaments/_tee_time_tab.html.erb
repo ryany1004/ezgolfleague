@@ -19,8 +19,8 @@
                 <div class="media-body">
                   <h2><%= outing.user.complete_name %></h2>
 
-                  <button class="btn dropdown-toggle edit-golfer-btn" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <%= link_to image_tag('edit.png', style: "width: 24px !important; height:24px;"), "", class:'edit-golfer-icon', data: { toggle:"modal", target:"#editGolferModal" } %>
+                  <button class="btn dropdown-toggle edit-golfer-btn" type="button" id="dropdownMenuButton">
+                    <a href='#' v-on:click="showGolferDetails" data-golfer-id="<%= outing.user.id %>" class='edit-golfer-icon'><%= image_tag('edit.png', style: "width: 24px !important; height:24px;") %></a>
                   </button>
                 </div>
               </div>

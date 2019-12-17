@@ -1,0 +1,29 @@
+json = {
+  league_id: @tournament.league.id,
+  tournament_id: @tournament.id,
+  tournament_day_id: @tournament_day.id,
+  mandatory_dues_amount: @tournament.mandatory_dues_amount
+}
+
+golfer_json = {
+  id: @player.id,
+  name: @player.complete_name,
+  short_name: @player.short_name,
+  image_url: @player.avatar_image_url,
+  dues_paid: @tournament.user_has_paid?(@player),
+  tournament_group_id: @tournament_day.tournament_group_for_player(@player).id,
+  tournament_group_time: @tournament_day.tournament_group_for_player(@player).formatted_tee_time,
+  scoring_rules: @player_scoring_rules.map {|r| r.id }
+}
+
+json[:golfer] = golfer_json
+
+json[:tournament_groups] = @tournament_groups.map do |group|
+  {
+    id: group.id,
+    tee_time: group.formatted_tee_time,
+    max_number_of_players: group.max_number_of_players,
+  }
+end
+
+json

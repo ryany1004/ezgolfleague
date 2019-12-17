@@ -129,6 +129,7 @@ Rails.application.routes.draw do
             resources :flights
             resources :tournament_groups
             resources :scoring_rules
+            resources :golfer_details, only: [:show, :update, :destroy]
           end
         end
       end

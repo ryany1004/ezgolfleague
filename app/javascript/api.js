@@ -58,6 +58,29 @@ export default {
 
     return client.patch(`/api/v2/leagues/${tournamentDetailsPayload.leagueId}/tournaments/${tournamentDetailsPayload.id}`, jsonPayload, config);
   },
+  getGolferDetails(leagueId, tournamentId, tournamentDayId, golferId) {
+    return client.get(`/api/v2/leagues/${leagueId}/tournaments/${tournamentId}/tournament_days/${tournamentDayId}/golfer_details/${golferId}.json`);
+  },
+  patchGolferDetails(csrfToken, leagueId, tournamentId, tournamentDayId, golferId, golferPayload) {
+    const config = {
+      headers: {
+        'X-CSRF-TOKEN': csrfToken,
+      },
+    };
+
+    const jsonPayload = JSON.stringify(golferPayload);
+
+    return client.patch(`/api/v2/leagues/${leagueId}/tournaments/${tournamentId}/tournament_days/${tournamentDayId}/golfer_details/${golferId}.json`, jsonPayload, config);
+  },
+  destroyGolferDetails(csrfToken, leagueId, tournamentId, tournamentDayId, golferId) {
+    const config = {
+      headers: {
+        'X-CSRF-TOKEN': csrfToken,
+      },
+    };
+
+    return client.delete(`/api/v2/leagues/${leagueId}/tournaments/${tournamentId}/tournament_days/${tournamentDayId}/golfer_details/${golferId}.json`, config);
+  },
   createFlight(csrfToken, flightsPayload) {
     const config = {
       headers: {

@@ -11,6 +11,7 @@ import store from '../store/store';
 import Scorecard from '../components/Scorecard/Scorecard';
 import TeeTimeEditor from '../components/TeeTimes/TeeTimeEditor.vue';
 import TournamentDetails from '../components/Tournament/TournamentDetails.vue';
+import GolferDetails from '../components/Tournament/GolferDetails.vue';
 import Flights from '../components/Tournament/Flights.vue';
 import ScoringRules from '../components/Tournament/ScoringRules.vue';
 
@@ -30,6 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
       Scorecard,
       TeeTimeEditor,
       TournamentDetails,
+      GolferDetails,
       Flights,
       ScoringRules,
     },
@@ -50,6 +52,21 @@ document.addEventListener('DOMContentLoaded', () => {
     methods: {
       showTournamentDetails() {
         app.$modal.show('tournament-details-modal');
+      },
+      showGolferDetails(event) {
+        NProgress.start();
+
+        const { golferId } = event.currentTarget.dataset;
+
+        api.getGolferDetails(props.league.id, props.tournament.id, props.tournament_day.id, golferId)
+          .then((response) => {
+            NProgress.done();
+
+            const payload = response.data;
+            payload.scoringRules = this.$store.getters['tournament/selectedScoringRules'];
+
+            app.$modal.show('golfer-details-modal', { payload });
+          });
       },
       showFlights() {
         app.$modal.show('flights-modal');
