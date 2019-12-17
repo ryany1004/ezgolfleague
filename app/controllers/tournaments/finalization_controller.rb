@@ -2,23 +2,23 @@ module Tournaments
   class FinalizationController < TournamentsController
     before_action :fetch_tournament, only: [:show, :update]
 
-    def show
-      @page_title = 'Finalize Tournament'
+    # def show
+    #   @page_title = 'Finalize Tournament'
 
-      if @tournament.can_be_finalized?
-        @stage_name = 'finalize'
+    #   if @tournament.can_be_finalized?
+    #     @stage_name = 'finalize'
 
-        TournamentService::Finalizer.call(@tournament) if params[:bypass_calc].blank?
+    #     TournamentService::Finalizer.call(@tournament) if params[:bypass_calc].blank?
 
-        @tournament_days = @tournament.tournament_days.includes(scoring_rules: [payout_results: [:flight, :user, :payout],
-                                                                tournament_day_results: [:user, :primary_scorecard]],
-                                                                tournament_groups: [golf_outings: [:user, scorecard: :scores]])
-      else
-        finalization_blockers = @tournament.finalization_blockers
+    #     @tournament_days = @tournament.tournament_days.includes(scoring_rules: [payout_results: [:flight, :user, :payout],
+    #                                                             tournament_day_results: [:user, :primary_scorecard]],
+    #                                                             tournament_groups: [golf_outings: [:user, scorecard: :scores]])
+    #   else
+    #     finalization_blockers = @tournament.finalization_blockers
 
-        redirect_to league_tournament_tournament_day_flights_path(@tournament.league, @tournament, @tournament.tournament_days.first), flash: { error: "This tournament cannot be finalized. #{finalization_blockers.join(' ')}" }
-      end
-    end
+    #     redirect_to league_tournament_tournament_day_flights_path(@tournament.league, @tournament, @tournament.tournament_days.first), flash: { error: "This tournament cannot be finalized. #{finalization_blockers.join(' ')}" }
+    #   end
+    # end
 
     def update
       if @tournament.can_be_finalized?
@@ -44,9 +44,9 @@ module Tournaments
           day.touch
         end
 
-        redirect_to league_tournaments_path(current_user.selected_league), flash: { success: 'The tournament was successfully finalized.' }
+        redirect_to league_tournament_path(current_user.selected_league, @tournament), flash: { success: 'The tournament was successfully finalized.' }
       else
-        redirect_to league_tournaments_path(current_user.selected_league), flash: { error: 'The tournament could not be finalized - it is missing required data.' }
+        redirect_to league_tournament_path(current_user.selected_league, @tournament), flash: { error: 'The tournament could not be finalized - it is missing required data.' }
       end
     end
   end

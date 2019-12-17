@@ -162,11 +162,11 @@ class Api::V2::TournamentWizardsController < BaseController
   end
 
   def assign_course_holes(scoring_rule, hole_information)
-    if hole_information == 'all_holes'
+    if hole_information == 'allHoles'
       holes = scoring_rule.tournament_day.course.course_holes
-    elsif hole_information == 'front_nine'
+    elsif hole_information == 'frontNine'
       holes = scoring_rule.tournament_day.course.course_holes.where('hole_number < 10')
-    elsif hole_information == 'back_nine'
+    elsif hole_information == 'backNine'
       holes = scoring_rule.tournament_day.course.course_holes.where('hole_number > 9')
     elsif hole_information == 'custom'
       raise

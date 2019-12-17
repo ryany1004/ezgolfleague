@@ -11,6 +11,17 @@
         </div>
 
         <div class="tournament-card__body">
+          <% if !@tournament.can_be_finalized? %>
+            <div class="row">
+              <ul>
+                <li>This tournament is missing data required to be calculated.</li>
+                <% @tournament.finalization_blockers.each do |b| %>
+                  <li><%= b %></li>
+                <% end %>
+              </ul>
+            </div>
+          <% end %>
+
           <div class="row">
             <div class="col-md-3">
               <div class="tournament-card__content p-4">
