@@ -67,15 +67,15 @@ class SubscriptionCreditsController < BaseController
     token = params[:stripeToken]
 
     if token.blank?
-      redirect_to edit_play_user_account_path, flash:
+      redirect_to edit_user_account_path(current_user), flash:
       { error: 'There was a problem updating your credit card. Please check your details and try again.' }
     else
       updated_successfully = Stripe::CardTerminal.create_or_update_stripe_customer(@league, user: current_user, token: token)
 
       if updated_successfully
-        redirect_to edit_play_user_account_path
+        redirect_to edit_user_account_path(current_user)
       else
-        redirect_to edit_play_user_account_path, flash:
+        redirect_to edit_user_account_path(current_user), flash:
         { error: 'We were unable to update your details with the credit system. Please check your details and try again.' }
       end
     end
