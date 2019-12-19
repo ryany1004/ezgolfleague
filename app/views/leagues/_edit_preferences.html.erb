@@ -17,19 +17,19 @@
 		</div>
 
     <div class="form-flex-group pt-2">
-      <%= f.input :display_balances_to_players, label: 'Show Win Balances to Players?', as: :boolean %>
+      <%= f.input :display_balances_to_players, label: 'Show Win Balances to Players?', as: :boolean, input_html: { "data-tooltip" => true, :title => "Players will see dollar based win balances." } %>
 		</div>
 
     <div class="form-flex-group">
-      <%= f.input :show_in_search, label: 'Show in League Search?', as: :boolean %>
+      <%= f.input :show_in_search, label: 'Show in League Search?', as: :boolean, input_html: { "data-tooltip" => true, :title => "Appears when new users search for leagues." } %>
 		</div>
 
 		<div class="form-flex-group">
-      <%= f.input :calculate_handicaps_from_past_rounds, label: 'Automatically Calculate Handicaps From Past Rounds?', as: :boolean %>
+      <%= f.input :calculate_handicaps_from_past_rounds, label: 'Automatically Calculate Handicaps From Past Rounds?', as: :boolean, input_html: { "data-tooltip" => true, :title => "Calculate handicap information from all of your players nightly." } %>
 		</div>
 
 		<div class="form-flex-group">
-      <%= f.input :number_of_rounds_to_handicap, label: 'Number of Rounds to Use' %>
+      <%= f.input :number_of_rounds_to_handicap, label: 'Number of Rounds to Use', input_html: { "data-tooltip" => true, :title => "For automatic handicaps, how many rounds should we use in our calculation?" } %>
 		</div>    
 
 		<div class="form-actions form-flex-group"> 
