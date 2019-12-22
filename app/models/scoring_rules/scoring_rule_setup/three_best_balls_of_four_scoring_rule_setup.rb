@@ -4,7 +4,11 @@ module ThreeBestBallsOfFourScoringRuleSetup
   end
 
   def should_add_par_key
-    "ShouldAddParIfNotEnoughScores-T-#{tournament_day.id}-#{id}"
+    if tournament_day.blank?
+      nil
+    else
+      "ShouldAddParIfNotEnoughScores-T-#{tournament_day.id}-#{id}"
+    end
   end
 
   def save_setup_details(game_type_options)

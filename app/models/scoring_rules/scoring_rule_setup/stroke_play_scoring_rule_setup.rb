@@ -4,7 +4,11 @@ module StrokePlayScoringRuleSetup
   end
 
   def use_back_nine_key
-    "ShouldUseBackNineForTies-T-#{tournament_day.id}-#{id}"
+    if tournament_day.blank?
+      true
+    else
+      "ShouldUseBackNineForTies-T-#{tournament_day.id}-#{id}"
+    end
   end
 
   def legacy_use_back_nine_key

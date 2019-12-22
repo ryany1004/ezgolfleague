@@ -306,9 +306,9 @@ class ScoringRule < ApplicationRecord
 end
 
 class ScoringRuleOption
-  attr_accessor :name, :class_name, :custom_name_allowed, :setup_component_name, :show_course_holes
+  attr_accessor :name, :class_name, :custom_name_allowed, :setup_component_name, :show_course_holes, :custom_configuration
 
-  def self.option(name:, class_name:, custom_name_allowed:, setup_component_name:, show_course_holes:)
+  def self.option(name:, class_name:, custom_name_allowed:, setup_component_name:, show_course_holes:, custom_configuration:)
     o = ScoringRuleOption.new
 
     o.name = name
@@ -316,6 +316,7 @@ class ScoringRuleOption
     o.custom_name_allowed = custom_name_allowed
     o.setup_component_name = setup_component_name
     o.show_course_holes = show_course_holes
+    o.custom_configuration = custom_configuration
 
     o
   end
@@ -345,7 +346,8 @@ class ScoringRuleOption
                                              class_name: i,
                                              custom_name_allowed: instance.allows_custom_name?,
                                              setup_component_name: instance.setup_component_name,
-                                             show_course_holes: instance.show_course_holes?)
+                                             show_course_holes: instance.show_course_holes?,
+                                             custom_configuration: instance.custom_configuration_params)
     end
 
     team_classes = [
@@ -366,7 +368,8 @@ class ScoringRuleOption
                                        class_name: i,
                                        custom_name_allowed: instance.allows_custom_name?,
                                        setup_component_name: instance.setup_component_name,
-                                       show_course_holes: instance.show_course_holes?)
+                                       show_course_holes: instance.show_course_holes?,
+                                       custom_configuration: instance.custom_configuration_params)
     end
 
     if show_team_rules

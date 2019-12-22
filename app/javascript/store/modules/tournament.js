@@ -66,7 +66,7 @@ export const mutations = {
       isOptIn: false,
       customName: null,
       holeConfiguration: state.holeOptions[0],
-      customConfiguration: {},
+      customConfiguration: payload.customConfiguration,
     };
 
     state.tournament.tournamentDays[0].scoringRules.push(newRule);
