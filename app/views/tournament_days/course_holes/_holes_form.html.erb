@@ -1,4 +1,0 @@
-<h3><%= scoring_rule.name %> Course Holes</h3>
-<div class="well">
-  <%= p.association :course_holes, collection: tournament_day.course.course_holes, label: 'Which holes are you playing?', label_method: :name, as: :check_boxes %>
-</div>

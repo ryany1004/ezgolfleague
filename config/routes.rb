@@ -148,103 +148,20 @@ Rails.application.routes.draw do
     get 'switch_seasons'
 
     resources :subscription_credits, except: :show do
-      get 'information', on: :collection
-      get 'current', on: :collection
       post 'update_credit_card', on: :collection
       put 'update_active', on: :collection
     end
 
-    resources :league_seasons do
-      resources :league_season_scoring_groups do
-        post :update_player
-        delete :delete_player
-      end
-
-      resources :league_season_teams do
-        post :update_player
-        delete :delete_player
-      end
-    end
+    resources :league_seasons
 
     resources :league_memberships do
       get 'print', on: :collection
       post 'update_handicaps', on: :collection
     end
 
-    resources :reports do
-      get 'adjusted_scores', on: :collection
-      get 'confirmed_players', on: :collection
-      get 'finalization_report', on: :collection
-      get 'leagues_report', on: :collection
-      patch 'export_leagues', on: :collection
-    end
-
     resources :tournaments do
-      resources :tournament_days do
-        resources :flights do
-          patch 'reflight_players', on: :collection
-        end
-
-        resources :tournament_groups do
-          post 'batch_create', on: :collection
-        end
-
-        resource :course_holes, path: 'course-holes', only: [:edit, :update], controller: 'tournament_days/course_holes'
-
-        resources :scoring_rules do
-          get 'options', on: :collection
-          patch 'set_primary'
-
-          resources :payouts, only: [:new, :create, :edit, :update, :destroy]
-          resources :payout_results, controller: 'scoring_rules/payout_results'
-        end
-
-        resources :tournament_notifications
-
-        resources :scorecards, except: [:delete] do
-          patch 'disqualify'
-        end
-
-        resource :team_configuration, path: 'copy_teams', only: [:update]
-      end
-
-      resource :auto_scheduling, path: 'autoschedule', only: [:update], controller: 'tournaments/auto_scheduling' do
-        patch 'run_auto_scheduling'
-      end
-
       resource :finalization, path: 'finalize', only: [:show, :update], controller: 'tournaments/finalization'
-
-      # Individual Outings
-      get 'tournament_days/:tournament_day_id/players' => 'golf_outings#players', as: :day_players
-      post 'tournament_days/:tournament_day_id/:tournament_group_id/update_players' => 'golf_outings#update_players', as: :update_day_players
-      patch 'tournament_days/:tournament_day_id/move_group' => 'golf_outings#move_group', as: :move_group_players
-      patch 'tournament_days/:tournament_day_id/disqualify_signup' => 'golf_outings#disqualify_signup', as: :disqualify_day_players
-      delete 'tournament_days/:tournament_day_id/delete_signup' => 'golf_outings#delete_signup', as: :delete_day_players
-
-      # Team Outings
-      get 'tournament_days/:tournament_day_id/teams' => 'team_outings#teams', as: :day_teams
-      post 'tournament_days/:tournament_day_id/:tournament_group_id/update_teams' => 'team_outings#update_teams', as: :update_day_teams
-      delete 'tournament_days/:tournament_day_id/delete_team_signup' => 'team_outings#delete_team_signup', as: :delete_day_teams
-      get 'tournament_days/:tournament_day_id/teams/:team_id' => 'team_outings#team', as: :day_team
-      patch 'tournament_days/:tournament_day_id/teams/:team_id/toggle_player/:player_id' => 'team_outings#toggle_player', as: :update_day_team
-      patch 'tournament_days/:tournament_day_id/teams/:team_id/toggle_players' => 'team_outings#toggle_players', as: :toggle_all_team_players
-
-      patch 'tournament_days/:tournament_day_id/teams/:team_id/:matchup_id/update_matchup_sequence' => 'team_outings#update_matchup_sequence', as: :update_matchup_sequence
-      patch 'tournament_days/:tournament_day_id/teams/:team_id/:matchup_id/clear_matchup_sequence' => 'team_outings#clear_matchup_sequence', as: :clear_matchup_sequence
-
-      get 'handicaps'
-      patch 'update_course_handicaps'
-      patch 'touch_tournament'
-      patch 'rescore_players'
-
-      get 'debug'
     end
-  end
-
-  resources :payments
-
-  resources :notification_templates do
-    put 'duplicate_template'
   end
 
   resources :prints do

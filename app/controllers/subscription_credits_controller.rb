@@ -1,14 +1,6 @@
 class SubscriptionCreditsController < BaseController
   before_action :fetch_league
-  before_action :fetch_active_subscription, only: [:current, :update_active]
-
-  def current
-    @league.league_memberships.map(&:expire) if @active_subscription.blank?
-  end
-
-  def information
-    render layout: 'golfer'
-  end
+  before_action :fetch_active_subscription, only: [:update_active]
 
   def update_active
     if @active_subscription.blank?

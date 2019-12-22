@@ -1,8 +1,0 @@
-<ol class="breadcrumb">
-  <li><%= link_to "Leagues", leagues_path %></li>
-  <li><%= link_to @league_season.name, league_league_seasons_path(@league, @league_season) %></li>
-  <li><%= link_to @scoring_group.name, league_league_season_league_season_scoring_groups_path(@league, @league_season, @scoring_group) %></li>
-  <li class="active">Create Scoring Group</li>
-</ol>
-
-<%= render 'form' %>

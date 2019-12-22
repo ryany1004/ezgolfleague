@@ -1,8 +1,0 @@
-<ol class="breadcrumb">
-  <li><%= link_to "Leagues", leagues_path %></li>
-  <li><%= link_to @league_season.name, league_league_seasons_path(@league, @league_season) %></li>
-  <li><%= link_to @league_season_team.name, league_league_season_league_season_teams_path(@league, @league_season, @league_season_team) %></li>
-  <li class="active">Edit Team</li>
-</ol>
-
-<%= render 'form' %>

@@ -1,7 +1,0 @@
-<% selected_scorecard = scoring_rule.selected_scorecard_for_score(score) %>
-
-<% if selected_scorecard != score.scorecard && score.strokes != 0 -%>
-  <%= link_to "Tee Shot", "#", {"data-toggle" => "modal", "data-target" => "#ScrambleGroup#{score.course_hole.id}"} %>
-<% elsif selected_scorecard == score.scorecard -%>
-  Tee: <%= selected_scorecard.individual_name %>
-<% end -%>
