@@ -241,7 +241,7 @@ class User < ApplicationRecord
 
   def payments_for_league(league)
     cache_key = payments_cache_key
-    total_payments = 0.0
+    total_payments = []
 
     total_payments = Rails.cache.fetch(cache_key, expires_in: 24.hours, race_condition_ttl: 10) do
       league_season_ids = []
@@ -254,7 +254,9 @@ class User < ApplicationRecord
         league_payments = payments.where('league_season_id IN (?)', league_season_ids)
 
         payments.each do |p|
-          scoring_rule_payments << p if league_season_ids.include? p.scoring_rule&.tournament_day&.tournament&.league&.league_seasons&.pluck(:id)
+          rule_ids = p.scoring_rule&.tournament_day&.tournament&.league&.league_seasons&.pluck(:id)
+
+          scoring_rule_payments << p if rule_ids.present? && league_season_ids.any? { |sid| rule_ids.include?(sid) }
         end
       end
 
