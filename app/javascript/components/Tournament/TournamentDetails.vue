@@ -25,7 +25,7 @@
                   <div class="date-inputs" style="padding-right:24px;">
                     <div class="row">
                       <div class="col-12">
-                        <date-picker v-model="startsAt"></date-picker>
+                        <date-picker v-model="startsAt" :config="datePickerOptions"></date-picker>
                       </div>
                     </div>
                   </div>
@@ -41,10 +41,10 @@
                   <div class="date-inputs">
                     <div class="row">
                       <div class="col-md-6">
-                        <date-picker v-model="opensAt"></date-picker>
+                        <date-picker v-model="opensAt" :config="datePickerOptions"></date-picker>
                       </div>
                       <div class="col-md-6" style="padding-right: 40px;">
-                        <date-picker v-model="closesAt"></date-picker>
+                        <date-picker v-model="closesAt" :config="datePickerOptions"></date-picker>
                       </div>
                     </div>
                   </div>
@@ -106,6 +106,14 @@ export default {
   components: {
     datePicker,
     ToggleButton,
+  },
+  data() {
+    return {
+      datePickerOptions: {
+        format: 'MM/DD/YYYY hh:mm A',
+        useCurrent: false,
+      },
+    };
   },
   computed: {
     ...mapFields([
