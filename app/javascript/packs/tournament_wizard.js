@@ -50,6 +50,10 @@ document.addEventListener('DOMContentLoaded', () => {
     },
     data: {
       csrfToken: document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+      datePickerOptions: {
+        format: 'MM/DD/YYYY hh:mm A',
+        useCurrent: false,
+      },
       tournamentWizard: {
         name: null,
         startsAt: null,

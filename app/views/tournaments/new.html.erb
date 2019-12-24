@@ -63,7 +63,7 @@
                             <div class="date-inputs" style="padding-right:24px;">
   														<div class="row">
   															<div class="col-12">
-                                  <date-picker v-model="tournamentWizard.startsAt"></date-picker>
+                                  <date-picker v-model="tournamentWizard.startsAt" :config="datePickerOptions"></date-picker>
   															</div>
   														</div>
                             </div>
@@ -79,10 +79,10 @@
                             <div class="date-inputs">
   														<div class="row">
   															<div class="col-md-6">
-                                  <date-picker v-model="tournamentWizard.opensAt"></date-picker>
+                                  <date-picker v-model="tournamentWizard.opensAt" :config="datePickerOptions"></date-picker>
   															</div>
   															<div class="col-md-6" style="padding-right: 40px;">
-                                  <date-picker v-model="tournamentWizard.closesAt"></date-picker>
+                                  <date-picker v-model="tournamentWizard.closesAt" :config="datePickerOptions"></date-picker>
   															</div>
   														</div>
                             </div>

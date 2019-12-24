@@ -30,7 +30,7 @@ class Api::V2::TournamentsController < BaseController
   private
 
   def parse_date(date_string)
-    Date.strptime(date_string, '%m/%d/%Y %I:%M %p')
+    EzglCalendar::CalendarUtils.datetime_for_picker_date(date_string)
   end
 
   def fetch

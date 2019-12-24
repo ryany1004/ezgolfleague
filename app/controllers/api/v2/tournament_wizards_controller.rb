@@ -51,7 +51,7 @@ class Api::V2::TournamentWizardsController < BaseController
   end
 
   def formatted_time(time_string)
-    DateTime.parse(time_string)
+    EzglCalendar::CalendarUtils.datetime_for_picker_date(time_string)
   end
 
   def update_free_tournaments
