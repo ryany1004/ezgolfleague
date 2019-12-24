@@ -71,7 +71,7 @@ class ScoringRule < ApplicationRecord
   end
 
   def scorecards
-    users.map { |u| tournament_day.primary_scorecard_for_user(u) }
+    users.map { |u| tournament_day.primary_scorecard_for_user(u) }.compact
   end
 
   def scorecard_api(scorecard:)
