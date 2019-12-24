@@ -347,14 +347,4 @@ class TournamentDay < ApplicationRecord
 
     handicap_computer.displayable_handicap_allowance(user: user)
   end
-
-  # # date parsing
-  # def tournament_at=(date)
-  #   begin
-  #     parsed = EzglCalendar::CalendarUtils.datetime_for_picker_date(date)
-  #     super parsed
-  #   rescue
-  #     write_attribute(:tournament_at, date)
-  #   end
-  # end
 end

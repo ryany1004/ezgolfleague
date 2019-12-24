@@ -353,23 +353,4 @@ class Tournament < ApplicationRecord
       false
     end
   end
-
-  # # date parsing
-  # def signup_opens_at=(date)
-  #   begin
-  #     parsed = EzglCalendar::CalendarUtils.datetime_for_picker_date(date)
-  #     super parsed
-  #   rescue
-  #     write_attribute(:signup_opens_at, date)
-  #   end
-  # end
-
-  # def signup_closes_at=(date)
-  #   begin
-  #     parsed = EzglCalendar::CalendarUtils.datetime_for_picker_date(date)
-  #     super parsed
-  #   rescue
-  #     write_attribute(:signup_closes_at, date)
-  #   end
-  # end
 end
