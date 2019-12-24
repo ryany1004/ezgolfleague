@@ -33,11 +33,7 @@ class ScoringRule < ApplicationRecord
   validates :dues_amount, numericality: { greater_than_or_equal_to: 0 }
 
   attr_accessor :selected_class_name
-
-  def form_class # TODO: REMOVE?
-    becomes(ScoringRule)
-  end
-
+  
   def name
     raise 'A Base Class Has No Name'
   end
