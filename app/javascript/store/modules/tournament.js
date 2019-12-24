@@ -85,6 +85,22 @@ export const mutations = {
 
     rule.customConfiguration[payload.attribute] = payload.newValue;
   },
+  addPayout(state, payload) {
+    const { scoringRules } = state.tournament.tournamentDays[0];
+    const rule = scoringRules[payload.index];
+
+    rule.payouts.push(payload.newPayout);
+  },
+  deletePayout(state, payload) {
+    state.tournament.tournamentDays[0].scoringRules[payload.scoringRuleIndex].payouts.splice(payload.payoutIndex, 1);
+  },
+  updatePayoutAttributeValue(state, payload) {
+    const { scoringRules } = state.tournament.tournamentDays[0];
+    const rule = scoringRules[payload.scoringRuleIndex];
+    const payout = rule.payouts[payload.index];
+
+    payout[payload.attribute] = payload.newValue;
+  },
 };
 
 export const actions = {
@@ -174,6 +190,21 @@ export const actions = {
   updateCustomScoringRuleConfigurationValue({ commit }, { attribute, index, newValue }) {
     commit('updateCustomScoringRuleConfigurationValue', { attribute, index, newValue });
   },
+  addScoringRulePayout({ commit }, { index }) {
+    const newPayout = {
+      flight: state.tournament.tournamentDays[0].flights[0],
+      points: 0,
+      payout: 0,
+    };
+
+    commit('addPayout', { newPayout, index });
+  },
+  deleteScoringRulePayout({ commit }, { payoutIndex, scoringRuleIndex }) {
+    commit('deletePayout', { payoutIndex, scoringRuleIndex });
+  },
+  updatePayoutAttributeValue({ commit }, { attribute, index, scoringRuleIndex, newValue }) {
+    commit('updatePayoutAttributeValue', { attribute, index, scoringRuleIndex, newValue });
+  },
   saveScoringRules({ rootState }) {
     const { scoringRules } = state.tournament.tournamentDays[0];
 
@@ -190,7 +221,19 @@ export const actions = {
         holeConfiguration: rule.holeConfiguration,
         className: rule.className,
         customConfiguration: rule.customConfiguration,
+        payouts: [],
       };
+
+      rule.payouts.forEach((payout) => {
+        const payoutPayload = {
+          id: payout.id,
+          amount: payout.amount,
+          points: payout.points,
+          flightId: payout.flight.id,
+        };
+
+        rulePayload.payouts.push(payoutPayload);
+      });
 
       if (rule.id == null) {
         requests.push(api.createScoringRule(rootState.csrfToken, rulePayload));
@@ -224,6 +267,13 @@ export const getters = {
     const rule = scoringRules[index];
 
     return rule.customConfiguration[attribute];
+  },
+  payoutAttributeValue: (state) => (attribute, index, scoringRuleIndex) => {
+    const { scoringRules } = state.tournament.tournamentDays[0];
+    const rule = scoringRules[scoringRuleIndex];
+    const payout = rule.payouts[index];
+
+    return payout[attribute];
   },
   groupedScoringRules: (state) => {
     return state.scoringRules;

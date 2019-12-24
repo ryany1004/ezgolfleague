@@ -69,6 +69,18 @@ Rails.cache.fetch ['v2', @tournament.cache_key_with_version] do
 
       rule_json[:custom_configuration] = rule.custom_configuration_params if rule.respond_to?(:custom_configuration_params)
 
+      rule_json[:payouts] = rule.payouts.map do |payout|
+        {
+          id: payout.id,
+          amount: payout.amount,
+          points: payout.points,
+          flight: {
+            id: payout.flight.id,
+            flight_number: payout.flight.flight_number
+          }
+        }
+      end
+
       rule_json
     end
 

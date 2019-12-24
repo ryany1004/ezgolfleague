@@ -70,6 +70,8 @@ class Api::V2::ScoringRulesController < BaseController
 
     assign_custom_configuration(scoring_rule, payload['customConfiguration'])
 
+    update_payouts(scoring_rule, payload)
+
     assign_players(scoring_rule) if !scoring_rule.is_opt_in && assign_players
 
     configure_for_daily_teams if scoring_rule.team_type == ScoringRuleTeamType::DAILY && @tournament_day.daily_teams.count.zero?
@@ -129,5 +131,24 @@ class Api::V2::ScoringRulesController < BaseController
 
   def manage_shadow_stroke_play(tournament_day)
     TournamentService::ShadowStrokePlay.call(tournament_day)
+  end
+
+  def update_payouts(scoring_rule, payload)
+    payouts_payload = payload['payouts']
+
+    valid_ids = payouts_payload.map { |x| x['id'] }.compact
+    scoring_rule.payouts.where('id NOT IN (?)', valid_ids).destroy_all if valid_ids.present?
+
+    payouts_payload.each do |p|
+      p['points'].blank? ? points = 0 : points = p['points']
+      p['amount'].blank? ? amount = 0 : amount = p['amount']
+
+      if p['id'].present?
+        payout = scoring_rule.payouts.find(p['id'])
+        payout.update(points: points, amount: amount)
+      else
+        Payout.create(scoring_rule: scoring_rule, points: points, amount: amount, flight_id: p['flightId'])
+      end
+    end
   end
 end
