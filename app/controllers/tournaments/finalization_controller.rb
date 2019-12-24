@@ -1,24 +1,6 @@
 module Tournaments
   class FinalizationController < TournamentsController
-    before_action :fetch_tournament, only: [:show, :update]
-
-    # def show
-    #   @page_title = 'Finalize Tournament'
-
-    #   if @tournament.can_be_finalized?
-    #     @stage_name = 'finalize'
-
-    #     TournamentService::Finalizer.call(@tournament) if params[:bypass_calc].blank?
-
-    #     @tournament_days = @tournament.tournament_days.includes(scoring_rules: [payout_results: [:flight, :user, :payout],
-    #                                                             tournament_day_results: [:user, :primary_scorecard]],
-    #                                                             tournament_groups: [golf_outings: [:user, scorecard: :scores]])
-    #   else
-    #     finalization_blockers = @tournament.finalization_blockers
-
-    #     redirect_to league_tournament_tournament_day_flights_path(@tournament.league, @tournament, @tournament.tournament_days.first), flash: { error: "This tournament cannot be finalized. #{finalization_blockers.join(' ')}" }
-    #   end
-    # end
+    before_action :fetch_tournament, only: [:update]
 
     def update
       if @tournament.can_be_finalized?
@@ -29,8 +11,9 @@ module Tournaments
         end
         @tournament.notify_tournament_users(notification_string, { tournament_id: @tournament.id })
 
-        @tournament.is_finalized = true
-        @tournament.save
+        TournamentService::Finalizer.call(@tournament)
+
+        @tournament.update(is_finalized: true)
 
         @tournament.finalization_notifications.each do |n|
           n.has_been_delivered = false
