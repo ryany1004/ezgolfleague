@@ -110,12 +110,12 @@ module ApplicationHelper
   def par_helper(par)
     return nil if par.blank?
 
-    if par == 0
-      return "Even"
-    elsif par > 0
-      return "+#{par}"
+    if par.zero?
+      'Even'
+    elsif par.positive?
+      "+#{par}"
     else
-      return par
+      par
     end
   end
 
@@ -126,7 +126,7 @@ module ApplicationHelper
       members << outing.user unless members.include? outing.user or outing.user == user
     end
 
-    names = ""
+    names = ''
 
     members.each do |m|
       names = "#{names}#{m.complete_name}<br/>"
