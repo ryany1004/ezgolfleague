@@ -2,7 +2,7 @@
   <div class="tournament-card raking-content-card">
     <div class="tournament-card__header">
       <h3 class="p-4">Game Types</h3>
-      <% if @tournament.tournament_state == TournamentState::REGISTRATION %>
+      <% if @tournament.tournament_state != TournamentState::POST_SCORES %>
         <a href='#' class="btn btn__ezgl-secondary" v-on:click="showScoringRules">Edit</a>
       <% end %>
     </div>

@@ -5,7 +5,7 @@
       <div class="tournament-card">
         <div class="tournament-card__header">
           <h3 class="p-4">Tournament Details</h3>
-          <% if @tournament.tournament_state == TournamentState::REGISTRATION %>
+          <% if @tournament.tournament_state != TournamentState::POST_SCORES %>
             <a href='#' class='btn btn__ezgl-secondary' v-on:click="showTournamentDetails">Edit</a>
           <% end %>
         </div>
