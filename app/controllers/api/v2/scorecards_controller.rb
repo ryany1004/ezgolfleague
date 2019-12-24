@@ -27,13 +27,12 @@ class Api::V2::ScorecardsController < BaseController
       card_data['scores'].each do |score_data|
         scores_to_update[score_data['id']] = { strokes: score_data['score'] }
       end
+
+      course_handicap = card_data['course_handicap']
+      Scorecard.find(card_data['id']).golf_outing.update(course_handicap: course_handicap)
     end
 
     Updaters::ScorecardUpdating.update_scorecards_for_scores(scores_to_update, @scorecard, @scorecards_to_update)
-
-    primary_scorecard = payload['scorecards'].first
-    course_handicap = primary_scorecard['course_handicap']
-    Scorecard.find(primary_scorecard['id']).golf_outing.update(course_handicap: course_handicap)
 
     render json: :ok
   end

@@ -40,7 +40,7 @@ class Api::V2::TournamentGroupsController < BaseController
     @tournament_day.tournament_groups.find(group_id).destroy
 
     index_payload
-    
+
     render :index
   end
 
