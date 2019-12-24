@@ -1,5 +1,5 @@
 <template>
-  <vue-modal name="scorecard-modal" height="auto" width="80%" @before-open="beforeOpen">
+  <vue-modal name="scorecard-modal" height="auto" width="80%" @before-open="beforeOpen" @before-close="beforeClose">
     <div class="tornament-info-popup-header-top">
       <div class="row">
         <div class="col-md-4 first">
@@ -40,7 +40,7 @@
             <tr>
               <td>&nbsp;</td>
               <td>Par</td>
-              <template v-for="(holeGroup, j) in sliceScores(scorecard.holes)">
+              <template v-for="holeGroup in sliceScores(scorecard.holes)">
                 <template v-for="hole in holeGroup">
                   <td>{{ hole.par }}</td>
                 </template>
@@ -81,7 +81,12 @@
                 </template>
               </template>
               <td name="course-handicap">
-                {{ card.courseHandicap }}
+                <template v-if="editMode">
+                  <input label="false" type="number" class="form-control string required" style="padding:0;" v-model.number="card.courseHandicap">
+                </template>
+                <template v-else>
+                  {{ card.courseHandicap }}
+                </template>
                 <br/>
                 <i class="fas fa-unlock edit"/>
               </td>
@@ -134,6 +139,9 @@ export default {
   methods: {
     beforeOpen(event) {
       this.scorecard = event.params.scorecard;
+    },
+    beforeClose() {
+      this.editMode = false;
     },
     toggleEdit() {
       this.editMode = !this.editMode;

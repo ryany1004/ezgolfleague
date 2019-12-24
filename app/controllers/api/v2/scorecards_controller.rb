@@ -31,6 +31,10 @@ class Api::V2::ScorecardsController < BaseController
 
     Updaters::ScorecardUpdating.update_scorecards_for_scores(scores_to_update, @scorecard, @scorecards_to_update)
 
+    primary_scorecard = payload['scorecards'].first
+    course_handicap = primary_scorecard['course_handicap']
+    Scorecard.find(primary_scorecard['id']).golf_outing.update(course_handicap: course_handicap)
+
     render json: :ok
   end
 
