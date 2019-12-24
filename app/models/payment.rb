@@ -47,7 +47,7 @@ class Payment < ApplicationRecord
   end
 
   def modifiable?
-    if self.payment_source == PAYMENT_METHOD_CREDIT_CARD
+    if payment_source == PAYMENT_METHOD_CREDIT_CARD
       false
     else
       true
