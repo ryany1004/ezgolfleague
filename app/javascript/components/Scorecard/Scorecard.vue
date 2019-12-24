@@ -23,7 +23,7 @@
               <th scope="col">Hole<br>Yards</th>
               <template v-for="(holeGroup, j) in sliceScores(scorecard.holes)">
                 <template v-for="hole in holeGroup">
-                  <th scope="col">{{ hole.holeNumber }}<br>{{ hole.yardForFlight }}</th>
+                  <th scope="col" v-bind:key="hole.holeNumber">{{ hole.holeNumber }}<br>{{ hole.yardForFlight }}</th>
                 </template>
                 <template v-if="j == 0">
                   <th scope="col">Out</th>
@@ -42,7 +42,7 @@
               <td>Par</td>
               <template v-for="holeGroup in sliceScores(scorecard.holes)">
                 <template v-for="hole in holeGroup">
-                  <td>{{ hole.par }}</td>
+                  <td v-bind:key="hole.holeNumber">{{ hole.par }}</td>
                 </template>
                 <td>&nbsp;</td>
               </template>
