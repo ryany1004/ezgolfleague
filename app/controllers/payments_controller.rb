@@ -28,7 +28,7 @@ class PaymentsController < BaseController
     @payment = Payment.new(payment_params)
     
     if @payment.save
-      unless @payment.league_season.blank?
+      if @payment.league_season.present?
         Payment.create(payment_amount: (@payment.payment_amount * -1.0), user: @payment.user, payment_type: "#{@payment.user.complete_name} League Dues", league_season: @payment.league_season)
       end
       
@@ -70,7 +70,7 @@ class PaymentsController < BaseController
   end
   
   def payment_params
-    params.require(:payment).permit(:user_id, :payment_amount, :league_season_id, :tournament_id, :payment_details, :payment_source)
+    params.require(:payment).permit(:user_id, :payment_amount, :league_season_id, :scoring_rule_id, :payment_details, :payment_source)
   end
   
   def selected_league
@@ -83,20 +83,23 @@ class PaymentsController < BaseController
   private
   
   def fetch_payment
-    #TODO: update for secure fetching
     @payment = Payment.find(params[:id])
   end
   
   def fetch_collections
     if current_user.is_super_user?
       @users = User.all.order(:last_name).order(:first_name)
-      @tournaments = Tournament.all.order(signup_closes_at: :desc)
+      @scoring_rules = ScoringRule.all.order(created_at: :desc).where('dues_amount > 0')
       @league_seasons = LeagueSeason.all.order(starts_at: :desc)
     else
       selected_league = self.selected_league
       
       @users = selected_league.users.order(:last_name).order(:first_name)
-      @tournaments = selected_league.tournaments.order(signup_closes_at: :desc)
+
+      tids = selected_league.tournaments.order(signup_closes_at: :desc).pluck(:id)
+      tids.present? ? tdids = TournamentDay.where('tournament_id IN ?', tids).pluck(:id) : tdids = []
+      tdids.present? ? @scoring_rules = ScoringRule.where('tournament_day_id IN ?', tdids).order(created_at: :desc).where('dues_amount > 0') : @scoring_rules = []
+      
       @league_seasons = LeagueSeason.where("league_id = ?", selected_league.id).order(starts_at: :desc)
     end
   end

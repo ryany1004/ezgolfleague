@@ -42,6 +42,10 @@ class ScoringRule < ApplicationRecord
     raise 'A Base Class Has No Name'
   end
 
+  def name_with_tournament
+    "#{name} (#{tournament_day.tournament.name})"
+  end
+
   def allows_custom_name?
     false
   end

@@ -317,6 +317,10 @@ class TournamentDay < ApplicationRecord
     @optional_scoring_rules_with_dues ||= optional_scoring_rules.select { |r| r.dues_amount.positive? }
   end
 
+  def scoring_rules_with_dues
+    @scoring_rules_with_dues ||= scoring_rules.select { |r| r.dues_amount.positive? }
+  end
+
   def points_for_user(user:)
     scoring_rules.map { |rule| rule.points_for_user(user: user) }.sum
   end
