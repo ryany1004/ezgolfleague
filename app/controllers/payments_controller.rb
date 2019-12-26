@@ -97,9 +97,11 @@ class PaymentsController < BaseController
       @users = selected_league.users.order(:last_name).order(:first_name)
 
       tids = selected_league.tournaments.order(signup_closes_at: :desc).pluck(:id)
-      tids.present? ? tdids = TournamentDay.where('tournament_id IN ?', tids).pluck(:id) : tdids = []
-      tdids.present? ? @scoring_rules = ScoringRule.where('tournament_day_id IN ?', tdids).order(created_at: :desc).where('dues_amount > 0') : @scoring_rules = []
-      
+      tids.present? ? tdids = TournamentDay.where('tournament_id IN (?)', tids).pluck(:id) : tdids = []
+      tdids.present? ? @scoring_rules = ScoringRule.where('tournament_day_id IN (?)', tdids)
+                                                   .order(created_at: :desc)
+                                                   .where('dues_amount > 0') : @scoring_rules = []
+
       @league_seasons = LeagueSeason.where("league_id = ?", selected_league.id).order(starts_at: :desc)
     end
   end
