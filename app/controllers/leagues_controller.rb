@@ -1,23 +1,6 @@
 class LeaguesController < BaseController
   before_action :fetch_league, only: [:show, :edit, :update, :destroy]
 
-  def index
-    if current_user.is_super_user?
-      @leagues = League.order(:name).page params[:page]
-
-      @page_title = 'All Leagues'
-    else
-      @leagues = current_user.leagues_admin.order(:name).page params[:page]
-
-      @page_title = 'My Leagues'
-    end
-
-    return if params[:search].blank?
-
-    search_string = "%#{params[:search].downcase}%"
-    @leagues = @leagues.where('lower(name) LIKE ?', search_string)
-  end
-
   def show
     active_season = current_user.active_league_season
     if session[:selected_season_id].blank?
@@ -26,21 +9,6 @@ class LeaguesController < BaseController
       @league_season = current_user.selected_league.league_seasons.where(id: session[:selected_season_id]).first
     end
     @rankings = @league_season.league_season_ranking_groups
-  end
-
-  def new
-    @league = League.new
-  end
-
-  def create
-    @league = League.new(league_params)
-
-    if @league.save
-      redirect_to leagues_path, flash:
-      { success: 'The league was successfully created.' }
-    else
-      render :new
-    end
   end
 
   def edit; end
