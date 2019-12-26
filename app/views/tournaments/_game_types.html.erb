@@ -25,7 +25,7 @@
               <td><%= rule.users.count %></td>
               <td><%= number_to_currency(rule.dues_amount) %></td>
               <td><%= human_boolean(rule.is_opt_in) %></td>
-              <td>-</td>
+              <td><% if rule.respond_to?(:use_back_9_to_break_ties?) %><% if rule.use_back_9_to_break_ties? %>Yes<% else %>No<% end %><% else %>-<% end %></td>
             </tr>
           <% end %>
         </tbody>
