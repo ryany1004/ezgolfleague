@@ -1,5 +1,5 @@
 <template>
-  <vue-modal name="tee-time-editor" height="auto" width="85%" :scrollable="false" @before-open="beforeOpen" :clickToClose="true">
+  <vue-modal name="tee-time-editor" height="auto" width="85%" :scrollable="false" @before-open="beforeOpen" @before-close="beforeClose" :clickToClose="true">
     <div class="edit-tee-times">
       <div class="edit-tee-times-header">
         <div class="row">
@@ -103,6 +103,9 @@ export default {
   methods: {
     beforeOpen(event) {
       this.teeGroupData = event.params.teeGroupData;
+    },
+    beforeClose(event) {
+      window.location.reload();
     },
     remainingSlotsForGroup(tournamentGroup) {
       const remainingSlots = tournamentGroup.maxNumberOfPlayers - tournamentGroup.players.length;
