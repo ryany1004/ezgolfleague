@@ -68,6 +68,8 @@ class Api::V2::ScoringRulesController < BaseController
   def post_process_rule(scoring_rule, payload, assign_players = true)
     assign_course_holes(scoring_rule, payload['holeConfiguration']['value'])
 
+    update_scores_for_course_holes(tournament_day: @tournament_day)
+
     assign_custom_configuration(scoring_rule, payload['customConfiguration'])
 
     update_payouts(scoring_rule, payload)
@@ -100,6 +102,18 @@ class Api::V2::ScoringRulesController < BaseController
 
     holes.each do |ch|
       scoring_rule.course_holes << ch
+    end
+  end
+
+  def update_scores_for_course_holes(tournament_day:)
+    tournament_day.eager_groups.each do |group|
+      group.golf_outings.each do |golf_outing|
+        scorecard = golf_outing.scorecard
+
+        tournament_day.update_scores_for_scorecard(scorecard: scorecard)
+
+        golf_outing.user.send_silent_notification({ action: 'update', tournament_id: tournament_day.tournament.id, tournament_day_id: tournament_day.id })
+      end
     end
   end
 
