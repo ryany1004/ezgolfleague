@@ -165,9 +165,7 @@ export default {
     saveScorecard() {
       api.patchScorecard(this.csrfToken, this.scorecard)
         .then((response) => {
-          this.editMode = false;
-
-          this.$modal.hide('scorecard-modal');
+          window.location.reload();
         });
     },
   },
