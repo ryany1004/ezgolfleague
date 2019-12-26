@@ -1,7 +1,66 @@
-<ol class="breadcrumb">
-  <li><%= link_to "Leagues", leagues_path(@league) %></li>
-  <li><%= link_to "League Membership", league_league_memberships_path(@league) %></li>
-  <li class="active">Edit League Membership</li>
-</ol>
+<div class="ezgl-container">
+  <div id="container">
+    <div class="row">
+      <div class="onboarding__panel registration user-account-edit">
+        <div class="onboarding__panel-side white">
+          <div class="panel-side-text">
+            <div class="nav flex-column" id="v-tab" role="tablist" aria-orientation="vertical">
+              <a class="nav-link active" id="v-edit-profile-tab" data-toggle="pill" href="#v-edit-profile" role="tab" aria-controls="v-edit-profile" aria-selected="true">Edit Details</a>
+            </div>
+          </div>
+          <%= link_to "Exit to Dashboard", root_path, class: 'btn btn-outline-secondary' %>
+        </div>
+        <div class="panel panel-default panel-user p-5">
+          <div class="panel-body registration">
+            <div class="tab-content" id="v-tabContent">
+              <div class="tab-pane fade show pb-5 active" id="v-edit-profile" role="tabpanel" aria-labelledby="v-edit-profile-tab">
+                <div class="registration-form-container">
+                  <div class="panel-heading">
+                    <h3 class="panel-title pb-4">Membership Details</h3>
+                  </div>
 
-<%= render 'form' %>
+                  <%= simple_form_for([@league, @league_membership], defaults: { input_html: { class: "onboarding__input", label: false }}) do |f| %>
+                    <% if notification = f.error_notification %>
+                      <div class="alert alert-error fade in">
+                        <a class="close" data-dismiss="alert" href="#">&times;</a>
+                        <%= notification %>
+                      </div>
+                    <% end %>
+
+                    <div class="registration-full-name form-flex-group">
+                      <div class="form-side-label">
+                        <p>Dues Discount</p>
+                      </div>
+
+                      <div class="form-flex-group">
+                        <%= f.input :league_dues_discount, placeholder: 'User discount on dues' %>
+                      </div>
+                    </div>
+
+                    <div class="form-flex-group">
+                      <%= f.input :is_admin, label: 'League Admin', as: :boolean %>
+                    </div>
+
+                    <div class="form-flex-group">
+                      <div class="form-side-label">
+                        <p>League Admin</p>
+                      </div>
+
+                      <%= f.input :is_admin, as: :boolean %>
+                    </div>
+
+                    <div class="form-actions form-flex-group"> 
+                      <div class="form-flex-right">
+                        <%= f.button :submit, "Save", class: 'btn__ezgl-secondary' %>
+                      </div>
+                    </div>
+                  <% end %>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
