@@ -81,6 +81,7 @@ class Api::V2::TournamentWizardsController < BaseController
   end
 
   def create_tee_groups(tournament_day, payload)
+    minutes_between = payload['minutes_between_tee_times'].to_i
     number_of_players = payload['number_of_players'].to_i
     groups_to_create = (number_of_players / 4.0).ceil
     tee_time = tournament_day.tournament_at
@@ -88,7 +89,7 @@ class Api::V2::TournamentWizardsController < BaseController
     groups_to_create.times do |_|
       TournamentGroup.create(tournament_day: tournament_day, max_number_of_players: 4, tee_time_at: tee_time)
 
-      tee_time += 8.minutes
+      tee_time += minutes_between.minutes
     end
   end
 

@@ -62,6 +62,7 @@ document.addEventListener('DOMContentLoaded', () => {
         showTeeTimes: false,
         enterScoresUntilFinalized: false,
         numberOfPlayers: 0,
+        minutesBetweenTeeTimes: 8,
         course: null,
         flights: [
           new EZGLFlight({}),
@@ -389,6 +390,7 @@ document.addEventListener('DOMContentLoaded', () => {
           opens_at: this.tournamentWizard.opensAt,
           closes_at: this.tournamentWizard.closesAt,
           course_id: this.tournamentWizard.course.id,
+          minutes_between_tee_times: this.tournamentWizard.minutesBetweenTeeTimes,
           number_of_players: this.tournamentWizard.numberOfPlayers,
           show_tee_times: this.tournamentWizard.showTeeTimes,
           enter_scores_until_finalized: this.tournamentWizard.enterScoresUntilFinalized,
