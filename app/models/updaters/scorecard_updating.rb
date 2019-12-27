@@ -15,7 +15,7 @@ module Updaters
           next if score.course_hole.blank?
 
           should_update = true
-          unless date_scored.blank?
+          if date_scored.present?
             scored_at = Time.zone.at(date_scored).to_datetime
 
             should_update = false if scored_at <= score.updated_at
