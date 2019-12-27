@@ -24,7 +24,7 @@ class TeamMatchPlayBestBallScoringRule < MatchPlayScoringRule
   end
 
   def handicap_computer
-    HandicapComputer::BaseHandicapComputer.new(self) # this game type does not use match play handicaps
+    ScoringRules::HandicapComputer::BaseHandicapComputer.new(self) # this game type does not use match play handicaps
   end
 
   def opponent_for_user(user)

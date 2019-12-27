@@ -7,7 +7,7 @@ class AddNetStrokesToScore < ActiveRecord::Migration[5.2]
 
   		next if scoring_rule.blank?
 
-  		handicap_computer = HandicapComputer::BaseHandicapComputer.new(scoring_rule)
+  		handicap_computer = ScoringRules::HandicapComputer::BaseHandicapComputer.new(scoring_rule)
 			handicap_allowance = handicap_computer.handicap_allowance(user: scorecard.user)
 
 			scorecard.scores.each do |score|

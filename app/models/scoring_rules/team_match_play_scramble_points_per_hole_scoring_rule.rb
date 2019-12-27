@@ -14,7 +14,7 @@ class TeamMatchPlayScramblePointsPerHoleScoringRule < TeamMatchPlayVsScoringRule
   end
 
   def handicap_computer
-    HandicapComputer::TeamMatchPlayScramblePointsPerHoleHandicapComputer.new(self)
+    ScoringRules::HandicapComputer::TeamMatchPlayScramblePointsPerHoleHandicapComputer.new(self)
   end
 
   def payout_type

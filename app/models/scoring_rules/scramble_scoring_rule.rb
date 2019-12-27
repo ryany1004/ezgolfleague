@@ -19,7 +19,7 @@ class ScrambleScoringRule < StrokePlayScoringRule
   end
 
   def handicap_computer
-    HandicapComputer::ScrambleHandicapComputer.new(self)
+    ScoringRules::HandicapComputer::ScrambleHandicapComputer.new(self)
   end
 
   def override_scorecard_name(scorecard:)
