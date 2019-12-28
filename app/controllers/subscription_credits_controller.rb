@@ -9,21 +9,21 @@ class SubscriptionCreditsController < BaseController
       active_before_update = @active_subscription.golfer_count
     end
 
+    @league.league_memberships.each do |m|
+      m.update(state: MembershipStates::ADDED)
+    end
+
     active_status = params[:is_active]
 
     if active_status.present?
       Rails.logger.info { "Activating #{active_status.keys.count} members." }
 
       @league.league_memberships.each do |m|
-        m.state = MembershipStates::ADDED
-
-        if active_status.key? m.id
-          membership.state = MembershipStates::ACTIVE_FOR_BILLING
+        if active_status.key? m.id.to_s
+          m.update(state: MembershipStates::ACTIVE_FOR_BILLING)
 
           Rails.logger.info { "Updating Member to Active: #{m.user.complete_name} #{m.state}" }
         end
-
-        m.save
       end
     end
 
@@ -41,16 +41,18 @@ class SubscriptionCreditsController < BaseController
 
         SubscriptionCredit.create(league_season: @league.active_season, amount: payment_amount, golfer_count: updated_golfers, transaction_id: charge.id)
 
-        redirect_to edit_play_user_account_path, flash:
+        redirect_to edit_user_account_path(current_user, anchor: 'v-billing'), flash:
         { success: 'Your payment was recorded. Thanks!' }
       else
-        redirect_to edit_play_user_account_path, flash:
+        redirect_to edit_user_account_path(current_user, anchor: 'v-billing'), flash:
         { error: 'There was an error processing your payment.' }
       end
     else
       Rails.logger.info { "Active Delta #{active_delta}. Active After Update: #{active_after_update}" }
 
-      redirect_to edit_play_user_account_path, flash:
+      @active_subscription.update(golfer_count: active_after_update)
+
+      redirect_to edit_user_account_path(current_user, anchor: 'v-billing'), flash:
       { success: 'The memberships were successfully updated. Your account was not charged.' }
     end
   end
@@ -59,15 +61,15 @@ class SubscriptionCreditsController < BaseController
     token = params[:stripeToken]
 
     if token.blank?
-      redirect_to edit_user_account_path(current_user), flash:
+      redirect_to edit_user_account_path(current_user, anchor: 'v-billing'), flash:
       { error: 'There was a problem updating your credit card. Please check your details and try again.' }
     else
       updated_successfully = Stripe::CardTerminal.create_or_update_stripe_customer(@league, user: current_user, token: token)
 
       if updated_successfully
-        redirect_to edit_user_account_path(current_user)
+        redirect_to edit_user_account_path(current_user, anchor: 'v-billing')
       else
-        redirect_to edit_user_account_path(current_user), flash:
+        redirect_to edit_user_account_path(current_user, anchor: 'v-billing'), flash:
         { error: 'We were unable to update your details with the credit system. Please check your details and try again.' }
       end
     end
