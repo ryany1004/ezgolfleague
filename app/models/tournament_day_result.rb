@@ -14,21 +14,21 @@ class TournamentDayResult < ApplicationRecord
   end
 
   def name
-    if self.league_season_team.present?
-      self.league_season_team.name
-    elsif self.read_attribute(:name).present?
-      self.read_attribute(:name)
-    elsif self.user.present?
-      self.user.complete_name
+    if league_season_team.present?
+      league_season_team.name
+    elsif read_attribute(:name).present?
+      read_attribute(:name)
+    elsif user.present?
+      user.complete_name
     else
       'N/A'
     end
   end
 
   def payout_results_relation
-    relation = self.scoring_rule.payout_results
+    relation = scoring_rule.payout_results
 
-    if self.user.present?
+    if user.present?
       relation.where(user: user)
     else
       relation.where(league_season_team: league_season_team)
@@ -45,7 +45,7 @@ class TournamentDayResult < ApplicationRecord
 
     total_points = 0
 
-    self.payout_results_relation.where("points > 0").each do |payout_result|
+    self.payout_results_relation.where('points > 0').each do |payout_result|
       total_points += payout_result.points
     end
 
@@ -57,7 +57,7 @@ class TournamentDayResult < ApplicationRecord
 
     total_payouts = 0
 
-    self.payout_results_relation.where("amount > 0").each do |payout_result|
+    payout_results_relation.where('amount > 0').each do |payout_result|
       total_payouts += payout_result.amount
     end
 
@@ -85,6 +85,6 @@ class TournamentDayResult < ApplicationRecord
   end
 
   def to_s
-    "#{self.name} - Net: #{self.net_score} Gross: #{self.gross_score}"
+    "#{name} - Net: #{net_score} Gross: #{gross_score}"
   end
 end
