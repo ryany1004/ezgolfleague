@@ -27,6 +27,9 @@ class UserAccountsController < BaseController
   def create
     @user_account = User.new(user_params)
 
+    @user_account.time_zone = current_user.time_zone
+    @user_account.password = SecureRandom.hex(10)
+
     if @user_account.save
       @user_account.leagues << current_user.selected_league
       @user_account.invite!(current_user) if @user_account.should_invite == '1'
