@@ -116,10 +116,10 @@ module ScoringComputer
       result_name = Users::ResultName.result_name_for_user(user, @scoring_rule)
 
       if gross_score.positive?
-        result = @scoring_rule.tournament_day_results.find_or_create_by(user: user) # TODO: create_or_find_by
+        Rails.logger.debug { "Finding or Inserting TDR for #{result_name}" }
+        result = @scoring_rule.tournament_day_results.find_or_create_by!(user: user, primary_scorecard: user_scorecard) # TODO: create_or_find_by
 
         result.name = result_name
-        result.primary_scorecard = user_scorecard
         result.flight = flight
         result.gross_score = gross_score
         result.net_score = net_score
