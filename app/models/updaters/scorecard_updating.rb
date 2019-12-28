@@ -1,6 +1,9 @@
 module Updaters
   class ScorecardUpdating
     def self.update_scorecards_for_scores(scores, primary_scorecard, other_scorecards, notify_score_scores = false)
+      scorecards_to_update = [primary_scorecard]
+      scorecards_to_update += other_scorecards
+
       scores.each do |score_param|
         Rails.logger.info { "score_param #{score_param}" }
 
@@ -32,14 +35,15 @@ module Updaters
             Rails.logger.info { "Updating Score: #{score.id}" }
 
             scorecard_to_rescore = score.scorecard
-            UpdateUserScorecardJob.perform_later(scorecard_to_rescore, []) if scorecard_to_rescore != primary_scorecard && scorecard_to_rescore.present?
+            scorecards_to_update << scorecard_to_rescore if scorecard_to_rescore != primary_scorecard && scorecard_to_rescore.present?
           else
             Rails.logger.info { "Not Updating Scores - Too Old #{date_scored}" }
           end
         end
       end
 
-      UpdateUserScorecardJob.perform_later(primary_scorecard, other_scorecards)
+      scorecards_to_update.uniq!
+      UpdateUserScorecardJob.perform_later(primary_scorecard, scorecards_to_update.drop(1)) # this makes sure the primary is only done once
     end
   end
 end
