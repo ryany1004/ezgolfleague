@@ -245,6 +245,10 @@ class Tournament < ApplicationRecord
     @optional_scoring_rules_with_dues ||= tournament_days.map(&:optional_scoring_rules_with_dues).flatten
   end
 
+  def scoring_rules_with_dues
+    @scoring_rules_with_dues ||= self.tournament_days.map(&:scoring_rules_with_dues).flatten
+  end
+
   def is_paid?
     if league.exempt_from_subscription
       true
