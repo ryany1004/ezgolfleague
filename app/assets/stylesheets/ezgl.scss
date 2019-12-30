@@ -3102,6 +3102,7 @@ select.selectpicker {
     background: ezgl-color("background", "light");
     border-radius: 4px;
     padding: 0;
+    z-index: 100000;
 
     .onboarding__panel-header {
       display: flex;
