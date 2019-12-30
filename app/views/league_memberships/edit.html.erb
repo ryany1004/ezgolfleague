@@ -38,15 +38,13 @@
                     </div>
 
                     <div class="form-flex-group">
-                      <%= f.input :is_admin, label: 'League Admin', as: :boolean %>
-                    </div>
-
-                    <div class="form-flex-group">
                       <div class="form-side-label">
                         <p>League Admin</p>
                       </div>
 
-                      <%= f.input :is_admin, as: :boolean %>
+                      <div class="form-flex-group">
+                        <%= f.check_box :is_admin %>
+                      </div>
                     </div>
 
                     <div class="form-actions form-flex-group"> 
