@@ -42,5 +42,5 @@ staging:
 
 beta:
   <<: *defaults
-  monitor: false
+  monitor: true
   name: "EZ Golf League - Beta"
