@@ -36,6 +36,12 @@
 		</div>
 	</div>
 
+  <% if notification = flash[:error] %>
+    <div class="form-flex-group pt-4 pb-3">
+      <p style="color: red;"><%= notification %></p>
+    </div>
+  <% end %>
+
 	<div class="form-flex-group credit-card pt-2 pb-4">
 		<% if @league.cc_last_four.blank? %>
       <span>None</span>

@@ -10,36 +10,40 @@ module Stripe
 
 	    update_successful = false
 
-	    if league.stripe_token.present?
-	      stripe_customer = Stripe::Customer.retrieve(league.stripe_token)
-
-	      card = stripe_customer.sources.create({ source: token })
-	      card.save
-
-	      stripe_customer.default_source = card.id
-	      stripe_customer.save
-			else
-	      stripe_customer = Stripe::Customer.create(
-	        description: "#{user.email} for league #{league.name}",
-	        source: token
-	      )
-
-	      league.stripe_token = stripe_customer.id
-	      league.save
-	    end
-
-	    if stripe_customer.sources.data.present?
-	      stripe_card = stripe_customer.sources.data.first
-
-	      league.cc_last_four = stripe_card.last4
-	      league.cc_expire_month = stripe_card.exp_month
-	      league.cc_expire_year = stripe_card.exp_year
-	      league.save
-
-	      update_successful = true
-	    end
-
-	    update_successful
+			begin
+				if league.stripe_token.present?
+					stripe_customer = Stripe::Customer.retrieve(league.stripe_token)
+	
+					card = stripe_customer.sources.create({ source: token })
+					card.save
+	
+					stripe_customer.default_source = card.id
+					stripe_customer.save
+				else
+					stripe_customer = Stripe::Customer.create(
+						description: "#{user.email} for league #{league.name}",
+						source: token
+					)
+	
+					league.stripe_token = stripe_customer.id
+					league.save
+				end
+	
+				if stripe_customer.sources.data.present?
+					stripe_card = stripe_customer.sources.data.first
+	
+					league.cc_last_four = stripe_card.last4
+					league.cc_expire_month = stripe_card.exp_month
+					league.cc_expire_year = stripe_card.exp_year
+					league.save
+	
+					update_successful = true
+				end
+	
+				return update_successful
+			rescue Stripe::CardError => e
+				return false
+			end
 	  end
 
 	  def self.charge_customer(league, payment_amount:, description:)
