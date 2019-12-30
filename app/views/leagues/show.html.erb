@@ -94,6 +94,7 @@
           <%= f.input :dues_amount, label: 'Dues ($)' %>
 
           <%= f.hidden_field :starts_at %>
+          
           <%= f.hidden_field :ends_at %>
 
           <% if @league_season.new_record? && !@league.allow_scoring_groups -%>
