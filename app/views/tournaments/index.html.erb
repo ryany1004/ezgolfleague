@@ -10,7 +10,9 @@
       </div>
       <!-- /.col-md-8 --> 
       <div class="col-md-4 text-right">
-        <%= link_to "Create Tournament", new_league_tournament_path(current_user.selected_league), class: 'btn btn-primary' %>
+        <% if @can_create_tournaments %>
+          <%= link_to "Create Tournament", new_league_tournament_path(current_user.selected_league), class: 'btn btn-primary' %>
+        <% end %>
       </div>
       <!-- /.col-md-6 --> 
     </div>
