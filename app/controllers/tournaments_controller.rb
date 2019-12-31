@@ -2,8 +2,7 @@ class TournamentsController < BaseController
   helper Play::TournamentsHelper
 
   before_action :fetch_league
-  before_action :fetch_tournament, except: [:index, :new, :create]
-  before_action :set_stage
+  before_action :fetch_tournament, except: [:index, :new]
 
   def index
     if current_user.selected_league.blank? && current_user.impersonatable_users.blank?
@@ -16,11 +15,7 @@ class TournamentsController < BaseController
     @past_tournaments = Tournament.all_past([@league]).reorder(tournament_starts_at: :desc).page(params[:page]).without_count
     @unconfigured_tournaments = Tournament.all_unconfigured([@league]).page(params[:page]).without_count
 
-    if current_user.can_create_tournaments?
-      @can_create_tournaments = true
-    else
-      @can_create_tournaments = false
-    end
+    current_user.can_create_tournaments? ? @can_create_tournaments = true : @can_create_tournaments = false
 
     @page_title = 'Tournaments'
   end
@@ -32,50 +27,10 @@ class TournamentsController < BaseController
     end
   end
 
-  def create
-    @tournament = Tournament.new(tournament_params)
-    @tournament.auto_schedule_for_multi_day = 0 # default
-    @tournament.skip_date_validation = current_user.is_super_user
-
-    if @tournament.save
-      league = @tournament.league
-      if !league.exempt_from_subscription && league.free_tournaments_remaining.positive?
-        league.free_tournaments_remaining -= 1 # decrement the free tournaments
-        league.save
-      end
-
-      SendEventToDripJob.perform_later('Created a new tournament', user: current_user, options: { tournament: { name: @tournament.name } })
-
-      redirect_to league_tournament_tournament_days_path(@tournament.league, @tournament), flash:
-      { success: 'The tournament was successfully created. Please update course information.' }
-    else
-      initialize_form
-
-      render :new
-    end
-  end
-
-  def show
-    registered_players = @tournament.players_for_day(@tournament.first_day)
-    @non_registered_players = @tournament.league.users.select { |x| !registered_players.include?(x) }
-    @courses = Course.all.order(:name)
-  end
+  def show; end
 
   def edit
     redirect_to league_tournaments_path(current_user.selected_league), flash: { success: 'We could not locate the tournament in question in your account.' } if @tournament.blank?
-  end
-
-  def update
-    if @tournament.update(tournament_params)
-      redirect_to league_tournaments_path(current_user.selected_league), flash:
-      { success: 'The tournament was successfully updated.' }
-
-      current_user.send_silent_notification({ action: 'update', tournament_id: @tournament.id })
-    else
-      initialize_form
-
-      render :edit
-    end
   end
 
   def destroy
@@ -91,29 +46,7 @@ class TournamentsController < BaseController
     { success: 'The tournament was successfully deleted.' }
   end
 
-  def options
-    tournament_group = TournamentGroup.find(params[:tournament_group_id])
-
-    @daily_teams = tournament_group.daily_teams
-  end
-
   private
-
-  def set_stage
-    @stage_name = 'basic_details'
-  end
-
-  def tournament_params
-    params.require(:tournament).permit(:name,
-                                       :league_id,
-                                       :allow_credit_card_payment,
-                                       :signup_opens_at,
-                                       :signup_closes_at,
-                                       :max_players,
-                                       :show_players_tee_times,
-                                       :auto_schedule_for_multi_day,
-                                       tournament_days_attributes: [:id, course_hole_ids: []])
-  end
 
   def fetch_league
     if current_user.is_super_user?
@@ -124,6 +57,9 @@ class TournamentsController < BaseController
   end
 
   def fetch_tournament
-    @tournament = fetch_tournament_from_user_for_tournament_id(params[:tournament_id] || params[:id])
+    valid_tournament_id = fetch_tournament_from_user_for_tournament_id(params[:tournament_id] || params[:id]).id
+    @tournament = Tournament.where('id = ?', valid_tournament_id)
+                            .includes(tournament_days: [:course, :tournament_groups, :flights, scoring_rules: [:tournament_day_results]])
+                            .first
   end
 end
