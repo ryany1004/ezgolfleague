@@ -24,6 +24,8 @@ class Api::V2::TournamentsController < BaseController
     @tournament_day.update(tournament_at: starts_at)
     @errors << @tournament_day.errors
 
+    current_user.send_silent_notification({ action: 'update', tournament_id: @tournament.id })
+
     render json: { errors: @errors, url: league_tournament_path(@tournament.league, @tournament) }
   end
 
