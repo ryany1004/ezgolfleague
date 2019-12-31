@@ -66,7 +66,7 @@
 </template>
 
 <script>
-import api from 'api';
+import GolferDetailsAPI from '../../api/GolferDetailsAPI';
 
 export default {
   data() {
@@ -113,13 +113,13 @@ export default {
       this.$modal.hide('golfer-details-modal');
     },
     removeGolfer() {
-      api.destroyGolferDetails(this.csrfToken, this.leagueId, this.tournamentId, this.tournamentDayId, this.golfer.id)
+      GolferDetailsAPI.destroyGolferDetails(this.csrfToken, this.leagueId, this.tournamentId, this.tournamentDayId, this.golfer.id)
         .then(() => {
           window.location.reload();
         });
     },
     save() {
-      api.patchGolferDetails(this.csrfToken, this.leagueId, this.tournamentId, this.tournamentDayId, this.golfer.id, this.golfer)
+      GolferDetailsAPI.patchGolferDetails(this.csrfToken, this.leagueId, this.tournamentId, this.tournamentDayId, this.golfer.id, this.golfer)
         .then(() => {
           window.location.reload();
         });

@@ -1,6 +1,10 @@
 import { getField, updateField } from 'vuex-map-fields';
 
-import api from '../../api';
+import APIClient from '../../api/APIClient';
+import FlightAPI from '../../api/FlightAPI';
+import ScoringRuleAPI from '../../api/ScoringRuleAPI';
+import TournamentAPI from '../../api/TournamentAPI';
+import GameTypesAPI from '../../api/GameTypesAPI';
 
 export const namespaced = true;
 
@@ -105,13 +109,13 @@ export const mutations = {
 
 export const actions = {
   fetchTournament({ commit }, { leagueId, tournamentId }) {
-    return api.getTournament(leagueId, tournamentId)
+    return TournamentAPI.getTournament(leagueId, tournamentId)
       .then((response) => {
         commit('setTournament', response.data);
       });
   },
   fetchScoringRules({ commit }, { leagueId }) {
-    return api.getGameTypes(leagueId)
+    return GameTypesAPI.getGameTypes(leagueId)
       .then((response) => {
         const flattenedRules = response.data.flat(1);
 
@@ -119,7 +123,7 @@ export const actions = {
       });
   },
   saveTournamentDetails({ rootState }) {
-    return api.patchTournamentDetails(rootState.csrfToken, state.tournament);
+    return TournamentAPI.patchTournamentDetails(rootState.csrfToken, state.tournament);
   },
   addFlight({ commit }) {
     const existingFlights = this.state.tournament.tournament.tournamentDays[0].flights;
@@ -159,11 +163,11 @@ export const actions = {
       };
 
       if (flight.id == null) {
-        requests.push(api.createFlight(rootState.csrfToken, flightPayload));
+        requests.push(FlightAPI.createFlight(rootState.csrfToken, flightPayload));
       } else {
         flightPayload.id = flight.id;
 
-        requests.push(api.patchFlight(rootState.csrfToken, flightPayload));
+        requests.push(FlightAPI.patchFlight(rootState.csrfToken, flightPayload));
       }
     });
 
@@ -176,10 +180,10 @@ export const actions = {
         id: flight.id,
       };
 
-      requests.push(api.destroyFlight(rootState.csrfToken, flightPayload));
+      requests.push(FlightAPI.destroyFlight(rootState.csrfToken, flightPayload));
     });
 
-    return api.runAll(requests);
+    return APIClient.runAll(requests);
   },
   addScoringRule({ commit }, { value }) {
     commit('addScoringRule', value);
@@ -236,11 +240,11 @@ export const actions = {
       });
 
       if (rule.id == null) {
-        requests.push(api.createScoringRule(rootState.csrfToken, rulePayload));
+        requests.push(ScoringRuleAPI.createScoringRule(rootState.csrfToken, rulePayload));
       } else {
         rulePayload.id = rule.id;
 
-        requests.push(api.patchScoringRule(rootState.csrfToken, rulePayload));
+        requests.push(ScoringRuleAPI.patchScoringRule(rootState.csrfToken, rulePayload));
       }
     });
 
@@ -253,10 +257,10 @@ export const actions = {
         id: rule.id,
       };
 
-      requests.push(api.destroyScoringRule(rootState.csrfToken, rulePayload));
+      requests.push(ScoringRuleAPI.destroyScoringRule(rootState.csrfToken, rulePayload));
     });
 
-    return api.runAll(requests);
+    return APIClient.runAll(requests);
   },
 };
 

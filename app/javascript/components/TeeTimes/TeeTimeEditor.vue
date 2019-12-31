@@ -84,7 +84,7 @@
 import draggable from 'vuedraggable';
 import datePicker from 'vue-bootstrap-datetimepicker';
 
-import api from 'api';
+import TournamentGroupAPI from '../../api/TournamentGroupAPI';
 
 export default {
   components: {
@@ -123,7 +123,7 @@ export default {
         position,
       };
 
-      api.createTournamentGroup(this.csrfToken, payload)
+      TournamentGroupAPI.createTournamentGroup(this.csrfToken, payload)
         .then((response) => {
           console.log(response);
 
@@ -138,7 +138,7 @@ export default {
         group,
       };
 
-      api.destroyTournamentGroup(this.csrfToken, payload)
+      TournamentGroupAPI.destroyTournamentGroup(this.csrfToken, payload)
         .then((response) => {
           console.log(response);
 
@@ -165,7 +165,7 @@ export default {
         group,
       };
 
-      api.patchTournamentGroup(this.csrfToken, payload);
+      TournamentGroupAPI.patchTournamentGroup(this.csrfToken, payload);
     },
   },
 };

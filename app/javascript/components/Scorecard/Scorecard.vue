@@ -118,7 +118,7 @@
 </template>
 
 <script>
-import api from 'api';
+import ScorecardAPI from '../../api/ScorecardAPI';
 
 export default {
   data() {
@@ -163,7 +163,7 @@ export default {
       return sliced;
     },
     saveScorecard() {
-      api.patchScorecard(this.csrfToken, this.scorecard)
+      ScorecardAPI.patchScorecard(this.csrfToken, this.scorecard)
         .then((response) => {
           window.location.reload();
         });

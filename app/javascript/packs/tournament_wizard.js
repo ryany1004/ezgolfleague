@@ -11,7 +11,9 @@ import { required, minValue } from 'vuelidate/lib/validators';
 
 import { ToggleButton } from 'vue-js-toggle-button';
 
-import api from 'api';
+import CourseAPI from '../api/CourseAPI';
+import GameTypesAPI from '../api/GameTypesAPI';
+import TournamentAPI from '../api/TournamentAPI';
 
 import IndividualStrokePlaySetup from '../components/ScoringRuleSetup/IndividualStrokePlaySetup';
 import StablefordSetup from '../components/ScoringRuleSetup/StablefordSetup';
@@ -119,7 +121,7 @@ document.addEventListener('DOMContentLoaded', () => {
       },
     },
     mounted() {
-      api.getGameTypes(props.league.id)
+      GameTypesAPI.getGameTypes(props.league.id)
         .then((response) => {
           app.scoringRules = response.data.flat(1);
 
@@ -210,7 +212,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         app.isLoading = true;
 
-        api.searchCourses(query)
+        CourseAPI.searchCourses(query)
           .then((response) => {
             app.isLoading = false;
 
@@ -228,7 +230,7 @@ document.addEventListener('DOMContentLoaded', () => {
           });
       },
       courseSelected(selectedOption) {
-        api.getCourseTeeBoxes(selectedOption.id)
+        CourseAPI.getCourseTeeBoxes(selectedOption.id)
           .then((response) => {
             app.configureHoleOptions(selectedOption.numberOfHoles);
 
@@ -442,7 +444,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const tournamentPayload = this.tournamentData();
         const jsonPayload = JSON.stringify(tournamentPayload);
 
-        api.postTournamentWizard(this.csrfToken, props.league.id, jsonPayload)
+        TournamentAPI.postTournamentWizard(this.csrfToken, props.league.id, jsonPayload)
           .then((response) => {
             if (response.data.errors.length > 0) {
               app.saveErrors = response.data.errors;

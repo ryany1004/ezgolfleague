@@ -5,7 +5,10 @@ import VModal from 'vue-js-modal';
 import NProgress from 'nprogress';
 import 'nprogress/nprogress.css';
 
-import api from 'api';
+import GolferDetailsAPI from 'api/GolferDetailsAPI';
+import ScorecardAPI from 'api/ScorecardAPI';
+import TournamentGroupAPI from 'api/TournamentGroupAPI';
+
 import store from '../store/store';
 
 import Scorecard from '../components/Scorecard/Scorecard';
@@ -58,7 +61,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const { golferId } = event.currentTarget.dataset;
 
-        api.getGolferDetails(props.league.id, props.tournament.id, props.tournament_day.id, golferId)
+        GolferDetailsAPI.getGolferDetails(props.league.id, props.tournament.id, props.tournament_day.id, golferId)
           .then((response) => {
             NProgress.done();
 
@@ -75,7 +78,7 @@ document.addEventListener('DOMContentLoaded', () => {
         app.$modal.show('scoring-rules-modal');
       },
       showTeeTimeEditor() {
-        api.getTournametGroups(props.league.id, props.tournament.id, props.tournament_day.id)
+        TournamentGroupAPI.getTournamentGroups(props.league.id, props.tournament.id, props.tournament_day.id)
           .then((response) => {
             app.$modal.show('tee-time-editor', { teeGroupData: response.data });
           });
@@ -85,7 +88,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const { scorecardId } = event.currentTarget.dataset;
 
-        api.getScorecard(scorecardId)
+        ScorecardAPI.getScorecard(scorecardId)
           .then((response) => {
             NProgress.done();
 
