@@ -16,7 +16,7 @@ Style/ModuleFunction:
   Enabled: false
 Metrics/MethodLength:
   Max: 20
-Metrics/LineLength:
+Layout/LineLength:
   Max: 200
 Style/ConditionalAssignment:
   Enabled: false
