@@ -10,7 +10,7 @@
 	</div>
 
 	<div class="form-flex-group flex-wrap pt-3">
-			<% unless @active_subscription.blank? %>
+		<% if @active_subscription.present? %>
 			<h4>Pay Per Golfer</h4>
 			<p><%= @active_subscription.golfer_count %> active golfers in your league</p>
 
