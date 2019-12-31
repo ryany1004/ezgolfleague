@@ -29,6 +29,7 @@ class SubscriptionCreditsController < BaseController
 
     active_after_update = @league.league_memberships.reload.active.count
     active_delta = active_after_update - active_before_update
+    return if active_delta.zero?
 
     if active_delta.positive?
       per_golfer_cost = SubscriptionCredit.cost_per_golfer(league: @league)
@@ -69,8 +70,12 @@ class SubscriptionCreditsController < BaseController
       if updated_successfully
         redirect_to edit_user_account_path(current_user, anchor: 'v-billing')
       else
+        @league.update(cc_last_four: nil,
+                       cc_expire_month: nil,
+                       cc_expire_year: nil)
+
         redirect_to edit_user_account_path(current_user, anchor: 'v-billing'), flash:
-        { error: 'We were unable to update your details with the credit system. Please check your details and try again.' }
+        { error: 'We were unable to update your details with the credit system. Please check your submission and try again.' }
       end
     end
   end
