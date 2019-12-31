@@ -8,7 +8,7 @@ class League < ApplicationRecord
   has_many :notification_templates, dependent: :destroy
 
   validates :name, presence: true, uniqueness: true
-  validates :location, presence: true
+  validates :location, presence: true, on: :create
   validates :free_tournaments_remaining, presence: true
   validates :number_of_rounds_to_handicap, presence: true
   validates :number_of_lowest_rounds_to_handicap, presence: true
