@@ -1,89 +1,88 @@
 <!DOCTYPE html>
 <html>
-<head>
-	<meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <% if @page_title.blank? -%>
-  <title>EZ Golf League</title>
-  <% else -%>
-  <title><%= @page_title %> || EZ Golf League</title>
-  <% end -%>
-	<%= stylesheet_link_tag    'application', media: 'all' %>
-	<%= javascript_include_tag 'application' %>
-  <%= csrf_meta_tags %>
-  <link rel="apple-touch-icon" sizes="57x57" href="/icons/apple-icon-57x57.png">
-  <link rel="apple-touch-icon" sizes="60x60" href="/icons/apple-icon-60x60.png">
-  <link rel="apple-touch-icon" sizes="72x72" href="/icons/apple-icon-72x72.png">
-  <link rel="apple-touch-icon" sizes="76x76" href="/icons/apple-icon-76x76.png">
-  <link rel="apple-touch-icon" sizes="114x114" href="/icons/apple-icon-114x114.png">
-  <link rel="apple-touch-icon" sizes="120x120" href="/icons/apple-icon-120x120.png">
-  <link rel="apple-touch-icon" sizes="144x144" href="/icons/apple-icon-144x144.png">
-  <link rel="apple-touch-icon" sizes="152x152" href="/icons/apple-icon-152x152.png">
-  <link rel="apple-touch-icon" sizes="180x180" href="/icons/apple-icon-180x180.png">
-  <link rel="icon" type="image/png" sizes="192x192" href="/icons/android-icon-192x192.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32x32.png">
-  <link rel="icon" type="image/png" sizes="96x96" href="/icons/favicon-96x96.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="/icons/favicon-16x16.png">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <% if @page_title.blank? -%>
+    <title>EZ Golf League</title>
+    <% else -%>
+    <title><%= @page_title %> || EZ Golf League</title>
+    <% end -%>
+    <%= stylesheet_link_tag    'application', media: 'all' %>
+    <%= javascript_include_tag 'application' %>
+    <%= csrf_meta_tags %>
+    <link rel="apple-touch-icon" sizes="57x57" href="/icons/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/icons/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/icons/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/icons/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/icons/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/icons/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/icons/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/icons/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/icons/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/icons/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/icons/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/icons/favicon-16x16.png">
 
-  <%= render partial: 'shared/stripe' %>
-  
-  <%= render partial: 'shared/analytics' %>
-</head>
-<body class="ezgl-container">
+    <%= render partial: 'shared/stripe' %>
+    
+    <%= render partial: 'shared/analytics' %>
+  </head>
+  <body class="ezgl-container">
 
-<!-- <%= Rails.env %> -->
+  <!-- <%= Rails.env %> -->
 
-<div class="container master-container">
-  <% if Rails.env.staging? %>
-    <div class="alert alert-danger alert-dismissable fade in">
-      You are running in the staging environment.
-    </div>
-  <% end %>
+  <div class="container master-container">
+    <% if Rails.env.staging? %>
+      <div class="alert alert-danger alert-dismissable fade in">
+        You are running in the staging environment.
+      </div>
+    <% end %>
 
-  <% flash.each do |type, message| %>
-    <div class="alert <%= bootstrap_class_for(type) %> alert-dismissable fade in">
-      <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-      <%= message %>
-    </div>
-  <% end %>
+    <% flash.each do |type, message| %>
+      <div class="alert <%= bootstrap_class_for(type) %> alert-dismissable fade in">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+        <%= message %>
+      </div>
+    <% end %>
 
-  <%= yield %>
-</div>
-
-<footer class="container">
-  <% unless @show_apps_in_footer == false %>
-  <br/><br/>
-  <div>
-    <a href='https://itunes.apple.com/us/app/ez-golf-league/id1088689756?mt=8'><%= image_tag 'app_store.svg', width: "180" %></a>
-    &nbsp;&nbsp;
-    <a href='https://play.google.com/store/apps/details?id=com.ezgolfleague.golfapp&hl=en'><%= image_tag 'google-play-badge.png', width: "200" %></a>
+    <%= yield %>
   </div>
-  <% end %>
 
-  <% if user_signed_in? && current_user != true_user && true_user.is_super_user %>
+  <footer class="container">
+    <% unless @show_apps_in_footer == false %>
     <br/><br/>
-    <strong>You (<%= true_user.complete_name %>) are signed in as <%= current_user.complete_name %>
-    <br/>
-    <%= link_to "Stop Impersonating", stop_impersonating_user_accounts_path %></strong>
-<% end %>
-</footer>
+    <div>
+      <a href='https://itunes.apple.com/us/app/ez-golf-league/id1088689756?mt=8'><%= image_tag 'app_store.svg', width: "180" %></a>
+      &nbsp;&nbsp;
+      <a href='https://play.google.com/store/apps/details?id=com.ezgolfleague.golfapp&hl=en'><%= image_tag 'google-play-badge.png', width: "200" %></a>
+    </div>
+    <% end %>
 
-</body>
+    <% if user_signed_in? && current_user != true_user && true_user.is_super_user %>
+      <br/><br/>
+      <strong>You (<%= true_user.complete_name %>) are signed in as <%= current_user.complete_name %>
+      <br/>
+      <%= link_to "Stop Impersonating", stop_impersonating_user_accounts_path %></strong>
+  <% end %>
+  </footer>
 
-<% unless current_user.blank? || current_user.selected_league.blank? || current_user.selected_league.required_container_frame_url.blank? %>
-  <script>
-    function inIframe() {
-      try {
-          return window.self !== window.top;
-      } catch (e) {
-          return true;
+  </body>
+
+  <% unless current_user.blank? || current_user.selected_league.blank? || current_user.selected_league.required_container_frame_url.blank? %>
+    <script>
+      function inIframe() {
+        try {
+            return window.self !== window.top;
+        } catch (e) {
+            return true;
+        }
       }
-    }
 
-    if (inIframe() == false) {
-      window.location = "/invalid_container.html?container=<%= current_user.selected_league.required_container_frame_url %>";
-    }
-  </script>
-<% end %>
-
+      if (inIframe() == false) {
+        window.location = "/invalid_container.html?container=<%= current_user.selected_league.required_container_frame_url %>";
+      }
+    </script>
+  <% end %>
 </html>
