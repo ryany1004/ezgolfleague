@@ -2,8 +2,6 @@ class Api::V1::ApiBaseController < ApplicationController
   skip_before_action :verify_authenticity_token
   around_action :user_time_zone, if: :current_user
 
-  force_ssl if: :ssl_configured?
-
   def protect_with_token
     session_token = request.headers["ezgl-token"]
 
@@ -37,9 +35,5 @@ class Api::V1::ApiBaseController < ApplicationController
 
   def user_time_zone(&block)
     Time.use_zone(current_user.time_zone, &block)
-  end
-
-  def ssl_configured?
-    !Rails.env.development?
   end
 end

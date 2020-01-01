@@ -51,20 +51,6 @@ class Play::RegistrationsController < Play::BaseController
     current_user.leagues << @league
 
     redirect_to play_dashboard_index_path
-
-    # ToDo Remove if payments in onboarding is no longer wanted
-    # if @league.encrypted_stripe_production_publishable_key.blank? || @league.dues_amount.zero?
-    #   current_user.leagues << @league
-
-    #   redirect_to play_dashboard_index_path
-    # else
-    #   @cost_breakdown_lines = [
-    #     { name: "#{@league.name} League Fees", price: @league.dues_amount },
-    #     { name: "Credit Card Fees", price: Stripe::StripeFees.fees_for_transaction_amount(@league.dues_amount) }
-    #   ]
-
-    #   @payment_amount = Payments::LeagueJoinService.payment_amount(@league)
-    # end
   end
 
   def request_information

@@ -1,4 +1,4 @@
-require File.expand_path('../boot', __FILE__)
+require_relative 'boot'
 
 require 'rails/all'
 
@@ -8,29 +8,24 @@ Bundler.require(*Rails.groups)
 
 module EzgolfRails
   class Application < Rails::Application
+    # Initialize configuration defaults for originally generated Rails version.
+    config.load_defaults 6.0
+
+    config.autoload_paths << Rails.root.join('lib')
+
+    # Rails.autoloaders.log!
+
     # Settings in config/environments/* take precedence over those specified here.
-    # Application configuration should go into files in config/initializers
-    config.load_defaults 5.2
-    # -- all .rb files in that directory are automatically loaded.
-
-    config.eager_load_paths << Rails.root.join('lib')
-    config.eager_load_paths += Dir[Rails.root.join("app", "models", "{*/}")]
-    config.eager_load_paths += Dir[Rails.root.join("app", "models", "{*/}", "{*/}")]
-
-    # Set Time.zone default to the specified zone and make Active Record auto-convert to this zone.
-    # Run "rake -D time" for a list of tasks for finding time zone names. Default is UTC.
-    # config.time_zone = 'Pacific Time (US & Canada)'
-
-    # The default locale is :en and all translations from config/locales/*.rb,yml are auto loaded.
-    # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]
-    # config.i18n.default_locale = :de
+    # Application configuration can go into files in config/initializers
+    # -- all .rb files in that directory are automatically loaded after loading
+    # the framework and any gems in your application.
 
     config.generators do |g|
       g.test_framework :rspec
     end
 
     config.action_dispatch.default_headers = {
-        'X-Frame-Options' => 'ALLOWALL'
+      'X-Frame-Options' => 'ALLOWALL'
     }
 
     config.middleware.insert_after Rack::Sendfile, Rack::Deflater

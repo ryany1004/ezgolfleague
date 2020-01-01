@@ -67,7 +67,7 @@ class ScoringRule < ApplicationRecord
   end
 
   def handicap_computer
-    ScoringRules::HandicapComputer::BaseHandicapComputer.new(self)
+    HandicapComputers::BaseHandicapComputer.new(self)
   end
 
   def scorecards

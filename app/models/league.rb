@@ -8,7 +8,6 @@ class League < ApplicationRecord
   has_many :notification_templates, dependent: :destroy
 
   validates :name, presence: true, uniqueness: true
-  validates :location, presence: true, on: :create
   validates :free_tournaments_remaining, presence: true
   validates :number_of_rounds_to_handicap, presence: true
   validates :number_of_lowest_rounds_to_handicap, presence: true
@@ -113,8 +112,11 @@ class League < ApplicationRecord
     start_date = Date.civil(year, 1, 1)
     end_date = Date.civil(year, -1, -1)
 
+    last_season = league_seasons.last
+
     s = LeagueSeason.create(name: Time.zone.now.year.to_s, starts_at: start_date, ends_at: end_date, league: self)
     s.update(season_type_raw: LeagueSeasonType::TEAM) if league_type == 'Team Play'
+    s.update(dues_amount: last_season.dues_amount) if last_season.present?
   end
 
   def create_missing_next_season
@@ -124,7 +126,7 @@ class League < ApplicationRecord
     return if current_season.blank?
 
     if current_season.ends_at - 60.days < DateTime.now && current_season == last_season
-      new_year = Time.now.beginning_of_year + 1.year
+      new_year = Time.zone.now.beginning_of_year + 1.year
 
       create_season_for_year(new_year)
     end

@@ -5,13 +5,13 @@ class TournamentDay < ApplicationRecord
 
   include CacheKeyable
 
-  include ::AddToTournamentDay
-  include ::RemoveFromTournamentDay
-  include ::CourseHandicapTournamentDay
-  include ::FlightTournamentDay
-  include ::Autoschedule
-  include ::TournamentApiSupport
-  include ::TournamentScorecardSupport
+  include TournamentDays::AddToTournamentDay
+  include TournamentDays::RemoveFromTournamentDay
+  include TournamentDays::CourseHandicapTournamentDay
+  include TournamentDays::FlightTournamentDay
+  include TournamentDays::Autoschedule
+  include TournamentDays::TournamentApiSupport
+  include TournamentDays::TournamentScorecardSupport
 
   belongs_to :tournament, inverse_of: :tournament_days, touch: true, counter_cache: true
   belongs_to :course, inverse_of: :tournament_days

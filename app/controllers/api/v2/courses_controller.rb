@@ -8,6 +8,7 @@ class Api::V2::CoursesController < BaseController
     search_string = "%#{params[:search].downcase}%"
     @courses = @courses
                .where('lower(name) LIKE ? OR lower(city) LIKE ? OR lower(us_state) LIKE ?', search_string, search_string, search_string)
+               .includes(:course_holes, :course_tee_boxes)
 
     render json: @courses.to_json(methods: :number_of_holes)
   end

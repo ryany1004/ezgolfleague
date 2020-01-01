@@ -1,7 +1,7 @@
 class UserAccountsController < BaseController
   before_action :fetch_user_account, only: [:edit, :update, :destroy]
   before_action :fetch_league, only: [:edit]
-  before_action :fetch_active_subscription, only: [:current, :edit, :update_active]
+  before_action :fetch_active_subscription, only: [:edit, :update_active]
   before_action :initialize_form, only: [:new, :edit, :edit_current]
 
   def index
@@ -25,16 +25,21 @@ class UserAccountsController < BaseController
   end
 
   def create
-    @user_account = User.new(user_params)
+    @existing_account = User.find_by(email: user_params[:email])
+    if @existing_account.present?
+      @existing_account.leagues << current_user.selected_league
+    else
+      @user_account = User.new(user_params)
 
-    @user_account.time_zone = current_user.time_zone
-    @user_account.password = SecureRandom.hex(10)
-
-    if @user_account.save
-      @user_account.leagues << current_user.selected_league
-      @user_account.invite!(current_user) if @user_account.should_invite == '1'
-
-      GhinUpdateJob.perform_later([@user_account]) if @user_account.ghin_number.present?
+      @user_account.time_zone = current_user.time_zone
+      @user_account.password = SecureRandom.hex(10)
+  
+      if @user_account.save
+        @user_account.leagues << current_user.selected_league
+        @user_account.invite!(current_user) if @user_account.should_invite == '1'
+  
+        GhinUpdateJob.perform_later([@user_account]) if @user_account.ghin_number.present?
+      end
     end
 
     redirect_to league_league_memberships_path(current_user.selected_league)

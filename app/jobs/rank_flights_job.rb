@@ -6,7 +6,7 @@ class RankFlightsJob < ApplicationJob
       tournament_day.flights.each do |flight|
         Rails.logger.info { "RankFlightsJob #{flight.id} #{rule.id}" }
 
-        Flights::RankPosition.compute_rank(flight: flight, scoring_rule: rule)
+        Rankings::FlightRanking.compute_rank(flight: flight, scoring_rule: rule)
       end
     end
   end

@@ -1,14 +1,9 @@
 class BaseController < ActionController::Base
   layout 'application'
 
-  force_ssl if: :ssl_configured?
-
-  def ssl_configured?
-    !Rails.env.development?
-  end
-
   before_action :authenticate_user!
   before_action :forward_to_beta
+  before_action :create_missing_league_season
   around_action :user_time_zone, if: :current_user
 
   def forward_to_beta
@@ -66,6 +61,10 @@ class BaseController < ActionController::Base
     else
       current_user.leagues_admin.find_by(id: league_id)
     end
+  end
+
+  def create_missing_league_season
+    current_user&.selected_league&.create_default_league_season
   end
 
   impersonates :user
