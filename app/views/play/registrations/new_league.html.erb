@@ -53,6 +53,22 @@ fbq('track', 'CompleteRegistration', {
 
               <div class="form-flex-group">
                 <div class="form-side-label">
+                  <p>Number of Players</p>
+                </div>
+
+                <div class="form-flex-group">
+                  <%= f.input :league_estimated_players, label: "Estimated Number of Players", collection: ["Don't Know", "1-10", "10-20", "20-40", "40-60", "60-100", "100+"] %>
+
+                  <div class="form-side-label pl-4">
+                    <p>Start Date</p>
+                  </div>
+
+                  <%= f.input :start_date, label: 'When Does Your Season Start?' %>
+                </div>
+              </div>
+
+              <div class="form-flex-group">
+                <div class="form-side-label">
                   <p>Admin Name</p>
                 </div>
 
