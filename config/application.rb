@@ -12,7 +12,7 @@ module EzgolfRails
     # Application configuration should go into files in config/initializers
     config.load_defaults 5.2
     # -- all .rb files in that directory are automatically loaded.
-    
+
     config.eager_load_paths << Rails.root.join('lib')
     config.eager_load_paths += Dir[Rails.root.join("app", "models", "{*/}")]
     config.eager_load_paths += Dir[Rails.root.join("app", "models", "{*/}", "{*/}")]
