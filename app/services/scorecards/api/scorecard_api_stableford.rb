@@ -1,6 +1,6 @@
 module Scorecards
   module Api
-    class ScorecardAPIStableford < ScorecardAPIBase
+    class ScorecardApiStableford < ScorecardApiBase
       def additional_rows
         rows = []
 

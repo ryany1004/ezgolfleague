@@ -78,7 +78,7 @@ class ScoringRule < ApplicationRecord
     return nil if scorecard.blank?
 
     handicap_allowance = handicap_computer.handicap_allowance(user: scorecard.golf_outing.user)
-    Scorecards::Api::ScorecardAPIBase.new(scorecard.tournament_day, scorecard, handicap_allowance).scorecard_representation
+    Scorecards::Api::ScorecardApiBase.new(scorecard.tournament_day, scorecard, handicap_allowance).scorecard_representation
   end
 
   def individual_tournament_day_results

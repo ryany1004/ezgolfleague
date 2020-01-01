@@ -1,6 +1,6 @@
 module Scorecards
   module Api
-    class ScorecardAPIBase
+    class ScorecardApiBase
       attr_accessor :tournament_day
       attr_accessor :scorecard
       attr_accessor :handicap_allowance

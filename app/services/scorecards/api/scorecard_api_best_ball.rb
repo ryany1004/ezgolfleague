@@ -1,6 +1,6 @@
 module Scorecards
   module Api
-    class ScorecardAPIBestBall < ScorecardAPIBase
+    class ScorecardApiBestBall < ScorecardApiBase
       def additional_rows
         rows = []
 
