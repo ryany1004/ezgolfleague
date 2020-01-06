@@ -14,7 +14,7 @@
           <% if @tournament.tournament_state == TournamentState::REVIEW_SCORES && !@tournament.can_be_finalized? %>
             <div class="row">
               <ul>
-                <li>This tournament is missing data required to be calculated.</li>
+                <li class="missing_detail_header">This tournament is missing data required to be calculated.</li>
                 <% @tournament.finalization_blockers.each do |b| %>
                   <li><%= b %></li>
                 <% end %>
